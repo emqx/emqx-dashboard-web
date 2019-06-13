@@ -17,14 +17,14 @@ export default {
     return {}
   },
 
-  methods: {},
-
   created() {},
+
+  methods: {},
 }
 </script>
 
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .not-found {
 }
 </style>

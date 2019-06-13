@@ -1,36 +1,63 @@
+/* eslint-disable */
 import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from './components/Layout'
+import Login from './views/Login'
+import { toLogin, getBasicAuthInfo } from './common/utils'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
+  scrollBehavior(to, from, savedPosition) {
+    if (to.meta.keepAlive && savedPosition) {
+      return savedPosition
+    }
+    return { x: 0, y: 0 }
+  },
   routes: [
     {
+      path: '/login',
+      name: 'login',
+      meta: {
+        authRequired: false,
+      },
+      component: Login,
+    },
+    {
       path: '/',
-      name: 'overview',
       component: Layout,
       children: [
         {
           path: '',
-          name: 'overview-home',
-          component: () => import('@/views/Overview')
-        }
+          name: 'overview',
+          component: () => import('@/views/Overview'),
+        },
       ],
     },
     {
       path: '*',
-      name: 'not-found',
       component: Layout,
       children: [
         {
           path: '',
-          name: 'not-found-home',
-          component: () => import('@/views/NotFound')
-        }
+          name: 'not-found',
+          component: () => import('@/views/NotFound'),
+        },
       ],
     },
   ],
 })
+
+router.beforeEach((form, to, next) => {
+  const { authRequired = false } = to
+  const userInfo = getBasicAuthInfo()
+  if (!userInfo.username && authRequired) {
+    toLogin()
+  } else {
+    next()
+  }
+})
+
+export default router

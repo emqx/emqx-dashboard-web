@@ -1,28 +1,27 @@
 <template>
   <div class="left-bar">
     <div class="logo">
-      <router-link class="title" tag="div" to="/">EMQ X Dashboard</router-link>
+      <div class="title" tag="div" to="/">EMQ X Dashboard</div>
       <div class="line"></div>
     </div>
 
     <div class="router-item-wrapper">
       <router-link
         v-for="(item, i) in menus"
+        :key="i"
         class="router-item"
         tag="div"
-        :key="i"
-        :to="item.path">
+        :to="item.path"
+      >
         {{ item.title }}
       </router-link>
     </div>
 
     <div class="footer-wrapper">
       <!--<div class="alert">-->
-        <!--<a-icon type="notification"/>-->
+      <!--<a-icon type="notification"/>-->
       <!--</div>-->
-      <div class="logout">
-        <a-icon type="logout"/>
-      </div>
+      <i class="logout iconfont icon-logout"></i>
       <div class="user-info">admin</div>
     </div>
   </div>
@@ -56,14 +55,14 @@ export default {
     }
   },
 
-  methods: {},
-
   created() {},
+
+  methods: {},
 }
 </script>
 
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .left-bar {
   position: relative;
   min-height: 100%;
@@ -101,7 +100,7 @@ export default {
       border-left-color: #f1f1f1;
     }
 
-    &.router-link-active {
+    &.router-link-exact-active {
       border-left-color: #34C388;
       color: #606060;
       background-color: #f1f1f1;
@@ -109,27 +108,27 @@ export default {
   }
 }
 
+
 .footer-wrapper {
+  border-top: 1px solid #d9d9d9;
   width: 100%;
   display: flex;
   align-items: center;
   padding-left: 22px;
   height: 48px;
-  color: #808080;
+  color: #34C388;
   position: absolute;
   bottom: 0;
   left: 0;
-
-  &:hover {
-    color: #606060;
-  }
 
   .user-info {
     cursor: pointer;
     padding-left: 12px;
   }
 }
+
 .logout {
   cursor: pointer;
+  margin-top: 3px;
 }
 </style>
