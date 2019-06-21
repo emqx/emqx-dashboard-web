@@ -46,6 +46,16 @@
       </el-col>
 
     </el-row>
+
+    <a-card
+      class="node-wrapper"
+      :tab-list="nodeList"
+      :active-tab-key="activeNode"
+      :bordered="false" :loading="pageLoading" hoverable
+      @tabChange="key => activeNode = key"
+    >
+      1
+    </a-card>
   </div>
 </template>
 
@@ -74,6 +84,14 @@ export default {
         message_rate_count: 0,
         message_rate_max: 0,
       },
+      nodeList: [{
+        key: 'tab1',
+        tab: 'tab1',
+      }, {
+        key: 'tab2',
+        tab: 'tab2',
+      }],
+      activeNode: 'tab1',
     }
   },
 
@@ -104,6 +122,8 @@ export default {
 
 
 <style lang="scss">
+@import "../assets/style/variables";
+
 .overview {
   .page-header {
     font-size: 20px;
@@ -115,6 +135,9 @@ export default {
   }
 
   .app-card {
+    @include trans-up-mixin(-1px);
+    border-radius: 6px;
+
     .ant-card-head {
       border-bottom: none;
       padding: 0 16px;
@@ -148,6 +171,14 @@ export default {
           margin-left: 12px;
         }
       }
+    }
+  }
+
+  .node-wrapper {
+    margin-top: 32px;
+
+    & > .ant-card-head {
+      /*padding: 0 8px;*/
     }
   }
 }

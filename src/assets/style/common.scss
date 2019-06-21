@@ -22,9 +22,18 @@ body {
 }
 
 
+.trans-up {
+  @extend %trans-up-styles;
+}
+
 .el-button {
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: all 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  &:hover {
+    box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08);
+    transform: translateY(-1px);
+  }
 
 
   &--dashed {
@@ -67,9 +76,6 @@ body {
   }
 }
 
-.el-form {
-}
-
 .el-form-item {
   &.is-error {
     .el-input__inner {
@@ -102,4 +108,14 @@ body {
       color: $--color-primary;
     }
   }
+}
+
+.emq-list-card {
+
+}
+
+
+// radius
+.el-input__inner, .el-button, .el-select, .el-tag, .el-checkbox, .ant-card {
+  border-radius: 0 !important;
 }

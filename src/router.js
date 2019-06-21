@@ -28,11 +28,40 @@ const router = new Router({
     {
       path: '/',
       component: Layout,
+      redirect: '/overview',
       children: [
         {
-          path: '',
+          path: '/overview',
           name: 'overview',
           component: () => import('@/views/Overview'),
+        },
+      ],
+    },
+    {
+      path: '/rules',
+      component: Layout,
+      redirect: '/rules/list',
+      children: [
+        {
+          path: 'list',
+          name: 'rules',
+          component: () => import('@/views/RuleEngine/Rules'),
+        },
+        {
+          path: 'create',
+          name: 'rules-create',
+          component: () => import('@/views/RuleEngine/RuleCreate'),
+        },
+        {
+          path: ':id',
+          name: 'rules-view',
+          component: () => import('@/views/RuleEngine/RuleView'),
+        },
+        // 资源
+        {
+          path: 'resources',
+          name: 'resources',
+          component: () => import('@/views/RuleEngine/Resources'),
         },
       ],
     },
