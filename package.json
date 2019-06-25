@@ -14,6 +14,7 @@
     "dateformat": "^3.0.3",
     "element-theme-chalk": "^2.9.1",
     "element-ui": "^2.9.1",
+    "highlight.js": "^9.15.8",
     "mqtt": "^3.0.0",
     "vue": "^2.6.10",
     "vue-directive-waves": "^2.0.2",

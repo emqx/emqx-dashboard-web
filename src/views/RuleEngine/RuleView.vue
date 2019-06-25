@@ -15,9 +15,9 @@ export default {
     return {}
   },
 
-  methods: {},
-
   created() {},
+
+  methods: {},
 }
 </script>
 

@@ -9,4 +9,5 @@ export function auth(user = {}) {
   })
 }
 
+
 export default {}

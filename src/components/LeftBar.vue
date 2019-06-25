@@ -15,7 +15,7 @@
       >
         <i class="iconfont nav-icon" :class="item.icon"></i>
 
-        {{ item.title }}
+        <span class="title">{{ item.title }}</span>
 
         <div v-if="item.children && item.children.length > 0" class="nav-item-child-wrapper">
           <router-link
@@ -23,15 +23,16 @@
             :key="i"
             :to="{ path: item.path }"
             class="nav-item nav-item-child"
-            tag="div">
-            {{ item.title }}
+            tag="div"
+          >
+            <span class="title">{{ item.title }}</span>
           </router-link>
         </div>
 
       </router-link>
     </div>
 
-    <div class="footer-wrapper" v-if="false">
+    <div v-if="false" class="footer-wrapper">
       <!--<div class="alert">-->
       <!--<a-icon type="notification"/>-->
       <!--</div>-->
@@ -64,12 +65,12 @@ export default {
           icon: 'icon-zuzhiqunzu',
         },
         {
-          title: '规则引擎',
+          title: '规则',
           path: '/rules',
           icon: 'icon-guizeyinqing',
           children: [
             {
-              title: '规则',
+              title: '规则引擎',
               path: '/rules/list',
             },
             {
@@ -80,7 +81,7 @@ export default {
         },
         {
           title: '告警',
-          path: '/alert',
+          path: '/alerts',
           icon: 'icon-gaojingkongxin',
         },
         {

@@ -1,10 +1,12 @@
 <template>
   <div class="nav-header">
     <div class="pull-left">
-      <div class="func-item">
-        <i class="iconfont icon-zuoyouduiqi"></i>
+      <div class="func-item" @click="toggleLeftNarCollapse">
+        <i :class="['iconfont', $store.state.leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"></i>
       </div>
     </div>
+
+
     <div class="pull-right">
       <el-tooltip effect="dark" content="使用文档" placement="bottom" :visible-arrow="false">
         <div class="document-link func-item">
@@ -50,20 +52,24 @@ export default {
     return {}
   },
 
-  methods: {
-    handleDropdownCommand(command) {
-      if (!command) {
-        return
-      }
-      this.$router.push({ path: `/${command}` })
+  computed: {
+    username() {
+      return this.$store.state.user.username || '未登录'
     },
   },
 
   created() {},
 
-  computed: {
-    username() {
-      return this.$store.state.user.username || '未登录'
+  methods: {
+    toggleLeftNarCollapse() {
+      const collapse = !this.$store.state.leftBarCollapse
+      this.$store.dispatch('SET_LEFT_BAR_COLLAPSE', collapse)
+    },
+    handleDropdownCommand(command) {
+      if (!command) {
+        return
+      }
+      this.$router.push({ path: `/${command}` })
     },
   },
 }

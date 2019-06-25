@@ -9,8 +9,14 @@ export default new Vuex.Store({
   state: {
     loading: false,
     user: safeParser(localStorage.user || sessionStorage.user),
+    lang: 'zh',
+    leftBarCollapse: false, // localStorage.getItem('leftBarCollapse'),
   },
   actions: {
+    SET_LEFT_BAR_COLLAPSE({ commit }, collapse = false) {
+      // localStorage.setItem('leftBarCollapse', collapse ? 'true' : '')
+      commit('SET_LEFT_BAR_COLLAPSE', !!collapse)
+    },
     UPDATE_USER_INFO({ commit }, userInfo = {}) {
       const { logOut = false, remember } = userInfo
       if (logOut) {
@@ -35,6 +41,10 @@ export default new Vuex.Store({
     LOADING(state, loading) {
       // eslint-disable-next-line
       state.loading = loading
+    },
+    SET_LEFT_BAR_COLLAPSE(state, collapse) {
+      // eslint-disable-next-line
+      state.leftBarCollapse = collapse
     },
   },
 })

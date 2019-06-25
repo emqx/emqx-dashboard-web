@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '@/store'
 import Layout from './components/Layout'
 import Login from './views/Login'
 import { toLogin, getBasicAuthInfo } from './common/utils'
@@ -51,6 +52,9 @@ const router = new Router({
           path: 'create',
           name: 'rules-create',
           component: () => import('@/views/RuleEngine/RuleCreate'),
+          meta: {
+            hideLeftBar: true,
+          },
         },
         {
           path: ':id',
@@ -62,6 +66,18 @@ const router = new Router({
           path: 'resources',
           name: 'resources',
           component: () => import('@/views/RuleEngine/Resources'),
+        },
+      ],
+    },
+    {
+      path: '/alerts',
+      component: Layout,
+      redirect: '/alerts/list',
+      children: [
+        {
+          path: 'list',
+          name: 'alerts',
+          component: () => import('@/views/Alerts/Alerts'),
         },
       ],
     },
@@ -80,11 +96,19 @@ const router = new Router({
 })
 
 router.beforeEach((form, to, next) => {
-  const { authRequired = false } = to
-  const userInfo = getBasicAuthInfo()
-  if (!userInfo.username && authRequired) {
+  const { authRequired = false, before, hideLeftBar = false } = to.meta
+  const { hideLeftBar: hideLeftBarForm = false } = form.meta
+
+  if (authRequired && !getBasicAuthInfo().username) {
     toLogin()
   } else {
+    if (before) {
+      before()
+    }
+    // 当前路由隐藏左侧菜单
+    if (hideLeftBarForm !== hideLeftBar) {
+      store.dispatch('SET_LEFT_BAR_COLLAPSE', !hideLeftBar)
+    }
     next()
   }
 })

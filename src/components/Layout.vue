@@ -1,7 +1,7 @@
 <template>
   <el-container class="layout" style="min-height: 100vh">
     <!-- 左侧 -->
-    <el-aside width="200px">
+    <el-aside :width="leftBarWidth">
       <left-bar></left-bar>
     </el-aside>
 
@@ -32,11 +32,17 @@ export default {
       theme: 'light',
     }
   },
+  computed: {
+    leftBarWidth() {
+      return this.$store.state.leftBarCollapse ? '0px' : '200px'
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .el-aside {
   background-color: #fff;
+  transition: width .3s;
 }
 </style>
