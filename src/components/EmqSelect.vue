@@ -2,14 +2,16 @@
   <el-select
     :value="rawValue"
     v-bind="$attrs"
+    class="emq-select"
     v-on="$listeners"
-    class="emq-select">
+  >
     <slot>
       <el-option
         v-for="(item, i) in options" :key="i"
         :value="item.value"
         :label="item.label"
-        :disabled="isDisabled(item)">
+        :disabled="isDisabled(item)"
+      >
         <slot name="option" :item="item"></slot>
       </el-option>
     </slot>
@@ -43,26 +45,6 @@ export default {
     }
   },
 
-  methods: {
-    isDisabled(item) {
-      return this.disabledItem.includes(item.value)
-    },
-    async getOptions() {
-      const { api, url, options, list } = this.field
-      let value = []
-      if (options) {
-        value = options
-      } else if (list) {
-        value = list.map($ => ({ label: $, value: $ }))
-      } else if (api) {
-        value = await api()
-      } else if (url) {
-        value = await http.get(url)
-      }
-      return value
-    },
-  },
-
   computed: {
     rawValue: {
       get() {
@@ -76,6 +58,28 @@ export default {
 
   async created() {
     this.options = await this.getOptions()
+  },
+
+  methods: {
+    isDisabled(item) {
+      return this.disabledItem.includes(item.value)
+    },
+    async getOptions() {
+      const {
+        api, url, options, list,
+      } = this.field
+      let value = []
+      if (options) {
+        value = options
+      } else if (list) {
+        value = list.map($ => ({ label: $, value: $ }))
+      } else if (api) {
+        value = await api()
+      } else if (url) {
+        value = await http.get(url)
+      }
+      return value
+    },
   },
 }
 </script>

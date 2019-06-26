@@ -86,6 +86,10 @@ export default {
   background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
   border-left: 1px solid #f0f2f5;
+  /*position: fixed;*/
+  /*top: 0;*/
+  /*right: 0;*/
+  /*left: 200px;*/
 }
 
 .pull-right {

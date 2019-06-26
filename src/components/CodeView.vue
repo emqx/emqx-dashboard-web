@@ -1,5 +1,5 @@
 <template>
-  <pre class="code-view" ref="codeView">
+  <pre ref="codeView" class="code-view">
     <code :class="lang">{{ code }}</code>
   </pre>
 </template>

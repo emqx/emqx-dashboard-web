@@ -26,7 +26,7 @@
           </div>
           <el-form-item prop="for" label="触发事件">
             <emq-select v-model="record.for" :field="{ api: loadEventsSelect }" @change="handleForChange">
-              <div class="emq-option-item" slot="option" slot-scope="{ item }">
+              <div slot="option" slot-scope="{ item }" class="emq-option-item">
                 <span class="option-label">{{ item.label }}</span>
                 <span class="option-value">{{ item.value }}</span>
               </div>
@@ -165,6 +165,24 @@ export default {
     }
   },
 
+  computed: {
+    rawSQL() {
+      const { value, ctx: { topic: topicField } } = this.selectEvent
+      const { topic, field, tiaojian } = this.record
+      const fields = field.replace(/[\n\b\t]/g, '').split(',').join(',') || '*'
+      let where = ''
+      if (topicField) {
+        where = `topic =~ '${topic || '#'}'`
+        if (tiaojian) {
+          where += ` AND ${tiaojian}`
+        }
+      } else if (tiaojian) {
+        where = `${tiaojian}`
+      }
+      return `SELECT ${fields} FROM "${value}"${where ? ` WHERE ${where}` : ''}`
+    },
+  },
+
   async created() {
     this.events = loadEvents()
     this.selectEvent = this.events[0]
@@ -184,32 +202,13 @@ export default {
         return cb([])
       }
       this.timer = setTimeout(() => {
-        const matchItems = this.topics.filter(($) => {
-          return $.topic.includes(queryString) // || queryString.includes($.topic)
-        }).sort(($1, $2) => $1.toString().length > $2.toString().length ? -1 : 1)
+        const matchItems = this.topics.filter($ => $.topic.includes(queryString), // || queryString.includes($.topic)
+        ).sort(($1, $2) => ($1.toString().length > $2.toString().length ? -1 : 1))
         cb(matchItems)
       }, 300)
     },
     handleTopicSelect(item) {
       this.record.topic = item.topic
-    },
-  },
-
-  computed: {
-    rawSQL() {
-      const { value, ctx: { topic: topicField } } = this.selectEvent
-      const { topic, field, tiaojian } = this.record
-      const fields = field.replace(/[\n\b\t]/g, '').split(',').join(',') || '*'
-      let where = ''
-      if (topicField) {
-        where = `topic =~ '${topic || '#'}'`
-        if (tiaojian) {
-          where += ` AND ${tiaojian}`
-        }
-      } else if (tiaojian) {
-        where = `${tiaojian}`
-      }
-      return `SELECT ${fields} FROM "${value}"${where ? ' WHERE ' + where : ''}`
     },
   },
 }

@@ -12,7 +12,7 @@
         <nav-header></nav-header>
       </el-header>
 
-      <div :style="{ padding: '24px', minHeight: '360px' }">
+      <div :style="{ padding: '24px', minHeight: '360px', minWidth: '600px' }">
         <router-view></router-view>
       </div>
     </el-main>

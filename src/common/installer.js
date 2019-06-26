@@ -6,7 +6,6 @@ import 'ant-design-vue/lib/badge/style'
 import EmqSelect from '@/components/EmqSelect'
 
 export default (Vue) => {
-
   Vue.component(Drawer.name, Drawer)
   Vue.component(Card.name, Card)
   Vue.component(Badge.name, Badge)

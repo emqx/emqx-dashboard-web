@@ -73,6 +73,8 @@ export default {
 
   components: {},
 
+  filters: {},
+
   props: {},
 
   data() {
@@ -130,8 +132,6 @@ export default {
       ],
     }
   },
-
-  filters: {},
 
   created() {
   },

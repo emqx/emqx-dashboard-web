@@ -41,10 +41,9 @@ const router = new Router({
     {
       path: '/rules',
       component: Layout,
-      redirect: '/rules/list',
       children: [
         {
-          path: 'list',
+          path: '',
           name: 'rules',
           component: () => import('@/views/RuleEngine/Rules'),
         },
@@ -61,7 +60,13 @@ const router = new Router({
           name: 'rules-view',
           component: () => import('@/views/RuleEngine/RuleView'),
         },
-        // 资源
+      ],
+    },
+    // 资源
+    {
+      path: '/resources',
+      component: Layout,
+      children: [
         {
           path: 'resources',
           name: 'resources',

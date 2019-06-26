@@ -5,7 +5,7 @@
       <div class="line"></div>
     </div>
 
-    <div class="nav-item-wrapper">
+    <div v-if="false" class="nav-item-wrapper">
       <router-link
         v-for="(item, i) in menus"
         :key="i"
@@ -32,22 +32,76 @@
       </router-link>
     </div>
 
-    <div v-if="false" class="footer-wrapper">
-      <!--<div class="alert">-->
-      <!--<a-icon type="notification"/>-->
-      <!--</div>-->
-      <i class="logout iconfont icon-logout"></i>
-      <div class="user-info">admin</div>
-    </div>
+    <a-menu
+      style="width: 200px"
+      :default-selected-keys="defaultSelectedKeys"
+      :default-open-keys="defaultOpenKeys"
+      mode="inline"
+      @click="handleClick"
+    >
+      <template v-for="item in menus">
+        <a-sub-menu
+          v-if="item.children && item.children.length > 0"
+          :key="item.key"
+          @titleClick="titleClick(item)">
+          <span slot="title">
+            <i class="iconfont" :class="item.icon"></i>
+            <span>{{ item.title }}</span>
+          </span>
+          <template>
+            <a-menu-item v-for="item2 in item.children" :key="item2.path">
+              {{ item2.title }}
+            </a-menu-item>
+          </template>
+        </a-sub-menu>
+
+        <a-menu-item v-else-if="!item.children" :key="item.path">
+          <i class="iconfont" :class="item.icon"></i>
+          <span>{{ item.title }}</span>
+        </a-menu-item>
+      </template>
+    </a-menu>
+
+    <el-menu
+      v-if="false"
+      router
+      :default-active="defaultSelectedKeys"
+      :collapse="inlineCollapsed">
+      <template v-for="item in menus">
+        <el-submenu v-if="item.key" :index="item.path">
+          <template slot="title">
+            <i :class="['iconfont', item.icon]"></i>
+            <span slot="title">{{ item.title }}</span>
+          </template>
+          <el-menu-item v-for="item2 in item.children" :index="item2.path" :key="item2.path">
+            <span slot="title">{{ item2.title }}</span>
+          </el-menu-item>
+        </el-submenu>
+
+        <el-menu-item v-else :index="item.path">
+          <i :class="['iconfont', item.icon]"></i>
+          <span slot="title">{{ item.title }}</span>
+        </el-menu-item>
+      </template>
+    </el-menu>
   </div>
 </template>
 
 
 <script>
+import { Menu } from 'ant-design-vue'
+import 'ant-design-vue/lib/menu/style'
+
 export default {
   name: 'LeftBar',
 
-  components: {},
+  components: {
+    [Menu.name]: Menu,
+    [Menu.Item.name]: Menu.Item,
+    [Menu.ItemGroup.name]: Menu.ItemGroup,
+    [Menu.SubMenu.name]: Menu.SubMenu,
+    [Menu.Divider.name]: Menu.Divider,
+  },
 
   props: {},
 
@@ -66,16 +120,18 @@ export default {
         },
         {
           title: '规则',
-          path: '/rules',
+          key: 'rules',
           icon: 'icon-guizeyinqing',
           children: [
             {
               title: '规则引擎',
-              path: '/rules/list',
+              path: '/rules',
+              parentKey: 'rules',
             },
             {
               title: '资源',
-              path: '/rules/resources',
+              path: '/resources',
+              parentKey: 'rules',
             },
           ],
         },
@@ -91,35 +147,40 @@ export default {
         },
         {
           title: '工具',
-          path: '/websocket',
+          key: 'tools',
           icon: 'icon-yunduanshuaxin',
           children: [
             {
               title: 'WebSocket',
               path: '/websocket',
+              parentKey: 'tools',
             },
             {
               title: 'Tracker',
               path: '/tracker',
+              parentKey: 'tools',
             },
           ],
         },
         {
           title: '通用功能',
-          path: '/function',
+          path: 'function',
           icon: 'icon-fenzuguanli',
           children: [
             {
               title: '错误日志',
-              path: '/func/error',
+              path: '/error_log',
+              parentKey: 'function',
             },
             {
               title: '系统设置',
-              path: '/func/setting',
+              path: '/setting',
+              parentKey: 'function',
             },
           ],
         },
       ],
+      defaultOpenKeys: [],
     }
   },
 
@@ -128,7 +189,32 @@ export default {
   },
 
   methods: {
+    handleClick(e) {
+      this.$router.push({ path: e.key })
+    },
+    titleClick() {
+    },
     initRouter() {
+      const { path } = this.$route
+      this.menus.forEach((item) => {
+        if (!item.key) {
+          return
+        }
+        if (item.children.find($ => $.path === path)) {
+          this.defaultOpenKeys = [item.key]
+        }
+      })
+
+    },
+  },
+
+  computed: {
+    defaultSelectedKeys() {
+      const { path } = this.$route
+      return [`/${path.split('/')[1]}`]
+    },
+    inlineCollapsed() {
+      return this.$store.state.leftBarCollapse
     },
   },
 }
@@ -139,8 +225,25 @@ export default {
 @import "../assets/style/element-variables";
 
 .left-bar {
-  position: relative;
   min-height: 100%;
+  background-color: #fff;
+
+  /*position: fixed;*/
+  /*top: 0;*/
+  /*left: 0;*/
+  /*bottom: 0;*/
+}
+
+.ant-menu {
+  min-height: calc(100% - 80px);
+
+  &.ant-menu-inline {
+    border-right-color: #fff;
+  }
+}
+
+.iconfont {
+  margin-right: 8px;
 }
 
 .logo {
@@ -149,99 +252,21 @@ export default {
   font-weight: 500;
   padding: 20px 0;
   color: #34C388;
-}
+  overflow: hidden;
 
-.line {
-  margin-top: 12px;
-  width: 120px;
-}
-
-.nav-item-wrapper {
-  margin-top: 12px;
-
-  .nav-item-child-wrapper {
-    padding-left: 50px;
-    display: none;
-    transition: all .3s;
-  }
-
-  .nav-item {
-    width: 100%;
-    min-height: 40px;
-    line-height: 40px;
-    padding-left: 12px;
-    color: rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-    transition: all .3s;
-    position: relative;
-
-
-    &:hover {
-      color: rgba(0, 0, 0, 0.9);
-    }
-
-    &:before {
-      top: .25rem;
-      bottom: .25rem;
-      left: 0;
-      right: auto;
-      border-left: 4px solid $--color-primary;
-      border-bottom: 0;
-      content: ' ';
-      position: absolute;
-      display: none;
-    }
-
-
-    &.router-link-active {
-      color: rgba(0, 0, 0, 0.8);
-      font-weight: bold;
-
-      .iconfont {
-        font-weight: normal;
-      }
-
-      .nav-item-child:not(.router-link-active) {
-        font-weight: normal;
-      }
-
-      &:not(.nav-item-child):before {
-        display: block;
-      }
-
-      .nav-item-child-wrapper {
-        display: block;
-      }
-    }
-
-    .nav-icon {
-      margin: 10px;
-    }
-
+  .line {
+    margin-top: 12px;
+    width: 120px;
   }
 }
 
 
-.footer-wrapper {
-  border-top: 1px solid #d9d9d9;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding-left: 22px;
-  height: 48px;
-  color: #34C388;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+.el-menu {
+  min-height: calc(100% - 80px);
 
-  .user-info {
-    cursor: pointer;
-    padding-left: 12px;
+  &:not(.el-menu--collapse) {
+    width: 200px;
   }
 }
 
-.logout {
-  cursor: pointer;
-  margin-top: 3px;
-}
 </style>
