@@ -8,8 +8,8 @@
     <slot>
       <el-option
         v-for="(item, i) in options" :key="i"
-        :value="item.value"
-        :label="item.label"
+        :value="item[fieldName.value]"
+        :label="item[fieldName.label]"
         :disabled="isDisabled(item)"
       >
         <slot name="option" :item="item"></slot>
@@ -33,36 +33,89 @@ export default {
       type: Object,
       required: true,
     },
+    fieldName: {
+      type: Object,
+      default: () => ({
+        label: 'label',
+        value: 'value',
+      }),
+    },
     disabledItem: {
       type: Array,
       default: () => [],
+    },
+    refresh: {
+      type: Boolean,
     },
   },
 
   data() {
     return {
       options: [],
+      parserField: {},
     }
+  },
+
+  watch: {
+    refresh(val) {
+      if (val) {
+        this.loadData()
+      }
+    },
+    field: {
+      handler() {
+        this.loadData()
+      },
+      deep: true,
+    },
   },
 
   computed: {
     rawValue: {
       get() {
-        return this.value
+        return typeof this.value === 'boolean' ? this.value.toString() : this.value
       },
       set(val) {
+        const valueKey = this.fieldName.value
+        const item = this.options.find($ => $[valueKey] === val)
+        if (item && this.parserField[valueKey]) {
+          val = val === 'true'
+        }
         this.$emit('update:value', val)
       },
     },
   },
 
-  async created() {
-    this.options = await this.getOptions()
+  created() {
+    this.loadData()
   },
 
   methods: {
+    async loadData() {
+      const options = await this.getOptions()
+      this.parserField = {}
+
+      const valueKey = this.fieldName.value
+      const labelKey = this.fieldName.label
+
+      this.options = options.map((option) => {
+        const value = option[valueKey]
+        const label = option[labelKey]
+        if (typeof value === 'boolean') {
+          this.parserField[valueKey] = 'boolean'
+          option[valueKey] = value.toString()
+
+          if (typeof label === 'boolean') {
+            option[labelKey] = label.toString()
+          }
+
+        }
+        return option
+      })
+      this.$emit('update:refresh', false)
+    },
     isDisabled(item) {
-      return this.disabledItem.includes(item.value)
+      return this.disabledItem.includes(item[this.fieldName.value])
     },
     async getOptions() {
       const {

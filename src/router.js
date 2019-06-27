@@ -52,7 +52,7 @@ const router = new Router({
           name: 'rules-create',
           component: () => import('@/views/RuleEngine/RuleCreate'),
           meta: {
-            hideLeftBar: true,
+            // hideLeftBar: true,
           },
         },
         {

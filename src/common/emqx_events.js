@@ -5,6 +5,7 @@ export default [
     description: '',
     test_field: ['payload', 'client_id', 'username', 'topic', 'qos'],
     ctx: {
+      payload: { msg: 'hello' },
       client_id: 'c_emqx',
       event: 'message.publish',
       flags: {
@@ -12,7 +13,6 @@ export default [
         retain: false,
       },
       id: '588D045CCB2C7B44B000004D10001',
-      payload: { msg: 'hello' },
       peername: '127.0.0.1:58138',
       qos: 0,
       timestamp: 1557802989171,
@@ -27,6 +27,7 @@ export default [
     description: '',
     test_field: ['payload', 'client_id', 'username', 'topic', 'qos'],
     ctx: {
+      payload: { msg: 'hello' },
       client_id: 'c_emqx',
       event: 'message.acked',
       flags: {
@@ -34,7 +35,6 @@ export default [
         retain: false,
       },
       id: '588D3DD4C6820B44B0000055C0001',
-      payload: { msg: 'hello' },
       peername: '127.0.0.1:63412',
       qos: 1,
       timestamp: 1557818415802,
@@ -49,6 +49,7 @@ export default [
     description: '',
     test_field: ['payload', 'client_id', 'username', 'topic', 'qos'],
     ctx: {
+      payload: { msg: 'hello' },
       auth_result: 'success',
       client_id: 'c_emqx',
       event: 'message.deliver',
@@ -57,7 +58,6 @@ export default [
         retain: false,
       },
       id: '588D3DD4C6820B44B0000055C0001',
-      payload: { msg: 'hello' },
       peername: '127.0.0.1:63412',
       qos: 1,
       timestamp: 1557818415802,
@@ -73,6 +73,7 @@ export default [
     description: '',
     test_field: ['payload', 'client_id', 'username', 'topic', 'qos'],
     ctx: {
+      payload: { msg: 'hello' },
       client_id: 'c_emqx',
       event: 'message.dropped',
       flags: {
@@ -81,7 +82,6 @@ export default [
       },
       id: '588D3DD4F8874B44B0000055C0002',
       node: 'nonode@nohost',
-      payload: { msg: 'hello' },
       peername: '127.0.0.1:63412',
       qos: 1,
       timestamp: 1557818416007,

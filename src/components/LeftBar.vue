@@ -1,35 +1,8 @@
 <template>
-  <div class="left-bar">
-    <div class="logo">
+  <el-scrollbar class="left-bar">
+    <div class="logo" :style="logoStyle">
       <div class="title" tag="div" to="/">EMQ X Dashboard</div>
       <div class="line"></div>
-    </div>
-
-    <div v-if="false" class="nav-item-wrapper">
-      <router-link
-        v-for="(item, i) in menus"
-        :key="i"
-        :to="item.path"
-        class="nav-item"
-        tag="div"
-      >
-        <i class="iconfont nav-icon" :class="item.icon"></i>
-
-        <span class="title">{{ item.title }}</span>
-
-        <div v-if="item.children && item.children.length > 0" class="nav-item-child-wrapper">
-          <router-link
-            v-for="(item, i) in item.children"
-            :key="i"
-            :to="{ path: item.path }"
-            class="nav-item nav-item-child"
-            tag="div"
-          >
-            <span class="title">{{ item.title }}</span>
-          </router-link>
-        </div>
-
-      </router-link>
     </div>
 
     <a-menu
@@ -61,30 +34,7 @@
         </a-menu-item>
       </template>
     </a-menu>
-
-    <el-menu
-      v-if="false"
-      router
-      :default-active="defaultSelectedKeys"
-      :collapse="inlineCollapsed">
-      <template v-for="item in menus">
-        <el-submenu v-if="item.key" :index="item.path">
-          <template slot="title">
-            <i :class="['iconfont', item.icon]"></i>
-            <span slot="title">{{ item.title }}</span>
-          </template>
-          <el-menu-item v-for="item2 in item.children" :index="item2.path" :key="item2.path">
-            <span slot="title">{{ item2.title }}</span>
-          </el-menu-item>
-        </el-submenu>
-
-        <el-menu-item v-else :index="item.path">
-          <i :class="['iconfont', item.icon]"></i>
-          <span slot="title">{{ item.title }}</span>
-        </el-menu-item>
-      </template>
-    </el-menu>
-  </div>
+  </el-scrollbar>
 </template>
 
 
@@ -213,8 +163,8 @@ export default {
       const { path } = this.$route
       return [`/${path.split('/')[1]}`]
     },
-    inlineCollapsed() {
-      return this.$store.state.leftBarCollapse
+    logoStyle() {
+      return { left: !this.$store.state.leftBarCollapse ? 0 : '-200px' }
     },
   },
 }
@@ -225,17 +175,13 @@ export default {
 @import "../assets/style/element-variables";
 
 .left-bar {
-  min-height: 100%;
+  min-height: calc(100vh - 80px);
   background-color: #fff;
-
-  /*position: fixed;*/
-  /*top: 0;*/
-  /*left: 0;*/
-  /*bottom: 0;*/
 }
 
+
 .ant-menu {
-  min-height: calc(100% - 80px);
+  margin-top: 80px;
 
   &.ant-menu-inline {
     border-right-color: #fff;
@@ -248,11 +194,18 @@ export default {
 
 .logo {
   text-align: center;
+  width: 200px;
   font-size: 18px;
   font-weight: 500;
   padding: 20px 0;
   color: #34C388;
   overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  z-index: 100;
+  transition: left .5s;
 
   .line {
     margin-top: 12px;
@@ -260,6 +213,9 @@ export default {
   }
 }
 
+.el-scrollbar {
+  height: 100vh;
+}
 
 .el-menu {
   min-height: calc(100% - 80px);

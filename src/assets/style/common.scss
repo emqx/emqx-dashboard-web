@@ -92,6 +92,14 @@ body {
   }
 }
 
+.el-form {
+  &.el-form--label-left {
+    .el-form-item.is-required .el-form-item__label {
+      margin-left: -10px;
+    }
+  }
+}
+
 .el-select-dropdown__item {
   &.hover {
     background-color: rgba(52, 195, 136, 0.08);
@@ -192,12 +200,16 @@ body {
 
 
 .emq-title {
-  padding-left: 10px;
-  border-left: 4px solid #34C388;
+  font-size: 16px;
+  color: #101010;
+  font-weight: bolder;
 
   .sub-title {
+    font-weight: normal;
+    display: block;
     font-size: 12px;
-    margin-left: 4px;
+    color: #8F9297;
+    margin-top: 12px;
   }
 }
 
@@ -221,3 +233,16 @@ body {
   border-radius: 50%;
 }
 
+
+.dialog-primary-btn {
+  margin-left: 12px;
+}
+.el-dialog {
+  .dialog-align-footer {
+    text-align: center;
+  }
+}
+
+.emq-popover-content {
+  font-size: 12px;
+}

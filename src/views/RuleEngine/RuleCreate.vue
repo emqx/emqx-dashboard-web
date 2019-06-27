@@ -1,23 +1,31 @@
 <template>
   <div class="rule-create">
-    <a-card class="emq-list-card">
-      <template slot="title">
-        <div class="back-btn" @click="$router.push({ path: '/rules/list' })">
-          规则列表
-        </div>
-        <span class="title">创建规则</span>
-      </template>
+    <!--<template slot="title">-->
+    <!--<router-link class="back-btn" :to="{ path: '/rules' }" tag="div">-->
+    <!--规则列表-->
+    <!--</router-link>-->
+    <!--<span class="title">创建规则</span>-->
+    <!--</template>-->
 
-      <div class="emq-list-body rule-create-wrapper">
-        <el-form
-          ref="record"
-          :model="record"
-          :rules="rules"
-          label-width="120px"
-          label-position="right"
-          size="small"
-          label-suffix=":"
-        >
+    <a-card class="detail-title-wrapper">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/rules' }">规则列表</el-breadcrumb-item>
+        <el-breadcrumb-item>创建规则</el-breadcrumb-item>
+      </el-breadcrumb>
+    </a-card>
+
+    <div class="emq-list-body rule-create-wrapper">
+      <el-form
+        ref="record"
+        :model="record"
+        :rules="rules"
+        label-width="120px"
+        label-position="left"
+        size="small"
+        label-suffix=":"
+      >
+
+        <a-card class="emq-list-card">
           <div class="emq-title">
             条件
             <span class="sub-title">
@@ -59,54 +67,116 @@
               &nbsp;
             </template>
             <!--<code-view v-if="rawsqlVisible" lang="sql" :code="rawSQL"></code-view>-->
-            <div class="code">
+            <div class="code code-border">
               <code>{{ rawSQL }}</code>
             </div>
           </el-form-item>
 
 
           <el-form-item prop="field" label="查询字段">
-            <el-input v-model="record.field" type="textarea" :rows="4"></el-input>
+            <el-input v-model="record.field" type="textarea" :rows="4" placeholder="e.g payload.speed"></el-input>
+            <span class="tips btn btn-default" @click="toggleTips">可用字段</span>
           </el-form-item>
+
+          <el-collapse-transition>
+            <el-form-item v-if="showTips">
+              <span slot="label">&nbsp;</span>
+              <div class="tips-wrapper code">
+                当前事件可用字段
+                <code><span
+                  v-for="key in availableFields"
+                  :key="key"
+                  class="available-fields"
+                  @click="selectAvailableFields(key)">{{ key }}</span> </code>
+              </div>
+            </el-form-item>
+          </el-collapse-transition>
 
           <el-form-item prop="tiaojian" label="筛选条件">
             <el-input v-model="record.tiaojian" placeholder="e.g payload.speed > 60"></el-input>
           </el-form-item>
 
           <el-form-item label="SQL测试">
-            <el-switch v-model="record.test"></el-switch>
+            <el-switch v-model="showTest" @change="handlePreSQLTest"></el-switch>
             <el-popover placement="top" trigger="hover">
               输入元数据进行 SQL 匹配测试
               <i slot="reference" class="icon el-icon-question"></i>
             </el-popover>
           </el-form-item>
 
+          <el-collapse-transition>
+            <div v-if="showTest">
+              <el-form-item
+                v-for="(field, i) in testField"
+                :prop="`ctx.${field}`"
+                :key="i"
+                :label="field">
+                <el-input
+                  v-model="record.ctx[field]"
+                  :type="field === 'payload' ? 'textarea' : ''"
+                  :rows="5">
+                </el-input>
+              </el-form-item>
 
-          <div class="line"></div>
+              <el-form-item>
+                <span slot="label">&nbsp;</span>
+                <el-button type="primary" @click="handleSQLTest">测试</el-button>
+              </el-form-item>
 
-          <div class="emq-title">
-            响应动作
-            <span class="sub-title">
+              <el-form-item label="测试输出">
+                <el-input v-model="testOutPut" type="textarea" readonly :rows="4"></el-input>
+                <!--<code-view :code="testOutPut" lang="json"></code-view>-->
+              </el-form-item>
+
+
+            </div>
+          </el-collapse-transition>
+
+        </a-card>
+      </el-form>
+
+      <a-card class="emq-list-card">
+        <div class="emq-title">
+          响应动作
+          <span class="sub-title">
               处理命中规则的消息
             </span>
-          </div>
+        </div>
 
-        </el-form>
-      </div>
-    </a-card>
+        <div class="rule-action-wrapper">
+          <rule-actions v-model="record.actions" :event="record.for"></rule-actions>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="rule-create-footer">
+          <el-button type="primary" size="medium" @click="handleCreate">
+            创建
+          </el-button>
+          <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
+            取消
+          </el-button>
+        </div>
+      </a-card>
+
+
+    </div>
+
+
   </div>
 </template>
 
 
 <script>
-import { loadEventsSelect, loadEvents } from '@/api/rules'
+import { loadEventsSelect, loadEvents, SQLTest, createRule } from '@/api/rules'
 import { loadTopics } from '@/api/server'
 import CodeView from '@/components/CodeView'
+import RuleActions from './components/RuleActions'
 
 export default {
   name: 'RuleCrate',
 
-  components: { CodeView },
+  components: { RuleActions, CodeView },
 
   props: {},
 
@@ -116,6 +186,7 @@ export default {
       loadEventsSelect,
       topics: [],
       events: [],
+      testOutPut: '',
       selectEvent: {
         name: '',
         value: '',
@@ -125,25 +196,22 @@ export default {
         sql: '',
       },
       timer: 0,
+      showTips: false,
+      showTest: false,
       rawsqlVisible: true,
       record: {
         for: '',
         rawsql: '',
         topic: '',
-        field: '',
-        actions: [
-          // {
-          //   name: 'inspect',
-          //   params: {},
-          // },
-        ],
+        field: '*',
+        actions: [],
         description: '',
         ctx: {},
       },
       rules: {
         for: { required: true, message: '请选择触发事件' },
         topic: { required: true, message: '请输入主题' },
-        tiaojian: { required: true, message: '请输入条件' },
+        ctx: {},
         field: [
           { required: true, message: '请输入查询字段' },
           {
@@ -169,7 +237,7 @@ export default {
     rawSQL() {
       const { value, ctx: { topic: topicField } } = this.selectEvent
       const { topic, field, tiaojian } = this.record
-      const fields = field.replace(/[\n\b\t]/g, '').split(',').join(',') || '*'
+      const fields = field.replace(/[\n\b\t]/g, '').split(',').join(', ') || '*'
       let where = ''
       if (topicField) {
         where = `topic =~ '${topic || '#'}'`
@@ -181,20 +249,102 @@ export default {
       }
       return `SELECT ${fields} FROM "${value}"${where ? ` WHERE ${where}` : ''}`
     },
+    availableFields() {
+      return Object.keys(this.selectEvent.ctx)
+    },
+    testField() {
+      return this.selectEvent.test_field
+    },
   },
 
   async created() {
     this.events = loadEvents()
     this.selectEvent = this.events[0]
     this.record.for = this.selectEvent.value
+    if (this.selectEvent.ctx.payload) {
+      this.record.topic = '#'
+    }
 
     const data = await loadTopics()
     this.topics = data.items || []
   },
 
   methods: {
+    async handleCreate() {
+      const valid = await this.$refs.record.validate()
+      if (!valid) {
+        return
+      }
+      if (this.record.actions.length === 0) {
+        this.$message.error('请添加相应动作')
+        return
+      }
+      const record = {
+        for: this.record.for,
+        rawsql: this.rawSQL,
+        actions: this.record.actions.map($ => ({ name: $.name, params: $.params })),
+        description: this.record.description,
+      }
+      createRule(record).then(() => {
+        this.$message.success('创建成功')
+        setTimeout(() => {
+          this.$router.push({ path: '/rules' })
+        }, 600)
+      })
+    },
+    handleSQLTest() {
+      this.$refs.record.validate(async (valid) => {
+        if (!valid) {
+          return
+        }
+        const record = JSON.parse(JSON.stringify(this.record))
+        this.testOutPut = ''
+
+        try {
+          record.ctx.payload = JSON.stringify(JSON.parse(record.ctx.payload))
+        } catch (e) {
+        }
+        record.rawsql = this.rawSQL
+        SQLTest(record).then((resp) => {
+          this.testOutPut = JSON.stringify(resp, null, 2)
+        }).catch((e) => {
+          if (e === 'SQL Not Match') {
+            this.testOutPut = '输出为空'
+          } else {
+            this.testOutPut = 'SQL 错误请检查'
+          }
+        })
+      })
+    },
+    handlePreSQLTest() {
+      this.record.ctx = {}
+      const { ctx, test_field: testField } = this.selectEvent
+      if (this.showTest) {
+        testField.forEach((k) => {
+          let v = ctx[k]
+          if (typeof v === 'object') {
+            v = JSON.stringify(v, null, 2)
+          }
+          this.$set(this.record.ctx, k, v)
+        })
+      }
+    },
+    selectAvailableFields(key) {
+      const { field } = this.record
+      let dot = field.endsWith(',') ? ' ' : ', '
+      if (field.trim() === '') {
+        dot = ''
+      }
+      this.record.field += (`${dot}${key}`)
+    },
+    toggleTips() {
+      this.showTips = !this.showTips
+    },
     handleForChange(val) {
       this.selectEvent = this.events.find($ => $.value === val)
+      if (this.selectEvent.ctx.payload) {
+        this.record.topic = '#'
+      }
     },
     topicSearch(queryString, cb) {
       clearTimeout(this.timer)
@@ -235,21 +385,80 @@ export default {
   .el-textarea,
   .code-view,
   .code {
-    width: 600px;
+    width: 460px;
   }
 
   .code {
     font-size: 13px;
+    padding: 4px;
+    border: 1px dashed #fff;
+    transition: all .3s;
+    line-height: 24px;
+
+    &.code-border {
+      border: 1px dashed #fff;
+
+      &:hover {
+        border: 1px dashed #d8d8d8;
+      }
+    }
+
+
+    code {
+      word-break: break-word;
+    }
   }
 
-  .icon {
+  .icon, .tips {
     margin-left: 12px;
   }
 
+  .tips {
+    user-select: none;
+    font-size: 12px;
+  }
+
   .line {
-    width: 1000px;
+    width: 94%;
     margin: 30px auto 40px auto;
-    background-color: #d8d8d8;
+    background-color: #EDEEF2;
+  }
+}
+
+.available-fields {
+  transition: all .3s;
+  border-bottom: 1px dashed #fff;
+  padding-bottom: 3px;
+  position: relative;
+  margin-right: 8px;
+  user-select: none;
+
+  &:hover {
+    color: #333;
+    border-bottom: 1px dashed #d8d8d8;
+  }
+}
+
+.emq-list-card {
+  margin-bottom: 24px;
+}
+
+.detail-title-wrapper {
+  margin: -28px -24px 20px;
+
+  .ant-card-body {
+    padding: 14px 32px;
+  }
+}
+
+.rule-create-footer {
+  height: 60px;
+  background-color: #fff;
+  margin-top: 24px;
+  text-align: center;
+
+  .el-button {
+    min-width: 80px;
   }
 }
 </style>
