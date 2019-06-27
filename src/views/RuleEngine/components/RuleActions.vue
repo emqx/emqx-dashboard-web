@@ -4,9 +4,12 @@
       <div class="action-item-head">
         <div class="action-item-type">
           <div class="title">动作类型</div>
-          <div class="desc">{{ item.name }}</div>
+          <div class="desc">{{ item._config.title }} ({{ item.name }})</div>
         </div>
         <div class="action-item-btn btn" @click="removeAction(i)">删除</div>
+      </div>
+      <div class="action-item-description">
+        {{ item._config.description }}
       </div>
 
       <div v-if="item._value" class="action-item-params">
@@ -17,10 +20,16 @@
       </div>
 
     </div>
-    <el-button size="small" @click="addAction">添加动作</el-button>
+
+    <div v-if="value.length === 0" class="create-guide">
+      <!--<i class="el-icon-plus"></i>-->
+      <el-button type="dashed" icon="plus" @click="addAction">添加动作</el-button>
+    </div>
+
+    <el-button v-else size="small" @click="addAction">添加动作</el-button>
 
 
-    <el-dialog :visible.sync="addActionDialogVisible" title="新增动作" width="520px" @close="atDialogClose">
+    <el-dialog :visible.sync="addActionDialogVisible" title="新增动作" width="520px">
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
         <el-form-item prop="name" label="动作类型">
           <emq-select
@@ -61,7 +70,7 @@
           </span>
         </el-form-item>
 
-        <div class="line"></div>
+        <div v-if="selectedAction.params.$resource" class="line"></div>
 
         <el-row v-if="paramsLoading || paramsList.length > 0" class="params-item-wrapper" :gutter="50">
           <div v-if="paramsLoading" class="params-loading-wrapper">
@@ -178,19 +187,24 @@ export default {
 
   methods: {
     atDialogClose() {
-      setTimeout(this.$refs.record.clearValidate, 10)
+      setTimeout(() => {
+        this.$refs.record.clearValidate()
+        this.$refs.record.resetFields()
+      }, 10)
     },
     async handleCreate() {
       const valid = await this.$refs.record.validate()
       if (!valid) {
         return
       }
-      this.rawValue.push(this.record)
+      this.rawValue.push(JSON.parse(JSON.stringify(this.record)))
       this.fillRawValue()
       this.addActionDialogVisible = false
+      this.atDialogClose()
     },
     handleCache() {
       this.addActionDialogVisible = false
+      this.atDialogClose()
     },
     checkResource(open = false) {
       if (open && this.availableResources.length === 0) {
@@ -347,6 +361,12 @@ export default {
     }
   }
 
+  .action-item-description {
+    font-size: 12px;
+    color: #888;
+    margin: 4px 0 12px 0;
+  }
+
   .action-item-params {
     margin-top: 12px;
     font-size: 12px;
@@ -356,7 +376,7 @@ export default {
     flex-wrap: wrap;
 
     .action-item-field {
-      margin-right: 10px;
+      margin-right: 20px;
     }
 
     .title {
@@ -440,9 +460,21 @@ export default {
   .resource-name {
     float: right;
     font-size: 12px;
-    color: #8F9297;
+    color: #888;
     margin-left: 30px;
   }
 }
 
+.create-guide {
+  min-height: 80px;
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .el-button {
+    width: 90%;
+  }
+}
 </style>

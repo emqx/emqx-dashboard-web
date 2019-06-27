@@ -211,6 +211,14 @@ body {
     color: #8F9297;
     margin-top: 12px;
   }
+
+  &.required-title {
+    &:before {
+      content: '*';
+      color: #F5222D;
+      margin-right: 4px;
+    }
+  }
 }
 
 .emq-option-item {
@@ -237,6 +245,7 @@ body {
 .dialog-primary-btn {
   margin-left: 12px;
 }
+
 .el-dialog {
   .dialog-align-footer {
     text-align: center;

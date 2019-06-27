@@ -145,7 +145,6 @@ export default {
     loadConfigList() {
       const { params } = this.selectedResource
       const { form, rules } = renderParamsForm(params, 'config')
-      console.log(form)
       this.rules.config = rules
 
       this.record.config = {}
@@ -163,6 +162,7 @@ export default {
       }
       const resource = await createResource(this.record, test)
       if (test) {
+        this.$message.success('资源可用')
         return
       }
       this.$emit('created', resource.id)

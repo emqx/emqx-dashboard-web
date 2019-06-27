@@ -136,7 +136,7 @@
       </el-form>
 
       <a-card class="emq-list-card">
-        <div class="emq-title">
+        <div class="emq-title required-title">
           响应动作
           <span class="sub-title">
               处理命中规则的消息
@@ -276,7 +276,7 @@ export default {
         return
       }
       if (this.record.actions.length === 0) {
-        this.$message.error('请添加相应动作')
+        this.$message.error('请添加响应动作')
         return
       }
       const record = {
@@ -333,6 +333,10 @@ export default {
       const { field } = this.record
       let dot = field.endsWith(',') ? ' ' : ', '
       if (field.trim() === '') {
+        dot = ''
+      }
+      if (field.trim() === '*') {
+        this.record.field = ''
         dot = ''
       }
       this.record.field += (`${dot}${key}`)
