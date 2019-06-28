@@ -4,12 +4,23 @@
       <div class="action-item-head">
         <div class="action-item-type">
           <div class="title">动作类型</div>
-          <div class="desc">{{ item._config.title }} ({{ item.name }})</div>
+          <div class="desc">{{ (item._config || {}).title }} ({{ item.name }})</div>
         </div>
-        <div class="action-item-btn btn" @click="removeAction(i)">删除</div>
+        <div
+          v-if="!disabled"
+          class="action-item-btn btn"
+          @click="removeAction(i)">删除
+        </div>
+        <div v-else class="action-item-btn action-item-type">
+          <span class="title">成功 </span>
+          <span class="desc">{{(item.metrics || {}).success }}</span>
+
+          <span class="title">失败 </span>
+          <span class="desc">{{(item.metrics || {}).failed }}</span>
+        </div>
       </div>
       <div class="action-item-description">
-        {{ item._config.description }}
+        {{ (item._config || {}).description }}
       </div>
 
       <div v-if="item._value" class="action-item-params">
@@ -22,11 +33,11 @@
     </div>
 
     <div v-if="value.length === 0" class="create-guide">
-      <!--<i class="el-icon-plus"></i>-->
-      <el-button type="dashed" icon="plus" @click="addAction">添加动作</el-button>
+      <el-button v-if="!disabled" type="dashed" icon="plus" @click="addAction">添加动作</el-button>
+      <p v-else>暂无动作</p>
     </div>
 
-    <el-button v-else size="small" @click="addAction">添加动作</el-button>
+    <el-button v-else-if="!disabled" size="small" @click="addAction">添加动作</el-button>
 
 
     <el-dialog :visible.sync="addActionDialogVisible" title="新增动作" width="520px">
@@ -147,9 +158,12 @@ export default {
 
   props: {
     value: {},
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     event: {
       type: String,
-      required: true,
       default: 'message.publish',
     },
   },
@@ -333,9 +347,9 @@ export default {
     border: 1px dashed #f2f2f2;
     transition: border .3s;
 
-    &:hover {
-      border: 1px dashed #d8d8d8;
-    }
+    /*&:hover {*/
+      /*border: 1px dashed #d8d8d8;*/
+    /*}*/
   }
 
   .action-item-head {
@@ -357,7 +371,9 @@ export default {
         float: left;
         margin-left: 8px;
         color: #444;
+        margin-right: 20px;
       }
+
     }
   }
 

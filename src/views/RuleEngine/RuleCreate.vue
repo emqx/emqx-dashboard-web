@@ -14,7 +14,7 @@
       </el-breadcrumb>
     </a-card>
 
-    <div class="emq-list-body rule-create-wrapper">
+    <div class="emq-list-body rule-wrapper">
       <el-form
         ref="record"
         :model="record"
@@ -369,100 +369,35 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import "./style.less";
+
 .rule-create {
-}
+  @import "./style.less";
 
-.rule-create-wrapper {
-  .emq-title {
-    margin-bottom: 40px;
-  }
-
-  .el-form-item {
-    padding-left: 32px;
-    /*width: 540px;*/
-  }
-
-  .el-input,
-  .el-select,
-  .el-autocomplete,
-  .el-textarea,
-  .code-view,
-  .code {
-    width: 460px;
-  }
-
-  .code {
-    font-size: 13px;
-    padding: 4px;
-    border: 1px dashed #fff;
+  .available-fields {
     transition: all .3s;
-    line-height: 24px;
-
-    &.code-border {
-      border: 1px dashed #fff;
-
-      &:hover {
-        border: 1px dashed #d8d8d8;
-      }
-    }
-
-
-    code {
-      word-break: break-word;
-    }
-  }
-
-  .icon, .tips {
-    margin-left: 12px;
-  }
-
-  .tips {
+    border-bottom: 1px dashed #fff;
+    padding-bottom: 3px;
+    position: relative;
+    margin-right: 8px;
     user-select: none;
-    font-size: 12px;
+
+    &:hover {
+      color: #333;
+      border-bottom: 1px dashed #d8d8d8;
+    }
   }
 
-  .line {
-    width: 94%;
-    margin: 30px auto 40px auto;
-    background-color: #EDEEF2;
-  }
-}
+  .rule-create-footer {
+    height: 60px;
+    background-color: #fff;
+    margin-top: 24px;
+    text-align: center;
 
-.available-fields {
-  transition: all .3s;
-  border-bottom: 1px dashed #fff;
-  padding-bottom: 3px;
-  position: relative;
-  margin-right: 8px;
-  user-select: none;
-
-  &:hover {
-    color: #333;
-    border-bottom: 1px dashed #d8d8d8;
-  }
-}
-
-.emq-list-card {
-  margin-bottom: 24px;
-}
-
-.detail-title-wrapper {
-  margin: -28px -24px 20px;
-
-  .ant-card-body {
-    padding: 14px 32px;
-  }
-}
-
-.rule-create-footer {
-  height: 60px;
-  background-color: #fff;
-  margin-top: 24px;
-  text-align: center;
-
-  .el-button {
-    min-width: 80px;
+    .el-button {
+      min-width: 80px;
+    }
   }
 }
 </style>

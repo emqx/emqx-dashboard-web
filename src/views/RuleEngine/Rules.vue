@@ -16,7 +16,7 @@
         <!--</el-table-column>-->
         <el-table-column prop="id" label="ID">
           <template slot-scope="{ row }">
-            <span class="btn">{{ row.id }}</span>
+            <router-link :to="{ path: `/rules/${row.id}` }">{{ row.id }}</router-link>
           </template>
         </el-table-column>
         <el-table-column prop="metrics" label="监控">
