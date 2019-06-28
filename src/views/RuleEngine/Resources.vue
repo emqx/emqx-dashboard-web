@@ -110,7 +110,9 @@ export default {
     createResource() {
       this.dialogVisible = true
     },
-    showResource(row) {},
+    showResource(row) {
+      this.$router.push({ path: `/resources/${row.id}` })
+    },
     getStateText(is_alive) {
       return is_alive ? '可用' : '不可用'
     },

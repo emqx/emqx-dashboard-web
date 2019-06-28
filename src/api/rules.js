@@ -92,12 +92,12 @@ export async function loadResourceDetails(id) {
   resource.typeInfo = resourceTypes[resource.type] || {}
   resource._config = []
   Object.keys(resource.config).forEach((key) => {
-    const value = resource.config[value]
-    const { title = value, description } = resource.typeInfo.params || {}
+    const value = resource.config[key]
+    const { title, description } = resource.typeInfo.params[key] || {}
     resource._config.push({
       key,
-      value: resource.config[value],
-      title,
+      value,
+      title: title || value,
       description,
     })
   })

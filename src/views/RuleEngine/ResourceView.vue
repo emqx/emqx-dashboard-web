@@ -3,107 +3,80 @@
     <a-card class="detail-title-wrapper">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/resources' }">资源列表</el-breadcrumb-item>
-        <el-breadcrumb-item>{{ resourceId }}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ resourceId }}
+
+        </el-breadcrumb-item>
       </el-breadcrumb>
     </a-card>
 
 
     <div class="emq-list-body rule-wrapper">
-      <!-- 运行统计 -->
-      <a-card class="emq-list-card" :loading="loading">
-        <div class="emq-title">
-          运行统计
-        </div>
-
-        <el-row :gutter="40" class="metrics-wrapper">
-          <el-col class="metrics-card" :span="8">
-            <div class="card-title">
-              执行次数
-            </div>
-            <div class="card-value">
-              {{ record.metrics.matched }}
-              <span class="card-unit">次</span>
-            </div>
-            <div class="card-desc">
-              规则启用后的执行次数
-            </div>
-          </el-col>
-          <el-col class="metrics-card" :span="8">
-            <div class="card-title">
-              当前速度
-            </div>
-            <div class="card-value">
-              {{ record.metrics.speed }}
-              <span class="card-unit">次/秒</span>
-            </div>
-            <div class="card-desc">
-              最大执行速度: {{ record.metrics.speed_max }} 次/秒
-            </div>
-          </el-col>
-
-          <el-col class="metrics-card last-child" :span="8">
-            <div class="card-title">
-              最近5分钟执行速度
-            </div>
-            <div class="card-value">
-              {{ record.metrics.speed_last5m }}
-              <span class="card-unit">次/秒</span>
-            </div>
-            <div class="card-desc">
-              最近5分钟平均执行速度
-            </div>
-          </el-col>
-        </el-row>
-      </a-card>
-
-
       <!-- 基本信息 -->
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
           基本信息
         </div>
 
+
         <ul class="field-info">
           <li class="field-info-item">
-            <div class="field-title">触发事件：</div>
-            <span class="field-value">{{ configItem.event.name }} ({{ record.for[0] }})</span>
+            <div class="field-title">状态：</div>
+            <span class="field-value">
+              <a-badge
+                style="font-size: 12px"
+                :status="record.status.is_alive ? 'success' : 'error'"
+                :text="record.status.is_alive ? '可用' : '不可用'"
+                dot
+              >
+            </a-badge>
+              <el-button
+                v-if="!record.status.is_alive"
+                size="mini"
+                style="margin-left: 12px"
+                type="primary"
+                @click="reconnectResource">
+                重连
+              </el-button>
+
+            </span>
+          </li>
+
+          <li class="field-info-item">
+            <div class="field-title">资源类型：</div>
+            <span class="field-value">{{ record.typeInfo.title }} ({{ record.type }})</span>
           </li>
           <li class="field-info-item">
             <div class="field-title">备注：</div>
-            <span class="field-value">{{ configItem.description }}</span>
+            <span class="field-value">{{ record.description }}</span>
           </li>
+
           <li class="field-info-item">
-            <div class="field-title">查询字段：</div>
-            <span class="field-value">{{ configItem.fields }}</span>
+            <div class="field-title">使用说明：</div>
+            <span class="field-value">{{ record.typeInfo.description }}</span>
           </li>
-          <li class="field-info-item">
-            <div class="field-title">筛选条件：</div>
-            <span class="field-value">{{ configItem.where }}</span>
-          </li>
-          <li class="field-info-item">
-            <div class="field-title">规则 SQL：</div>
-            <div class="field-content">
-              <code-view v-if="record.rawsql" lang="sql" :code="record.rawsql"></code-view>
-            </div>
-          </li>
+
         </ul>
       </a-card>
 
 
-      <!-- 响应动作 -->
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
-          响应动作
-          <span class="sub-title">
-            命中规则的消息处理方式
-          </span>
+          配置信息
         </div>
 
-        <rule-actions
-          v-model="record.actions"
-          disabled
-        ></rule-actions>
+        <el-row :gutter="40" class="resource-field-wrapper">
+          <ul class="field-info">
+            <el-col v-for="(item, i) in record._config" :key="i" :span="12">
+              <li class="field-info-item" :title="item.description">
+                <div class="field-title">{{ item.title }}：</div>
+                <span class="field-value">{{ item.value | itemValue }}</span>
+              </li>
+            </el-col>
+          </ul>
+        </el-row>
+
       </a-card>
+
     </div>
 
 
@@ -112,7 +85,7 @@
 
 
 <script>
-import { loadResourceDetails } from '@/api/rules'
+import { loadResourceDetails, reconnectResource } from '@/api/rules'
 
 export default {
   name: 'ResourceView',
@@ -124,20 +97,21 @@ export default {
   data() {
     return {
       loading: true,
-      timer: 0,
       record: {
-        for: [],
-        actions: [],
-        metrics: {
-          matched: 0,
-          speed: 0,
-          speed_last5m: 0,
-          speed_max: 0,
-        },
+        _config: [],
+        typeInfo: {},
+        status: {},
       },
-      eventsMap: {},
-      actions: [],
     }
+  },
+
+  filters: {
+    itemValue(val) {
+      if (typeof val === 'object') {
+        return JSON.stringify(val)
+      }
+      return val
+    },
   },
 
   watch: {
@@ -151,39 +125,20 @@ export default {
   },
 
   methods: {
-    async loadData() {
-      const record = await loadRuleDetails(this.resourceId)
-      const events = await loadEvents()
-      events.forEach((event) => {
-        this.eventsMap[event.value] = event
+    async reconnectResource() {
+      reconnectResource(this.resourceId).then(() => {
+        this.loadData()
       })
+    },
+    async loadData() {
+      this.record = await loadResourceDetails(this.resourceId)
+      console.log(this.record)
       this.loading = false
-      this.record = record
     },
   },
   computed: {
     resourceId() {
       return this.$route.params.id
-    },
-    configItem() {
-      if (!this.record.id) {
-        return {
-          event: {},
-        }
-      }
-      const { for: value, rawsql = '' } = this.record
-      const sql = rawsql.replace(/\n/g, ' ')
-      const reField = sql.match(/SELECT (.+) FROM/)
-      const fields = reField ? reField[1] : '*'
-      const reWhere = sql.split(' WHERE ')
-      const where = reWhere && reWhere[1] ? reWhere[1] : ''
-      const event = this.eventsMap[value] || {}
-      return {
-        fields,
-        where,
-        event,
-        ...this.record,
-      }
     },
   },
 }
@@ -196,6 +151,16 @@ export default {
 
   .field-title {
     width: 80px;
+  }
+
+  .ant-badge-status-text {
+    font-size: 12px;
+  }
+
+  .resource-field-wrapper {
+    .field-title {
+      width: 140px;
+    }
   }
 }
 </style>
