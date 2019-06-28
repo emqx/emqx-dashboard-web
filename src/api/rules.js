@@ -22,6 +22,14 @@ export function destroyRule(id) {
   return http.delete(`/rules/${id}`)
 }
 
+export function destroyResource(id) {
+  return http.delete(`/resources/${id}`)
+}
+
+export function reconnectResource(id) {
+  return http.post(`/resources/${id}`)
+}
+
 export function loadEventsSelect() {
   const events = JSON.parse(JSON.stringify(EMQXEvents)).map($ => ({ label: $.name, value: $.value }))
   return fillI18n(events, ['label'])
@@ -71,6 +79,29 @@ export async function loadResource(params = {}) {
     item.config = resourceTypes[item.type] || {}
     return item
   })
+}
+
+export async function loadResourceDetails(id) {
+  if (Object.keys(resourceTypes).length === 0) {
+    const types = await loadResourceTypes()
+    types.forEach((item) => {
+      resourceTypes[item.name] = item
+    })
+  }
+  let resource = await http.get(`/resources/${id}`)
+  resource.typeInfo = resourceTypes[resource.type] || {}
+  resource._config = []
+  Object.keys(resource.config).forEach((key) => {
+    const value = resource.config[value]
+    const { title = value, description } = resource.typeInfo.params || {}
+    resource._config.push({
+      key,
+      value: resource.config[value],
+      title,
+      description,
+    })
+  })
+  return resource
 }
 
 export function createResource(resource = {}, test = false) {

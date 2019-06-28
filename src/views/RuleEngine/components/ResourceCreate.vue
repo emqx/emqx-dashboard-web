@@ -7,6 +7,7 @@
     v-on="$listeners"
     :visible.sync="dialogVisible"
     @open="loadData"
+    @close="clearForm"
   >
     <el-form
       :model="record"
@@ -24,17 +25,28 @@
           @change="resourceTypeChange"
         >
         </emq-select>
-        <el-button type="primary" style="margin-left: 20px" @click="handleCreate(true)">测试连接</el-button>
+        <el-button
+          :disabled="!record.type"
+          type="primary"
+          style="margin-left: 20px"
+          @click="handleCreate(true)"
+        >
+          测试连接
+        </el-button>
       </el-form-item>
 
-      <div class="line"></div>
+      <el-form-item style="width: 330px" prop="description" label="备注">
+        <el-input v-model="record.description" placeholder="请输入"></el-input>
+      </el-form-item>
 
-      <el-row class="config-item-wrapper" :gutter="30">
+
+      <el-row v-if="record.type" class="config-item-wrapper" :gutter="30">
         <div v-if="configLoading" class="params-loading-wrapper">
           <a-skeleton active></a-skeleton>
         </div>
-        <template v-else>
-          <el-col v-for="(item, i) in configList" :span="item.type === 'textarea' ? 24 : 12">
+        <template v-else-if="configList.length > 0">
+          <div class="line"></div>
+          <el-col v-for="(item, i) in configList" :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12">
             <el-form-item v-bind="item.formItemAttributes">
               <template v-if="item.formItemAttributes.description" slot="label">
                 {{ item.formItemAttributes.label }}
@@ -43,7 +55,11 @@
                   <i slot="reference" class="el-icon-question"></i>
                 </el-popover>
               </template>
-              <template v-if="item.elType !== 'select'">
+              <template v-if="item.elType === 'object'">
+                <key-and-value-editor v-model="record.config[item.key]"></key-and-value-editor>
+              </template>
+              <!-- input -->
+              <template v-else-if="item.elType !== 'select'">
                 <el-input
                   v-if="item.type === 'number'"
                   v-bind="item.bindAttributes"
@@ -58,6 +74,8 @@
                 >
                 </el-input>
               </template>
+
+              <!-- select -->
               <template v-else>
                 <emq-select
                   v-if="item.type === 'number'"
@@ -92,11 +110,12 @@
 <script>
 import { loadResourceTypes, loadResource, createResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
+import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 
 export default {
   name: 'ResourceDialog',
 
-  components: {},
+  components: { KeyAndValueEditor },
 
   inheritAttrs: false,
 
@@ -133,6 +152,14 @@ export default {
   },
 
   methods: {
+    clearForm() {
+      if (this.$refs.record) {
+        setTimeout(() => {
+          this.$refs.record.resetFields()
+          this.configList = []
+        }, 10)
+      }
+    },
     resourceTypeChange(name) {
       this.record.name = name
       this.selectedResource = this.resourceTypes.find($ => $.name === name)
@@ -193,7 +220,7 @@ export default {
 
   computed: {
     availableTypes() {
-      return this.resourceTypes.filter($ => this.types.includes($.name))
+      return this.types.length > 0 ? this.resourceTypes.filter($ => this.types.includes($.name)) : this.resourceTypes
     },
     disabledSelect() {
       return this.types.length === 1
@@ -229,22 +256,20 @@ export default {
     background-color: #d8d8d8;
   }
 
-  .el-form {
-    .el-form-item {
-      .el-input {
-        width: 100%;
-      }
+  .el-form-item {
+    .el-input {
+      width: 100%;
+    }
 
-      .el-select {
-        &:not(.reset-width) {
-          width: 330px;
-        }
+    .el-select {
+      &:not(.reset-width) {
+        width: 330px;
       }
+    }
 
-      .el-form-item__label {
-        padding-bottom: 0;
-        font-size: 12px;
-      }
+    .el-form-item__label {
+      padding-bottom: 0;
+      font-size: 12px;
     }
   }
 
@@ -257,7 +282,7 @@ export default {
     }
 
     .el-input, .el-select {
-      width: 200px !important;
+      width: 200px;
     }
 
     .el-textarea {

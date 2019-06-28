@@ -150,7 +150,7 @@ export default {
         if (!item.key) {
           return
         }
-        if (item.children.find($ => $.path === path)) {
+        if (item.children.find($ => path.includes($.path) || path === $.path)) {
           this.defaultOpenKeys = [item.key]
         }
       })

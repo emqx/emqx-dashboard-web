@@ -1,9 +1,9 @@
 <template>
-  <div class="rule-view">
+  <div class="resource-view">
     <a-card class="detail-title-wrapper">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/rules' }">规则列表</el-breadcrumb-item>
-        <el-breadcrumb-item>{{ ruleId }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/resources' }">资源列表</el-breadcrumb-item>
+        <el-breadcrumb-item>{{ resourceId }}</el-breadcrumb-item>
       </el-breadcrumb>
     </a-card>
 
@@ -112,14 +112,12 @@
 
 
 <script>
-import { loadRuleDetails, loadEvents } from '@/api/rules'
-import CodeView from '@/components/CodeView'
-import RuleActions from './components/RuleActions'
+import { loadResourceDetails } from '@/api/rules'
 
 export default {
-  name: 'RuleView',
+  name: 'ResourceView',
 
-  components: { CodeView, RuleActions },
+  components: {},
 
   props: {},
 
@@ -154,7 +152,7 @@ export default {
 
   methods: {
     async loadData() {
-      const record = await loadRuleDetails(this.ruleId)
+      const record = await loadRuleDetails(this.resourceId)
       const events = await loadEvents()
       events.forEach((event) => {
         this.eventsMap[event.value] = event
@@ -164,7 +162,7 @@ export default {
     },
   },
   computed: {
-    ruleId() {
+    resourceId() {
       return this.$route.params.id
     },
     configItem() {
@@ -193,7 +191,7 @@ export default {
 
 
 <style lang="scss">
-.rule-view {
+.resource-view {
   @import "./style.less";
 
   .field-title {

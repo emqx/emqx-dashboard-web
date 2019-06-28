@@ -113,6 +113,9 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         elType = 'select'
         field = { list: [true, false] }
         break
+      case 'object':
+        elType = 'object'
+        break
     }
     if (enumValue) {
       elType = 'select'

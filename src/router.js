@@ -68,9 +68,14 @@ const router = new Router({
       component: Layout,
       children: [
         {
-          path: 'resources',
+          path: '',
           name: 'resources',
           component: () => import('@/views/RuleEngine/Resources'),
+        },
+        {
+          path: ':id',
+          name: 'resources-view',
+          component: () => import('@/views/RuleEngine/ResourceView'),
         },
       ],
     },
