@@ -17,7 +17,7 @@
       <el-table :data="tableData" class="data-list">
         <el-table-column prop="client_id" min-width="110px" label="Client ID">
           <template slot-scope="{ row }">
-            <router-link to="/connections">
+            <router-link :to="{ path: '/connections/detail', query: { client_id: row.client_id } }">
               {{ row.client_id }}
             </router-link>
           </template>

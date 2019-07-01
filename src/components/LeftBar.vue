@@ -183,6 +183,7 @@ export default {
 .ant-menu {
   margin-top: 80px;
 
+
   &.ant-menu-inline {
     border-right-color: #fff;
   }

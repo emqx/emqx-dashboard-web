@@ -164,6 +164,7 @@ body {
 .emq-table-header {
   padding: 12px 0 24px 0;
 }
+
 .emq-table-footer {
   margin-top: 24px;
   text-align: center;
@@ -290,5 +291,24 @@ body {
   .field-value {
     font-size: 12px;
     color: #101010;
+  }
+}
+
+
+.ant-badge-status-success {
+  background-color: #34C388;
+}
+
+.ant-badge {
+  &[type="success"] {
+    .ant-badge-status-text {
+      color: #34C388;
+    }
+  }
+
+  &[type="error"] {
+    .ant-badge-status-text {
+      color: #f5222d;
+    }
   }
 }

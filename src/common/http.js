@@ -56,8 +56,10 @@ function handleError(error) {
     return Promise.reject(error.message)
   }
 
-  const { response: { status, data: { message }, config: { params: { _m: showMessage = true } } } } = error
-  if (message) {
+  const { selfError, response: { status, data: { message }, config: { params: { _m: showMessage = true } } } } = error
+  if (selfError) {
+    error.message = selfError
+  } else if (message) {
     error.message = message
   }
   if (status === 401) {
@@ -71,11 +73,13 @@ function handleError(error) {
 axios.interceptors.response.use((response) => {
   let res = response.data
   let error = ''
+  let selfError = ''
   if (typeof res === 'object') {
     const { status } = response
     const { code = -1, meta, message } = response.data
     let { data } = response.data
     if (code !== 0) {
+      selfError = httpCode[code]
       error = httpCode[code] || message
     }
     // pagination
@@ -91,6 +95,7 @@ axios.interceptors.response.use((response) => {
     response.status = 400
     return handleError({
       message: error,
+      selfError,
       response,
     })
   }

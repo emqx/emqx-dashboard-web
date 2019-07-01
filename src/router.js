@@ -47,7 +47,11 @@ const router = new Router({
           name: 'connections',
           component: () => import('@/views/Connections/Connections'),
         },
-
+        {
+          path: 'detail',
+          name: 'connections-view',
+          component: () => import('@/views/Connections/ConnectionView'),
+        },
       ],
     },
     {
