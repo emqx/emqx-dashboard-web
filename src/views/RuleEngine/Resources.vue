@@ -104,7 +104,9 @@ export default {
       this.filterOptions.resourceTypes = resourceTypes.map($ => ({ text: $.title, value: $.name }))
     },
     async loadData() {
-      this.tableData = await loadResource()
+      this.tableData = await loadResource().catch(() => {
+        this.listLoading = false
+      })
       this.listLoading = false
     },
     createResource() {

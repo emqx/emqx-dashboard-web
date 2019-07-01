@@ -9,7 +9,7 @@ import { toLogin, getBasicAuthInfo } from './common/utils'
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   scrollBehavior(to, from, savedPosition) {
     if (to.meta.keepAlive && savedPosition) {
@@ -29,13 +29,25 @@ const router = new Router({
     {
       path: '/',
       component: Layout,
-      redirect: '/overview',
+      redirect: '/rules',
       children: [
         {
           path: '/overview',
           name: 'overview',
           component: () => import('@/views/Overview'),
         },
+      ],
+    },
+    {
+      path: '/connections',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'connections',
+          component: () => import('@/views/Connections/Connections'),
+        },
+
       ],
     },
     {

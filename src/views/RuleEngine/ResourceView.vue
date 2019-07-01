@@ -131,9 +131,12 @@ export default {
       })
     },
     async loadData() {
-      this.record = await loadResourceDetails(this.resourceId)
-      console.log(this.record)
-      this.loading = false
+      try {
+        this.record = await loadResourceDetails(this.resourceId)
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+      }
     },
   },
   computed: {

@@ -81,6 +81,7 @@
                   v-if="item.type === 'number'"
                   v-bind="item.bindAttributes"
                   v-model.number="record.config[item.key]"
+                  class="reset-width"
                 >
                 </emq-select>
 
@@ -88,6 +89,7 @@
                   v-else
                   v-bind="item.bindAttributes"
                   v-model="record.config[item.key]"
+                  class="reset-width"
                 >
                 </emq-select>
               </template>
@@ -265,6 +267,7 @@ export default {
       &:not(.reset-width) {
         width: 330px;
       }
+      width: 100%;
     }
 
     .el-form-item__label {
@@ -282,7 +285,7 @@ export default {
     }
 
     .el-input, .el-select {
-      width: 200px;
+      width: 200px !important;
     }
 
     .el-textarea {
