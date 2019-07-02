@@ -141,6 +141,17 @@ const router = new Router({
       ],
     },
     {
+      path: '/plugins',
+      component: Layout,
+      children: [
+        {
+          path: '/plugins',
+          name: 'plugins',
+          component: () => import('@/views/Plugins/Plugins'),
+        },
+      ],
+    },
+    {
       path: '*',
       component: Layout,
       children: [
