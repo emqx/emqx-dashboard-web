@@ -18,6 +18,7 @@
     "highlight.js": "^9.15.8",
     "moment": "^2.24.0",
     "mqtt": "^3.0.0",
+    "mqtt-match": "^2.0.3",
     "vue": "^2.6.10",
     "vue-directive-waves": "^2.0.2",
     "vue-router": "^3.0.3",
