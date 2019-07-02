@@ -96,21 +96,9 @@ export default {
           icon: 'icon-kongjian',
         },
         {
-          title: '工具',
-          key: 'tools',
-          icon: 'icon-yunduanshuaxin',
-          children: [
-            {
-              title: 'WebSocket',
-              path: '/websocket',
-              parentKey: 'tools',
-            },
-            {
-              title: 'Tracker',
-              path: '/tracker',
-              parentKey: 'tools',
-            },
-          ],
+          title: 'WebSocket',
+          path: '/websocket',
+          icon: 'icon-xinhao',
         },
         {
           title: '通用功能',
@@ -118,8 +106,13 @@ export default {
           icon: 'icon-fenzuguanli',
           children: [
             {
-              title: '错误日志',
-              path: '/error_log',
+              title: '应用',
+              path: '/application',
+              parentKey: 'function',
+            },
+            {
+              title: '用户',
+              path: '/users',
               parentKey: 'function',
             },
             {

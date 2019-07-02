@@ -1,16 +1,36 @@
 <template>
   <div class="overview">
-    <div class="page-header">服务器状态</div>
+    <!--<div class="page-header">服务器状态</div>-->
 
     <el-row class="content-wrapper" :gutter="20">
       <el-col :span="6">
-        <a-card title="连接数" class="app-card" :bordered="false" :loading="pageLoading" hoverable>
-          <div class="content">{{ state.connections_count }}</div>
+        <a-card title="节点数" class="app-card" :bordered="true" :loading="pageLoading" hoverable>
+          <div class="content">
+            {{ currentMetrics.node }}
+          </div>
           <div class="app-footer">
             <div class="footer-item">
-              最大连接数
+              集群中节点数
+              <!--<span class="item-value">-->
+              <!--{{ state.connections_max }}-->
+              <!--</span>-->
+            </div>
+          </div>
+        </a-card>
+      </el-col>
+
+      <el-col :span="6">
+        <a-card title="消息发出" class="app-card" :bordered="true" :loading="pageLoading" hoverable>
+          <div class="content">
+            {{ currentMetrics.sent }}
+            <span class="unit">条/秒</span>
+          </div>
+          <div class="app-footer">
+            <div class="footer-item">
+              消息流入
               <span class="item-value">
-                {{ state.connections_max }}
+                {{ currentMetrics.received }}
+                <span class="unit">条/秒</span>
               </span>
             </div>
           </div>
@@ -18,21 +38,20 @@
       </el-col>
 
       <el-col :span="6">
-        <a-card title="消息" class="app-card" :bordered="false" :loading="pageLoading" hoverable>
-          <div class="content">{{ state.message_rate_count }}/s</div>
+        <a-card title="订阅数" class="app-card" :bordered="true" :loading="pageLoading" hoverable>
+          <div class="content">{{ currentMetrics.subscription }}</div>
 
           <div class="app-footer">
             <div class="footer-item">
-              最大速率
-              <span class="item-value">{{ state.message_rate_max }}/s</span>
+              集群订阅关系数
             </div>
           </div>
         </a-card>
       </el-col>
 
       <el-col :span="6">
-        <a-card title="订阅数" class="app-card" :bordered="false" hoverable :loading="pageLoading">
-          <div class="content">{{ state.subscribers_count }}</div>
+        <a-card title="连接数" class="app-card" :bordered="true" hoverable :loading="pageLoading">
+          <div class="content">{{ currentMetrics.connection }}</div>
 
           <div class="app-footer">
             <div class="footer-item">
@@ -51,7 +70,7 @@
       class="node-wrapper"
       :tab-list="nodeList"
       :active-tab-key="activeNode"
-      :bordered="false" :loading="pageLoading" hoverable
+      :bordered="true" :loading="pageLoading" hoverable
       @tabChange="key => activeNode = key"
     >
       1
@@ -61,7 +80,7 @@
 
 
 <script>
-import { loadState } from '@/api/overview'
+import { loadState, loadCurrentMetrics } from '@/api/overview'
 
 export default {
   name: 'Overview',
@@ -74,6 +93,18 @@ export default {
     return {
       pageLoading: true,
       timer: 0,
+      currentMetricsLogs: {
+        received: [],
+        sent: [],
+        subscription: [],
+      },
+      currentMetrics: {
+        node: 0,  // 节点数
+        received: 0, // 消息 in 速率
+        sent: 0, // 消息 out 速率
+        subscription: 0, // 订阅数
+        connection: 0, // 连接数
+      },
       state: {
         connections_count: 0,
         connections_max: 0,
@@ -109,12 +140,22 @@ export default {
 
   methods: {
     async loadData() {
-      const state = await loadState().catch(() => {})
+      const state = await loadCurrentMetrics()
       this.pageLoading = false
       if (!state) {
         return
       }
       this.state = state
+      this.setCurrentMetricsLogs(state)
+    },
+    setCurrentMetricsLogs(state = {}) {
+      ['received', 'sent', 'subscription'].forEach((key) => {
+        const currentValue = state[key] || 0
+        this.currentMetricsLogs[key].push([Date.now(), currentValue])
+        if (this.currentMetricsLogs[key].length >= 30) {
+          this.currentMetricsLogs[key].unshift()
+        }
+      })
     },
   },
 }
@@ -131,7 +172,6 @@ export default {
   }
 
   .content-wrapper {
-    margin-top: 30px;
   }
 
   .app-card {
@@ -155,9 +195,19 @@ export default {
     .content {
       color: rgba(0, 0, 0, 0.85);
       font-size: 30px;
-      text-align: center;
       padding: 0 16px 16px 16px;
       border-bottom: 1px dashed #e8e8e8;
+
+
+
+      .unit {
+        font-size: 14px;
+        margin-left: 4px;
+      }
+
+      .charts {
+        margin-top: 6px;
+      }
     }
 
     .app-footer {

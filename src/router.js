@@ -108,6 +108,39 @@ const router = new Router({
       ],
     },
     {
+      path: '/websocket',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'websocket',
+          component: () => import('@/views/Tools/WebSocket'),
+        },
+      ],
+    },
+    {
+      path: '/application',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'application',
+          component: () => import('@/views/Function/Application'),
+        },
+      ],
+    },
+    {
+      path: '/users',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'users',
+          component: () => import('@/views/Function/Users'),
+        },
+      ],
+    },
+    {
       path: '*',
       component: Layout,
       children: [

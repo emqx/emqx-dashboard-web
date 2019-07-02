@@ -29,4 +29,8 @@ export async function loadState() {
   return state
 }
 
+export function loadCurrentMetrics() {
+  return http.get('/overview/current_metrics')
+}
+
 export default {}

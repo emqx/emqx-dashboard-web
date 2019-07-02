@@ -130,7 +130,7 @@ body {
 
 
 // radius
-.el-input__inner, .el-button, .el-select, .el-tag, .el-checkbox, .ant-card, .el-textarea__inner {
+.el-input__inner, .el-button:not(.is-circle), .el-select, .el-tag, .el-checkbox, .ant-card, .el-textarea__inner {
   border-radius: 0 !important;
 }
 

@@ -75,7 +75,6 @@ export default {
     },
     async handleAdd() {
       const valid = await this.$refs.record.validate()
-      console.log(valid)
       if (!valid) {
         return
       }
