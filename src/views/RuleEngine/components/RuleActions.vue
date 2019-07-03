@@ -96,7 +96,7 @@
             <a-skeleton active></a-skeleton>
           </div>
           <template v-else>
-            <el-col v-for="(item, i) in paramsList" :span="item.type === 'textarea' ? 24 : 12">
+            <el-col v-for="(item, i) in paramsList" :key="i" :span="item.type === 'textarea' ? 24 : 12">
               <el-form-item v-bind="item.formItemAttributes">
                 <template v-if="item.formItemAttributes.description" slot="label">
                   {{ item.formItemAttributes.label }}

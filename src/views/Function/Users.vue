@@ -1,41 +1,79 @@
 <template>
   <div class="users">
-    <a-card
-      class="emq-list-card"
-      title="用户列表"
-    >
-      <div class="emq-table-header">
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-plus"
-          @click="showDialog('create')">创 建</el-button>
+    <div class="page-header">
+      <div class="page-header-content">
+        <a-breadcrumb>
+          <a-breadcrumb-item>
+            <router-link class="btn btn-default raw" to="/" tag="span">
+              首页
+            </router-link>
+          </a-breadcrumb-item>
+
+          <a-breadcrumb-item>
+            <span class="btn btn-default raw">
+              用户
+            </span>
+          </a-breadcrumb-item>
+        </a-breadcrumb>
+
+        <div class="page-header-title-view">
+          <div class="title">
+            用户
+          </div>
+        </div>
+
+        <div class="page-header-content-view">
+          <div class="content">
+            管理 Dashboard 登录用户
+          </div>
+        </div>
       </div>
+    </div>
 
-      <el-table :data="tableData" class="data-list">
-        <el-table-column label="用户名" prop="username"></el-table-column>
-        <el-table-column label="备注" prop="tags"></el-table-column>
-        <el-table-column>
-          <template slot-scope="{ row }">
-            <el-button type="dashed" size="mini" @click="showDialog('edit', row)">编辑</el-button>
-            <el-button
-              v-if="row.tags !== 'administrator'"
-              type="dashed"
-              size="mini"
-              @click="deleteConfirm(row)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+    <div class="app-wrapper">
+      <a-card
+        class="emq-list-card"
+      >
+        <div class="emq-table-header">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            @click="showDialog('create')">
+            创 建
+          </el-button>
+        </div>
 
-    </a-card>
+        <el-table :data="tableData" class="data-list">
+          <el-table-column min-width="120px" prop="username" label="用户名"></el-table-column>
+          <el-table-column min-width="60px" prop="tags" label="备注"></el-table-column>
+          <el-table-column width="120px">
+            <template slot-scope="{ row }">
+              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">编辑</el-button>
+
+
+              <el-button
+                v-if="row.tags !== 'administrator' && row.username !== 'admin'"
+                type="danger"
+                size="mini"
+                @click="deleteConfirm(row)">删除
+              </el-button>
+
+            </template>
+          </el-table-column>
+        </el-table>
+
+      </a-card>
+    </div>
 
 
     <el-dialog
       width="520px"
-      :title="accessType === 'edit' ? '编辑用户' : '创建用户'" 
+      :title="accessType === 'edit' ? '编辑用户' : '创建用户'"
+      @close="clearInput"
       :visible.sync="dialogVisible">
       <el-form size="small" ref="recordForm" :model="record" :rules="rules">
-        <el-form-item prop="username" label="用户名称" >
+        <el-form-item prop="username" label="用户名称">
           <el-input
             v-model="record.username"
             :disabled="accessType === 'edit'"></el-input>
@@ -43,18 +81,18 @@
         <el-form-item prop="tags" label="备注">
           <el-input v-model="record.tags"></el-input>
         </el-form-item>
-          <el-form-item
-            v-if="accessType !== 'edit' || allowChange"
-            prop="password"
-            :label="accessType === 'edit' ? '旧密码' : '密码'">
-            <el-input v-model="record.password"></el-input>
-          </el-form-item>
-          <el-form-item v-if="allowChange" prop="newPassword" label="新密码">
-            <el-input v-model="record.newPassword"></el-input>
-          </el-form-item>
-          <el-form-item v-if="allowChange" prop="repeatPassword" label="确认新密码">
-            <el-input v-model="record.repeatPassword"></el-input>
-          </el-form-item>
+        <el-form-item
+          v-if="accessType !== 'edit' || allowChange"
+          prop="password"
+          :label="accessType === 'edit' ? '旧密码' : '密码'">
+          <el-input v-model="record.password" type="password"></el-input>
+        </el-form-item>
+        <el-form-item v-if="allowChange" prop="newPassword" label="新密码">
+          <el-input v-model="record.newPassword" type="password"></el-input>
+        </el-form-item>
+        <el-form-item v-if="allowChange" prop="repeatPassword" label="确认新密码">
+          <el-input v-model="record.repeatPassword" type="password"></el-input>
+        </el-form-item>
         <el-link
           v-if="accessType === 'edit'"
           :underline="false"
@@ -73,7 +111,6 @@
 
 
 <script>
-// API 自行去老 Dashboard 抓包
 import {
   loadUser,
   createUser,
@@ -92,11 +129,11 @@ export default {
   data() {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'));
+        callback(new Error('请再次输入密码'))
       } else if (value !== this.record.newPassword) {
-        callback(new Error('两次输入密码不一致!'));
+        callback(new Error('两次输入密码不一致!'))
       } else {
-        callback();
+        callback()
       }
     }
     return {
@@ -119,7 +156,7 @@ export default {
         }, {
           min: 3,
           max: 32,
-          message: '密码长度不符',
+          message: '密码长度为 3-32 位',
           trigger: ['blur', 'change'],
         }],
         newPassword: [{
@@ -129,11 +166,11 @@ export default {
         }, {
           min: 3,
           max: 32,
-          message: '密码长度不符',
+          message: '密码长度为 3-32 位',
           trigger: ['blur', 'change'],
         }],
         repeatPassword: [
-          { required: true, message: '请再次输入密码' },
+          { required: true, message: '请输入确认密码' },
           { validator: validatePass, trigger: ['blur', 'change'] },
         ],
       },
@@ -145,6 +182,11 @@ export default {
   },
 
   methods: {
+    clearInput() {
+      if (this.$refs.recordForm) {
+        this.$refs.recordForm.resetFields()
+      }
+    },
     async loadData() {
       this.tableData = await loadUser()
     },
@@ -171,7 +213,7 @@ export default {
         }
       }
     },
-    save() {
+    async save() {
       const vue = this
       this.$refs.recordForm.validate(function(valid) {
         if (!valid) {
@@ -179,13 +221,13 @@ export default {
         }
         if (vue.accessType === 'edit') {
           const { username } = vue.record
-          updateUser(username, vue.record).then(() => {
+          updateUser(username, vue.record).then(async () => {
             if (vue.allowChange) {
               const passwordData = {
                 new_pwd: vue.record.newPassword,
                 old_pwd: vue.record.password,
               }
-              changePassword(username, passwordData)
+              await changePassword(username, passwordData)
             }
             vue.$message.success('编辑成功')
             vue.dialogVisible = false
@@ -207,15 +249,17 @@ export default {
     },
     deleteConfirm(item) {
       const vue = this
-      this.$confirm('确定删除该用户?', {
+
+      this.$msgbox.confirm('确定删除该用户?', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-      }).then(() => {
+        type: 'warning',
+      }).then(async () => {
         destroyUser(item.username).then(() => {
           vue.$message.success('删除成功')
           vue.loadData()
         })
-      })
+      }).catch(() => {})
     },
   },
 }
