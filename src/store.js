@@ -8,7 +8,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     loading: false,
-    user: safeParser(localStorage.user || sessionStorage.user),
+    user: JSON.parse(localStorage.user || sessionStorage.user || '{}') || {},
     lang: 'zh',
     leftBarCollapse: false, // localStorage.getItem('leftBarCollapse'),
   },

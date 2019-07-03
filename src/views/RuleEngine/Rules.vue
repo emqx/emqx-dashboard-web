@@ -242,7 +242,7 @@ export default {
 
   methods: {
     deleteRule(row) {
-      this.$msgbox.confirm('此操作将停用并删除该规则, 是否继续?', {
+      this.$msgbox.confirm('此操作将停用并删除该规则, 确认继续?', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

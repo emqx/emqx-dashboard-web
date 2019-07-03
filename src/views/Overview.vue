@@ -66,21 +66,59 @@
 
     </el-row>
 
-    <a-card
-      class="node-wrapper"
-      :tab-list="nodeList"
-      :active-tab-key="activeNode"
-      :bordered="true" :loading="pageLoading" hoverable
-      @tabChange="key => activeNode = key"
-    >
-      1
+    <a-card class="node-wrapper" title="节点状态">
+      等待接口
     </a-card>
+
+
+    <a-card class="license-card" title="License 信息" :loading="pageLoading">
+      <ul class="license-field">
+        <li class="item">
+          <span class="key">签发对象:</span>
+          <span class="value">{{ license.customer }}</span>
+        </li>
+
+        <li class="item">
+          <span class="key">连接线数:</span>
+          <div class="content">
+            <el-progress :stroke-width="12" :percentage="licensePercentage" color="#34c388"
+                         :format="formatConnection"></el-progress>
+          </div>
+        </li>
+
+        <li class="item">
+          <span class="key">签发邮箱:</span>
+          <span class="value">{{ license.email }}</span>
+        </li>
+
+        <li class="item">
+          <span class="key">签发时间:</span>
+          <div class="value broker">{{ license.issued_at }}</div>
+        </li>
+
+        <li class="item">
+          <span class="key">到期时间:</span>
+          <div class="value broker">{{ license.expiry_at }}</div>
+        </li>
+      </ul>
+
+      <div class="license-card-footer">
+        <div class="description">
+          证书到期前 EMQ 将通过邮件通知签发邮箱，
+          请留意信息接收以免错误续期时间影响业务。
+        </div>
+        <div class="oper">
+          <el-button type="dashed" size="small">升级</el-button>
+        </div>
+      </div>
+    </a-card>
+
   </div>
 </template>
 
 
 <script>
-import { loadState, loadCurrentMetrics } from '@/api/overview'
+import { loadState, loadCurrentMetrics, loadLicenseInfo } from '@/api/overview'
 
 export default {
   name: 'Overview',
@@ -93,6 +131,17 @@ export default {
     return {
       pageLoading: true,
       timer: 0,
+      license: {
+        'customer': '北京中天九五科技发展有限公司',
+        'email': 'liruilong@gas95.com',
+        'plugins': 'emqx_backend_redis,  emqx_backend_mysql,  emqx_backend_pgsql,  emqx_backend_mongo,  emqx_backend_cassa,  emqx_bridge_kafka,  emqx_bridge_rabbit',
+        'max_connections': 100000,
+        'issued_at': '2019-05-05 08:31:04',
+        'expiry_at': '2119-05-31 08:31:04',
+        'vendor': 'EMQ Technologies Co., Ltd.',
+        'version': '0.0.0+build.1.ref8234b61',
+        'type': 'trial',
+      },
       currentMetricsLogs: {
         received: [],
         sent: [],
@@ -129,6 +178,7 @@ export default {
   created() {
     this.pageLoading = true
     this.loadData()
+    this.loadLicenseData()
     clearTimeout(this.timer)
     this.timer = setTimeout(this.loadData, 10 * 1000)
   },
@@ -138,13 +188,41 @@ export default {
     next()
   },
 
+  computed: {
+    licensePercentage() {
+      const { connection } = this.currentMetrics
+      const { max_connections } = this.license
+      const value = Math.floor((connection / max_connections) * 100)
+      if (value < 2) {
+        return 2
+      }
+      return value
+    },
+  },
+
   methods: {
+    formatConnection() {
+      const { connection } = this.currentMetrics
+      const { max_connections } = this.license
+      return `${this._formatNumber(connection)}/${this._formatNumber(max_connections)}`
+    },
+    _formatNumber(num) {
+      if (num > 10000) {
+        const value = (num / 10000)
+        return `${value}W`
+      }
+      return num
+    },
+    async loadLicenseData() {
+      this.license = await loadLicenseInfo()
+    },
     async loadData() {
       const state = await loadCurrentMetrics()
       this.pageLoading = false
       if (!state) {
         return
       }
+      this.currentMetrics = state
       this.state = state
       this.setCurrentMetricsLogs(state)
     },
@@ -166,6 +244,10 @@ export default {
 @import "../assets/style/variables";
 
 .overview {
+  .license-card {
+    margin-top: 32px;
+  }
+
   .page-header {
     font-size: 20px;
     color: #101010;
@@ -228,6 +310,67 @@ export default {
 
     & > .ant-card-head {
       /*padding: 0 8px;*/
+    }
+  }
+
+  .license-card {
+    width: 500px;
+
+    .license-card-footer {
+      display: flex;
+      margin-top: 12px;
+      align-items: center;
+      justify-content: space-between;
+
+      .description {
+        font-size: 12px;
+        color: #B2B2B2;
+        line-height: 1.4;
+        width: 340px;
+      }
+
+      .oper {
+        width: 100px;
+      }
+    }
+
+  }
+
+  .license-field {
+    list-style-type: none;
+    padding-left: 0;
+
+    .item {
+      font-size: 14px;
+      color: #333;
+      padding: 6px 0;
+
+      .key {
+        margin-right: 24px;
+      }
+
+      .value {
+        font-weight: bold;
+        color: #666;
+        &.broker {
+          margin-top: 6px;
+        }
+      }
+
+      .content {
+        margin-top: 6px;
+      }
+
+      .el-progress {
+        .el-progress-bar {
+          padding-right: 15%;
+        }
+
+        .el-progress__text {
+          font-size: 14px !important;
+          margin-left: 10px;
+        }
+      }
     }
   }
 }

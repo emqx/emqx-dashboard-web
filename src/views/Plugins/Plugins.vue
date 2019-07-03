@@ -46,15 +46,14 @@
       <a-card class="emq-list-card">
 
 
-
         <div class="emq-table-header">
           <div>
             <!--<emq-select-->
-              <!--v-model="nodeName"-->
-              <!--:field="{ api: loadNodes }"-->
-              <!--:field-name="{ label: 'name', value: 'name' }"-->
-              <!--size="mini"-->
-              <!--@change="loadData"-->
+            <!--v-model="nodeName"-->
+            <!--:field="{ api: loadNodes }"-->
+            <!--:field-name="{ label: 'name', value: 'name' }"-->
+            <!--size="mini"-->
+            <!--@change="loadData"-->
             <!--&gt;-->
             <!--</emq-select>-->
 
@@ -123,7 +122,7 @@
               <el-button :type="item.active ? 'danger' : 'dashed'" size="mini" @click="togglePlugin(item)">
                 {{ item.active ? '停 止' : '启 动' }}
               </el-button>
-              <el-button size="mini" type="dashed">配 置</el-button>
+              <el-button size="mini" type="dashed" @click="toConfig(item)">配 置</el-button>
             </div>
           </div>
         </div>
@@ -231,6 +230,16 @@ export default {
   },
 
   methods: {
+    toConfig(item = {}) {
+      const { name } = item
+      const node = this.nodeName
+      this.$router.push({
+        path: `/plugins/${name}`,
+        query: {
+          node,
+        },
+      })
+    },
     typeFilterHandler(value, row) {
       return value === row.type
     },
@@ -261,7 +270,7 @@ export default {
         row.active = true
         return
       }
-      this.$msgbox.confirm('此操作将停止该插件, 是否继续?', {
+      this.$msgbox.confirm('此操作将停止该插件, 确认继续?', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -385,6 +394,7 @@ export default {
       margin-left: 20px;
     }
   }
+
   .emq-table-header {
     margin-bottom: 30px;
   }

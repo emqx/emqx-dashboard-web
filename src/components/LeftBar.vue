@@ -118,11 +118,11 @@ export default {
               path: '/users',
               parentKey: 'function',
             },
-            {
-              title: '系统设置',
-              path: '/setting',
-              parentKey: 'function',
-            },
+            // {
+            //   title: '系统设置',
+            //   path: '/setting',
+            //   parentKey: 'function',
+            // },
           ],
         },
       ],

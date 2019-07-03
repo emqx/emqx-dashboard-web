@@ -33,4 +33,8 @@ export function loadCurrentMetrics() {
   return http.get('/overview/current_metrics')
 }
 
+export function loadLicenseInfo() {
+  return http.get('/license_info')
+}
+
 export default {}

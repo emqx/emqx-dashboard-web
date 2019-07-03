@@ -112,7 +112,7 @@ export default {
 
   methods: {
     deleteResource(row) {
-      this.$msgbox.confirm('此操作将停用并删除该资源, 是否继续?', {
+      this.$msgbox.confirm('此操作将停用并删除该资源, 确认继续?', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
