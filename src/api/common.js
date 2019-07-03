@@ -9,5 +9,20 @@ export function auth(user = {}) {
   })
 }
 
+export function loadPlugins(nodeName) {
+  return http.get(`/nodes/${nodeName}/plugins`)
+}
+
+export function startPlugin(nodeName, pluginName) {
+  return http.get(`/nodes/${nodeName}/plugins/${pluginName}/load`)
+}
+
+export function stopPlugin(nodeName, pluginName) {
+  return http.get(`/nodes/${nodeName}/plugins/${pluginName}/unload`)
+}
+
+export function loadNodes() {
+  return http.get('/nodes')
+}
 
 export default {}

@@ -1,13 +1,14 @@
 <template>
   <el-dialog
     v-bind="$attrs"
-    v-on="$listeners"
     title="添加订阅"
     width="400px"
     :visible.sync="rawVisible"
+    class="create-subscribe"
+    v-on="$listeners"
     @close="close"
     @open="open"
-    class="create-subscribe">
+  >
     <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
       <el-form-item v-if="!clientId" prop="client_id" label="Client ID">
         <el-input v-model="record.client_id" placeholder="请输入 Client ID"></el-input>
@@ -36,6 +37,8 @@ export default {
 
   components: {},
 
+  inheritAttrs: false,
+
   props: {
     visible: {
       type: Boolean,
@@ -46,8 +49,6 @@ export default {
       default: '',
     },
   },
-
-  inheritAttrs: false,
 
   data() {
     return {
@@ -69,6 +70,20 @@ export default {
     }
   },
 
+  computed: {
+    rawVisible: {
+      get() {
+        return this.visible
+      },
+      set(val) {
+        this.$emit('update:visible', val)
+      },
+    },
+  },
+
+  created() {
+  },
+
   methods: {
     open() {
       this.record.client_id = this.clientId
@@ -85,20 +100,6 @@ export default {
     close() {
       this.$refs.record.resetFields()
       this.$emit('update:visible', false)
-    },
-  },
-
-  created() {
-  },
-
-  computed: {
-    rawVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      },
     },
   },
 }

@@ -6,7 +6,7 @@
       :loading="listLoading"
     >
       <div class="emq-table-header">
-        <el-button type="primary" @click="createResource">创建资源</el-button>
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">创建</el-button>
       </div>
 
       <el-table :data="tableData" class="data-list">
@@ -55,7 +55,9 @@
 
 
 <script>
-import { loadResource, loadResourceTypes, destroyResource, reconnectResource } from '@/api/rules'
+import {
+  loadResource, loadResourceTypes, destroyResource, reconnectResource,
+} from '@/api/rules'
 import ResourceDialog from './components/ResourceCreate'
 
 export default {

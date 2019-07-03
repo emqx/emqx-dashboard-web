@@ -52,6 +52,15 @@ export default {
     return {}
   },
 
+  computed: {
+    navHeadStyle() {
+      return { left: !this.$store.state.leftBarCollapse ? '201px' : 0 }
+    },
+    username() {
+      return this.$store.state.user.username || '未登录'
+    },
+  },
+
   created() {},
 
   methods: {
@@ -64,15 +73,6 @@ export default {
         return
       }
       this.$router.push({ path: `/${command}` })
-    },
-  },
-
-  computed: {
-    navHeadStyle() {
-      return { left: !this.$store.state.leftBarCollapse ? '200px' : 0 }
-    },
-    username() {
-      return this.$store.state.user.username || '未登录'
     },
   },
 }
@@ -88,11 +88,10 @@ export default {
   padding: 0 20px 0 0;
   background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
-  border-left: 1px solid #f0f2f5;
   position: fixed;
   top: 0;
   right: 0;
-  left: 200px;
+  left: 201px;
   z-index: 100;
   transition: left .5s;
 }

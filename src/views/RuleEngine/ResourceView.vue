@@ -28,13 +28,14 @@
                 :text="record.status.is_alive ? '可用' : '不可用'"
                 dot
               >
-            </a-badge>
+              </a-badge>
               <el-button
                 v-if="!record.status.is_alive"
                 size="mini"
                 style="margin-left: 12px"
                 type="primary"
-                @click="reconnectResource">
+                @click="reconnectResource"
+              >
                 重连
               </el-button>
 
@@ -92,6 +93,15 @@ export default {
 
   components: {},
 
+  filters: {
+    itemValue(val) {
+      if (typeof val === 'object') {
+        return JSON.stringify(val)
+      }
+      return val
+    },
+  },
+
   props: {},
 
   data() {
@@ -104,13 +114,9 @@ export default {
       },
     }
   },
-
-  filters: {
-    itemValue(val) {
-      if (typeof val === 'object') {
-        return JSON.stringify(val)
-      }
-      return val
+  computed: {
+    resourceId() {
+      return this.$route.params.id
     },
   },
 
@@ -137,11 +143,6 @@ export default {
       } catch (e) {
         this.loading = false
       }
-    },
-  },
-  computed: {
-    resourceId() {
-      return this.$route.params.id
     },
   },
 }

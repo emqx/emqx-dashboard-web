@@ -5,7 +5,7 @@
       title="应用列表"
     >
       <div class="emq-table-header">
-        <el-button type="primary" @click="createApplication">创建应用</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="small" @click="createApplication">创建</el-button>
       </div>
 
 
@@ -59,18 +59,22 @@ export default {
       dialogVisible: false,
       tableData: [],
       record: {
-        'name': 'wivwiv', // 应用名称
-        'app_id': '7a9984c29896b', // 应用 ID
-        'status': true, // 是否启用
-        'expired': 0, // 到期时间 秒时间错 显示需要格式化为 年月日
-        'secret': 'Mjg4MTQ0NjgwNDQ2MDEwMDkyMzIwNzgzNTI1ODAwODM3MTC', // 密钥 自动生成 [查看可见]
-        'desc': '', // 描述
+        name: 'wivwiv', // 应用名称
+        app_id: '7a9984c29896b', // 应用 ID
+        status: true, // 是否启用
+        expired: 0, // 到期时间 秒时间错 显示需要格式化为 年月日
+        secret: 'Mjg4MTQ0NjgwNDQ2MDEwMDkyMzIwNzgzNTI1ODAwODM3MTC', // 密钥 自动生成 [查看可见]
+        desc: '', // 描述
       },
       rules: {
         name: { required: true },
         status: [{ required: true }, { type: 'enum', enum: [0, 1] }],
       },
     }
+  },
+
+  created() {
+    this.loadData()
   },
 
   methods: {
@@ -80,10 +84,6 @@ export default {
     createApplication() {
       this.dialogVisible = true
     },
-  },
-
-  created() {
-    this.loadData()
   },
 }
 </script>

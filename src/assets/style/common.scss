@@ -19,7 +19,10 @@ body {
   background-color: #f0f2f5;
   padding: 0;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif !important;
+  //font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif !important;
+  color: rgba(0, 0, 0, .65);
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 
 .line {
@@ -131,7 +134,7 @@ body {
 
 // radius
 .el-input__inner, .el-button:not(.is-circle), .el-select, .el-tag, .el-checkbox, .ant-card, .el-textarea__inner {
-  border-radius: 0 !important;
+  //border-radius: 0 !important;
 }
 
 

@@ -9,14 +9,15 @@
         <div
           v-if="!disabled"
           class="action-item-btn btn"
-          @click="removeAction(i)">删除
+          @click="removeAction(i)"
+        >删除
         </div>
         <div v-else class="action-item-btn action-item-type">
           <span class="title">成功 </span>
-          <span class="desc">{{(item.metrics || {}).success }}</span>
+          <span class="desc">{{ (item.metrics || {}).success }}</span>
 
           <span class="title">失败 </span>
-          <span class="desc">{{(item.metrics || {}).failed }}</span>
+          <span class="desc">{{ (item.metrics || {}).failed }}</span>
         </div>
       </div>
       <div class="action-item-description">
@@ -46,7 +47,7 @@
           <emq-select
             v-model="record.name"
             :field="{ options: availableActions }"
-            :fieldName="{ label: 'title', value: 'name'}"
+            :field-name="{ label: 'title', value: 'name'}"
             @change="actionTypeChange"
           >
           </emq-select>
@@ -54,7 +55,8 @@
 
         <div
           v-if="(selectedAction.title.length - selectedAction.description.length) > 18"
-          class="action-description">
+          class="action-description"
+        >
           {{ selectedAction.description }}
         </div>
 
@@ -62,12 +64,12 @@
           <emq-select
             v-model="record.params.$resource"
             :field="{ options: availableResources }"
-            :fieldName="{ label: 'id', value: 'id'}"
+            :field-name="{ label: 'id', value: 'id'}"
             class="reset-width"
             style="width: 250px"
             @visible-change="checkResource"
           >
-            <div class="resource-option" slot="option" slot-scope="{ item }">
+            <div slot="option" slot-scope="{ item }" class="resource-option">
               <span class="resource-state">
                 <a-badge :status="item.status.is_alive ? 'success' : 'error'"></a-badge>
               </span>
@@ -76,8 +78,8 @@
             </div>
           </emq-select>
 
-          <span class="tips btn" @click="toCreateResource">
-            新建资源
+          <span class="tips btn" icon="el-icon-plus" @click="toCreateResource">
+            新建
           </span>
         </el-form-item>
 
@@ -100,30 +102,30 @@
                 <template v-if="item.elType !== 'select'">
                   <el-input
                     v-if="item.type === 'number'"
-                    v-bind="item.bindAttributes"
                     v-model.number="record.params[item.key]"
+                    v-bind="item.bindAttributes"
                   >
                   </el-input>
 
                   <el-input
                     v-else
-                    v-bind="item.bindAttributes"
                     v-model="record.params[item.key]"
+                    v-bind="item.bindAttributes"
                   >
                   </el-input>
                 </template>
                 <template v-else>
                   <emq-select
                     v-if="item.type === 'number'"
-                    v-bind="item.bindAttributes"
                     v-model.number="record.params[item.key]"
+                    v-bind="item.bindAttributes"
                   >
                   </emq-select>
 
                   <emq-select
                     v-else
-                    v-bind="item.bindAttributes"
                     v-model="record.params[item.key]"
+                    v-bind="item.bindAttributes"
                   >
                   </emq-select>
                 </template>
@@ -135,7 +137,7 @@
       </el-form>
 
 
-      <div class="dialog-align-footer" slot="footer">
+      <div slot="footer" class="dialog-align-footer">
         <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">确定</el-button>
         <el-button size="small" @click="handleCache">取消</el-button>
       </div>
@@ -197,6 +199,42 @@ export default {
       actions: [], // 全部 actions
       resources: [], // 全部资源
     }
+  },
+
+  computed: {
+    rawValue: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('update:value', val)
+      },
+    },
+    availableActions() {
+      const data = this.actions.filter($ => ['$any', this.event].includes($.for))
+      if (!this.record.name && data[0]) {
+        this.record.name = data[0].name
+        this.actionTypeChange(this.record.name)
+      }
+      return data
+    },
+    availableResources() {
+      const { types } = this.selectedAction
+      if (!types) {
+        return []
+      }
+      return this.resources.filter($ => types.includes($.type))
+    },
+  },
+
+  watch: {
+    event() {
+
+    },
+  },
+
+  created() {
+    this.loadActions()
   },
 
   methods: {
@@ -284,9 +322,8 @@ export default {
     },
 
     fillRawValue() {
-      const rawValue = this.rawValue
+      const { rawValue } = this
       rawValue.forEach((item) => {
-
         item._config = this.actionsMap[item.name]
         const { params, _config: { params: paramsTemplate } } = item
         item._value = Object.entries(params).map(([k, v]) => ({
@@ -297,42 +334,6 @@ export default {
       })
       this.rawValue = rawValue
     },
-  },
-
-  watch: {
-    event() {
-
-    },
-  },
-
-  computed: {
-    rawValue: {
-      get() {
-        return this.value
-      },
-      set(val) {
-        this.$emit('update:value', val)
-      },
-    },
-    availableActions() {
-      const data = this.actions.filter($ => ['$any', this.event].includes($.for))
-      if (!this.record.name && data[0]) {
-        this.record.name = data[0].name
-        this.actionTypeChange(this.record.name)
-      }
-      return data
-    },
-    availableResources() {
-      const { types } = this.selectedAction
-      if (!types) {
-        return []
-      }
-      return this.resources.filter($ => types.includes($.type))
-    },
-  },
-
-  created() {
-    this.loadActions()
   },
 }
 </script>

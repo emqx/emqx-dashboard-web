@@ -57,6 +57,17 @@ export default {
     }
   },
 
+  computed: {},
+
+  created() {
+    const list = []
+    const d = this.value
+    Object.entries(d).forEach(([key, value]) => {
+      list.push({ key, value, state: 0 })
+    })
+    this.tableData = list
+  },
+
   methods: {
     atInputChange() {
       const data = {}
@@ -78,17 +89,6 @@ export default {
       })
     },
   },
-
-  created() {
-    const list = []
-    const d = this.value
-    Object.entries(d).forEach(([key, value]) => {
-      list.push({ key, value, state: 0 })
-    })
-    this.tableData = list
-  },
-
-  computed: {},
 }
 </script>
 

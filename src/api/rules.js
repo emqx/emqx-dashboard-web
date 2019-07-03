@@ -74,7 +74,7 @@ export async function loadResource(params = {}) {
       resourceTypes[item.name] = item
     })
   }
-  let resources = await http.get('/resources', { params })
+  const resources = await http.get('/resources', { params })
   return resources.map((item) => {
     item.config = resourceTypes[item.type] || {}
     return item
@@ -88,7 +88,7 @@ export async function loadResourceDetails(id) {
       resourceTypes[item.name] = item
     })
   }
-  let resource = await http.get(`/resources/${id}`)
+  const resource = await http.get(`/resources/${id}`)
   resource.typeInfo = resourceTypes[resource.type] || {}
   resource._config = []
   Object.keys(resource.config).forEach((key) => {

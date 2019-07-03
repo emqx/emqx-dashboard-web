@@ -13,22 +13,18 @@ import 'echarts/lib/component/markLine'
 import 'echarts/lib/component/markPoint'
 
 export default {
-  name: 'line-chart',
+  name: 'LineChart',
 
   props: {
     // Y-coordinate title
     yTitle: {
       type: Array,
-      default: () => {
-        return ['']
-      },
+      default: () => [''],
     },
     // Chart line color
     chartColor: {
       type: Array,
-      default: () => {
-        return ['#23c88e']
-      },
+      default: () => ['#23c88e'],
     },
     axisColor: {
       type: Object,
@@ -37,20 +33,8 @@ export default {
     // Chart data
     chartData: {
       type: Array,
-      default: () => {
-        return []
-      },
+      default: () => [],
     },
-  },
-
-  computed: {
-    rawData() {
-      // [[t, v], [t, v]]
-      return this.chartData.map($ => {
-        const [k, v] = $
-        return {  }
-      })
-    }
   },
 
   data() {
@@ -60,11 +44,25 @@ export default {
     }
   },
 
+  computed: {
+    rawData() {
+      // [[t, v], [t, v]]
+      return this.chartData.map(($) => {
+        const [k, v] = $
+        return { }
+      })
+    },
+  },
+
   watch: {
     chartData: {
       deep: true,
       handler: 'drawChart',
     },
+  },
+
+  mounted() {
+    this.drawChart()
   },
 
   methods: {
@@ -154,10 +152,6 @@ export default {
       this.chart = undefined
       this.drawChart()
     },
-  },
-
-  mounted() {
-    this.drawChart()
   },
 }
 </script>

@@ -5,7 +5,7 @@
       title="用户列表"
     >
       <div class="emq-table-header">
-        <el-button type="primary" @click="createUsers">创建用户</el-button>
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="createUsers">创建</el-button>
       </div>
 
       <el-table :data="tableData" class="data-list">
@@ -76,6 +76,10 @@ export default {
     }
   },
 
+  created() {
+    this.loadData()
+  },
+
   methods: {
     async loadData() {
       this.tableData = await loadUser()
@@ -83,10 +87,6 @@ export default {
     createUsers() {
       this.dialogVisible = true
     },
-  },
-
-  created() {
-    this.loadData()
   },
 }
 </script>

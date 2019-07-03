@@ -87,7 +87,8 @@
                   v-for="key in availableFields"
                   :key="key"
                   class="available-fields"
-                  @click="selectAvailableFields(key)">{{ key }}</span> </code>
+                  @click="selectAvailableFields(key)"
+                >{{ key }}</span> </code>
               </div>
             </el-form-item>
           </el-collapse-transition>
@@ -108,13 +109,15 @@
             <div v-if="showTest">
               <el-form-item
                 v-for="(field, i) in testField"
-                :prop="`ctx.${field}`"
                 :key="i"
-                :label="field">
+                :prop="`ctx.${field}`"
+                :label="field"
+              >
                 <el-input
                   v-model="record.ctx[field]"
                   :type="field === 'payload' ? 'textarea' : ''"
-                  :rows="5">
+                  :rows="5"
+                >
                 </el-input>
               </el-form-item>
 
@@ -139,8 +142,8 @@
         <div class="emq-title required-title">
           响应动作
           <span class="sub-title">
-              处理命中规则的消息
-            </span>
+            处理命中规则的消息
+          </span>
         </div>
 
         <div class="rule-action-wrapper">
@@ -168,7 +171,9 @@
 
 
 <script>
-import { loadEventsSelect, loadEvents, SQLTest, createRule } from '@/api/rules'
+import {
+  loadEventsSelect, loadEvents, SQLTest, createRule,
+} from '@/api/rules'
 import { loadTopics } from '@/api/server'
 import CodeView from '@/components/CodeView'
 import RuleActions from './components/RuleActions'

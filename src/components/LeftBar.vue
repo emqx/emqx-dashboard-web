@@ -1,8 +1,10 @@
 <template>
-  <el-scrollbar class="left-bar">
+  <div class="left-bar">
     <div class="logo" :style="logoStyle">
-      <div class="title" tag="div" to="/">EMQ X Dashboard</div>
-      <div class="line"></div>
+      <img class="logo-img" src="../assets/emqx_logo.png" alt="logo">
+      <div class="title">
+        Dashboard
+      </div>
     </div>
 
     <a-menu
@@ -16,7 +18,8 @@
         <a-sub-menu
           v-if="item.children && item.children.length > 0"
           :key="item.key"
-          @titleClick="titleClick(item)">
+          @titleClick="titleClick(item)"
+        >
           <span slot="title">
             <i class="iconfont" :class="item.icon"></i>
             <span>{{ item.title }}</span>
@@ -34,7 +37,7 @@
         </a-menu-item>
       </template>
     </a-menu>
-  </el-scrollbar>
+  </div>
 </template>
 
 
@@ -127,6 +130,16 @@ export default {
     }
   },
 
+  computed: {
+    defaultSelectedKeys() {
+      const { path } = this.$route
+      return [`/${path.split('/')[1]}`]
+    },
+    logoStyle() {
+      return { left: !this.$store.state.leftBarCollapse ? 0 : '-200px' }
+    },
+  },
+
   created() {
     this.initRouter()
   },
@@ -147,17 +160,6 @@ export default {
           this.defaultOpenKeys = [item.key]
         }
       })
-
-    },
-  },
-
-  computed: {
-    defaultSelectedKeys() {
-      const { path } = this.$route
-      return [`/${path.split('/')[1]}`]
-    },
-    logoStyle() {
-      return { left: !this.$store.state.leftBarCollapse ? 0 : '-200px' }
     },
   },
 }
@@ -175,10 +177,11 @@ export default {
 
 .ant-menu {
   margin-top: 80px;
-
+  border-right-color: transparent;
 
   &.ant-menu-inline {
     border-right-color: #fff;
+    border-right: 0;
   }
 }
 
@@ -190,8 +193,9 @@ export default {
   text-align: center;
   width: 200px;
   font-size: 18px;
-  font-weight: 500;
-  padding: 20px 0;
+  /*font-weight: bolder;*/
+  height: 60px;
+  line-height: 60px;
   color: #34C388;
   overflow: hidden;
   position: fixed;
@@ -200,6 +204,21 @@ export default {
   background-color: #fff;
   z-index: 100;
   transition: left .5s;
+  box-shadow: 1px 1px 0 0 #e8e8e8;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  .title {
+    margin-left: 12px;
+  }
+  .logo-img {
+    width: 48px;
+    height: auto;
+  }
+
+  .unit {
+    /*font-style: italic;*/
+  }
 
   .line {
     margin-top: 12px;

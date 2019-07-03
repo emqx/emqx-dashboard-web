@@ -4,15 +4,15 @@
     class="resource-dialog"
     width="520px"
     v-bind="$attrs"
-    v-on="$listeners"
     :visible.sync="dialogVisible"
+    v-on="$listeners"
     @open="loadData"
     @close="clearForm"
   >
     <el-form
+      ref="record"
       :model="record"
       :rules="rules"
-      ref="record"
       label-position="top"
       size="small"
     >
@@ -62,15 +62,15 @@
               <template v-else-if="item.elType !== 'select'">
                 <el-input
                   v-if="item.type === 'number'"
-                  v-bind="item.bindAttributes"
                   v-model.number="record.config[item.key]"
+                  v-bind="item.bindAttributes"
                 >
                 </el-input>
 
                 <el-input
                   v-else
-                  v-bind="item.bindAttributes"
                   v-model="record.config[item.key]"
+                  v-bind="item.bindAttributes"
                 >
                 </el-input>
               </template>
@@ -79,16 +79,16 @@
               <template v-else>
                 <emq-select
                   v-if="item.type === 'number'"
-                  v-bind="item.bindAttributes"
                   v-model.number="record.config[item.key]"
+                  v-bind="item.bindAttributes"
                   class="reset-width"
                 >
                 </emq-select>
 
                 <emq-select
                   v-else
-                  v-bind="item.bindAttributes"
                   v-model="record.config[item.key]"
+                  v-bind="item.bindAttributes"
                   class="reset-width"
                 >
                 </emq-select>
@@ -100,7 +100,7 @@
 
     </el-form>
 
-    <div class="dialog-align-footer" slot="footer">
+    <div slot="footer" class="dialog-align-footer">
       <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">确定</el-button>
       <el-button size="small" @click="handleCache">取消</el-button>
     </div>
@@ -151,6 +151,37 @@ export default {
         type: { required: true, message: '请选择' },
       },
     }
+  },
+
+  computed: {
+    availableTypes() {
+      return this.types.length > 0 ? this.resourceTypes.filter($ => this.types.includes($.name)) : this.resourceTypes
+    },
+    disabledSelect() {
+      return this.types.length === 1
+    },
+    dialogVisible: {
+      get() {
+        return this.visible || this.selfVisible
+      },
+      set(val) {
+        this.selfVisible = false
+        this.$emit('update:visible', val)
+      },
+    },
+    rawValue: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('update:value', val)
+      },
+    },
+  },
+
+  watch: {},
+
+  created() {
   },
 
   methods: {
@@ -216,37 +247,6 @@ export default {
         this.resourceTypeChange(this.record.type)
       })
     },
-  },
-
-  watch: {},
-
-  computed: {
-    availableTypes() {
-      return this.types.length > 0 ? this.resourceTypes.filter($ => this.types.includes($.name)) : this.resourceTypes
-    },
-    disabledSelect() {
-      return this.types.length === 1
-    },
-    dialogVisible: {
-      get() {
-        return this.visible || this.selfVisible
-      },
-      set(val) {
-        this.selfVisible = false
-        this.$emit('update:visible', val)
-      },
-    },
-    rawValue: {
-      get() {
-        return this.value
-      },
-      set(val) {
-        this.$emit('update:value', val)
-      },
-    },
-  },
-
-  created() {
   },
 }
 </script>

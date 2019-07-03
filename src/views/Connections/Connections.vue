@@ -35,7 +35,8 @@
           :filters="filterOptions.protoName"
           :filter-method="protoNameColumnFilter"
           filter-placement="bottom"
-          label="接入协议">
+          label="接入协议"
+        >
           <template slot-scope="{ row }">
             <span class="">
               {{ row.proto_name }}
@@ -67,7 +68,8 @@
           :current-page.sync="params._page"
           :total="count"
           @size-change="handleSizeChange"
-          @current-change="handleCurrentChange">
+          @current-change="handleCurrentChange"
+        >
         </el-pagination>
       </div>
     </a-card>
@@ -100,6 +102,10 @@ export default {
         protoName: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M', 'Stomp'].map($ => ({ text: $, value: $ })),
       },
     }
+  },
+
+  created() {
+    this.loadData()
   },
 
   methods: {
@@ -151,10 +157,6 @@ export default {
     protoNameColumnFilter(value, row) {
       return value === row.proto_name
     },
-  },
-
-  created() {
-    this.loadData()
   },
 }
 </script>

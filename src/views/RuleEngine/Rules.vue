@@ -6,7 +6,7 @@
       :loading="listLoading"
     >
       <div class="emq-table-header">
-        <el-button type="primary" @click="$router.push('/rules/create')">创建规则</el-button>
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">创建</el-button>
       </div>
 
       <el-table v-bind="rulesTable" :data="tableData" class="data-list">

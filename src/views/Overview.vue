@@ -99,7 +99,7 @@ export default {
         subscription: [],
       },
       currentMetrics: {
-        node: 0,  // 节点数
+        node: 0, // 节点数
         received: 0, // 消息 in 速率
         sent: 0, // 消息 out 速率
         subscription: 0, // 订阅数
@@ -197,7 +197,6 @@ export default {
       font-size: 30px;
       padding: 0 16px 16px 16px;
       border-bottom: 1px dashed #e8e8e8;
-
 
 
       .unit {

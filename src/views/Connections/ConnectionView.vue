@@ -11,7 +11,7 @@
           <a-badge :type="connStatus" :status="connStatus" :text="connStatusText"></a-badge>
         </div>
       </div>
-      <el-tabs class="detail-footer" v-model="activeName" @tab-click="handleTabClick">
+      <el-tabs v-model="activeName" class="detail-footer" @tab-click="handleTabClick">
         <el-tab-pane label="基本信息" name="detail"></el-tab-pane>
         <el-tab-pane label="订阅列表" name="subscriptions"></el-tab-pane>
       </el-tabs>
@@ -108,7 +108,8 @@
     <create-subscribe
       :visible.sync="dialogVisible"
       :client-id="record.client_id"
-      @created="loadData">
+      @created="loadData"
+    >
     </create-subscribe>
 
   </div>
@@ -164,6 +165,22 @@ export default {
     }
   },
 
+  computed: {
+    clientId() {
+      return this.$route.query.client_id
+    },
+    connStatus() {
+      return this.record.disconnected ? 'error' : 'success'
+    },
+    connStatusText() {
+      return this.record.disconnected ? '已断开' : '在线'
+    },
+  },
+
+  created() {
+    this.loadData()
+  },
+
   methods: {
     handlePreAdd() {
       this.dialogVisible = true
@@ -188,22 +205,6 @@ export default {
         await unSubscription({ topic, client_id })
         this.loadData()
       }).catch(() => {})
-    },
-  },
-
-  created() {
-    this.loadData()
-  },
-
-  computed: {
-    clientId() {
-      return this.$route.query.client_id
-    },
-    connStatus() {
-      return this.record.disconnected ? 'error' : 'success'
-    },
-    connStatusText() {
-      return this.record.disconnected ? '已断开' : '在线'
     },
   },
 }

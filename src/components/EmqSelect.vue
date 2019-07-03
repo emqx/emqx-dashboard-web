@@ -56,20 +56,6 @@ export default {
     }
   },
 
-  watch: {
-    refresh(val) {
-      if (val) {
-        this.loadData()
-      }
-    },
-    field: {
-      handler() {
-        this.loadData()
-      },
-      deep: true,
-    },
-  },
-
   computed: {
     rawValue: {
       get() {
@@ -83,6 +69,20 @@ export default {
         }
         this.$emit('update:value', val)
       },
+    },
+  },
+
+  watch: {
+    refresh(val) {
+      if (val) {
+        this.loadData()
+      }
+    },
+    field: {
+      handler() {
+        this.loadData()
+      },
+      deep: true,
     },
   },
 
@@ -108,7 +108,6 @@ export default {
           if (typeof label === 'boolean') {
             option[labelKey] = label.toString()
           }
-
         }
         return option
       })

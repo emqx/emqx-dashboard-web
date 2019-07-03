@@ -11,6 +11,7 @@
 
         <el-form
           ref="configForm"
+          hide-required-asterisk
           :model="connection"
           size="small"
           :rules="connectionRules"
@@ -18,170 +19,165 @@
           @keyup.enter.native="createConnection"
         >
 
-          <div class="connection-wrapper">
-            <el-form-item prop="protocols" label="协议类型" style="width: 100px">
-              <emq-select
-                v-model="connection.protocols"
+          <!--<el-form-item prop="protocols" label="协议类型">
+          <!--<emq-select-->
+          <!--v-model="connection.protocols"-->
+          <!--:readonly="client.connected"-->
+          <!--:field="{ list: ['ws', 'wss'] }"-->
+          <!--@change="protocolsChange"></emq-select>-->
+          <!--</el-form-item>-->
+
+          <el-row :gutter="20">
+            <el-col :span="8">
+              <el-form-item prop="host" label="主机名">
+                <el-input v-model="connection.host" :readonly="client.connected"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item prop="port" label="端口">
+                <el-input
+                  v-model.number="connection.port" type="number" placeholder="8083/8084"
+                  :readonly="client.connected"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item prop="endpoint" label="挂载点">
+                <el-input v-model="connection.endpoint" placeholder="/mqtt" :readonly="client.connected"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+
+
+              <el-form-item prop="clientId" label="Client ID">
+                <el-input v-model="connection.clientId" :readonly="client.connected">
+                  <i slot="suffix" title="随机生成" :disabled="client.connected" class="el-icon-refresh el-input_icon" @click="refreshClientId"></i>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+
+              <el-form-item prop="username" label="Username">
+                <el-input v-model="connection.username" :readonly="client.connected"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+
+              <el-form-item prop="password" label="Password">
+                <el-input v-model="connection.password" :readonly="client.connected"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+
+              <el-form-item prop="keepalive" label="Keepalive">
+                <el-input
+                  v-model.number="connection.keepalive"
+                  :readonly="client.connected"
+                  type="number"
+                  placeholder="60"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="24" class="footer-area">
+              <el-checkbox v-model="connection.clean" :disabled="client.connected">
+                Clean Session
+              </el-checkbox>
+
+              <el-checkbox v-model="connection.ssl" :disabled="client.connected" @change="protocolsChange">
+                SSL
+              </el-checkbox>
+
+              <!--<span class="btn">{{ connectUrl }}</span>-->
+            </el-col>
+
+            <el-col :span="24" class="footer-area">
+              <el-button
+                type="primary"
+                size="small"
+                class="conn-btn"
                 :disabled="client.connected"
-                :field="{ list: ['ws', 'wss'] }"
-                @change="protocolsChange"></emq-select>
-            </el-form-item>
-            <el-form-item prop="host" label="主机名" style="width: 240px">
-              <el-input v-model="connection.host" :disabled="client.connected"></el-input>
+                @click="createConnection"
+              >
+                {{ client.connected ? '已连接' : '连接' }}
+              </el-button>
+
+              <el-button
+                type="danger"
+                size="small"
+                class="conn-btn"
+                :disabled="!client.connected"
+                @click="destroyConnection"
+              >
+                断开连接
+              </el-button>
+            </el-col>
+
+
+          </el-row>
+
+          <!--
+          <div v-if="false" class="connection-wrapper">
+            <el-form-item label="Last-Will Topic">
+              <el-input v-model="connection.will.topic" :readonly="client.connected"></el-input>
             </el-form-item>
 
-            <el-form-item prop="port" label="端口" style="width: 100px">
-              <el-input v-model.number="connection.port" type="number" placeholder="8083/8084"
-                        :disabled="client.connected"></el-input>
-            </el-form-item>
-            <el-form-item prop="endpoint" label="挂载点" style="width: 150px">
-              <el-input v-model="connection.endpoint" placeholder="/mqtt" :disabled="client.connected"></el-input>
-            </el-form-item>
-
-            <el-button
-              :type="client.connected ? 'danger' : 'primary'"
-              :loading="client.connecting"
-              class="conn-btn"
-              size="small"
-              @click="handleConnect">
-              {{ btnStatusText }}
-            </el-button>
-          </div>
-
-          <div class="connection-wrapper">
-            <el-form-item prop="clientId" label="Client ID">
-              <el-input v-model="connection.clientId" :disabled="client.connected">
-                <i slot="suffix" title="随机生成" class="el-icon-refresh el-input_icon" @click="refreshClientId"></i>
-              </el-input>
-            </el-form-item>
-
-            <el-form-item prop="username" label="Username">
-              <el-input v-model="connection.username" :disabled="client.connected"></el-input>
-            </el-form-item>
-
-            <el-form-item prop="password" label="Password">
-              <el-input v-model="connection.password" :disabled="client.connected"></el-input>
-            </el-form-item>
-
-            <el-form-item prop="keepalive" label="Keepalive" style="width: 100px">
-              <el-input
-                v-model.number="connection.keepalive"
-                :disabled="client.connected"
-                type="number"
-                placeholder="60"></el-input>
-            </el-form-item>
-
-            <el-form-item label="Clean Session">
-              <el-checkbox v-model="connection.clean" :disabled="client.connected"></el-checkbox>
-            </el-form-item>
-          </div>
-
-          <div class="connection-wrapper">
-            <el-form-item label="Last-Will Topic" style="width: 382px">
-              <el-input v-model="connection.will.topic" :disabled="client.connected"></el-input>
-            </el-form-item>
-
-            <el-form-item label="Last-Will QoS" style="width: 178px">
-              <emq-select v-model.number="connection.will.qos" :disabled="client.connected"
-                          :field="{ list: [0, 1, 2] }"></emq-select>
+            <el-form-item label="Last-Will QoS">
+              <emq-select v-model.number="connection.will.qos" :readonly="client.connected"
+                          :field="{ list: [0, 1, 2] }"
+              ></emq-select>
             </el-form-item>
 
             <el-form-item label="Last-Will Retain">
-              <el-checkbox v-model="connection.will.retain" :disabled="client.connected"></el-checkbox>
+              <el-checkbox v-model="connection.will.retain" :readonly="client.connected"></el-checkbox>
             </el-form-item>
 
             <div>
-              <el-form-item label="Last-Will Message" style="width: 100%">
-                <el-input v-model="connection.will.payload" type="textarea" :disabled="client.connected"></el-input>
+              <el-form-item label="Last-Will Message">
+                <el-input v-model="connection.will.payload" type="textarea" :readonly="client.connected"></el-input>
               </el-form-item>
             </div>
           </div>
+          -->
         </el-form>
       </div>
     </a-card>
 
 
-    <el-row :gutter="24">
-      <el-col :span="16">
-        <a-card class="emq-list-card">
-          <div class="emq-title">
-            发布
-          </div>
+    <a-card class="emq-list-card">
+      <div class="emq-title">
+        订阅
+      </div>
 
-          <div class="connection-wrapper" style="max-width: 600px">
-            <el-form ref="pubForm" :model="messageRecord" :rules="messageRecordRules" size="small"
-                     @keyup.enter.native="_doPublish">
-              <el-form-item prop="topic" label="Topic" style="width: 290px">
-                <el-input v-model="messageRecord.topic" size="small"></el-input>
-              </el-form-item>
-              <el-form-item prop="qos" label="QoS" style="width: 100px">
-                <emq-select v-model.number="messageRecord.qos" :field="{ list: [0, 1, 2] }" size="small"></emq-select>
-              </el-form-item>
+      <el-row :gitter="20">
+        <el-col :span="12">
+          <el-form
+            ref="subForm"
+            hide-required-asterisk
+            :model="subscriptionsRecord"
+            :rules="subscriptionsRules"
+            size="small"
+            label-position="top"
+            @keyup.enter.native="_doSubscribe"
+          >
+            <el-form-item prop="topic" label="Topic">
+              <el-input v-model="subscriptionsRecord.topic"></el-input>
+            </el-form-item>
 
-              <el-form-item prop="retain" label="Retain">
-                <el-checkbox v-model="messageRecord.retain"></el-checkbox>
-              </el-form-item>
-
+            <el-form-item prop="qos" label="QoS">
+              <emq-select v-model.number="subscriptionsRecord.qos" :field="{ list: [0, 1, 2] }"></emq-select>
+            </el-form-item>
+            <div>
               <el-form-item>
-                <el-button type="primary" size="small" class="conn-btn" @click="_doPublish">发布</el-button>
+                <el-button type="primary" size="small" class="conn-btn" @click="_doSubscribe">
+                  订阅
+                </el-button>
               </el-form-item>
-
-              <div>
-                <el-form-item prop="payload" label="Payload" style="width: 100%">
-                  <el-input v-model="messageRecord.payload" size="small" type="textarea" :rows="3"></el-input>
-                </el-form-item>
-              </div>
-            </el-form>
-          </div>
-
-          <div class="line"></div>
-
-          <el-scrollbar view-class="message-item-wrapper" :native="false">
-            <a-card v-for="(item, i) in messages" :key="i" class="message-item" :class="{ 'message-out': item.out }">
-              <div class="message-item-header">
-                <span>Topic: {{ item.topic }}</span>
-                <span>QoS: {{ item.qos }}</span>
-                <span v-if="item.retain">Retain</span>
-                <span class="create-at">{{ item.createAt }}</span>
-              </div>
-              <div class="message-item-content">
-                <code>{{ item.payload }}</code>
-              </div>
-            </a-card>
-          </el-scrollbar>
-        </a-card>
-      </el-col>
-
-      <el-col :span="8">
-        <a-card class="emq-list-card">
-          <div class="connection-wrapper">
-            <div class="emq-title">
-              订阅
             </div>
+          </el-form>
+        </el-col>
 
-            <el-form
-              ref="subForm"
-              :model="subscriptionsRecord"
-              :rules="subscriptionsRules"
-              size="small"
-              @keyup.enter.native="_doSubscribe">
-              <el-form-item prop="topic" label="Topic">
-                <el-input v-model="subscriptionsRecord.topic"></el-input>
-              </el-form-item>
-              <el-form-item prop="qos" label="QoS" style="width: 100px">
-                <emq-select v-model.number="subscriptionsRecord.qos" :field="{ list: [0, 1, 2] }"></emq-select>
-              </el-form-item>
-              <div>
-                <el-form-item>
-                  <el-button type="primary" size="small" @click="_doSubscribe">订阅</el-button>
-                </el-form-item>
-              </div>
-            </el-form>
-          </div>
-
-
-          <div class="line"></div>
-
+        <el-col :span="12">
           <el-scrollbar wrap-class="sub-item-wrapper" :native="false">
             <a-card v-for="(item, i) in subscriptions" :key="i" class="sub-item">
               <i class="el-icon-close close-btn" @click="_doUnSubscribe(item)"></i>
@@ -192,9 +188,70 @@
               <div class="topic">{{ item.topic }}</div>
             </a-card>
           </el-scrollbar>
+        </el-col>
+
+      </el-row>
+    </a-card>
+
+
+    <a-card class="emq-list-card">
+      <div class="emq-title">
+        发布
+      </div>
+
+      <div class="connection-wrapper">
+        <el-form
+          ref="pubForm"
+          hide-required-asterisk
+          label-position="top" :model="messageRecord" :rules="messageRecordRules" size="small"
+          @keyup.enter.native="_doPublish"
+        >
+          <el-row :gutter="20">
+            <el-col :span="6">
+              <el-form-item prop="topic" label="Topic">
+                <el-input v-model="messageRecord.topic" size="small"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item prop="payload" label="Payload">
+                <el-input v-model="messageRecord.payload" size="small"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item prop="qos" label="QoS">
+                <emq-select v-model.number="messageRecord.qos" :field="{ list: [0, 1, 2] }" size="small"></emq-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <span slot="label">&nbsp;</span>
+                <el-checkbox v-model="messageRecord.retain" style="margin-right: 20px">Retain</el-checkbox>
+                <el-button type="primary" size="small" class="conn-btn" style="float: right" @click="_doPublish">
+                  发布
+                </el-button>
+              </el-form-item>
+            </el-col>
+
+          </el-row>
+        </el-form>
+      </div>
+
+      <div class="line"></div>
+
+      <el-scrollbar view-class="message-item-wrapper" :native="false">
+        <a-card v-for="(item, i) in messages" :key="i" class="message-item" :class="{ 'message-out': item.out }">
+          <div class="message-item-header">
+            <span>Topic: {{ item.topic }}</span>
+            <span>QoS: {{ item.qos }}</span>
+            <span v-if="item.retain">Retain</span>
+            <span class="create-at">{{ item.createAt }}</span>
+          </div>
+          <div class="message-item-content">
+            <code>{{ item.payload }}</code>
+          </div>
         </a-card>
-      </el-col>
-    </el-row>
+      </el-scrollbar>
+    </a-card>
 
   </div>
 </template>
@@ -246,6 +303,7 @@ export default {
         port: this.getOption().port,
         protocols: this.getOption().protocols,
         clientId: this.getOption().clientId,
+        ssl: false,
 
         endpoint: '/mqtt',
         username: '',
@@ -281,6 +339,29 @@ export default {
     }
   },
 
+  computed: {
+    btnStatusText() {
+      let text = '连接'
+      if (this.client.connected) {
+        text = '断开连接'
+      } else if (this.client.connecting) {
+        text = '连接中'
+      }
+      return text
+    },
+    connectUrl() {
+      const {
+        host, port, ssl, endpoint,
+      } = this.connection
+      const protocol = ssl ? 'wss://' : 'ws://'
+      return `${protocol}${host}:${port}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`
+    },
+  },
+
+  watch: {},
+
+  created() {},
+
   methods: {
     _now() {
       return moment().format('YYYY-MM-DD HH:mm:ss')
@@ -300,6 +381,11 @@ export default {
         this.client.end()
       } else {
         this.createConnection()
+      }
+    },
+    destroyConnection() {
+      if (this.client.connected) {
+        this.client.end()
       }
     },
     _doUnSubscribe(item) {
@@ -349,7 +435,9 @@ export default {
         this.$message.error('客户端未连接')
         return
       }
-      const { topic, qos, payload, retain } = this.messageRecord
+      const {
+        topic, qos, payload, retain,
+      } = this.messageRecord
       this.client.publish(topic, payload, {
         qos, retain,
       }, (err) => {
@@ -388,14 +476,17 @@ export default {
       }
     },
     protocolsChange() {
-      const { protocols, port } = this.connection
-      if (protocols === 'ws' && port === 8084) {
+      const { port, ssl } = this.connection
+      if (!ssl && port === 8084) {
         this.connection.port = 8083
-      } else if (protocols === 'wss' && port === 8083) {
+      } else if (ssl && port === 8083) {
         this.connection.port = 8084
       }
     },
     refreshClientId() {
+      if (this.client.connected) {
+        return
+      }
       this.connection.clientId = this.getOption().clientId
     },
     createConnection() {
@@ -410,12 +501,17 @@ export default {
           protocols, host, endpoint, clientId, username, port,
           password, reconnectPeriod, keepalive, clean, connectTimeout, will,
         } = this.connection
-        const url = `${protocols}://${host}:${port}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`
 
-        this.client = mqtt.connect(url, {
+        this.client = mqtt.connect(this.connectUrl, {
           port,
-          clientId, username,
-          password, reconnectPeriod, keepalive, clean, connectTimeout, will: will.topic ? will : undefined,
+          clientId,
+          username,
+          password,
+          reconnectPeriod,
+          keepalive,
+          clean,
+          connectTimeout,
+          will: will.topic ? will : undefined,
         })
         window.client = this.client
         this.client.on('error', () => {
@@ -436,7 +532,7 @@ export default {
         host: window.location.hostname,
         protocols: window.location.protocol === 'http:' ? 'ws' : 'wss',
         port: window.location.protocol === 'http:' ? 8083 : 8084,
-        clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
+        clientId: `mqttjs_${Math.random().toString(16).substr(2, 8)}`,
       }
     },
     atSessionChange(i) {
@@ -458,28 +554,25 @@ export default {
       this.activeIndex = i
     },
   },
-
-  watch: {},
-
-  computed: {
-    btnStatusText() {
-      let text = '连接'
-      if (this.client.connected) {
-        text = '断开连接'
-      } else if (this.client.connecting) {
-        text = '连接中'
-      }
-      return text
-    },
-  },
-
-  created() {},
 }
 </script>
 
 
 <style lang="scss">
 .websocket {
+
+
+  .el-form-item {
+    .el-form-item__label {
+      padding: 0;
+    }
+  }
+
+  .el-row {
+    .el-input, .emq-select {
+      width: 100%;
+    }
+  }
 
   .emq-list-card {
     .ant-card-head-title {
@@ -500,24 +593,15 @@ export default {
   }
 
   .connection-wrapper {
-    width: 800px;
-
     .el-form-item {
-      display: inline-block;
-      margin-right: 12px;
-
       .el-form-item__label {
         padding: 0;
-      }
-
-      .el-checkbox {
-        margin-left: 16px;
       }
     }
   }
 
   .conn-btn {
-    min-width: 100px;
+    min-width: 90px;
   }
 
   .el-input_icon {
@@ -577,7 +661,7 @@ export default {
   }
 
   .message-item.ant-card {
-    margin: 0 20px 24px 20px;
+    margin: 20px auto;
     position: relative;
 
     &:not(.message-out) {
@@ -611,6 +695,11 @@ export default {
       margin-top: 6px;
       padding: 6px;
     }
+  }
+
+
+  .footer-area {
+    margin-top: 20px;
   }
 }
 </style>

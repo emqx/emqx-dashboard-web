@@ -141,28 +141,6 @@ export default {
       actions: [],
     }
   },
-
-  watch: {
-    $route() {
-      this.loadData()
-    },
-  },
-
-  created() {
-    this.loadData()
-  },
-
-  methods: {
-    async loadData() {
-      const record = await loadRuleDetails(this.ruleId)
-      const events = await loadEvents()
-      events.forEach((event) => {
-        this.eventsMap[event.value] = event
-      })
-      this.loading = false
-      this.record = record
-    },
-  },
   computed: {
     ruleId() {
       return this.$route.params.id
@@ -186,6 +164,28 @@ export default {
         event,
         ...this.record,
       }
+    },
+  },
+
+  watch: {
+    $route() {
+      this.loadData()
+    },
+  },
+
+  created() {
+    this.loadData()
+  },
+
+  methods: {
+    async loadData() {
+      const record = await loadRuleDetails(this.ruleId)
+      const events = await loadEvents()
+      events.forEach((event) => {
+        this.eventsMap[event.value] = event
+      })
+      this.loading = false
+      this.record = record
     },
   },
 }
