@@ -28,11 +28,9 @@
     </div>
 
     <div class="app-wrapper">
-      <a-card
-        class="emq-list-card"
-        :loading="listLoading"
-      >
+      <a-card class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
+          <div></div>
           <div class="search-wrapper">
             <el-input v-model="searchValue" size="small" placeholder="输入 client id"></el-input>
             <el-button type="primary" size="small" @click="handleSearch">搜 索</el-button>
@@ -40,7 +38,9 @@
               {{ searchValue ? '重 置' : '刷 新' }}
             </el-button>
           </div>
+
         </div>
+
         <el-table :data="tableData" class="data-list">
           <el-table-column prop="client_id" min-width="110px" label="Client ID">
             <template slot-scope="{ row }">
@@ -57,17 +57,12 @@
             </template>
           </el-table-column>
           <el-table-column prop="keepalive" label="keepalive"></el-table-column>
-          <el-table-column
-            prop="proto_name"
-            :filters="filterOptions.protoName"
-            :filter-method="protoNameColumnFilter"
-            filter-placement="bottom"
-            label="接入协议"
-          >
+          <el-table-column prop="proto_name" :filters="filterOptions.protoName" :filter-method="protoNameColumnFilter"
+                           filter-placement="bottom" label="接入协议">
             <template slot-scope="{ row }">
-            <span class="">
-              {{ row.proto_name }}
-            </span>
+              <span class="">
+                {{ row.proto_name }}
+              </span>
             </template>
           </el-table-column>
 
@@ -79,24 +74,16 @@
                 {{ row.disconnected ? '已断开' : '断 开' }}
               </el-button>
 
-
               <!--<el-button size="mini" type="danger">Ban</el-button>-->
             </template>
           </el-table-column>
         </el-table>
 
         <div class="emq-table-footer">
-          <el-pagination
-            hide-on-single-page
-            background
-            layout="total, sizes, prev, pager, next"
-            :page-sizes="[20, 50, 100, 500]"
-            :page-size.sync="params._limit"
-            :current-page.sync="params._page"
-            :total="count"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          >
+          <el-pagination hide-on-single-page background layout="total, sizes, prev, pager, next"
+                         :page-sizes="[20, 50, 100, 500]" :page-size.sync="params._limit"
+                         :current-page.sync="params._page" :total="count" @size-change="handleSizeChange"
+                         @current-change="handleCurrentChange">
           </el-pagination>
         </div>
       </a-card>
@@ -149,7 +136,7 @@ export default {
         await disconnectConnection(row.client_id)
         this.$set(row, 'disconnected', true)
         this.$message.success('断开成功')
-      }).catch(() => {})
+      }).catch(() => { })
     },
     resetSearch() {
       if (this.searchValue) {
@@ -201,8 +188,6 @@ export default {
     .el-button {
       margin-left: 12px;
     }
-
-    clear: both;
   }
 
   .data-list {
@@ -214,7 +199,7 @@ export default {
     height: 24px;
     line-height: 24px;
     border-radius: 50%;
-    background-color: #34C388;
+    background-color: #34c388;
     padding: 10px;
     font-size: 12px;
     color: #fff;

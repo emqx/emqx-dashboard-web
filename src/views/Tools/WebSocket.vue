@@ -238,7 +238,7 @@
                   {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
                 </template>
               </el-table-column>
-              <el-table-column show-overflow-tooltip  prop="payload" label="Payload" min-width="180px">
+              <el-table-column show-overflow-tooltip prop="payload" label="Payload" min-width="180px">
                 <template slot-scope="{ row }">
                   <code>{{ row.payload }}</code>
                 </template>
@@ -259,7 +259,7 @@
                   {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
                 </template>
               </el-table-column>
-              <el-table-column show-overflow-tooltip  prop="payload" label="Payload" min-width="180px">
+              <el-table-column show-overflow-tooltip prop="payload" label="Payload" min-width="180px">
                 <template slot-scope="{ row }">
                   <code>{{ row.payload }}</code>
                 </template>

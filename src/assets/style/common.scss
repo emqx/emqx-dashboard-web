@@ -43,6 +43,7 @@ body {
 
 .el-button {
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+  font-weight: normal;
   &.el-button--small {
     font-size: 14px;
     padding: 8px 15px;
@@ -177,6 +178,9 @@ body {
 }
 
 .emq-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 12px 0 24px 0;
 }
 
@@ -387,6 +391,19 @@ body {
 
     .link-item {
       margin-right: 12px;
+    }
+  }
+}
+
+.el-radio-group {
+  font-weight: normal;
+  .el-radio-button__inner {
+    font-weight: normal;
+  }
+  &[border] {
+    .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+      background-color: #fff;
+      color: #34C388;
     }
   }
 }

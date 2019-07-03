@@ -1,19 +1,5 @@
 <template>
   <div class="plugins">
-    <el-card class="count-list" style="display: none">
-      <div class="count-left">
-        <div class="count-title">插件数量</div>
-        <div class="count-result">24个插件</div>
-      </div>
-      <div class="count-center">
-        <div class="count-title">已启用</div>
-        <div class="count-result">10</div>
-      </div>
-      <div class="count-right">
-        <div class="count-title">错误捕获</div>
-        <div class="count-result">22次</div>
-      </div>
-    </el-card>
 
 
     <div class="page-header">
@@ -40,25 +26,111 @@
     </div>
 
     <div class="app-wrapper">
-      <a-card
-        class="emq-list-card"
-      >
 
-        <div class="emq-table-header" style="display: none">
-          <el-radio-group v-model="category" size="mini" @change="changeCategory">
-            <el-radio-button label="0">全部</el-radio-button>
-            <el-radio-button label="1">安全</el-radio-button>
-            <el-radio-button label="2">数据</el-radio-button>
-            <el-radio-button label="3">功能</el-radio-button>
-          </el-radio-group>
-          <el-radio-group v-model="status" size="mini" @change="changeStatus">
-            <el-radio-button label="0">全部</el-radio-button>
-            <el-radio-button label="1">运行中</el-radio-button>
-          </el-radio-group>
+
+      <a-card class="count-list">
+        <div class="count-left">
+          <div class="count-title">插件数量</div>
+          <div class="count-result">{{ state.count }}个插件</div>
+        </div>
+        <div class="count-center">
+          <div class="count-title">运行中</div>
+          <div class="count-result">{{ state.running }}个</div>
+        </div>
+        <div class="count-right">
+          <div class="count-title">已停止</div>
+          <div class="count-result">{{ state.stop }}个</div>
+        </div>
+      </a-card>
+
+      <a-card class="emq-list-card">
+
+
+
+        <div class="emq-table-header">
+          <div>
+            <!--<emq-select-->
+              <!--v-model="nodeName"-->
+              <!--:field="{ api: loadNodes }"-->
+              <!--:field-name="{ label: 'name', value: 'name' }"-->
+              <!--size="mini"-->
+              <!--@change="loadData"-->
+            <!--&gt;-->
+            <!--</emq-select>-->
+
+            <div class="emq-title">
+              插件列表
+            </div>
+            <!--<span class="btn btn-default" style="margin-left: 12px">节点选择</span>-->
+          </div>
+
+          <div class="search-wrapper">
+            <emq-select
+              v-model="nodeName"
+              :field="{ api: loadNodes }"
+              :field-name="{ label: 'name', value: 'name' }"
+              size="mini"
+              @change="loadData"
+            >
+            </emq-select>
+
+            <el-radio-group v-model="status" size="mini" border @change="loadData">
+              <el-radio-button label="wivwiv">全部</el-radio-button>
+              <el-radio-button label="1">运行中</el-radio-button>
+              <el-radio-button label="0">已停止</el-radio-button>
+            </el-radio-group>
+
+            <el-radio-group v-model="category" size="mini" border @change="loadData">
+              <el-radio-button label="wivwiv">全部</el-radio-button>
+              <el-radio-button
+                v-for="item in typeFilterOption"
+                :key="item.value"
+                :label="item.value">
+                {{ item.text }}
+              </el-radio-button>
+            </el-radio-group>
+          </div>
         </div>
 
 
-        <el-table :data="tableData" :default-sort="{ prop: 'active', order: 'descending' }" class="data-list">
+        <div class="plugin-wrapper">
+          <div v-for="(item, i) in listTableData" :key="i" :gutter="20" class="plugin-item">
+
+            <div class="logo">
+              <img src="https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png" alt="plugin-logo">
+            </div>
+
+            <div class="header">
+              <div class="name">{{ item.name }}</div>
+              <div class="description">{{ item.description }}</div>
+            </div>
+
+            <div class="content">
+              <div class="type">{{ item.type | typeText }}</div>
+              <div class="version">{{ item.version }}</div>
+            </div>
+
+            <div class="state">
+              <a-badge
+                :status="item.active ? 'success' : 'error'"
+                :text="item.active ? '运行中' : '已停止'"
+                dot
+              >
+              </a-badge>
+            </div>
+
+            <div class="oper">
+              <el-button :type="item.active ? 'danger' : 'dashed'" size="mini" @click="togglePlugin(item)">
+                {{ item.active ? '停 止' : '启 动' }}
+              </el-button>
+              <el-button size="mini" type="dashed">配 置</el-button>
+            </div>
+          </div>
+        </div>
+
+
+        <el-table v-if="false" :data="listTableData" :default-sort="{ prop: 'active', order: 'descending' }"
+                  class="data-list">
           <el-table-column prop="name" min-width="110px" label="插件名称"></el-table-column>
           <el-table-column prop="version" min-width="80px" label="版本"></el-table-column>
           <el-table-column prop="description" min-width="160px" show-overflow-tooltip label="描述"></el-table-column>
@@ -86,48 +158,11 @@
               <el-button :type="row.active ? 'danger' : 'dashed'" size="mini" @click="togglePlugin(row)">
                 {{ row.active ? '停 止' : '启 动' }}
               </el-button>
-              <el-button size="mini">配 置</el-button>
+              <el-button size="mini" type="dashed">配 置</el-button>
             </template>
           </el-table-column>
 
         </el-table>
-
-        <div class="list-wrapper">
-          <div v-for="(item, i) in tableData" :key="i" class="plugin-item">
-            <div class="plugin-logo">
-              <img src="https://www.emqx.io/static/img/logo.png">
-            </div>
-
-            <div class="basic-info">
-              <div class="name">
-                {{ item.name }}
-                <!--<el-tag size="mini" color="transparent">{{ item.type }}</el-tag>-->
-              </div>
-              <p class="description">{{ item.description }}</p>
-            </div>
-
-
-            <div>
-              <p>EMQ 官方</p>
-              <p>{{ item.version }}</p>
-            </div>
-            <div>
-              <p v-if="item.active" class="status">
-                <span class="dot active"></span>已启动
-              </p>
-              <p v-else class="status">
-                <span class="dot"></span>已停止
-                <span class="error">错误 1</span>
-              </p>
-              <p>2019/06/19 11:22:00</p>
-            </div>
-            <div>
-              <el-link v-if="item.active" :underline="false">停止</el-link>
-              <el-link v-else type="success" :underline="false">启动</el-link>
-              <el-link type="info" :underline="false">配置</el-link>
-            </div>
-          </div>
-        </div>
 
       </a-card>
     </div>
@@ -142,23 +177,25 @@ import {
 } from '@/api/common'
 
 export default {
-  name: 'Alerts',
+  name: 'Plugins',
 
   props: {},
 
   data() {
     return {
-      category: 0,
-      status: 0,
+      loadNodes,
+      category: 'wivwiv',
+      status: 'wivwiv',
       tableData: [],
+      listTableData: [],
       nodes: [],
-      nodeName: 'emqx@127.0.0.1',
+      nodeName: '',
       pluginTypes: {
+        feature: '最新',
         auth: '认证',
-        feature: '基础',
         backend: '持久化',
         bridge: '桥接',
-        protocol: '协议拓展',
+        protocol: '协议',
       },
       typeFilterOption: [],
     }
@@ -167,6 +204,30 @@ export default {
   created() {
     this.loadData()
     this.typeFilterOption = Object.entries(this.pluginTypes).map(([value, text]) => ({ text, value }))
+  },
+
+  computed: {
+    state() {
+      const tableData = this.tableData || []
+      return {
+        count: tableData.length,
+        running: tableData.filter($ => !!$.active).length,
+        stop: tableData.filter($ => !$.active).length,
+      }
+    },
+  },
+
+  filters: {
+    typeText(type) {
+      const pluginTypes = {
+        feature: '最新',
+        auth: '认证',
+        backend: '持久化',
+        bridge: '桥接',
+        protocol: '协议',
+      }
+      return pluginTypes[type] || '其他'
+    },
   },
 
   methods: {
@@ -178,14 +239,21 @@ export default {
     },
     async loadData() {
       this.nodes = await loadNodes()
-      this.nodeName = (this.nodes[0] || {}).name
+      this.nodeName = this.nodeName || (this.nodes[0] || {}).name
       this.tableData = await loadPlugins(this.nodeName)
+      this.handleFilter()
     },
-    changeCategory(newValue) {
-      console.log(newValue)
-    },
-    changeStatus(newValue) {
-      console.log(newValue)
+    handleFilter() {
+      let list = this.tableData
+      if (this.category !== 'wivwiv') {
+        list = list.filter($ => $.type === this.category)
+      }
+      if (this.status !== 'wivwiv') {
+        const active = this.status === '1'
+        list = list.filter($ => $.active === active)
+      }
+      console.log(list, 'x')
+      this.listTableData = list
     },
     async togglePlugin(row) {
       if (!row.active) {
@@ -210,6 +278,74 @@ export default {
 
 <style lang="scss">
 .plugins {
+  .plugin-wrapper {
+    .plugin-item {
+      padding: 16px 0;
+      border-bottom: 1px solid #f1f1f1;
+      display: flex;
+      align-items: center;
+      position: relative;
+
+      .logo {
+        position: absolute;
+        top: 24px;
+        left: 0;
+
+        img {
+          width: 48px;
+          height: 48px;
+        }
+      }
+
+      .header {
+        flex: 1.2;
+        padding-left: 70px;
+
+        .name {
+          margin-bottom: 4px;
+          color: rgba(0, 0, 0, .65);
+          font-size: 14px;
+          line-height: 22px;
+        }
+
+        .description {
+          color: rgba(0, 0, 0, .45);
+          font-size: 14px;
+          line-height: 22px;
+          max-width: 300px;
+        }
+      }
+
+      .content {
+        margin-left: 40px;
+        flex: 1;
+
+        .type {
+          color: rgba(0, 0, 0, .45);
+          margin-top: 4px;
+          margin-bottom: 0;
+          line-height: 22px;
+        }
+
+        .version {
+          color: rgba(0, 0, 0, .45);
+          margin-top: 4px;
+          margin-bottom: 0;
+          line-height: 22px;
+        }
+      }
+
+      .state {
+        height: 18px;
+        flex: 1;
+      }
+
+      .oper {
+        flex: .5;
+      }
+    }
+  }
+
   .count-list {
     overflow: hidden;
     text-align: center;
@@ -244,15 +380,13 @@ export default {
   }
 
 
-  .plugins {
-
-  }
-
-  .list-wrapper {
-    display: none;
-
-    .plugin-item {
+  .search-wrapper {
+    .el-radio-group {
+      margin-left: 20px;
     }
+  }
+  .emq-table-header {
+    margin-bottom: 30px;
   }
 }
 </style>

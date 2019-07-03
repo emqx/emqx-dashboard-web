@@ -27,7 +27,8 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card">
         <div class="emq-table-header">
-          <el-radio-group size="small" v-model="alertType" @change="loadData">
+          <div></div>
+          <el-radio-group border v-model="alertType" size="small" @change="loadData">
             <el-radio-button label="present">当前告警</el-radio-button>
             <el-radio-button label="history">历史告警</el-radio-button>
           </el-radio-group>

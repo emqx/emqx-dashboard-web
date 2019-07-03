@@ -140,7 +140,9 @@
 
 
 <script>
-import { loadConnectionDetail, loadSubscriptions, unSubscription, disconnectConnection } from '@/api/connections'
+import {
+  loadConnectionDetail, loadSubscriptions, unSubscription, disconnectConnection,
+} from '@/api/connections'
 import CreateSubscribe from './components/CreateSubscribe'
 
 export default {

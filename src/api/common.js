@@ -14,11 +14,11 @@ export function loadPlugins(nodeName) {
 }
 
 export function startPlugin(nodeName, pluginName) {
-  return http.get(`/nodes/${nodeName}/plugins/${pluginName}/load`)
+  return http.put(`/nodes/${nodeName}/plugins/${pluginName}/load`)
 }
 
 export function stopPlugin(nodeName, pluginName) {
-  return http.get(`/nodes/${nodeName}/plugins/${pluginName}/unload`)
+  return http.put(`/nodes/${nodeName}/plugins/${pluginName}/unload`)
 }
 
 export function loadNodes() {
