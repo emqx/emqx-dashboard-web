@@ -5,7 +5,7 @@
       title="应用列表"
     >
       <div class="emq-table-header">
-        <el-button type="primary" icon="el-icon-plus" size="small" @click="createApplication">创建</el-button>
+        <el-button type="primary" icon="el-icon-plus" size="small" @click="createApplication">创 建</el-button>
       </div>
 
 
@@ -29,8 +29,8 @@
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button type="primary" size="small">确定</el-button>
-        <el-button plain size="small">取消</el-button>
+        <el-button type="primary" size="small">确 定</el-button>
+        <el-button plain size="small">取 消</el-button>
       </div>
     </el-dialog>
   </div>

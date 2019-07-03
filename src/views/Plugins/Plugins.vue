@@ -61,9 +61,9 @@
         <el-table-column width="140px">
           <template slot-scope="{ row }">
             <el-button :type="row.active ? 'danger' : 'dashed'" size="mini" @click="togglePlugin(row)">
-              {{ row.active ? '停止' : '启动' }}
+              {{ row.active ? '停 止' : '启 动' }}
             </el-button>
-            <el-button size="mini">配置</el-button>
+            <el-button size="mini">配 置</el-button>
           </template>
         </el-table-column>
 

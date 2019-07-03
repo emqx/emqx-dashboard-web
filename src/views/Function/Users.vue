@@ -5,7 +5,7 @@
       title="用户列表"
     >
       <div class="emq-table-header">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="createUsers">创建</el-button>
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="createUsers">创 建</el-button>
       </div>
 
       <el-table :data="tableData" class="data-list">
@@ -27,8 +27,8 @@
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button type="primary" size="small">确定</el-button>
-        <el-button plain size="small">取消</el-button>
+        <el-button type="primary" size="small">确 定</el-button>
+        <el-button plain size="small">取 消</el-button>
       </div>
     </el-dialog>
   </div>

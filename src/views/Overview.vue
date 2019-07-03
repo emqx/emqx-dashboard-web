@@ -1,5 +1,5 @@
 <template>
-  <div class="overview">
+  <div class="overview app-wrapper">
     <!--<div class="page-header">服务器状态</div>-->
 
     <el-row class="content-wrapper" :gutter="20">

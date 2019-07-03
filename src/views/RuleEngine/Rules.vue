@@ -6,7 +6,7 @@
       :loading="listLoading"
     >
       <div class="emq-table-header">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">创建</el-button>
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">创 建</el-button>
       </div>
 
       <el-table v-bind="rulesTable" :data="tableData" class="data-list">
@@ -43,7 +43,7 @@
         </el-table-column>
         <el-table-column width="80px" prop="id">
           <template slot-scope="{ row }">
-            <el-button type="dashed" size="mini" @click="deleteRule(row)">删除</el-button>
+            <el-button type="dashed" size="mini" @click="deleteRule(row)">删 除</el-button>
           </template>
         </el-table-column>
 

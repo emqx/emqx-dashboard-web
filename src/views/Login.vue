@@ -25,7 +25,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-checkbox v-model="record.remember">记住</el-checkbox>
-          <el-button type="primary" style="float: right" @click="login">登录</el-button>
+          <el-button type="primary" style="float: right" @click="login">登 录</el-button>
         </el-form-item>
       </el-form>
     </a-card>

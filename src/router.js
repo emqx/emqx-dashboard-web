@@ -115,6 +115,9 @@ const router = new Router({
           path: '',
           name: 'websocket',
           component: () => import('@/views/Tools/WebSocket'),
+          meta: {
+            keepAlive: true,
+          },
         },
       ],
     },

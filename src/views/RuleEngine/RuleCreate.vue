@@ -123,7 +123,7 @@
 
               <el-form-item>
                 <span slot="label">&nbsp;</span>
-                <el-button type="primary" @click="handleSQLTest">测试</el-button>
+                <el-button type="primary" @click="handleSQLTest">测 试</el-button>
               </el-form-item>
 
               <el-form-item label="测试输出">
@@ -154,10 +154,10 @@
 
         <div class="rule-create-footer">
           <el-button type="primary" size="medium" @click="handleCreate">
-            创建
+            创 建
           </el-button>
           <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
-            取消
+            取 消
           </el-button>
         </div>
       </a-card>

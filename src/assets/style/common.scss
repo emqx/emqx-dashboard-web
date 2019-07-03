@@ -25,6 +25,10 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 
+.app-wrapper {
+  padding: 24px !important;
+}
+
 .line {
   height: 1px;
   min-width: 50px;
@@ -138,6 +142,10 @@ body {
 }
 
 
+.ant-card-bordered {
+  border: none;
+}
+
 .emq-list-card.ant-card {
   .ant-card-head {
     border-bottom: 1px solid #eee;
@@ -211,6 +219,12 @@ body {
 
   &:not(.btn-default) {
     color: #34C388;
+  }
+
+  &.raw {
+    &:hover {
+      color: #34C388;
+    }
   }
 }
 
@@ -312,6 +326,55 @@ body {
   &[type="error"] {
     .ant-badge-status-text {
       color: #f5222d;
+    }
+  }
+}
+
+.page-header {
+  width: 100%;
+  background-color: #fff;
+  box-sizing: border-box;
+  position: relative;
+
+  .page-header-top-start {
+    position: absolute;
+    right: 24px;
+    top: 24px;
+  }
+
+  .page-header-content {
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    transition: .3s;
+    padding: 16px 24px;
+    background: #fff;
+  }
+
+  .el-breadcrumb, .ant-breadcrumb {
+    margin-bottom: 12px;
+  }
+
+  .page-header-title-view {
+    .title {
+      display: inline-block;
+      padding-right: 12px;
+      color: rgba(0, 0, 0, .85);
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 1.4;
+
+      span {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  .page-header-content-view {
+    margin-top: 12px;
+
+    .content {
+      margin-bottom: 14px;
     }
   }
 }

@@ -8,12 +8,16 @@
 
     <el-main style="margin: 0;padding: 0;" :style="elMainStyle">
 
-      <el-header style="height: 64px;padding: 0">
+      <el-header style="height: 60px;padding: 0">
         <nav-header></nav-header>
       </el-header>
 
-      <div :style="{ padding: '24px', minHeight: '360px', minWidth: '600px', overflowX: 'hidden' }">
-        <router-view></router-view>
+      <div :style="{ minHeight: '360px', minWidth: '600px', overflowX: 'hidden' }">
+        <keep-alive>
+          <router-view v-if="$route.meta.keepAlive"></router-view>
+        </keep-alive>
+
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
       </div>
     </el-main>
   </el-container>
@@ -34,7 +38,10 @@ export default {
   },
   computed: {
     elAsideStyle() {
-      return { left: !this.$store.state.leftBarCollapse ? 0 : '-200px' }
+      return {
+        left: !this.$store.state.leftBarCollapse ? 0 : '-200px',
+        boxShadow: this.$store.state.leftBarCollapse ? 'none' : '2px 0 8px 0 rgba(29,35,41,.05)',
+      }
     },
     elMainStyle() {
       return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : 0 }
@@ -51,6 +58,7 @@ export default {
   top: 0;
   left: 0;
   bottom: 0;
+  z-index: 100;
 }
 
 .el-main {
