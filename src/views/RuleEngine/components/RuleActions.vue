@@ -8,10 +8,16 @@
         </div>
         <div
           v-if="!disabled"
-          class="action-item-btn btn"
-          @click="removeAction(i)"
-        >删除
+          class="action-item-btn"
+        >
+          <!--<span class="btn" @click="editAction(item)">-->
+            <!--编辑-->
+          <!--</span>-->
+          <span class="btn" @click="removeAction(i)">
+            删除
+          </span>
         </div>
+
         <div v-else class="action-item-btn action-item-type">
           <span class="title">成功 </span>
           <span class="desc">{{ (item.metrics || {}).success }}</span>
@@ -34,7 +40,7 @@
     </div>
 
     <div v-if="value.length === 0" class="create-guide">
-      <el-button v-if="!disabled" type="dashed" icon="plus" @click="addAction">添加动作</el-button>
+      <el-button v-if="!disabled" type="dashed" icon="el-icon-plus" @click="addAction">添加动作</el-button>
       <p v-else>暂无动作</p>
     </div>
 
@@ -66,7 +72,7 @@
             :field="{ options: availableResources }"
             :field-name="{ label: 'id', value: 'id'}"
             class="reset-width"
-            style="width: 250px"
+            style="width: 330px"
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="resource-option">
@@ -238,6 +244,11 @@ export default {
   },
 
   methods: {
+    editAction(item) {
+      this.record = { ...item }
+      this.addActionDialogVisible = true
+      this.actionTypeChange(item.name)
+    },
     atDialogClose() {
       setTimeout(() => {
         this.$refs.record.clearValidate()
@@ -249,7 +260,11 @@ export default {
       if (!valid) {
         return
       }
-      this.rawValue.push(JSON.parse(JSON.stringify(this.record)))
+      const action = JSON.parse(JSON.stringify(this.record))
+      if (action.params && !action.params.$resource) {
+        delete action.params.$resource
+      }
+      this.rawValue.push(action)
       this.fillRawValue()
       this.addActionDialogVisible = false
       this.atDialogClose()
@@ -349,7 +364,7 @@ export default {
     transition: border .3s;
 
     /*&:hover {*/
-      /*border: 1px dashed #d8d8d8;*/
+    /*border: 1px dashed #d8d8d8;*/
     /*}*/
   }
 

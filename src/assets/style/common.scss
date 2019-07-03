@@ -43,6 +43,10 @@ body {
 
 .el-button {
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
+  &.el-button--small {
+    font-size: 14px;
+    padding: 8px 15px;
+  }
   //transition: all 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   //&:hover {
@@ -375,6 +379,14 @@ body {
 
     .content {
       margin-bottom: 14px;
+    }
+  }
+
+  .page-header-link {
+    margin-top: 16px;
+
+    .link-item {
+      margin-right: 12px;
     }
   }
 }

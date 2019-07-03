@@ -25,4 +25,30 @@ export function loadNodes() {
   return http.get('/nodes')
 }
 
+export async function loadAlarm() {
+  const list = await http.get('/alarms/present')
+  const data = []
+  list.forEach((item) => {
+    const { node, alarms } = item
+    alarms.forEach(($) => {
+      $.node = node
+      data.push($)
+    })
+  })
+  return data
+}
+
+export async function loadHistoryAlarm() {
+  const list = await http.get('/alarms/history')
+  const data = []
+  list.forEach((item) => {
+    const { node, alarms } = item
+    alarms.forEach(($) => {
+      $.node = node
+      data.push($)
+    })
+  })
+  return data
+}
+
 export default {}

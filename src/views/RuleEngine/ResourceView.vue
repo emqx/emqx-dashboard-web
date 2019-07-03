@@ -1,16 +1,38 @@
 <template>
   <div class="resource-view">
-    <a-card class="detail-title-wrapper">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/resources' }">资源列表</el-breadcrumb-item>
-        <el-breadcrumb-item>{{ resourceId }}
+    <div class="page-header">
+      <div class="page-header-content">
+        <a-breadcrumb>
+          <a-breadcrumb-item>
+            <router-link class="btn btn-default raw" to="/" tag="span">
+              首页
+            </router-link>
+          </a-breadcrumb-item>
 
-        </el-breadcrumb-item>
-      </el-breadcrumb>
-    </a-card>
+          <a-breadcrumb-item>
+            <router-link class="btn btn-default raw" to="/resources" tag="span">
+              资源
+            </router-link>
+          </a-breadcrumb-item>
 
 
-    <div class="emq-list-body rule-wrapper">
+          <a-breadcrumb-item>
+            <span class="btn btn-default raw">
+              详情
+            </span>
+          </a-breadcrumb-item>
+        </a-breadcrumb>
+
+        <div class="page-header-title-view">
+          <div class="title">
+            {{ resourceId }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="emq-list-body rule-wrapper app-wrapper">
       <!-- 基本信息 -->
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">

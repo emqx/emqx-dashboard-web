@@ -1,20 +1,39 @@
 <template>
   <div class="rule-create">
-    <!--<template slot="title">-->
-    <!--<router-link class="back-btn" :to="{ path: '/rules' }" tag="div">-->
-    <!--规则列表-->
-    <!--</router-link>-->
-    <!--<span class="title">创建规则</span>-->
-    <!--</template>-->
 
-    <a-card class="detail-title-wrapper">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/rules' }">规则列表</el-breadcrumb-item>
-        <el-breadcrumb-item>创建规则</el-breadcrumb-item>
-      </el-breadcrumb>
-    </a-card>
+    <div class="page-header">
+      <div class="page-header-content">
+        <a-breadcrumb>
+          <a-breadcrumb-item>
+            <router-link to="/" tag="span" class="btn btn-default raw">
+              首页
+            </router-link>
+          </a-breadcrumb-item>
+          <a-breadcrumb-item>
+            <router-link to="/rules" tag="span" class="btn btn-default raw">
+              规则引擎
+            </router-link>
+          </a-breadcrumb-item>
+          <a-breadcrumb-item>
+            <span class="btn btn-default raw">
+              创建
+            </span>
+          </a-breadcrumb-item>
+        </a-breadcrumb>
 
-    <div class="emq-list-body rule-wrapper">
+        <div class="page-header-title-view">
+          <div class="title">创建规则</div>
+        </div>
+
+        <!--<div class="page-header-content-view">-->
+          <!--<div class="content">-->
+
+          <!--</div>-->
+        <!--</div>-->
+      </div>
+    </div>
+
+    <div class="emq-list-body rule-wrapper app-wrapper">
       <el-form
         ref="record"
         :model="record"

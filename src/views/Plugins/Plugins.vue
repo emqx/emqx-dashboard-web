@@ -16,97 +16,121 @@
     </el-card>
 
 
-    <a-card
-      class="emq-list-card"
-      title="插件列表"
-    >
+    <div class="page-header">
+      <div class="page-header-content">
+        <a-breadcrumb>
+          <a-breadcrumb-item>
+            <router-link to="/" tag="span" class="btn btn-default raw">
+              首页
+            </router-link>
+          </a-breadcrumb-item>
 
-      <div class="emq-table-header" style="display: none">
-        <el-radio-group v-model="category" size="mini" @change="changeCategory">
-          <el-radio-button label="0">全部</el-radio-button>
-          <el-radio-button label="1">安全</el-radio-button>
-          <el-radio-button label="2">数据</el-radio-button>
-          <el-radio-button label="3">功能</el-radio-button>
-        </el-radio-group>
-        <el-radio-group v-model="status" size="mini" @change="changeStatus">
-          <el-radio-button label="0">全部</el-radio-button>
-          <el-radio-button label="1">运行中</el-radio-button>
-        </el-radio-group>
+          <a-breadcrumb-item>
+            <span class="btn btn-default raw">
+              插件
+            </span>
+          </a-breadcrumb-item>
+        </a-breadcrumb>
+
+        <div class="page-header-title-view">
+          <div class="title">插件</div>
+        </div>
+
       </div>
+    </div>
+
+    <div class="app-wrapper">
+      <a-card
+        class="emq-list-card"
+      >
+
+        <div class="emq-table-header" style="display: none">
+          <el-radio-group v-model="category" size="mini" @change="changeCategory">
+            <el-radio-button label="0">全部</el-radio-button>
+            <el-radio-button label="1">安全</el-radio-button>
+            <el-radio-button label="2">数据</el-radio-button>
+            <el-radio-button label="3">功能</el-radio-button>
+          </el-radio-group>
+          <el-radio-group v-model="status" size="mini" @change="changeStatus">
+            <el-radio-button label="0">全部</el-radio-button>
+            <el-radio-button label="1">运行中</el-radio-button>
+          </el-radio-group>
+        </div>
 
 
-      <el-table :data="tableData" :default-sort="{ prop: 'active', order: 'descending' }" class="data-list">
-        <el-table-column prop="name" min-width="110px" label="插件名称"></el-table-column>
-        <el-table-column prop="version" min-width="80px" label="版本"></el-table-column>
-        <el-table-column prop="description" min-width="160px" show-overflow-tooltip label="描述"></el-table-column>
-        <el-table-column
-          prop="type"
-          min-width="100px"
-          label="类型"
-          sortable
-          :filters="typeFilterOption"
-          :filter-method="typeFilterHandler"
-          :formatter="typeFormatter"
-        ></el-table-column>
-        <el-table-column min-width="70px" prop="active" label="状态" sortable>
-          <template slot-scope="{ row }">
-            <a-badge
-              :status="row.active ? 'success' : 'error'"
-              :text="row.active ? '运行中' : '已停止'"
-              dot
-            >
-            </a-badge>
-          </template>
-        </el-table-column>
-        <el-table-column width="140px">
-          <template slot-scope="{ row }">
-            <el-button :type="row.active ? 'danger' : 'dashed'" size="mini" @click="togglePlugin(row)">
-              {{ row.active ? '停 止' : '启 动' }}
-            </el-button>
-            <el-button size="mini">配 置</el-button>
-          </template>
-        </el-table-column>
+        <el-table :data="tableData" :default-sort="{ prop: 'active', order: 'descending' }" class="data-list">
+          <el-table-column prop="name" min-width="110px" label="插件名称"></el-table-column>
+          <el-table-column prop="version" min-width="80px" label="版本"></el-table-column>
+          <el-table-column prop="description" min-width="160px" show-overflow-tooltip label="描述"></el-table-column>
+          <el-table-column
+            prop="type"
+            min-width="100px"
+            label="类型"
+            sortable
+            :filters="typeFilterOption"
+            :filter-method="typeFilterHandler"
+            :formatter="typeFormatter"
+          ></el-table-column>
+          <el-table-column min-width="70px" prop="active" label="状态" sortable>
+            <template slot-scope="{ row }">
+              <a-badge
+                :status="row.active ? 'success' : 'error'"
+                :text="row.active ? '运行中' : '已停止'"
+                dot
+              >
+              </a-badge>
+            </template>
+          </el-table-column>
+          <el-table-column width="140px">
+            <template slot-scope="{ row }">
+              <el-button :type="row.active ? 'danger' : 'dashed'" size="mini" @click="togglePlugin(row)">
+                {{ row.active ? '停 止' : '启 动' }}
+              </el-button>
+              <el-button size="mini">配 置</el-button>
+            </template>
+          </el-table-column>
 
-      </el-table>
+        </el-table>
 
-      <div class="list-wrapper">
-        <div v-for="(item, i) in tableData" :key="i" class="plugin-item">
-          <div class="plugin-logo">
-            <img src="https://www.emqx.io/static/img/logo.png">
-          </div>
-
-          <div class="basic-info">
-            <div class="name">
-              {{ item.name }}
-              <!--<el-tag size="mini" color="transparent">{{ item.type }}</el-tag>-->
+        <div class="list-wrapper">
+          <div v-for="(item, i) in tableData" :key="i" class="plugin-item">
+            <div class="plugin-logo">
+              <img src="https://www.emqx.io/static/img/logo.png">
             </div>
-            <p class="description">{{ item.description }}</p>
-          </div>
+
+            <div class="basic-info">
+              <div class="name">
+                {{ item.name }}
+                <!--<el-tag size="mini" color="transparent">{{ item.type }}</el-tag>-->
+              </div>
+              <p class="description">{{ item.description }}</p>
+            </div>
 
 
-          <div>
-            <p>EMQ 官方</p>
-            <p>{{ item.version }}</p>
-          </div>
-          <div>
-            <p v-if="item.active" class="status">
-              <span class="dot active"></span>已启动
-            </p>
-            <p v-else class="status">
-              <span class="dot"></span>已停止
-              <span class="error">错误 1</span>
-            </p>
-            <p>2019/06/19 11:22:00</p>
-          </div>
-          <div>
-            <el-link v-if="item.active" :underline="false">停止</el-link>
-            <el-link v-else type="success" :underline="false">启动</el-link>
-            <el-link type="info" :underline="false">配置</el-link>
+            <div>
+              <p>EMQ 官方</p>
+              <p>{{ item.version }}</p>
+            </div>
+            <div>
+              <p v-if="item.active" class="status">
+                <span class="dot active"></span>已启动
+              </p>
+              <p v-else class="status">
+                <span class="dot"></span>已停止
+                <span class="error">错误 1</span>
+              </p>
+              <p>2019/06/19 11:22:00</p>
+            </div>
+            <div>
+              <el-link v-if="item.active" :underline="false">停止</el-link>
+              <el-link v-else type="success" :underline="false">启动</el-link>
+              <el-link type="info" :underline="false">配置</el-link>
+            </div>
           </div>
         </div>
-      </div>
 
-    </a-card>
+      </a-card>
+    </div>
 
   </div>
 </template>

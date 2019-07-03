@@ -1,52 +1,78 @@
 <template>
   <div class="resources">
-    <a-card
-      class="emq-list-card"
-      title="资源列表"
-      :loading="listLoading"
-    >
-      <div class="emq-table-header">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">创 建</el-button>
+
+    <div class="page-header">
+      <div class="page-header-content">
+        <a-breadcrumb>
+          <a-breadcrumb-item>
+            <router-link class="btn btn-default raw" to="/" tag="span">
+              首页
+            </router-link>
+          </a-breadcrumb-item>
+
+          <a-breadcrumb-item>
+            <span class="btn btn-default raw">
+              资源
+            </span>
+          </a-breadcrumb-item>
+        </a-breadcrumb>
+
+        <div class="page-header-title-view">
+          <div class="title">
+            资源
+          </div>
+        </div>
       </div>
+    </div>
 
-      <el-table :data="tableData" class="data-list">
-        <el-table-column prop="id" min-width="80px" label="ID">
-          <template slot-scope="{ row }">
-            <span class="btn" @click="showResource(row)">{{ row.id }}</span>
-          </template>
-        </el-table-column>
+    <div class="app-wrapper">
+      <a-card
+        class="emq-list-card"
+        :loading="listLoading"
+      >
+        <div class="emq-table-header">
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">创 建</el-button>
+        </div>
 
-        <!-- 资源类型 -->
-        <el-table-column
-          prop="config.title"
-          label="资源类型"
-          show-overflow-tooltip
-          :filters="filterOptions.resourceTypes"
-          :filter-method="resourceTypesColumnFilter"
-          filter-placement="bottom"
-        ></el-table-column>
+        <el-table :data="tableData" class="data-list">
+          <el-table-column prop="id" min-width="80px" label="ID">
+            <template slot-scope="{ row }">
+              <span class="btn" @click="showResource(row)">{{ row.id }}</span>
+            </template>
+          </el-table-column>
 
-        <el-table-column min-width="100px" prop="description" show-overflow-tooltip label="备注"></el-table-column>
-        <el-table-column min-width="70px" prop="status.is_alive" label="状态">
-          <template slot-scope="{ row }">
-            <a-badge
-              :status="row.status.is_alive ? 'success' : 'error'"
-              :text="getStateText(row.status.is_alive)"
-              dot
-            >
-            </a-badge>
-          </template>
-        </el-table-column>
+          <!-- 资源类型 -->
+          <el-table-column
+            prop="config.title"
+            label="资源类型"
+            show-overflow-tooltip
+            :filters="filterOptions.resourceTypes"
+            :filter-method="resourceTypesColumnFilter"
+            filter-placement="bottom"
+          ></el-table-column>
 
-        <el-table-column width="120px" prop="id">
-          <template slot-scope="{ row }">
-            <el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">重 连</el-button>
-            <el-button type="dashed" size="mini" @click="deleteResource(row)">删 除</el-button>
-          </template>
-        </el-table-column>
+          <el-table-column min-width="100px" prop="description" show-overflow-tooltip label="备注"></el-table-column>
+          <el-table-column min-width="70px" prop="status.is_alive" label="状态">
+            <template slot-scope="{ row }">
+              <a-badge
+                :status="row.status.is_alive ? 'success' : 'error'"
+                :text="getStateText(row.status.is_alive)"
+                dot
+              >
+              </a-badge>
+            </template>
+          </el-table-column>
 
-      </el-table>
-    </a-card>
+          <el-table-column width="120px" prop="id">
+            <template slot-scope="{ row }">
+              <el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">重 连</el-button>
+              <el-button type="dashed" size="mini" @click="deleteResource(row)">删 除</el-button>
+            </template>
+          </el-table-column>
+
+        </el-table>
+      </a-card>
+    </div>
 
     <resource-dialog :visible.sync="dialogVisible" @created="loadData"></resource-dialog>
 

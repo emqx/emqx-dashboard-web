@@ -1,55 +1,98 @@
 <template>
   <div class="rules">
-    <a-card
-      class="emq-list-card"
-      title="规则列表"
-      :loading="listLoading"
-    >
-      <div class="emq-table-header">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">创 建</el-button>
+
+    <div class="page-header">
+      <div class="page-header-content">
+        <a-breadcrumb>
+          <a-breadcrumb-item>
+            <router-link to="/" tag="span" class="btn btn-default raw">
+              首页
+            </router-link>
+          </a-breadcrumb-item>
+
+          <a-breadcrumb-item>
+            <span class="btn btn-default raw">
+              规则引擎
+            </span>
+          </a-breadcrumb-item>
+        </a-breadcrumb>
+
+        <div class="page-header-title-view">
+          <div class="title">规则引擎</div>
+        </div>
+
+        <div class="page-header-content-view">
+          <div class="content">
+            <p class="description">
+              规则引擎使用 SQL 语句配置 EMQ X 消息流与设备事件的处理规则，内置多种灵活的数据处理方案。
+            </p>
+            <div class="page-header-link">
+              <a :href="docs.tutorial" target="_blank" class="link-item">
+                <i class="icon el-icon-position"></i>
+                快速开始
+              </a>
+
+              <a :href="docs.tutorial" target="_blank" class="link-item">
+                <i class="icon el-icon-document"></i>
+                产品文档
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <el-table v-bind="rulesTable" :data="tableData" class="data-list">
-        <!--<el-table-column-->
-        <!--type="selection"-->
-        <!--width="55">-->
-        <!--</el-table-column>-->
-        <el-table-column prop="id" label="ID">
-          <template slot-scope="{ row }">
-            <router-link :to="{ path: `/rules/${row.id}` }">{{ row.id }}</router-link>
-          </template>
-        </el-table-column>
-        <el-table-column prop="metrics" label="监控">
-          <template slot-scope="{ row }">
-            <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
-          </template>
-        </el-table-column>
-        <el-table-column prop="description" show-overflow-tooltip label="描述"></el-table-column>
-        <el-table-column
-          prop="for"
-          :filters="filterOptions.for"
-          :filter-method="forColumnFilter"
-          filter-placement="bottom"
-          label="触发事件"
-        ></el-table-column>
-        <el-table-column
-          prop="actions"
-          :filters="filterOptions.actions"
-          :filter-method="actionsColumnFilter"
-          filter-placement="bottom"
-          :formatter="actionsFormatter"
-          label="响应动作"
-        >
-        </el-table-column>
-        <el-table-column width="80px" prop="id">
-          <template slot-scope="{ row }">
-            <el-button type="dashed" size="mini" @click="deleteRule(row)">删 除</el-button>
-          </template>
-        </el-table-column>
+    <div class="app-wrapper">
+      <a-card
+        class="emq-list-card"
+        :loading="listLoading"
+      >
+        <div class="emq-table-header">
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">创 建
+          </el-button>
+        </div>
 
-      </el-table>
-    </a-card>
+        <el-table v-bind="rulesTable" :data="tableData" class="data-list">
+          <!--<el-table-column-->
+          <!--type="selection"-->
+          <!--width="55">-->
+          <!--</el-table-column>-->
+          <el-table-column prop="id" label="ID">
+            <template slot-scope="{ row }">
+              <router-link :to="{ path: `/rules/${row.id}` }">{{ row.id }}</router-link>
+            </template>
+          </el-table-column>
+          <el-table-column prop="metrics" label="监控">
+            <template slot-scope="{ row }">
+              <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
+            </template>
+          </el-table-column>
+          <el-table-column prop="description" show-overflow-tooltip label="描述"></el-table-column>
+          <el-table-column
+            prop="for"
+            :filters="filterOptions.for"
+            :filter-method="forColumnFilter"
+            filter-placement="bottom"
+            label="触发事件"
+          ></el-table-column>
+          <el-table-column
+            prop="actions"
+            :filters="filterOptions.actions"
+            :filter-method="actionsColumnFilter"
+            filter-placement="bottom"
+            :formatter="actionsFormatter"
+            label="响应动作"
+          >
+          </el-table-column>
+          <el-table-column width="80px" prop="id">
+            <template slot-scope="{ row }">
+              <el-button type="dashed" size="mini" @click="deleteRule(row)">删 除</el-button>
+            </template>
+          </el-table-column>
 
+        </el-table>
+      </a-card>
+    </div>
 
     <a-drawer
       v-bind="rulesDrawer"
@@ -139,6 +182,7 @@ import {
   loadEventsSelect,
 } from '@/api/rules'
 import CodeView from '@/components/CodeView'
+import { getLink } from '@/common/utils'
 
 export default {
   name: 'Rules',
@@ -149,6 +193,10 @@ export default {
 
   data() {
     return {
+      docs: {
+        tutorial: getLink('ruleEngineTutorial'),
+        docs: '',
+      },
       listLoading: false,
       metricsDrawerVisible: false,
       currentRules: {
@@ -252,6 +300,24 @@ export default {
 
 <style lang="scss" scoped>
 .rules {
+}
+
+.link-item {
+  .icon {
+    width: 24px;
+    height: 24px;
+    line-height: 14px;
+    border-radius: 50%;
+    border: 1px solid #34C388;
+    padding: 4px;
+    text-align: center;
+    margin-right: 8px;
+    font-size: 12px;
+  }
+}
+
+.description {
+  max-width: 500px;
 }
 
 .rule-metrics {

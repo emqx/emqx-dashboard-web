@@ -2,6 +2,8 @@
 import store from '@/store'
 import router from '@/router'
 
+import { en as enDocsLink, zh as zhDocsLink } from '@/common/link_urls'
+
 export function getBasicAuthInfo() {
   return store.state.user
 }
@@ -153,4 +155,10 @@ export function renderParamsForm(params = {}, propPrefix = '') {
   }
   // form 综合排序
   return { form, rules }
+}
+
+export function getLink(name) {
+  const { lang = 'zh' } = store.state
+  const dictMap = lang === 'zh' ? zhDocsLink : enDocsLink
+  return dictMap[name] || '/'
 }

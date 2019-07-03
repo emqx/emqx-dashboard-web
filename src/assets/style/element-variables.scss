@@ -542,10 +542,12 @@ $--button-medium-padding-vertical: 10px !default;
 $--button-medium-padding-horizontal: 20px !default;
 
 /// fontSize||Font|1
-$--button-small-font-size: 12px !default;
+$--button-small-font-size: 14px !default;
+// $--button-small-font-size: 12px !default;
 $--button-small-border-radius: #{$--border-radius-base - 1} !default;
 /// padding||Spacing|3
-$--button-small-padding-vertical: 9px !default;
+$--button-small-padding-vertical: 8px !default;
+//$--button-small-padding-vertical: 9px !default;
 /// padding||Spacing|3
 $--button-small-padding-horizontal: 15px !default;
 /// fontSize||Font|1
