@@ -200,7 +200,7 @@ export default {
       this.configLoading = true
       this.configList = []
 
-      setTimeout(this.loadConfigList, 400)
+      setTimeout(this.loadConfigList, 200)
     },
     loadConfigList() {
       const { params } = this.selectedResource

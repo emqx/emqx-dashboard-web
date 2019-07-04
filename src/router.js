@@ -29,7 +29,7 @@ const router = new Router({
     {
       path: '/',
       component: Layout,
-      redirect: '/rules',
+      redirect: '/overview',
       children: [
         {
           path: '/overview',

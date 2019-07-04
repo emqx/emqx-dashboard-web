@@ -39,12 +39,8 @@
 
     </div>
 
-    <div v-if="value.length === 0" class="create-guide">
-      <el-button v-if="!disabled" type="dashed" icon="el-icon-plus" @click="addAction">添加动作</el-button>
-      <p v-else>暂无动作</p>
-    </div>
 
-    <el-button v-else-if="!disabled" size="small" @click="addAction">添加动作</el-button>
+    <el-button v-if="!disabled" size="small" icon="el-icon-plus" @click="addAction">添加动作</el-button>
 
 
     <el-dialog :visible.sync="addActionDialogVisible" title="新增动作" width="520px">
@@ -317,7 +313,7 @@ export default {
       this.selectedAction = this.actionsMap[actionName]
       this.paramsList = []
       this.paramsLoading = true
-      setTimeout(this.loadParamsList, 400)
+      setTimeout(this.loadParamsList, 200)
       this.loadResourceData()
     },
     addAction() {
@@ -499,14 +495,9 @@ export default {
 
 .create-guide {
   min-height: 80px;
-  width: 80%;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  .el-button {
-    width: 90%;
-  }
 }
 </style>

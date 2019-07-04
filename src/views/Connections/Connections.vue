@@ -21,7 +21,7 @@
 
         <div class="page-header-content-view">
           <div class="content">
-            当前在线设备连接
+            当前在线连接
           </div>
         </div>
       </div>
@@ -135,6 +135,7 @@ export default {
       }).then(async () => {
         await disconnectConnection(row.client_id)
         this.$set(row, 'disconnected', true)
+        this.loadData()
         this.$message.success('断开成功')
       }).catch(() => { })
     },

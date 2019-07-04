@@ -6,6 +6,10 @@
       </div>
     </div>
 
+    <!--<div class="search-wrapper">-->
+      <!---->
+    <!--</div>-->
+
 
     <div class="pull-right">
       <el-tooltip effect="dark" content="使用文档" placement="bottom" :visible-arrow="false">
@@ -15,19 +19,22 @@
       </el-tooltip>
 
 
-      <div class="alert-info func-item">
-        <el-badge is-dot>
-          <i class="iconfont icon-Notificationlisttongzhiliebiao"></i>
-        </el-badge>
-      </div>
+      <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
+        <div class="alert-info func-item">
+          <el-badge :count="alertCount">
+            <router-link to="/alerts/list" tag="i" class="iconfont icon-Notificationlisttongzhiliebiao"></router-link>
+          </el-badge>
+        </div>
+      </el-tooltip>
 
 
       <el-dropdown placement="bottom" class="user-info-dropdown" @command="handleDropdownCommand">
         <div class="user-info func-item">
           <span>{{ username }}</span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="setting">系统设置</el-dropdown-item>
-            <el-dropdown-item command="app">应用管理</el-dropdown-item>
+            <!--<el-dropdown-item command="setting">系统设置</el-dropdown-item>-->
+            <el-dropdown-item command="application">应用管理</el-dropdown-item>
+            <el-dropdown-item command="users">用户管理</el-dropdown-item>
             <el-dropdown-item divided command="login">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </div>
@@ -41,6 +48,8 @@
 
 
 <script>
+import { loadAlarm } from '@/api/common'
+
 export default {
   name: 'NavHeader',
 
@@ -49,7 +58,9 @@ export default {
   props: {},
 
   data() {
-    return {}
+    return {
+      alertCount: 0,
+    }
   },
 
   computed: {
@@ -59,11 +70,27 @@ export default {
     username() {
       return this.$store.state.user.username || '未登录'
     },
+    alertText() {
+      return this.alertCount > 0 ? `系统有 ${this.alertCount} 条告警，点击查看` : '暂无告警'
+    },
   },
 
-  created() {},
+  created() {
+    this.loadData()
+  },
 
   methods: {
+    async loadData() {
+      const alert = await loadAlarm()
+      this.alertCount = alert.length
+    },
+    logout() {
+      this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
+      setTimeout(() => {
+        this.$message.success('已退出登录')
+        this.$router.push('/login')
+      }, 300)
+    },
     toggleLeftNarCollapse() {
       const collapse = !this.$store.state.leftBarCollapse
       this.$store.dispatch('SET_LEFT_BAR_COLLAPSE', collapse)
@@ -72,7 +99,17 @@ export default {
       if (!command) {
         return
       }
-      this.$router.push({ path: `/${command}` })
+      if (command !== 'login') {
+        this.$router.push({ path: `/${command}` })
+        return
+      }
+      this.$msgbox.confirm('是否退出登录?', {
+        confirmButtonText: '退出',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }).then(() => {
+        this.logout()
+      }).catch(() => {})
     },
   },
 }

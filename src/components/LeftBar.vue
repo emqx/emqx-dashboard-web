@@ -10,7 +10,8 @@
     <a-menu
       style="width: 200px"
       :default-selected-keys="defaultSelectedKeys"
-      :default-open-keys="defaultOpenKeys"
+      :selectedKeys="defaultSelectedKeys"
+      :openKeys.sync="defaultOpenKeys"
       mode="inline"
       @click="handleClick"
     >
@@ -99,13 +100,20 @@ export default {
           icon: 'icon-kongjian',
         },
         {
-          title: 'WebSocket',
-          path: '/websocket',
-          icon: 'icon-xinhao',
+          title: '工具',
+          key: 'tool',
+          icon: 'icon-gongju',
+          children: [
+            {
+              title: 'WebSocket',
+              path: '/websocket',
+              parentKey: 'tool',
+            },
+          ],
         },
         {
-          title: '通用功能',
-          path: 'function',
+          title: '通用',
+          key: 'function',
           icon: 'icon-fenzuguanli',
           children: [
             {
@@ -133,6 +141,7 @@ export default {
   computed: {
     defaultSelectedKeys() {
       const { path } = this.$route
+      console.log(`/${path.split('/')[1]}`)
       return [`/${path.split('/')[1]}`]
     },
     logoStyle() {
@@ -142,6 +151,12 @@ export default {
 
   created() {
     this.initRouter()
+  },
+
+  watch: {
+    $route() {
+      this.initRouter()
+    },
   },
 
   methods: {
@@ -208,9 +223,11 @@ export default {
   display: flex;
   align-items: center;
   padding: 0 20px;
+
   .title {
     margin-left: 12px;
   }
+
   .logo-img {
     width: 48px;
     height: auto;

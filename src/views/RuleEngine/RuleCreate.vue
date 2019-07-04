@@ -34,132 +34,141 @@
     </div>
 
     <div class="emq-list-body rule-wrapper app-wrapper">
-      <el-form
-        ref="record"
-        :model="record"
-        :rules="rules"
-        label-width="120px"
-        label-position="left"
-        size="small"
-        label-suffix=":"
-      >
-
-        <a-card class="emq-list-card">
-          <div class="emq-title">
-            条件
-            <span class="sub-title">
+      <a-card class="emq-list-card">
+        <div class="emq-title">
+          条件
+          <span class="sub-title">
               使用 SQL 定义规则条件与数据处理方式
             </span>
-          </div>
-          <el-form-item prop="for" label="触发事件">
-            <emq-select v-model="record.for" :field="{ api: loadEventsSelect }" @change="handleForChange">
-              <div slot="option" slot-scope="{ item }" class="emq-option-item">
-                <span class="option-label">{{ item.label }}</span>
-                <span class="option-value">{{ item.value }}</span>
-              </div>
-            </emq-select>
-          </el-form-item>
+        </div>
 
-          <el-form-item prop="description" label="备注">
-            <el-input v-model="record.description"></el-input>
-          </el-form-item>
-
-          <el-form-item v-if="selectEvent.ctx.topic" prop="topic" label="主题">
-            <el-autocomplete
-              v-model="record.topic"
-              :fetch-suggestions="topicSearch"
-              placeholder="e.g t/#"
-              @select="handleTopicSelect"
+        <el-row :gutter="20">
+          <el-col :span="15">
+            <el-form
+              ref="record"
+              :model="record"
+              :rules="rules"
+              label-width="120px"
+              label-position="left"
+              size="small"
+              label-suffix=":"
             >
-              <template slot-scope="{ item }">
-                <div class="name">{{ item.topic }}</div>
-              </template>
-            </el-autocomplete>
-            <el-popover placement="top" trigger="hover">
-              规则要处理的主题，支持 MQTT 主题通配符 '+'、'#'
-              <i slot="reference" class="icon el-icon-question"></i>
-            </el-popover>
-          </el-form-item>
 
-          <el-form-item>
-            <template slot="label">
-              &nbsp;
-            </template>
-            <!--<code-view v-if="rawsqlVisible" lang="sql" :code="rawSQL"></code-view>-->
-            <div class="code code-border">
-              <code>{{ rawSQL }}</code>
-            </div>
-          </el-form-item>
-
-
-          <el-form-item prop="field" label="查询字段">
-            <el-input v-model="record.field" type="textarea" :rows="4" placeholder="e.g payload.speed"></el-input>
-            <span class="tips btn btn-default" @click="toggleTips">可用字段</span>
-          </el-form-item>
-
-          <el-collapse-transition>
-            <el-form-item v-if="showTips">
-              <span slot="label">&nbsp;</span>
-              <div class="tips-wrapper code">
-                当前事件可用字段
-                <code><span
-                  v-for="key in availableFields"
-                  :key="key"
-                  class="available-fields"
-                  @click="selectAvailableFields(key)"
-                >{{ key }}</span> </code>
-              </div>
-            </el-form-item>
-          </el-collapse-transition>
-
-          <el-form-item prop="tiaojian" label="筛选条件">
-            <el-input v-model="record.tiaojian" placeholder="e.g payload.speed > 60"></el-input>
-          </el-form-item>
-
-          <el-form-item label="SQL测试">
-            <el-switch v-model="showTest" @change="handlePreSQLTest"></el-switch>
-            <el-popover placement="top" trigger="hover">
-              输入元数据进行 SQL 匹配测试
-              <i slot="reference" class="icon el-icon-question"></i>
-            </el-popover>
-          </el-form-item>
-
-          <el-collapse-transition>
-            <div v-if="showTest">
-              <el-form-item
-                v-for="(field, i) in testField"
-                :key="i"
-                :prop="`ctx.${field}`"
-                :label="field"
-              >
-                <el-input
-                  v-model="record.ctx[field]"
-                  :type="field === 'payload' ? 'textarea' : ''"
-                  :rows="5"
-                >
-                </el-input>
+              <el-form-item prop="for" label="触发事件">
+                <emq-select v-model="record.for" :field="{ api: loadEventsSelect }" @change="handleForChange">
+                  <div slot="option" slot-scope="{ item }" class="emq-option-item">
+                    <span class="option-label">{{ item.label }}</span>
+                    <span class="option-value">{{ item.value }}</span>
+                  </div>
+                </emq-select>
               </el-form-item>
+
+              <el-form-item prop="description" label="备注">
+                <el-input v-model="record.description"></el-input>
+              </el-form-item>
+
+              <!--<el-form-item v-if="selectEvent.ctx.topic" prop="topic" label="主题">-->
+              <!--<el-autocomplete-->
+              <!--v-model="record.topic"-->
+              <!--:fetch-suggestions="topicSearch"-->
+              <!--placeholder="e.g t/#"-->
+              <!--@select="handleTopicSelect"-->
+              <!--&gt;-->
+              <!--<template slot-scope="{ item }">-->
+              <!--<div class="name">{{ item.topic }}</div>-->
+              <!--</template>-->
+              <!--</el-autocomplete>-->
+              <!--<el-popover placement="top" trigger="hover">-->
+              <!--规则要处理的主题，支持 MQTT 主题通配符 '+'、'#'-->
+              <!--<i slot="reference" class="icon el-icon-question"></i>-->
+              <!--</el-popover>-->
+              <!--</el-form-item>-->
 
               <el-form-item>
-                <span slot="label">&nbsp;</span>
-                <el-button type="primary" @click="handleSQLTest">测 试</el-button>
+                <template slot="label">
+                  &nbsp;
+                </template>
+                <!--<code-view v-if="rawsqlVisible" lang="sql" :code="rawSQL"></code-view>-->
+                <div class="code code-border">
+                  <code>{{ rawSQL }}</code>
+                </div>
               </el-form-item>
 
-              <el-form-item label="测试输出">
-                <el-input v-model="testOutPut" type="textarea" readonly :rows="4"></el-input>
-                <!--<code-view :code="testOutPut" lang="json"></code-view>-->
+
+              <el-form-item prop="field" label="查询字段">
+                <el-input v-model="record.field" type="textarea" :rows="4" placeholder="e.g payload.speed"></el-input>
+                <!--<span class="tips btn btn-default" @click="toggleTips">可用字段</span>-->
               </el-form-item>
 
 
+              <el-form-item prop="tiaojian" label="筛选条件">
+                <el-input v-model="record.tiaojian" placeholder="e.g payload.speed > 60"></el-input>
+              </el-form-item>
+
+              <el-form-item label="SQL测试">
+                <el-switch v-model="showTest" @change="handlePreSQLTest"></el-switch>
+                <el-popover placement="top" trigger="hover">
+                  输入元数据进行 SQL 匹配测试
+                  <i slot="reference" class="icon el-icon-question"></i>
+                </el-popover>
+              </el-form-item>
+
+              <el-collapse-transition>
+                <div v-if="showTest">
+                  <el-form-item
+                    v-for="(field, i) in testField"
+                    :key="i"
+                    :prop="`ctx.${field}`"
+                    :label="field"
+                  >
+                    <el-input
+                      v-model="record.ctx[field]"
+                      :type="field === 'payload' ? 'textarea' : ''"
+                      :rows="5"
+                    >
+                    </el-input>
+                  </el-form-item>
+
+                  <el-form-item>
+                    <span slot="label">&nbsp;</span>
+                    <el-button type="primary" @click="handleSQLTest">测 试</el-button>
+                  </el-form-item>
+
+                  <el-form-item label="测试输出">
+                    <el-input v-model="testOutPut" type="textarea" readonly :rows="4"></el-input>
+                    <!--<code-view :code="testOutPut" lang="json"></code-view>-->
+                  </el-form-item>
+
+
+                </div>
+              </el-collapse-transition>
+            </el-form>
+          </el-col>
+
+          <el-col :span="9" class="tips-form">
+            <div style="color: #606266">当前事件可用字段</div>
+            <div class="tips-wrapper code">
+             <span
+               v-for="key in availableFields"
+               :key="key"
+               class="available-fields"
+               @click="selectAvailableFields(key)"
+             >
+               {{ key }}
+             </span>
             </div>
-          </el-collapse-transition>
+          </el-col>
+        </el-row>
 
-        </a-card>
-      </el-form>
+
+      </a-card>
+
 
       <a-card class="emq-list-card">
-        <div class="emq-title required-title">
-          响应动作
+        <div class="emq-title">
+          <div class="title required-title">
+            响应动作
+          </div>
           <span class="sub-title">
             处理命中规则的消息
           </span>
@@ -168,18 +177,17 @@
         <div class="rule-action-wrapper">
           <rule-actions v-model="record.actions" :event="record.for"></rule-actions>
         </div>
-
-        <div class="line"></div>
-
-        <div class="rule-create-footer">
-          <el-button type="primary" size="medium" @click="handleCreate">
-            创 建
-          </el-button>
-          <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
-            取 消
-          </el-button>
-        </div>
       </a-card>
+
+
+      <div style="text-align: center">
+        <el-button type="primary" size="medium" @click="handleCreate">
+          创 建
+        </el-button>
+        <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
+          取 消
+        </el-button>
+      </div>
 
 
     </div>
@@ -226,7 +234,7 @@ export default {
       record: {
         for: '',
         rawsql: '',
-        topic: '',
+        // topic: '',
         field: '*',
         actions: [],
         description: '',
@@ -234,7 +242,7 @@ export default {
       },
       rules: {
         for: { required: true, message: '请选择触发事件' },
-        topic: { required: true, message: '请输入主题' },
+        // topic: { required: true, message: '请输入主题' },
         ctx: {},
         field: [
           { required: true, message: '请输入查询字段' },
@@ -263,15 +271,16 @@ export default {
       const { topic, field, tiaojian } = this.record
       const fields = field.replace(/[\n\b\t]/g, '').split(',').join(', ') || '*'
       let where = ''
-      if (topicField) {
-        where = `topic =~ '${topic || '#'}'`
-        if (tiaojian) {
-          where += ` AND ${tiaojian}`
-        }
-      } else if (tiaojian) {
-        where = `${tiaojian}`
+      // if (topicField) {
+      //   where = `topic =~ '${topic || '#'}'`
+      //   if (tiaojian) {
+      //     where += ` AND ${tiaojian}`
+      //   }
+      // } else
+      if (tiaojian) {
+        where = ` WHERE ${tiaojian}`
       }
-      return `SELECT ${fields} FROM "${value}"${where ? ` WHERE ${where}` : ''}`
+      return `SELECT ${fields} FROM "${value}"${where ? `${where}` : ''}`
     },
     availableFields() {
       return Object.keys(this.selectEvent.ctx)
@@ -373,6 +382,8 @@ export default {
       if (this.selectEvent.ctx.payload) {
         this.record.topic = '#'
       }
+      this.record.field = '*'
+      this.record.tiaojian = ''
     },
     topicSearch(queryString, cb) {
       clearTimeout(this.timer)
@@ -422,6 +433,22 @@ export default {
     .el-button {
       min-width: 80px;
     }
+  }
+
+  .required-title {
+    &:after {
+      content: '*';
+      color: #F5222D;
+      margin-right: 4px;
+    }
+  }
+  .tips-wrapper {
+    width: 100% !important;
+    word-break: break-word;
+    padding: 6px 0 0 0 ;
+  }
+  .tips-form {
+    padding-top: 4px;
   }
 }
 </style>

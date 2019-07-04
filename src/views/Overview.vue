@@ -209,7 +209,7 @@ export default {
     _formatNumber(num) {
       if (num > 10000) {
         const value = (num / 10000)
-        return `${value}W`
+        return `${parseInt(value * 100) / 100}W`
       }
       return num
     },
@@ -363,7 +363,7 @@ export default {
 
       .el-progress {
         .el-progress-bar {
-          padding-right: 15%;
+          padding-right: 20%;
         }
 
         .el-progress__text {

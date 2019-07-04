@@ -34,11 +34,15 @@
           <div class="count-result">{{ state.count }}个插件</div>
         </div>
         <div class="count-center">
-          <div class="count-title">运行中</div>
+          <div class="count-title">
+            运行中
+          </div>
           <div class="count-result">{{ state.running }}个</div>
         </div>
         <div class="count-right">
-          <div class="count-title">已停止</div>
+          <div class="count-title">
+            已停止
+          </div>
           <div class="count-result">{{ state.stop }}个</div>
         </div>
       </a-card>
@@ -74,13 +78,21 @@
             </emq-select>
 
             <el-radio-group v-model="status" size="mini" border @change="loadData">
-              <el-radio-button label="wivwiv">全部</el-radio-button>
-              <el-radio-button label="1">运行中</el-radio-button>
-              <el-radio-button label="0">已停止</el-radio-button>
+              <el-radio-button label="1">
+                运行中
+              </el-radio-button>
+              <el-radio-button label="0">
+                已停止
+              </el-radio-button>
+              <el-radio-button label="wivwiv">
+                全部
+              </el-radio-button>
             </el-radio-group>
 
             <el-radio-group v-model="category" size="mini" border @change="loadData">
-              <el-radio-button label="wivwiv">全部</el-radio-button>
+              <el-radio-button label="wivwiv">
+                全部
+              </el-radio-button>
               <el-radio-button
                 v-for="item in typeFilterOption"
                 :key="item.value"
@@ -119,10 +131,23 @@
             </div>
 
             <div class="oper">
-              <el-button :type="item.active ? 'danger' : 'dashed'" size="mini" @click="togglePlugin(item)">
-                {{ item.active ? '停 止' : '启 动' }}
+              <el-button
+                :type="item.active ? 'danger' : 'dashed'"
+                size="mini"
+                v-if="!primaryList.includes(item.name)"
+                @click="togglePlugin(item)"
+              >
+                {{ item.active ? '停止' : '启动' }}
               </el-button>
-              <el-button size="mini" type="dashed" @click="toConfig(item)">配 置</el-button>
+              <span v-else>--</span>
+              <el-button
+                size="mini"
+                type="dashed"
+                @click="toConfig(item)"
+                v-if="!primaryList.includes(item.name)"
+              >
+                配置
+              </el-button>
             </div>
           </div>
         </div>
@@ -184,17 +209,18 @@ export default {
     return {
       loadNodes,
       category: 'wivwiv',
-      status: 'wivwiv',
+      status: '1',
       tableData: [],
       listTableData: [],
       nodes: [],
+      primaryList: ['emqx_dashboard', 'emqx_management'],
       nodeName: '',
       pluginTypes: {
-        feature: '最新',
         auth: '认证',
         backend: '持久化',
         bridge: '桥接',
         protocol: '协议',
+        feature: '其他',
       },
       typeFilterOption: [],
     }
@@ -219,11 +245,11 @@ export default {
   filters: {
     typeText(type) {
       const pluginTypes = {
-        feature: '最新',
         auth: '认证',
         backend: '持久化',
         bridge: '桥接',
         protocol: '协议',
+        feature: '其他',
       }
       return pluginTypes[type] || '其他'
     },
