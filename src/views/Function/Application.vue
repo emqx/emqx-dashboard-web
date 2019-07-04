@@ -40,24 +40,30 @@
     </div>
 
     <div class="app-wrapper">
-      <a-card
-        class="emq-list-card"
-      >
+      <a-card class="emq-list-card">
         <div class="emq-table-header">
           <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-plus"
-          @click="showDialog('create')">创 建</el-button>
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            @click="showDialog('create')">
+            创 建
+          </el-button>
         </div>
 
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column label="应用ID" prop="app_id"></el-table-column>
-          <el-table-column label="应用名称" prop="name"></el-table-column>
-          <el-table-column label="到期时间" prop="expired"></el-table-column>
-          <el-table-column label="备注" prop="desc"></el-table-column>
-          <el-table-column label="状态">
+          <el-table-column prop="app_id" label="应用ID">
+            <template slot-scope="{ row }">
+              <span class="btn" @click="showDialog('view', row)">
+                {{ row.app_id }}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="应用名称"></el-table-column>
+          <el-table-column prop="expired" :formatter="formatterExpired" label="到期时间"></el-table-column>
+          <el-table-column prop="desc" label="备注"></el-table-column>
+          <el-table-column label="是否启用">
             <template slot-scope="{ row }">
               <el-switch
                 v-model="row.status"
@@ -69,12 +75,15 @@
           </el-table-column>
           <el-table-column>
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('view', row)">查看</el-button>
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">编辑</el-button>
+              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
+                编辑
+              </el-button>
               <el-button
                 type="dashed"
                 size="mini"
-                @click="deleteConfirm(row)">删除</el-button>
+                @click="deleteConfirm(row)">
+                删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -85,54 +94,72 @@
 
     <el-dialog
       width="600px"
-      :title="accessType === 'edit' ? '编辑应用' : '创建应用'" 
-      :visible.sync="dialogVisible">
-      <el-form size="small" ref="recordForm" :model="record" :rules="rules">
+      :title="accessType === 'edit' ? '编辑应用' : '创建应用'"
+      :visible.sync="dialogVisible"
+      @close="clearInput">
+      <el-form
+        size="small"
+        ref="recordForm"
+        :model="record"
+        :rules="accessType === 'view' ? {} : rules"
+      >
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item prop="app_id" label="应用ID" >
+            <el-form-item prop="app_id" label="应用ID">
               <el-input
                 v-model="record.app_id"
-                :disabled="accessType !== 'create'"></el-input>
+                :readonly="accessType !== 'create'"
+                :disabled="accessType === 'edit'"
+              >
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col v-if="accessType === 'view'" :span="12">
-            <el-form-item prop="secret" label="密钥" >
-              <el-input v-model="record.secret" disabled></el-input>
+            <el-form-item prop="secret" label="密钥">
+              <el-input
+                v-model="record.secret"
+                :disabled="accessType === 'edit'"
+                :readonly="accessType !== 'create'"
+              >
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="name" label="应用名称" >
+            <el-form-item prop="name" label="应用名称">
               <el-input
                 v-model="record.name"
-                :disabled="accessType !== 'create'"></el-input>
+                :disabled="accessType === 'edit'"
+                :readonly="accessType === 'view'"
+              >
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="status" label="状态" >
-              <el-select
+            <el-form-item prop="status" label="是否启用">
+              <emq-select
                 v-model="record.status"
-                :disabled="accessType === 'view'">
-                <el-option label="启用" :value="true"></el-option>
-                <el-option label="不启用" :value="false"></el-option>
-              </el-select>
+                :field="{ options: enableOption }"
+                :disabled="accessType === 'view'"
+              >
+              </emq-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="expired" label="到期时间" >
+            <el-form-item prop="expired" label="到期时间">
               <el-date-picker
                 v-model="record.expired"
                 type="date"
+                format="yyyy-MM-dd"
                 value-format="yyyy-MM-dd"
-                :disabled="accessType === 'view'">
+                :readonly="accessType === 'view'">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="desc" label="备注" >
+            <el-form-item prop="desc" label="备注">
               <el-input
                 v-model="record.desc"
-                :disabled="accessType === 'view'"></el-input>
+                :readonly="accessType === 'view'"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -148,6 +175,8 @@
 
 
 <script>
+import moment from 'moment'
+
 // API 自行去老 Dashboard 抓包
 import {
   loadApp,
@@ -168,23 +197,20 @@ export default {
   data() {
     return {
       docs: {
-        restAPI: getLink('ruleEngineTutorial'),
+        restAPI: getLink('restAPI'),
       },
       dialogVisible: false,
       tableData: [],
       accessType: '',
+      enableOption: [{ label: '启用', value: true }, { label: '不启用', value: false }],
       record: {
-        name: 'wivwiv', // 应用名称
-        app_id: '7a9984c29896b', // 应用 ID
         status: true, // 是否启用
-        expired: 0, // 到期时间 秒时间错 显示需要格式化为 年月日
-        secret: 'Mjg4MTQ0NjgwNDQ2MDEwMDkyMzIwNzgzNTI1ODAwODM3MTC', // 密钥 自动生成 [查看可见]
-        desc: '', // 描述
+        desc: '',
       },
       rules: {
-        name: [ { required: true, message: '请输入应用名称' } ],
-        app_id: [ { required: true, message: '请输入应用 ID' } ],
-        status: [ { required: true, message: '请选择是否启用' } ],
+        name: [{ required: true, message: '请输入应用名称' }],
+        app_id: [{ required: true, message: '请输入应用 ID' }],
+        status: [{ required: true, message: '请选择是否启用' }],
       },
     }
   },
@@ -194,21 +220,46 @@ export default {
   },
 
   methods: {
+    formatterExpired({ expired }) {
+      if (!expired || typeof expired !== 'number') {
+        return '永不过期'
+      }
+      return moment(expired * 1000).format('YYYY-MM-DD')
+    },
+    clearInput() {
+      if (this.$refs.recordForm) {
+        this.$refs.recordForm.resetFields()
+      }
+    },
     async loadData() {
       this.tableData = await loadApp()
     },
     // 请求一组数据
     async loadAppData(id) {
-      this.record = await showApp(id)
+      const record = await showApp(id)
+      if (record.expired && typeof record.expired === 'number') {
+        record.expired = moment(record.expired * 1000).format('YYYY-MM-DD')
+      }
+      this.record = record
     },
     showDialog(type, item) {
-      this.record = {}
       this.accessType = type
       if (type === 'edit') {
-        this.record = item
-      }
-      if (type === 'view') {
+        const record = { ...item }
+        if (record.expired && typeof record.expired === 'number') {
+          record.expired = moment(record.expired * 1000).format('YYYY-MM-DD')
+        } else {
+          record.expired = undefined
+        }
+        this.record = record
+      } else if (type === 'view') {
         this.loadAppData(item.app_id)
+      } else {
+        this.record = {
+          app_id: Math.random().toString(16).slice(3),
+          status: true,
+          desc: '',
+        }
       }
       this.dialogVisible = true
     },
@@ -219,25 +270,31 @@ export default {
     },
     save() {
       const vue = this
-      this.$refs.recordForm.validate(function(valid) {
+      this.$refs.recordForm.validate((valid) => {
         if (!valid) {
           return false
         }
+        const record = { ...this.record }
+        if (record.expired && typeof record.expired === 'string') {
+          try {
+            record.expired = Math.floor(new Date(record.expired).getTime() / 1000)
+          } catch (e) {
+            record.expired = null
+          }
+        }
         if (vue.accessType === 'edit') {
           const { app_id } = vue.record
-          updateApp(app_id, vue.record).then(() => {
+          updateApp(app_id, record).then(() => {
             vue.$message.success('编辑成功')
             vue.dialogVisible = false
             vue.accessType = ''
-            vue.record = {}
             vue.loadData()
           })
         } else {
-          createApp(vue.record).then(() => {
+          createApp(record).then(() => {
             vue.$message.success('创建应用成功')
             vue.dialogVisible = false
             vue.accessType = ''
-            vue.record = {}
             vue.loadData()
           })
         }
@@ -245,15 +302,16 @@ export default {
     },
     deleteConfirm(item) {
       const vue = this
-      this.$confirm('确定删除该应用?', {
+      this.$msgbox.confirm('确定删除该应用?', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-      }).then(() => {
+        type: 'warning',
+      }).then(async () => {
         destroyAPP(item.app_id).then(() => {
           vue.$message.success('删除成功')
           vue.loadData()
         })
-      })
+      }).catch(() => {})
     },
   },
 }
@@ -275,9 +333,11 @@ export default {
       font-size: 12px;
     }
   }
+
   .el-select {
     width: 100%;
   }
+
   .el-date-editor {
     width: 100%;
   }
