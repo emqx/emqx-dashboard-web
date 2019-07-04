@@ -2,7 +2,7 @@
   <el-table class="key-and-value-editor" :data="tableData" size="mini">
     <el-table-column prop="key" label="键" min-width="80px">
       <template slot-scope="{ row }">
-        <el-input v-model="row.key" size="mini" placeholder="对象键" @input="atInputChange"></el-input>
+        <el-input v-model="row.key" style="width: 120px !important;" class="key-input" size="mini" placeholder="对象键" @input="atInputChange"></el-input>
       </template>
     </el-table-column>
     <el-table-column prop="value" label="值" min-width="150px">
@@ -99,6 +99,10 @@ export default {
 
   .el-input {
     width: 100% !important;
+
+    &.key-input {
+      width: 120px !important;
+    }
   }
 
   .el-table__empty-block {

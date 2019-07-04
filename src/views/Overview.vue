@@ -105,7 +105,7 @@
       <div class="license-card-footer">
         <div class="description">
           证书到期前 EMQ 将通过邮件通知签发邮箱，
-          请留意信息接收以免错误续期时间影响业务。
+          请留意信息接收以免错过续期时间对业务造成影响。
         </div>
         <div class="oper">
           <el-button type="dashed" size="small">升级</el-button>
@@ -331,6 +331,7 @@ export default {
 
       .oper {
         width: 100px;
+        text-align: right;
       }
     }
 
@@ -342,7 +343,7 @@ export default {
 
     .item {
       font-size: 14px;
-      color: #333;
+      color: #666;
       padding: 6px 0;
 
       .key {
@@ -350,8 +351,7 @@ export default {
       }
 
       .value {
-        font-weight: bold;
-        color: #666;
+        color: #333;
         &.broker {
           margin-top: 6px;
         }
@@ -367,7 +367,7 @@ export default {
         }
 
         .el-progress__text {
-          font-size: 14px !important;
+          font-size: 12px !important;
           margin-left: 10px;
         }
       }
