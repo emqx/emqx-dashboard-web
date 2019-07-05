@@ -89,23 +89,23 @@
 
         <ul class="field-info">
           <li class="field-info-item">
-            <div class="field-title">触发事件：</div>
+            <div class="field-title">触发事件:</div>
             <span class="field-value">{{ configItem.event.name }} ({{ record.for[0] }})</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">备注：</div>
+            <div class="field-title">备注:</div>
             <span class="field-value">{{ configItem.description }}</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">查询字段：</div>
+            <div class="field-title">查询字段:</div>
             <span class="field-value">{{ configItem.fields }}</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">筛选条件：</div>
+            <div class="field-title">筛选条件:</div>
             <span class="field-value">{{ configItem.where }}</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">规则 SQL：</div>
+            <div class="field-title">规则 SQL:</div>
             <div class="field-content">
               <code-view v-if="record.rawsql" lang="sql" :code="record.rawsql"></code-view>
             </div>

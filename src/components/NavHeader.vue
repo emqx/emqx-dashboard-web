@@ -7,7 +7,7 @@
     </div>
 
     <!--<div class="search-wrapper">-->
-      <!---->
+    <!---->
     <!--</div>-->
 
 
@@ -21,9 +21,10 @@
 
       <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
         <div class="alert-info func-item">
-          <el-badge :count="alertCount">
-            <router-link to="/alerts/list" tag="i" class="iconfont icon-Notificationlisttongzhiliebiao"></router-link>
-          </el-badge>
+          <a-badge :count="alertCount">
+            <router-link to="/alerts/list" tag="i" class="iconfont icon-Notificationlisttongzhiliebiao"
+                         @click="clearAlert"></router-link>
+          </a-badge>
         </div>
       </el-tooltip>
 
@@ -59,7 +60,7 @@ export default {
 
   data() {
     return {
-      alertCount: 0,
+      alertCount: 100,
     }
   },
 
@@ -79,10 +80,17 @@ export default {
     this.loadData()
   },
 
+  mounted() {
+    window.onfocus = this.loadData()
+  },
+
   methods: {
+    clearAlert() {
+      // this.alertCount = 0
+    },
     async loadData() {
       const alert = await loadAlarm()
-      this.alertCount = alert.length
+      this.alertCount = Array.isArray(alert) ? alert.length : 0
     },
     logout() {
       this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })

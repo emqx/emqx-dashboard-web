@@ -5,6 +5,7 @@
         ref="record"
         :model="record"
         :rules="rules"
+        size="small"
         hide-required-asterisk
         :show-message="false"
         @keyup.enter.native="login"

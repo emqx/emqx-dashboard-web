@@ -42,7 +42,7 @@
 
         <ul class="field-info">
           <li class="field-info-item">
-            <div class="field-title">状态：</div>
+            <div class="field-title">状态:</div>
             <span class="field-value">
               <a-badge
                 style="font-size: 12px"
@@ -65,16 +65,16 @@
           </li>
 
           <li class="field-info-item">
-            <div class="field-title">资源类型：</div>
+            <div class="field-title">资源类型:</div>
             <span class="field-value">{{ record.typeInfo.title }} ({{ record.type }})</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">备注：</div>
+            <div class="field-title">备注:</div>
             <span class="field-value">{{ record.description }}</span>
           </li>
 
           <li class="field-info-item">
-            <div class="field-title">使用说明：</div>
+            <div class="field-title">使用说明:</div>
             <span class="field-value">{{ record.typeInfo.description }}</span>
           </li>
 
@@ -91,7 +91,7 @@
           <ul class="field-info">
             <el-col v-for="(item, i) in record._config" :key="i" :span="12">
               <li class="field-info-item" :title="item.description">
-                <div class="field-title">{{ item.title }}：</div>
+                <div class="field-title">{{ item.title }}:</div>
                 <span class="field-value">{{ item.value | itemValue }}</span>
               </li>
             </el-col>

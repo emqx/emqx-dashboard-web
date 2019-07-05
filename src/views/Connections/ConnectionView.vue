@@ -40,66 +40,72 @@
 
     <div class="app-wrapper">
       <a-card v-if="activeName === 'detail'" class="detail-card">
-        <div class="emq-title">
-          连接信息
-        </div>
+        <el-row :gutter="40">
+          <el-col :span="9">
+            <div class="emq-title">
+              连接信息
+            </div>
 
-        <ul class="field-info">
-          <el-row :gutter="40">
-            <el-col :span="12">
+            <ul class="field-info">
               <li class="field-info-item">
-                <div class="field-title">Client ID：</div>
+                <div class="field-title">接入节点:</div>
+                <span class="field-value">{{ record.node }}</span>
+              </li>
+              <li class="field-info-item">
+                <div class="field-title">Client ID:</div>
                 <span class="field-value">{{ record.client_id }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">Username：</div>
+                <div class="field-title">Username:</div>
                 <span class="field-value">{{ record.username }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">连接时间：</div>
+                <div class="field-title">连接时间:</div>
                 <span class="field-value">{{ record.connected_at }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">Address：</div>
-                <span class="field-value">{{ record.ipaddress }}:{{ record.port }}</span>
+                <div class="field-title">Address:</div>
+                <span class="field-value">{{ record.ipaddress ? `${record.ipaddress}:` : '' }}{{ record.port }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">Clean Start：</div>
+                <div class="field-title">Clean Start:</div>
                 <span class="field-value">{{ record.clean_start }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">keepalive：</div>
+                <div class="field-title">keepalive:</div>
                 <span class="field-value">{{ record.keepalive }}</span>
               </li>
-            </el-col>
-          </el-row>
-        </ul>
-      </a-card>
+            </ul>
+          </el-col>
+          <el-col :span="9">
+            <div class="emq-title">
+              协议信息
+            </div>
 
-
-      <a-card v-if="activeName === 'detail'" class="detail-card">
-        <div class="emq-title">
-          协议信息
-        </div>
-
-        <ul class="field-info">
-          <li class="field-info-item">
-            <div class="field-title">协议类型：</div>
-            <span class="field-value">{{ record.proto_name }}</span>
-          </li>
-          <li class="field-info-item">
-            <div class="field-title">协议版本：</div>
-            <span class="field-value">{{ record.proto_ver }}</span>
-          </li>
-          <li class="field-info-item">
-            <div class="field-title">SSL 证书：</div>
-            <span class="field-value">{{ record.peercert }}</span>
-          </li>
-          <li class="field-info-item">
-            <div class="field-title">接入分区：</div>
-            <span class="field-value">{{ record.zone }}</span>
-          </li>
-        </ul>
+            <ul class="field-info">
+              <li class="field-info-item">
+                <div class="field-title">桥接设备:</div>
+                <span class="field-value">{{ record.is_bridge ? '是' : '否' }}</span>
+              </li>
+              <li class="field-info-item">
+                <div class="field-title">协议类型:</div>
+                <span class="field-value">{{ record.proto_name }}</span>
+              </li>
+              <li class="field-info-item">
+                <div class="field-title">协议版本:</div>
+                <span class="field-value">{{ record.proto_ver }}</span>
+              </li>
+              <li class="field-info-item">
+                <div class="field-title">SSL 证书:</div>
+                <span class="field-value">{{ record.peercert }}</span>
+              </li>
+              <li class="field-info-item">
+                <div class="field-title">接入分区:</div>
+                <span class="field-value">{{ record.zone }}</span>
+              </li>
+            </ul>
+          </el-col>
+        </el-row>
       </a-card>
 
 

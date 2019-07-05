@@ -30,7 +30,6 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
-          <div></div>
           <div class="search-wrapper">
             <el-input v-model="searchValue" size="small" placeholder="输入 client id"></el-input>
             <el-button type="primary" size="small" @click="handleSearch">搜 索</el-button>
@@ -39,10 +38,18 @@
             </el-button>
           </div>
 
+          <!--<div>-->
+            <!--<el-radio-group v-model="showLevel" size="mini" @change="syncShowLevel">-->
+              <!--<el-radio-button label="simple">概览</el-radio-button>-->
+              <!--<el-radio-button label="more">详细</el-radio-button>-->
+            <!--</el-radio-group>-->
+          <!--</div>-->
+
+
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="client_id" min-width="110px" label="Client ID">
+          <el-table-column prop="client_id" min-width="130px" label="Client ID">
             <template slot-scope="{ row }">
               <router-link :to="{ path: '/connections/detail', query: { client_id: row.client_id } }">
                 {{ row.client_id }}
@@ -50,7 +57,8 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="username" label="Username"></el-table-column>
+          <el-table-column prop="username" min-width="120px" label="Username"></el-table-column>
+          <el-table-column v-if="showLevel === 'more'" prop="node" min-width="120px" label="接入节点"></el-table-column>
           <el-table-column prop="ipaddress" min-width="120px" label="Address">
             <template slot-scope="{ row }">
               {{ row.ipaddress }}:{{ row.port }}
@@ -65,8 +73,13 @@
               </span>
             </template>
           </el-table-column>
+          <el-table-column v-if="showLevel === 'more'" prop="proto_ver" min-width="80px" label="协议版本"></el-table-column>
+          <el-table-column v-if="showLevel === 'more'" prop="clean_start" min-width="80px" label="清除会话"
+                           :formatter="$ => $ ? 'true' : 'false'"></el-table-column>
+          <el-table-column v-if="showLevel === 'more'" prop="peercert" min-width="80px" label="连接加密"></el-table-column>
 
-          <el-table-column prop="connected_at" min-width="120px" label="连接时间"></el-table-column>
+
+          <el-table-column prop="connected_at" min-width="140px" label="连接时间"></el-table-column>
           <el-table-column prop="oper" width="120px" label="">
             <template slot-scope="{ row }">
 
@@ -80,10 +93,12 @@
         </el-table>
 
         <div class="emq-table-footer">
-          <el-pagination hide-on-single-page background layout="total, sizes, prev, pager, next"
-                         :page-sizes="[20, 50, 100, 500]" :page-size.sync="params._limit"
-                         :current-page.sync="params._page" :total="count" @size-change="handleSizeChange"
-                         @current-change="handleCurrentChange">
+          <el-pagination
+            hide-on-single-page background
+            layout="total, sizes, prev, pager, next"
+            :page-sizes="[20, 50, 100, 500]" :page-size.sync="params._limit"
+            :current-page.sync="params._page" :total="count" @size-change="handleSizeChange"
+            @current-change="handleCurrentChange">
           </el-pagination>
         </div>
       </a-card>
@@ -104,6 +119,7 @@ export default {
 
   data() {
     return {
+      showLevel: 'simple', // localStorage.getItem('showLevel') || 'simple',
       popoverVisible: false,
       listLoading: true,
       tableData: [],
@@ -124,6 +140,9 @@ export default {
   },
 
   methods: {
+    syncShowLevel() {
+      localStorage.setItem('SHOW_LEVEL', this.showLevel)
+    },
     async handleDisconnect(row) {
       if (row.disconnected) {
         return

@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 /* eslint-disable */
 import store from '@/store'
 import router from '@/router'
@@ -96,7 +98,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       continue
     }
     const {
-      default: defaultValue, description,
+      default: defaultValue, description = '',
       enum: enumValue, title, type,
       input = 'text', order = 10, format, required = false,
     } = v
@@ -161,4 +163,34 @@ export function getLink(name) {
   const { lang = 'zh' } = store.state
   const dictMap = lang === 'zh' ? zhDocsLink : enDocsLink
   return dictMap[name] || '/'
+}
+
+export function toTableData(metric = {}) {
+  const data = []
+  const nodes = Object.keys(metric)
+  const itData = Object.values(metric)[0] || []
+
+  for (let i = 0; i < itData.length; i++) {
+    const row = {}
+    const [ts, _] = itData[i] || []
+    if (!ts) {
+      continue
+    }
+    row.k = moment(ts).format('HH:mm:ss')
+
+    nodes.forEach((node) => {
+      const currentData = metric[node] || []
+      const kv = currentData[i]
+      if (!kv) {
+        return
+      }
+      const [_k, v] = kv
+      if (!v) {
+        return
+      }
+      row[node] = v
+    })
+    data.push(row)
+  }
+  return { data, nodes }
 }

@@ -29,8 +29,24 @@ export function updatePlugin(nodeName, pluginName) {
   return http.put(`/nodes/${nodeName}/plugin_configs/${pluginName}`)
 }
 
-export function loadNodes() {
-  return http.get('/nodes')
+export function loadBrokers() {
+  return http.get('/brokers')
+}
+
+export async function loadNodes() {
+  const brokers = await loadBrokers()
+  const brokerMap = {}
+  brokers.forEach((broker) => {
+    brokerMap[broker.node] = broker
+  })
+  const nodes = await http.get('/nodes')
+  return nodes.map(($) => {
+    const broker = brokerMap[$.name] || {}
+    return {
+      ...broker,
+      ...$,
+    }
+  })
 }
 
 export async function loadAlarm() {

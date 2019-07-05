@@ -34,7 +34,12 @@ const router = new Router({
         {
           path: '/overview',
           name: 'overview',
-          component: () => import('@/views/Overview'),
+          component: () => import('@/views/Overview/Overview'),
+        },
+        {
+          path: '/overview/node',
+          name: 'node',
+          component: () => import('@/views/Overview/Node'),
         },
       ],
     },
@@ -154,7 +159,7 @@ const router = new Router({
         },
         {
           path: ':name',
-          name: 'plugins',
+          name: 'plugins-config',
           component: () => import('@/views/Plugins/PluginView'),
         },
       ],

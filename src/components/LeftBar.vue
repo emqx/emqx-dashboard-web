@@ -141,7 +141,6 @@ export default {
   computed: {
     defaultSelectedKeys() {
       const { path } = this.$route
-      console.log(`/${path.split('/')[1]}`)
       return [`/${path.split('/')[1]}`]
     },
     logoStyle() {
@@ -172,7 +171,9 @@ export default {
           return
         }
         if (item.children.find($ => path.includes($.path) || path === $.path)) {
-          this.defaultOpenKeys = [item.key]
+          if (!this.defaultOpenKeys.includes(item.key)) {
+            this.defaultOpenKeys.push(item.key)
+          }
         }
       })
     },

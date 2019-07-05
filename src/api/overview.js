@@ -37,4 +37,35 @@ export function loadLicenseInfo() {
   return http.get('/license_info')
 }
 
+export function loadMetricsLog(node, type) {
+  if (!node && type) {
+    return http.get(`/overview/metrics/${type}`)
+  }
+  if (node && !type) {
+    return http.get(`/nodes/${node}/overview/metrics`)
+  }
+  if (node && type) {
+    return http.get(`/nodes/${node}/overview/metrics/${type}`)
+  }
+  return http.get('/overview/metrics')
+}
+
+export function loadMetrics(node) {
+  return http.get(`/nodes/${node}/metrics`)
+}
+
+export function loadConfig(node) {
+  return http.get(`/nodes/${node}/configs`)
+}
+
+export function loadListeners(node) {
+  return http.get(`/nodes/${node}/listeners`)
+}
+
+export async function loadNodeDetail(node) {
+  const broker = await http.get(`/brokers/${node}`)
+  const nodeData = await http.get(`/nodes/${node}`)
+  return { ...broker, ...nodeData }
+}
+
 export default {}
