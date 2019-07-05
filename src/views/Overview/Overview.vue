@@ -155,7 +155,7 @@
       </div>
 
       <div v-else class="basic" style="margin-bottom: -32px" v-loading="tableLoading">
-        <div v-if="activeMetrics.data.length < 4 && !tableLoading" class="data-list">
+        <div v-if="activeMetrics.data.length === 0 && !tableLoading" class="data-list">
           <p>暂无数据</p>
         </div>
         <metric-line v-else :value="activeMetrics"></metric-line>

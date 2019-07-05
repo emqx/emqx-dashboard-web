@@ -108,7 +108,9 @@
           <div v-for="(item, i) in listTableData" :key="i" :gutter="20" class="plugin-item">
 
             <div class="logo">
-              <img src="https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png" alt="plugin-logo">
+              <img
+                :src="iconMap[item.name] || 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png'"
+                alt="plugin-logo">
             </div>
 
             <div class="header">
@@ -223,6 +225,7 @@ export default {
         feature: '其他',
       },
       typeFilterOption: [],
+      iconMap: {},
     }
   },
 
@@ -256,6 +259,19 @@ export default {
   },
 
   methods: {
+    loadIcon() {
+      const iconMap = {}
+      this.tableData.forEach((item) => {
+        const { name } = item
+        try {
+          iconMap[name] = require(`../../assets/plugin_icon/${name}.png`)
+        } catch (e) {
+          console.log(e)
+        }
+      })
+      console.log(iconMap)
+      return iconMap
+    },
     toConfig(item = {}) {
       const { name } = item
       const node = this.nodeName
@@ -277,6 +293,7 @@ export default {
       this.nodeName = this.nodeName || (this.nodes[0] || {}).name
       this.tableData = await loadPlugins(this.nodeName)
       this.handleFilter()
+      this.iconMap = this.loadIcon()
     },
     handleFilter() {
       let list = this.tableData
@@ -325,6 +342,8 @@ export default {
         position: absolute;
         top: 24px;
         left: 0;
+        border-radius: 4px;
+        overflow: hidden;
 
         img {
           width: 48px;

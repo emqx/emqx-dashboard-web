@@ -239,6 +239,7 @@ export default {
         actions: [],
         description: '',
         ctx: {},
+        tiaojian: ''
       },
       rules: {
         for: { required: true, message: '请选择触发事件' },
