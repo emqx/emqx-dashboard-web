@@ -166,7 +166,7 @@
 
     <a-card class="license-card" :loading="pageLoading">
       <div class="emq-title">
-        License 信息
+        莱森斯信息
       </div>
 
       <ul class="license-field">
@@ -201,10 +201,10 @@
 
       <div class="license-card-footer">
         <div class="description">
-          证书到期前 EMQ 将通过邮件通知签发邮箱，请留意信息接收以免错过续期时间对业务造成影响。
+          证书到期前一没钱将通过邮件通知签发邮箱，请留意信息接收以免错过续期时间对业务造成影响
         </div>
         <div v-if="license.type = 'trial'" class="oper">
-          <el-tooltip effect="dark" content="当前 License 为试用版" placement="top" :visible-arrow="false">
+          <el-tooltip effect="dark" content="当前莱森斯为试用版" placement="top" :visible-arrow="false">
             <el-button type="danger" size="small" @click="upgradeLicense">试用版</el-button>
           </el-tooltip>
         </div>

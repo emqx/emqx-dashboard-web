@@ -111,7 +111,7 @@ export default {
         this.$router.push({ path: `/${command}` })
         return
       }
-      this.$msgbox.confirm('是否退出登录?', {
+      this.$msgbox.confirm('是否退出登录？', {
         confirmButtonText: '退出',
         cancelButtonText: '取消',
         type: 'warning',

@@ -217,7 +217,7 @@ export default {
       if (this.record.disconnected) {
         return
       }
-      this.$msgbox.confirm('此操作将断开该连接, 连接可能通过重连机制再次重连, 确认继续?', {
+      this.$msgbox.confirm('此操作将断开该连接,连接可能通过重连机制再次重连,确认继续?', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

@@ -123,13 +123,128 @@ async function process() {
 
 async function processFile() {
   const models = await loadFileModel()
-  const dictMap = require('./dict')
+  const keyMap = require('./dict_filled').all
+
+  const fileMap = {}
 
   models.forEach((item) => {
     const { name, model, file } = item
+    fileMap[model] = fileMap[model] || {
+      __not: [],
+    }
 
+    const rows = fs.readFileSync(file).toString().split('\n')
+    let cursor = 0
+    rows.forEach((row, i) => {
+      if (row.startsWith('<script>')) {
+        cursor = 1
+      } else if (row.startsWith('</script>')) {
+        cursor = 2
+      }
+
+      // 替换每一行
+      const words = getWords(row).filter(key => {
+        if (/^[0-9,]*$/.test(key)) {
+          return false
+        }
+        const value = keyMap[key]
+        if (!value) {
+          fileMap[model].__not.push(key)
+          return false
+        }
+        return true
+      })
+      if (words.length === 0) {
+        return
+      }
+
+      words.forEach((word) => {
+        const { key, zh, en } = keyMap[word]
+        const n = `$t('${model}.${key}')`
+        fileMap[model][key] = {
+          zh,
+          en,
+        }
+
+        // 在 template 里面
+        if (cursor === 0) {
+          // 直接替换
+          if (word === row.trim() || row.includes(`>${word}`)) {
+            row = row.replace(word, `{{ ${n} }}`)
+          } else if (row.includes(`label="${word}"`)) {
+            row = row.replace(`label="${word}"`, `:label="${n}"`)
+          } else if (row.includes(`title="${word}"`)) {
+            row = row.replace(`title="${word}"`, `:title="${n}"`)
+          } else if (row.includes(`placeholder="${word}"`)) {
+            row = row.replace(`placeholder="${word}"`, `:placeholder="${n}"`)
+          } else if (row.includes(`'${word}'`)) {
+            row = row.replace(`'${word}'`, n)
+          }
+
+          // TODO 优化多个字段替换
+          if (word === row.trim() || row.includes(`>${word}`)) {
+            row = row.replace(word, `{{ ${n} }}`)
+          } else if (row.includes(`label="${word}"`)) {
+            row = row.replace(`label="${word}"`, `:label="${n}"`)
+          } else if (row.includes(`title="${word}"`)) {
+            row = row.replace(`title="${word}"`, `:title="${n}"`)
+          } else if (row.includes(`placeholder="${word}"`)) {
+            row = row.replace(`placeholder="${word}"`, `:placeholder="${n}"`)
+          } else if (row.includes(`'${word}'`)) {
+            row = row.replace(`'${word}'`, n)
+          }
+
+          if (word === row.trim() || row.includes(`>${word}`)) {
+            row = row.replace(word, `{{ ${n} }}`)
+          } else if (row.includes(`label="${word}"`)) {
+            row = row.replace(`label="${word}"`, `:label="${n}"`)
+          } else if (row.includes(`title="${word}"`)) {
+            row = row.replace(`title="${word}"`, `:title="${n}"`)
+          } else if (row.includes(`placeholder="${word}"`)) {
+            row = row.replace(`placeholder="${word}"`, `:placeholder="${n}"`)
+          } else if (row.includes(`'${word}'`)) {
+            row = row.replace(`'${word}'`, n)
+          }
+        } else if (cursor === 1) {
+          if (row.includes(`'${word}'`)) {
+            row = row.replace(`'${word}'`, `this.${n}`)
+          }
+
+          if (row.includes(`'${word}'`)) {
+            row = row.replace(`'${word}'`, `this.${n}`)
+          }
+
+          if (row.includes(`'${word}'`)) {
+            row = row.replace(`'${word}'`, `this.${n}`)
+          }
+
+          if (row.includes(`'${word}'`)) {
+            row = row.replace(`'${word}'`, `this.${n}`)
+          }
+
+          if (row.includes(`'${word}'`)) {
+            row = row.replace(`'${word}'`, `this.${n}`)
+          }
+        }
+      })
+
+      rows[i] = row
+    })
+
+    fs.writeFileSync(file, rows.join('\n'))
+
+  })
+
+  Object.keys(fileMap).forEach((key) => {
+    const value = fileMap[key]
+    fs.writeFileSync(
+        path.join(__dirname, `../src/i18n/${key}.js`,
+            `export default {\n ${JSON.stringify(value, null, 2)} \n}`),
+    )
+    console.log(key, 'Done')
   })
 }
 
-process()
+// process()
 
+processFile()

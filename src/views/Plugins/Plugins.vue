@@ -184,7 +184,7 @@
               <el-button :type="row.active ? 'danger' : 'dashed'" size="mini" @click="togglePlugin(row)">
                 {{ row.active ? '停止' : '启动' }}
               </el-button>
-              <el-button size="mini" type="dashed">配 置</el-button>
+              <el-button size="mini" type="dashed">配置</el-button>
             </template>
           </el-table-column>
 
@@ -313,7 +313,7 @@ export default {
         row.active = true
         return
       }
-      this.$msgbox.confirm('此操作将停止该插件, 确认继续?', {
+      this.$msgbox.confirm('此操作将停止该插件,确认继续？', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

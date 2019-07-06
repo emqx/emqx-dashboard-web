@@ -24,7 +24,7 @@
         <div class="page-header-content-view">
           <div class="content">
             <p class="description">
-              规则引擎使用 SQL 语句配置 EMQ X 消息流与设备事件的处理规则，内置多种灵活的数据处理方案。
+              规则引擎使用说起来语句配置二面消息流与设备事件的处理规则，内置多种灵活的数据处理方案。
             </p>
             <div class="page-header-link">
               <a :href="docs.tutorial" target="_blank" class="link-item">
@@ -243,7 +243,7 @@ export default {
 
   methods: {
     deleteRule(row) {
-      this.$msgbox.confirm('此操作将停用并删除该规则,确认继续?', {
+      this.$msgbox.confirm('此操作将停用并删除该规则,确认继续？', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

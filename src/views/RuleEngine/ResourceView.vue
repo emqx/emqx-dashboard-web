@@ -58,7 +58,7 @@
                 type="primary"
                 @click="reconnectResource"
               >
-                重 连
+                重连
               </el-button>
 
             </span>

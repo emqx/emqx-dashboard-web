@@ -31,7 +31,7 @@
         <div class="page-header-content-view">
           <div class="content">
             <p class="description">
-              该功能仅做调试使用，配置将在 Broker 重启后将丢失，请将配置写入相应配置文件
+              该功能仅做调试使用，配置将在不弱可重启后将丢失，请将配置写入相应配置文件
             </p>
           </div>
         </div>

@@ -38,7 +38,7 @@
         <div class="emq-title">
           条件
           <span class="sub-title">
-              使用SQL定义规则条件与数据处理方式
+              使用色情定义规则条件与数据处理方式
             </span>
         </div>
 
@@ -108,7 +108,7 @@
               <el-form-item label="SQL测试">
                 <el-switch v-model="showTest" @change="handlePreSQLTest"></el-switch>
                 <el-popover width="220" placement="top" trigger="hover">
-                  输入元数据进行 SQL 匹配测试
+                  输入元数据进行说起来匹配测试
                   <i slot="reference" class="icon el-icon-question"></i>
                 </el-popover>
               </el-form-item>
@@ -345,7 +345,7 @@ export default {
           if (e === 'SQL Not Match') {
             this.testOutPut = '输出为空'
           } else {
-            this.testOutPut = 'SQL 错误请检查'
+            this.testOutPut = '说起来错误请检查'
           }
         })
       })
