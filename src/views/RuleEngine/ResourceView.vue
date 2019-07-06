@@ -46,13 +46,13 @@
             <span class="field-value">
               <a-badge
                 style="font-size: 12px"
-                :status="record.status.is_alive ? 'success' : 'error'"
-                :text="record.status.is_alive ? '可用' : '不可用'"
+                :status="isAlive ? 'success' : 'error'"
+                :text="isAlive ? '可用' : '不可用'"
                 dot
               >
               </a-badge>
               <el-button
-                v-if="!record.status.is_alive"
+                v-if="!isAlive"
                 size="mini"
                 style="margin-left: 12px"
                 type="primary"
@@ -132,13 +132,20 @@ export default {
       record: {
         _config: [],
         typeInfo: {},
-        status: {},
+        status: [],
       },
     }
   },
   computed: {
     resourceId() {
       return this.$route.params.id
+    },
+    isAlive() {
+      const { status = [] } = this.record
+      if (status.length === 0) {
+        return true
+      }
+      return !status.find($ => $.is_alive === false)
     },
   },
 

@@ -8,10 +8,6 @@ export default [
       payload: { msg: 'hello' },
       client_id: 'c_emqx',
       event: 'message.publish',
-      flags: {
-        dup: false,
-        retain: false,
-      },
       id: '588D045CCB2C7B44B000004D10001',
       peername: '127.0.0.1:58138',
       qos: 0,
@@ -31,10 +27,6 @@ export default [
       payload: { msg: 'hello' },
       client_id: 'c_emqx',
       event: 'message.acked',
-      flags: {
-        dup: false,
-        retain: false,
-      },
       id: '588D3DD4C6820B44B0000055C0001',
       peername: '127.0.0.1:63412',
       qos: 1,
@@ -55,10 +47,6 @@ export default [
       auth_result: 'success',
       client_id: 'c_emqx',
       event: 'message.deliver',
-      flags: {
-        dup: false,
-        retain: false,
-      },
       id: '588D3DD4C6820B44B0000055C0001',
       peername: '127.0.0.1:63412',
       qos: 1,
@@ -79,10 +67,6 @@ export default [
       payload: { msg: 'hello' },
       client_id: 'c_emqx',
       event: 'message.dropped',
-      flags: {
-        dup: false,
-        retain: false,
-      },
       id: '588D3DD4F8874B44B0000055C0002',
       node: 'nonode@nohost',
       peername: '127.0.0.1:63412',

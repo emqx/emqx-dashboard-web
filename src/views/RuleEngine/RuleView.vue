@@ -45,7 +45,7 @@
               执行次数
             </div>
             <div class="card-value">
-              {{ record.metrics.matched }}
+              {{ record.metricsData.matched }}
               <span class="card-unit">次</span>
             </div>
             <div class="card-desc">
@@ -57,11 +57,11 @@
               当前速度
             </div>
             <div class="card-value">
-              {{ record.metrics.speed }}
+              {{ record.metricsData.speed }}
               <span class="card-unit">次/秒</span>
             </div>
             <div class="card-desc">
-              最大执行速度: {{ record.metrics.speed_max }} 次/秒
+              最大执行速度: {{ record.metricsData.speed_max }} 次/秒
             </div>
           </el-col>
 
@@ -70,7 +70,7 @@
               最近5分钟执行速度
             </div>
             <div class="card-value">
-              {{ record.metrics.speed_last5m }}
+              {{ record.metricsData.speed_last5m }}
               <span class="card-unit">次/秒</span>
             </div>
             <div class="card-desc">
@@ -154,12 +154,13 @@ export default {
       record: {
         for: [],
         actions: [],
-        metrics: {
+        metricsData: {
           matched: 0,
           speed: 0,
           speed_last5m: 0,
           speed_max: 0,
         },
+        metrics: [],
       },
       eventsMap: {},
       actions: [],
@@ -207,6 +208,13 @@ export default {
       const events = await loadEvents()
       events.forEach((event) => {
         this.eventsMap[event.value] = event
+      })
+      record.metricsData = {}
+      record.metrics.forEach((item) => {
+        ['matched', 'speed', 'speed_last5m', 'speed_max'].forEach((key) => {
+          record.metricsData[key] = record.metricsData[key] || 0
+          record.metricsData[key] += item[key] || 0
+        })
       })
       this.loading = false
       this.record = record

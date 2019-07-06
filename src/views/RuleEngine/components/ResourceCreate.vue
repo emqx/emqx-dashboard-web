@@ -40,7 +40,7 @@
       </el-form-item>
 
 
-      <el-row v-if="record.type" class="config-item-wrapper" :gutter="30">
+      <el-row v-if="record.type" class="config-item-wrapper" :gutter="20">
         <div v-if="configLoading" class="params-loading-wrapper">
           <a-skeleton active></a-skeleton>
         </div>
@@ -50,7 +50,7 @@
             <el-form-item v-bind="item.formItemAttributes">
               <template v-if="item.formItemAttributes.description" slot="label">
                 {{ item.formItemAttributes.label }}
-                <el-popover trigger="hover" placement="top-start">
+                <el-popover width="220" trigger="hover" placement="top">
                   <div class="emq-popover-content" v-html="item.formItemAttributes.description"></div>
                   <i slot="reference" class="el-icon-question"></i>
                 </el-popover>
@@ -255,7 +255,9 @@ export default {
 <style lang="scss">
 .resource-dialog {
   .line {
-    background-color: #d8d8d8;
+    width: 95%;
+    margin: 30px auto 28px auto;
+    background-color: #EDEEF2;
   }
 
   .el-form-item {
@@ -267,6 +269,7 @@ export default {
       &:not(.reset-width) {
         width: 330px;
       }
+
       width: 100%;
     }
 
@@ -277,7 +280,6 @@ export default {
   }
 
   .config-item-wrapper {
-    margin-top: 30px;
     min-height: 100px;
 
     .params-loading-wrapper {
@@ -285,11 +287,11 @@ export default {
     }
 
     .el-input, .el-select {
-      width: 200px !important;
+      /*width: 200px !important;*/
     }
 
     .el-textarea {
-      width: 330px;
+      /*width: 330px;*/
     }
 
 

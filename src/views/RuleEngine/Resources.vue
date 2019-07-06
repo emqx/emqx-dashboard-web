@@ -52,16 +52,16 @@
           ></el-table-column>
 
           <el-table-column min-width="100px" prop="description" show-overflow-tooltip label="备注"></el-table-column>
-          <el-table-column min-width="70px" prop="status.is_alive" label="状态">
-            <template slot-scope="{ row }">
-              <a-badge
-                :status="row.status.is_alive ? 'success' : 'error'"
-                :text="getStateText(row.status.is_alive)"
-                dot
-              >
-              </a-badge>
-            </template>
-          </el-table-column>
+          <!--<el-table-column min-width="70px" prop="status.is_alive" label="状态">-->
+            <!--<template slot-scope="{ row }">-->
+              <!--<a-badge-->
+                <!--:status="getStatus(row.status) ? 'success' : 'error'"-->
+                <!--:text="getStateText(row.status)"-->
+                <!--dot-->
+              <!--&gt;-->
+              <!--</a-badge>-->
+            <!--</template>-->
+          <!--</el-table-column>-->
 
           <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
@@ -142,9 +142,6 @@ export default {
     },
     showResource(row) {
       this.$router.push({ path: `/resources/${row.id}` })
-    },
-    getStateText(is_alive) {
-      return is_alive ? '可用' : '不可用'
     },
     resourceTypesColumnFilter(value, row) {
       return row.name === value

@@ -20,10 +20,10 @@
 
         <div v-else class="action-item-btn action-item-type">
           <span class="title">成功 </span>
-          <span class="desc">{{ (item.metrics || {}).success }}</span>
+          <span class="desc">{{  sumCount(item.metrics, 'success') }}</span>
 
           <span class="title">失败 </span>
-          <span class="desc">{{ (item.metrics || {}).failed }}</span>
+          <span class="desc">{{ sumCount(item.metrics, 'failed') }}</span>
         </div>
       </div>
       <div class="action-item-description">
@@ -96,7 +96,7 @@
               <el-form-item v-bind="item.formItemAttributes">
                 <template v-if="item.formItemAttributes.description" slot="label">
                   {{ item.formItemAttributes.label }}
-                  <el-popover trigger="hover" placement="top-start">
+                  <el-popover trigger="hover" width="220" placement="top">
                     <div class="emq-popover-content" v-html="item.formItemAttributes.description"></div>
                     <i slot="reference" class="el-icon-question"></i>
                   </el-popover>
@@ -240,6 +240,16 @@ export default {
   },
 
   methods: {
+    sumCount(data, key) {
+      if (!data || data.length === 0) {
+        return 0
+      }
+      let sum = 0
+      data.forEach((item) => {
+        sum += item[key]
+      })
+      return sum
+    },
     editAction(item) {
       this.record = { ...item }
       this.addActionDialogVisible = true

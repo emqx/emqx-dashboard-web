@@ -107,7 +107,7 @@
 
               <el-form-item label="SQL测试">
                 <el-switch v-model="showTest" @change="handlePreSQLTest"></el-switch>
-                <el-popover placement="top" trigger="hover">
+                <el-popover width="220" placement="top" trigger="hover">
                   输入元数据进行 SQL 匹配测试
                   <i slot="reference" class="icon el-icon-question"></i>
                 </el-popover>
