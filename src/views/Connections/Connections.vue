@@ -32,9 +32,9 @@
         <div class="emq-table-header">
           <div class="search-wrapper">
             <el-input v-model="searchValue" size="small" placeholder="输入 client id"></el-input>
-            <el-button type="primary" size="small" @click="handleSearch">搜 索</el-button>
+            <el-button type="primary" size="small" @click="handleSearch">搜索</el-button>
             <el-button plain size="small" @click="resetSearch">
-              {{ searchValue ? '重 置' : '刷 新' }}
+              {{ searchValue ? '重置' : '刷新' }}
             </el-button>
           </div>
 
@@ -84,7 +84,7 @@
             <template slot-scope="{ row }">
 
               <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
-                {{ row.disconnected ? '已断开' : '断 开' }}
+                {{ row.disconnected ? '已断开' : '断开' }}
               </el-button>
 
               <!--<el-button size="mini" type="danger">Ban</el-button>-->
@@ -147,7 +147,7 @@ export default {
       if (row.disconnected) {
         return
       }
-      this.$msgbox.confirm('此操作将断开该连接, 连接可能通过重连机制再次重连, 确认继续?', {
+      this.$msgbox.confirm('此操作将断开该连接,连接可能通过重连机制再次重连,确认继续?', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

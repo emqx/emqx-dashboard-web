@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
 import Layout from './components/Layout'
-import Login from './views/Login'
+import Login from './views/Base/Login'
 import { toLogin, getBasicAuthInfo } from './common/utils'
 
 Vue.use(Router)
@@ -171,7 +171,7 @@ const router = new Router({
         {
           path: '',
           name: 'not-found',
-          component: () => import('@/views/NotFound'),
+          component: () => import('@/views/Base/NotFound'),
         },
       ],
     },

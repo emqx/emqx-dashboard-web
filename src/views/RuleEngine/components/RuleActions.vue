@@ -140,8 +140,8 @@
 
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">确 定</el-button>
-        <el-button size="small" @click="handleCache">取 消</el-button>
+        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">确定</el-button>
+        <el-button size="small" @click="handleCache">取消</el-button>
       </div>
     </el-dialog>
 

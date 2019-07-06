@@ -24,7 +24,7 @@
 
         <div class="page-header-content-view">
           <div class="content">
-            管理 Dashboard 登录用户
+            管理大师登录用户
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
             size="small"
             icon="el-icon-plus"
             @click="showDialog('create')">
-            创 建
+            创建
           </el-button>
         </div>
 
@@ -73,7 +73,7 @@
       @close="clearInput"
       :visible.sync="dialogVisible">
       <el-form size="small" ref="recordForm" :model="record" :rules="rules">
-        <el-form-item prop="username" label="用户名称">
+        <el-form-item prop="username" label="用户名">
           <el-input
             v-model="record.username"
             :disabled="accessType === 'edit'"></el-input>
@@ -156,7 +156,7 @@ export default {
         }, {
           min: 3,
           max: 32,
-          message: '密码长度为 3-32 位',
+          message: '密码长度为三到三十二位',
           trigger: ['blur', 'change'],
         }],
         newPassword: [{
@@ -166,7 +166,7 @@ export default {
         }, {
           min: 3,
           max: 32,
-          message: '密码长度为 3-32 位',
+          message: '密码长度为三到三十二位',
           trigger: ['blur', 'change'],
         }],
         repeatPassword: [

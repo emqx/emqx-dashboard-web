@@ -153,7 +153,7 @@
               <div>
                 <el-form-item>
                   <el-button type="primary" size="small" class="conn-btn" @click="_doSubscribe">
-                    订 阅
+                    订阅
                   </el-button>
                 </el-form-item>
               </div>
@@ -214,7 +214,7 @@
                   <span slot="label">&nbsp;</span>
                   <el-checkbox v-model="messageRecord.retain" style="margin-right: 20px">Retain</el-checkbox>
                   <el-button type="primary" size="small" class="conn-btn" style="float: right" @click="_doPublish">
-                    发 布
+                    发布
                   </el-button>
                 </el-form-item>
               </el-col>

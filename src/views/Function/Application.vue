@@ -25,7 +25,7 @@
         <div class="page-header-content-view">
           <div class="content">
             <p class="description">
-              应用为调用 REST API 认证凭证，通过 REST API 可查询、调整 EMQ X 集群信息，对设备进行管理操作
+              应用为调用RESTAPI认证凭证，通过RESTAPI可查询、调整EMQX集群信息，对设备进行管理操作
             </p>
 
             <div class="page-header-link">
@@ -47,7 +47,7 @@
             size="small"
             icon="el-icon-plus"
             @click="showDialog('create')">
-            创 建
+            创建
           </el-button>
         </div>
 
@@ -177,7 +177,6 @@
 <script>
 import moment from 'moment'
 
-// API 自行去老 Dashboard 抓包
 import {
   loadApp,
   createApp,
@@ -209,8 +208,8 @@ export default {
       },
       rules: {
         name: [{ required: true, message: '请输入应用名称' }],
-        app_id: [{ required: true, message: '请输入应用 ID' }],
-        status: [{ required: true, message: '请选择是否启用' }],
+        app_id: [{ required: true, message: '请输入应用艾迪' }],
+        status: [{ required: true, message: '请选择' }],
       },
     }
   },

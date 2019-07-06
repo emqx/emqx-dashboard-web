@@ -87,7 +87,7 @@
 
           <!--<el-table-column width="150px" prop="id">-->
           <!--<template slot-scope="{ row }">-->
-          <!--<el-button v-if="row.level !== '系统'" type="dashed" size="mini">删 除</el-button>-->
+          <!--<el-button v-if="row.level !== '系统'" type="dashed" size="mini">删除</el-button>-->
           <!--<el-button type="dashed" size="mini">告警列表</el-button>-->
           <!--</template>-->
           <!--</el-table-column>-->

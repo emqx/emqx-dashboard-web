@@ -1,5 +1,6 @@
 module.exports = {
   devServer: {
+    disableHostCheck: true,
     proxy: {
       '/api': {
         target: process.env.HOST_URL || 'http://127.0.0.1:18083',

@@ -31,7 +31,7 @@
         :loading="listLoading"
       >
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">创 建</el-button>
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">创建</el-button>
         </div>
 
         <el-table :data="tableData" class="data-list">
@@ -65,8 +65,8 @@
 
           <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
-              <el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">重 连</el-button>
-              <el-button type="dashed" size="mini" @click="deleteResource(row)">删 除</el-button>
+              <el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">重连</el-button>
+              <el-button type="dashed" size="mini" @click="deleteResource(row)">删除</el-button>
             </template>
           </el-table-column>
 

@@ -22,8 +22,8 @@
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
-      <el-button plain size="small" @click="close">取 消</el-button>
-      <el-button type="primary" size="small" @click="handleAdd">添 加</el-button>
+      <el-button plain size="small" @click="close">取消</el-button>
+      <el-button type="primary" size="small" @click="handleAdd">添加</el-button>
     </div>
   </el-dialog>
 </template>

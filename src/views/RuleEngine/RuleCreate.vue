@@ -38,7 +38,7 @@
         <div class="emq-title">
           条件
           <span class="sub-title">
-              使用 SQL 定义规则条件与数据处理方式
+              使用SQL定义规则条件与数据处理方式
             </span>
         </div>
 
@@ -131,7 +131,7 @@
 
                   <el-form-item>
                     <span slot="label">&nbsp;</span>
-                    <el-button type="primary" @click="handleSQLTest">测 试</el-button>
+                    <el-button type="primary" @click="handleSQLTest">测试</el-button>
                   </el-form-item>
 
                   <el-form-item label="测试输出">
@@ -182,10 +182,10 @@
 
       <div style="text-align: center">
         <el-button type="primary" size="medium" @click="handleCreate">
-          创 建
+          创建
         </el-button>
         <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
-          取 消
+          取消
         </el-button>
       </div>
 

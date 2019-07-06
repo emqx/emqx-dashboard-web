@@ -114,7 +114,7 @@
           当前订阅
 
           <div class="subscriptions-header">
-            <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">刷 新</el-button>
+            <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">刷新</el-button>
             <el-button plain size="mini" icon="el-icon-plus" @click="handlePreAdd">添加订阅</el-button>
           </div>
         </div>
