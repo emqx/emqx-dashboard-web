@@ -5,13 +5,13 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link to="/" tag="span" class="btn btn-default raw">
-              首页
+              {{ $t('Plugins.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
           <a-breadcrumb-item>
             <router-link to="/plugins" tag="span" class="btn btn-default raw">
-              插件
+              {{ $t('Plugins.plugin') }}
             </router-link>
           </a-breadcrumb-item>
 
@@ -31,7 +31,7 @@
         <div class="page-header-content-view">
           <div class="content">
             <p class="description">
-              该功能仅做调试使用，配置将在不弱可重启后将丢失，请将配置写入相应配置文件
+              {{ $t('Plugins.pluginTips') }}
             </p>
           </div>
         </div>
@@ -41,11 +41,11 @@
 
     <div class="app-wrapper">
       <a-card class="emq-list-card">
-        <div class="emq-title">配置信息</div>
+        <div class="emq-title">{{ $t('Plugins.configuration') }}</div>
 
         <el-form ref="record" :model="record" size="small" :rules="rules" label-position="top">
           <el-row :gutter="20">
-            <el-col v-for="(item, i) in fieldList" :span="item.span" :key="i">
+            <el-col v-for="(item, i) in fieldList" :key="i" :span="item.span">
               <el-form-item v-bind="item.formItem">
                 <el-input v-if="item.type !== 'number'" v-model="record[item.key]" v-bind="item.inputItem"></el-input>
 
@@ -57,8 +57,8 @@
 
         <div class="line" style="margin: 20px auto;background-color: #d8d8d8"></div>
         <div class="footer">
-          <el-button size="medium" type="primary" :disabled="!changed" @click="updateConfig">保存</el-button>
-          <el-button size="medium" @click="handleCache">取消</el-button>
+          <el-button size="medium" type="primary" :disabled="!changed" @click="updateConfig">{{ $t('Plugins.save') }}</el-button>
+          <el-button size="medium" @click="handleCache">{{ $t('Plugins.cancel') }}</el-button>
         </div>
       </a-card>
     </div>
@@ -88,6 +88,19 @@ export default {
     }
   },
 
+  computed: {
+    node() {
+      return this.$route.query.node
+    },
+    changed() {
+      return this.oldConfig !== JSON.stringify(this.record)
+    },
+  },
+
+  created() {
+    this.loadData()
+  },
+
   methods: {
     async updateConfig() {
       this.$refs.record.validate(async (valid) => {
@@ -95,15 +108,15 @@ export default {
           return
         }
         await updatePlugin(this.node, this.$route.params.name)
-        this.$message.success('更新成功')
+        this.$message.success(this.$t('Plugins.updateSuccessful'))
         this.$router.go(-1)
       })
     },
     handleCache() {
       if (this.changed) {
-        this.$msgbox.confirm('你的更改将不被保存，确认继续？', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        this.$msgbox.confirm(this.$t('Plugins.pluginBeforeSaveTips'), {
+          confirmButtonText: this.$t('Plugins.confirm'),
+          cancelButtonText: this.$t('Plugins.cancel'),
           type: 'warning',
         }).then(() => {
           this.$router.go(-1)
@@ -121,14 +134,16 @@ export default {
       this.fieldList = []
       const list = []
       this.config.forEach((item) => {
-        const { key, value, desc, required } = item
+        const {
+          key, value, desc, required,
+        } = item
         this.$set(this.record, key, value)
         list.push(this.getFieldItem(item))
       })
       this.oldConfig = JSON.stringify(this.record)
       this.fieldList = list.filter($ => $.type !== 'textarea')
       const otherField = list.filter($ => $.type === 'textarea')
-      otherField.sort(($1, $2) => $1.order > $2.order ? 1 : -1)
+      otherField.sort(($1, $2) => ($1.order > $2.order ? 1 : -1))
       this.fieldList.concat(otherField)
     },
     getFieldItem(item) {
@@ -154,7 +169,7 @@ export default {
         order,
         formItem: {
           label: key,
-          rules: required ? { required: true, message: '请输入' } : {},
+          rules: required ? { required: true, message: this.$t('Plugins.pleaseEnter') } : {},
         },
         inputItem: {
           type,
@@ -162,19 +177,6 @@ export default {
           rows: 4,
         },
       }
-    },
-  },
-
-  created() {
-    this.loadData()
-  },
-
-  computed: {
-    node() {
-      return this.$route.query.node
-    },
-    changed() {
-      return this.oldConfig !== JSON.stringify(this.record)
     },
   },
 }

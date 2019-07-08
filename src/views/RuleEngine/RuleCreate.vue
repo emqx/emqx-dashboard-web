@@ -6,23 +6,23 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link to="/" tag="span" class="btn btn-default raw">
-              首页
+              {{ $t('RuleEngine.homePage') }}
             </router-link>
           </a-breadcrumb-item>
           <a-breadcrumb-item>
             <router-link to="/rules" tag="span" class="btn btn-default raw">
-              规则引擎
+              {{ $t('RuleEngine.ruleEngine') }}
             </router-link>
           </a-breadcrumb-item>
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              创建
+              {{ $t('RuleEngine.create') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
 
         <div class="page-header-title-view">
-          <div class="title">创建规则</div>
+          <div class="title">{{ $t('RuleEngine.createRules') }}</div>
         </div>
 
         <!--<div class="page-header-content-view">-->
@@ -36,10 +36,10 @@
     <div class="emq-list-body rule-wrapper app-wrapper">
       <a-card class="emq-list-card">
         <div class="emq-title">
-          条件
+          {{ $t('RuleEngine.condition') }}
           <span class="sub-title">
-              使用色情定义规则条件与数据处理方式
-            </span>
+            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
+          </span>
         </div>
 
         <el-row :gutter="20">
@@ -54,7 +54,7 @@
               label-suffix=":"
             >
 
-              <el-form-item prop="for" label="触发事件">
+              <el-form-item prop="for" :label="$t('RuleEngine.triggerEvent')">
                 <emq-select v-model="record.for" :field="{ api: loadEventsSelect }" @change="handleForChange">
                   <div slot="option" slot-scope="{ item }" class="emq-option-item">
                     <span class="option-label">{{ item.label }}</span>
@@ -63,11 +63,11 @@
                 </emq-select>
               </el-form-item>
 
-              <el-form-item prop="description" label="备注">
+              <el-form-item prop="description" :label="$t('RuleEngine.remark')">
                 <el-input v-model="record.description"></el-input>
               </el-form-item>
 
-              <!--<el-form-item v-if="selectEvent.ctx.topic" prop="topic" label="主题">-->
+              <!--<el-form-item v-if="selectEvent.ctx.topic" prop="topic" :label="$t('RuleEngine.topic')">-->
               <!--<el-autocomplete-->
               <!--v-model="record.topic"-->
               <!--:fetch-suggestions="topicSearch"-->
@@ -95,20 +95,20 @@
               </el-form-item>
 
 
-              <el-form-item prop="field" label="查询字段">
+              <el-form-item prop="field" :label="$t('RuleEngine.selectFiled')">
                 <el-input v-model="record.field" type="textarea" :rows="4" placeholder="e.g payload.speed"></el-input>
-                <!--<span class="tips btn btn-default" @click="toggleTips">可用字段</span>-->
+                <!--<span class="tips btn btn-default" @click="toggleTips">{{ $t('RuleEngine.availableField') }}</span>-->
               </el-form-item>
 
 
-              <el-form-item prop="tiaojian" label="筛选条件">
+              <el-form-item prop="tiaojian" :label="$t('RuleEngine.selectConditions')">
                 <el-input v-model="record.tiaojian" placeholder="e.g payload.speed > 60"></el-input>
               </el-form-item>
 
               <el-form-item label="SQL测试">
                 <el-switch v-model="showTest" @change="handlePreSQLTest"></el-switch>
                 <el-popover width="220" placement="top" trigger="hover">
-                  输入元数据进行说起来匹配测试
+                  {{ $t('RuleEngine.inputMetadata') }}
                   <i slot="reference" class="icon el-icon-question"></i>
                 </el-popover>
               </el-form-item>
@@ -131,10 +131,10 @@
 
                   <el-form-item>
                     <span slot="label">&nbsp;</span>
-                    <el-button type="primary" @click="handleSQLTest">测试</el-button>
+                    <el-button type="primary" @click="handleSQLTest">{{ $t('RuleEngine.test') }}</el-button>
                   </el-form-item>
 
-                  <el-form-item label="测试输出">
+                  <el-form-item :label="$t('RuleEngine.testOutput')">
                     <el-input v-model="testOutPut" type="textarea" readonly :rows="4"></el-input>
                     <!--<code-view :code="testOutPut" lang="json"></code-view>-->
                   </el-form-item>
@@ -146,16 +146,16 @@
           </el-col>
 
           <el-col :span="9" class="tips-form">
-            <div style="color: #606266">当前事件可用字段</div>
+            <div style="color: #606266">{{ $t('RuleEngine.currentEventAvailableField') }}</div>
             <div class="tips-wrapper code">
-             <span
-               v-for="key in availableFields"
-               :key="key"
-               class="available-fields"
-               @click="selectAvailableFields(key)"
-             >
-               {{ key }}
-             </span>
+              <span
+                v-for="key in availableFields"
+                :key="key"
+                class="available-fields"
+                @click="selectAvailableFields(key)"
+              >
+                {{ key }}
+              </span>
             </div>
           </el-col>
         </el-row>
@@ -167,10 +167,10 @@
       <a-card class="emq-list-card">
         <div class="emq-title">
           <div class="title required-title">
-            响应动作
+            {{ $t('RuleEngine.responseAction') }}
           </div>
           <span class="sub-title">
-            处理命中规则的消息
+            {{ $t('RuleEngine.processingMessagesForHitRules') }}
           </span>
         </div>
 
@@ -182,10 +182,10 @@
 
       <div style="text-align: center">
         <el-button type="primary" size="medium" @click="handleCreate">
-          创建
+          {{ $t('RuleEngine.create') }}
         </el-button>
         <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
-          取消
+          {{ $t('RuleEngine.cancel') }}
         </el-button>
       </div>
 
@@ -239,14 +239,14 @@ export default {
         actions: [],
         description: '',
         ctx: {},
-        tiaojian: ''
+        tiaojian: '',
       },
       rules: {
-        for: { required: true, message: '请选择触发事件' },
-        // topic: { required: true, message: '请输入主题' },
+        for: { required: true, message: this.$t('RuleEngine.pleaseSelectTheTriggerEvent') },
+        // topic: { required: true, message: this.$t('RuleEngine.pleaseEnterTheTopic') },
         ctx: {},
         field: [
-          { required: true, message: '请输入查询字段' },
+          { required: true, message: this.$t('RuleEngine.pleaseEnterTheSelectField') },
           {
             validator(rule, value, cb) {
               if (value.trim() === '*') {
@@ -256,7 +256,7 @@ export default {
               // 空字符错误
               const fieldError = fields.find($ => !$)
               if (fieldError !== undefined) {
-                return cb(new Error('字段填写错误'))
+                return cb(new Error(this.$t('RuleEngine.fieldFillingError')))
               }
               cb()
             },
@@ -310,7 +310,7 @@ export default {
         return
       }
       if (this.record.actions.length === 0) {
-        this.$message.error('请添加响应动作')
+        this.$message.error(this.$t('RuleEngine.pleaseAddAResponseAction'))
         return
       }
       const record = {
@@ -320,7 +320,7 @@ export default {
         description: this.record.description,
       }
       createRule(record).then(() => {
-        this.$message.success('创建成功')
+        this.$message.success(this.$t('RuleEngine.createSuccess'))
         setTimeout(() => {
           this.$router.push({ path: '/rules' })
         }, 600)
@@ -343,9 +343,9 @@ export default {
           this.testOutPut = JSON.stringify(resp, null, 2)
         }).catch((e) => {
           if (e === 'SQL Not Match') {
-            this.testOutPut = '输出为空'
+            this.testOutPut = this.$t('RuleEngine.resultIsEmpty')
           } else {
-            this.testOutPut = '说起来错误请检查'
+            this.testOutPut = this.$t('RuleEngine.checkForErrors')
           }
         })
       })

@@ -27,15 +27,6 @@ export default {
     },
   },
 
-  watch: {
-    value: {
-      deep: true,
-      handler() {
-        this.setData()
-      },
-    },
-  },
-
   data() {
     return {
       chartSettings: {
@@ -47,6 +38,19 @@ export default {
     }
   },
 
+  watch: {
+    value: {
+      deep: true,
+      handler() {
+        this.setData()
+      },
+    },
+  },
+
+  created() {
+    this.setData()
+  },
+
   methods: {
     setData() {
       const data = { ...this.value }
@@ -55,10 +59,6 @@ export default {
       this.chartData.rows = data.data
       this.chartData.columns = ['k', ...data.nodes]
     },
-  },
-
-  created() {
-    this.setData()
   },
 }
 </script>

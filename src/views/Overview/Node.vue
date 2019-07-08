@@ -5,19 +5,19 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link to="/" tag="span" class="btn btn-default raw">
-              首页
+              {{ $t('Overview.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
           <!--<a-breadcrumb-item>-->
-            <!--<router-link to="/overview" tag="span" class="btn btn-default raw">-->
-              <!--监控-->
-            <!--</router-link>-->
+          <!--<router-link to="/overview" tag="span" class="btn btn-default raw">-->
+          <!--监控-->
+          <!--</router-link>-->
           <!--</a-breadcrumb-item>-->
 
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              节点详情
+              {{ $t('Overview.nodeData') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
@@ -29,16 +29,16 @@
         <div class="page-header-content-view">
           <div class="content">
             <p class="description">
-              当前节点信息如下
+              {{ $t('Overview.currentNodeInfo') }}
             </p>
           </div>
         </div>
 
 
         <el-tabs v-model="activeName" class="page-header-footer" @tab-click="handleTabClick">
-          <el-tab-pane label="基本信息" name="basic"></el-tab-pane>
-          <el-tab-pane label="度量指标" name="metrics"></el-tab-pane>
-          <el-tab-pane label="配置信息" name="config"></el-tab-pane>
+          <el-tab-pane :label="$t('Overview.basicInfo')" name="basic"></el-tab-pane>
+          <el-tab-pane :label="$t('Overview.metric')" name="metrics"></el-tab-pane>
+          <el-tab-pane :label="$t('Overview.configuration')" name="config"></el-tab-pane>
         </el-tabs>
 
       </div>
@@ -47,21 +47,21 @@
     <div class="app-wrapper">
       <div v-if="activeName === 'basic'" class="card-wrapper">
         <a-card class="emq-list-card">
-          <div class="emq-title">版本信息</div>
+          <div class="emq-title">{{ $t('Overview.version') }}</div>
           <node-basic-card :value="record" :show-button="false"></node-basic-card>
         </a-card>
 
         <a-card class="emq-list-card">
           <div class="emq-title">
-            监听器
+            {{ $t('Overview.listener') }}
             <div class="sub-title">
-              当前监听端口列表
+              {{ $t('Overview.ListeningPorts') }}
             </div>
           </div>
 
           <el-table :data="listeners">
-            <el-table-column prop="protocol" min-width="100px" label="监听协议"></el-table-column>
-            <el-table-column prop="listen_on" min-width="80px" label="监听地址"></el-table-column>
+            <el-table-column prop="protocol" min-width="100px" :label="$t('Overview.listenerProtocol')"></el-table-column>
+            <el-table-column prop="listen_on" min-width="80px" :label="$t('Overview.listenerAddress')"></el-table-column>
             <el-table-column prop="acceptors" min-width="60px" label="Acceptors"></el-table-column>
             <el-table-column prop="current_conns" min-width="120px" label="连接(当前/最大)">
               <template slot-scope="{ row }">
@@ -78,7 +78,7 @@
 
         <a-card class="emq-list-card">
           <div class="emq-title">
-            数据列表
+            {{ $t('Overview.dataList') }}
             <div class="sub-title">
               节点的报文信息、消息统计与流量收发统计
             </div>
@@ -95,7 +95,7 @@
 
             <el-col :span="8">
               <el-table :data="metricsData.messages">
-                <el-table-column prop="key" label="消息数" min-width="100px"></el-table-column>
+                <el-table-column prop="key" :label="$t('Overview.messageNumber')" min-width="100px"></el-table-column>
                 <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
               </el-table>
             </el-col>
@@ -112,7 +112,7 @@
 
       <a-card v-else-if="activeName === 'config'" class="emq-list-card">
         <div class="emq-title">
-          节点主要配置
+          {{ $t('Overview.mainConfiguration') }}
         </div>
 
         <ul class="field-info">
@@ -121,8 +121,8 @@
               {{ item.key }}:
             </div>
             <span class="field-value">
-                {{ item.value }}
-              </span>
+              {{ item.value }}
+            </span>
           </li>
         </ul>
       </a-card>
@@ -132,7 +132,9 @@
 
 
 <script>
-import { loadConfig, loadNodeDetail, loadListeners, loadMetrics } from '@/api/overview'
+import {
+  loadConfig, loadNodeDetail, loadListeners, loadMetrics,
+} from '@/api/overview'
 
 import NodeBasicCard from './components/NodeBasicCard'
 
@@ -151,20 +153,6 @@ export default {
       config: {},
       listeners: [],
     }
-  },
-
-  methods: {
-    handleTabClick() {},
-    async loadData() {
-      this.record = await loadNodeDetail(this.name)
-      this.metrics = await loadMetrics(this.name)
-      this.config = await loadConfig(this.name)
-      this.listeners = await loadListeners(this.name)
-    },
-  },
-
-  created() {
-    this.loadData()
   },
 
   computed: {
@@ -221,6 +209,20 @@ export default {
         messages: magicMap('messages'),
         bytes: magicMap('bytes'),
       }
+    },
+  },
+
+  created() {
+    this.loadData()
+  },
+
+  methods: {
+    handleTabClick() {},
+    async loadData() {
+      this.record = await loadNodeDetail(this.name)
+      this.metrics = await loadMetrics(this.name)
+      this.config = await loadConfig(this.name)
+      this.listeners = await loadListeners(this.name)
     },
   },
 }

@@ -6,20 +6,20 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link class="btn btn-default raw" to="/" tag="span">
-              首页
+              {{ $t('RuleEngine.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              资源
+              {{ $t('RuleEngine.resources') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
 
         <div class="page-header-title-view">
           <div class="title">
-            资源
+            {{ $t('RuleEngine.resources') }}
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@
         :loading="listLoading"
       >
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">创建</el-button>
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">{{ $t('RuleEngine.create') }}</el-button>
         </div>
 
         <el-table :data="tableData" class="data-list">
@@ -44,29 +44,29 @@
           <!-- 资源类型 -->
           <el-table-column
             prop="config.title"
-            label="资源类型"
+            :label="$t('RuleEngine.resourceTypes')"
             show-overflow-tooltip
             :filters="filterOptions.resourceTypes"
             :filter-method="resourceTypesColumnFilter"
             filter-placement="bottom"
           ></el-table-column>
 
-          <el-table-column min-width="100px" prop="description" show-overflow-tooltip label="备注"></el-table-column>
-          <!--<el-table-column min-width="70px" prop="status.is_alive" label="状态">-->
-            <!--<template slot-scope="{ row }">-->
-              <!--<a-badge-->
-                <!--:status="getStatus(row.status) ? 'success' : 'error'"-->
-                <!--:text="getStateText(row.status)"-->
-                <!--dot-->
-              <!--&gt;-->
-              <!--</a-badge>-->
-            <!--</template>-->
+          <el-table-column min-width="100px" prop="description" show-overflow-tooltip :label="$t('RuleEngine.remark')"></el-table-column>
+          <!--<el-table-column min-width="70px" prop="status.is_alive" :label="$t('RuleEngine.state')">-->
+          <!--<template slot-scope="{ row }">-->
+          <!--<a-badge-->
+          <!--:status="getStatus(row.status) ? 'success' : 'error'"-->
+          <!--:text="getStateText(row.status)"-->
+          <!--dot-->
+          <!--&gt;-->
+          <!--</a-badge>-->
+          <!--</template>-->
           <!--</el-table-column>-->
 
           <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
-              <el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">重连</el-button>
-              <el-button type="dashed" size="mini" @click="deleteResource(row)">删除</el-button>
+              <el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">{{ $t('RuleEngine.reconnect') }}</el-button>
+              <el-button type="dashed" size="mini" @click="deleteResource(row)">{{ $t('RuleEngine.delete') }}</el-button>
             </template>
           </el-table-column>
 
@@ -113,13 +113,13 @@ export default {
   methods: {
     deleteResource(row) {
       this.$msgbox.confirm('此操作将停用并删除该资源,确认继续?', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('RuleEngine.confirm'),
+        cancelButtonText: this.$t('RuleEngine.cancel'),
         type: 'warning',
       }).then(async () => {
         await destroyResource(row.id)
         this.loadData()
-        this.$message.success('删除成功')
+        this.$message.success(this.$t('RuleEngine.successfulDeletion'))
       }).catch(() => {})
     },
     reconnect(row) {

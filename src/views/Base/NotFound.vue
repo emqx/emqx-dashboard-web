@@ -1,6 +1,6 @@
 <template>
   <div class="not-found">
-    资源未找到
+    {{ $t('Base.resourcesNotFound') }}
   </div>
 </template>
 

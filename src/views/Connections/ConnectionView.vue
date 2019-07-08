@@ -6,15 +6,15 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link to="/" tag="span" class="btn btn-default raw">
-              首页
+              {{ $t('Connections.homePage') }}
             </router-link>
           </a-breadcrumb-item>
           <a-breadcrumb-item>
             <router-link to="/connections" tag="span" class="btn btn-default raw">
-              连接
+              {{ $t('Connections.connect') }}
             </router-link>
           </a-breadcrumb-item>
-          <a-breadcrumb-item>连接详情</a-breadcrumb-item>
+          <a-breadcrumb-item>{{ $t('Connections.connectionDetails') }}</a-breadcrumb-item>
         </a-breadcrumb>
 
 
@@ -28,12 +28,12 @@
         </div>
 
         <el-tabs v-model="activeName" class="page-header-footer" @tab-click="handleTabClick">
-          <el-tab-pane label="基本信息" name="detail"></el-tab-pane>
-          <el-tab-pane label="订阅列表" name="subscriptions"></el-tab-pane>
+          <el-tab-pane :label="$t('Connections.basicInfo')" name="detail"></el-tab-pane>
+          <el-tab-pane :label="$t('Connections.subscriptions')" name="subscriptions"></el-tab-pane>
         </el-tabs>
 
         <div v-if="!record.disconnected" class="page-header-top-start">
-          <el-button type="danger" size="small" @click="handleDisconnect">断开</el-button>
+          <el-button type="danger" size="small" @click="handleDisconnect">{{ $t('Connections.disconnect') }}</el-button>
         </div>
       </div>
     </div>
@@ -43,12 +43,12 @@
         <el-row :gutter="40">
           <el-col :span="9">
             <div class="emq-title">
-              连接信息
+              {{ $t('Connections.connectionInfo') }}
             </div>
 
             <ul class="field-info">
               <li class="field-info-item">
-                <div class="field-title">接入节点:</div>
+                <div class="field-title">{{ $t('Connections.accessPoint') }}:</div>
                 <span class="field-value">{{ record.node }}</span>
               </li>
               <li class="field-info-item">
@@ -60,7 +60,7 @@
                 <span class="field-value">{{ record.username }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">连接时间:</div>
+                <div class="field-title">{{ $t('Connections.connectionAt') }}:</div>
                 <span class="field-value">{{ record.connected_at }}</span>
               </li>
               <li class="field-info-item">
@@ -79,20 +79,20 @@
           </el-col>
           <el-col :span="9">
             <div class="emq-title">
-              协议信息
+              {{ $t('Connections.protocolInfo') }}
             </div>
 
             <ul class="field-info">
               <li class="field-info-item">
-                <div class="field-title">桥接设备:</div>
-                <span class="field-value">{{ record.is_bridge ? '是' : '否' }}</span>
+                <div class="field-title">{{ $t('Connections.bridge') }}:</div>
+                <span class="field-value">{{ record.is_bridge ? $t('Connections.yes') : $t('Connections.no') }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">协议类型:</div>
+                <div class="field-title">{{ $t('Connections.protocolType') }}:</div>
                 <span class="field-value">{{ record.proto_name }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">协议版本:</div>
+                <div class="field-title">{{ $t('Connections.protocolVersion') }}:</div>
                 <span class="field-value">{{ record.proto_ver }}</span>
               </li>
               <li class="field-info-item">
@@ -100,7 +100,7 @@
                 <span class="field-value">{{ record.peercert }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">接入分区:</div>
+                <div class="field-title">{{ $t('Connections.zone') }}:</div>
                 <span class="field-value">{{ record.zone }}</span>
               </li>
             </ul>
@@ -111,11 +111,11 @@
 
       <a-card v-if="activeName === 'subscriptions'">
         <div class="emq-title">
-          当前订阅
+          {{ $t('Connections.currentSubscription') }}
 
           <div class="subscriptions-header">
-            <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">刷新</el-button>
-            <el-button plain size="mini" icon="el-icon-plus" @click="handlePreAdd">添加订阅</el-button>
+            <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">{{ $t('Connections.refresh') }}</el-button>
+            <el-button plain size="mini" icon="el-icon-plus" @click="handlePreAdd">{{ $t('Connections.addASubscription') }}</el-button>
           </div>
         </div>
 
@@ -123,10 +123,10 @@
         <el-table :data="subscriptions" class="data-list">
           <el-table-column prop="topic" min-width="110px" show-overflow-tooltip label="Topic"></el-table-column>
           <el-table-column prop="qos" min-width="110px" label="QoS"></el-table-column>
-          <el-table-column prop="node" min-width="80px" label="节点"></el-table-column>
+          <el-table-column prop="node" min-width="80px" :label="$t('Connections.node')"></el-table-column>
           <el-table-column prop="client_id" width="80px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="handleUnSubscription(row)">取消订阅</el-button>
+              <el-button type="dashed" size="mini" @click="handleUnSubscription(row)">{{ $t('Connections.unsubscribe') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -204,7 +204,7 @@ export default {
       return this.record.disconnected ? 'error' : 'success'
     },
     connStatusText() {
-      return this.record.disconnected ? '已断开' : '在线'
+      return this.record.disconnected ? this.$t('Connections.disconnected') : this.$t('Connections.onLine')
     },
   },
 
@@ -218,13 +218,13 @@ export default {
         return
       }
       this.$msgbox.confirm('此操作将断开该连接,连接可能通过重连机制再次重连,确认继续?', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('Connections.confirm'),
+        cancelButtonText: this.$t('Connections.cancel'),
         type: 'warning',
       }).then(async () => {
         await disconnectConnection(this.record.client_id)
         this.$set(this.record, 'disconnected', true)
-        this.$message.success('断开成功')
+        this.$message.success(this.$t('Connections.successfulDisconnection'))
       }).catch(() => {})
     },
     handlePreAdd() {
@@ -242,8 +242,8 @@ export default {
     },
     handleUnSubscription(row) {
       this.$msgbox.confirm('此操作将取消订阅该主题, 确认继续?', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('Connections.confirm'),
+        cancelButtonText: this.$t('Connections.cancel'),
         type: 'warning',
       }).then(async () => {
         const { topic, client_id } = row

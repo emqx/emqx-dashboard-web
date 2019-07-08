@@ -7,19 +7,19 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link to="/" tag="span" class="btn btn-default raw">
-              首页
+              {{ $t('Plugins.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              插件
+              {{ $t('Plugins.plugin') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
 
         <div class="page-header-title-view">
-          <div class="title">插件</div>
+          <div class="title">{{ $t('Plugins.plugin') }}</div>
         </div>
 
       </div>
@@ -30,18 +30,18 @@
 
       <a-card class="count-list">
         <div class="count-left">
-          <div class="count-title">插件数量</div>
+          <div class="count-title">{{ $t('Plugins.numberOfPlugIns') }}</div>
           <div class="count-result">{{ state.count }}个插件</div>
         </div>
         <div class="count-center">
           <div class="count-title">
-            运行中
+            {{ $t('Plugins.running') }}
           </div>
           <div class="count-result">{{ state.running }}个</div>
         </div>
         <div class="count-right">
           <div class="count-title">
-            已停止
+            {{ $t('Plugins.stopped') }}
           </div>
           <div class="count-result">{{ state.stop }}个</div>
         </div>
@@ -62,9 +62,9 @@
             <!--</emq-select>-->
 
             <div class="emq-title">
-              插件列表
+              {{ $t('Plugins.pluginsList') }}
             </div>
-            <!--<span class="btn btn-default" style="margin-left: 12px">节点选择</span>-->
+            <!--<span class="btn btn-default" style="margin-left: 12px">{{ $t('Plugins.selectNode') }}</span>-->
           </div>
 
           <div class="search-wrapper">
@@ -79,24 +79,25 @@
 
             <el-radio-group v-model="status" size="mini" border @change="loadData">
               <el-radio-button label="1">
-                运行中
+                {{ $t('Plugins.running') }}
               </el-radio-button>
               <el-radio-button label="0">
-                已停止
+                {{ $t('Plugins.stopped') }}
               </el-radio-button>
               <el-radio-button label="wivwiv">
-                全部
+                {{ $t('Plugins.all') }}
               </el-radio-button>
             </el-radio-group>
 
             <el-radio-group v-model="category" size="mini" border @change="loadData">
               <el-radio-button label="wivwiv">
-                全部
+                {{ $t('Plugins.all') }}
               </el-radio-button>
               <el-radio-button
                 v-for="item in typeFilterOption"
                 :key="item.value"
-                :label="item.value">
+                :label="item.value"
+              >
                 {{ item.text }}
               </el-radio-button>
             </el-radio-group>
@@ -110,7 +111,8 @@
             <div class="logo">
               <img
                 :src="iconMap[item.name] || 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png'"
-                alt="plugin-logo">
+                alt="plugin-logo"
+              >
             </div>
 
             <div class="header">
@@ -119,14 +121,14 @@
             </div>
 
             <div class="content">
-              <div class="type">{{ item.type | typeText }}</div>
+              <div class="type">{{ typeText(item.type) }}</div>
               <div class="version">{{ item.version }}</div>
             </div>
 
             <div class="state">
               <a-badge
                 :status="item.active ? 'success' : 'error'"
-                :text="item.active ? '运行中' : '已停止'"
+                :text="item.active ? $t('Plugins.running') : $t('Plugins.stopped')"
                 dot
               >
               </a-badge>
@@ -134,21 +136,21 @@
 
             <div class="oper">
               <el-button
+                v-if="!primaryList.includes(item.name)"
                 :type="item.active ? 'danger' : 'dashed'"
                 size="mini"
-                v-if="!primaryList.includes(item.name)"
                 @click="togglePlugin(item)"
               >
-                {{ item.active ? '停止' : '启动' }}
+                {{ item.active ? $t('Plugins.stopped') : $t('Plugins.startRunning') }}
               </el-button>
               <span v-else>--</span>
               <el-button
+                v-if="!primaryList.includes(item.name)"
                 size="mini"
                 type="dashed"
                 @click="toConfig(item)"
-                v-if="!primaryList.includes(item.name)"
               >
-                配置
+                {{ $t('Plugins.config') }}
               </el-button>
             </div>
           </div>
@@ -156,24 +158,25 @@
 
 
         <el-table v-if="false" :data="listTableData" :default-sort="{ prop: 'active', order: 'descending' }"
-                  class="data-list">
-          <el-table-column prop="name" min-width="110px" label="插件名称"></el-table-column>
-          <el-table-column prop="version" min-width="80px" label="版本"></el-table-column>
-          <el-table-column prop="description" min-width="160px" show-overflow-tooltip label="描述"></el-table-column>
+                  class="data-list"
+        >
+          <el-table-column prop="name" min-width="110px" :label="$t('Plugins.pluginName')"></el-table-column>
+          <el-table-column prop="version" min-width="80px" :label="$t('Plugins.version')"></el-table-column>
+          <el-table-column prop="description" min-width="160px" show-overflow-tooltip :label="$t('Plugins.describe')"></el-table-column>
           <el-table-column
             prop="type"
             min-width="100px"
-            label="类型"
+            :label="$t('Plugins.type')"
             sortable
             :filters="typeFilterOption"
             :filter-method="typeFilterHandler"
             :formatter="typeFormatter"
           ></el-table-column>
-          <el-table-column min-width="70px" prop="active" label="状态" sortable>
+          <el-table-column min-width="70px" prop="active" :label="$t('Plugins.state')" sortable>
             <template slot-scope="{ row }">
               <a-badge
                 :status="row.active ? 'success' : 'error'"
-                :text="row.active ? '运行中' : '已停止'"
+                :text="row.active ? $t('Plugins.running') : $t('Plugins.stopped')"
                 dot
               >
               </a-badge>
@@ -182,9 +185,9 @@
           <el-table-column width="140px">
             <template slot-scope="{ row }">
               <el-button :type="row.active ? 'danger' : 'dashed'" size="mini" @click="togglePlugin(row)">
-                {{ row.active ? '停止' : '启动' }}
+                {{ row.active ? $t('Plugins.stopped') : $t('Plugins.startRunning') }}
               </el-button>
-              <el-button size="mini" type="dashed">配置</el-button>
+              <el-button size="mini" type="dashed">{{ $t('Plugins.config') }}</el-button>
             </template>
           </el-table-column>
 
@@ -218,20 +221,15 @@ export default {
       primaryList: ['emqx_dashboard', 'emqx_management'],
       nodeName: '',
       pluginTypes: {
-        auth: '认证',
-        backend: '持久化',
-        bridge: '桥接',
-        protocol: '协议',
-        feature: '其他',
+        auth: this.$t('Plugins.authentication'),
+        backend: this.$t('Plugins.backend'),
+        bridge: this.$t('Plugins.bridge'),
+        protocol: this.$t('Plugins.protocol'),
+        feature: this.$t('Plugins.other'),
       },
       typeFilterOption: [],
       iconMap: {},
     }
-  },
-
-  created() {
-    this.loadData()
-    this.typeFilterOption = Object.entries(this.pluginTypes).map(([value, text]) => ({ text, value }))
   },
 
   computed: {
@@ -245,20 +243,22 @@ export default {
     },
   },
 
-  filters: {
-    typeText(type) {
-      const pluginTypes = {
-        auth: '认证',
-        backend: '持久化',
-        bridge: '桥接',
-        protocol: '协议',
-        feature: '其他',
-      }
-      return pluginTypes[type] || '其他'
-    },
+  created() {
+    this.loadData()
+    this.typeFilterOption = Object.entries(this.pluginTypes).map(([value, text]) => ({ text, value }))
   },
 
   methods: {
+    typeText(type) {
+      const pluginTypes = {
+        auth: this.$t('Plugins.authentication'),
+        backend: this.$t('Plugins.backend'),
+        bridge: this.$t('Plugins.bridge'),
+        protocol: this.$t('Plugins.protocol'),
+        feature: this.$t('Plugins.other'),
+      }
+      return pluginTypes[type] || this.$t('Plugins.other')
+    },
     loadIcon() {
       const iconMap = {}
       this.tableData.forEach((item) => {
@@ -286,7 +286,7 @@ export default {
       return value === row.type
     },
     typeFormatter({ type }) {
-      return this.pluginTypes[type] || '其他'
+      return this.pluginTypes[type] || this.$t('Plugins.other')
     },
     async loadData() {
       this.nodes = await loadNodes()
@@ -313,13 +313,13 @@ export default {
         row.active = true
         return
       }
-      this.$msgbox.confirm('此操作将停止该插件,确认继续？', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$msgbox.confirm(this.$t('Plugins.thisActionWillStopThePlugIn.'), {
+        confirmButtonText: this.$t('Plugins.confirm'),
+        cancelButtonText: this.$t('Plugins.cancel'),
         type: 'warning',
       }).then(async () => {
         await stopPlugin(this.nodeName, row.name)
-        this.$message.success('停止成功')
+        this.$message.success(this.$t('Plugins.stopSuccess'))
         row.active = false
       }).catch(() => {})
     },

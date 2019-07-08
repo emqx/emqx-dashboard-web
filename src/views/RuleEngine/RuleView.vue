@@ -5,20 +5,20 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link class="btn btn-default raw" to="/" tag="span">
-              首页
+              {{ $t('RuleEngine.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
           <a-breadcrumb-item>
             <router-link class="btn btn-default raw" to="/rules" tag="span">
-              规则引擎
+              {{ $t('RuleEngine.ruleEngine') }}
             </router-link>
           </a-breadcrumb-item>
 
 
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              详情
+              {{ $t('RuleEngine.details') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
@@ -36,29 +36,29 @@
       <!-- 运行统计 -->
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
-          运行统计
+          {{ $t('RuleEngine.runningMetrics') }}
         </div>
 
         <el-row :gutter="40" class="metrics-wrapper">
           <el-col class="metrics-card" :span="8">
             <div class="card-title">
-              执行次数
+              {{ $t('RuleEngine.numberOfHits') }}
             </div>
             <div class="card-value">
               {{ record.metricsData.matched }}
-              <span class="card-unit">次</span>
+              <span class="card-unit">{{ $t('RuleEngine.second') }}</span>
             </div>
             <div class="card-desc">
-              规则启用后的执行次数
+              {{ $t('RuleEngine.numberOfRulesExecutedAfterEnabling') }}
             </div>
           </el-col>
           <el-col class="metrics-card" :span="8">
             <div class="card-title">
-              当前速度
+              {{ $t('RuleEngine.currentSpeed') }}
             </div>
             <div class="card-value">
               {{ record.metricsData.speed }}
-              <span class="card-unit">次/秒</span>
+              <span class="card-unit">{{ $t('RuleEngine.second') }}/秒</span>
             </div>
             <div class="card-desc">
               最大执行速度: {{ record.metricsData.speed_max }} 次/秒
@@ -67,14 +67,14 @@
 
           <el-col class="metrics-card last-child" :span="8">
             <div class="card-title">
-              最近5分钟执行速度
+              {{ $t('RuleEngine.last5MinutesSpeed') }}
             </div>
             <div class="card-value">
               {{ record.metricsData.speed_last5m }}
-              <span class="card-unit">次/秒</span>
+              <span class="card-unit">{{ $t('RuleEngine.second') }}/秒</span>
             </div>
             <div class="card-desc">
-              最近5分钟平均执行速度
+              {{ $t('RuleEngine.averageExecutionSpeedInTheLast5Minutes') }}
             </div>
           </el-col>
         </el-row>
@@ -84,28 +84,28 @@
       <!-- 基本信息 -->
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
-          基本信息
+          {{ $t('RuleEngine.basicInfo') }}
         </div>
 
         <ul class="field-info">
           <li class="field-info-item">
-            <div class="field-title">触发事件:</div>
+            <div class="field-title">{{ $t('RuleEngine.triggerEvent') }}:</div>
             <span class="field-value">{{ configItem.event.name }} ({{ record.for[0] }})</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">备注:</div>
+            <div class="field-title">{{ $t('RuleEngine.remark') }}:</div>
             <span class="field-value">{{ configItem.description }}</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">查询字段:</div>
+            <div class="field-title">{{ $t('RuleEngine.selectFiled') }}:</div>
             <span class="field-value">{{ configItem.fields }}</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">筛选条件:</div>
+            <div class="field-title">{{ $t('RuleEngine.selectConditions') }}:</div>
             <span class="field-value">{{ configItem.where }}</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">规则 SQL:</div>
+            <div class="field-title">{{ $t('RuleEngine.rule') }} SQL:</div>
             <div class="field-content">
               <code-view v-if="record.rawsql" lang="sql" :code="record.rawsql"></code-view>
             </div>
@@ -117,9 +117,9 @@
       <!-- 响应动作 -->
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
-          响应动作
+          {{ $t('RuleEngine.responseAction') }}
           <span class="sub-title">
-            命中规则的消息处理方式
+            {{ $t('RuleEngine.messageProcessingForHitRules') }}
           </span>
         </div>
 

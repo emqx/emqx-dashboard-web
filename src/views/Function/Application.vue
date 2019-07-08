@@ -5,20 +5,20 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link class="btn btn-default raw" to="/" tag="span">
-              首页
+              {{ $t('Function.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              应用
+              {{ $t('Function.application') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
 
         <div class="page-header-title-view">
           <div class="title">
-            应用
+            {{ $t('Function.application') }}
           </div>
         </div>
 
@@ -31,7 +31,7 @@
             <div class="page-header-link">
               <a :href="docs.restAPI" target="_blank" class="link-item">
                 <i class="icon el-icon-document"></i>
-                产品文档
+                {{ $t('Function.productDocumentation') }}
               </a>
             </div>
           </div>
@@ -46,8 +46,9 @@
             type="primary"
             size="small"
             icon="el-icon-plus"
-            @click="showDialog('create')">
-            创建
+            @click="showDialog('create')"
+          >
+            {{ $t('Function.create') }}
           </el-button>
         </div>
 
@@ -60,29 +61,31 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="应用名称"></el-table-column>
-          <el-table-column prop="expired" :formatter="formatterExpired" label="到期时间"></el-table-column>
-          <el-table-column prop="desc" label="备注"></el-table-column>
-          <el-table-column label="是否启用">
+          <el-table-column prop="name" :label="$t('Function.appName')"></el-table-column>
+          <el-table-column prop="expired" :formatter="formatterExpired" :label="$t('Function.expireAt')"></el-table-column>
+          <el-table-column prop="desc" :label="$t('Function.remark')"></el-table-column>
+          <el-table-column :label="$t('Function.enabled')">
             <template slot-scope="{ row }">
               <el-switch
                 v-model="row.status"
                 active-color="#13ce66"
                 inactive-color="#d0d3e0"
-                @change="updateApplication(row)">
+                @change="updateApplication(row)"
+              >
               </el-switch>
             </template>
           </el-table-column>
           <el-table-column>
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
-                编辑
+                {{ $t('Function.edit') }}
               </el-button>
               <el-button
                 type="dashed"
                 size="mini"
-                @click="deleteConfirm(row)">
-                删除
+                @click="deleteConfirm(row)"
+              >
+                {{ $t('Function.delete') }}
               </el-button>
             </template>
           </el-table-column>
@@ -94,12 +97,13 @@
 
     <el-dialog
       width="600px"
-      :title="accessType === 'edit' ? '编辑应用' : '创建应用'"
+      :title="accessType === 'edit' ? $t('Function.editApp') : $t('Function.createApp')"
       :visible.sync="dialogVisible"
-      @close="clearInput">
+      @close="clearInput"
+    >
       <el-form
-        size="small"
         ref="recordForm"
+        size="small"
         :model="record"
         :rules="accessType === 'view' ? {} : rules"
       >
@@ -115,7 +119,7 @@
             </el-form-item>
           </el-col>
           <el-col v-if="accessType === 'view'" :span="12">
-            <el-form-item prop="secret" label="密钥">
+            <el-form-item prop="secret" :label="$t('Function.secret')">
               <el-input
                 v-model="record.secret"
                 :disabled="accessType === 'edit'"
@@ -125,7 +129,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="name" label="应用名称">
+            <el-form-item prop="name" :label="$t('Function.appName')">
               <el-input
                 v-model="record.name"
                 :disabled="accessType === 'edit'"
@@ -135,7 +139,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="status" label="是否启用">
+            <el-form-item prop="status" :label="$t('Function.enabled')">
               <emq-select
                 v-model="record.status"
                 :field="{ options: enableOption }"
@@ -145,29 +149,31 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="expired" label="到期时间">
+            <el-form-item prop="expired" :label="$t('Function.expireAt')">
               <el-date-picker
                 v-model="record.expired"
                 type="date"
                 format="yyyy-MM-dd"
                 value-format="yyyy-MM-dd"
-                :readonly="accessType === 'view'">
+                :readonly="accessType === 'view'"
+              >
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="desc" label="备注">
+            <el-form-item prop="desc" :label="$t('Function.remark')">
               <el-input
                 v-model="record.desc"
-                :readonly="accessType === 'view'"></el-input>
+                :readonly="accessType === 'view'"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
 
       <div v-if="accessType !== 'view'" slot="footer" class="dialog-align-footer">
-        <el-button type="primary" size="small" @click="save">确定</el-button>
-        <el-button plain size="small" @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" size="small" @click="save">{{ $t('Function.confirm') }}</el-button>
+        <el-button plain size="small" @click="dialogVisible = false">{{ $t('Function.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -201,15 +207,15 @@ export default {
       dialogVisible: false,
       tableData: [],
       accessType: '',
-      enableOption: [{ label: '启用', value: true }, { label: '不启用', value: false }],
+      enableOption: [{ label: this.$t('Function.enabled'), value: true }, { label: this.$t('Function.disabled'), value: false }],
       record: {
         status: true, // 是否启用
         desc: '',
       },
       rules: {
-        name: [{ required: true, message: '请输入应用名称' }],
-        app_id: [{ required: true, message: '请输入应用艾迪' }],
-        status: [{ required: true, message: '请选择' }],
+        name: [{ required: true, message: this.$t('Function.pleaseEnterAppName.') }],
+        app_id: [{ required: true, message: this.$t('Function.pleaseEnterTheAppId') }],
+        status: [{ required: true, message: this.$t('Function.pleaseChoose') }],
       },
     }
   },
@@ -221,7 +227,7 @@ export default {
   methods: {
     formatterExpired({ expired }) {
       if (!expired || typeof expired !== 'number') {
-        return '永不过期'
+        return this.$t('Function.neverExpire')
       }
       return moment(expired * 1000).format('YYYY-MM-DD')
     },
@@ -264,7 +270,7 @@ export default {
     },
     updateApplication(item) {
       updateApp(item.app_id, item).then(() => {
-        this.$message.success('编辑成功')
+        this.$message.success(this.$t('Function.editorialSuccess'))
       })
     },
     save() {
@@ -284,14 +290,14 @@ export default {
         if (vue.accessType === 'edit') {
           const { app_id } = vue.record
           updateApp(app_id, record).then(() => {
-            vue.$message.success('编辑成功')
+            vue.$message.success(this.$t('Function.editorialSuccess'))
             vue.dialogVisible = false
             vue.accessType = ''
             vue.loadData()
           })
         } else {
           createApp(record).then(() => {
-            vue.$message.success('创建应用成功')
+            vue.$message.success(this.$t('Function.successfulAppCreation'))
             vue.dialogVisible = false
             vue.accessType = ''
             vue.loadData()
@@ -302,12 +308,12 @@ export default {
     deleteConfirm(item) {
       const vue = this
       this.$msgbox.confirm('确定删除该应用?', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('Function.confirm'),
+        cancelButtonText: this.$t('Function.cancel'),
         type: 'warning',
       }).then(async () => {
         destroyAPP(item.app_id).then(() => {
-          vue.$message.success('删除成功')
+          vue.$message.success(this.$t('Function.successfulDeletion'))
           vue.loadData()
         })
       }).catch(() => {})

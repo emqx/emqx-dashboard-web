@@ -6,19 +6,19 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link to="/" tag="span" class="btn btn-default raw">
-              首页
+              {{ $t('RuleEngine.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              规则引擎
+              {{ $t('RuleEngine.ruleEngine') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
 
         <div class="page-header-title-view">
-          <div class="title">规则引擎</div>
+          <div class="title">{{ $t('RuleEngine.ruleEngine') }}</div>
         </div>
 
         <div class="page-header-content-view">
@@ -29,12 +29,12 @@
             <div class="page-header-link">
               <a :href="docs.tutorial" target="_blank" class="link-item">
                 <i class="icon el-icon-position"></i>
-                快速开始
+                {{ $t('RuleEngine.quickStart') }}
               </a>
 
               <a :href="docs.tutorial" target="_blank" class="link-item">
                 <i class="icon el-icon-document"></i>
-                产品文档
+                {{ $t('RuleEngine.productDocumentation') }}
               </a>
             </div>
           </div>
@@ -49,7 +49,7 @@
       >
         <div class="emq-table-header">
           <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">
-            创建
+            {{ $t('RuleEngine.create') }}
           </el-button>
         </div>
 
@@ -63,18 +63,18 @@
               <router-link :to="{ path: `/rules/${row.id}` }">{{ row.id }}</router-link>
             </template>
           </el-table-column>
-          <el-table-column prop="metrics" label="监控">
+          <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
             <template slot-scope="{ row }">
               <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
             </template>
           </el-table-column>
-          <el-table-column prop="description" show-overflow-tooltip label="描述"></el-table-column>
+          <el-table-column prop="description" show-overflow-tooltip :label="$t('RuleEngine.describe')"></el-table-column>
           <el-table-column
             prop="for"
             :filters="filterOptions.for"
             :filter-method="forColumnFilter"
             filter-placement="bottom"
-            label="触发事件"
+            :label="$t('RuleEngine.triggerEvent')"
           ></el-table-column>
           <el-table-column
             prop="actions"
@@ -82,12 +82,12 @@
             :filter-method="actionsColumnFilter"
             filter-placement="bottom"
             :formatter="actionsFormatter"
-            label="响应动作"
+            :label="$t('RuleEngine.responseAction')"
           >
           </el-table-column>
           <el-table-column width="80px" prop="id">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="deleteRule(row)">删除</el-button>
+              <el-button type="dashed" size="mini" @click="deleteRule(row)">{{ $t('RuleEngine.delete') }}</el-button>
             </template>
           </el-table-column>
 
@@ -104,41 +104,41 @@
     >
       <div class="rule-metrics">
         <div class="metrics-item">
-          <div class="metrics-item-title">规则统计</div>
+          <div class="metrics-item-title">{{ $t('RuleEngine.ruleMetrics') }}</div>
           <ul class="metrics-item-body value-item-wrapper">
             <li class="value-item">
               命中次数:
               <span class="value">
                 {{ currentRules.metrics.matched }}
-                <span class="unit">次</span>
+                <span class="unit">{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
             <li class="value-item">
               当前执行速度:
               <span class="value">
                 {{ currentRules.metrics.speed }}
-                <span class="unit">次/秒</span>
+                <span class="unit">{{ $t('RuleEngine.second') }}/秒</span>
               </span>
             </li>
             <li class="value-item">
               最大执行速度:
               <span class="value">
                 {{ currentRules.metrics.speed_max }}
-                <span class="unit">次/秒</span>
+                <span class="unit">{{ $t('RuleEngine.second') }}/秒</span>
               </span>
             </li>
             <li class="value-item">
               最近5分钟执行速度:
               <span class="value">
                 {{ currentRules.metrics.speed_last5m }}
-                <span class="unit">次/秒</span>
+                <span class="unit">{{ $t('RuleEngine.second') }}/秒</span>
               </span>
             </li>
           </ul>
         </div>
 
         <div class="metrics-item">
-          <div class="metrics-item-title">动作统计</div>
+          <div class="metrics-item-title">{{ $t('RuleEngine.actionMetrics') }}</div>
 
           <template v-if="currentRules.actions.length === 0">
 
@@ -243,14 +243,14 @@ export default {
 
   methods: {
     deleteRule(row) {
-      this.$msgbox.confirm('此操作将停用并删除该规则,确认继续？', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$msgbox.confirm(this.$t('RuleEngine.deleteRuleConfirm'), {
+        confirmButtonText: this.$t('RuleEngine.confirm'),
+        cancelButtonText: this.$t('RuleEngine.cancel'),
         type: 'warning',
       }).then(async () => {
         await destroyRule(row.id)
         this.loadData()
-        this.$message.success('删除成功')
+        this.$message.success(this.$t('RuleEngine.successfulDeletion'))
       }).catch(() => {})
     },
 

@@ -5,23 +5,23 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link to="/" tag="span" class="btn btn-default raw">
-              首页
+              {{ $t('Connections.homePage') }}
             </router-link>
           </a-breadcrumb-item>
           <a-breadcrumb-item>
-            连接
+            {{ $t('Connections.connect') }}
           </a-breadcrumb-item>
         </a-breadcrumb>
 
         <div class="page-header-title-view">
           <div class="title">
-            连接
+            {{ $t('Connections.connect') }}
           </div>
         </div>
 
         <div class="page-header-content-view">
           <div class="content">
-            当前在线连接
+            {{ $t('Connections.currentConnection') }}
           </div>
         </div>
       </div>
@@ -32,17 +32,17 @@
         <div class="emq-table-header">
           <div class="search-wrapper">
             <el-input v-model="searchValue" size="small" placeholder="输入 client id"></el-input>
-            <el-button type="primary" size="small" @click="handleSearch">搜索</el-button>
+            <el-button type="primary" size="small" @click="handleSearch">{{ $t('Connections.search') }}</el-button>
             <el-button plain size="small" @click="resetSearch">
-              {{ searchValue ? '重置' : '刷新' }}
+              {{ searchValue ? $t('Connections.reset') : $t('Connections.refresh') }}
             </el-button>
           </div>
 
           <!--<div>-->
-            <!--<el-radio-group v-model="showLevel" size="mini" @change="syncShowLevel">-->
-              <!--<el-radio-button label="simple">概览</el-radio-button>-->
-              <!--<el-radio-button label="more">详细</el-radio-button>-->
-            <!--</el-radio-group>-->
+          <!--<el-radio-group v-model="showLevel" size="mini" @change="syncShowLevel">-->
+          <!--<el-radio-button label="simple">{{ $t('Connections.overview') }}</el-radio-button>-->
+          <!--<el-radio-button label="more">{{ $t('Connections.detailed') }}</el-radio-button>-->
+          <!--</el-radio-group>-->
           <!--</div>-->
 
 
@@ -58,7 +58,7 @@
           </el-table-column>
 
           <el-table-column prop="username" min-width="120px" label="Username"></el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="node" min-width="120px" label="接入节点"></el-table-column>
+          <el-table-column v-if="showLevel === 'more'" prop="node" min-width="120px" :label="$t('Connections.accessPoint')"></el-table-column>
           <el-table-column prop="ipaddress" min-width="120px" label="Address">
             <template slot-scope="{ row }">
               {{ row.ipaddress }}:{{ row.port }}
@@ -66,25 +66,27 @@
           </el-table-column>
           <el-table-column prop="keepalive" label="keepalive"></el-table-column>
           <el-table-column prop="proto_name" :filters="filterOptions.protoName" :filter-method="protoNameColumnFilter"
-                           filter-placement="bottom" label="接入协议">
+                           filter-placement="bottom" :label="$t('Connections.protocol')"
+          >
             <template slot-scope="{ row }">
               <span class="">
                 {{ row.proto_name }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="proto_ver" min-width="80px" label="协议版本"></el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="clean_start" min-width="80px" label="清除会话"
-                           :formatter="$ => $ ? 'true' : 'false'"></el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="peercert" min-width="80px" label="连接加密"></el-table-column>
+          <el-table-column v-if="showLevel === 'more'" prop="proto_ver" min-width="80px" :label="$t('Connections.protocolVersion')"></el-table-column>
+          <el-table-column v-if="showLevel === 'more'" prop="clean_start" min-width="80px" :label="$t('Connections.clearSession')"
+                           :formatter="$ => $ ? 'true' : 'false'"
+          ></el-table-column>
+          <el-table-column v-if="showLevel === 'more'" prop="peercert" min-width="80px" :label="$t('Connections.SSL')"></el-table-column>
 
 
-          <el-table-column prop="connected_at" min-width="140px" label="连接时间"></el-table-column>
+          <el-table-column prop="connected_at" min-width="140px" :label="$t('Connections.connectionAt')"></el-table-column>
           <el-table-column prop="oper" width="120px" label="">
             <template slot-scope="{ row }">
 
               <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
-                {{ row.disconnected ? '已断开' : '断开' }}
+                {{ row.disconnected ? $t('Connections.disconnected') : $t('Connections.disconnect') }}
               </el-button>
 
               <!--<el-button size="mini" type="danger">Ban</el-button>-->
@@ -98,7 +100,8 @@
             layout="total, sizes, prev, pager, next"
             :page-sizes="[20, 50, 100, 500]" :page-size.sync="params._limit"
             :current-page.sync="params._page" :total="count" @size-change="handleSizeChange"
-            @current-change="handleCurrentChange">
+            @current-change="handleCurrentChange"
+          >
           </el-pagination>
         </div>
       </a-card>
@@ -148,14 +151,14 @@ export default {
         return
       }
       this.$msgbox.confirm('此操作将断开该连接,连接可能通过重连机制再次重连,确认继续?', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('Connections.confirm'),
+        cancelButtonText: this.$t('Connections.cancel'),
         type: 'warning',
       }).then(async () => {
         await disconnectConnection(row.client_id)
         this.$set(row, 'disconnected', true)
         this.loadData()
-        this.$message.success('断开成功')
+        this.$message.success(this.$t('Connections.successfulDisconnection'))
       }).catch(() => { })
     },
     resetSearch() {

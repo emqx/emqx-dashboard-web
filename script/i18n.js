@@ -238,8 +238,8 @@ async function processFile() {
   Object.keys(fileMap).forEach((key) => {
     const value = fileMap[key]
     fs.writeFileSync(
-        path.join(__dirname, `../src/i18n/${key}.js`,
-            `export default {\n ${JSON.stringify(value, null, 2)} \n}`),
+        path.join(__dirname, `../src/i18n/${key}.js`),
+        `export default \n ${JSON.stringify(value, null, 2)} \n`,
     )
     console.log(key, 'Done')
   })

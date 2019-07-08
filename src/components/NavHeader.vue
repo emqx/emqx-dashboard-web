@@ -23,7 +23,8 @@
         <div class="alert-info func-item">
           <a-badge :count="alertCount">
             <router-link to="/alerts/list" tag="i" class="iconfont icon-Notificationlisttongzhiliebiao"
-                         @click="clearAlert"></router-link>
+                         @click="clearAlert"
+            ></router-link>
           </a-badge>
         </div>
       </el-tooltip>
@@ -33,10 +34,10 @@
         <div class="user-info func-item">
           <span>{{ username }}</span>
           <el-dropdown-menu slot="dropdown">
-            <!--<el-dropdown-item command="setting">系统设置</el-dropdown-item>-->
-            <el-dropdown-item command="application">应用管理</el-dropdown-item>
-            <el-dropdown-item command="users">用户管理</el-dropdown-item>
-            <el-dropdown-item divided command="login">退出登录</el-dropdown-item>
+            <!--<el-dropdown-item command="setting">{{ $t('components.settings') }}</el-dropdown-item>-->
+            <el-dropdown-item command="application">{{ $t('components.applicationManagement') }}</el-dropdown-item>
+            <el-dropdown-item command="users">{{ $t('components.usersManagement') }}</el-dropdown-item>
+            <el-dropdown-item divided command="login">{{ $t('components.logOut') }}</el-dropdown-item>
           </el-dropdown-menu>
         </div>
       </el-dropdown>
@@ -69,10 +70,10 @@ export default {
       return { left: !this.$store.state.leftBarCollapse ? '201px' : 0 }
     },
     username() {
-      return this.$store.state.user.username || '未登录'
+      return this.$store.state.user.username || this.$t('components.notLoggedIn')
     },
     alertText() {
-      return this.alertCount > 0 ? `系统有 ${this.alertCount} 条告警，点击查看` : '暂无告警'
+      return this.alertCount > 0 ? `系统有 ${this.alertCount} 条告警，点击查看` : this.$t('components.noWarning')
     },
   },
 
@@ -95,7 +96,7 @@ export default {
     logout() {
       this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
       setTimeout(() => {
-        this.$message.success('已退出登录')
+        this.$message.success(this.$t('components.loggedOut'))
         this.$router.push('/login')
       }, 300)
     },
@@ -111,9 +112,9 @@ export default {
         this.$router.push({ path: `/${command}` })
         return
       }
-      this.$msgbox.confirm('是否退出登录？', {
-        confirmButtonText: '退出',
-        cancelButtonText: '取消',
+      this.$msgbox.confirm(this.$t('components.whetherToLogOutOrNot'), {
+        confirmButtonText: this.$t('components.signOut'),
+        cancelButtonText: this.$t('components.cancel'),
         type: 'warning',
       }).then(() => {
         this.logout()

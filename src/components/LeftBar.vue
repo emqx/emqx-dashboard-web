@@ -10,8 +10,8 @@
     <a-menu
       style="width: 200px"
       :default-selected-keys="defaultSelectedKeys"
-      :selectedKeys="defaultSelectedKeys"
-      :openKeys.sync="defaultOpenKeys"
+      :selected-keys="defaultSelectedKeys"
+      :open-keys.sync="defaultOpenKeys"
       mode="inline"
       @click="handleClick"
     >
@@ -61,79 +61,7 @@ export default {
 
   data() {
     return {
-      menus: [
-        {
-          title: '监控',
-          path: '/overview',
-          icon: 'icon-yibiaopan',
-        },
-        {
-          title: '连接',
-          path: '/connections',
-          icon: 'icon-zuzhiqunzu',
-        },
-        {
-          title: '规则',
-          key: 'rules',
-          icon: 'icon-guizeyinqing',
-          children: [
-            {
-              title: '规则引擎',
-              path: '/rules',
-              parentKey: 'rules',
-            },
-            {
-              title: '资源',
-              path: '/resources',
-              parentKey: 'rules',
-            },
-          ],
-        },
-        {
-          title: '告警',
-          path: '/alerts',
-          icon: 'icon-gaojingkongxin',
-        },
-        {
-          title: '插件',
-          path: '/plugins',
-          icon: 'icon-kongjian',
-        },
-        {
-          title: '工具',
-          key: 'tool',
-          icon: 'icon-gongju',
-          children: [
-            {
-              title: 'WebSocket',
-              path: '/websocket',
-              parentKey: 'tool',
-            },
-          ],
-        },
-        {
-          title: '通用',
-          key: 'function',
-          icon: 'icon-fenzuguanli',
-          children: [
-            {
-              title: '应用',
-              path: '/application',
-              parentKey: 'function',
-            },
-            {
-              title: '用户',
-              path: '/users',
-              parentKey: 'function',
-            },
-            // {
-            //   title: '系统设置',
-            //   path: '/setting',
-            //   parentKey: 'function',
-            // },
-          ],
-        },
-      ],
+      menus: [],
       defaultOpenKeys: [],
     }
   },
@@ -148,14 +76,87 @@ export default {
     },
   },
 
-  created() {
-    this.initRouter()
-  },
-
   watch: {
     $route() {
       this.initRouter()
     },
+  },
+
+  created() {
+    this.menus = [
+      {
+        title: this.$t('components.monitor'),
+        path: '/overview',
+        icon: 'icon-yibiaopan',
+      },
+      {
+        title: this.$t('components.connect'),
+        path: '/connections',
+        icon: 'icon-zuzhiqunzu',
+      },
+      {
+        title: this.$t('components.rule'),
+        key: 'rules',
+        icon: 'icon-guizeyinqing',
+        children: [
+          {
+            title: this.$t('components.ruleEngine'),
+            path: '/rules',
+            parentKey: 'rules',
+          },
+          {
+            title: this.$t('components.resources'),
+            path: '/resources',
+            parentKey: 'rules',
+          },
+        ],
+      },
+      {
+        title: this.$t('components.alarm'),
+        path: '/alerts',
+        icon: 'icon-gaojingkongxin',
+      },
+      {
+        title: this.$t('components.plugin'),
+        path: '/plugins',
+        icon: 'icon-kongjian',
+      },
+      {
+        title: this.$t('components.tool'),
+        key: 'tool',
+        icon: 'icon-gongju',
+        children: [
+          {
+            title: 'WebSocket',
+            path: '/websocket',
+            parentKey: 'tool',
+          },
+        ],
+      },
+      {
+        title: this.$t('components.general'),
+        key: 'function',
+        icon: 'icon-fenzuguanli',
+        children: [
+          {
+            title: this.$t('components.application'),
+            path: '/application',
+            parentKey: 'function',
+          },
+          {
+            title: this.$t('components.user'),
+            path: '/users',
+            parentKey: 'function',
+          },
+          // {
+          //   title: this.$t('components.settings'),
+          //   path: '/setting',
+          //   parentKey: 'function',
+          // },
+        ],
+      },
+    ]
+    this.initRouter()
   },
 
   methods: {

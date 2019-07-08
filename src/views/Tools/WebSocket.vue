@@ -5,7 +5,7 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link to="/" tag="span" class="btn btn-default raw">
-              首页
+              {{ $t('Tools.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
@@ -28,12 +28,12 @@
         <div class="websocket-config">
 
           <div class="emq-title">
-            连接配置
+            {{ $t('Tools.connectionConfiguration') }}
           </div>
 
           <el-form ref="configForm" hide-required-asterisk :model="connection" size="small" :rules="connectionRules" label-position="top" @keyup.enter.native="createConnection">
 
-            <!--<el-form-item prop="protocols" label="协议类型">
+            <!--<el-form-item prop="protocols" :label="$t('Tools.protocolType')">
             <!--<emq-select-->
             <!--v-model="connection.protocols"-->
             <!--:readonly="client.connected"-->
@@ -43,17 +43,17 @@
 
             <el-row :gutter="20">
               <el-col :span="8">
-                <el-form-item prop="host" label="主机名">
+                <el-form-item prop="host" :label="$t('Tools.host')">
                   <el-input v-model="connection.host" :readonly="client.connected"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item prop="port" label="端口">
+                <el-form-item prop="port" :label="$t('Tools.port')">
                   <el-input v-model.number="connection.port" type="number" placeholder="8083/8084" :readonly="client.connected"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item prop="endpoint" label="挂载点">
+                <el-form-item prop="endpoint" :label="$t('Tools.mountPoint')">
                   <el-input v-model="connection.endpoint" placeholder="/mqtt" :readonly="client.connected"></el-input>
                 </el-form-item>
               </el-col>
@@ -61,7 +61,7 @@
 
                 <el-form-item prop="clientId" label="Client ID">
                   <el-input v-model="connection.clientId" :readonly="client.connected">
-                    <i slot="suffix" title="随机生成" :disabled="client.connected" class="el-icon-refresh el-input_icon" @click="refreshClientId"></i>
+                    <i slot="suffix" :title="$t('Tools.randomGeneration')" :disabled="client.connected" class="el-icon-refresh el-input_icon" @click="refreshClientId"></i>
                   </el-input>
                 </el-form-item>
               </el-col>
@@ -98,11 +98,11 @@
 
               <el-col :span="24" class="footer-area">
                 <el-button type="primary" size="small" class="conn-btn" style="margin-right: 20px" :disabled="client.connected || connecting" @click="createConnection">
-                  {{ client.connected ? '已连接' : connecting ? '连接中' : '连接' }}
+                  {{ client.connected ? $t('Tools.connected') : connecting ? $t('Tools.inConnection') : $t('Tools.connect') }}
                 </el-button>
 
                 <el-button type="danger" size="small" class="conn-btn" :disabled="!client.connected && !connecting" @click="destroyConnection">
-                  {{ connecting ? '取消连接' : '断开连接' }}
+                  {{ connecting ? $t('Tools.cancelConnection') : $t('Tools.disconnect') }}
                 </el-button>
               </el-col>
 
@@ -137,7 +137,7 @@
 
       <a-card class="emq-list-card">
         <div class="emq-title">
-          订阅
+          {{ $t('Tools.Subscription') }}
         </div>
 
         <el-row :gutter="20">
@@ -153,7 +153,7 @@
               <div>
                 <el-form-item>
                   <el-button type="primary" size="small" class="conn-btn" @click="_doSubscribe">
-                    订阅
+                    {{ $t('Tools.Subscription') }}
                   </el-button>
                 </el-form-item>
               </div>
@@ -173,10 +173,10 @@
             <el-table :data="subscriptions" max-height="400px" style="margin-top: 10px;">
               <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="180px"></el-table-column>
               <el-table-column prop="qos" label="QoS" width="80px"></el-table-column>
-              <el-table-column prop="createAt" label="时间"></el-table-column>
+              <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
               <el-table-column width="60px">
                 <template slot-scope="{ row }">
-                  <span class="btn" @click="_doUnSubscribe(row)">取消</span>
+                  <span class="btn" @click="_doUnSubscribe(row)">{{ $t('Tools.cancel') }}</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -188,7 +188,7 @@
 
       <a-card class="emq-list-card">
         <div class="emq-title">
-          发布
+          {{ $t('Tools.publish') }}
         </div>
 
         <div class="connection-wrapper">
@@ -214,7 +214,7 @@
                   <span slot="label">&nbsp;</span>
                   <el-checkbox v-model="messageRecord.retain" style="margin-right: 20px">Retain</el-checkbox>
                   <el-button type="primary" size="small" class="conn-btn" style="float: right" @click="_doPublish">
-                    发布
+                    {{ $t('Tools.publish') }}
                   </el-button>
                 </el-form-item>
               </el-col>
@@ -228,8 +228,8 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <div class="message-btn">
-              已接收
-              <i class="icon el-icon-refresh" title="清除" @click="messageIn = []"></i>
+              {{ $t('Tools.received') }}
+              <i class="icon el-icon-refresh" :title="$t('Tools.clear')" @click="messageIn = []"></i>
             </div>
             <el-table class="list-table" :data="messageIn" max-height="400px" style="margin-top: 10px;">
               <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="120px"></el-table-column>
@@ -243,14 +243,14 @@
                   <code>{{ row.payload }}</code>
                 </template>
               </el-table-column>
-              <el-table-column prop="createAt" label="时间"></el-table-column>
+              <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
             </el-table>
           </el-col>
 
           <el-col :span="12">
             <div class="message-btn">
-              已发送
-              <i class="icon el-icon-refresh" title="清除" @click="messageOut = []"></i>
+              {{ $t('Tools.published') }}
+              <i class="icon el-icon-refresh" :title="$t('Tools.clear')" @click="messageOut = []"></i>
             </div>
             <el-table class="list-table" :data="messageOut" max-height="400px" style="margin-top: 10px;">
               <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="120px"></el-table-column>
@@ -264,7 +264,7 @@
                   <code>{{ row.payload }}</code>
                 </template>
               </el-table-column>
-              <el-table-column prop="createAt" label="时间"></el-table-column>
+              <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
             </el-table>
           </el-col>
         </el-row>
@@ -309,7 +309,7 @@ export default {
       maxTims: 4,
       connecting: false,
       messageRecordRules: {
-        topic: { required: true, message: '请输入' },
+        topic: { required: true, message: this.$t('Tools.pleaseEnter') },
       },
       stateIcon: {
         0: 'el-icon-message',
@@ -318,16 +318,16 @@ export default {
       },
       connectionRules: {
         host: { required: true },
-        port: [{ type: 'number', required: true, message: '请输入' }, {
+        port: [{ type: 'number', required: true, message: this.$t('Tools.pleaseEnter') }, {
           type: 'number',
           min: 1,
           max: 65535,
-          message: '范围错误',
+          message: this.$t('Tools.rangeError'),
         }],
-        keepalive: [{ type: 'number', required: true, message: '请输入' }, { type: 'number', min: 0, message: '范围错误' }],
+        keepalive: [{ type: 'number', required: true, message: this.$t('Tools.pleaseEnter') }, { type: 'number', min: 0, message: this.$t('Tools.rangeError') }],
       },
       subscriptionsRules: {
-        topic: [{ required: true, message: '请输入' }],
+        topic: [{ required: true, message: this.$t('Tools.pleaseEnter') }],
       },
 
       client: {
@@ -379,11 +379,11 @@ export default {
 
   computed: {
     btnStatusText() {
-      let text = '连接'
+      let text = this.$t('Tools.connect')
       if (this.client.connected) {
-        text = '断开连接'
+        text = this.$t('Tools.disconnect')
       } else if (this.client.connecting) {
-        text = '连接中'
+        text = this.$t('Tools.inConnection')
       }
       return text
     },
@@ -436,7 +436,7 @@ export default {
     },
     _doUnSubscribe(item) {
       if (!this.client.connected) {
-        this.$message.error('客户端未连接')
+        this.$message.error(this.$t('Tools.clientNotConnected'))
         return
       }
       this.client.unsubscribe(item.topic, (error) => {
@@ -453,13 +453,13 @@ export default {
         return
       }
       if (!this.client.connected) {
-        this.$message.error('客户端未连接')
+        this.$message.error(this.$t('Tools.clientNotConnected'))
         return
       }
       const { topic, qos } = this.subscriptionsRecord
       this.client.subscribe(topic, { qos }, (err, granted) => {
         if (err) {
-          this.$message.error('订阅失败')
+          this.$message.error(this.$t('Tools.subscriptionFailure'))
           return
         }
         if (this.subscriptions.find($ => $.topic === topic)) {
@@ -478,7 +478,7 @@ export default {
         return
       }
       if (!this.client.connected) {
-        this.$message.error('客户端未连接')
+        this.$message.error(this.$t('Tools.clientNotConnected'))
         return
       }
       const {
@@ -488,7 +488,7 @@ export default {
         qos, retain,
       }, (err) => {
         if (err) {
-          this.$message.error('发布失败')
+          this.$message.error(this.$t('Tools.publishingFailure'))
           return
         }
         const message = {
@@ -577,7 +577,7 @@ export default {
         this.client.on('reconnect', () => {
           if (this.times > this.maxTims) {
             this.destroyConnection()
-            this.$message.error('连接已断开')
+            this.$message.error(this.$t('Tools.connectionDisconnected'))
           }
           if (this.connecting) {
             this.times += 1

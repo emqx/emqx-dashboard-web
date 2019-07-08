@@ -2,8 +2,8 @@
   <count-to
     v-bind="$attrs"
     class="emq-count-to"
-    :startVal="startVal"
-    :endVal="endVal"
+    :start-val="startVal"
+    :end-val="endVal"
   >
   </count-to>
 </template>
@@ -29,13 +29,6 @@ export default {
     },
   },
 
-  watch: {
-    value(val, oldValue) {
-      this.startVal = oldValue
-      this.endVal = val
-    },
-  },
-
   data() {
     return {
       startVal: 0,
@@ -43,8 +36,15 @@ export default {
     }
   },
 
-  methods: {},
+  watch: {
+    value(val, oldValue) {
+      this.startVal = oldValue
+      this.endVal = val
+    },
+  },
 
   created() {},
+
+  methods: {},
 }
 </script>

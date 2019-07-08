@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="创建资源"
+    :title="$t('RuleEngine.createResources')"
     class="resource-dialog"
     width="520px"
     v-bind="$attrs"
@@ -16,7 +16,7 @@
       label-position="top"
       size="small"
     >
-      <el-form-item prop="type" label="资源类型">
+      <el-form-item prop="type" :label="$t('RuleEngine.resourceTypes')">
         <emq-select
           v-model="record.type"
           :disabled="disabledSelect"
@@ -31,12 +31,12 @@
           style="margin-left: 20px"
           @click="handleCreate(true)"
         >
-          测试连接
+          {{ $t('RuleEngine.testConnection') }}
         </el-button>
       </el-form-item>
 
-      <el-form-item style="width: 330px" prop="description" label="备注">
-        <el-input v-model="record.description" placeholder="请输入"></el-input>
+      <el-form-item style="width: 330px" prop="description" :label="$t('RuleEngine.remark')">
+        <el-input v-model="record.description" :placeholder="$t('RuleEngine.pleaseEnter')"></el-input>
       </el-form-item>
 
 
@@ -101,8 +101,8 @@
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
-      <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">确定</el-button>
-      <el-button size="small" @click="handleCache">取消</el-button>
+      <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">{{ $t('RuleEngine.confirm') }}</el-button>
+      <el-button size="small" @click="handleCache">{{ $t('RuleEngine.cancel') }}</el-button>
     </div>
 
   </el-dialog>
@@ -148,7 +148,7 @@ export default {
       },
       rules: {
         config: {},
-        type: { required: true, message: '请选择' },
+        type: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
       },
     }
   },
@@ -222,7 +222,7 @@ export default {
       }
       const resource = await createResource(this.record, test)
       if (test) {
-        this.$message.success('资源可用')
+        this.$message.success(this.$t('RuleEngine.resourceAvailable'))
         return
       }
       this.$emit('created', resource.id)

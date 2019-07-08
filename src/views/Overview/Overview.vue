@@ -1,13 +1,13 @@
 <template>
   <div class="overview app-wrapper">
-    <!--<div class="page-header">服务器状态</div>-->
+    <!--<div class="page-header">{{ $t('Overview.brokerStatus') }}</div>-->
 
     <el-row class="content-wrapper" :gutter="20">
       <!--
       <el-col :span="6">
         <a-card class="app-card" :bordered="true" :loading="pageLoading" hoverable>
           <div class="app-card-title">
-            节点数
+            {{ $t('Overview.nodesNun') }}
           </div>
 
           <div class="content">
@@ -15,7 +15,7 @@
           </div>
           <div class="app-footer">
             <div class="footer-item">
-              集群中节点数
+              {{ $t('Overview.numberOfNodesInCluster') }}
             </div>
           </div>
         </a-card>
@@ -26,12 +26,12 @@
       <el-col :span="6">
         <a-card class="app-card" :bordered="true" :loading="pageLoading" hoverable>
           <div class="app-card-title">
-            消息发出
+            {{ $t('Overview.messageOut') }}
           </div>
 
           <div class="content">
             <emq-count-to v-model="currentMetrics.sent"></emq-count-to>
-            <span class="unit">条/秒</span>
+            <span class="unit">{{ $t('Overview.strip') }}/秒</span>
 
             <div class="flux-wrapper">
               <simple-line v-model="currentMetricsLogs.sent" type="bar" color="#34c388"></simple-line>
@@ -40,7 +40,7 @@
 
           <div class="app-footer">
             <div class="footer-item">
-              当前消息发出速度
+              {{ $t('Overview.currentMessageOutRate') }}
             </div>
           </div>
         </a-card>
@@ -49,12 +49,12 @@
       <el-col :span="6">
         <a-card class="app-card" :bordered="true" :loading="pageLoading" hoverable>
           <div class="app-card-title">
-            消息流入
+            {{ $t('Overview.messageIn') }}
           </div>
 
           <div class="content">
             <emq-count-to v-model="currentMetrics.received"></emq-count-to>
-            <span class="unit">条/秒</span>
+            <span class="unit">{{ $t('Overview.strip') }}/秒</span>
 
             <div class="flux-wrapper">
               <simple-line v-model="currentMetricsLogs.received" type="bar"></simple-line>
@@ -63,7 +63,7 @@
 
           <div class="app-footer">
             <div class="footer-item">
-              当前消息流入速度
+              {{ $t('Overview.currentMessageInRate') }}
             </div>
           </div>
         </a-card>
@@ -72,7 +72,7 @@
       <el-col :span="6">
         <a-card class="app-card" :bordered="true" :loading="pageLoading" hoverable>
           <div class="app-card-title">
-            订阅数
+            {{ $t('Overview.subscriptionNumber') }}
           </div>
 
           <div class="content">
@@ -85,7 +85,7 @@
 
           <div class="app-footer">
             <div class="footer-item">
-              集群订阅关系数
+              {{ $t('Overview.topicNumber') }}
             </div>
           </div>
         </a-card>
@@ -94,7 +94,7 @@
       <el-col :span="6">
         <a-card class="app-card" :bordered="true" hoverable :loading="pageLoading">
           <div class="app-card-title">
-            连接数
+            {{ $t('Overview.connectionNumber') }}
           </div>
 
           <div class="content">
@@ -112,7 +112,7 @@
           </div>
           <div class="app-footer">
             <div class="footer-item">
-              连接数峰值
+              {{ $t('Overview.maxConnections') }}
               <span class="item-value">
                 <emq-count-to v-model="state.subscribers_max"></emq-count-to>
               </span>
@@ -126,12 +126,13 @@
     <a-card class="node-wrapper" :loading="tableLoading">
       <div class="emq-title">
         <div class="title">
-          节点数据
+          {{ $t('Overview.nodeData') }}
         </div>
         <div class="type-filter">
-          <emq-select v-if="dataType === 'basic'" size="mini" style="margin-right: 20px" v-model="nodeName"
+          <emq-select v-if="dataType === 'basic'" v-model="nodeName" size="mini" style="margin-right: 20px"
                       :field="{ options: nodes }" :field-name="{ label: 'name', value: 'name' }"
-                      @change="dataTypeChange"></emq-select>
+                      @change="dataTypeChange"
+          ></emq-select>
           <el-radio-group v-model="dataType" size="mini" @change="dataTypeChange">
             <el-radio-button v-for="(item, i) in dataTypeFilter" :key="i" :label="item.value">
               {{ item.text }}
@@ -154,9 +155,9 @@
 
       </div>
 
-      <div v-else class="basic" style="margin-bottom: -32px" v-loading="tableLoading">
+      <div v-else v-loading="tableLoading" class="basic" style="margin-bottom: -32px">
         <div v-if="activeMetrics.data.length === 0 && !tableLoading" class="data-list">
-          <p>暂无数据</p>
+          <p>{{ $t('Overview.noData') }}</p>
         </div>
         <metric-line v-else :value="activeMetrics"></metric-line>
       </div>
@@ -171,41 +172,42 @@
 
       <ul class="license-field">
         <li class="item">
-          <span class="key">签发对象:</span>
+          <span class="key">{{ $t('Overview.customer') }}:</span>
           <span class="value">{{ license.customer }}</span>
         </li>
 
         <li class="item">
-          <span class="key">连接线数:</span>
+          <span class="key">{{ $t('Overview.numberOfConnectionLines') }}:</span>
           <div class="content">
             <el-progress :stroke-width="12" :percentage="licensePercentage" color="#34c388"
-                         :format="formatConnection"></el-progress>
+                         :format="formatConnection"
+            ></el-progress>
           </div>
         </li>
 
         <li class="item">
-          <span class="key">签发邮箱:</span>
+          <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
           <span class="value">{{ license.email }}</span>
         </li>
 
         <li class="item">
-          <span class="key">签发时间:</span>
+          <span class="key">{{ $t('Overview.issuedAt') }}:</span>
           <div class="value broker">{{ license.issued_at }}</div>
         </li>
 
         <li class="item">
-          <span class="key">到期时间:</span>
+          <span class="key">{{ $t('Overview.expireAt') }}:</span>
           <div class="value broker">{{ license.expiry_at }}</div>
         </li>
       </ul>
 
       <div class="license-card-footer">
         <div class="description">
-          证书到期前一没钱将通过邮件通知签发邮箱，请留意信息接收以免错过续期时间对业务造成影响
+          {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>
         <div v-if="license.type = 'trial'" class="oper">
           <el-tooltip effect="dark" content="当前莱森斯为试用版" placement="top" :visible-arrow="false">
-            <el-button type="danger" size="small" @click="upgradeLicense">试用版</el-button>
+            <el-button type="danger" size="small" @click="upgradeLicense">{{ $t('Overview.trialEdition') }}</el-button>
           </el-tooltip>
         </div>
       </div>
@@ -218,7 +220,9 @@
 <script>
 import Moment from 'moment'
 import { toTableData } from '@/common/utils'
-import { loadState, loadCurrentMetrics, loadLicenseInfo, loadMetricsLog } from '@/api/overview'
+import {
+  loadState, loadCurrentMetrics, loadLicenseInfo, loadMetricsLog,
+} from '@/api/overview'
 import { loadNodes as loadNodesApi } from '@/api/common'
 import EmqCountTo from '@/components/EmqCountTo'
 import MetricLine from '@/views/Overview/components/MetricLine'
@@ -241,49 +245,50 @@ export default {
   props: {},
 
   data() {
+    const that = this
     return {
       pageLoading: true,
       tableLoading: false,
       nodeName: '',
       _currentNode: {
-        'connections': 16,
-        'load1': '14.01',
-        'load15': '11.85',
-        'load5': '12.54',
-        'max_fds': 7168,
-        'memory_total': '126.59M',
-        'memory_used': '97.05M',
-        'name': 'emqx@127.0.0.1',
-        'node': 'emqx@127.0.0.1',
-        'node_status': 'Running',
-        'otp_release': 'R21/10.3.4',
-        'process_available': 2097152,
-        'process_used': 402,
-        'uptime': '12 minutes, 37 seconds',
-        'version': '0.0.0+build.1.ref8234b61',
+        connections: 16,
+        load1: '14.01',
+        load15: '11.85',
+        load5: '12.54',
+        max_fds: 7168,
+        memory_total: '126.59M',
+        memory_used: '97.05M',
+        name: 'emqx@127.0.0.1',
+        node: 'emqx@127.0.0.1',
+        node_status: 'Running',
+        otp_release: 'R21/10.3.4',
+        process_available: 2097152,
+        process_used: 402,
+        uptime: '12 minutes, 37 seconds',
+        version: '0.0.0+build.1.ref8234b61',
       },
       timer: 0,
       dataType: 'basic',
       dataTypeMap: {
-        basic: '基础信息',
-        sent: '消息发出',
-        received: '消息流入',
-        dropped: '消息丢弃',
-        connection: '连接',
-        route: '路由',
-        subscriptions: '订阅',
+        basic: that.$t('Overview.basicInfo'),
+        sent: that.$t('Overview.messageOut'),
+        received: that.$t('Overview.messageIn'),
+        dropped: that.$t('Overview.messageDrop'),
+        connection: that.$t('Overview.connect'),
+        route: that.$t('Overview.topics'),
+        subscriptions: that.$t('Overview.Subscription'),
       },
       nodes: [],
       license: {
-        'customer': '',
-        'email': '',
-        'plugins': '',
-        'max_connections': 100000,
-        'issued_at': '',
-        'expiry_at': '',
-        'vendor': '',
-        'version': '',
-        'type': 'trial',
+        customer: '',
+        email: '',
+        plugins: '',
+        max_connections: 100000,
+        issued_at: '',
+        expiry_at: '',
+        vendor: '',
+        version: '',
+        type: 'trial',
       },
       metricLog: {
         sent: { data: [], nodes: {} },
@@ -335,20 +340,6 @@ export default {
     }
   },
 
-  created() {
-    this.pageLoading = true
-    this.loadData()
-    this.loadLicenseData()
-    clearInterval(this.timer)
-    this.timer = setInterval(this.loadData, 10 * 1000)
-    this.dataTypeChange()
-  },
-
-  beforeRouteLeave(form, to, next) {
-    clearInterval(this.timer)
-    next()
-  },
-
   computed: {
     activeMetrics() {
       if (this.metricLog[this.dataType]) {
@@ -377,15 +368,28 @@ export default {
     },
   },
 
+  created() {
+    this.pageLoading = true
+    this.loadData()
+    this.loadLicenseData()
+    clearInterval(this.timer)
+    this.timer = setInterval(this.loadData, 10 * 1000)
+    this.dataTypeChange()
+  },
+
+  beforeRouteLeave(form, to, next) {
+    clearInterval(this.timer)
+    next()
+  },
+
   filter: {
     numFormat(s, type) {
-      if (/[^0-9.]/.test(s))
-        return '0'
+      if (/[^0-9.]/.test(s)) return '0'
       if (s == null || s === 'null' || s === '') {
         return '0'
       }
       s = s.toString().replace(/^(\d*)$/, '$1.')
-      s = (s + '00').replace(/(\d*\.\d\d)\d*/, '$1')
+      s = (`${s}00`).replace(/(\d*\.\d\d)\d*/, '$1')
       s = s.replace('.', ',')
       const re = /(\d)(\d{3},)/
       while (re.test(s)) {

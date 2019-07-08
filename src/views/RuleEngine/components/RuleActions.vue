@@ -3,7 +3,7 @@
     <div v-for="(item, i) in rawValue" :key="i" class="action-item">
       <div class="action-item-head">
         <div class="action-item-type">
-          <div class="title">动作类型</div>
+          <div class="title">{{ $t('RuleEngine.actionType') }}</div>
           <div class="desc">{{ (item._config || {}).title }} ({{ item.name }})</div>
         </div>
         <div
@@ -14,15 +14,15 @@
           <!--编辑-->
           <!--</span>-->
           <span class="btn" @click="removeAction(i)">
-            删除
+            {{ $t('RuleEngine.delete') }}
           </span>
         </div>
 
         <div v-else class="action-item-btn action-item-type">
-          <span class="title">成功 </span>
-          <span class="desc">{{  sumCount(item.metrics, 'success') }}</span>
+          <span class="title">{{ $t('RuleEngine.success') }} </span>
+          <span class="desc">{{ sumCount(item.metrics, 'success') }}</span>
 
-          <span class="title">失败 </span>
+          <span class="title">{{ $t('RuleEngine.fail') }} </span>
           <span class="desc">{{ sumCount(item.metrics, 'failed') }}</span>
         </div>
       </div>
@@ -40,12 +40,12 @@
     </div>
 
 
-    <el-button v-if="!disabled" size="small" icon="el-icon-plus" @click="addAction">添加动作</el-button>
+    <el-button v-if="!disabled" size="small" icon="el-icon-plus" @click="addAction">{{ $t('RuleEngine.addAction') }}</el-button>
 
 
-    <el-dialog :visible.sync="addActionDialogVisible" title="新增动作" width="520px">
+    <el-dialog :visible.sync="addActionDialogVisible" :title="$t('RuleEngine.addActions')" width="520px">
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
-        <el-form-item prop="name" label="动作类型">
+        <el-form-item prop="name" :label="$t('RuleEngine.actionType')">
           <emq-select
             v-model="record.name"
             :field="{ options: availableActions }"
@@ -62,7 +62,7 @@
           {{ selectedAction.description }}
         </div>
 
-        <el-form-item v-if="selectedAction.params.$resource" prop="params.$resource" label="使用资源">
+        <el-form-item v-if="selectedAction.params.$resource" prop="params.$resource" :label="$t('RuleEngine.useOfResources')">
           <emq-select
             v-model="record.params.$resource"
             :field="{ options: availableResources }"
@@ -81,7 +81,7 @@
           </emq-select>
 
           <span class="tips btn" icon="el-icon-plus" @click="toCreateResource">
-            新建
+            {{ $t('RuleEngine.createNew') }}
           </span>
         </el-form-item>
 
@@ -140,8 +140,8 @@
 
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">确定</el-button>
-        <el-button size="small" @click="handleCache">取消</el-button>
+        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">{{ $t('RuleEngine.confirm') }}</el-button>
+        <el-button size="small" @click="handleCache">{{ $t('RuleEngine.cancel') }}</el-button>
       </div>
     </el-dialog>
 
@@ -188,7 +188,7 @@ export default {
       },
       rules: {
         params: {
-          $resource: { required: true, message: '请选择' },
+          $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
         },
       },
       selectedAction: {
@@ -306,7 +306,7 @@ export default {
       const { form, rules } = renderParamsForm(params, 'params')
       this.paramsList = form
       this.rules.params = {
-        $resource: { required: true, message: '请选择' },
+        $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
         ...rules,
       }
       this.record.params = {}

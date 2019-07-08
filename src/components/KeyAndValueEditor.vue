@@ -1,22 +1,22 @@
 <template>
   <el-table class="key-and-value-editor" :data="tableData" size="mini">
-    <el-table-column prop="key" label="键" min-width="80px">
+    <el-table-column prop="key" :label="$t('components.key')" min-width="80px">
       <template slot-scope="{ row }">
-        <el-input v-model="row.key" style="width: 120px !important;" class="key-input" size="mini" placeholder="对象键" @input="atInputChange"></el-input>
+        <el-input v-model="row.key" style="width: 120px !important;" class="key-input" size="mini" :placeholder="$t('components.objectKey')" @input="atInputChange"></el-input>
       </template>
     </el-table-column>
-    <el-table-column prop="value" label="值" min-width="150px">
+    <el-table-column prop="value" :label="$t('components.value')" min-width="150px">
       <template slot-scope="{ row }">
         <el-input v-model="row.value" size="mini" @input="atInputChange"></el-input>
       </template>
     </el-table-column>
     <el-table-column width="60px">
       <span slot="header" class="btn" @click="addColumn">
-        添加
+        {{ $t('components.add') }}
       </span>
       <template slot-scope="{ row }">
         <span class="btn" @click="deleteItem(row)">
-          删除
+          {{ $t('components.delete') }}
         </span>
       </template>
     </el-table-column>

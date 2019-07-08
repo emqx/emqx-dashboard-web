@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-bind="$attrs"
-    title="添加订阅"
+    :title="$t('Connections.addASubscription')"
     width="400px"
     :visible.sync="rawVisible"
     class="create-subscribe"
@@ -22,8 +22,8 @@
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
-      <el-button plain size="small" @click="close">取消</el-button>
-      <el-button type="primary" size="small" @click="handleAdd">添加</el-button>
+      <el-button plain size="small" @click="close">{{ $t('Connections.cancel') }}</el-button>
+      <el-button type="primary" size="small" @click="handleAdd">{{ $t('Connections.add') }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -60,11 +60,11 @@ export default {
       rules: {
         client_id: {
           required: true,
-          message: '请输入',
+          message: this.$t('Connections.pleaseEnter'),
         },
         topic: {
           required: true,
-          message: '请输入',
+          message: this.$t('Connections.pleaseEnter'),
         },
       },
     }

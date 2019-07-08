@@ -4,7 +4,8 @@
       v-for="(item, i) in nodes"
       :key="i" class="item"
       :class="{ active: rawValue === item.name }"
-      @click="atClick(item)">
+      @click="atClick(item)"
+    >
       {{ item.name }}
     </div>
   </div>
@@ -50,6 +51,10 @@ export default {
     },
   },
 
+  created() {
+    this.loadData()
+  },
+
   methods: {
     atClick(item) {
       this.rawValue = item.name
@@ -64,10 +69,6 @@ export default {
         this.rawValue = (this.nodes[0] || {}).name
       }
     },
-  },
-
-  created() {
-    this.loadData()
   },
 }
 </script>

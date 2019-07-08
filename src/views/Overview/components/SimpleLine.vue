@@ -30,17 +30,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'line'
-    }
-  },
-
-  watch: {
-    value: {
-      deep: true,
-      handler: 'setSeriesConfig',
-    },
-    '$store.state.leftBarCollapse'() {
-      setTimeout(this.setSeriesConfig, 500)
+      default: 'line',
     },
   },
   data() {
@@ -49,10 +39,10 @@ export default {
       option: {
         color: [this.color],
         grid: {
-          x: 0, //默认是80px
-          y: 0, //默认是60px
-          x2: 0, //默认80px
-          y2: 0, //默认60px
+          x: 0, // 默认是80px
+          y: 0, // 默认是60px
+          x2: 0, // 默认80px
+          y2: 0, // 默认60px
         },
         tooltip: {
           trigger: 'axis',
@@ -95,10 +85,26 @@ export default {
     }
   },
 
+  watch: {
+    value: {
+      deep: true,
+      handler: 'setSeriesConfig',
+    },
+    '$store.state.leftBarCollapse': function () {
+      setTimeout(this.setSeriesConfig, 500)
+    },
+  },
+
+  mounted() {
+    this.setSeriesConfig()
+  },
+
+  created() {},
+
   methods: {
     setSeriesConfig() {
-      const color = this.color
-      const type = this.type
+      const { color } = this
+      const { type } = this
       this.chart = echarts.init(this.$refs.chart)
       this.option.series = [{
         data: this.value.y,
@@ -119,12 +125,6 @@ export default {
       this.chart.setOption(this.option)
     },
   },
-
-  mounted() {
-    this.setSeriesConfig()
-  },
-
-  created() {},
 }
 </script>
 

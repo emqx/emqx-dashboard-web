@@ -4,7 +4,7 @@
       <img class="logo" src="../../../assets/emqx_logo.png" alt="logo">
       <div class="version">{{ record.version }}</div>
       <div class="jump">
-        <el-button v-if="showButton" type="dashed" size="mini" @click="toDetails">详情</el-button>
+        <el-button v-if="showButton" type="dashed" size="mini" @click="toDetails">{{ $t('Overview.details') }}</el-button>
       </div>
     </div>
 
@@ -60,7 +60,7 @@
                 <a-badge
                   is-dot
                   :status="record.node_status === 'Running' ? 'success' : 'error'"
-                  :text="record.node_status === 'Running' ? '运行中' : '已停止'"
+                  :text="record.node_status === 'Running' ? $t('Overview.running') : $t('Overview.stopped')"
                 >
                 </a-badge>
               </span>
@@ -79,7 +79,7 @@
                 内存:
               </div>
               <span class="field-value">
-               {{ record.memory_used }} / {{ record.memory_total }}
+                {{ record.memory_used }} / {{ record.memory_total }}
               </span>
             </li>
 
@@ -106,8 +106,9 @@
                 CPU 负载
                 <el-popover
                   trigger="hover"
-                  content="load1/load4/load15">
-                  <i class="el-icon-question" slot="reference"></i>
+                  content="load1/load4/load15"
+                >
+                  <i slot="reference" class="el-icon-question"></i>
                 </el-popover>
                 :
               </div>
@@ -149,6 +150,8 @@ export default {
     },
   },
 
+  created() {},
+
   methods: {
     toDetails() {
       this.$router.push({
@@ -159,11 +162,8 @@ export default {
       })
     },
   },
-
-  created() {},
 }
 </script>
-
 
 
 <style lang="scss">

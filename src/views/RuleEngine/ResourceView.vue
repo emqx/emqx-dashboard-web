@@ -5,20 +5,20 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link class="btn btn-default raw" to="/" tag="span">
-              首页
+              {{ $t('RuleEngine.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
           <a-breadcrumb-item>
             <router-link class="btn btn-default raw" to="/resources" tag="span">
-              资源
+              {{ $t('RuleEngine.resources') }}
             </router-link>
           </a-breadcrumb-item>
 
 
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              详情
+              {{ $t('RuleEngine.details') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
@@ -36,18 +36,18 @@
       <!-- 基本信息 -->
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
-          基本信息
+          {{ $t('RuleEngine.basicInfo') }}
         </div>
 
 
         <ul class="field-info">
           <li class="field-info-item">
-            <div class="field-title">状态:</div>
+            <div class="field-title">{{ $t('RuleEngine.state') }}:</div>
             <span class="field-value">
               <a-badge
                 style="font-size: 12px"
                 :status="isAlive ? 'success' : 'error'"
-                :text="isAlive ? '可用' : '不可用'"
+                :text="isAlive ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')"
                 dot
               >
               </a-badge>
@@ -58,23 +58,23 @@
                 type="primary"
                 @click="reconnectResource"
               >
-                重连
+                {{ $t('RuleEngine.reconnect') }}
               </el-button>
 
             </span>
           </li>
 
           <li class="field-info-item">
-            <div class="field-title">资源类型:</div>
+            <div class="field-title">{{ $t('RuleEngine.resourceTypes') }}:</div>
             <span class="field-value">{{ record.typeInfo.title }} ({{ record.type }})</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">备注:</div>
+            <div class="field-title">{{ $t('RuleEngine.remark') }}:</div>
             <span class="field-value">{{ record.description }}</span>
           </li>
 
           <li class="field-info-item">
-            <div class="field-title">使用说明:</div>
+            <div class="field-title">{{ $t('RuleEngine.instructions') }}:</div>
             <span class="field-value">{{ record.typeInfo.description }}</span>
           </li>
 
@@ -84,7 +84,7 @@
 
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
-          配置信息
+          {{ $t('RuleEngine.configuration') }}
         </div>
 
         <el-row :gutter="40" class="resource-field-wrapper">

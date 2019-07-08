@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <a-card title="登录" class="login-card">
+    <a-card :title="$t('Base.signIn')" class="login-card">
       <el-form
         ref="record"
         :model="record"
@@ -18,15 +18,15 @@
         >
         </el-alert>
 
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="record.username" placeholder="用户名"></el-input>
+        <el-form-item :label="$t('Base.userName')" prop="username">
+          <el-input v-model="record.username" :placeholder="$t('Base.userName')"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="record.password" type="password" placeholder="密码"></el-input>
+        <el-form-item :label="$t('Base.password')" prop="password">
+          <el-input v-model="record.password" type="password" :placeholder="$t('Base.password')"></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-checkbox v-model="record.remember">记住</el-checkbox>
-          <el-button type="primary" style="float: right" @click="login">登录</el-button>
+          <el-checkbox v-model="record.remember">{{ $t('Base.remember') }}</el-checkbox>
+          <el-button type="primary" style="float: right" @click="login">{{ $t('Base.signIn') }}</el-button>
         </el-form-item>
       </el-form>
     </a-card>
