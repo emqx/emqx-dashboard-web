@@ -121,13 +121,7 @@
           </div>
           <div class="app-footer">
             <div class="footer-item">
-              {{ $t('Overview.maxConnections') }}
-              <span class="item-value">
-                <!--<emq-count-to v-model="state.subscribers_max"></emq-count-to>-->
-                <span>
-                  {{ currentMetrics.subscription }}
-                </span>
-              </span>
+              {{ $t('Overview.connectionsTips') }}
             </div>
           </div>
         </a-card>
@@ -135,7 +129,7 @@
 
     </el-row>
 
-    <a-card class="node-wrapper">
+    <a-card class="node-wrapper" :loading="pageLoading">
       <div class="emq-title">
         <div class="title">
           {{ $t('Overview.nodeData') }}
@@ -242,9 +236,8 @@
 import Moment from 'moment'
 import { toTableData } from '@/common/utils'
 import {
-  loadState, loadCurrentMetrics, loadLicenseInfo, loadMetricsLog,
+  loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo, loadMetricsLog,
 } from '@/api/overview'
-import { loadNodes as loadNodesApi } from '@/api/common'
 import EmqCountTo from '@/components/EmqCountTo'
 import MetricLine from '@/views/Overview/components/MetricLine'
 import NodeItem from './components/NodeItem'
@@ -266,7 +259,6 @@ export default {
   props: {},
 
   data() {
-    const that = this
     return {
       pageLoading: true,
       tableLoading: false,
@@ -291,13 +283,13 @@ export default {
       timer: 0,
       dataType: 'basic',
       dataTypeMap: {
-        basic: that.$t('Overview.basicInfo'),
-        sent: that.$t('Overview.messageOut'),
-        received: that.$t('Overview.messageIn'),
-        dropped: that.$t('Overview.messageDrop'),
-        connection: that.$t('Overview.connection'),
-        route: that.$t('Overview.topics'),
-        subscriptions: that.$t('Overview.Subscription'),
+        basic: this.$t('Overview.basicInfo'),
+        sent: this.$t('Overview.messageOut'),
+        received: this.$t('Overview.messageIn'),
+        dropped: this.$t('Overview.messageDrop'),
+        connection: this.$t('Overview.connection'),
+        route: this.$t('Overview.topics'),
+        subscriptions: this.$t('Overview.Subscription'),
       },
       nodes: [],
       license: {
@@ -340,24 +332,6 @@ export default {
         subscription: 0, // 订阅数
         connection: 0, // 连接数
       },
-      state: {
-        connections_count: 0,
-        connections_max: 0,
-        subscribers_count: 0,
-        subscribers_max: 0,
-        message_count: 0,
-        message_max: 0,
-        message_rate_count: 0,
-        message_rate_max: 0,
-      },
-      nodeList: [{
-        key: 'tab1',
-        tab: 'tab1',
-      }, {
-        key: 'tab2',
-        tab: 'tab2',
-      }],
-      activeNode: 'tab1',
     }
   },
 
@@ -477,7 +451,6 @@ export default {
         return
       }
       this.currentMetrics = state
-      this.state = await loadState()
       this.setCurrentMetricsLogs(state)
     },
     getNow() {
@@ -485,6 +458,7 @@ export default {
     },
     setCurrentMetricsLogs(state = {}) {
       ['received', 'sent', 'subscription'].forEach((key) => {
+        this.currentMetricsLogs[key] = this.currentMetricsLogs[key] || { x: [], y: [] }
         const currentValue = state[key] || 0
         this.currentMetricsLogs[key].x.push(this.getNow())
         this.currentMetricsLogs[key].y.push(currentValue)

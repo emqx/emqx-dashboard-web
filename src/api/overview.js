@@ -29,6 +29,39 @@ export async function loadState() {
   return state
 }
 
+export function loadBrokers() {
+  return http.get('/brokers')
+}
+
+export function loadStats() {
+  return http.get('/stats')
+}
+
+export async function loadNodes() {
+  const brokers = await loadBrokers()
+  const stats = await loadStats()
+  const brokerMap = {}
+  brokers.forEach((broker) => {
+    brokerMap[broker.node] = broker
+  })
+
+  const stateMap = {}
+  stats.forEach((state) => {
+    stateMap[state.node] = state
+  })
+
+  const nodes = await http.get('/nodes')
+  return nodes.map(($) => {
+    const broker = brokerMap[$.name] || {}
+    const state = stateMap[$.name] || {}
+    return {
+      ...broker,
+      ...state,
+      ...$,
+    }
+  })
+}
+
 export function loadCurrentMetrics() {
   return http.get('/overview/current_metrics')
 }
@@ -65,7 +98,8 @@ export function loadListeners(node) {
 export async function loadNodeDetail(node) {
   const broker = await http.get(`/brokers/${node}`)
   const nodeData = await http.get(`/nodes/${node}`)
-  return { ...broker, ...nodeData }
+  const stats = await http.get(`/nodes/${node}/stats`)
+  return { ...broker, ...stats, ...nodeData }
 }
 
 export default {}

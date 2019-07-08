@@ -47,7 +47,7 @@
     <div class="app-wrapper">
       <div v-if="activeName === 'basic'" class="card-wrapper">
         <a-card class="emq-list-card">
-          <div class="emq-title">{{ $t('Overview.version') }}</div>
+          <div class="emq-title">{{ $t('Overview.basic') }}</div>
           <node-basic-card :value="record" :show-button="false"></node-basic-card>
         </a-card>
 

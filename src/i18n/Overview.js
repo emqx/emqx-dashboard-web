@@ -7,6 +7,22 @@ export default
     '默认60',
     '莱森斯信息',
   ],
+  shareSubscription: {
+    zh: '共享订阅',
+    en: 'Share Subscription'
+  },
+  subscription: {
+    zh: '订阅',
+    en: 'Subscriptions'
+  },
+  retained: {
+    zh: '保留消息',
+    en: 'Retained'
+  },
+  connectionsTips: {
+    zh: '当前活跃连接数',
+    en: 'Currently active connections'
+  },
   details: {
     zh: '查看',
     en: 'View',
@@ -20,7 +36,7 @@ export default
     en: 'Uptime',
   },
   currentConnection: {
-    zh: '当前连接',
+    zh: '连接',
     en: 'Connections',
   },
   nodeState: {
@@ -82,6 +98,10 @@ export default
   version: {
     zh: '版本信息',
     en: 'Version',
+  },
+  basic: {
+    zh: '基础信息',
+    en: 'Basic',
   },
   listener: {
     zh: '监听器',
@@ -236,7 +256,7 @@ export default
     en: 'Message Drop',
   },
   topics: {
-    zh: '路由',
+    zh: '主题',
     en: 'Topics',
   },
   Subscription: {
