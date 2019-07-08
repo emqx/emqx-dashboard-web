@@ -2,9 +2,9 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 import Waves from 'vue-directive-waves'
 import VueI18n from 'vue-i18n'
+import ElementLocale from 'element-ui/lib/locale'
 import lang from './i18n'
 
-import ElementLocale from 'element-ui/lib/locale'
 
 import installer from '@/common/installer'
 import '@/assets/style/common.scss'
@@ -19,7 +19,7 @@ Vue.use(ElementUI)
 Vue.use(Waves)
 
 const i18n = new VueI18n({
-  locale: window.localStorage.language || (window.EMQX_DASHBOARD_CONFIG || {}).lang || 'en',
+  locale: store.state.lang,
   messages: lang,
 })
 

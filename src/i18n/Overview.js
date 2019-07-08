@@ -16,7 +16,7 @@ export default
     en: 'System Time',
   },
   uptime: {
-    zh: '启动时间',
+    zh: '启动时长',
     en: 'Uptime',
   },
   currentConnection: {
@@ -99,9 +99,9 @@ export default
     zh: '监听地址',
     en: 'Address',
   },
-  connect: {
-    zh: '连接',
-    en: 'Connect',
+  connectCurrentAndMax: {
+    zh: '连接(当前/最大)',
+    en: 'Connect(Current/Max)',
   },
   current: {
     zh: '当前',
@@ -116,14 +116,10 @@ export default
     en: 'Data List',
   },
   packetStatisticsOfNodes: {
-    zh: '节点的报文信息',
-    en: 'Packet statistics of nodes',
+    zh: '节点的报文信息, 消息统计与流量收发统计',
+    en: 'Packet statistics of nodes、Message I/O Statistics',
   },
-  messageIOStatistics: {
-    zh: '消息统计与流量收发统计',
-    en: 'Message I/O Statistics',
-  },
-  packages: {
+  mqttPackages: {
     zh: '报文',
     en: 'Packages',
   },
@@ -132,11 +128,7 @@ export default
     en: 'Messages',
   },
   traffic: {
-    zh: '流量收发',
-    en: 'Traffic',
-  },
-  byte: {
-    zh: '字节',
+    zh: '流量收发(字节)',
     en: 'Byte',
   },
   mainConfiguration: {
@@ -187,6 +179,10 @@ export default
     zh: '集群订阅关系数',
     en: 'Topics',
   },
+  connection: {
+    zh: '连接',
+    en: 'Connection',
+  },
   connectionNumber: {
     zh: '连接数',
     en: 'Connections',
@@ -204,8 +200,8 @@ export default
     en: 'Customer',
   },
   numberOfConnectionLines: {
-    zh: '连接线数',
-    en: 'Number of max connections',
+    zh: 'License 使用情况',
+    en: 'License usage',
   },
   issuanceOfEmail: {
     zh: '签发邮箱',
@@ -226,6 +222,10 @@ export default
   forTrialEdition: {
     zh: '当前 License 为试用版',
     en: 'The license is trial edition',
+  },
+  license: {
+    zh: 'License 信息',
+    en: 'License',
   },
   trialEdition: {
     zh: '试用版',

@@ -44,10 +44,12 @@ body {
 .el-button {
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
   font-weight: normal;
+
   &.el-button--small {
     font-size: 14px;
     padding: 8px 15px;
   }
+
   //transition: all 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
 
   //&:hover {
@@ -397,13 +399,22 @@ body {
 
 .el-radio-group {
   font-weight: normal;
+
   .el-radio-button__inner {
     font-weight: normal;
   }
+
   &[border] {
     .el-radio-button__orig-radio:checked + .el-radio-button__inner {
       background-color: #fff;
       color: #34C388;
     }
+  }
+}
+
+.el-dropdown-menu__item {
+  &.active {
+    background-color: #ebf9f3;
+    color: #5dcfa0;
   }
 }

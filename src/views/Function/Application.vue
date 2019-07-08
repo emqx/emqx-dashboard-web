@@ -25,7 +25,7 @@
         <div class="page-header-content-view">
           <div class="content">
             <p class="description">
-              应用为调用RESTAPI认证凭证，通过RESTAPI可查询、调整EMQX集群信息，对设备进行管理操作
+              {{ $t('Function.applicationIsCalled') }}
             </p>
 
             <div class="page-header-link">
@@ -54,7 +54,7 @@
 
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="app_id" label="应用ID">
+          <el-table-column prop="app_id" label="AppID">
             <template slot-scope="{ row }">
               <span class="btn" @click="showDialog('view', row)">
                 {{ row.app_id }}
@@ -109,7 +109,7 @@
       >
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item prop="app_id" label="应用ID">
+            <el-form-item prop="app_id" label="AppID">
               <el-input
                 v-model="record.app_id"
                 :readonly="accessType !== 'create'"
@@ -213,7 +213,7 @@ export default {
         desc: '',
       },
       rules: {
-        name: [{ required: true, message: this.$t('Function.pleaseEnterAppName.') }],
+        name: [{ required: true, message: this.$t('Function.pleaseEnterAppName') }],
         app_id: [{ required: true, message: this.$t('Function.pleaseEnterTheAppId') }],
         status: [{ required: true, message: this.$t('Function.pleaseChoose') }],
       },

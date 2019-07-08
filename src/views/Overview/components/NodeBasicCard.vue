@@ -18,7 +18,7 @@
           <ul class="field-info">
             <li class="field-info-item">
               <div class="field-title">
-                系统时间:
+                {{ $t('Overview.systemTime') }}:
               </div>
               <span class="field-value">
                 {{ record.datetime }}
@@ -27,7 +27,7 @@
 
             <li class="field-info-item">
               <div class="field-title">
-                启动时间:
+                {{ $t('Overview.uptime') }}:
               </div>
               <span class="field-value">
                 {{ record.uptime }}
@@ -45,7 +45,7 @@
 
             <li class="field-info-item">
               <div class="field-title">
-                当前连接:
+                {{ $t('Overview.currentConnection') }}:
               </div>
               <span class="field-value">
                 {{ record.connections }}
@@ -54,7 +54,7 @@
 
             <li class="field-info-item">
               <div class="field-title">
-                节点状态:
+                {{ $t('Overview.nodeState') }}:
               </div>
               <span class="field-value">
                 <a-badge
@@ -76,7 +76,7 @@
           <ul class="field-info">
             <li class="field-info-item">
               <div class="field-title">
-                内存:
+                {{ $t('Overview.memory') }}:
               </div>
               <span class="field-value">
                 {{ record.memory_used }} / {{ record.memory_total }}
@@ -85,7 +85,7 @@
 
             <li class="field-info-item">
               <div class="field-title">
-                最大文件句柄:
+                {{ $t('Overview.maxFds') }}:
               </div>
               <span class="field-value">
                 {{ record.max_fds }}
@@ -94,7 +94,7 @@
 
             <li class="field-info-item">
               <div class="field-title">
-                Erlang 进程:
+                Erlang {{ $t('Overview.process') }}:
               </div>
               <span class="field-value">
                 {{ record.process_used }} / {{ record.process_available }}
@@ -103,7 +103,7 @@
 
             <li class="field-info-item">
               <div class="field-title">
-                CPU 负载
+                CPU {{ $t('Overview.load') }}
                 <el-popover
                   trigger="hover"
                   content="load1/load4/load15"
@@ -173,7 +173,7 @@ export default {
   align-items: center;
 
   .field-title {
-    width: 100px;
+    width: 110px;
   }
 
   .version-wrapper {

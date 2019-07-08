@@ -15,7 +15,7 @@ export default
   },
   host: {
     zh: '主机名',
-    en: 'host',
+    en: 'Host',
   },
   port: {
     zh: '端口',

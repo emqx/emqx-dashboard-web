@@ -112,7 +112,7 @@ export default {
 
   methods: {
     deleteResource(row) {
-      this.$msgbox.confirm('此操作将停用并删除该资源,确认继续?', {
+      this.$msgbox.confirm(this.$t('RuleEngine.deleteResource'), {
         confirmButtonText: this.$t('RuleEngine.confirm'),
         cancelButtonText: this.$t('RuleEngine.cancel'),
         type: 'warning',

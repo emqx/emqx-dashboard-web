@@ -79,7 +79,7 @@ export default
   },
   abnormal: {
     zh: '异常',
-    en: 'abnormal',
+    en: 'Alarm',
   },
   second: {
     zh: '次',

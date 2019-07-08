@@ -31,7 +31,7 @@
 
           <div class="content">
             <emq-count-to v-model="currentMetrics.sent"></emq-count-to>
-            <span class="unit">{{ $t('Overview.strip') }}/秒</span>
+            <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
 
             <div class="flux-wrapper">
               <simple-line v-model="currentMetricsLogs.sent" type="bar" color="#34c388"></simple-line>
@@ -54,7 +54,7 @@
 
           <div class="content">
             <emq-count-to v-model="currentMetrics.received"></emq-count-to>
-            <span class="unit">{{ $t('Overview.strip') }}/秒</span>
+            <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
 
             <div class="flux-wrapper">
               <simple-line v-model="currentMetricsLogs.received" type="bar"></simple-line>
@@ -167,7 +167,7 @@
 
     <a-card class="license-card" :loading="pageLoading">
       <div class="emq-title">
-        莱森斯信息
+        {{ $t('Overview.license') }}
       </div>
 
       <ul class="license-field">
@@ -206,7 +206,7 @@
           {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>
         <div v-if="license.type = 'trial'" class="oper">
-          <el-tooltip effect="dark" content="当前莱森斯为试用版" placement="top" :visible-arrow="false">
+          <el-tooltip effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false">
             <el-button type="danger" size="small" @click="upgradeLicense">{{ $t('Overview.trialEdition') }}</el-button>
           </el-tooltip>
         </div>
@@ -274,7 +274,7 @@ export default {
         sent: that.$t('Overview.messageOut'),
         received: that.$t('Overview.messageIn'),
         dropped: that.$t('Overview.messageDrop'),
-        connection: that.$t('Overview.connect'),
+        connection: that.$t('Overview.connection'),
         route: that.$t('Overview.topics'),
         subscriptions: that.$t('Overview.Subscription'),
       },
@@ -487,7 +487,7 @@ export default {
   }
 
   .node-basic-card {
-    max-width: 800px;
+    max-width: 1200px;
   }
 
   .flux-wrapper {

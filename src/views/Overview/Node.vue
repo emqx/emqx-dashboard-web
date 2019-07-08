@@ -63,7 +63,7 @@
             <el-table-column prop="protocol" min-width="100px" :label="$t('Overview.listenerProtocol')"></el-table-column>
             <el-table-column prop="listen_on" min-width="80px" :label="$t('Overview.listenerAddress')"></el-table-column>
             <el-table-column prop="acceptors" min-width="60px" label="Acceptors"></el-table-column>
-            <el-table-column prop="current_conns" min-width="120px" label="连接(当前/最大)">
+            <el-table-column prop="current_conns" min-width="120px" :label="$t('Overview.connectCurrentAndMax')">
               <template slot-scope="{ row }">
                 {{ row.current_conns }}/{{ row.max_conns }}
               </template>
@@ -80,7 +80,7 @@
           <div class="emq-title">
             {{ $t('Overview.dataList') }}
             <div class="sub-title">
-              节点的报文信息、消息统计与流量收发统计
+              {{ $t('Overview.packetStatisticsOfNodes') }}
             </div>
           </div>
 
@@ -88,7 +88,7 @@
           <el-row :gutter="30">
             <el-col :span="8">
               <el-table :data="metricsData.packets">
-                <el-table-column prop="key" label="MQTT 报文" min-width="100px"></el-table-column>
+                <el-table-column prop="key" :label="$t('Overview.mqttPackages')" min-width="100px"></el-table-column>
                 <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
               </el-table>
             </el-col>
@@ -102,7 +102,7 @@
 
             <el-col :span="8">
               <el-table :data="metricsData.bytes">
-                <el-table-column prop="key" label="流量收发(字节)" min-width="100px"></el-table-column>
+                <el-table-column prop="key" :label="$t('Overview.traffic')" min-width="100px"></el-table-column>
                 <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
               </el-table>
             </el-col>

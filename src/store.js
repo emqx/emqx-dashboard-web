@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { safeParser } from '@/common/utils'
+import { safeParser, getDefaultLanguage } from '@/common/utils'
 
 Vue.use(Vuex)
 
@@ -9,10 +9,18 @@ export default new Vuex.Store({
   state: {
     loading: false,
     user: JSON.parse(localStorage.user || sessionStorage.user || '{}') || {},
-    lang: 'zh',
+    lang: getDefaultLanguage(),
     leftBarCollapse: false, // localStorage.getItem('leftBarCollapse'),
   },
   actions: {
+    SET_LANGUAGE({ commit }, lang = 'en') {
+      localStorage.setItem('language', lang)
+      commit('SET_LANGUAGE', lang)
+      console.log('SET_LANGUAGE')
+      setTimeout(() => {
+        location.reload()
+      }, 400)
+    },
     SET_LEFT_BAR_COLLAPSE({ commit }, collapse = false) {
       // localStorage.setItem('leftBarCollapse', collapse ? 'true' : '')
       commit('SET_LEFT_BAR_COLLAPSE', !!collapse)
@@ -45,6 +53,9 @@ export default new Vuex.Store({
     SET_LEFT_BAR_COLLAPSE(state, collapse) {
       // eslint-disable-next-line
       state.leftBarCollapse = collapse
+    },
+    SET_LANGUAGE(state, lang) {
+      state.lang = lang
     },
   },
 })

@@ -6,6 +6,10 @@ export default
     '主题通配符',
     '规则引擎使用说起来语句配置二面消息流与设备事件的处理规则，内置多种灵活的数据处理方案',
   ],
+  deleteResource: {
+    zh: '此操作将停用并删除该资源,确认继续?',
+    en: 'This operation will disable and delete the resource',
+  },
   createResources: {
     zh: '创建资源',
     en: 'Create',
@@ -16,7 +20,7 @@ export default
   },
   testConnection: {
     zh: '测试连接',
-    en: 'Test Connection',
+    en: 'Test',
   },
   remark: {
     zh: '备注',
@@ -147,8 +151,8 @@ export default
     en: 'Condition',
   },
   definingRuleConditionsAndDataProcessing: {
-    zh: '使用SQL定义规则条件与数据处理方式',
-    en: 'Defining Rule Conditions and Data Processing By SQL',
+    zh: '规则引擎使用 SQL 定义规则条件与数据处理方式,内置多种灵活的数据处理方案',
+    en: 'Defining Rule Engine Conditions and Data Processing By SQL',
   },
   triggerEvent: {
     zh: '触发事件',
@@ -170,9 +174,9 @@ export default
     zh: '筛选条件',
     en: 'Conditions',
   },
-  test: {
-    zh: '测试',
-    en: 'Test',
+  sqlTest: {
+    zh: 'SQL 测试',
+    en: 'SQL Test',
   },
   inputMetadata: {
     zh: '输入元数据进行 SQL 匹配测试',
@@ -236,7 +240,7 @@ export default
   },
   productDocumentation: {
     zh: '产品文档',
-    en: 'Documentation',
+    en: 'Document',
   },
   monitor: {
     zh: '监控',

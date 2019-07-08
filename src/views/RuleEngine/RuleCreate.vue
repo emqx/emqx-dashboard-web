@@ -105,7 +105,7 @@
                 <el-input v-model="record.tiaojian" placeholder="e.g payload.speed > 60"></el-input>
               </el-form-item>
 
-              <el-form-item label="SQL测试">
+              <el-form-item :label="$t('RuleEngine.sqlTest')">
                 <el-switch v-model="showTest" @change="handlePreSQLTest"></el-switch>
                 <el-popover width="220" placement="top" trigger="hover">
                   {{ $t('RuleEngine.inputMetadata') }}

@@ -63,11 +63,11 @@ export default
   },
   application: {
     zh: '应用',
-    en: 'application',
+    en: 'Application',
   },
   user: {
     zh: '用户',
-    en: 'User',
+    en: 'Users',
   },
   settings: {
     zh: '系统设置',
@@ -97,7 +97,7 @@ export default
     zh: '系统有',
     en: 'The system has',
   },
-  'noteAlert,ClickView': {
+  noteAlertClickView: {
     zh: '条告警，点击查看',
     en: 'alerts, Click to view',
   },

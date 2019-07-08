@@ -88,7 +88,7 @@ export default
     en: 'Disconnect',
   },
   'thisOperationWillDisconnectTheConnection.': {
-    zh: '此操作将断开该连接,连接可能通过重连机制再次重连,确认继续,',
+    zh: '此操作将断开该连接,连接可能通过重连机制再次重连,确认继续?',
     en: 'This operation will disconnect the connection',
   },
   confirm: {
@@ -135,8 +135,8 @@ export default
     zh: '协议类型',
     en: 'Protocol Type',
   },
-  cert: {
-    zh: '证书',
+  sslCert: {
+    zh: 'SSL 证书',
     en: 'Cert',
   },
   zone: {
@@ -160,7 +160,7 @@ export default
     en: 'Online',
   },
   'thisActionWillCancelSubscriptionToTheTopic.': {
-    zh: '此操作将取消订阅该主题,',
+    zh: '此操作将取消订阅该主题',
     en: 'This action will cancel subscription to the topic',
   },
 }

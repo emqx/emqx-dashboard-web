@@ -11,10 +11,10 @@
   >
     <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
       <el-form-item v-if="!clientId" prop="client_id" label="Client ID">
-        <el-input v-model="record.client_id" placeholder="请输入 Client ID"></el-input>
+        <el-input v-model="record.client_id" placeholder="Client ID"></el-input>
       </el-form-item>
       <el-form-item prop="topic" label="Topic">
-        <el-input v-model="record.topic" placeholder="请输入 Topic"></el-input>
+        <el-input v-model="record.topic" placeholder="Topic"></el-input>
       </el-form-item>
       <el-form-item prop="qos" label="QoS">
         <emq-select v-model.sync="record.qos" :field="{ list: [0, 1, 2] }"></emq-select>

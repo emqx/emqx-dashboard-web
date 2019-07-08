@@ -1,9 +1,12 @@
-export default
-{
+export default {
   __not: [],
   homePage: {
     zh: '首页',
     en: 'Home',
+  },
+  unit: {
+    zh: '个插件',
+    en: '',
   },
   plugin: {
     zh: '插件',
@@ -25,8 +28,12 @@ export default
     zh: '个',
     en: '',
   },
-  stopped: {
+  stop: {
     zh: '停止',
+    en: 'Stop',
+  },
+  stopped: {
+    zh: '已停止',
     en: 'Stopped',
   },
   pluginsList: {
@@ -75,23 +82,23 @@ export default
   },
   backend: {
     zh: '持久化',
-    en: 'backend',
+    en: 'Backend',
   },
   bridge: {
     zh: '桥接',
-    en: 'bridge',
+    en: 'Bridge',
   },
   protocol: {
     zh: '协议',
-    en: 'protocol',
+    en: 'Protocol',
   },
   other: {
     zh: '其他',
-    en: 'other',
+    en: 'Other',
   },
-  'thisActionWillStopThePlugIn.': {
+  thisActionWillStopThePlugIn: {
     zh: '此操作将停止该插件,确认继续?',
-    en: 'This action stops the plugin',
+    en: 'Confirm to stops the plugin?',
   },
   confirm: {
     zh: '确定',
@@ -107,7 +114,7 @@ export default
   },
   pluginTips: {
     zh: '该功能仅做调试使用，配置将在 Broker 重启后将丢失，请将配置写入相应配置文件',
-    en: 'This function is only used for debugging, and the configuration will be lost when broker restart',
+    en: 'The module is only used for debugging or testing, and the configuration will be lost when broker restart',
   },
   configuration: {
     zh: '配置信息',

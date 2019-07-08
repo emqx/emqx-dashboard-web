@@ -140,7 +140,7 @@ export default {
       const stateMap = {
         0: this.$t('Alerts.normal'),
       }
-      return stateMap[state] || `异常 ${state} 次`
+      return stateMap[state] || `${this.$t('Alerts.abnormal')} ${state} ${this.$t('Alerts.second')}`
     },
   },
 }

@@ -31,19 +31,19 @@
       <a-card class="count-list">
         <div class="count-left">
           <div class="count-title">{{ $t('Plugins.numberOfPlugIns') }}</div>
-          <div class="count-result">{{ state.count }}个插件</div>
+          <div class="count-result">{{ state.count }}</div>
         </div>
         <div class="count-center">
           <div class="count-title">
             {{ $t('Plugins.running') }}
           </div>
-          <div class="count-result">{{ state.running }}个</div>
+          <div class="count-result">{{ state.running }}</div>
         </div>
         <div class="count-right">
           <div class="count-title">
             {{ $t('Plugins.stopped') }}
           </div>
-          <div class="count-result">{{ state.stop }}个</div>
+          <div class="count-result">{{ state.stop }}</div>
         </div>
       </a-card>
 
@@ -82,7 +82,7 @@
                 {{ $t('Plugins.running') }}
               </el-radio-button>
               <el-radio-button label="0">
-                {{ $t('Plugins.stopped') }}
+                {{ $t('Plugins.stop') }}
               </el-radio-button>
               <el-radio-button label="wivwiv">
                 {{ $t('Plugins.all') }}
@@ -162,7 +162,9 @@
         >
           <el-table-column prop="name" min-width="110px" :label="$t('Plugins.pluginName')"></el-table-column>
           <el-table-column prop="version" min-width="80px" :label="$t('Plugins.version')"></el-table-column>
-          <el-table-column prop="description" min-width="160px" show-overflow-tooltip :label="$t('Plugins.describe')"></el-table-column>
+          <el-table-column prop="description" min-width="160px" show-overflow-tooltip
+                           :label="$t('Plugins.describe')"
+          ></el-table-column>
           <el-table-column
             prop="type"
             min-width="100px"
@@ -269,7 +271,6 @@ export default {
           console.log(e)
         }
       })
-      console.log(iconMap)
       return iconMap
     },
     toConfig(item = {}) {
@@ -304,7 +305,6 @@ export default {
         const active = this.status === '1'
         list = list.filter($ => $.active === active)
       }
-      console.log(list, 'x')
       this.listTableData = list
     },
     async togglePlugin(row) {
@@ -313,7 +313,7 @@ export default {
         row.active = true
         return
       }
-      this.$msgbox.confirm(this.$t('Plugins.thisActionWillStopThePlugIn.'), {
+      this.$msgbox.confirm(this.$t('Plugins.thisActionWillStopThePlugIn'), {
         confirmButtonText: this.$t('Plugins.confirm'),
         cancelButtonText: this.$t('Plugins.cancel'),
         type: 'warning',

@@ -4,6 +4,8 @@ import moment from 'moment'
 import store from '@/store'
 import router from '@/router'
 
+const { lang = 'zh' } = store.state
+
 import { en as enDocsLink, zh as zhDocsLink } from '@/common/link_urls'
 
 export function getBasicAuthInfo() {
@@ -148,8 +150,11 @@ export function renderParamsForm(params = {}, propPrefix = '') {
 
     // rules 的属性
     rules[k] = []
+    const requiredInputText = lang === 'zh' ? '请输入' : 'Field required'
+    const requiredSelectText = lang === 'zh' ? '请选择' : 'Please select'
+
     if (required) {
-      rules[k].push({ required: true, message: elType === 'input' ? '请输入' : '请选择' })
+      rules[k].push({ required: true, message: elType === 'input' ? requiredInputText : requiredSelectText })
     }
     if (enumValue) {
       rules[k].push({ type: 'enum', enum: enumValue })
@@ -193,4 +198,18 @@ export function toTableData(metric = {}) {
     data.push(row)
   }
   return { data, nodes }
+}
+
+function checkLanguage(lang) {
+  if (['en', 'zh'].includes(lang)) {
+    return lang
+  }
+  return ''
+}
+
+export function getDefaultLanguage() {
+  const browserLanguage = checkLanguage(navigator.language.substr(0, 2))
+  const localStorageLanguage = checkLanguage(localStorage.getItem('language'))
+  const defaultLanguage = (window.EMQX_CONFIG || {}).language
+  return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
 }

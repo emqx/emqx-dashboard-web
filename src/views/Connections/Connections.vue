@@ -31,7 +31,7 @@
       <a-card class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
           <div class="search-wrapper">
-            <el-input v-model="searchValue" size="small" placeholder="输入 client id"></el-input>
+            <el-input v-model="searchValue" size="small" placeholder="Client id"></el-input>
             <el-button type="primary" size="small" @click="handleSearch">{{ $t('Connections.search') }}</el-button>
             <el-button plain size="small" @click="resetSearch">
               {{ searchValue ? $t('Connections.reset') : $t('Connections.refresh') }}

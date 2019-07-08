@@ -96,7 +96,7 @@
                 <span class="field-value">{{ record.proto_ver }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">SSL 证书:</div>
+                <div class="field-title">{{ $t('Connections.sslCert') }} }}:</div>
                 <span class="field-value">{{ record.peercert }}</span>
               </li>
               <li class="field-info-item">
@@ -124,9 +124,11 @@
           <el-table-column prop="topic" min-width="110px" show-overflow-tooltip label="Topic"></el-table-column>
           <el-table-column prop="qos" min-width="110px" label="QoS"></el-table-column>
           <el-table-column prop="node" min-width="80px" :label="$t('Connections.node')"></el-table-column>
-          <el-table-column prop="client_id" width="80px">
+          <el-table-column prop="client_id" width="100px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="handleUnSubscription(row)">{{ $t('Connections.unsubscribe') }}</el-button>
+              <el-button type="dashed" size="mini" @click="handleUnSubscription(row)">
+                {{ $t('Connections.unsubscribe') }}
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -217,7 +219,7 @@ export default {
       if (this.record.disconnected) {
         return
       }
-      this.$msgbox.confirm('此操作将断开该连接,连接可能通过重连机制再次重连,确认继续?', {
+      this.$msgbox.confirm(this.$t('Connections.thisOperationWillDisconnectTheConnection'), {
         confirmButtonText: this.$t('Connections.confirm'),
         cancelButtonText: this.$t('Connections.cancel'),
         type: 'warning',
@@ -241,7 +243,7 @@ export default {
       this.loadData()
     },
     handleUnSubscription(row) {
-      this.$msgbox.confirm('此操作将取消订阅该主题, 确认继续?', {
+      this.$msgbox.confirm(this.$t('Connections.thisActionWillCancelSubscriptionToTheTopic'), {
         confirmButtonText: this.$t('Connections.confirm'),
         cancelButtonText: this.$t('Connections.cancel'),
         type: 'warning',

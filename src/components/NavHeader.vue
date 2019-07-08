@@ -12,11 +12,12 @@
 
 
     <div class="pull-right">
-      <el-tooltip effect="dark" content="使用文档" placement="bottom" :visible-arrow="false">
-        <div class="document-link func-item">
-          <i class="iconfont icon-icon_yiwenkongxin"></i>
-        </div>
-      </el-tooltip>
+      <!-- TODO: 补充使用情况 -->
+      <!--<el-tooltip effect="dark" :content="$t('components.usingDocuments')" placement="bottom" :visible-arrow="false">-->
+      <!--<div class="document-link func-item">-->
+      <!--<i class="iconfont icon-icon_yiwenkongxin"></i>-->
+      <!--</div>-->
+      <!--</el-tooltip>-->
 
 
       <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
@@ -43,6 +44,17 @@
       </el-dropdown>
 
 
+      <el-dropdown placement="bottom" class="user-info-dropdown" @command="handleLanguageDropdownCommand">
+        <div class="user-info func-item">
+          <span>
+            <i class="iconfont icon-i18n"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="en" :class="{ active: language === 'en' }">English</el-dropdown-item>
+            <el-dropdown-item command="zh" :class="{ active: language === 'zh' }">中文</el-dropdown-item>
+          </el-dropdown-menu>
+        </div>
+      </el-dropdown>
       <!--<div class="i18n-link func-item"></div>-->
     </div>
   </div>
@@ -73,7 +85,10 @@ export default {
       return this.$store.state.user.username || this.$t('components.notLoggedIn')
     },
     alertText() {
-      return this.alertCount > 0 ? `系统有 ${this.alertCount} 条告警，点击查看` : this.$t('components.noWarning')
+      return this.alertCount > 0 ? `${this.$t('components.theSystemHas')} ${this.alertCount} ${this.$t('components.noteAlertClickView')}` : this.$t('components.noWarning')
+    },
+    language() {
+      return this.$store.state.lang
     },
   },
 
@@ -86,6 +101,13 @@ export default {
   },
 
   methods: {
+    handleLanguageDropdownCommand(command) {
+      if (this.language === command) {
+        console.log(this.language === command)
+        return
+      }
+      this.$store.dispatch('SET_LANGUAGE', command)
+    },
     clearAlert() {
       // this.alertCount = 0
     },

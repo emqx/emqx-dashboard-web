@@ -24,7 +24,7 @@
         <div class="page-header-content-view">
           <div class="content">
             <p class="description">
-              规则引擎使用说起来语句配置二面消息流与设备事件的处理规则，内置多种灵活的数据处理方案。
+              {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
             </p>
             <div class="page-header-link">
               <a :href="docs.tutorial" target="_blank" class="link-item">
@@ -107,31 +107,31 @@
           <div class="metrics-item-title">{{ $t('RuleEngine.ruleMetrics') }}</div>
           <ul class="metrics-item-body value-item-wrapper">
             <li class="value-item">
-              命中次数:
+              {{ $t('RuleEngine.matched') }}:
               <span class="value">
                 {{ currentRules.metrics.matched }}
                 <span class="unit">{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
             <li class="value-item">
-              当前执行速度:
+              {{ $t('RuleEngine.currentSpeed') }}:
               <span class="value">
                 {{ currentRules.metrics.speed }}
-                <span class="unit">{{ $t('RuleEngine.second') }}/秒</span>
+                <span class="unit">{{ $t('RuleEngine.second') }}/{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
             <li class="value-item">
-              最大执行速度:
+              {{ $t('RuleEngine.maximumSpeed') }}:
               <span class="value">
                 {{ currentRules.metrics.speed_max }}
-                <span class="unit">{{ $t('RuleEngine.second') }}/秒</span>
+                <span class="unit">{{ $t('RuleEngine.second') }}/{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
             <li class="value-item">
-              最近5分钟执行速度:
+              {{ $t('RuleEngine.last5MinutesSpeed') }}:
               <span class="value">
                 {{ currentRules.metrics.speed_last5m }}
-                <span class="unit">{{ $t('RuleEngine.second') }}/秒</span>
+                <span class="unit">{{ $t('RuleEngine.second') }}/{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
           </ul>
@@ -150,14 +150,14 @@
 
 
               <li class="value-item">
-                成功:
+                {{ $t('RuleEngine.success') }}:
                 <span class="value">
                   {{ item.metrics.success }}
                 </span>
               </li>
 
               <li class="value-item">
-                失败:
+                {{ $t('RuleEngine.fail') }}:
                 <span class="value">
                   {{ item.metrics.failed }}
                 </span>
