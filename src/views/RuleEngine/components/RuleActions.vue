@@ -31,7 +31,7 @@
       </div>
 
       <div v-if="item._value" class="action-item-params">
-        <div v-for="(item2, j) in item._value" class="action-item-field">
+        <div v-for="(item2, j) in item._value" :key="j" class="action-item-field">
           <div class="title">{{ item2.label }}</div>
           <div class="value">{{ item2.value }}</div>
         </div>
@@ -40,10 +40,20 @@
     </div>
 
 
-    <el-button v-if="!disabled" size="small" icon="el-icon-plus" @click="addAction">{{ $t('RuleEngine.addAction') }}</el-button>
+    <el-button
+      v-if="!disabled"
+      size="small"
+      icon="el-icon-plus"
+      @click="addAction"
+    >
+      {{ $t('RuleEngine.addAction') }}
+    </el-button>
 
-
-    <el-dialog :visible.sync="addActionDialogVisible" :title="$t('RuleEngine.addActions')" width="520px">
+    <el-dialog
+      :visible.sync="addActionDialogVisible"
+      :title="$t('RuleEngine.addActions')"
+      width="520px"
+    >
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
         <el-form-item prop="name" :label="$t('RuleEngine.actionType')">
           <emq-select
@@ -72,9 +82,9 @@
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="resource-option">
-              <span class="resource-state">
-                <a-badge :status="item.status.is_alive ? 'success' : 'error'"></a-badge>
-              </span>
+              <!--<span class="resource-state">-->
+                <!--<a-badge :status="item.status.is_alive ? 'success' : 'error'"></a-badge>-->
+              <!--</span>-->
               <span class="resource-id">{{ item.id }}</span>
               <span class="resource-name">{{ item.config.title }}</span>
             </div>
@@ -87,17 +97,28 @@
 
         <div v-if="selectedAction.params.$resource" class="line"></div>
 
-        <el-row v-if="paramsLoading || paramsList.length > 0" class="params-item-wrapper" :gutter="50">
+        <el-row
+          v-if="paramsLoading || paramsList.length > 0"
+          class="params-item-wrapper" :gutter="50"
+        >
           <div v-if="paramsLoading" class="params-loading-wrapper">
             <a-skeleton active></a-skeleton>
           </div>
           <template v-else>
-            <el-col v-for="(item, i) in paramsList" :key="i" :span="item.type === 'textarea' ? 24 : 12">
+            <el-col
+              v-for="(item, i) in paramsList"
+              :key="i"
+              :span="item.type === 'textarea' ? 24 : 12"
+            >
               <el-form-item v-bind="item.formItemAttributes">
                 <template v-if="item.formItemAttributes.description" slot="label">
                   {{ item.formItemAttributes.label }}
                   <el-popover trigger="hover" width="220" placement="top">
-                    <div class="emq-popover-content" v-html="item.formItemAttributes.description"></div>
+                    <div
+                      class="emq-popover-content"
+                      v-html="item.formItemAttributes.description"
+                    >
+                    </div>
                     <i slot="reference" class="el-icon-question"></i>
                   </el-popover>
                 </template>

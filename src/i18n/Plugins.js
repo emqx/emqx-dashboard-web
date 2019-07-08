@@ -1,5 +1,9 @@
 export default {
   __not: [],
+  listNull: {
+    zh: '列表为空,请调整过滤条件再试',
+    en: 'Empty. Please change the filter and try again'
+  },
   homePage: {
     zh: '首页',
     en: 'Home',

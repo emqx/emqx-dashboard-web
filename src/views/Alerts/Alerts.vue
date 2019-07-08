@@ -131,6 +131,7 @@ export default {
     async loadData() {
       if (this.alertType === 'present') {
         this.tableData = await loadAlarm()
+        this.$store.dispatch('SET_ALERT_COUNT', (this.tableData || []).length)
       } else {
         this.tableData = await loadHistoryAlarm()
       }

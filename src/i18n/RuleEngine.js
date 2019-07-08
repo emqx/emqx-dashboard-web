@@ -1,5 +1,4 @@
-export default
-{
+export default {
   __not: [
     '此操作将停用并删除该资源,确认继续',
     '规则要处理的主题，支持',
@@ -261,6 +260,10 @@ export default
   second: {
     zh: '秒',
     en: 'second',
+  },
+  times: {
+    zh: '次',
+    en: 'times',
   },
   currentSpeed: {
     zh: '当前速度',

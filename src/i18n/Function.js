@@ -10,6 +10,10 @@ export default {
     '密码长度为三到三十二位',
     '取消修改密码，删除密码数据',
   ],
+  confirmDelete: {
+    zh: '确认删除应用?',
+    en: 'Confirm delete?'
+  },
   applicationIsCalled: {
     zh: '应用为调用 REST API 认证凭证，通过 REST API 可查询、调整 EMQ X 集群信息，对设备进行管理操作',
     en: 'In order to invoke the certificate of REST API, the application can query and adjust EMQ X cluster information through REST API, and manage and operate the equipment',
@@ -46,8 +50,12 @@ export default {
     zh: '备注',
     en: 'Remark',
   },
-  enabled: {
+  isEnabled: {
     zh: '是否启用',
+    en: 'Is Enabled'
+  },
+  enabled: {
+    zh: '启用',
     en: 'Enabled',
   },
   edit: {
@@ -119,7 +127,7 @@ export default {
     en: 'Users',
   },
   manageDashboardUsers: {
-    zh: '管理 Dashboard 登录用户',
+    zh: 'Dashboard 登录管理用户',
     en: 'Manage Dashboard users',
   },
   userName: {
@@ -182,7 +190,7 @@ export default {
     zh: '请输入新密码',
     en: 'Please enter new password',
   },
-  'pleaseEnterAConfirmationPassword.': {
+  'pleaseEnterAConfirmationPassword': {
     zh: '请输入确认密码',
     en: 'Please enter confirm password.',
   },
@@ -193,5 +201,13 @@ export default {
   determineToDeleteTheUser: {
     zh: '确定删除该用户',
     en: 'Confirm to delete the user',
+  },
+  passwordLength: {
+    zh: '密码长度为 3~32 位',
+    en: 'Password length is 3~32'
+  },
+  confirmDeleteUser: {
+    zh: '确认删除该用户?',
+    en: 'Confirm delete?'
   },
 }

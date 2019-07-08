@@ -34,7 +34,7 @@
           <el-form ref="configForm" hide-required-asterisk :model="connection" size="small" :rules="connectionRules" label-position="top" @keyup.enter.native="createConnection">
 
             <!--<el-form-item prop="protocols" :label="$t('Tools.protocolType')">
-            <!--<emq-select-->
+            <emq-select-->
             <!--v-model="connection.protocols"-->
             <!--:readonly="client.connected"-->
             <!--:field="{ list: ['ws', 'wss'] }"-->
@@ -206,7 +206,8 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item prop="qos" label="QoS">
-                  <emq-select v-model.number="messageRecord.qos" :field="{ list: [0, 1, 2] }" size="small"></emq-select>
+                  <emq-select v-model.number="messageRecord.qos" :field="{ list: [0, 1, 2] }" size="small">
+                  </emq-select>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
@@ -303,7 +304,6 @@ export default {
   props: {},
 
   data() {
-    const that = this
     return {
       times: 0,
       maxTims: 4,
@@ -401,13 +401,13 @@ export default {
   created() { },
 
   methods: {
-    _now() {
+    getNow() {
       return moment().format('HH:mm:ss')
     },
     onMessage(topic, payload, packet = {}) {
       const message = {
         out: false,
-        createAt: this._now(),
+        createAt: this.getNow(),
         topic,
         payload: payload.toString(),
         qos: packet.qos,
@@ -457,7 +457,7 @@ export default {
         return
       }
       const { topic, qos } = this.subscriptionsRecord
-      this.client.subscribe(topic, { qos }, (err, granted) => {
+      this.client.subscribe(topic, { qos }, (err) => {
         if (err) {
           this.$message.error(this.$t('Tools.subscriptionFailure'))
           return
@@ -468,7 +468,7 @@ export default {
         this.subscriptions.unshift({
           topic,
           qos,
-          createAt: this._now(),
+          createAt: this.getNow(),
         })
       })
     },
@@ -493,7 +493,7 @@ export default {
         }
         const message = {
           out: true,
-          createAt: this._now(),
+          createAt: this.getNow(),
           topic,
           payload,
           qos,
@@ -548,7 +548,7 @@ export default {
           return
         }
         const {
-          protocols, host, endpoint, clientId, username, port,
+          clientId, username, port,
           password, reconnectPeriod, keepalive, clean, connectTimeout, will,
         } = this.connection
 

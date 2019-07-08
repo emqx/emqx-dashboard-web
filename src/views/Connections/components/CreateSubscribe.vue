@@ -22,8 +22,8 @@
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
-      <el-button plain size="small" @click="close">{{ $t('Connections.cancel') }}</el-button>
       <el-button type="primary" size="small" @click="handleAdd">{{ $t('Connections.add') }}</el-button>
+      <el-button plain size="small" @click="close">{{ $t('Connections.cancel') }}</el-button>
     </div>
   </el-dialog>
 </template>

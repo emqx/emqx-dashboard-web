@@ -30,11 +30,14 @@
           </div>
 
           <div class="content">
-            <emq-count-to v-model="currentMetrics.sent"></emq-count-to>
+            <!--<emq-count-to v-model="currentMetrics.sent"></emq-count-to>-->
+            <span>
+              {{ currentMetrics.sent }}
+            </span>
             <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
 
             <div class="flux-wrapper">
-              <simple-line v-model="currentMetricsLogs.sent" type="bar" color="#34c388"></simple-line>
+              <simple-line :value="currentMetricsLogs.sent" type="bar" color="#34c388"></simple-line>
             </div>
           </div>
 
@@ -53,7 +56,10 @@
           </div>
 
           <div class="content">
-            <emq-count-to v-model="currentMetrics.received"></emq-count-to>
+            <!--<emq-count-to v-model="currentMetrics.received"></emq-count-to>-->
+            <span>
+              {{ currentMetrics.received }}
+            </span>
             <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
 
             <div class="flux-wrapper">
@@ -76,7 +82,10 @@
           </div>
 
           <div class="content">
-            <emq-count-to v-model="currentMetrics.subscription"></emq-count-to>
+            <!--<emq-count-to v-model="currentMetrics.subscription"></emq-count-to>-->
+            <span>
+              {{ currentMetrics.subscription }}
+            </span>
             <div class="flux-wrapper">
               <simple-line v-model="currentMetricsLogs.subscription" color="#58afff"></simple-line>
             </div>
@@ -114,7 +123,10 @@
             <div class="footer-item">
               {{ $t('Overview.maxConnections') }}
               <span class="item-value">
-                <emq-count-to v-model="state.subscribers_max"></emq-count-to>
+                <!--<emq-count-to v-model="state.subscribers_max"></emq-count-to>-->
+                <span>
+                  {{ currentMetrics.subscription }}
+                </span>
               </span>
             </div>
           </div>
@@ -123,15 +135,16 @@
 
     </el-row>
 
-    <a-card class="node-wrapper" :loading="tableLoading">
+    <a-card class="node-wrapper">
       <div class="emq-title">
         <div class="title">
           {{ $t('Overview.nodeData') }}
         </div>
         <div class="type-filter">
-          <emq-select v-if="dataType === 'basic'" v-model="nodeName" size="mini" style="margin-right: 20px"
-                      :field="{ options: nodes }" :field-name="{ label: 'name', value: 'name' }"
-                      @change="dataTypeChange"
+          <emq-select
+            v-if="dataType === 'basic'" v-model="nodeName" size="mini" style="margin-right: 20px"
+            :field="{ options: nodes }" :field-name="{ label: 'name', value: 'name' }"
+            @change="dataTypeChange"
           ></emq-select>
           <el-radio-group v-model="dataType" size="mini" @change="dataTypeChange">
             <el-radio-button v-for="(item, i) in dataTypeFilter" :key="i" :label="item.value">
@@ -155,12 +168,20 @@
 
       </div>
 
-      <div v-else v-loading="tableLoading" class="basic" style="margin-bottom: -32px">
-        <div v-if="activeMetrics.data.length === 0 && !tableLoading" class="data-list">
-          <p>{{ $t('Overview.noData') }}</p>
+      <template v-else>
+        <div
+          v-for="item in dataTypeFilter"
+          v-if="dataType === item.value"
+          :key="item.value"
+          class="basic"
+          style="margin-bottom: -32px"
+        >
+          <div v-if="metricLog[item.value].data.length === 0" class="data-list">
+            <p>{{ $t('Overview.noData') }}</p>
+          </div>
+          <metric-line v-else :value="metricLog[item.value]"></metric-line>
         </div>
-        <metric-line v-else :value="activeMetrics"></metric-line>
-      </div>
+      </template>
 
     </a-card>
 
@@ -488,6 +509,7 @@ export default {
 
   .node-basic-card {
     max-width: 1200px;
+    height: 364px;
   }
 
   .flux-wrapper {

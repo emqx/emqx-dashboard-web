@@ -65,7 +65,7 @@
 
           <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
-              <el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">{{ $t('RuleEngine.reconnect') }}</el-button>
+              <!--<el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">{{ $t('RuleEngine.reconnect') }}</el-button>-->
               <el-button type="dashed" size="mini" @click="deleteResource(row)">{{ $t('RuleEngine.delete') }}</el-button>
             </template>
           </el-table-column>

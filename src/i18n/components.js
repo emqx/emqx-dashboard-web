@@ -31,7 +31,7 @@ export default
   },
   connect: {
     zh: '连接',
-    en: 'Connect',
+    en: 'Connections',
   },
   rule: {
     zh: '规则',

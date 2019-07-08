@@ -8,8 +8,8 @@ export default
     '莱森斯信息',
   ],
   details: {
-    zh: '详情',
-    en: 'Details',
+    zh: '查看',
+    en: 'View',
   },
   systemTime: {
     zh: '系统时间',
@@ -61,7 +61,7 @@ export default
   },
   nodeData: {
     zh: '节点数据',
-    en: 'Node',
+    en: 'Nodes',
   },
   currentNodeInfo: {
     zh: '当前节点信息如下',
@@ -89,7 +89,7 @@ export default
   },
   ListeningPorts: {
     zh: '当前监听端口列表',
-    en: 'Listening ports',
+    en: 'Listening address and ports',
   },
   listenerProtocol: {
     zh: '监听协议',

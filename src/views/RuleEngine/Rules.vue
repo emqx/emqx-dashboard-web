@@ -182,13 +182,12 @@ import {
   loadRules, loadRuleDetails, loadActions, destroyRule,
   loadEventsSelect,
 } from '@/api/rules'
-import CodeView from '@/components/CodeView'
 import { getLink } from '@/common/utils'
 
 export default {
   name: 'Rules',
 
-  components: { CodeView },
+  components: {},
 
   props: {},
 

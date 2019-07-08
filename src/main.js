@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import 'babel-polyfill';
 import ElementUI from 'element-ui'
 import Waves from 'vue-directive-waves'
 import VueI18n from 'vue-i18n'

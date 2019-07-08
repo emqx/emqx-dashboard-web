@@ -46,7 +46,7 @@
             </div>
             <div class="card-value">
               {{ record.metricsData.matched }}
-              <span class="card-unit">{{ $t('RuleEngine.second') }}</span>
+              <span class="card-unit">{{ $t('RuleEngine.times') }}</span>
             </div>
             <div class="card-desc">
               {{ $t('RuleEngine.numberOfRulesExecutedAfterEnabling') }}
@@ -58,10 +58,10 @@
             </div>
             <div class="card-value">
               {{ record.metricsData.speed }}
-              <span class="card-unit">{{ $t('RuleEngine.second') }}/{{ $t('RuleEngine.second') }}</span>
+              <span class="card-unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
             </div>
             <div class="card-desc">
-              {{ $t('RuleEngine.maximumSpeed') }}: {{ record.metricsData.speed_max }} {{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }} }}
+              {{ $t('RuleEngine.maximumSpeed') }}: {{ record.metricsData.speed_max }} {{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}
             </div>
           </el-col>
 
@@ -71,7 +71,7 @@
             </div>
             <div class="card-value">
               {{ record.metricsData.speed_last5m }}
-              <span class="card-unit">{{ $t('RuleEngine.second') }}/{{ $t('RuleEngine.second') }}</span>
+              <span class="card-unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
             </div>
             <div class="card-desc">
               {{ $t('RuleEngine.averageExecutionSpeedInTheLast5Minutes') }}

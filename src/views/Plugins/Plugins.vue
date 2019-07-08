@@ -82,7 +82,7 @@
                 {{ $t('Plugins.running') }}
               </el-radio-button>
               <el-radio-button label="0">
-                {{ $t('Plugins.stop') }}
+                {{ $t('Plugins.stopped') }}
               </el-radio-button>
               <el-radio-button label="wivwiv">
                 {{ $t('Plugins.all') }}
@@ -106,53 +106,58 @@
 
 
         <div class="plugin-wrapper">
-          <div v-for="(item, i) in listTableData" :key="i" :gutter="20" class="plugin-item">
+          <template v-if="listTableData.length > 0">
+            <div v-for="(item, i) in listTableData" :key="i" :gutter="20" class="plugin-item">
 
-            <div class="logo">
-              <img
-                :src="iconMap[item.name] || 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png'"
-                alt="plugin-logo"
-              >
-            </div>
+              <div class="logo">
+                <img
+                  :src="iconMap[item.name] || 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png'"
+                  alt="plugin-logo"
+                >
+              </div>
 
-            <div class="header">
-              <div class="name">{{ item.name }}</div>
-              <div class="description">{{ item.description }}</div>
-            </div>
+              <div class="header">
+                <div class="name">{{ item.name }}</div>
+                <div class="description">{{ item.description }}</div>
+              </div>
 
-            <div class="content">
-              <div class="type">{{ typeText(item.type) }}</div>
-              <div class="version">{{ item.version }}</div>
-            </div>
+              <div class="content">
+                <div class="type">{{ typeText(item.type) }}</div>
+                <div class="version">{{ item.version }}</div>
+              </div>
 
-            <div class="state">
-              <a-badge
-                :status="item.active ? 'success' : 'error'"
-                :text="item.active ? $t('Plugins.running') : $t('Plugins.stopped')"
-                dot
-              >
-              </a-badge>
-            </div>
+              <div class="state">
+                <a-badge
+                  :status="item.active ? 'success' : 'error'"
+                  :text="item.active ? $t('Plugins.running') : $t('Plugins.stopped')"
+                  dot
+                >
+                </a-badge>
+              </div>
 
-            <div class="oper">
-              <el-button
-                v-if="!primaryList.includes(item.name)"
-                :type="item.active ? 'danger' : 'dashed'"
-                size="mini"
-                @click="togglePlugin(item)"
-              >
-                {{ item.active ? $t('Plugins.stopped') : $t('Plugins.startRunning') }}
-              </el-button>
-              <span v-else>--</span>
-              <el-button
-                v-if="!primaryList.includes(item.name)"
-                size="mini"
-                type="dashed"
-                @click="toConfig(item)"
-              >
-                {{ $t('Plugins.config') }}
-              </el-button>
+              <div class="oper">
+                <el-button
+                  v-if="!primaryList.includes(item.name)"
+                  :type="item.active ? 'danger' : 'dashed'"
+                  size="mini"
+                  @click="togglePlugin(item)"
+                >
+                  {{ item.active ? $t('Plugins.stopped') : $t('Plugins.startRunning') }}
+                </el-button>
+                <span v-else>--</span>
+                <el-button
+                  v-if="!primaryList.includes(item.name)"
+                  size="mini"
+                  type="dashed"
+                  @click="toConfig(item)"
+                >
+                  {{ $t('Plugins.config') }}
+                </el-button>
+              </div>
             </div>
+          </template>
+          <div v-else class="null-plugins">
+            <p>{{ $t('Plugins.listNull') }}</p>
           </div>
         </div>
 
@@ -442,6 +447,13 @@ export default {
 
   .emq-table-header {
     margin-bottom: 30px;
+  }
+
+  .null-plugins {
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

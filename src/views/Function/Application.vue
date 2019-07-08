@@ -64,7 +64,7 @@
           <el-table-column prop="name" :label="$t('Function.appName')"></el-table-column>
           <el-table-column prop="expired" :formatter="formatterExpired" :label="$t('Function.expireAt')"></el-table-column>
           <el-table-column prop="desc" :label="$t('Function.remark')"></el-table-column>
-          <el-table-column :label="$t('Function.enabled')">
+          <el-table-column :label="$t('Function.isEnabled')">
             <template slot-scope="{ row }">
               <el-switch
                 v-model="row.status"
@@ -139,7 +139,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="status" :label="$t('Function.enabled')">
+            <el-form-item prop="status" :label="$t('Function.isEnabled')">
               <emq-select
                 v-model="record.status"
                 :field="{ options: enableOption }"
@@ -307,7 +307,7 @@ export default {
     },
     deleteConfirm(item) {
       const vue = this
-      this.$msgbox.confirm('确定删除该应用?', {
+      this.$msgbox.confirm(this.$t('Function.confirmDelete'), {
         confirmButtonText: this.$t('Function.confirm'),
         cancelButtonText: this.$t('Function.cancel'),
         type: 'warning',

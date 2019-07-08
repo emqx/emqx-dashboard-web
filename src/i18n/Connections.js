@@ -25,11 +25,11 @@ export default
   },
   connect: {
     zh: '连接',
-    en: 'Connect',
+    en: 'Connections',
   },
   currentConnection: {
     zh: '当前在线连接',
-    en: 'Current connection',
+    en: 'Current Connections',
   },
   input: {
     zh: '输入',
@@ -88,7 +88,7 @@ export default
     en: 'Disconnect',
   },
   'thisOperationWillDisconnectTheConnection.': {
-    zh: '此操作将断开该连接,连接可能通过重连机制再次重连,确认继续?',
+    zh: '此操作将断开该连接,连接可能通过重连机制再次连接,确认继续?',
     en: 'This operation will disconnect the connection',
   },
   confirm: {
@@ -137,7 +137,7 @@ export default
   },
   sslCert: {
     zh: 'SSL 证书',
-    en: 'Cert',
+    en: 'SSL',
   },
   zone: {
     zh: '接入分区',
@@ -159,7 +159,7 @@ export default
     zh: '在线',
     en: 'Online',
   },
-  'thisActionWillCancelSubscriptionToTheTopic.': {
+  unsubscribeTitle: {
     zh: '此操作将取消订阅该主题',
     en: 'This action will cancel subscription to the topic',
   },

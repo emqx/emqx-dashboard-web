@@ -44,15 +44,7 @@
 
         <el-row :gutter="20">
           <el-col :span="15">
-            <el-form
-              ref="record"
-              :model="record"
-              :rules="rules"
-              label-width="120px"
-              label-position="left"
-              size="small"
-              label-suffix=":"
-            >
+            <el-form ref="record" :model="record" :rules="rules" label-width="120px" label-position="left" size="small" label-suffix=":">
 
               <el-form-item prop="for" :label="$t('RuleEngine.triggerEvent')">
                 <emq-select v-model="record.for" :field="{ api: loadEventsSelect }" @change="handleForChange">
@@ -94,12 +86,10 @@
                 </div>
               </el-form-item>
 
-
               <el-form-item prop="field" :label="$t('RuleEngine.selectFiled')">
                 <el-input v-model="record.field" type="textarea" :rows="4" placeholder="e.g payload.speed"></el-input>
                 <!--<span class="tips btn btn-default" @click="toggleTips">{{ $t('RuleEngine.availableField') }}</span>-->
               </el-form-item>
-
 
               <el-form-item prop="tiaojian" :label="$t('RuleEngine.selectConditions')">
                 <el-input v-model="record.tiaojian" placeholder="e.g payload.speed > 60"></el-input>
@@ -115,17 +105,8 @@
 
               <el-collapse-transition>
                 <div v-if="showTest">
-                  <el-form-item
-                    v-for="(field, i) in testField"
-                    :key="i"
-                    :prop="`ctx.${field}`"
-                    :label="field"
-                  >
-                    <el-input
-                      v-model="record.ctx[field]"
-                      :type="field === 'payload' ? 'textarea' : ''"
-                      :rows="5"
-                    >
+                  <el-form-item v-for="(field, i) in testField" :key="i" :prop="`ctx.${field}`" :label="field">
+                    <el-input v-model="record.ctx[field]" :type="field === 'payload' ? 'textarea' : ''" :rows="5">
                     </el-input>
                   </el-form-item>
 
@@ -139,7 +120,6 @@
                     <!--<code-view :code="testOutPut" lang="json"></code-view>-->
                   </el-form-item>
 
-
                 </div>
               </el-collapse-transition>
             </el-form>
@@ -148,21 +128,14 @@
           <el-col :span="9" class="tips-form">
             <div style="color: #606266">{{ $t('RuleEngine.currentEventAvailableField') }}</div>
             <div class="tips-wrapper code">
-              <span
-                v-for="key in availableFields"
-                :key="key"
-                class="available-fields"
-                @click="selectAvailableFields(key)"
-              >
+              <span v-for="key in availableFields" :key="key" class="available-fields" @click="selectAvailableFields(key)">
                 {{ key }}
               </span>
             </div>
           </el-col>
         </el-row>
 
-
       </a-card>
-
 
       <a-card class="emq-list-card">
         <div class="emq-title">
@@ -179,7 +152,6 @@
         </div>
       </a-card>
 
-
       <div style="text-align: center">
         <el-button type="primary" size="medium" @click="handleCreate">
           {{ $t('RuleEngine.create') }}
@@ -189,9 +161,7 @@
         </el-button>
       </div>
 
-
     </div>
-
 
   </div>
 </template>
@@ -202,18 +172,16 @@ import {
   loadEventsSelect, loadEvents, SQLTest, createRule,
 } from '@/api/rules'
 import { loadTopics } from '@/api/server'
-import CodeView from '@/components/CodeView'
 import RuleActions from './components/RuleActions'
 
 export default {
   name: 'RuleCrate',
 
-  components: { RuleActions, CodeView },
+  components: { RuleActions },
 
   props: {},
 
   data() {
-    const that = this
     return {
       loadEventsSelect,
       topics: [],
@@ -258,7 +226,7 @@ export default {
               if (fieldError !== undefined) {
                 return cb(new Error(this.$t('RuleEngine.fieldFillingError')))
               }
-              cb()
+              return cb()
             },
           },
         ],
@@ -268,8 +236,8 @@ export default {
 
   computed: {
     rawSQL() {
-      const { value, ctx: { topic: topicField } } = this.selectEvent
-      const { topic, field, tiaojian } = this.record
+      const { value } = this.selectEvent
+      const { field, tiaojian } = this.record
       const fields = field.replace(/[\n\b\t]/g, '').split(',').join(', ') || '*'
       let where = ''
       // if (topicField) {
@@ -337,6 +305,7 @@ export default {
         try {
           record.ctx.payload = JSON.stringify(JSON.parse(record.ctx.payload))
         } catch (e) {
+          console.log(e)
         }
         record.rawsql = this.rawSQL
         SQLTest(record).then((resp) => {
@@ -392,10 +361,12 @@ export default {
         return cb([])
       }
       this.timer = setTimeout(() => {
-        const matchItems = this.topics.filter($ => $.topic.includes(queryString), // || queryString.includes($.topic)
+        const matchItems = this.topics.filter(
+          $ => $.topic.includes(queryString), // || queryString.includes($.topic)
         ).sort(($1, $2) => ($1.toString().length > $2.toString().length ? -1 : 1))
         cb(matchItems)
       }, 300)
+      return []
     },
     handleTopicSelect(item) {
       this.record.topic = item.topic
@@ -406,13 +377,13 @@ export default {
 
 
 <style lang="scss">
-@import "./style.less";
+@import './style.less';
 
 .rule-create {
-  @import "./style.less";
+  @import './style.less';
 
   .available-fields {
-    transition: all .3s;
+    transition: all 0.3s;
     border-bottom: 1px dashed #fff;
     padding-bottom: 3px;
     position: relative;
@@ -439,14 +410,14 @@ export default {
   .required-title {
     &:after {
       content: '*';
-      color: #F5222D;
+      color: #f5222d;
       margin-right: 4px;
     }
   }
   .tips-wrapper {
     width: 100% !important;
     word-break: break-word;
-    padding: 6px 0 0 0 ;
+    padding: 6px 0 0 0;
   }
   .tips-form {
     padding-top: 4px;

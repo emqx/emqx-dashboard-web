@@ -96,7 +96,7 @@
                 <span class="field-value">{{ record.proto_ver }}</span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">{{ $t('Connections.sslCert') }} }}:</div>
+                <div class="field-title">{{ $t('Connections.sslCert') }}:</div>
                 <span class="field-value">{{ record.peercert }}</span>
               </li>
               <li class="field-info-item">
@@ -114,8 +114,11 @@
           {{ $t('Connections.currentSubscription') }}
 
           <div class="subscriptions-header">
-            <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">{{ $t('Connections.refresh') }}</el-button>
-            <el-button plain size="mini" icon="el-icon-plus" @click="handlePreAdd">{{ $t('Connections.addASubscription') }}</el-button>
+            <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">{{ $t('Connections.refresh') }}
+            </el-button>
+            <el-button plain size="mini" icon="el-icon-plus" @click="handlePreAdd">{{ $t('Connections.addASubscription')
+              }}
+            </el-button>
           </div>
         </div>
 
@@ -243,11 +246,15 @@ export default {
       this.loadData()
     },
     handleUnSubscription(row) {
-      this.$msgbox.confirm(this.$t('Connections.thisActionWillCancelSubscriptionToTheTopic'), {
-        confirmButtonText: this.$t('Connections.confirm'),
-        cancelButtonText: this.$t('Connections.cancel'),
-        type: 'warning',
-      }).then(async () => {
+      const title = this.$t('Connections.unsubscribeTitle')
+      console.log(this)
+      this.$msgbox.confirm(
+          title,
+          {
+            confirmButtonText: this.$t('Connections.confirm'),
+            cancelButtonText: this.$t('Connections.cancel'),
+            type: 'warning',
+          }).then(async () => {
         const { topic, client_id } = row
         await unSubscription({ topic, client_id })
         this.loadData()

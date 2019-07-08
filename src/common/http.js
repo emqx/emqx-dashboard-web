@@ -102,7 +102,7 @@ axios.interceptors.response.use((response) => {
   let selfError = ''
   if (typeof res === 'object') {
     const { status } = response
-    const { code = -1, meta, message } = response.data
+    const { code = 0, meta, message } = response.data
     let { data } = response.data
     if (code !== 0) {
       selfError = httpMap[code]

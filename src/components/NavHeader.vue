@@ -72,12 +72,13 @@ export default {
   props: {},
 
   data() {
-    return {
-      alertCount: 100,
-    }
+    return {}
   },
 
   computed: {
+    alertCount() {
+      return this.$store.state.alertCount
+    },
     navHeadStyle() {
       return { left: !this.$store.state.leftBarCollapse ? '201px' : 0 }
     },
@@ -113,7 +114,7 @@ export default {
     },
     async loadData() {
       const alert = await loadAlarm()
-      this.alertCount = Array.isArray(alert) ? alert.length : 0
+      this.$store.dispatch('SET_ALERT_COUNT', (alert || []).length)
     },
     logout() {
       this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })

@@ -11,8 +11,12 @@ export default new Vuex.Store({
     user: JSON.parse(localStorage.user || sessionStorage.user || '{}') || {},
     lang: getDefaultLanguage(),
     leftBarCollapse: false, // localStorage.getItem('leftBarCollapse'),
+    alertCount: 0
   },
   actions: {
+    SET_ALERT_COUNT({ commit }, count = 0) {
+      commit('SET_ALERT_COUNT', count)
+    },
     SET_LANGUAGE({ commit }, lang = 'en') {
       localStorage.setItem('language', lang)
       commit('SET_LANGUAGE', lang)
@@ -42,6 +46,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    SET_ALERT_COUNT(state, count) {
+      state.alertCount = count
+    },
     UPDATE_USER_INFO(state, userInfo) {
       // eslint-disable-next-line
       state.user = userInfo

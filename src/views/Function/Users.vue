@@ -50,7 +50,8 @@
           <el-table-column min-width="60px" prop="tags" :label="$t('Function.remark')"></el-table-column>
           <el-table-column width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">{{ $t('Function.edit') }}</el-button>
+              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">{{ $t('Function.edit') }}
+              </el-button>
 
 
               <el-button
@@ -162,7 +163,7 @@ export default {
         }, {
           min: 3,
           max: 32,
-          message: '密码长度为三到三十二位',
+          message: this.$t('Function.passwordLength'),
           trigger: ['blur', 'change'],
         }],
         newPassword: [{
@@ -172,11 +173,11 @@ export default {
         }, {
           min: 3,
           max: 32,
-          message: '密码长度为三到三十二位',
+          message: this.$t('Function.passwordLength'),
           trigger: ['blur', 'change'],
         }],
         repeatPassword: [
-          { required: true, message: this.$t('Function.pleaseEnterAConfirmationPassword.') },
+          { required: true, message: this.$t('Function.pleaseEnterAConfirmationPassword') },
           { validator: validatePass, trigger: ['blur', 'change'] },
         ],
       },
@@ -221,12 +222,12 @@ export default {
     },
     async save() {
       const vue = this
-      this.$refs.recordForm.validate(function (valid) {
+      this.$refs.recordForm.validate(function(valid) {
         if (!valid) {
           return false
         }
         if (vue.accessType === 'edit') {
-          const { username } = vue.record
+          const { username, password } = vue.record
           updateUser(username, vue.record).then(async () => {
             if (vue.allowChange) {
               const passwordData = {
@@ -234,8 +235,10 @@ export default {
                 old_pwd: vue.record.password,
               }
               await changePassword(username, passwordData)
+              // 更新当前用户
+              this.$store.dispatch('UPDATE_USER_INFO', { username, password })
             }
-            vue.$message.success(this.$t('Function.editorialSuccess'))
+            vue.$message.success(vue.$t('Function.editorialSuccess'))
             vue.dialogVisible = false
             vue.allowChange = false
             vue.accessType = ''
@@ -244,7 +247,7 @@ export default {
           })
         } else {
           createUser(vue.record).then(() => {
-            vue.$message.success(this.$t('Function.createUserSuccess'))
+            vue.$message.success(vue.$t('Function.createUserSuccess'))
             vue.dialogVisible = false
             vue.accessType = ''
             vue.record = {}
@@ -256,7 +259,7 @@ export default {
     deleteConfirm(item) {
       const vue = this
 
-      this.$msgbox.confirm('确定删除该用户?', {
+      this.$msgbox.confirm(this.$t('Function.confirmDeleteUser'), {
         confirmButtonText: this.$t('Function.confirm'),
         cancelButtonText: this.$t('Function.cancel'),
         type: 'warning',
