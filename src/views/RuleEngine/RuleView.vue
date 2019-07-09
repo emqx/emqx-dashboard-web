@@ -28,6 +28,12 @@
             {{ ruleId }}
           </div>
         </div>
+
+        <div class="page-header-top-start">
+          <el-button type="danger" size="small" @click="deleteRule">
+            {{ $t('RuleEngine.delete') }}
+          </el-button>
+        </div>
       </div>
     </div>
 
@@ -37,6 +43,12 @@
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
           {{ $t('RuleEngine.runningMetrics') }}
+          <i
+            class="btn btn-default"
+            :class="reloading ? 'el-icon-loading' : 'el-icon-refresh'"
+            @click="loadData"
+          >
+          </i>
         </div>
 
         <el-row :gutter="40" class="metrics-wrapper">
@@ -61,7 +73,8 @@
               <span class="card-unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
             </div>
             <div class="card-desc">
-              {{ $t('RuleEngine.maximumSpeed') }}: {{ record.metricsData.speed_max }} {{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}
+              {{ $t('RuleEngine.maximumSpeed') }}: {{ record.metricsData.speed_max }} {{ $t('RuleEngine.times') }}/{{
+              $t('RuleEngine.second') }}
             </div>
           </el-col>
 
@@ -77,6 +90,10 @@
               {{ $t('RuleEngine.averageExecutionSpeedInTheLast5Minutes') }}
             </div>
           </el-col>
+
+          <el-col :span="24">
+            <rule-metrics-table :metrics="record.metrics"></rule-metrics-table>
+          </el-col>
         </el-row>
       </a-card>
 
@@ -90,7 +107,7 @@
         <ul class="field-info">
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.triggerEvent') }}:</div>
-            <span class="field-value">{{ configItem.event.name }} ({{ record.for[0] }})</span>
+            <span class="field-value">{{ configItem.event.title }} ({{ record.for[0] }})</span>
           </li>
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.remark') }}:</div>
@@ -136,14 +153,15 @@
 
 
 <script>
-import { loadRuleDetails, loadEvents } from '@/api/rules'
+import { loadRuleDetails, destroyRule } from '@/api/rules'
 import CodeView from '@/components/CodeView'
+import RuleMetricsTable from './components/RuleMetricsTable'
 import RuleActions from './components/RuleActions'
 
 export default {
   name: 'RuleView',
 
-  components: { CodeView, RuleActions },
+  components: { RuleMetricsTable, CodeView, RuleActions },
 
   props: {},
 
@@ -162,11 +180,12 @@ export default {
         },
         metrics: [],
       },
-      eventsMap: {},
-      actions: [],
     }
   },
   computed: {
+    reloading() {
+      return this.$store.state.loading
+    },
     ruleId() {
       return this.$route.params.id
     },
@@ -182,11 +201,9 @@ export default {
       const fields = reField ? reField[1] : '*'
       const reWhere = sql.split(' WHERE ')
       const where = reWhere && reWhere[1] ? reWhere[1] : ''
-      const event = this.eventsMap[value] || {}
       return {
         fields,
         where,
-        event,
         ...this.record,
       }
     },
@@ -204,20 +221,21 @@ export default {
 
   methods: {
     async loadData() {
-      const record = await loadRuleDetails(this.ruleId)
-      const events = await loadEvents()
-      events.forEach((event) => {
-        this.eventsMap[event.value] = event
-      })
-      record.metricsData = {}
-      record.metrics.forEach((item) => {
-        ['matched', 'speed', 'speed_last5m', 'speed_max'].forEach((key) => {
-          record.metricsData[key] = record.metricsData[key] || 0
-          record.metricsData[key] += item[key] || 0
-        })
-      })
+      this.record = await loadRuleDetails(this.ruleId)
       this.loading = false
-      this.record = record
+    },
+    deleteRule() {
+      this.$msgbox.confirm(this.$t('RuleEngine.deleteRuleConfirm'), {
+        confirmButtonText: this.$t('RuleEngine.confirm'),
+        cancelButtonText: this.$t('RuleEngine.cancel'),
+        type: 'warning',
+      }).then(async () => {
+        await destroyRule(this.record.id)
+        this.$message.success(this.$t('RuleEngine.successfulDeletion'))
+        setTimeout(() => {
+          this.$router.push({ path: '/rules' })
+        }, 500)
+      }).catch(() => {})
     },
   },
 }
@@ -229,7 +247,11 @@ export default {
   @import "./style.less";
 
   .field-title {
-    width: 80px;
+    width: 100px;
+  }
+
+  .rule-metrics-table {
+    margin-top: 20px;
   }
 }
 </style>

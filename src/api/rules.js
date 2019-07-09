@@ -1,13 +1,45 @@
 import http from '@/common/http'
 import { fillI18n } from '@/common/utils'
-import EMQXEvents from '@/common/emqx_events'
+
+let ruleEvents = []
+const eventsMap = {}
+
+export async function loadRuleEvents() {
+  if (ruleEvents.length === 0) {
+    const data = await http.get('/rule_events')
+    ruleEvents = fillI18n(data, ['title', 'description'])
+  }
+  ruleEvents.forEach((event) => {
+    eventsMap[event.event] = event
+  })
+  return ruleEvents
+}
 
 export function loadRules(params) {
   return http.get('/rules', params)
 }
 
-export function loadRuleDetails(id) {
-  return http.get(`/rules/${id}`)
+export async function loadRuleDetails(id) {
+  const rule = await http.get(`/rules/${id}`)
+  await loadRuleEvents()
+  rule.event = eventsMap[rule.for[0]]
+  rule.metricsData = {}
+  rule.metrics.forEach((item) => {
+    ['matched', 'speed', 'speed_last5m', 'speed_max'].forEach((key) => {
+      rule.metricsData[key] = rule.metricsData[key] || 0
+      rule.metricsData[key] += item[key] || 0
+    })
+  })
+  rule.actions = rule.actions.map((action) => {
+    action.failed = 0
+    action.success = 0
+    action.metrics.forEach((item) => {
+      action.failed += item.failed
+      action.success += item.success
+    })
+    return action
+  })
+  return rule
 }
 
 export async function loadActions(options = { fillI18n: false }) {
@@ -28,15 +60,6 @@ export function destroyResource(id) {
 
 export function reconnectResource(id) {
   return http.post(`/resources/${id}`)
-}
-
-export function loadEventsSelect() {
-  const events = JSON.parse(JSON.stringify(EMQXEvents)).map($ => ({ label: $.name, value: $.value }))
-  return fillI18n(events, ['label'])
-}
-
-export function loadEvents() {
-  return fillI18n(JSON.parse(JSON.stringify(EMQXEvents)), ['name'])
 }
 
 export function SQLTest(rule = {}) {

@@ -71,11 +71,12 @@ axios.interceptors.request.use((config) => {
   }
   config.auth.username = user.username
   config.auth.password = user.password
+
+  store.dispatch('LOADING', true)
   return config
 }, error => Promise.reject(error))
 
 function handleError(error) {
-  store.dispatch('LOADING', false)
   console.log(error)
   if (!error.response) {
     // Message.error(error.message)

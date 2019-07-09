@@ -226,6 +226,7 @@ body {
 
 .btn {
   cursor: pointer;
+  user-select: none;
 
   &:not(.btn-default) {
     color: #34C388;
@@ -353,7 +354,7 @@ body {
   .page-header-top-start {
     position: absolute;
     right: 24px;
-    top: 24px;
+    top: 16px;
   }
 
   .page-header-content {

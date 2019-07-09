@@ -287,7 +287,7 @@ export default {
     }
 
     .el-input, .el-select {
-      /*width: 200px !important;*/
+      width: 200px !important;
     }
 
     .el-textarea {

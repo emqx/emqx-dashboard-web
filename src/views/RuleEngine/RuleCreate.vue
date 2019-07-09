@@ -44,13 +44,26 @@
 
         <el-row :gutter="20">
           <el-col :span="15">
-            <el-form ref="record" :model="record" :rules="rules" label-width="120px" label-position="left" size="small" label-suffix=":">
+            <el-form
+              ref="record"
+              :model="record"
+              :rules="rules"
+              label-width="120px"
+              label-position="left"
+              size="small"
+              label-suffix=":"
+            >
 
               <el-form-item prop="for" :label="$t('RuleEngine.triggerEvent')">
-                <emq-select v-model="record.for" :field="{ api: loadEventsSelect }" @change="handleForChange">
+                <emq-select
+                  v-model="record.for"
+                  :field="{ api: loadRuleEvents }"
+                  :field-name="{ label: 'title', value: 'event' }"
+                  @change="handleForChange"
+                >
                   <div slot="option" slot-scope="{ item }" class="emq-option-item">
-                    <span class="option-label">{{ item.label }}</span>
-                    <span class="option-value">{{ item.value }}</span>
+                    <span class="option-label">{{ item.title }}</span>
+                    <span class="option-value">{{ item.event }}</span>
                   </div>
                 </emq-select>
               </el-form-item>
@@ -112,7 +125,9 @@
 
                   <el-form-item>
                     <span slot="label">&nbsp;</span>
-                    <el-button type="primary" @click="handleSQLTest">{{ $t('RuleEngine.test') }}</el-button>
+                    <el-button type="primary" @click="handleSQLTest">
+                      {{ $t('RuleEngine.sqlTest') }}
+                    </el-button>
                   </el-form-item>
 
                   <el-form-item :label="$t('RuleEngine.testOutput')">
@@ -128,7 +143,9 @@
           <el-col :span="9" class="tips-form">
             <div style="color: #606266">{{ $t('RuleEngine.currentEventAvailableField') }}</div>
             <div class="tips-wrapper code">
-              <span v-for="key in availableFields" :key="key" class="available-fields" @click="selectAvailableFields(key)">
+              <span
+                v-for="key in availableFields" :key="key" class="available-fields"
+                @click="selectAvailableFields(key)">
                 {{ key }}
               </span>
             </div>
@@ -169,7 +186,7 @@
 
 <script>
 import {
-  loadEventsSelect, loadEvents, SQLTest, createRule,
+  loadRuleEvents, SQLTest, createRule,
 } from '@/api/rules'
 import { loadTopics } from '@/api/server'
 import RuleActions from './components/RuleActions'
@@ -183,17 +200,34 @@ export default {
 
   data() {
     return {
-      loadEventsSelect,
+      loadRuleEvents,
       topics: [],
       events: [],
       testOutPut: '',
       selectEvent: {
-        name: '',
-        value: '',
-        description: '',
-        test_field: [],
-        ctx: {},
-        sql: '',
+        'columns': [
+          'client_id',
+          'username',
+          'event',
+          'id',
+          'payload',
+          'peername',
+          'qos',
+          'timestamp',
+          'topic',
+          'node',
+        ],
+        'description': 'message publish',
+        'event': 'message.publish',
+        'sql_example': 'SELECT * FROM "message.publish" WHERE topic =~ \'t/#\'',
+        'test_columns': {
+          'client_id': 'c_emqx',
+          'username': 'u_emqx',
+          'topic': 't/a',
+          'qos': 1,
+          'payload': '{"msg": "hello"}',
+        },
+        'title': 'message publish',
       },
       timer: 0,
       showTips: false,
@@ -236,7 +270,7 @@ export default {
 
   computed: {
     rawSQL() {
-      const { value } = this.selectEvent
+      const { event } = this.selectEvent
       const { field, tiaojian } = this.record
       const fields = field.replace(/[\n\b\t]/g, '').split(',').join(', ') || '*'
       let where = ''
@@ -249,24 +283,20 @@ export default {
       if (tiaojian) {
         where = ` WHERE ${tiaojian}`
       }
-      return `SELECT ${fields} FROM "${value}"${where ? `${where}` : ''}`
+      return `SELECT ${fields} FROM "${event}"${where ? `${where}` : ''}`
     },
     availableFields() {
-      return Object.keys(this.selectEvent.ctx)
+      return this.selectEvent.columns
     },
     testField() {
-      return this.selectEvent.test_field
+      return Object.keys(this.selectEvent.test_columns)
     },
   },
 
   async created() {
-    this.events = loadEvents()
+    this.events = await loadRuleEvents()
     this.selectEvent = this.events[0]
-    this.record.for = this.selectEvent.value
-    if (this.selectEvent.ctx.payload) {
-      this.record.topic = '#'
-    }
-
+    this.record.for = this.selectEvent.event
     const data = await loadTopics()
     this.topics = data.items || []
   },
@@ -321,13 +351,9 @@ export default {
     },
     handlePreSQLTest() {
       this.record.ctx = {}
-      const { ctx, test_field: testField } = this.selectEvent
+      const { test_columns: testColumn } = this.selectEvent
       if (this.showTest) {
-        testField.forEach((k) => {
-          let v = ctx[k]
-          if (typeof v === 'object') {
-            v = JSON.stringify(v, null, 2)
-          }
+        Object.entries(testColumn).forEach(([k, v]) => {
           this.$set(this.record.ctx, k, v)
         })
       }
@@ -348,10 +374,7 @@ export default {
       this.showTips = !this.showTips
     },
     handleForChange(val) {
-      this.selectEvent = this.events.find($ => $.value === val)
-      if (this.selectEvent.ctx.payload) {
-        this.record.topic = '#'
-      }
+      this.selectEvent = this.events.find($ => $.event === val)
       this.record.field = '*'
       this.record.tiaojian = ''
     },
@@ -362,7 +385,7 @@ export default {
       }
       this.timer = setTimeout(() => {
         const matchItems = this.topics.filter(
-          $ => $.topic.includes(queryString), // || queryString.includes($.topic)
+            $ => $.topic.includes(queryString), // || queryString.includes($.topic)
         ).sort(($1, $2) => ($1.toString().length > $2.toString().length ? -1 : 1))
         cb(matchItems)
       }, 300)
@@ -414,11 +437,13 @@ export default {
       margin-right: 4px;
     }
   }
+
   .tips-wrapper {
     width: 100% !important;
     word-break: break-word;
     padding: 6px 0 0 0;
   }
+
   .tips-form {
     padding-top: 4px;
   }

@@ -68,7 +68,8 @@
               <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
             </template>
           </el-table-column>
-          <el-table-column prop="description" show-overflow-tooltip :label="$t('RuleEngine.describe')"></el-table-column>
+          <el-table-column prop="description" show-overflow-tooltip
+                           :label="$t('RuleEngine.describe')"></el-table-column>
           <el-table-column
             prop="for"
             :filters="filterOptions.for"
@@ -90,7 +91,6 @@
               <el-button type="dashed" size="mini" @click="deleteRule(row)">{{ $t('RuleEngine.delete') }}</el-button>
             </template>
           </el-table-column>
-
         </el-table>
       </a-card>
     </div>
@@ -104,34 +104,49 @@
     >
       <div class="rule-metrics">
         <div class="metrics-item">
-          <div class="metrics-item-title">{{ $t('RuleEngine.ruleMetrics') }}</div>
-          <ul class="metrics-item-body value-item-wrapper">
-            <li class="value-item">
-              {{ $t('RuleEngine.matched') }}:
-              <span class="value">
-                {{ currentRules.metrics.matched }}
-                <span class="unit">{{ $t('RuleEngine.second') }}</span>
+          <div class="metrics-item-title">
+            {{ $t('RuleEngine.ruleMetrics') }}
+          </div>
+          <ul class="metrics-item-body field-info rule-metrics">
+
+            <li class="field-info-item">
+              <div class="field-title">
+                {{ $t('RuleEngine.matched') }}:
+              </div>
+              <span class="field-value">
+                {{ currentRules.metricsData.matched }}
+                <span class="unit">{{ $t('RuleEngine.times') }}</span>
               </span>
             </li>
-            <li class="value-item">
-              {{ $t('RuleEngine.currentSpeed') }}:
-              <span class="value">
-                {{ currentRules.metrics.speed }}
-                <span class="unit">{{ $t('RuleEngine.second') }}/{{ $t('RuleEngine.second') }}</span>
+
+            <li class="field-info-item">
+              <div class="field-title">
+                {{ $t('RuleEngine.currentSpeed') }}:
+              </div>
+
+              <span class="field-value">
+                {{ currentRules.metricsData.speed }}
+                <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
-            <li class="value-item">
-              {{ $t('RuleEngine.maximumSpeed') }}:
-              <span class="value">
-                {{ currentRules.metrics.speed_max }}
-                <span class="unit">{{ $t('RuleEngine.second') }}/{{ $t('RuleEngine.second') }}</span>
+
+            <li class="field-info-item">
+              <div class="field-title">
+                {{ $t('RuleEngine.maximumSpeed') }}:
+              </div>
+              <span class="field-value">
+                {{ currentRules.metricsData.speed_max }}
+                <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
-            <li class="value-item">
-              {{ $t('RuleEngine.last5MinutesSpeed') }}:
-              <span class="value">
-                {{ currentRules.metrics.speed_last5m }}
-                <span class="unit">{{ $t('RuleEngine.second') }}/{{ $t('RuleEngine.second') }}</span>
+
+            <li class="field-info-item">
+              <div class="field-title">
+                {{ $t('RuleEngine.last5MinutesSpeed') }}:
+              </div>
+              <span class="field-value">
+                {{ currentRules.metricsData.speed_last5m }}
+                <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
           </ul>
@@ -144,28 +159,32 @@
 
           </template>
 
-          <ul v-for="(item, i) in currentRules.actions" :key="i" class="metrics-item-body value-item-wrapper">
-            <div class="value-item value-item-title">
-              {{ item.name }}
+          <div v-for="(item, i) in currentRules.actions" :key="i" class="metrics-item-body">
+            <ul class="field-info metrics-item-body action-metrics">
+              <div class="item-title">
+                {{ item.name }}
+              </div>
 
-
-              <li class="value-item">
-                {{ $t('RuleEngine.success') }}:
-                <span class="value">
-                  {{ item.metrics.success }}
+              <li class="field-info-item">
+                <div class="field-title">{{ $t('RuleEngine.success') }}:</div>
+                <span class="field-value">
+                  {{ item.success }}
                 </span>
               </li>
-
-              <li class="value-item">
-                {{ $t('RuleEngine.fail') }}:
-                <span class="value">
-                  {{ item.metrics.failed }}
+              <li class="field-info-item">
+                <div class="field-title">
+                  {{ $t('RuleEngine.fail') }}:
+                </div>
+                <span class="field-value">
+                  {{ item.failed }}
                 </span>
               </li>
+            </ul>
+          </div>
 
-            </div>
-
-          </ul>
+          <!--<div class="metrics-item oper-wrapper">-->
+            <!--<el-button type="dashed" size="small">查看详情</el-button>-->
+          <!--</div>-->
 
 
         </div>
@@ -180,14 +199,15 @@
 <script>
 import {
   loadRules, loadRuleDetails, loadActions, destroyRule,
-  loadEventsSelect,
+  loadRuleEvents,
 } from '@/api/rules'
 import { getLink } from '@/common/utils'
+import CodeView from '@/components/CodeView'
 
 export default {
   name: 'Rules',
 
-  components: {},
+  components: { CodeView },
 
   props: {},
 
@@ -200,25 +220,35 @@ export default {
       listLoading: false,
       metricsDrawerVisible: false,
       currentRules: {
-        metrics: {
-          matched: 0,
-          speed: 0,
-          speed_last5m: 0,
-          speed_max: 0,
+        'actions': [{
+          'id': 'do_nothing_1562653876521962460',
+          'metrics': [{ 'failed': 0, 'node': 'emqx@127.0.0.1', 'success': 3 }],
+          'name': 'do_nothing',
+          'params': {},
+        }],
+        'description': '',
+        'enabled': true,
+        'for': ['client.connected'],
+        'id': 'rule:33570eea',
+        'metrics': [{ 'matched': 3, 'node': 'emqx@127.0.0.1', 'speed': 0, 'speed_last5m': 0, 'speed_max': 0.1 }],
+        'rawsql': 'SELECT * FROM "client.connected"',
+        'event': {
+          'columns': ['client_id', 'username', 'event', 'auth_result', 'clean_start', 'connack', 'connected_at', 'is_bridge', 'keepalive', 'mountpoint', 'peername', 'proto_ver', 'timestamp', 'node'],
+          'description': '连接建立',
+          'event': 'client.connected',
+          'sql_example': 'SELECT * FROM "client.connected"',
+          'test_columns': {
+            'client_id': 'c_emqx',
+            'username': 'u_emqx',
+            'auth_result': 'success',
+            'peername': '127.0.0.1:63412',
+          },
+          'title': '连接建立',
         },
-        actions: [
-          // {
-          //   metrics: {
-          //     failed: 0,
-          //     success: 0,
-          //   },
-          //   name: 'inspect',
-          //   params: {},
-          // },
-        ],
+        'metricsData': { 'matched': 3, 'speed': 0, 'speed_last5m': 0, 'speed_max': 0.1 },
       },
       filterOptions: {
-        for: loadEventsSelect().map($ => ({ text: $.value, value: $.value })),
+        for: [],
         actions: [],
       },
       rulesDrawer: {
@@ -236,7 +266,9 @@ export default {
     }
   },
 
-  created() {
+  async created() {
+    const events = await loadRuleEvents()
+    this.filterOptions.for = events.map($ => ({ text: $.event, value: $.event }))
     this.loadActionsFilter().then(this.loadData)
   },
 
@@ -330,43 +362,34 @@ export default {
       color: #101010;
     }
 
-    .value-item-wrapper {
-      margin-top: 24px;
+    .oper-wrapper {
+      margin: 20px auto;
+      text-align: center;
     }
   }
-}
 
-.value-item-wrapper {
-  display: block;
-  list-style-type: disc;
-  padding: 0;
-  margin: 0;
+  .field-info {
+    margin-top: 12px;
 
-  .value-item {
-    list-style-type: none;
-    font-size: 12px;
-    color: #808080;
-    margin-bottom: 8px;
-
-    &.value-item-title {
-      color: #000;
-
-      & > .value-item {
-        margin-top: 8px;
-      }
-
-      .value-item {
-        padding-left: 10px;
+    &.rule-metrics {
+      .field-title {
+        min-width: 130px;
       }
     }
 
-    .value {
-      color: #000;
-      cursor: pointer;
-
-      &:hover {
-        border-bottom: 1px dashed #d8d8d8;
+    &.action-metrics {
+      .field-info-item {
+        padding-left: 12px;
       }
+      .field-title {
+        min-width: 40px;
+      }
+    }
+  }
+
+  .metrics-item-body {
+    .item-title {
+      color: #101010;
     }
   }
 }

@@ -28,6 +28,12 @@
             {{ resourceId }}
           </div>
         </div>
+
+        <div class="page-header-top-start">
+          <el-button type="danger" size="small" @click="deleteResource">
+            {{ $t('RuleEngine.delete') }}
+          </el-button>
+        </div>
       </div>
     </div>
 
@@ -114,7 +120,7 @@
 
 
 <script>
-import { loadResourceDetails, reconnectResource } from '@/api/rules'
+import { loadResourceDetails, reconnectResource, destroyResource } from '@/api/rules'
 import ResourceNode from './components/ResourceNode'
 import ResourceField from './components/ResourceField'
 
@@ -161,6 +167,19 @@ export default {
   },
 
   methods: {
+    deleteResource() {
+      this.$msgbox.confirm(this.$t('RuleEngine.deleteResource'), {
+        confirmButtonText: this.$t('RuleEngine.confirm'),
+        cancelButtonText: this.$t('RuleEngine.cancel'),
+        type: 'warning',
+      }).then(async () => {
+        await destroyResource(this.record.id)
+        this.$message.success(this.$t('RuleEngine.successfulDeletion'))
+        setTimeout(() => {
+          this.$router.push({ path: '/resources' })
+        }, 500)
+      }).catch(() => {})
+    },
     toggleShowConfig() {
       this.showConfig = !this.showConfig
     },

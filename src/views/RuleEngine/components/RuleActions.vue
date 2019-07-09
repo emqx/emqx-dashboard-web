@@ -20,10 +20,10 @@
 
         <div v-else class="action-item-btn action-item-type">
           <span class="title">{{ $t('RuleEngine.success') }} </span>
-          <span class="desc">{{ sumCount(item.metrics, 'success') }}</span>
+          <span class="desc">{{ item.success }}</span>
 
           <span class="title">{{ $t('RuleEngine.fail') }} </span>
-          <span class="desc">{{ sumCount(item.metrics, 'failed') }}</span>
+          <span class="desc">{{ item.failed }}</span>
         </div>
       </div>
       <div class="action-item-description">
@@ -31,9 +31,39 @@
       </div>
 
       <div v-if="item._value" class="action-item-params">
+        <div v-if="disabled" class="action-item-field">
+          <div class="title">
+            {{ $t('RuleEngine.detailedMetrics') }}
+          </div>
+          <div class="value">
+            <span class="btn btn-default show-btn" @click="toggleShowMetrics(item)">
+              {{ item.showList ? $t('RuleEngine.hide') : $t('RuleEngine.view') }}
+            </span>
+          </div>
+        </div>
         <div v-for="(item2, j) in item._value" :key="j" class="action-item-field">
           <div class="title">{{ item2.label }}</div>
           <div class="value">{{ item2.value }}</div>
+        </div>
+      </div>
+
+      <div v-if="disabled && item.showList" class="metrics-detail">
+        <div class="main-title">
+          {{ $t('RuleEngine.actionMetricsTips') }}
+        </div>
+        <div v-for="(item3, k) in item.metrics" :key="k" class="item">
+          <span class="title">
+            {{ $t('RuleEngine.node') }}
+          </span>
+          <span class="value">
+            {{ item3.node }}
+          </span>
+
+          <span class="title">{{ $t('RuleEngine.success') }} </span>
+          <span class="value">{{ item.success }}</span>
+
+          <span class="title">{{ $t('RuleEngine.fail') }} </span>
+          <span class="value">{{ item.failed }}</span>
         </div>
       </div>
 
@@ -72,7 +102,8 @@
           {{ selectedAction.description }}
         </div>
 
-        <el-form-item v-if="selectedAction.params.$resource" prop="params.$resource" :label="$t('RuleEngine.useOfResources')">
+        <el-form-item v-if="selectedAction.params.$resource" prop="params.$resource"
+                      :label="$t('RuleEngine.useOfResources')">
           <emq-select
             v-model="record.params.$resource"
             :field="{ options: availableResources }"
@@ -83,7 +114,7 @@
           >
             <div slot="option" slot-scope="{ item }" class="resource-option">
               <!--<span class="resource-state">-->
-                <!--<a-badge :status="item.status.is_alive ? 'success' : 'error'"></a-badge>-->
+              <!--<a-badge :status="item.status.is_alive ? 'success' : 'error'"></a-badge>-->
               <!--</span>-->
               <span class="resource-id">{{ item.id }}</span>
               <span class="resource-name">{{ item.config.title }}</span>
@@ -161,8 +192,12 @@
 
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">{{ $t('RuleEngine.confirm') }}</el-button>
-        <el-button size="small" @click="handleCache">{{ $t('RuleEngine.cancel') }}</el-button>
+        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">{{
+          $t('RuleEngine.confirm') }}
+        </el-button>
+        <el-button size="small" @click="handleCache">
+          {{ $t('RuleEngine.cancel') }}
+        </el-button>
       </div>
     </el-dialog>
 
@@ -261,15 +296,9 @@ export default {
   },
 
   methods: {
-    sumCount(data, key) {
-      if (!data || data.length === 0) {
-        return 0
-      }
-      let sum = 0
-      data.forEach((item) => {
-        sum += item[key]
-      })
-      return sum
+    toggleShowMetrics(item) {
+      const { showList = false } = item
+      this.$set(item, 'showList', !showList)
     },
     editAction(item) {
       this.record = { ...item }
@@ -383,6 +412,29 @@ export default {
 
 <style lang="scss">
 .rule-actions {
+  .show-btn {
+    border-bottom: 1px dashed #d8d8d8;
+  }
+
+  .metrics-detail {
+    margin-top: 16px;
+    padding: 4px 0;
+    font-size: 12px;
+    color: #444;
+    .main-title {
+      color: #101010;
+      margin-bottom: 8px;
+    }
+    .title {
+      color: #888;
+      padding-left: 8px;
+    }
+    .value {
+      margin-left: 8px;
+      margin-right: 20px;
+    }
+  }
+
   .action-item {
     padding: 20px;
     margin-bottom: 20px;

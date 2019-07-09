@@ -5,13 +5,33 @@ export default {
     '主题通配符',
     '规则引擎使用说起来语句配置二面消息流与设备事件的处理规则，内置多种灵活的数据处理方案',
   ],
+  foldDetails: {
+    zh: '折叠详情',
+    en: 'Fold Details',
+  },
+  showDetails: {
+    zh: '详细信息',
+    en: 'Show Details',
+  },
+  node: {
+    zh: '节点',
+    en: 'Node',
+  },
   view: {
     zh: '点击查看',
-    en: 'view',
+    en: 'View',
   },
   hide: {
     zh: '点击收起',
-    en: 'hide',
+    en: 'Hide',
+  },
+  detailedMetrics: {
+    zh: '详细统计',
+    en: 'Detailed metrics',
+  },
+  actionMetricsTips: {
+    zh: '节点上的动作统计信息',
+    en: 'Metrics on nodes',
   },
   detailedStatus: {
     zh: '详细状态',
@@ -283,7 +303,7 @@ export default {
   },
   times: {
     zh: '次',
-    en: 'times',
+    en: 'matched',
   },
   currentSpeed: {
     zh: '当前速度',

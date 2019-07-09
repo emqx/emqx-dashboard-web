@@ -185,11 +185,6 @@ export default {
         this.$message.success(this.$t('RuleEngine.successfulDeletion'))
       }).catch(() => {})
     },
-    reconnect(row) {
-      reconnectResource(row.id).then(() => {
-        setTimeout(this.loadData, 100)
-      })
-    },
     async initData() {
       const resourceTypes = await loadResourceTypes()
       this.filterOptions.resourceTypes = resourceTypes.map($ => ({ text: $.title, value: $.name }))
