@@ -1,6 +1,18 @@
 export default
 {
   __not: [],
+  userCreate: {
+    zh: 'https://developer.emqx.io/docs/broker/v3/cn/commands.html#admins',
+    en: 'https://developer.emqx.io/docs/broker/v3/en/commands.html#admins'
+  },
+  loginUserAccount: {
+    zh: '使用 Dashboard 用户登录',
+    en: 'Login using Dashboard accounts'
+  },
+  forgetPassword: {
+    zh: '忘记密码?',
+    en: 'Forget the password?',
+  },
   signIn: {
     zh: '登录',
     en: 'Sign in',

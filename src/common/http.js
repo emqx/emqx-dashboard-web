@@ -26,7 +26,7 @@ const httpCode = {
     113: '用户已存在',
     114: '旧密码错误',
     115: '主题错误',
-    '-1': '需要登录'
+    '-1': '需要登录',
   },
   en: {
     0: 'Success',
@@ -45,7 +45,7 @@ const httpCode = {
     113: 'User already exist',
     114: 'Old password error',
     115: 'Bad topic',
-    '-1': 'Login Required'
+    '-1': 'Login Required',
   },
 }
 
@@ -103,7 +103,7 @@ axios.interceptors.response.use((response) => {
   let selfError = ''
   if (typeof res === 'object') {
     const { status } = response
-    const { code = 0, meta, message } = response.data
+    const { code = -100, meta, message } = response.data
     let { data } = response.data
     if (code !== 0) {
       selfError = httpMap[code]
