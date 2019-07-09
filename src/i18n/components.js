@@ -115,7 +115,7 @@ export default
   },
   signOut: {
     zh: '退出',
-    en: 'Sign out',
+    en: 'Logout',
   },
   cancel: {
     zh: '取消',

@@ -31,10 +31,44 @@
         :loading="listLoading"
       >
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">{{ $t('RuleEngine.create') }}</el-button>
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">{{ $t('RuleEngine.create')
+            }}
+          </el-button>
         </div>
 
-        <el-table :data="tableData" class="data-list">
+        <el-table :data="tableData" class="data-list" @expand-change="handleExpandChange">
+          <el-table-column prop="id" type="expand">
+            <template slot-scope="{ row }">
+              <!-- 列表展示每个节点上资源的状态 -->
+              <a-card class="resource-node-wrapper" :loading="row.loading">
+                <el-row :gutter="40">
+                  <el-col :span="12">
+                    <div class="emq-title h3">
+                      {{ $t('RuleEngine.resourceStatus') }}
+                      <div class="sub-title">
+                        {{ $t('RuleEngine.resourceStatusTips') }}
+                      </div>
+                    </div>
+                    <resource-node :value="row" @change="handleExpandChange"></resource-node>
+                  </el-col>
+
+                  <!--<el-col v-if="false" :span="16">-->
+                    <!--<div class="emq-title h3">-->
+                      <!--资源配置-->
+                      <!--<div class="sub-title btn btn-default" @click.stop="toggleShowConfig(row)">-->
+                        <!--{{ row.showConfig ? '收起配置' : '展开配置' }}-->
+                        <!--<i :class="row.showConfig ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                    <!--<el-collapse-transition>-->
+                      <!--<resource-field v-if="row.showConfig" :config="row._config"></resource-field>-->
+                    <!--</el-collapse-transition>-->
+                  <!--</el-col>-->
+                </el-row>
+              </a-card>
+            </template>
+          </el-table-column>
+
           <el-table-column prop="id" min-width="80px" label="ID">
             <template slot-scope="{ row }">
               <span class="btn" @click="showResource(row)">{{ row.id }}</span>
@@ -51,7 +85,9 @@
             filter-placement="bottom"
           ></el-table-column>
 
-          <el-table-column min-width="100px" prop="description" show-overflow-tooltip :label="$t('RuleEngine.remark')"></el-table-column>
+          <el-table-column
+            min-width="100px" prop="description" show-overflow-tooltip
+            :label="$t('RuleEngine.remark')"></el-table-column>
           <!--<el-table-column min-width="70px" prop="status.is_alive" :label="$t('RuleEngine.state')">-->
           <!--<template slot-scope="{ row }">-->
           <!--<a-badge-->
@@ -66,7 +102,9 @@
           <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
               <!--<el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">{{ $t('RuleEngine.reconnect') }}</el-button>-->
-              <el-button type="dashed" size="mini" @click="deleteResource(row)">{{ $t('RuleEngine.delete') }}</el-button>
+              <el-button type="dashed" size="mini" @click="deleteResource(row)">
+                {{ $t('RuleEngine.delete') }}
+              </el-button>
             </template>
           </el-table-column>
 
@@ -82,14 +120,16 @@
 
 <script>
 import {
-  loadResource, loadResourceTypes, destroyResource, reconnectResource,
+  loadResource, loadResourceTypes, destroyResource, loadResourceDetails,
 } from '@/api/rules'
+import ResourceNode from './components/ResourceNode'
+import ResourceField from './components/ResourceField'
 import ResourceDialog from './components/ResourceCreate'
 
 export default {
   name: 'Resources',
 
-  components: { ResourceDialog },
+  components: { ResourceNode, ResourceField, ResourceDialog },
 
   props: {},
 
@@ -111,6 +151,29 @@ export default {
   },
 
   methods: {
+    toggleShowConfig(row) {
+      const showConfig = !row.showConfig
+      this.$set(row, 'showConfig', showConfig)
+    },
+
+    async handleExpandChange(row, reload = false) {
+      if (reload !== true && row.status.length > 0) {
+        return
+      }
+      try {
+        if (row.loading === undefined) {
+          this.$set(row, 'loading', true)
+        }
+        const resource = await loadResourceDetails(row.id)
+        this.$set(row, 'status', resource.status)
+        this.$set(row, 'typeInfo', resource.typeInfo)
+        this.$set(row, '_config', resource._config)
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.$set(row, 'loading', false)
+      }
+    },
     deleteResource(row) {
       this.$msgbox.confirm(this.$t('RuleEngine.deleteResource'), {
         confirmButtonText: this.$t('RuleEngine.confirm'),
@@ -132,10 +195,20 @@ export default {
       this.filterOptions.resourceTypes = resourceTypes.map($ => ({ text: $.title, value: $.name }))
     },
     async loadData() {
-      this.tableData = await loadResource().catch(() => {
+      try {
+        this.listLoading = true
+        const tableData = await loadResource()
+        this.tableData = tableData.map(($) => {
+          $._config = []
+          $.typeInfo = {}
+          $.status = []
+          return $
+        })
+      } catch (e) {
+        console.log(e)
+      } finally {
         this.listLoading = false
-      })
-      this.listLoading = false
+      }
     },
     createResource() {
       this.dialogVisible = true
@@ -151,7 +224,16 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
 .resources {
+  .emq-title {
+    margin-bottom: 20px;
+  }
+
+  .resource-node-wrapper {
+    .ant-card-body {
+      padding: 0 0 0 20px;
+    }
+  }
 }
 </style>

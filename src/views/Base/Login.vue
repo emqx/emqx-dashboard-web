@@ -24,7 +24,7 @@
         <el-form-item :label="$t('Base.password')" prop="password">
           <el-input v-model="record.password" type="password" :placeholder="$t('Base.password')"></el-input>
         </el-form-item>
-        <el-form-item label="">
+        <el-form-item class="oper-wrapper" label="">
           <el-checkbox v-model="record.remember">{{ $t('Base.remember') }}</el-checkbox>
           <el-button type="primary" style="float: right" @click="login">{{ $t('Base.signIn') }}</el-button>
         </el-form-item>
@@ -103,11 +103,14 @@ export default {
 }
 
 .login-card {
-  width: 500px;
+  width: 480px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.oper-wrapper {
+  margin-top: 32px;
 }
 
 .login-footer {

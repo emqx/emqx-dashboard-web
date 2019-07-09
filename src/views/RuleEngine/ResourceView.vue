@@ -53,6 +53,7 @@
               </a-badge>
               <el-button
                 v-if="!isAlive"
+                :loading="reloading"
                 size="mini"
                 style="margin-left: 12px"
                 type="primary"
@@ -78,6 +79,22 @@
             <span class="field-value">{{ record.typeInfo.description }}</span>
           </li>
 
+
+          <li class="field-info-item">
+            <div class="field-title">{{ $t('RuleEngine.detailedStatus') }}:</div>
+            <span class="field-value">
+              <el-button type="dashed" size="mini" @click="toggleShowConfig">
+                {{ showConfig ? $t('RuleEngine.hide') : $t('RuleEngine.view') }}
+              </el-button>
+            </span>
+          </li>
+
+          <li v-if="showConfig" class="field-info-item">
+            <el-collapse-transition>
+              <resource-node :value="record" @change="loadData"></resource-node>
+            </el-collapse-transition>
+          </li>
+
         </ul>
       </a-card>
 
@@ -86,18 +103,7 @@
         <div class="emq-title">
           {{ $t('RuleEngine.configuration') }}
         </div>
-
-        <el-row :gutter="40" class="resource-field-wrapper">
-          <ul class="field-info">
-            <el-col v-for="(item, i) in record._config" :key="i" :span="12">
-              <li class="field-info-item" :title="item.description">
-                <div class="field-title">{{ item.title }}:</div>
-                <span class="field-value">{{ item.value | itemValue }}</span>
-              </li>
-            </el-col>
-          </ul>
-        </el-row>
-
+        <resource-field :config="record._config"></resource-field>
       </a-card>
 
     </div>
@@ -109,31 +115,26 @@
 
 <script>
 import { loadResourceDetails, reconnectResource } from '@/api/rules'
+import ResourceNode from './components/ResourceNode'
+import ResourceField from './components/ResourceField'
 
 export default {
   name: 'ResourceView',
 
-  components: {},
-
-  filters: {
-    itemValue(val) {
-      if (typeof val === 'object') {
-        return JSON.stringify(val)
-      }
-      return val
-    },
-  },
+  components: { ResourceNode, ResourceField },
 
   props: {},
 
   data() {
     return {
       loading: true,
+      reloading: false,
       record: {
         _config: [],
         typeInfo: {},
         status: [],
       },
+      showConfig: false,
     }
   },
   computed: {
@@ -160,9 +161,16 @@ export default {
   },
 
   methods: {
+    toggleShowConfig() {
+      this.showConfig = !this.showConfig
+    },
     async reconnectResource() {
+      this.reloading = true
       reconnectResource(this.resourceId).then(() => {
+        this.reloading = false
         this.loadData()
+      }).catch(() => {
+        this.reloading = false
       })
     },
     async loadData() {
@@ -183,17 +191,11 @@ export default {
   @import "./style.less";
 
   .field-title {
-    width: 80px;
+    width: 110px;
   }
 
   .ant-badge-status-text {
     font-size: 12px;
-  }
-
-  .resource-field-wrapper {
-    .field-title {
-      width: 140px;
-    }
   }
 }
 </style>

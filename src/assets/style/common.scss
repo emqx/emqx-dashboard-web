@@ -244,6 +244,10 @@ body {
   color: #101010;
   font-weight: bolder;
 
+  &.h3 {
+    font-size: 14px;
+  }
+
   &[size="small"] {
     font-size: 14px;
   }

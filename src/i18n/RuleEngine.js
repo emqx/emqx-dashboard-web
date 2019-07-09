@@ -5,6 +5,26 @@ export default {
     '主题通配符',
     '规则引擎使用说起来语句配置二面消息流与设备事件的处理规则，内置多种灵活的数据处理方案',
   ],
+  view: {
+    zh: '点击查看',
+    en: 'view',
+  },
+  hide: {
+    zh: '点击收起',
+    en: 'hide',
+  },
+  detailedStatus: {
+    zh: '详细状态',
+    en: 'Detailed status',
+  },
+  resourceStatusTips: {
+    zh: '节点上的资源状态信息',
+    en: 'Resource status on nodes',
+  },
+  resourceStatus: {
+    zh: '资源状态',
+    en: 'Status',
+  },
   deleteResource: {
     zh: '此操作将停用并删除该资源,确认继续?',
     en: 'This operation will disable and delete the resource',
@@ -130,7 +150,7 @@ export default {
     en: 'Not available',
   },
   instructions: {
-    zh: '使用说明',
+    zh: '资源说明',
     en: 'Instructions',
   },
   configuration: {
@@ -291,7 +311,7 @@ export default {
   },
   numberOfHits: {
     zh: '命中次数',
-    en: 'Number of hits',
+    en: 'Hits',
   },
   numberOfRulesExecutedAfterEnabling: {
     zh: '规则启用后的执行次数',
