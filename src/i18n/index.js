@@ -5,7 +5,7 @@ import Alerts from './Alerts'
 import Base from './Base'
 import components from './components'
 import Connections from './Connections'
-import Func from './Function'
+import General from './General'
 import Overview from './Overview'
 import Plugins from './Plugins'
 import RuleEngine from './RuleEngine'
@@ -20,7 +20,7 @@ const lang = {
   },
 }
 
-const model = ['Alerts', 'Base', 'components', 'Connections', 'Function', 'Overview', 'Plugins', 'RuleEngine', 'Tools']
+const model = ['Alerts', 'Base', 'components', 'Connections', 'General', 'Overview', 'Plugins', 'RuleEngine', 'Tools']
 model.forEach((key) => {
   const value = require(`./${key}`).default
 

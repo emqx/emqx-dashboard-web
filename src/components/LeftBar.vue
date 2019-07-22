@@ -143,6 +143,11 @@ export default {
             path: '/application',
             parentKey: 'function',
           },
+          // {
+          //   title: this.$t('components.blacklist'),
+          //   path: '/blacklist',
+          //   parentKey: 'function',
+          // },
           {
             title: this.$t('components.user'),
             path: '/users',

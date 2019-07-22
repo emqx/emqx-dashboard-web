@@ -65,6 +65,10 @@ export default
     zh: '应用',
     en: 'Application',
   },
+  blacklist: {
+    zh: '黑名单',
+    en: 'Blacklist'
+  },
   user: {
     zh: '用户',
     en: 'Users',

@@ -207,7 +207,7 @@ function checkLanguage(lang) {
   return ''
 }
 
-export function getDefaultLanguage() {
+function getDefaultLanguage() {
   const browserLanguage = checkLanguage(navigator.language.substr(0, 2))
   const localStorageLanguage = checkLanguage(localStorage.getItem('language'))
   const defaultLanguage = (window.EMQX_CONFIG || {}).language

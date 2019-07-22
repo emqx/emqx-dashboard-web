@@ -133,7 +133,7 @@ const router = new Router({
         {
           path: '',
           name: 'application',
-          component: () => import('@/views/Function/Application'),
+          component: () => import('@/views/General/Application'),
         },
       ],
     },
@@ -144,7 +144,7 @@ const router = new Router({
         {
           path: '',
           name: 'users',
-          component: () => import('@/views/Function/Users'),
+          component: () => import('@/views/General/Users'),
         },
       ],
     },

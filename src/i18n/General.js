@@ -10,6 +10,13 @@ export default {
     '密码长度为三到三十二位',
     '取消修改密码，删除密码数据',
   ],
+  blacklistTips: {
+    zh: '设置黑名单禁用客户端或'
+  },
+  blacklist: {
+    zh: '黑名单',
+    en: 'Blacklist'
+  },
   confirmDelete: {
     zh: '确认删除应用?',
     en: 'Confirm delete?'

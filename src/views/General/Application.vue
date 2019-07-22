@@ -5,33 +5,33 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link class="btn btn-default raw" to="/" tag="span">
-              {{ $t('Function.homePage') }}
+              {{ $t('General.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              {{ $t('Function.application') }}
+              {{ $t('General.application') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
 
         <div class="page-header-title-view">
           <div class="title">
-            {{ $t('Function.application') }}
+            {{ $t('General.application') }}
           </div>
         </div>
 
         <div class="page-header-content-view">
           <div class="content">
             <p class="description">
-              {{ $t('Function.applicationIsCalled') }}
+              {{ $t('General.applicationIsCalled') }}
             </p>
 
             <div class="page-header-link">
               <a :href="docs.restAPI" target="_blank" class="link-item">
                 <i class="icon el-icon-document"></i>
-                {{ $t('Function.productDocumentation') }}
+                {{ $t('General.productDocumentation') }}
               </a>
             </div>
           </div>
@@ -48,7 +48,7 @@
             icon="el-icon-plus"
             @click="showDialog('create')"
           >
-            {{ $t('Function.create') }}
+            {{ $t('General.create') }}
           </el-button>
         </div>
 
@@ -61,10 +61,10 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="name" :label="$t('Function.appName')"></el-table-column>
-          <el-table-column prop="expired" :formatter="formatterExpired" :label="$t('Function.expireAt')"></el-table-column>
-          <el-table-column prop="desc" :label="$t('Function.remark')"></el-table-column>
-          <el-table-column :label="$t('Function.isEnabled')">
+          <el-table-column prop="name" :label="$t('General.appName')"></el-table-column>
+          <el-table-column prop="expired" :formatter="formatterExpired" :label="$t('General.expireAt')"></el-table-column>
+          <el-table-column prop="desc" :label="$t('General.remark')"></el-table-column>
+          <el-table-column :label="$t('General.isEnabled')">
             <template slot-scope="{ row }">
               <el-switch
                 v-model="row.status"
@@ -78,14 +78,14 @@
           <el-table-column>
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
-                {{ $t('Function.edit') }}
+                {{ $t('General.edit') }}
               </el-button>
               <el-button
                 type="dashed"
                 size="mini"
                 @click="deleteConfirm(row)"
               >
-                {{ $t('Function.delete') }}
+                {{ $t('General.delete') }}
               </el-button>
             </template>
           </el-table-column>
@@ -97,7 +97,7 @@
 
     <el-dialog
       width="600px"
-      :title="accessType === 'edit' ? $t('Function.editApp') : $t('Function.createApp')"
+      :title="accessType === 'edit' ? $t('General.editApp') : $t('General.createApp')"
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
@@ -119,7 +119,7 @@
             </el-form-item>
           </el-col>
           <el-col v-if="accessType === 'view'" :span="12">
-            <el-form-item prop="secret" :label="$t('Function.secret')">
+            <el-form-item prop="secret" :label="$t('General.secret')">
               <el-input
                 v-model="record.secret"
                 :disabled="accessType === 'edit'"
@@ -129,7 +129,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="name" :label="$t('Function.appName')">
+            <el-form-item prop="name" :label="$t('General.appName')">
               <el-input
                 v-model="record.name"
                 :disabled="accessType === 'edit'"
@@ -139,7 +139,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="status" :label="$t('Function.isEnabled')">
+            <el-form-item prop="status" :label="$t('General.isEnabled')">
               <emq-select
                 v-model="record.status"
                 :field="{ options: enableOption }"
@@ -149,7 +149,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="expired" :label="$t('Function.expireAt')">
+            <el-form-item prop="expired" :label="$t('General.expireAt')">
               <el-date-picker
                 v-model="record.expired"
                 type="date"
@@ -161,7 +161,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="desc" :label="$t('Function.remark')">
+            <el-form-item prop="desc" :label="$t('General.remark')">
               <el-input
                 v-model="record.desc"
                 :readonly="accessType === 'view'"
@@ -172,8 +172,8 @@
       </el-form>
 
       <div v-if="accessType !== 'view'" slot="footer" class="dialog-align-footer">
-        <el-button type="primary" size="small" @click="save">{{ $t('Function.confirm') }}</el-button>
-        <el-button plain size="small" @click="dialogVisible = false">{{ $t('Function.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{ $t('General.confirm') }}</el-button>
+        <el-button plain size="small" @click="dialogVisible = false">{{ $t('General.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -207,15 +207,15 @@ export default {
       dialogVisible: false,
       tableData: [],
       accessType: '',
-      enableOption: [{ label: this.$t('Function.enabled'), value: true }, { label: this.$t('Function.disabled'), value: false }],
+      enableOption: [{ label: this.$t('General.enabled'), value: true }, { label: this.$t('General.disabled'), value: false }],
       record: {
         status: true, // 是否启用
         desc: '',
       },
       rules: {
-        name: [{ required: true, message: this.$t('Function.pleaseEnterAppName') }],
-        app_id: [{ required: true, message: this.$t('Function.pleaseEnterTheAppId') }],
-        status: [{ required: true, message: this.$t('Function.pleaseChoose') }],
+        name: [{ required: true, message: this.$t('General.pleaseEnterAppName') }],
+        app_id: [{ required: true, message: this.$t('General.pleaseEnterTheAppId') }],
+        status: [{ required: true, message: this.$t('General.pleaseChoose') }],
       },
     }
   },
@@ -227,7 +227,7 @@ export default {
   methods: {
     formatterExpired({ expired }) {
       if (!expired || typeof expired !== 'number') {
-        return this.$t('Function.neverExpire')
+        return this.$t('General.neverExpire')
       }
       return moment(expired * 1000).format('YYYY-MM-DD')
     },
@@ -270,7 +270,7 @@ export default {
     },
     updateApplication(item) {
       updateApp(item.app_id, item).then(() => {
-        this.$message.success(this.$t('Function.editorialSuccess'))
+        this.$message.success(this.$t('General.editorialSuccess'))
       })
     },
     save() {
@@ -290,14 +290,14 @@ export default {
         if (vue.accessType === 'edit') {
           const { app_id } = vue.record
           updateApp(app_id, record).then(() => {
-            vue.$message.success(this.$t('Function.editorialSuccess'))
+            vue.$message.success(this.$t('General.editorialSuccess'))
             vue.dialogVisible = false
             vue.accessType = ''
             vue.loadData()
           })
         } else {
           createApp(record).then(() => {
-            vue.$message.success(this.$t('Function.successfulAppCreation'))
+            vue.$message.success(this.$t('General.successfulAppCreation'))
             vue.dialogVisible = false
             vue.accessType = ''
             vue.loadData()
@@ -307,13 +307,13 @@ export default {
     },
     deleteConfirm(item) {
       const vue = this
-      this.$msgbox.confirm(this.$t('Function.confirmDelete'), {
-        confirmButtonText: this.$t('Function.confirm'),
-        cancelButtonText: this.$t('Function.cancel'),
+      this.$msgbox.confirm(this.$t('General.confirmDelete'), {
+        confirmButtonText: this.$t('General.confirm'),
+        cancelButtonText: this.$t('General.cancel'),
         type: 'warning',
       }).then(async () => {
         destroyAPP(item.app_id).then(() => {
-          vue.$message.success(this.$t('Function.successfulDeletion'))
+          vue.$message.success(this.$t('General.successfulDeletion'))
           vue.loadData()
         })
       }).catch(() => {})

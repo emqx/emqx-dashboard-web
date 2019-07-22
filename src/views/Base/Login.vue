@@ -4,9 +4,9 @@
 
       <div class="split-wrapper">
         <div class="logo-wrapper">
-          <div class="logo">
-            <img src="../../assets/emqlogo.png" alt="">
-          </div>
+          <!--<div class="logo">-->
+          <!--<img src="../../assets/emqlogo.png" alt="">-->
+          <!--</div>-->
         </div>
 
         <div :span="12" class="login-wrapper">
@@ -123,10 +123,12 @@ export default {
   width: 100vw;
   min-height: 100vh;
   /*background-color: #181818;*/
+  box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08);
 
   .ant-card-body {
     padding: 0;
   }
+
   .emq-title {
     margin-bottom: 32px;
   }
@@ -136,7 +138,9 @@ export default {
   }
 
   .logo-wrapper {
-    background-color: #d8d8d8;
+    background-image: url("../../assets/emqx_banner.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
     position: relative;
     height: 512px;
     border-radius: 6px 0 0 6px;

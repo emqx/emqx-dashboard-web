@@ -1,9 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import { safeParser, getDefaultLanguage } from '@/common/utils'
-
 Vue.use(Vuex)
+
+function checkLanguage(lang) {
+  if (['en', 'zh'].includes(lang)) {
+    return lang
+  }
+  return ''
+}
+
+function getDefaultLanguage() {
+  const browserLanguage = checkLanguage(navigator.language.substr(0, 2))
+  const localStorageLanguage = checkLanguage(localStorage.getItem('language'))
+  const defaultLanguage = (window.EMQX_CONFIG || {}).language
+  return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
+}
 
 export default new Vuex.Store({
   state: {
@@ -11,7 +23,7 @@ export default new Vuex.Store({
     user: JSON.parse(localStorage.user || sessionStorage.user || '{}') || {},
     lang: getDefaultLanguage(),
     leftBarCollapse: false, // localStorage.getItem('leftBarCollapse'),
-    alertCount: 0
+    alertCount: 0,
   },
   actions: {
     SET_ALERT_COUNT({ commit }, count = 0) {

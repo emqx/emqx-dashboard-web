@@ -5,26 +5,26 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link class="btn btn-default raw" to="/" tag="span">
-              {{ $t('Function.homePage') }}
+              {{ $t('General.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              {{ $t('Function.user') }}
+              {{ $t('General.blacklist') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
 
         <div class="page-header-title-view">
           <div class="title">
-            {{ $t('Function.user') }}
+            {{ $t('General.blacklist') }}
           </div>
         </div>
 
         <div class="page-header-content-view">
           <div class="content">
-            {{ $t('Function.manageDashboardUsers') }}
+            {{ $t('General.manageDashboardUsers') }}
           </div>
         </div>
       </div>
@@ -41,16 +41,16 @@
             icon="el-icon-plus"
             @click="showDialog('create')"
           >
-            {{ $t('Function.create') }}
+            {{ $t('General.create') }}
           </el-button>
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column min-width="120px" prop="username" :label="$t('Function.userName')"></el-table-column>
-          <el-table-column min-width="60px" prop="tags" :label="$t('Function.remark')"></el-table-column>
+          <el-table-column min-width="120px" prop="username" :label="$t('General.userName')"></el-table-column>
+          <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')"></el-table-column>
           <el-table-column width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">{{ $t('Function.edit') }}
+              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">{{ $t('General.edit') }}
               </el-button>
 
 
@@ -59,7 +59,7 @@
                 type="danger"
                 size="mini"
                 @click="deleteConfirm(row)"
-              >{{ $t('Function.delete') }}
+              >{{ $t('General.delete') }}
               </el-button>
 
             </template>
@@ -72,31 +72,31 @@
 
     <el-dialog
       width="520px"
-      :title="accessType === 'edit' ? $t('Function.editorUser') : $t('Function.creatingUser')"
+      :title="accessType === 'edit' ? $t('General.editorUser') : $t('General.creatingUser')"
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
-        <el-form-item prop="username" :label="$t('Function.userName')">
+        <el-form-item prop="username" :label="$t('General.userName')">
           <el-input
             v-model="record.username"
             :disabled="accessType === 'edit'"
           ></el-input>
         </el-form-item>
-        <el-form-item prop="tags" :label="$t('Function.remark')">
+        <el-form-item prop="tags" :label="$t('General.remark')">
           <el-input v-model="record.tags"></el-input>
         </el-form-item>
         <el-form-item
           v-if="accessType !== 'edit' || allowChange"
           prop="password"
-          :label="accessType === 'edit' ? $t('Function.oldPassword') : $t('Function.password')"
+          :label="accessType === 'edit' ? $t('General.oldPassword') : $t('General.password')"
         >
           <el-input v-model="record.password" type="password"></el-input>
         </el-form-item>
-        <el-form-item v-if="allowChange" prop="newPassword" :label="$t('Function.newPassword')">
+        <el-form-item v-if="allowChange" prop="newPassword" :label="$t('General.newPassword')">
           <el-input v-model="record.newPassword" type="password"></el-input>
         </el-form-item>
-        <el-form-item v-if="allowChange" prop="repeatPassword" :label="$t('Function.confirmPassword')">
+        <el-form-item v-if="allowChange" prop="repeatPassword" :label="$t('General.confirmPassword')">
           <el-input v-model="record.repeatPassword" type="password"></el-input>
         </el-form-item>
         <el-link
@@ -104,13 +104,13 @@
           :underline="false"
           @click="togglePassword"
         >
-          {{ allowChange ? $t('Function.dontChangePassword') : $t('Function.changePassword') }}
+          {{ allowChange ? $t('General.dontChangePassword') : $t('General.changePassword') }}
         </el-link>
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button type="primary" size="small" @click="save">{{ $t('Function.confirm') }}</el-button>
-        <el-button plain size="small" @click="closeDialog">{{ $t('Function.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{ $t('General.confirm') }}</el-button>
+        <el-button plain size="small" @click="closeDialog">{{ $t('General.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -136,7 +136,7 @@ export default {
   data() {
     const validatePass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error(this.$t('Function.pleaseEnterYourPasswordAgain')))
+        callback(new Error(this.$t('General.pleaseEnterYourPasswordAgain')))
       } else if (value !== this.record.newPassword) {
         callback(new Error('两次输入密码不一致!'))
       } else {
@@ -151,33 +151,33 @@ export default {
       record: {},
       rules: {
         username: [
-          { required: true, message: this.$t('Function.enterOneUserName') },
+          { required: true, message: this.$t('General.enterOneUserName') },
         ],
         tags: [
-          { required: true, message: this.$t('Function.pleaseEnterNotes') },
+          { required: true, message: this.$t('General.pleaseEnterNotes') },
         ],
         password: [{
           required: true,
-          message: this.$t('Function.pleaseEnterPassword'),
+          message: this.$t('General.pleaseEnterPassword'),
           trigger: ['blur', 'change'],
         }, {
           min: 3,
           max: 32,
-          message: this.$t('Function.passwordLength'),
+          message: this.$t('General.passwordLength'),
           trigger: ['blur', 'change'],
         }],
         newPassword: [{
           required: true,
-          message: this.$t('Function.pleaseEnterNewPassword'),
+          message: this.$t('General.pleaseEnterNewPassword'),
           trigger: ['blur', 'change'],
         }, {
           min: 3,
           max: 32,
-          message: this.$t('Function.passwordLength'),
+          message: this.$t('General.passwordLength'),
           trigger: ['blur', 'change'],
         }],
         repeatPassword: [
-          { required: true, message: this.$t('Function.pleaseEnterAConfirmationPassword') },
+          { required: true, message: this.$t('General.pleaseEnterAConfirmationPassword') },
           { validator: validatePass, trigger: ['blur', 'change'] },
         ],
       },
@@ -238,7 +238,7 @@ export default {
               // 更新当前用户
               this.$store.dispatch('UPDATE_USER_INFO', { username, password })
             }
-            vue.$message.success(vue.$t('Function.editorialSuccess'))
+            vue.$message.success(vue.$t('General.editorialSuccess'))
             vue.dialogVisible = false
             vue.allowChange = false
             vue.accessType = ''
@@ -247,7 +247,7 @@ export default {
           })
         } else {
           createUser(vue.record).then(() => {
-            vue.$message.success(vue.$t('Function.createUserSuccess'))
+            vue.$message.success(vue.$t('General.createUserSuccess'))
             vue.dialogVisible = false
             vue.accessType = ''
             vue.record = {}
@@ -259,13 +259,13 @@ export default {
     deleteConfirm(item) {
       const vue = this
 
-      this.$msgbox.confirm(this.$t('Function.confirmDeleteUser'), {
-        confirmButtonText: this.$t('Function.confirm'),
-        cancelButtonText: this.$t('Function.cancel'),
+      this.$msgbox.confirm(this.$t('General.confirmDeleteUser'), {
+        confirmButtonText: this.$t('General.confirm'),
+        cancelButtonText: this.$t('General.cancel'),
         type: 'warning',
       }).then(async () => {
         destroyUser(item.username).then(() => {
-          vue.$message.success(this.$t('Function.successfulDeletion'))
+          vue.$message.success(this.$t('General.successfulDeletion'))
           vue.loadData()
         })
       }).catch(() => {})

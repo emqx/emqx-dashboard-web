@@ -1,11 +1,16 @@
 /* eslint-disable */
 import axios from 'axios'
 import { Message } from 'element-ui'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 import { getBasicAuthInfo, toLogin } from '@/common/utils'
 import config from '@/config'
 import store from '@/store'
 
+let timer = 0
+
+NProgress.configure({ showSpinner: false })
 const { lang = 'zh' } = store.state
 
 const httpCode = {
@@ -73,11 +78,16 @@ axios.interceptors.request.use((config) => {
   config.auth.password = user.password
 
   store.dispatch('LOADING', true)
+  NProgress.start()
   return config
 }, error => Promise.reject(error))
 
 function handleError(error) {
   console.log(error)
+  clearTimeout(timer)
+  timer = setTimeout(() => {
+    NProgress.done()
+  }, 300)
   if (!error.response) {
     // Message.error(error.message)
     return Promise.reject(error.message)
@@ -116,7 +126,11 @@ axios.interceptors.response.use((response) => {
     res = { data, status }
   }
 
-  store.dispatch('LOADING', false)
+  clearTimeout(timer)
+  timer = setTimeout(() => {
+    store.dispatch('LOADING', false)
+    NProgress.done()
+  }, 300)
 
   if (error) {
     response.status = 400
