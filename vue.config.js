@@ -1,5 +1,6 @@
 module.exports = {
   devServer: {
+    port: 8888,
     disableHostCheck: true,
     proxy: {
       '/api': {
@@ -22,5 +23,4 @@ module.exports = {
 
   assetsDir: 'static',
   productionSourceMap: false,
-
 }

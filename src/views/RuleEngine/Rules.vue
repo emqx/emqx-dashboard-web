@@ -17,10 +17,6 @@
           </a-breadcrumb-item>
         </a-breadcrumb>
 
-        <div class="page-header-title-view">
-          <div class="title">{{ $t('RuleEngine.ruleEngine') }}</div>
-        </div>
-
         <div class="page-header-content-view">
           <div class="content">
             <p class="description">

@@ -134,9 +134,7 @@ export default {
       this.fieldList = []
       const list = []
       this.config.forEach((item) => {
-        const {
-          key, value, desc, required,
-        } = item
+        const { key, value } = item
         this.$set(this.record, key, value)
         list.push(this.getFieldItem(item))
       })
@@ -147,13 +145,13 @@ export default {
       this.fieldList.concat(otherField)
     },
     getFieldItem(item) {
-      const { key, desc, required } = item
+      const { key, required } = item
       let { value } = item
       let type = value.length > 28 ? 'textarea' : 'text'
 
       if (typeof value === 'number' || (value && /^[0-9]*$/.test(value))) {
         type = 'number'
-        value = parseInt(value)
+        value = parseInt(value, 10)
       }
 
       let order = key.length

@@ -13,12 +13,6 @@
           </a-breadcrumb-item>
         </a-breadcrumb>
 
-        <div class="page-header-title-view">
-          <div class="title">
-            {{ $t('Connections.connect') }}
-          </div>
-        </div>
-
         <div class="page-header-content-view">
           <div class="content">
             {{ $t('Connections.currentConnection') }}

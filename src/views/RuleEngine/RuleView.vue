@@ -195,7 +195,7 @@ export default {
           event: {},
         }
       }
-      const { for: value, rawsql = '' } = this.record
+      const { rawsql = '' } = this.record
       const sql = rawsql.replace(/\n/g, ' ')
       const reField = sql.match(/SELECT (.+) FROM/)
       const fields = reField ? reField[1] : '*'

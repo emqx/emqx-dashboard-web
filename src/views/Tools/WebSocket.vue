@@ -16,10 +16,6 @@
           </a-breadcrumb-item>
         </a-breadcrumb>
 
-        <div class="page-header-title-view">
-          <div class="title">WebSocket</div>
-        </div>
-
         <el-tabs
           v-model="activeTab"
           class="page-header-footer"

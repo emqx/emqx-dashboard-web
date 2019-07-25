@@ -16,12 +16,6 @@
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
-
-        <div class="page-header-title-view">
-          <div class="title">
-            {{ $t('RuleEngine.resources') }}
-          </div>
-        </div>
       </div>
     </div>
 

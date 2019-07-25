@@ -16,12 +16,6 @@
           </a-breadcrumb-item>
         </a-breadcrumb>
 
-        <div class="page-header-title-view">
-          <div class="title">
-            {{ $t('General.application') }}
-          </div>
-        </div>
-
         <div class="page-header-content-view">
           <div class="content">
             <p class="description">
@@ -277,7 +271,7 @@ export default {
       const vue = this
       this.$refs.recordForm.validate((valid) => {
         if (!valid) {
-          return false
+          return
         }
         const record = { ...this.record }
         if (record.expired && typeof record.expired === 'string') {

@@ -17,7 +17,6 @@
           <a-breadcrumb-item>{{ $t('Connections.connectionDetails') }}</a-breadcrumb-item>
         </a-breadcrumb>
 
-
         <div class="page-header-title-view">
           <div style="display: flex;align-items: center">
             <span class="title">
