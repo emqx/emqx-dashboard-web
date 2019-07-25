@@ -9,10 +9,12 @@
 
     <a-menu
       style="width: 200px"
+      class="menu-wrapper"
       :default-selected-keys="defaultSelectedKeys"
       :selected-keys="defaultSelectedKeys"
       :open-keys.sync="defaultOpenKeys"
       mode="inline"
+      theme="dark"
       @click="handleClick"
     >
       <template v-for="item in menus">
@@ -188,78 +190,82 @@ export default {
 </script>
 
 
-<style lang="scss" scoped>
-@import "../assets/style/element-variables";
+<style lang="scss">
+@import "../assets/style/variables";
 
 .left-bar {
   min-height: calc(100vh - 80px);
-  background-color: #fff;
-}
+  background-color: $color-theme;
 
-
-.ant-menu {
-  margin-top: 80px;
-  border-right-color: transparent;
-
-  &.ant-menu-inline {
-    border-right-color: #fff;
-    border-right: 0;
+  .menu-wrapper {
+    margin-top: 80px;
   }
-}
+  .ant-menu {
+    border-right-color: transparent;
 
-.iconfont {
-  margin-right: 8px;
-}
-
-.logo {
-  text-align: center;
-  width: 200px;
-  font-size: 18px;
-  /*font-weight: bolder;*/
-  height: 60px;
-  line-height: 60px;
-  color: #34C388;
-  overflow: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: #fff;
-  z-index: 100;
-  transition: left .5s;
-  box-shadow: 1px 1px 0 0 #e8e8e8;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-
-  .title {
-    margin-left: 12px;
+    &.ant-menu-inline {
+      border-right-color: #fff;
+      border-right: 0;
+    }
   }
 
-  .logo-img {
-    width: 48px;
-    height: auto;
+  .ant-menu-sub, .ant-menu-dark {
+    background-color: $color-theme;
   }
 
-  .unit {
-    /*font-style: italic;*/
+  .iconfont {
+    margin-right: 8px;
   }
 
-  .line {
-    margin-top: 12px;
-    width: 120px;
-  }
-}
-
-.el-scrollbar {
-  height: 100vh;
-}
-
-.el-menu {
-  min-height: calc(100% - 80px);
-
-  &:not(.el-menu--collapse) {
+  .logo {
+    text-align: center;
     width: 200px;
-  }
-}
+    font-size: 18px;
+    height: 60px;
+    line-height: 60px;
+    color: #34C388;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    transition: left .5s;
+    // box-shadow: 0 2px 0 0 $color-theme--active;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
 
+    .title {
+      margin-left: 12px;
+    }
+
+    .logo-img {
+      width: 48px;
+      height: auto;
+    }
+
+    .unit {
+      /*font-style: italic;*/
+    }
+
+    .line {
+      margin-top: 12px;
+      width: 120px;
+    }
+  }
+
+  .el-scrollbar {
+    height: 100vh;
+  }
+
+  .el-menu {
+    min-height: calc(100% - 80px);
+
+    &:not(.el-menu--collapse) {
+      width: 200px;
+    }
+  }
+
+
+}
 </style>

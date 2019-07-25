@@ -51,8 +51,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/style/variables";
+
 .el-aside {
-  background-color: #fff;
+  background-color: $color-theme;
   transition: left .5s;
   position: fixed;
   top: 0;
