@@ -69,7 +69,8 @@
             </template>
           </el-table-column>
           <el-table-column prop="description" show-overflow-tooltip
-                           :label="$t('RuleEngine.describe')"></el-table-column>
+                           :label="$t('RuleEngine.describe')"
+          ></el-table-column>
           <el-table-column
             prop="for"
             :filters="filterOptions.for"
@@ -183,7 +184,7 @@
           </div>
 
           <!--<div class="metrics-item oper-wrapper">-->
-            <!--<el-button type="dashed" size="small">查看详情</el-button>-->
+          <!--<el-button type="dashed" size="small">查看详情</el-button>-->
           <!--</div>-->
 
 
@@ -202,12 +203,9 @@ import {
   loadRuleEvents,
 } from '@/api/rules'
 import { getLink } from '@/common/utils'
-import CodeView from '@/components/CodeView'
 
 export default {
   name: 'Rules',
-
-  components: { CodeView },
 
   props: {},
 
@@ -220,32 +218,36 @@ export default {
       listLoading: false,
       metricsDrawerVisible: false,
       currentRules: {
-        'actions': [{
-          'id': 'do_nothing_1562653876521962460',
-          'metrics': [{ 'failed': 0, 'node': 'emqx@127.0.0.1', 'success': 3 }],
-          'name': 'do_nothing',
-          'params': {},
+        actions: [{
+          id: 'do_nothing_1562653876521962460',
+          metrics: [{ failed: 0, node: 'emqx@127.0.0.1', success: 3 }],
+          name: 'do_nothing',
+          params: {},
         }],
-        'description': '',
-        'enabled': true,
-        'for': ['client.connected'],
-        'id': 'rule:33570eea',
-        'metrics': [{ 'matched': 3, 'node': 'emqx@127.0.0.1', 'speed': 0, 'speed_last5m': 0, 'speed_max': 0.1 }],
-        'rawsql': 'SELECT * FROM "client.connected"',
-        'event': {
-          'columns': ['client_id', 'username', 'event', 'auth_result', 'clean_start', 'connack', 'connected_at', 'is_bridge', 'keepalive', 'mountpoint', 'peername', 'proto_ver', 'timestamp', 'node'],
-          'description': '连接建立',
-          'event': 'client.connected',
-          'sql_example': 'SELECT * FROM "client.connected"',
-          'test_columns': {
-            'client_id': 'c_emqx',
-            'username': 'u_emqx',
-            'auth_result': 'success',
-            'peername': '127.0.0.1:63412',
+        description: '',
+        enabled: true,
+        for: ['client.connected'],
+        id: 'rule:33570eea',
+        metrics: [{
+          matched: 3, node: 'emqx@127.0.0.1', speed: 0, speed_last5m: 0, speed_max: 0.1,
+        }],
+        rawsql: 'SELECT * FROM "client.connected"',
+        event: {
+          columns: ['client_id', 'username', 'event', 'auth_result', 'clean_start', 'connack', 'connected_at', 'is_bridge', 'keepalive', 'mountpoint', 'peername', 'proto_ver', 'timestamp', 'node'],
+          description: '连接建立',
+          event: 'client.connected',
+          sql_example: 'SELECT * FROM "client.connected"',
+          test_columns: {
+            client_id: 'c_emqx',
+            username: 'u_emqx',
+            auth_result: 'success',
+            peername: '127.0.0.1:63412',
           },
-          'title': '连接建立',
+          title: '连接建立',
         },
-        'metricsData': { 'matched': 3, 'speed': 0, 'speed_last5m': 0, 'speed_max': 0.1 },
+        metricsData: {
+          matched: 3, speed: 0, speed_last5m: 0, speed_max: 0.1,
+        },
       },
       filterOptions: {
         for: [],

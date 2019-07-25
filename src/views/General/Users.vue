@@ -221,8 +221,9 @@ export default {
       }
     },
     async save() {
+      /* eslint-disable */
       const vue = this
-      this.$refs.recordForm.validate(function(valid) {
+      this.$refs.recordForm.validate(function (valid) {
         if (!valid) {
           return false
         }

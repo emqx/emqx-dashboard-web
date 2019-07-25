@@ -11,15 +11,15 @@ export default {
     '取消修改密码，删除密码数据',
   ],
   blacklistTips: {
-    zh: '设置黑名单禁用客户端或'
+    zh: '设置黑名单禁用客户端或',
   },
   blacklist: {
     zh: '黑名单',
-    en: 'Blacklist'
+    en: 'Blacklist',
   },
   confirmDelete: {
     zh: '确认删除应用?',
-    en: 'Confirm delete?'
+    en: 'Confirm delete?',
   },
   applicationIsCalled: {
     zh: '应用为调用 REST API 认证凭证，通过 REST API 可查询、调整 EMQ X 集群信息，对设备进行管理操作',
@@ -59,7 +59,7 @@ export default {
   },
   isEnabled: {
     zh: '是否启用',
-    en: 'Is Enabled'
+    en: 'Is Enabled',
   },
   enabled: {
     zh: '启用',
@@ -197,7 +197,7 @@ export default {
     zh: '请输入新密码',
     en: 'Please enter new password',
   },
-  'pleaseEnterAConfirmationPassword': {
+  pleaseEnterAConfirmationPassword: {
     zh: '请输入确认密码',
     en: 'Please enter confirm password.',
   },
@@ -211,10 +211,10 @@ export default {
   },
   passwordLength: {
     zh: '密码长度为 3~32 位',
-    en: 'Password length is 3~32'
+    en: 'Password length is 3~32',
   },
   confirmDeleteUser: {
     zh: '确认删除该用户?',
-    en: 'Confirm delete?'
+    en: 'Confirm delete?',
   },
 }

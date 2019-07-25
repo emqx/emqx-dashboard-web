@@ -2,11 +2,11 @@ export default {
   __not: [],
   maxSix: {
     zh: '最大支持 6 个连接',
-    en: 'Maximum support for 6 connection'
+    en: 'Maximum support for 6 connection',
   },
   defaultConnection: {
     zh: '默认连接',
-    en: 'Default'
+    en: 'Default',
   },
   connectionName: {
     zh: '新连接',

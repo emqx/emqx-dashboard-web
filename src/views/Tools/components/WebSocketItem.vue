@@ -8,7 +8,8 @@
         </div>
 
         <el-form ref="configForm" hide-required-asterisk :model="connection" size="small" :rules="connectionRules"
-                 label-position="top" @keyup.enter.native="createConnection">
+                 label-position="top" @keyup.enter.native="createConnection"
+        >
 
           <!--<el-form-item prop="protocols" :label="$t('Tools.protocolType')">
           <emq-select-->
@@ -27,7 +28,8 @@
             <el-col :span="8">
               <el-form-item prop="port" :label="$t('Tools.port')">
                 <el-input v-model.number="connection.port" type="number" placeholder="8083/8084"
-                          :readonly="client.connected"></el-input>
+                          :readonly="client.connected"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -40,7 +42,8 @@
               <el-form-item prop="clientId" label="Client ID">
                 <el-input v-model="connection.clientId" :readonly="client.connected">
                   <i slot="suffix" :title="$t('Tools.randomGeneration')" :disabled="client.connected"
-                     class="el-icon-refresh el-input_icon" @click="refreshClientId"></i>
+                     class="el-icon-refresh el-input_icon" @click="refreshClientId"
+                  ></i>
                 </el-input>
               </el-form-item>
             </el-col>
@@ -60,7 +63,8 @@
 
               <el-form-item prop="keepalive" label="Keepalive">
                 <el-input v-model.number="connection.keepalive" :readonly="client.connected" type="number"
-                          placeholder="60"></el-input>
+                          placeholder="60"
+                ></el-input>
               </el-form-item>
             </el-col>
 
@@ -78,13 +82,15 @@
 
             <el-col :span="24" class="footer-area">
               <el-button type="primary" size="small" class="conn-btn" style="margin-right: 20px"
-                         :disabled="client.connected || connecting" @click="createConnection">
+                         :disabled="client.connected || connecting" @click="createConnection"
+              >
                 {{ client.connected ? $t('Tools.connected') : connecting ? $t('Tools.inConnection') :
-                $t('Tools.connect') }}
+                  $t('Tools.connect') }}
               </el-button>
 
               <el-button type="danger" size="small" class="conn-btn" :disabled="!client.connected && !connecting"
-                         @click="destroyConnection">
+                         @click="destroyConnection"
+              >
                 {{ connecting ? $t('Tools.cancelConnection') : $t('Tools.disconnect') }}
               </el-button>
             </el-col>
@@ -126,7 +132,8 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form ref="subForm" hide-required-asterisk :model="subscriptionsRecord" :rules="subscriptionsRules"
-                   size="small" label-position="top" @keyup.enter.native="_doSubscribe">
+                   size="small" label-position="top" @keyup.enter.native="_doSubscribe"
+          >
             <el-form-item prop="topic" label="Topic">
               <el-input v-model="subscriptionsRecord.topic"></el-input>
             </el-form-item>
@@ -177,7 +184,8 @@
 
       <div class="connection-wrapper">
         <el-form ref="pubForm" hide-required-asterisk label-position="top" :model="messageRecord"
-                 :rules="messageRecordRules" size="small" @keyup.enter.native="_doPublish">
+                 :rules="messageRecordRules" size="small" @keyup.enter.native="_doPublish"
+        >
           <el-row :gutter="20">
             <el-col :span="6">
               <el-form-item prop="topic" label="Topic">
@@ -390,6 +398,9 @@ export default {
   watch: {},
 
   created() { },
+  beforeDestroy() {
+    this.destroyConnection()
+  },
 
   methods: {
     getNow() {
@@ -609,9 +620,6 @@ export default {
     sessionChange(i) {
       this.activeIndex = i
     },
-  },
-  beforeDestroy() {
-    this.destroyConnection()
   },
 }
 </script>

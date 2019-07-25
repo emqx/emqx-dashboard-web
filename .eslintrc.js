@@ -36,6 +36,8 @@ module.exports = {
     'import/no-cycle': 0,
     'max-len': 0,
     'no-underscore-dangle': 0,
+    'prefer-destructuring': ['error', {'object': true, 'array': false}],
+    'no-param-reassign': ['error', { 'props': false }],
   },
   parserOptions: {
     parser: 'babel-eslint',

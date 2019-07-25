@@ -222,7 +222,7 @@ export default {
     },
     async save() {
       const vue = this
-      this.$refs.recordForm.validate(function(valid) {
+      this.$refs.recordForm.validate(function (valid) {
         if (!valid) {
           return false
         }

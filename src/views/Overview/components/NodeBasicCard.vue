@@ -176,6 +176,7 @@ export default {
 
   props: {
     value: {
+      type: Object,
       default: () => ({}),
     },
     showButton: {
@@ -187,13 +188,13 @@ export default {
   data() {
     return {
       data: {
-        'datetime': '2019-07-08 16:27:14',
-        'node': 'emqx@127.0.0.1',
-        'node_status': 'Running',
-        'otp_release': 'R21/10.3.4',
-        'sysdescr': 'EMQ X Broker',
-        'uptime': '2 days,6 hours, 47 minutes, 50 seconds',
-        'version': '0.0.0+build.1.ref6ab9527',
+        datetime: '2019-07-08 16:27:14',
+        node: 'emqx@127.0.0.1',
+        node_status: 'Running',
+        otp_release: 'R21/10.3.4',
+        sysdescr: 'EMQ X Broker',
+        uptime: '2 days,6 hours, 47 minutes, 50 seconds',
+        version: '0.0.0+build.1.ref6ab9527',
         'subscriptions.shared.max': 0,
         'subscriptions.max': 102,
         'subscribers.max': 102,
@@ -220,16 +221,16 @@ export default {
         'resources.count': 2,
         'subscribers.count': 62,
         'connections.count': 62,
-        'connections': 77,
-        'load1': '9.41',
-        'load15': '10.59',
-        'load5': '10.77',
-        'max_fds': 7168,
-        'memory_total': '1.14G',
-        'memory_used': '415.58M',
-        'name': 'emqx@127.0.0.1',
-        'process_available': 2097152,
-        'process_used': 538,
+        connections: 77,
+        load1: '9.41',
+        load15: '10.59',
+        load5: '10.77',
+        max_fds: 7168,
+        memory_total: '1.14G',
+        memory_used: '415.58M',
+        name: 'emqx@127.0.0.1',
+        process_available: 2097152,
+        process_used: 538,
       },
     }
   },
