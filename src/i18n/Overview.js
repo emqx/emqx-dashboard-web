@@ -9,19 +9,19 @@ export default
   ],
   shareSubscription: {
     zh: '共享订阅',
-    en: 'Share Subscription'
+    en: 'Share Subscription',
   },
   subscription: {
     zh: '订阅',
-    en: 'Subscriptions'
+    en: 'Subscriptions',
   },
   retained: {
     zh: '保留消息',
-    en: 'Retained'
+    en: 'Retained',
   },
   connectionsTips: {
     zh: '当前活跃连接数',
-    en: 'Currently active connections'
+    en: 'Currently active connections',
   },
   details: {
     zh: '查看',

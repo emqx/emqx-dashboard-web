@@ -102,8 +102,11 @@
           {{ selectedAction.description }}
         </div>
 
-        <el-form-item v-if="selectedAction.params.$resource" prop="params.$resource"
-                      :label="$t('RuleEngine.useOfResources')">
+        <el-form-item
+          v-if="selectedAction.params.$resource"
+          prop="params.$resource"
+          :label="$t('RuleEngine.useOfResources')"
+        >
           <emq-select
             v-model="record.params.$resource"
             :field="{ options: availableResources }"
@@ -217,7 +220,10 @@ export default {
   components: { ResourceDialog },
 
   props: {
-    value: {},
+    value: {
+      type: Array,
+      required: true,
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -271,6 +277,7 @@ export default {
     availableActions() {
       const data = this.actions.filter($ => ['$any', this.event].includes($.for))
       if (!this.record.name && data[0]) {
+        // eslint-disable-next-line
         this.record.name = data[0].name
         this.actionTypeChange(this.record.name)
       }
@@ -395,8 +402,10 @@ export default {
     fillRawValue() {
       const { rawValue } = this
       rawValue.forEach((item) => {
+        // eslint-disable-next-line
         item._config = this.actionsMap[item.name]
         const { params, _config: { params: paramsTemplate } } = item
+        // eslint-disable-next-line
         item._value = Object.entries(params).map(([k, v]) => ({
           label: (paramsTemplate[k] || {}).title,
           value: v,
@@ -563,9 +572,6 @@ export default {
 .resource-option {
   .resource-state {
 
-  }
-
-  .resource-id {
   }
 
   .resource-name {

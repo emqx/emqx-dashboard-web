@@ -79,8 +79,6 @@ export default {
     }
   },
 
-  created() {},
-
   watch: {
     activeTab(val, oldVal) {
       const ins = this.tabs.find($ => $.name === val)
@@ -92,9 +90,10 @@ export default {
       if (!ins) {
         ins.messageCount = 0
       }
-
     },
   },
+
+  created() {},
 
   methods: {
     handleTabEdit(targetName, action) {
@@ -120,14 +119,13 @@ export default {
         }
         this.tabs.forEach((tab, index) => {
           if (tab.name === targetName) {
-            let nextTab = this.tabs[index + 1] || this.tabs[index - 1]
+            const nextTab = this.tabs[index + 1] || this.tabs[index - 1]
             if (nextTab) {
               this.activeTab = nextTab.name
             }
           }
         })
         this.tabs = this.tabs.filter($ => $.name !== targetName)
-
       }
     },
   },

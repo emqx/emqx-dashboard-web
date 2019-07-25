@@ -111,7 +111,6 @@ export default {
       }).catch((error) => {
         this.loginError = error
       })
-
     },
   },
 }

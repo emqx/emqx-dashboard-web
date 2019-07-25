@@ -18,13 +18,6 @@ export default {
 
   components: {},
 
-  props: {
-    config: {
-      type: Array,
-      required: true,
-    },
-  },
-
   filters: {
     itemValue(val) {
       if (typeof val === 'object') {
@@ -34,13 +27,20 @@ export default {
     },
   },
 
+  props: {
+    config: {
+      type: Array,
+      required: true,
+    },
+  },
+
   data() {
     return {}
   },
 
-  methods: {},
-
   created() {},
+
+  methods: {},
 }
 </script>
 

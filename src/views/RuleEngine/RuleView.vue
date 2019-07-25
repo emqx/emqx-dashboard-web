@@ -74,7 +74,7 @@
             </div>
             <div class="card-desc">
               {{ $t('RuleEngine.maximumSpeed') }}: {{ record.metricsData.speed_max }} {{ $t('RuleEngine.times') }}/{{
-              $t('RuleEngine.second') }}
+                $t('RuleEngine.second') }}
             </div>
           </el-col>
 

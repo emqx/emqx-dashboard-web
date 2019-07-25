@@ -67,7 +67,7 @@ export default
   },
   blacklist: {
     zh: '黑名单',
-    en: 'Blacklist'
+    en: 'Blacklist',
   },
   user: {
     zh: '用户',

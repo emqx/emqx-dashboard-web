@@ -32,7 +32,7 @@
       >
         <div class="emq-table-header">
           <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">{{ $t('RuleEngine.create')
-            }}
+          }}
           </el-button>
         </div>
 
@@ -53,16 +53,16 @@
                   </el-col>
 
                   <!--<el-col v-if="false" :span="16">-->
-                    <!--<div class="emq-title h3">-->
-                      <!--资源配置-->
-                      <!--<div class="sub-title btn btn-default" @click.stop="toggleShowConfig(row)">-->
-                        <!--{{ row.showConfig ? '收起配置' : '展开配置' }}-->
-                        <!--<i :class="row.showConfig ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>-->
-                      <!--</div>-->
-                    <!--</div>-->
-                    <!--<el-collapse-transition>-->
-                      <!--<resource-field v-if="row.showConfig" :config="row._config"></resource-field>-->
-                    <!--</el-collapse-transition>-->
+                  <!--<div class="emq-title h3">-->
+                  <!--资源配置-->
+                  <!--<div class="sub-title btn btn-default" @click.stop="toggleShowConfig(row)">-->
+                  <!--{{ row.showConfig ? '收起配置' : '展开配置' }}-->
+                  <!--<i :class="row.showConfig ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>-->
+                  <!--</div>-->
+                  <!--</div>-->
+                  <!--<el-collapse-transition>-->
+                  <!--<resource-field v-if="row.showConfig" :config="row._config"></resource-field>-->
+                  <!--</el-collapse-transition>-->
                   <!--</el-col>-->
                 </el-row>
               </a-card>
@@ -87,7 +87,8 @@
 
           <el-table-column
             min-width="100px" prop="description" show-overflow-tooltip
-            :label="$t('RuleEngine.remark')"></el-table-column>
+            :label="$t('RuleEngine.remark')"
+          ></el-table-column>
           <!--<el-table-column min-width="70px" prop="status.is_alive" :label="$t('RuleEngine.state')">-->
           <!--<template slot-scope="{ row }">-->
           <!--<a-badge-->
@@ -123,13 +124,12 @@ import {
   loadResource, loadResourceTypes, destroyResource, loadResourceDetails,
 } from '@/api/rules'
 import ResourceNode from './components/ResourceNode'
-import ResourceField from './components/ResourceField'
 import ResourceDialog from './components/ResourceCreate'
 
 export default {
   name: 'Resources',
 
-  components: { ResourceNode, ResourceField, ResourceDialog },
+  components: { ResourceNode, ResourceDialog },
 
   props: {},
 

@@ -145,7 +145,8 @@
             <div class="tips-wrapper code">
               <span
                 v-for="key in availableFields" :key="key" class="available-fields"
-                @click="selectAvailableFields(key)">
+                @click="selectAvailableFields(key)"
+              >
                 {{ key }}
               </span>
             </div>
@@ -205,7 +206,7 @@ export default {
       events: [],
       testOutPut: '',
       selectEvent: {
-        'columns': [
+        columns: [
           'client_id',
           'username',
           'event',
@@ -217,17 +218,17 @@ export default {
           'topic',
           'node',
         ],
-        'description': 'message publish',
-        'event': 'message.publish',
-        'sql_example': 'SELECT * FROM "message.publish" WHERE topic =~ \'t/#\'',
-        'test_columns': {
-          'client_id': 'c_emqx',
-          'username': 'u_emqx',
-          'topic': 't/a',
-          'qos': 1,
-          'payload': '{"msg": "hello"}',
+        description: 'message publish',
+        event: 'message.publish',
+        sql_example: 'SELECT * FROM "message.publish" WHERE topic =~ \'t/#\'',
+        test_columns: {
+          client_id: 'c_emqx',
+          username: 'u_emqx',
+          topic: 't/a',
+          qos: 1,
+          payload: '{"msg": "hello"}',
         },
-        'title': 'message publish',
+        title: 'message publish',
       },
       timer: 0,
       showTips: false,
@@ -385,7 +386,7 @@ export default {
       }
       this.timer = setTimeout(() => {
         const matchItems = this.topics.filter(
-            $ => $.topic.includes(queryString), // || queryString.includes($.topic)
+          $ => $.topic.includes(queryString), // || queryString.includes($.topic)
         ).sort(($1, $2) => ($1.toString().length > $2.toString().length ? -1 : 1))
         cb(matchItems)
       }, 300)

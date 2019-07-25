@@ -117,7 +117,7 @@
             <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">{{ $t('Connections.refresh') }}
             </el-button>
             <el-button plain size="mini" icon="el-icon-plus" @click="handlePreAdd">{{ $t('Connections.addASubscription')
-              }}
+            }}
             </el-button>
           </div>
         </div>
@@ -249,12 +249,13 @@ export default {
       const title = this.$t('Connections.unsubscribeTitle')
       console.log(this)
       this.$msgbox.confirm(
-          title,
-          {
-            confirmButtonText: this.$t('Connections.confirm'),
-            cancelButtonText: this.$t('Connections.cancel'),
-            type: 'warning',
-          }).then(async () => {
+        title,
+        {
+          confirmButtonText: this.$t('Connections.confirm'),
+          cancelButtonText: this.$t('Connections.cancel'),
+          type: 'warning',
+        },
+      ).then(async () => {
         const { topic, client_id } = row
         await unSubscription({ topic, client_id })
         this.loadData()

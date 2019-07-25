@@ -36,6 +36,8 @@ export default {
     return {}
   },
 
+  created() {},
+
   methods: {
     resourceReconnect(item) {
       this.$set(item, 'loading', true)
@@ -47,8 +49,6 @@ export default {
       })
     },
   },
-
-  created() {},
 }
 </script>
 

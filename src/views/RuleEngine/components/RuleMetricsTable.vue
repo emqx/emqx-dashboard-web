@@ -43,17 +43,17 @@ export default {
     }
   },
 
-  methods: {
-    toggleShowTable() {
-      this.showTable = !this.showTable
+  computed: {
+    showComponent() {
+      return this.metrics && this.metrics.length > 0
     },
   },
 
   created() {},
 
-  computed: {
-    showComponent() {
-      return this.metrics && this.metrics.length > 0
+  methods: {
+    toggleShowTable() {
+      this.showTable = !this.showTable
     },
   },
 }
