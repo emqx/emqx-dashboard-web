@@ -200,6 +200,7 @@ export default {
             delete dataMap[key][k]
           }
         })
+        // eslint-disable-next-line
         const otherList = Object.entries(dataMap[key]).map(([key, value]) => ({ key, value }))
         return [...list, ...otherList]
       }

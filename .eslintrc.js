@@ -39,6 +39,7 @@ module.exports = {
     'prefer-destructuring': ['error', { object: true, array: false }],
     'no-param-reassign': ['error', { props: false }],
     ignoreDestructuring: true,
+    camelcase: 'off',
   },
   parserOptions: {
     parser: 'babel-eslint',

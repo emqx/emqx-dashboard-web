@@ -18,10 +18,6 @@
           </a-breadcrumb-item>
         </a-breadcrumb>
 
-        <div class="page-header-title-view">
-          <div class="title">{{ $t('Plugins.plugin') }}</div>
-        </div>
-
       </div>
     </div>
 
@@ -271,6 +267,7 @@ export default {
       this.tableData.forEach((item) => {
         const { name } = item
         try {
+          // eslint-disable-next-line
           iconMap[name] = require(`../../assets/plugin_icon/${name}.png`)
         } catch (e) {
           console.log(e)

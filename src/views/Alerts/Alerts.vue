@@ -17,10 +17,6 @@
           </a-breadcrumb-item>
         </a-breadcrumb>
 
-        <div class="page-header-title-view">
-          <div class="title">{{ $t('Alerts.alarm') }}</div>
-        </div>
-
       </div>
     </div>
 
@@ -58,7 +54,7 @@
           <el-table-column prop="node" :label="$t('Alerts.triggerNode')" min-width="120px"></el-table-column>
           <el-table-column prop="id" :label="$t('Alerts.alarmType')" min-width="160px"></el-table-column>
           <el-table-column prop="node" :label="$t('Alerts.alarmLevel')" min-width="100px">
-            <template slot-scope="{ row }">
+            <template>
               {{ $t('Alerts.system') }}
             </template>
           </el-table-column>
