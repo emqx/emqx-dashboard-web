@@ -7,8 +7,14 @@
           {{ $t('Tools.connectionConfiguration') }}
         </div>
 
-        <el-form ref="configForm" hide-required-asterisk :model="connection" size="small" :rules="connectionRules"
-                 label-position="top" @keyup.enter.native="createConnection"
+        <el-form
+          ref="configForm"
+          hide-required-asterisk
+          size="small"
+          label-position="top"
+          :model="connection"
+          :rules="connectionRules"
+          @keyup.enter.native="createConnection"
         >
 
           <!--<el-form-item prop="protocols" :label="$t('Tools.protocolType')">

@@ -29,15 +29,15 @@ const router = new Router({
     {
       path: '/',
       component: Layout,
-      redirect: '/overview',
+      redirect: '/monitor',
       children: [
         {
-          path: '/overview',
-          name: 'overview',
+          path: '/monitor',
+          name: 'monitor',
           component: () => import('@/views/Overview/Overview'),
         },
         {
-          path: '/overview/node',
+          path: '/monitor/node',
           name: 'node',
           component: () => import('@/views/Overview/Node'),
         },

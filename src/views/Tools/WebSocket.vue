@@ -29,7 +29,12 @@
             :name="item.name"
           >
             <span slot="label">
-              <el-badge :hidden="item.messageCount === 0" :value="item.messageCount" :max="99" class="message-count">
+              <el-badge
+                class="message-count"
+                :hidden="item.messageCount === 0"
+                :value="item.messageCount"
+                :max="99"
+              >
                 {{ item.label }}
               </el-badge>
             </span>

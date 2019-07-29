@@ -246,7 +246,7 @@ export default {
   methods: {
     toDetails() {
       this.$router.push({
-        path: '/overview/node',
+        path: '/monitor/node',
         query: {
           name: this.record.name,
         },
