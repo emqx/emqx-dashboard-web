@@ -88,7 +88,7 @@ export default {
     this.menus = [
       {
         title: this.$t('components.monitor'),
-        path: '/overview',
+        path: '/monitor',
         icon: 'icon-yibiaopan',
       },
       {

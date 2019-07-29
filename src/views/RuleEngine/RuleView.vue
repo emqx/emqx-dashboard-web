@@ -15,7 +15,6 @@
             </router-link>
           </a-breadcrumb-item>
 
-
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
               {{ $t('RuleEngine.details') }}
