@@ -1,6 +1,6 @@
 <template>
   <div class="websocket-item">
-    <a-card class="emq-list-card">
+    <el-card class="emq-list-card">
       <div class="websocket-config">
 
         <div class="emq-title">
@@ -128,9 +128,9 @@
           -->
         </el-form>
       </div>
-    </a-card>
+    </el-card>
 
-    <a-card class="emq-list-card">
+    <el-card class="emq-list-card">
       <div class="emq-title">
         {{ $t('Tools.Subscription') }}
       </div>
@@ -159,14 +159,14 @@
 
         <el-col :span="12">
           <!-- <el-scrollbar wrap-class="sub-item-wrapper" :native="false"> -->
-          <!--<a-card v-for="(item, i) in subscriptions" :key="i" class="sub-item">-->
+          <!--<el-card v-for="(item, i) in subscriptions" :key="i" class="sub-item">-->
           <!--<i class="el-icon-close close-btn" @click="_doUnSubscribe(item)"></i>-->
           <!--<div class="sub-item-header">-->
           <!--<span class="qos">QoS: {{ item.qos }}</span>-->
           <!--<span class="create-at">{{ item.createAt }}</span>-->
           <!--</div>-->
           <!--<div class="topic">{{ item.topic }}</div>-->
-          <!--</a-card>-->
+          <!--</el-card>-->
           <el-table :data="subscriptions" max-height="400px" style="margin-top: 10px;">
             <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="180px"></el-table-column>
             <el-table-column prop="qos" label="QoS" width="80px"></el-table-column>
@@ -181,9 +181,9 @@
         </el-col>
 
       </el-row>
-    </a-card>
+    </el-card>
 
-    <a-card class="emq-list-card">
+    <el-card class="emq-list-card">
       <div class="emq-title">
         {{ $t('Tools.publish') }}
       </div>
@@ -270,7 +270,7 @@
       </el-row>
 
       <el-scrollbar v-if="false" view-class="message-item-wrapper" :native="false">
-        <a-card v-for="(item, i) in messages" :key="i" class="message-item" :class="{ 'message-out': item.out }">
+        <el-card v-for="(item, i) in messages" :key="i" class="message-item" :class="{ 'message-out': item.out }">
           <div class="message-item-header">
             <span>Topic: {{ item.topic }}</span>
             <span>QoS: {{ item.qos }}</span>
@@ -280,9 +280,9 @@
           <div class="message-item-content">
             <code>{{ item.payload }}</code>
           </div>
-        </a-card>
+        </el-card>
       </el-scrollbar>
-    </a-card>
+    </el-card>
   </div>
 </template>
 
@@ -647,8 +647,10 @@ export default {
   }
 
   .emq-list-card {
-    .ant-card-head-title {
-      /*text-align: left !important;*/
+    border-radius: 2px;
+    box-shadow: none;
+    .el-card__body {
+      padding: 24px 32px;
     }
   }
 

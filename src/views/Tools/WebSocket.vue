@@ -25,7 +25,7 @@
           <el-tab-pane
             v-for="(item, i) in tabs"
             :key="i"
-            :closable="i > 0 && i === tabs.length - 1"
+            :closable="i > 0"
             :name="item.name"
           >
             <span slot="label">
@@ -94,8 +94,6 @@ export default {
     },
   },
 
-  created() {},
-
   methods: {
     handleTabEdit(targetName, action) {
       if (action === 'add') {
@@ -156,10 +154,9 @@ export default {
     bottom: -14px;
 
     .el-tabs__item {
-      font-weight: normal;
-
-      &.is-active {
-        font-weight: 500;
+      .el-icon-close {
+        position: relative;
+        top: 2px;
       }
     }
 
