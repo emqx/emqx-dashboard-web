@@ -58,7 +58,7 @@
               {{ row.ipaddress }}:{{ row.port }}
             </template>
           </el-table-column>
-          <el-table-column prop="keepalive" label="keepalive"></el-table-column>
+          <el-table-column prop="keepalive" label="Keepalive"></el-table-column>
           <el-table-column prop="proto_name" :filters="filterOptions.protoName" :filter-method="protoNameColumnFilter"
                            filter-placement="bottom" :label="$t('Connections.protocol')"
           >
@@ -144,7 +144,7 @@ export default {
       if (row.disconnected) {
         return
       }
-      this.$msgbox.confirm('此操作将断开该连接,连接可能通过重连机制再次重连,确认继续?', {
+      this.$msgbox.confirm(this.$t('Connections.thisOperationWillDisconnectTheConnection'), {
         confirmButtonText: this.$t('Connections.confirm'),
         cancelButtonText: this.$t('Connections.cancel'),
         type: 'warning',

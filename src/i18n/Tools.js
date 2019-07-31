@@ -64,6 +64,10 @@ export default {
     zh: '订阅',
     en: 'Subscription',
   },
+  Subscribe: {
+    zh: '订阅',
+    en: 'Subscribe',
+  },
   time: {
     zh: '时间',
     en: 'Time',
@@ -74,7 +78,7 @@ export default {
   },
   publish: {
     zh: '发布',
-    en: 'publish',
+    en: 'Publish',
   },
   received: {
     zh: '已接收',

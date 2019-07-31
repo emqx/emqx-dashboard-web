@@ -77,7 +77,7 @@ export default
   },
   connectionAt: {
     zh: '连接时间',
-    en: 'Connection At',
+    en: 'Connection at',
   },
   disconnected: {
     zh: '已断开',

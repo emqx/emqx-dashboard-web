@@ -150,7 +150,7 @@
             <div>
               <el-form-item>
                 <el-button type="primary" size="small" class="conn-btn" @click="_doSubscribe">
-                  {{ $t('Tools.Subscription') }}
+                  {{ $t('Tools.Subscribe') }}
                 </el-button>
               </el-form-item>
             </div>
