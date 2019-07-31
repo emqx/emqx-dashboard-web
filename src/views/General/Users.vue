@@ -44,10 +44,12 @@
           <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')"></el-table-column>
           <el-table-column width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">{{ $t('General.edit') }}
+              <el-button
+                type="dashed"
+                size="mini"
+                @click="showDialog('edit', row)"
+              >{{ $t('General.edit') }}
               </el-button>
-
-
               <el-button
                 v-if="row.tags !== 'administrator' && row.username !== 'admin'"
                 type="danger"
@@ -192,10 +194,13 @@ export default {
       this.tableData = await loadUser()
     },
     showDialog(type, item) {
-      this.record = {}
+      this.record = {
+        username: '',
+        tags: '',
+      }
       this.accessType = 'create'
       if (type === 'edit') {
-        this.record = item
+        Object.assign(this.record, item)
         this.accessType = 'edit'
       }
       this.dialogVisible = true

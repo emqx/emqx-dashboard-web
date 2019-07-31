@@ -1,7 +1,6 @@
 <template>
   <div class="plugins">
 
-
     <div class="page-header">
       <div class="page-header-content">
         <a-breadcrumb>
@@ -23,7 +22,6 @@
 
     <div class="app-wrapper">
 
-
       <a-card class="count-list">
         <div class="count-left">
           <div class="count-title">{{ $t('Plugins.numberOfPlugIns') }}</div>
@@ -44,7 +42,6 @@
       </a-card>
 
       <a-card class="emq-list-card">
-
 
         <div class="emq-table-header">
           <div>
@@ -156,7 +153,6 @@
             <p>{{ $t('Plugins.listNull') }}</p>
           </div>
         </div>
-
 
         <el-table v-if="false" :data="listTableData" :default-sort="{ prop: 'active', order: 'descending' }"
                   class="data-list"
@@ -397,7 +393,7 @@ export default {
       }
 
       .oper {
-        flex: .5;
+        flex: .6;
       }
     }
   }

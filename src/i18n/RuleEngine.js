@@ -103,7 +103,7 @@ export default {
   },
   fail: {
     zh: '失败',
-    en: 'fail',
+    en: 'Fail',
   },
   addAction: {
     zh: '添加动作',
@@ -190,7 +190,7 @@ export default {
     en: 'Condition',
   },
   definingRuleConditionsAndDataProcessing: {
-    zh: '规则引擎使用 SQL 定义规则条件与数据处理方式,内置多种灵活的数据处理方案',
+    zh: '规则引擎使用 SQL 定义规则条件与数据处理方式，内置多种灵活的数据处理方案',
     en: 'Defining Rule Engine Conditions and Data Processing By SQL',
   },
   triggerEvent: {
