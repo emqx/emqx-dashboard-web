@@ -3,25 +3,6 @@
     <!--<div class="page-header">{{ $t('Overview.brokerStatus') }}</div>-->
 
     <el-row class="content-wrapper" :gutter="20">
-      <!--
-      <el-col :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading" hoverable>
-          <div class="app-card-title">
-            {{ $t('Overview.nodesNun') }}
-          </div>
-
-          <div class="content">
-            <emq-count-to v-model="currentMetrics.node"></emq-count-to>
-          </div>
-          <div class="app-footer">
-            <div class="footer-item">
-              {{ $t('Overview.numberOfNodesInCluster') }}
-            </div>
-          </div>
-        </a-card>
-      </el-col>
-      -->
-
 
       <el-col :span="6">
         <a-card class="app-card" :bordered="true" :loading="pageLoading" hoverable>
@@ -165,15 +146,16 @@
       <template v-else>
         <div
           v-for="item in dataTypeFilter"
-          v-if="dataType === item.value"
           :key="item.value"
           class="basic"
           style="margin-bottom: -32px"
         >
-          <div v-if="metricLog[item.value].data.length === 0" class="data-list">
-            <p>{{ $t('Overview.noData') }}</p>
-          </div>
-          <metric-line v-else :value="metricLog[item.value]"></metric-line>
+          <template v-if="dataType === item.value">
+            <div v-if="metricLog[item.value].data.length === 0" class="data-list">
+              <p>{{ $t('Overview.noData') }}</p>
+            </div>
+            <metric-line v-else :value="metricLog[item.value]"></metric-line>
+          </template>
         </div>
       </template>
 
@@ -220,7 +202,7 @@
         <div class="description">
           {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>
-        <div v-if="license.type = 'trial'" class="oper">
+        <div v-if="license.type === 'trial'" class="oper">
           <el-tooltip effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false">
             <el-button type="danger" size="small" @click="upgradeLicense">{{ $t('Overview.trialEdition') }}</el-button>
           </el-tooltip>
@@ -238,9 +220,7 @@ import { toTableData } from '@/common/utils'
 import {
   loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo, loadMetricsLog,
 } from '@/api/overview'
-import EmqCountTo from '@/components/EmqCountTo'
 import MetricLine from '@/views/Overview/components/MetricLine'
-import NodeItem from './components/NodeItem'
 import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
 
@@ -250,10 +230,8 @@ export default {
 
   components: {
     MetricLine,
-    NodeItem,
     NodeBasicCard,
     SimpleLine,
-    EmqCountTo,
   },
 
   props: {},
@@ -263,7 +241,7 @@ export default {
       pageLoading: true,
       tableLoading: false,
       nodeName: '',
-      _currentNode: {
+      initCurrentNode: {
         connections: 16,
         load1: '14.01',
         load15: '11.85',
@@ -359,7 +337,7 @@ export default {
       if (node) {
         return node
       }
-      return this._currentNode
+      return this.initCurrentNode
     },
   },
 
@@ -378,7 +356,8 @@ export default {
   },
 
   filter: {
-    numFormat(s, type) {
+    numFormat(num) {
+      let s = num
       if (/[^0-9.]/.test(s)) return '0'
       if (s == null || s === 'null' || s === '') {
         return '0'
@@ -437,7 +416,7 @@ export default {
     _formatNumber(num) {
       if (num > 10000) {
         const value = (num / 10000)
-        return `${parseInt(value * 100) / 100}W`
+        return `${parseInt(value * 100, 10) / 100}W`
       }
       return num
     },
