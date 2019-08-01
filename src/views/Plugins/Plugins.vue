@@ -104,7 +104,7 @@
 
               <div class="logo">
                 <img
-                  :src="iconMap[item.name] || 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png'"
+                  :src="iconMap[item.name]"
                   alt="plugin-logo"
                 >
               </div>
