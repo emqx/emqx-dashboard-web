@@ -487,9 +487,6 @@ export default {
     color: #101010;
   }
 
-  .content-wrapper {
-  }
-
   .app-card {
     @include trans-up-mixin(-1px);
     border-radius: 6px;
@@ -547,10 +544,6 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-
-    & > .ant-card-head {
-      /*padding: 0 8px;*/
     }
   }
 

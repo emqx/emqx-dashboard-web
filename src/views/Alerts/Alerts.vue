@@ -145,9 +145,6 @@ export default {
 
 
 <style lang="scss" scoped>
-.alerts {
-}
-
 .el-tag {
   margin-left: 10px;
 }
