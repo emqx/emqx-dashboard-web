@@ -9,12 +9,6 @@
             </router-link>
           </a-breadcrumb-item>
 
-          <!--<a-breadcrumb-item>-->
-          <!--<router-link to="/overview" tag="span" class="btn btn-default raw">-->
-          <!--监控-->
-          <!--</router-link>-->
-          <!--</a-breadcrumb-item>-->
-
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
               {{ $t('Overview.nodeData') }}

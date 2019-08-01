@@ -63,7 +63,7 @@ export async function loadNodes() {
 }
 
 export function loadCurrentMetrics() {
-  return http.get('/overview/current_metrics')
+  return http.get('/monitor/current_metrics')
 }
 
 export function loadLicenseInfo() {
@@ -72,15 +72,15 @@ export function loadLicenseInfo() {
 
 export function loadMetricsLog(node, type) {
   if (!node && type) {
-    return http.get(`/overview/metrics/${type}`)
+    return http.get(`/monitor/metrics/${type}`)
   }
   if (node && !type) {
-    return http.get(`/nodes/${node}/overview/metrics`)
+    return http.get(`/nodes/${node}/monitor/metrics`)
   }
   if (node && type) {
-    return http.get(`/nodes/${node}/overview/metrics/${type}`)
+    return http.get(`/nodes/${node}/monitor/metrics/${type}`)
   }
-  return http.get('/overview/metrics')
+  return http.get('/monitor/metrics')
 }
 
 export function loadMetrics(node) {
