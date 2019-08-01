@@ -20,12 +20,6 @@
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
-
-        <!--<div class="page-header-content-view">-->
-        <!--<div class="content">-->
-
-        <!--</div>-->
-        <!--</div>-->
       </div>
     </div>
 
@@ -67,23 +61,6 @@
               <el-form-item prop="description" :label="$t('RuleEngine.remark')">
                 <el-input v-model="record.description"></el-input>
               </el-form-item>
-
-              <!--<el-form-item v-if="selectEvent.ctx.topic" prop="topic" :label="$t('RuleEngine.topic')">-->
-              <!--<el-autocomplete-->
-              <!--v-model="record.topic"-->
-              <!--:fetch-suggestions="topicSearch"-->
-              <!--placeholder="e.g t/#"-->
-              <!--@select="handleTopicSelect"-->
-              <!--&gt;-->
-              <!--<template slot-scope="{ item }">-->
-              <!--<div class="name">{{ item.topic }}</div>-->
-              <!--</template>-->
-              <!--</el-autocomplete>-->
-              <!--<el-popover placement="top" trigger="hover">-->
-              <!--规则要处理的主题，支持 MQTT 主题通配符 '+'、'#'-->
-              <!--<i slot="reference" class="icon el-icon-question"></i>-->
-              <!--</el-popover>-->
-              <!--</el-form-item>-->
 
               <el-form-item>
                 <template slot="label">
@@ -404,15 +381,15 @@ export default {
 
   .available-fields {
     transition: all 0.3s;
-    border-bottom: 1px dashed #fff;
+    border-bottom: 1px dashed #d8d8d8;
     padding-bottom: 3px;
     position: relative;
     margin-right: 8px;
     user-select: none;
+    cursor: pointer;
 
     &:hover {
-      color: #333;
-      border-bottom: 1px dashed #d8d8d8;
+      color: #34C388;
     }
   }
 
