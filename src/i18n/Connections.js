@@ -87,7 +87,7 @@ export default
     zh: '断开',
     en: 'Disconnect',
   },
-  'thisOperationWillDisconnectTheConnection.': {
+  willDisconnectTheConnection: {
     zh: '此操作将断开该连接,连接可能通过重连机制再次连接,确认继续?',
     en: 'This operation will disconnect the connection',
   },
