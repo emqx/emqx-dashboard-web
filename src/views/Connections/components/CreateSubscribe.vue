@@ -17,7 +17,7 @@
         <el-input v-model="record.topic" placeholder="Topic"></el-input>
       </el-form-item>
       <el-form-item prop="qos" label="QoS">
-        <emq-select v-model.sync="record.qos" :field="{ list: [0, 1, 2] }"></emq-select>
+        <emq-select v-model="record.qos" :field="{ list: [0, 1, 2] }"></emq-select>
       </el-form-item>
     </el-form>
 

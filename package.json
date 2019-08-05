@@ -1,6 +1,6 @@
 {
   "name": "ee-dashboard",
-  "version": "0.1.0",
+  "version": "3.2.3",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

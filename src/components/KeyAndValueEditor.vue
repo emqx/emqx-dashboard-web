@@ -1,4 +1,5 @@
 <template>
+  <!-- eslint-disable -->
   <el-table class="key-and-value-editor" :data="tableData" size="mini">
     <el-table-column prop="key" :label="$t('components.key')" min-width="80px">
       <template slot-scope="{ row }">

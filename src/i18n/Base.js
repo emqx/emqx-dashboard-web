@@ -33,4 +33,8 @@ export default
     zh: '资源未找到',
     en: 'Resources not found',
   },
+  loging: {
+    zh: '登录中...',
+    en: 'logging in...',
+  },
 }

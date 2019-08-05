@@ -8,7 +8,7 @@ export function searchConnections(clientId = '') {
   return http.get(`/connections/${encodeURIComponent(clientId)}`)
 }
 
-export function banConnection(clientId) {}
+// export function banConnection(clientId) {}
 
 export function disconnectConnection(clientId = '') {
   return http.delete(`/connections/${encodeURIComponent(clientId)}`)

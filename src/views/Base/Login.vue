@@ -1,12 +1,9 @@
 <template>
   <div class="login">
-    <a-card class="login-card emq-list-card">
+    <a-card v-if="isNeedAuth" class="login-card emq-list-card">
 
       <div class="split-wrapper">
         <div class="logo-wrapper">
-          <!--<div class="logo">-->
-          <!--<img src="../../assets/emqlogo.png" alt="">-->
-          <!--</div>-->
         </div>
 
         <div :span="12" class="login-wrapper">
@@ -25,7 +22,7 @@
             :rules="rules"
             hide-required-asterisk
             :show-message="false"
-            @keyup.enter.native="login"
+            @keyup.enter.native="nativeLogin"
           >
             <el-alert
               v-if="loginError"
@@ -45,7 +42,7 @@
             <el-checkbox v-model="record.remember">{{ $t('Base.remember') }}</el-checkbox>
 
             <el-form-item class="oper-wrapper" label="">
-              <el-button class="sub-btn" type="primary" @click="login">{{ $t('Base.signIn') }}</el-button>
+              <el-button class="sub-btn" type="primary" @click="nativeLogin">{{ $t('Base.signIn') }}</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -56,9 +53,7 @@
 
 
 <script>
-// eslint-disable-next-line
 import { auth } from '@/api/common'
-// eslint-disable-next-line
 import { awaitWrap } from '@/common/utils'
 
 export default {
@@ -80,18 +75,18 @@ export default {
         username: { required: true },
         password: { required: true },
       },
+      isNeedAuth: true,
+      fullLoading: false,
     }
   },
 
   created() {
     this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
+    this.autoLogin()
   },
 
   methods: {
-    async login() {
-      if (!await awaitWrap(this.$refs.record.validate())) {
-        return
-      }
+    login() {
       const { username, password, remember } = this.record
       auth({
         username,
@@ -107,10 +102,41 @@ export default {
           this.$router.replace({
             path: to,
           })
+          if (!this.isNeedAuth) {
+            this.fullLoading.close()
+          }
         }, 500)
       }).catch((error) => {
+        if (!this.isNeedAuth) {
+          this.fullLoading.close()
+        }
+        this.isNeedAuth = true
         this.loginError = error
       })
+    },
+
+    async nativeLogin() {
+      if (!await awaitWrap(this.$refs.record.validate())) {
+        return
+      }
+      this.login()
+    },
+
+    autoLogin() {
+      const { username, password } = this.$route.params
+      this.isNeedAuth = !(username && password)
+      if (this.isNeedAuth) {
+        return
+      }
+      this.fullLoading = this.$loading({
+        lock: true,
+        text: this.$t('Base.loging'),
+        spinner: 'el-icon-loading',
+        background: '#fff',
+      })
+      this.record.username = username
+      this.record.password = password
+      this.login()
     },
   },
 }
@@ -121,7 +147,6 @@ export default {
 .login {
   width: 100vw;
   min-height: 100vh;
-  /*background-color: #181818;*/
   box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08);
 
   .ant-card-body {
@@ -179,9 +204,6 @@ export default {
 
   .oper-wrapper {
     margin-top: 32px;
-  }
-
-  .login-footer {
   }
 
   .sub-btn {
