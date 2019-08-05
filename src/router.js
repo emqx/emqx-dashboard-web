@@ -24,7 +24,15 @@ const router = new Router({
       meta: {
         authRequired: false,
       },
-      component: Login,
+      component: () => import('@/views/Base/Login'),
+    },
+    {
+      path: '/login/:username/:password',
+      name: 'login-no-auth',
+      meta: {
+        authRequired: false,
+      },
+      component: () => import('@/views/Base/Login'),
     },
     {
       path: '/',

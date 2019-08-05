@@ -73,6 +73,7 @@ export function SQLTest(rule = {}) {
 export async function loadActionsList(params = {}) {
   const actions = await http.get('/actions', { params })
   return actions.map((action) => {
+    // eslint-disable-next-line
     action = fillI18n(action, ['title', 'description'])
     action.params = fillI18n(action.params, true)
     return action

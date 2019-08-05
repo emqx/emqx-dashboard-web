@@ -46,7 +46,11 @@
         </div>
         <template v-else-if="configList.length > 0">
           <div class="line"></div>
-          <el-col v-for="(item, i) in configList" :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12">
+          <el-col
+            v-for="(item, i) in configList"
+            :key="i"
+            :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
+          >
             <el-form-item v-bind="item.formItemAttributes">
               <template v-if="item.formItemAttributes.description" slot="label">
                 {{ item.formItemAttributes.label }}
@@ -110,7 +114,7 @@
 
 
 <script>
-import { loadResourceTypes, loadResource, createResource } from '@/api/rules'
+import { loadResourceTypes, createResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 
@@ -122,8 +126,10 @@ export default {
   inheritAttrs: false,
 
   props: {
+    // eslint-disable-next-line
     value: {},
     visible: {
+      type: Boolean,
       default: false,
     },
   },
@@ -240,7 +246,7 @@ export default {
     },
     setup(options = {}) {
       this.selfVisible = true
-      const { types = [], action } = options
+      const { types = [] } = options
       this.loadData().then(() => {
         this.types = types
         this.record.type = types[0]
@@ -289,12 +295,6 @@ export default {
     .el-input, .el-select {
       width: 200px !important;
     }
-
-    .el-textarea {
-      /*width: 330px;*/
-    }
-
-
   }
 }
 </style>

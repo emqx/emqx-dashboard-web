@@ -7,7 +7,8 @@
   >
     <slot>
       <el-option
-        v-for="(item, i) in options" :key="i"
+        v-for="(item, i) in options"
+        :key="i"
         :value="item[fieldName.value]"
         :label="item[fieldName.label]"
         :disabled="isDisabled(item)"
@@ -28,7 +29,10 @@ export default {
   components: {},
 
   props: {
-    value: {},
+    // eslint-disable-next-line
+    value: {
+      required: true,
+    },
     field: {
       type: Object,
       required: true,
@@ -62,12 +66,13 @@ export default {
         return typeof this.value === 'boolean' ? this.value.toString() : this.value
       },
       set(val) {
+        let value = null
         const valueKey = this.fieldName.value
         const item = this.options.find($ => $[valueKey] === val)
         if (item && this.parserField[valueKey]) {
-          val = val === 'true'
+          value = val === 'true'
         }
-        this.$emit('update:value', val)
+        this.$emit('update:value', value)
       },
     },
   },

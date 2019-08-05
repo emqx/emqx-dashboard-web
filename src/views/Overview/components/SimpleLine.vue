@@ -90,6 +90,7 @@ export default {
       deep: true,
       handler: 'setSeriesConfig',
     },
+    // eslint-disable-next-line
     '$store.state.leftBarCollapse': function () {
       setTimeout(this.setSeriesConfig, 500)
     },
@@ -127,9 +128,3 @@ export default {
   },
 }
 </script>
-
-
-<style lang="scss">
-.SimpleLine {
-}
-</style>

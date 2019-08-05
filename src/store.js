@@ -34,6 +34,7 @@ export default new Vuex.Store({
       commit('SET_LANGUAGE', lang)
       console.log('SET_LANGUAGE')
       setTimeout(() => {
+        // eslint-disable-next-line
         location.reload()
       }, 400)
     },
