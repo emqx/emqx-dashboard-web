@@ -50,10 +50,6 @@
         </div>
 
         <el-table v-bind="rulesTable" :data="tableData" class="data-list">
-          <!--<el-table-column-->
-          <!--type="selection"-->
-          <!--width="55">-->
-          <!--</el-table-column>-->
           <el-table-column prop="id" label="ID">
             <template slot-scope="{ row }">
               <router-link :to="{ path: `/rules/${row.id}` }">{{ row.id }}</router-link>
@@ -64,8 +60,10 @@
               <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
             </template>
           </el-table-column>
-          <el-table-column prop="description" show-overflow-tooltip
-                           :label="$t('RuleEngine.describe')"
+          <el-table-column
+            prop="description"
+            show-overflow-tooltip
+            :label="$t('RuleEngine.describe')"
           ></el-table-column>
           <el-table-column
             prop="for"
@@ -85,7 +83,13 @@
           </el-table-column>
           <el-table-column width="80px" prop="id">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="deleteRule(row)">{{ $t('RuleEngine.delete') }}</el-button>
+              <el-button
+                type="dashed"
+                size="mini"
+                @click="deleteRule(row)"
+              >
+                {{ $t('RuleEngine.delete') }}
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
