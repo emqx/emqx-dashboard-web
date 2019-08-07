@@ -155,11 +155,11 @@
       </a-card>
 
       <div style="text-align: center">
-        <el-button type="primary" size="medium" @click="save">
-          {{ $t('RuleEngine.create') }}
-        </el-button>
         <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
           {{ $t('RuleEngine.cancel') }}
+        </el-button>
+        <el-button type="primary" size="medium" @click="save">
+          {{ $t('RuleEngine.create') }}
         </el-button>
       </div>
 

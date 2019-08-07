@@ -57,8 +57,8 @@
 
         <div class="line" style="margin: 20px auto;background-color: #d8d8d8"></div>
         <div class="footer">
-          <el-button size="medium" type="primary" :disabled="!changed" @click="updateConfig">{{ $t('Plugins.save') }}</el-button>
           <el-button size="medium" @click="handleCache">{{ $t('Plugins.cancel') }}</el-button>
+          <el-button size="medium" type="primary" :disabled="!changed" @click="updateConfig">{{ $t('Plugins.save') }}</el-button>
         </div>
       </a-card>
     </div>
