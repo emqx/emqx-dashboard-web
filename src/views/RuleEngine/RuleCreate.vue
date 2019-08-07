@@ -1,5 +1,11 @@
 <template>
   <div class="rule-create">
+    <!-- Hide copy text -->
+    <input
+      id="clipboard"
+      v-model="clipboardContent"
+      type="text"
+    >
 
     <div class="page-header">
       <div class="page-header-content">
@@ -62,23 +68,14 @@
                 <el-input v-model="record.description"></el-input>
               </el-form-item>
 
-              <el-form-item>
-                <template slot="label">
-                  &nbsp;
-                </template>
-                <!--<code-view v-if="rawsqlVisible" lang="sql" :code="rawSQL"></code-view>-->
-                <div class="code code-border">
-                  <code>{{ rawSQL }}</code>
-                </div>
-              </el-form-item>
-
-              <el-form-item prop="field" :label="$t('RuleEngine.selectFiled')">
-                <el-input v-model="record.field" type="textarea" :rows="4" placeholder="e.g payload.speed"></el-input>
-                <!--<span class="tips btn btn-default" @click="toggleTips">{{ $t('RuleEngine.availableField') }}</span>-->
-              </el-form-item>
-
-              <el-form-item prop="tiaojian" :label="$t('RuleEngine.selectConditions')">
-                <el-input v-model="record.tiaojian" placeholder="e.g payload.speed > 60"></el-input>
+              <el-form-item prop="rawsql" :label="$t('RuleEngine.sqlInput')">
+                <el-input
+                  v-model="record.rawsql"
+                  type="textarea"
+                  :rows="8"
+                  placeholder="e.g payload.speed"
+                >
+                </el-input>
               </el-form-item>
 
               <el-form-item :label="$t('RuleEngine.sqlTest')">
@@ -104,8 +101,8 @@
                   </el-form-item>
 
                   <el-form-item :label="$t('RuleEngine.testOutput')">
-                    <el-input v-model="testOutPut" type="textarea" readonly :rows="4"></el-input>
-                    <!--<code-view :code="testOutPut" lang="json"></code-view>-->
+                    <el-input v-model="testOutPut" type="textarea" readonly :rows="6">
+                    </el-input>
                   </el-form-item>
 
                 </div>
@@ -114,14 +111,28 @@
           </el-col>
 
           <el-col :span="9" class="tips-form">
-            <div style="color: #606266">{{ $t('RuleEngine.currentEventAvailableField') }}</div>
-            <div class="tips-wrapper code">
-              <span
-                v-for="key in availableFields" :key="key" class="available-fields"
-                @click="selectAvailableFields(key)"
-              >
-                {{ key }}
-              </span>
+            <div class="tips-item">
+              <div style="color: #606266">
+                {{ $t('RuleEngine.currentEventAvailableField') }}
+                <transition name="el-fade-in-linear">
+                  <span v-if="clipboardStatus" class="copy-success">{{ clipboardStatus }}</span>
+                </transition>
+              </div>
+              <div class="tips-wrapper code">
+                <span
+                  v-for="key in availableFields" :key="key" class="available-fields"
+                  @click="selectAvailableFields(key)"
+                >
+                  {{ key }}
+                </span>
+              </div>
+            </div>
+
+            <div class="tips-item">
+              <div style="color: #606266">{{ $t('RuleEngine.exampleSql') }}</div>
+              <div class="tips-wrapper code">
+                <code>{{ selectEvent.sql_example }}</code>
+              </div>
             </div>
           </el-col>
         </el-row>
@@ -144,7 +155,7 @@
       </a-card>
 
       <div style="text-align: center">
-        <el-button type="primary" size="medium" @click="handleCreate">
+        <el-button type="primary" size="medium" @click="save">
           {{ $t('RuleEngine.create') }}
         </el-button>
         <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
@@ -164,6 +175,7 @@ import {
 } from '@/api/rules'
 import { loadTopics } from '@/api/server'
 import RuleActions from './components/RuleActions'
+import { clearTimeout } from 'timers';
 
 export default {
   name: 'RuleCrate',
@@ -204,61 +216,24 @@ export default {
         title: 'message publish',
       },
       timer: 0,
-      showTips: false,
       showTest: false,
-      rawsqlVisible: true,
+      clipboardContent: '',
+      clipboardStatus: '',
       record: {
         for: '',
-        rawsql: '',
-        // topic: '',
-        field: '*',
+        rawsql: 'SELECT * FROM',
         actions: [],
         description: '',
         ctx: {},
-        tiaojian: '',
       },
       rules: {
         for: { required: true, message: this.$t('RuleEngine.pleaseSelectTheTriggerEvent') },
-        // topic: { required: true, message: this.$t('RuleEngine.pleaseEnterTheTopic') },
-        ctx: {},
-        field: [
-          { required: true, message: this.$t('RuleEngine.pleaseEnterTheSelectField') },
-          {
-            validator(rule, value, cb) {
-              if (value.trim() === '*') {
-                return cb()
-              }
-              const fields = value.replace(/[\n\b]/g, '').split(/,/)
-              // 空字符错误
-              const fieldError = fields.find($ => !$)
-              if (fieldError !== undefined) {
-                return cb(new Error(this.$t('RuleEngine.fieldFillingError')))
-              }
-              return cb()
-            },
-          },
-        ],
+        rawsql: { required: true, message: this.$t('RuleEngine.pleaseEnterTheSelectField') },
       },
     }
   },
 
   computed: {
-    rawSQL() {
-      const { event } = this.selectEvent
-      const { field, tiaojian } = this.record
-      const fields = field.replace(/[\n\b\t]/g, '').split(',').join(', ') || '*'
-      let where = ''
-      // if (topicField) {
-      //   where = `topic =~ '${topic || '#'}'`
-      //   if (tiaojian) {
-      //     where += ` AND ${tiaojian}`
-      //   }
-      // } else
-      if (tiaojian) {
-        where = ` WHERE ${tiaojian}`
-      }
-      return `SELECT ${fields} FROM "${event}"${where ? `${where}` : ''}`
-    },
     availableFields() {
       return this.selectEvent.columns
     },
@@ -271,48 +246,49 @@ export default {
     this.events = await loadRuleEvents()
     this.selectEvent = this.events[0]
     this.record.for = this.selectEvent.event
+    this.handleForChange(this.record.for)
     const data = await loadTopics()
     this.topics = data.items || []
   },
 
   methods: {
-    async handleCreate() {
-      const valid = await this.$refs.record.validate()
-      if (!valid) {
-        return
+    handleForChange(val) {
+      this.selectEvent = this.events.find($ => $.event === val)
+      const { event } = this.selectEvent
+      this.record.rawsql = `SELECT * FROM "${event}"`
+      this.handlePreSQLTest()
+    },
+    handlePreSQLTest() {
+      this.record.ctx = {}
+      const { test_columns: testColumn } = this.selectEvent
+      if (this.showTest) {
+        Object.entries(testColumn).forEach(([k, v]) => {
+          const key = k
+          let value = v
+          if (typeof v === 'object') {
+            value = JSON.stringify(v)
+          }
+          this.$set(this.record.ctx, key, value)
+        })
       }
-      if (this.record.actions.length === 0) {
-        this.$message.error(this.$t('RuleEngine.pleaseAddAResponseAction'))
-        return
-      }
-      const record = {
-        for: this.record.for,
-        rawsql: this.rawSQL,
-        actions: this.record.actions.map($ => ({ name: $.name, params: $.params })),
-        description: this.record.description,
-      }
-      createRule(record).then(() => {
-        this.$message.success(this.$t('RuleEngine.createSuccess'))
-        setTimeout(() => {
-          this.$router.push({ path: '/rules' })
-        }, 600)
-      })
     },
     handleSQLTest() {
       this.$refs.record.validate(async (valid) => {
         if (!valid) {
           return
         }
-        const record = JSON.parse(JSON.stringify(this.record))
+        const data = JSON.parse(JSON.stringify(this.record))
         this.testOutPut = ''
 
-        try {
-          record.ctx.payload = JSON.stringify(JSON.parse(record.ctx.payload))
-        } catch (e) {
-          console.log(e)
+        if (data.ctx.payload) {
+          try {
+            data.ctx.payload = JSON.stringify(JSON.parse(data.ctx.payload))
+          } catch (e) {
+            console.error(e)
+          }
         }
-        record.rawsql = this.rawSQL
-        SQLTest(record).then((resp) => {
+
+        SQLTest(data).then((resp) => {
           this.testOutPut = JSON.stringify(resp, null, 2)
         }).catch((e) => {
           if (e === 'SQL Not Match') {
@@ -323,50 +299,39 @@ export default {
         })
       })
     },
-    handlePreSQLTest() {
-      this.record.ctx = {}
-      const { test_columns: testColumn } = this.selectEvent
-      if (this.showTest) {
-        Object.entries(testColumn).forEach(([k, v]) => {
-          this.$set(this.record.ctx, k, v)
-        })
-      }
-    },
     selectAvailableFields(key) {
-      const { field } = this.record
-      let dot = field.endsWith(',') ? ' ' : ', '
-      if (field.trim() === '') {
-        dot = ''
-      }
-      if (field.trim() === '*') {
-        this.record.field = ''
-        dot = ''
-      }
-      this.record.field += (`${dot}${key}`)
-    },
-    toggleTips() {
-      this.showTips = !this.showTips
-    },
-    handleForChange(val) {
-      this.selectEvent = this.events.find($ => $.event === val)
-      this.record.field = '*'
-      this.record.tiaojian = ''
-    },
-    topicSearch(queryString, cb) {
       clearTimeout(this.timer)
-      if (!this.topics.length || !queryString) {
-        return cb([])
-      }
+      this.clipboardContent = key
       this.timer = setTimeout(() => {
-        const matchItems = this.topics.filter(
-          $ => $.topic.includes(queryString), // || queryString.includes($.topic)
-        ).sort(($1, $2) => ($1.toString().length > $2.toString().length ? -1 : 1))
-        cb(matchItems)
-      }, 300)
-      return []
+        this.clipboardStatus = this.$t('Base.copy')
+        document.querySelector('#clipboard').select()
+        document.execCommand('Copy')
+        setTimeout(() => {
+          this.clipboardStatus = ''
+        }, 3000)
+      }, 100)
     },
-    handleTopicSelect(item) {
-      this.record.topic = item.topic
+    async save() {
+      const valid = await this.$refs.record.validate()
+      if (!valid) {
+        return
+      }
+      if (this.record.actions.length === 0) {
+        this.$message.error(this.$t('RuleEngine.pleaseAddAResponseAction'))
+        return
+      }
+      const record = {
+        for: this.record.for,
+        rawsql: this.record.rawsql,
+        actions: this.record.actions.map($ => ({ name: $.name, params: $.params })),
+        description: this.record.description,
+      }
+      createRule(record).then(() => {
+        this.$message.success(this.$t('RuleEngine.createSuccess'))
+        setTimeout(() => {
+          this.$router.push({ path: '/rules' })
+        }, 600)
+      })
     },
   },
 }
@@ -374,8 +339,6 @@ export default {
 
 
 <style lang="scss">
-@import './style.less';
-
 .rule-create {
   @import './style.less';
 
@@ -387,6 +350,7 @@ export default {
     margin-right: 8px;
     user-select: none;
     cursor: pointer;
+    line-height: 2.3;
 
     &:hover {
       color: #34C388;
@@ -412,14 +376,28 @@ export default {
     }
   }
 
-  .tips-wrapper {
-    width: 100% !important;
-    word-break: break-word;
-    padding: 6px 0 0 0;
+  .tips-form {
+    .tips-item {
+      margin-bottom: 20px;
+
+      .copy-success {
+        color: #34C388;
+        float: right;
+      }
+    }
   }
 
-  .tips-form {
-    padding-top: 4px;
+  .tips-wrapper {
+    width: 100%;
+    word-break: break-word;
+    margin-top: 10px;
+    background: #f6f7fb;
+    border-radius: 4px;
+    color: #909399;
+    &.code {
+      border: none;
+      padding: 10px;
+    }
   }
 }
 </style>

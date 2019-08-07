@@ -205,6 +205,10 @@ export default {
     zh: '查询字段',
     en: 'Select field',
   },
+  sqlInput: {
+    zh: 'SQL 输入',
+    en: 'SQL',
+  },
   availableField: {
     zh: '可用字段',
     en: 'Available field',
@@ -228,6 +232,10 @@ export default {
   currentEventAvailableField: {
     zh: '当前事件可用字段',
     en: 'Current Event Available Field',
+  },
+  exampleSql: {
+    zh: '规则 SQL 示例',
+    en: 'SQL Example',
   },
   responseAction: {
     zh: '响应动作',
@@ -270,7 +278,7 @@ export default {
     en: 'Result is empty',
   },
   checkForErrors: {
-    zh: 'SQL 请检查',
+    zh: '请检查 SQL 语句',
     en: 'SQL is error',
   },
   quickStart: {

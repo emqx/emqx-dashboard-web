@@ -37,4 +37,8 @@ export default
     zh: '登录中...',
     en: 'logging in...',
   },
+  copy: {
+    zh: '复制成功！',
+    en: 'Copied!',
+  },
 }

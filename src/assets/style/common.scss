@@ -438,3 +438,8 @@ body {
     color: #5dcfa0;
   }
 }
+
+#clipboard {
+  position: absolute;
+  z-index: -1;
+}

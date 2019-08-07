@@ -17,14 +17,6 @@
           @keyup.enter.native="createConnection"
         >
 
-          <!--<el-form-item prop="protocols" :label="$t('Tools.protocolType')">
-          <emq-select-->
-          <!--v-model="connection.protocols"-->
-          <!--:readonly="client.connected"-->
-          <!--:field="{ list: ['ws', 'wss'] }"-->
-          <!--@change="protocolsChange"></emq-select>-->
-          <!--</el-form-item>-->
-
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item prop="host" :label="$t('Tools.host')">
@@ -103,29 +95,6 @@
 
           </el-row>
 
-          <!--
-          <div v-if="false" class="connection-wrapper">
-            <el-form-item label="Last-Will Topic">
-              <el-input v-model="connection.will.topic" :readonly="client.connected"></el-input>
-            </el-form-item>
-
-            <el-form-item label="Last-Will QoS">
-              <emq-select v-model.number="connection.will.qos" :readonly="client.connected"
-                          :field="{ list: [0, 1, 2] }"
-              ></emq-select>
-            </el-form-item>
-
-            <el-form-item label="Last-Will Retain">
-              <el-checkbox v-model="connection.will.retain" :readonly="client.connected"></el-checkbox>
-            </el-form-item>
-
-            <div>
-              <el-form-item label="Last-Will Message">
-                <el-input v-model="connection.will.payload" type="textarea" :readonly="client.connected"></el-input>
-              </el-form-item>
-            </div>
-          </div>
-          -->
         </el-form>
       </div>
     </el-card>
@@ -158,15 +127,6 @@
         </el-col>
 
         <el-col :span="12">
-          <!-- <el-scrollbar wrap-class="sub-item-wrapper" :native="false"> -->
-          <!--<el-card v-for="(item, i) in subscriptions" :key="i" class="sub-item">-->
-          <!--<i class="el-icon-close close-btn" @click="_doUnSubscribe(item)"></i>-->
-          <!--<div class="sub-item-header">-->
-          <!--<span class="qos">QoS: {{ item.qos }}</span>-->
-          <!--<span class="create-at">{{ item.createAt }}</span>-->
-          <!--</div>-->
-          <!--<div class="topic">{{ item.topic }}</div>-->
-          <!--</el-card>-->
           <el-table :data="subscriptions" max-height="400px" style="margin-top: 10px;">
             <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="180px"></el-table-column>
             <el-table-column prop="qos" label="QoS" width="80px"></el-table-column>
@@ -177,7 +137,6 @@
               </template>
             </el-table-column>
           </el-table>
-          <!-- </el-scrollbar> -->
         </el-col>
 
       </el-row>

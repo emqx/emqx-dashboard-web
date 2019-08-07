@@ -221,7 +221,7 @@ export default {
       if (this.record.disconnected) {
         return
       }
-      this.$msgbox.confirm(this.$t('Connections.thisOperationWillDisconnectTheConnection'), {
+      this.$msgbox.confirm(this.$t('Connections.willDisconnectTheConnection'), {
         confirmButtonText: this.$t('Connections.confirm'),
         cancelButtonText: this.$t('Connections.cancel'),
         type: 'warning',
