@@ -105,8 +105,8 @@
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button type="primary" size="small" @click="save">{{ $t('General.confirm') }}</el-button>
         <el-button plain size="small" @click="closeDialog">{{ $t('General.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{ $t('General.confirm') }}</el-button>
       </div>
     </el-dialog>
   </div>
