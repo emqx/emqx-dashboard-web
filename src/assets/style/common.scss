@@ -137,6 +137,12 @@ body {
   }
 }
 
+.code-editor__item.el-form-item {
+  .el-form-item__content {
+    line-height: 18px;
+  }
+}
+
 .el-select-dropdown__item {
   &.hover {
     background-color: rgba(52, 195, 136, 0.08);
@@ -156,13 +162,6 @@ body {
     }
   }
 }
-
-
-// radius
-// .el-input__inner, .el-button:not(.is-circle), .el-select, .el-tag, .el-checkbox, .ant-card, .el-textarea__inner {
-  //border-radius: 0 !important;
-// }
-
 
 .ant-card-bordered {
   border: none;
@@ -305,7 +304,6 @@ body {
   border-radius: 50%;
 }
 
-
 .dialog-primary-btn {
   margin-left: 12px;
 }
@@ -319,7 +317,6 @@ body {
 .emq-popover-content {
   font-size: 12px;
 }
-
 
 .field-info {
   margin: 0;
@@ -340,7 +337,6 @@ body {
     color: #101010;
   }
 }
-
 
 .ant-badge-status-success {
   background-color: #34C388;
@@ -442,4 +438,19 @@ body {
 #clipboard {
   position: absolute;
   z-index: -1;
+}
+
+// code-editor
+.code-editor {
+  border: 1px solid #D9D9D9;
+  border-radius: 4px;
+
+  .CodeMirror {
+    border-radius: 4px;
+    color: #646775;
+  }
+  .CodeMirror-gutters {
+    background-color: #F6F7FB;
+    border-right: 1px solid #D9D9D9;
+  }
 }

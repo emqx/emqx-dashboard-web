@@ -333,9 +333,6 @@ export default {
 
 
 <style lang="scss" scoped>
-.rules {
-}
-
 .link-item {
   .icon {
     width: 24px;
