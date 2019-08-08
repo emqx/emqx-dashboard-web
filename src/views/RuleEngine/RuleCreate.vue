@@ -68,14 +68,12 @@
                 <el-input v-model="record.description"></el-input>
               </el-form-item>
 
-              <el-form-item prop="rawsql" :label="$t('RuleEngine.sqlInput')">
-                <el-input
+              <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
+                <code-editor
                   v-model="record.rawsql"
-                  type="textarea"
-                  :rows="8"
-                  placeholder="e.g payload.speed"
-                >
-                </el-input>
+                  height="320px"
+                  lang="text/x-sql"
+                ></code-editor>
               </el-form-item>
 
               <el-form-item :label="$t('RuleEngine.sqlTest')">
@@ -88,9 +86,24 @@
 
               <el-collapse-transition>
                 <div v-if="showTest">
-                  <el-form-item v-for="(field, i) in testField" :key="i" :prop="`ctx.${field}`" :label="field">
-                    <el-input v-model="record.ctx[field]" :type="field === 'payload' ? 'textarea' : ''" :rows="5">
-                    </el-input>
+                  <el-form-item
+                    v-for="(field, i) in testField"
+                    :key="i"
+                    :prop="`ctx.${field}`"
+                    :label="field"
+                    :class="field === 'payload' ? 'code-editor__item' : ''"
+                  >
+                    <template v-if="field === 'payload'">
+                      <code-editor
+                        v-model="record.ctx[field]"
+                        lang="application/json"
+                        :lint="false"
+                      ></code-editor>
+                    </template>
+                    <template v-else>
+                      <el-input v-model="record.ctx[field]" :rows="5">
+                      </el-input>
+                    </template>
                   </el-form-item>
 
                   <el-form-item>
@@ -100,9 +113,14 @@
                     </el-button>
                   </el-form-item>
 
-                  <el-form-item :label="$t('RuleEngine.testOutput')">
-                    <el-input v-model="testOutPut" type="textarea" readonly :rows="6">
-                    </el-input>
+                  <el-form-item class="code-editor__item" :label="$t('RuleEngine.testOutput')">
+                    <code-editor
+                      v-model="testOutPut"
+                      height="250px"
+                      lang="application/json"
+                      :lint="false"
+                      :disabled="true"
+                    ></code-editor>
                   </el-form-item>
 
                 </div>
@@ -173,14 +191,18 @@
 import {
   loadRuleEvents, SQLTest, createRule,
 } from '@/api/rules'
+import CodeEditor from '@/components/CodeEditor'
 import { loadTopics } from '@/api/server'
 import RuleActions from './components/RuleActions'
-import { clearTimeout } from 'timers';
+import { clearTimeout } from 'timers'
 
 export default {
   name: 'RuleCrate',
 
-  components: { RuleActions },
+  components: {
+    RuleActions,
+    CodeEditor,
+  },
 
   props: {},
 
@@ -255,7 +277,7 @@ export default {
     handleForChange(val) {
       this.selectEvent = this.events.find($ => $.event === val)
       const { event } = this.selectEvent
-      this.record.rawsql = `SELECT * FROM "${event}"`
+      this.record.rawsql = `SELECT\n\r *\n\rFROM\n\r "${event}"\n\rWHERE\n\r `
       this.handlePreSQLTest()
     },
     handlePreSQLTest() {

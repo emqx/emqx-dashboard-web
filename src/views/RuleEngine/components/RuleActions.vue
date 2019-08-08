@@ -116,9 +116,6 @@
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="resource-option">
-              <!--<span class="resource-state">-->
-              <!--<a-badge :status="item.status.is_alive ? 'success' : 'error'"></a-badge>-->
-              <!--</span>-->
               <span class="resource-id">{{ item.id }}</span>
               <span class="resource-name">{{ item.config.title }}</span>
             </div>
@@ -144,7 +141,7 @@
               :key="i"
               :span="item.type === 'textarea' ? 24 : 12"
             >
-              <el-form-item v-bind="item.formItemAttributes">
+              <el-form-item :class="item.key === 'sql' ? 'code-editor__item' : ''" v-bind="item.formItemAttributes">
                 <template v-if="item.formItemAttributes.description" slot="label">
                   {{ item.formItemAttributes.label }}
                   <el-popover trigger="hover" width="220" placement="top">
@@ -163,7 +160,13 @@
                     v-bind="item.bindAttributes"
                   >
                   </el-input>
-
+                  <code-editor
+                    v-else-if="item.key === 'sql'"
+                    v-model="record.params.sql"
+                    lang="text/x-sql"
+                    :lint="false"
+                  >
+                  </code-editor>
                   <el-input
                     v-else
                     v-model="record.params[item.key]"
@@ -213,11 +216,15 @@
 import { loadActionsList, loadResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
 import ResourceDialog from '@/views/RuleEngine/components/ResourceCreate'
+import CodeEditor from '@/components/CodeEditor'
 
 export default {
   name: 'RuleActions',
 
-  components: { ResourceDialog },
+  components: {
+    ResourceDialog,
+    CodeEditor,
+  },
 
   props: {
     value: {
@@ -361,18 +368,23 @@ export default {
     loadParamsList() {
       const { params } = this.selectedAction
       const { form, rules } = renderParamsForm(params, 'params')
-      this.paramsList = form
-      this.rules.params = {
-        $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
-        ...rules,
-      }
       this.record.params = {}
       form.forEach(({ key, value }) => {
-        this.$set(this.record.params, key, value)
+        const k = key
+        let v = value
+        if (k === 'sql' && v === undefined) {
+          v = ''
+        }
+        this.$set(this.record.params, k, v)
       })
       this.$set(this.record.params, '$resource', '')
       if (this.$refs.record) {
         setTimeout(this.$refs.record.clearValidate, 0)
+      }
+      this.paramsList = form
+      this.rules.params = {
+        $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        ...rules,
       }
       this.paramsLoading = false
     },
@@ -450,10 +462,6 @@ export default {
     background-color: #f2f2f2;
     border: 1px dashed #f2f2f2;
     transition: border .3s;
-
-    /*&:hover {*/
-    /*border: 1px dashed #d8d8d8;*/
-    /*}*/
   }
 
   .action-item-head {
@@ -570,10 +578,6 @@ export default {
 }
 
 .resource-option {
-  .resource-state {
-
-  }
-
   .resource-name {
     float: right;
     font-size: 12px;
