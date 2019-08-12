@@ -277,7 +277,7 @@ export default {
     handleForChange(val) {
       this.selectEvent = this.events.find($ => $.event === val)
       const { event } = this.selectEvent
-      this.record.rawsql = `SELECT\n\r *\n\rFROM\n\r "${event}"\n\rWHERE\n\r `
+      this.record.rawsql = `SELECT\n\r *\n\rFROM\n\r "${event}"\n\rWHERE\n\r topic =~ 't/#`
       this.handlePreSQLTest()
     },
     handlePreSQLTest() {

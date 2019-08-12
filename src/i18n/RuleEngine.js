@@ -97,6 +97,10 @@ export default {
     zh: '删除',
     en: 'Delete',
   },
+  remove: {
+    zh: '移除',
+    en: 'Remove',
+  },
   success: {
     zh: '成功',
     en: 'Success',
