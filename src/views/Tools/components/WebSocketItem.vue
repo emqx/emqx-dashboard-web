@@ -75,19 +75,27 @@
                 SSL
               </el-checkbox>
 
-              <!--<span class="btn">{{ connectUrl }}</span>-->
             </el-col>
 
             <el-col :span="24" class="footer-area">
-              <el-button type="primary" size="small" class="conn-btn" style="margin-right: 20px"
-                         :disabled="client.connected || connecting" @click="createConnection"
+              <el-button
+                type="primary"
+                size="small"
+                class="conn-btn"
+                style="margin-right: 20px"
+                :disabled="client.connected || connecting"
+                @click="createConnection"
               >
                 {{ client.connected ? $t('Tools.connected') : connecting ? $t('Tools.inConnection') :
                   $t('Tools.connect') }}
               </el-button>
 
-              <el-button type="danger" size="small" class="conn-btn" :disabled="!client.connected && !connecting"
-                         @click="destroyConnection"
+              <el-button
+                type="danger"
+                size="small"
+                class="conn-btn"
+                :disabled="!client.connected && !connecting"
+                @click="destroyConnection"
               >
                 {{ connecting ? $t('Tools.cancelConnection') : $t('Tools.disconnect') }}
               </el-button>
@@ -106,8 +114,14 @@
 
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form ref="subForm" hide-required-asterisk :model="subscriptionsRecord" :rules="subscriptionsRules"
-                   size="small" label-position="top" @keyup.enter.native="_doSubscribe"
+          <el-form
+            ref="subForm"
+            hide-required-asterisk
+            :model="subscriptionsRecord"
+            :rules="subscriptionsRules"
+            size="small"
+            label-position="top"
+            @keyup.enter.native="_doSubscribe"
           >
             <el-form-item prop="topic" label="Topic">
               <el-input v-model="subscriptionsRecord.topic"></el-input>
@@ -148,8 +162,13 @@
       </div>
 
       <div class="connection-wrapper">
-        <el-form ref="pubForm" hide-required-asterisk label-position="top" :model="messageRecord"
-                 :rules="messageRecordRules" size="small" @keyup.enter.native="_doPublish"
+        <el-form
+          ref="pubForm"
+          hide-required-asterisk label-position="top"
+          :model="messageRecord"
+          :rules="messageRecordRules"
+          size="small"
+          @keyup.enter.native="_doPublish"
         >
           <el-row :gutter="20">
             <el-col :span="6">
@@ -181,8 +200,6 @@
           </el-row>
         </el-form>
       </div>
-
-      <!-- <div class="line"></div> -->
 
       <el-row :gutter="20">
         <el-col :span="12">
@@ -228,19 +245,6 @@
         </el-col>
       </el-row>
 
-      <el-scrollbar v-if="false" view-class="message-item-wrapper" :native="false">
-        <el-card v-for="(item, i) in messages" :key="i" class="message-item" :class="{ 'message-out': item.out }">
-          <div class="message-item-header">
-            <span>Topic: {{ item.topic }}</span>
-            <span>QoS: {{ item.qos }}</span>
-            <span v-if="item.retain">Retain</span>
-            <span class="create-at">{{ item.createAt }}</span>
-          </div>
-          <div class="message-item-content">
-            <code>{{ item.payload }}</code>
-          </div>
-        </el-card>
-      </el-scrollbar>
     </el-card>
   </div>
 </template>
@@ -249,7 +253,6 @@
 <script>
 import mqtt from 'mqtt'
 import moment from 'moment'
-import mqttMatch from 'mqtt-match'
 
 export default {
   name: 'WebSocketItem',
@@ -293,7 +296,6 @@ export default {
       subscriptionsRules: {
         topic: [{ required: true, message: this.$t('Tools.pleaseEnter') }],
       },
-
       client: {
         reconnecting: false,
       },
@@ -331,7 +333,6 @@ export default {
       },
 
       subscriptions: [],
-      messages: [],
 
       messageIn: [],
       messageOut: [],
@@ -360,14 +361,18 @@ export default {
     },
   },
 
-  watch: {},
-
-  created() { },
   beforeDestroy() {
     this.destroyConnection()
   },
 
   methods: {
+    addMessages(msg, content) {
+      const messageLimit = 5000
+      this[msg].unshift(content)
+      if (this[msg].length > messageLimit) {
+        this[msg].pop()
+      }
+    },
     getNow() {
       return moment().format('HH:mm:ss')
     },
@@ -380,9 +385,9 @@ export default {
         qos: packet.qos,
         retain: packet.retain,
       }
-      this.messages.unshift(message)
-      this.messageIn.unshift(message)
-      this.$emit('update:messageCount', this.messageCount += 1)
+      this.addMessages('messageIn', message)
+      let { messageCount } = this
+      this.$emit('update:messageCount', messageCount += 1)
     },
     handleConnect() {
       if (this.client.connected) {
@@ -412,7 +417,6 @@ export default {
           return
         }
         this.subscriptions = this.subscriptions.filter($ => $.topic !== item.topic)
-        this.messages = this.messages.filter($ => mqttMatch($.topic, item.topic))
       })
     },
     async _doSubscribe() {
@@ -467,8 +471,7 @@ export default {
           qos,
           retain,
         }
-        this.messages.unshift(message)
-        this.messageOut.unshift(message)
+        this.addMessages('messageOut', message)
       })
     },
     _getDefaultConnection() {
@@ -534,7 +537,8 @@ export default {
           will: will.topic ? will : undefined,
         })
         window.client = this.client
-        this.client.on('error', () => {
+        this.client.on('error', (error) => {
+          this.$message.error(error.toString())
           this.connecting = false
           try {
             this.client.end()
@@ -580,7 +584,6 @@ export default {
       this.subscriptionsRecord = session.subscriptionsRecord || {}
 
       this.subscriptions = session.subscriptions || []
-      this.messages = session.messages || []
     },
     sessionChange(i) {
       this.activeIndex = i
