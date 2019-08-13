@@ -33,6 +33,7 @@ export default {
       default: 'line',
     },
   },
+
   data() {
     return {
       chart: null,
