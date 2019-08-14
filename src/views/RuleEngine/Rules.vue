@@ -45,7 +45,7 @@
       >
         <div class="emq-table-header">
           <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">
-            {{ $t('RuleEngine.create') }}
+            {{ $t('Base.create') }}
           </el-button>
         </div>
 
@@ -183,13 +183,7 @@
             </ul>
           </div>
 
-          <!--<div class="metrics-item oper-wrapper">-->
-          <!--<el-button type="dashed" size="small">查看详情</el-button>-->
-          <!--</div>-->
-
-
         </div>
-
 
       </div>
     </a-drawer>
@@ -337,7 +331,7 @@ export default {
   .icon {
     width: 24px;
     height: 24px;
-    line-height: 14px;
+    line-height: 16px;
     border-radius: 50%;
     border: 1px solid #34C388;
     padding: 4px;

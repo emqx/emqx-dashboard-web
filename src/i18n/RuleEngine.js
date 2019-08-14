@@ -137,10 +137,6 @@ export default {
     zh: '资源',
     en: 'Resources',
   },
-  create: {
-    zh: '创建',
-    en: 'Create',
-  },
   state: {
     zh: '状态',
     en: 'State',

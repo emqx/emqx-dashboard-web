@@ -37,10 +37,6 @@ export default {
     zh: '产品文档',
     en: 'Document',
   },
-  create: {
-    zh: '创建',
-    en: 'Create',
-  },
   appName: {
     zh: '应用名称',
     en: 'App Name',

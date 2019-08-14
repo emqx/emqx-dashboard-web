@@ -35,7 +35,7 @@
             icon="el-icon-plus"
             @click="showDialog('create')"
           >
-            {{ $t('General.create') }}
+            {{ $t('Base.create') }}
           </el-button>
         </div>
 
@@ -267,9 +267,3 @@ export default {
   },
 }
 </script>
-
-
-<style lang="scss">
-.users {
-}
-</style>

@@ -3,7 +3,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
 import Layout from './components/Layout'
-import Login from './views/Base/Login'
 import { toLogin, getBasicAuthInfo } from './common/utils'
 
 Vue.use(Router)
@@ -51,6 +50,7 @@ const router = new Router({
         },
       ],
     },
+    // 连接
     {
       path: '/connections',
       component: Layout,
@@ -67,6 +67,19 @@ const router = new Router({
         },
       ],
     },
+    // Schemas
+    {
+      path: '/schemas',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'schemas',
+          component: () => import('@/views/Schemas/Schemas'),
+        },
+      ],
+    },
+    // 规则
     {
       path: '/rules',
       component: Layout,
@@ -80,9 +93,6 @@ const router = new Router({
           path: 'create',
           name: 'rules-create',
           component: () => import('@/views/RuleEngine/RuleCreate'),
-          meta: {
-            // hideLeftBar: true,
-          },
         },
         {
           path: ':id',
@@ -108,6 +118,7 @@ const router = new Router({
         },
       ],
     },
+    // 告警
     {
       path: '/alerts',
       component: Layout,
@@ -120,6 +131,7 @@ const router = new Router({
         },
       ],
     },
+    // 工具
     {
       path: '/websocket',
       component: Layout,
@@ -134,6 +146,7 @@ const router = new Router({
         },
       ],
     },
+    // 应用
     {
       path: '/application',
       component: Layout,
@@ -145,6 +158,7 @@ const router = new Router({
         },
       ],
     },
+    // 用户
     {
       path: '/users',
       component: Layout,
@@ -156,6 +170,7 @@ const router = new Router({
         },
       ],
     },
+    // 插件
     {
       path: '/plugins',
       component: Layout,

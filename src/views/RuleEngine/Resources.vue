@@ -25,8 +25,8 @@
         :loading="listLoading"
       >
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">{{ $t('RuleEngine.create')
-          }}
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">
+            {{ $t('Base.create') }}
           </el-button>
         </div>
 
@@ -45,7 +45,6 @@
                     </div>
                     <resource-node :value="row" @change="handleExpandChange"></resource-node>
                   </el-col>
-
                   <!--<el-col v-if="false" :span="16">-->
                   <!--<div class="emq-title h3">-->
                   <!--资源配置-->
@@ -78,22 +77,10 @@
             :filter-method="resourceTypesColumnFilter"
             filter-placement="bottom"
           ></el-table-column>
-
           <el-table-column
             min-width="100px" prop="description" show-overflow-tooltip
             :label="$t('RuleEngine.remark')"
           ></el-table-column>
-          <!--<el-table-column min-width="70px" prop="status.is_alive" :label="$t('RuleEngine.state')">-->
-          <!--<template slot-scope="{ row }">-->
-          <!--<a-badge-->
-          <!--:status="getStatus(row.status) ? 'success' : 'error'"-->
-          <!--:text="getStateText(row.status)"-->
-          <!--dot-->
-          <!--&gt;-->
-          <!--</a-badge>-->
-          <!--</template>-->
-          <!--</el-table-column>-->
-
           <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
               <!--<el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">{{ $t('RuleEngine.reconnect') }}</el-button>-->

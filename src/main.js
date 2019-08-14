@@ -6,7 +6,6 @@ import VueI18n from 'vue-i18n'
 import ElementLocale from 'element-ui/lib/locale'
 import lang from './i18n'
 
-
 import installer from '@/common/installer'
 import '@/assets/style/common.scss'
 import App from './App.vue'
