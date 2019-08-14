@@ -1,43 +1,24 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
   <div class="plugin-view">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <router-link to="/plugins" tag="span" class="btn btn-default raw">
-              {{ $t('Plugins.plugin') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ node }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-title-view">
-          <div class="title">
-            {{ $route.params.name }}
-          </div>
+    <page-header
+      :back-title="$t('Plugins.plugin')"
+      :oper="node"
+      back-path="/plugins"
+    >
+      <div class="page-header-title-view">
+        <div class="title">
+          {{ $route.params.name }}
         </div>
-
-        <div class="page-header-content-view">
-          <div class="content">
-            <p class="description">
-              {{ $t('Plugins.pluginTips') }}
-            </p>
-          </div>
-        </div>
-
       </div>
-    </div>
+
+      <div class="page-header-content-view">
+        <div class="content">
+          <p class="description">
+            {{ $t('Plugins.pluginTips') }}
+          </p>
+        </div>
+      </div>
+    </page-header>
 
     <div class="app-wrapper">
       <a-card class="emq-list-card">
@@ -62,7 +43,6 @@
         </div>
       </a-card>
     </div>
-
 
   </div>
 </template>

@@ -1,23 +1,10 @@
 <template>
   <div class="resources">
 
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link class="btn btn-default raw" to="/" tag="span">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('RuleEngine.resources') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-      </div>
-    </div>
+    <page-header
+      :back-title="$t('RuleEngine.resources')"
+    >
+    </page-header>
 
     <div class="app-wrapper">
       <a-card

@@ -1,37 +1,23 @@
 <template>
   <div class="application">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link class="btn btn-default raw" to="/" tag="span">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
+    <page-header
+      :back-title="$t('General.application')"
+    >
+      <div class="page-header-content-view">
+        <div class="content">
+          <p class="description">
+            {{ $t('General.applicationIsCalled') }}
+          </p>
 
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('General.application') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-content-view">
-          <div class="content">
-            <p class="description">
-              {{ $t('General.applicationIsCalled') }}
-            </p>
-
-            <div class="page-header-link">
-              <a :href="docs.restAPI" target="_blank" class="link-item">
-                <i class="icon el-icon-document"></i>
-                {{ $t('General.productDocumentation') }}
-              </a>
-            </div>
+          <div class="page-header-link">
+            <a :href="docs.restAPI" target="_blank" class="link-item">
+              <i class="icon el-icon-document"></i>
+              {{ $t('General.productDocumentation') }}
+            </a>
           </div>
         </div>
       </div>
-    </div>
+    </page-header>
 
     <div class="app-wrapper">
       <a-card class="emq-list-card">
@@ -45,7 +31,6 @@
             {{ $t('Base.create') }}
           </el-button>
         </div>
-
 
         <el-table :data="tableData" class="data-list">
           <el-table-column prop="app_id" label="AppID">
@@ -84,7 +69,6 @@
             </template>
           </el-table-column>
         </el-table>
-
 
       </a-card>
     </div>

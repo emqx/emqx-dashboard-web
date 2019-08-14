@@ -77,6 +77,11 @@ const router = new Router({
           name: 'schemas',
           component: () => import('@/views/Schemas/Schemas'),
         },
+        {
+          path: 'create',
+          name: 'schemas-create',
+          component: () => import('@/views/Schemas/SchemasCreate'),
+        },
       ],
     },
     // 规则
