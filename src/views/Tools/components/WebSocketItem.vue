@@ -147,7 +147,7 @@
             <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
             <el-table-column width="60px">
               <template slot-scope="{ row }">
-                <span class="btn" @click="_doUnSubscribe(row)">{{ $t('Tools.cancel') }}</span>
+                <span class="btn" @click="_doUnSubscribe(row)">{{ $t('Base.cancel') }}</span>
               </template>
             </el-table-column>
           </el-table>

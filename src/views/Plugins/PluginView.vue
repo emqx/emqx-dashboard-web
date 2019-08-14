@@ -38,7 +38,7 @@
 
         <div class="line" style="margin: 20px auto;background-color: #d8d8d8"></div>
         <div class="footer">
-          <el-button size="medium" @click="handleCache">{{ $t('Plugins.cancel') }}</el-button>
+          <el-button size="medium" @click="handleCache">{{ $t('Base.cancel') }}</el-button>
           <el-button size="medium" type="primary" :disabled="!changed" @click="updateConfig">{{ $t('Plugins.save') }}</el-button>
         </div>
       </a-card>
@@ -95,8 +95,8 @@ export default {
     handleCache() {
       if (this.changed) {
         this.$msgbox.confirm(this.$t('Plugins.pluginBeforeSaveTips'), {
-          confirmButtonText: this.$t('Plugins.confirm'),
-          cancelButtonText: this.$t('Plugins.cancel'),
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
           type: 'warning',
         }).then(() => {
           this.$router.go(-1)

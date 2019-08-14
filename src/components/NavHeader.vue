@@ -8,11 +8,6 @@
 
     <div class="pull-right">
       <!-- TODO: 补充使用情况 -->
-      <!--<el-tooltip effect="dark" :content="$t('components.usingDocuments')" placement="bottom" :visible-arrow="false">-->
-      <!--<div class="document-link func-item">-->
-      <!--<i class="iconfont icon-icon_yiwenkongxin"></i>-->
-      <!--</div>-->
-      <!--</el-tooltip>-->
       <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
         <div class="alert-info func-item">
           <a-badge :count="alertCount">
@@ -131,7 +126,7 @@ export default {
       }
       this.$msgbox.confirm(this.$t('components.whetherToLogOutOrNot'), {
         confirmButtonText: this.$t('components.signOut'),
-        cancelButtonText: this.$t('components.cancel'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(() => {
         this.logout()

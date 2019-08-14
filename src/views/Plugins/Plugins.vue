@@ -291,8 +291,8 @@ export default {
         return
       }
       this.$msgbox.confirm(this.$t('Plugins.thisActionWillStopThePlugIn'), {
-        confirmButtonText: this.$t('Plugins.confirm'),
-        cancelButtonText: this.$t('Plugins.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await stopPlugin(this.nodeName, row.name)

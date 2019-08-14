@@ -144,8 +144,8 @@ export default {
     },
     deleteResource(row) {
       this.$msgbox.confirm(this.$t('RuleEngine.deleteResource'), {
-        confirmButtonText: this.$t('RuleEngine.confirm'),
-        cancelButtonText: this.$t('RuleEngine.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await destroyResource(row.id)
