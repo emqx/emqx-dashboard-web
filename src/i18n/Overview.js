@@ -23,7 +23,7 @@ export default
     zh: '当前活跃连接数',
     en: 'Currently active connections',
   },
-  details: {
+  view: {
     zh: '查看',
     en: 'View',
   },

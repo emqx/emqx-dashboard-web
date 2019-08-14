@@ -4,7 +4,8 @@
       <img class="logo" src="../../../assets/emqx_logo.png" alt="logo">
       <div class="version">{{ record.version }}</div>
       <div class="jump">
-        <el-button v-if="showButton" type="dashed" size="mini" @click="toDetails">{{ $t('Overview.details') }}
+        <el-button v-if="showButton" type="dashed" size="mini" @click="toDetails">
+          {{ $t('Overview.view') }}
         </el-button>
       </div>
     </div>
