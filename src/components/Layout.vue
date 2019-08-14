@@ -5,7 +5,6 @@
       <left-bar></left-bar>
     </el-aside>
 
-
     <el-main style="margin: 0;padding: 0;" :style="elMainStyle">
 
       <el-header style="height: 60px;padding: 0">
@@ -23,19 +22,26 @@
   </el-container>
 </template>
 
+
 <script>
 import LeftBar from '@/components/LeftBar'
 import NavHeader from '@/components/NavHeader'
 
 export default {
   name: 'Layout',
-  components: { NavHeader, LeftBar },
+
+  components: {
+    NavHeader,
+    LeftBar,
+  },
+
   data() {
     return {
       collapsed: false,
       theme: 'light',
     }
   },
+
   computed: {
     elAsideStyle() {
       return {
@@ -50,8 +56,9 @@ export default {
 }
 </script>
 
+
 <style lang="scss" scoped>
-@import "../assets/style/variables";
+@import "../assets/style/variables.scss";
 
 .el-aside {
   background-color: $color-theme;

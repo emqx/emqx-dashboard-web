@@ -33,6 +33,10 @@ export default
     zh: '连接',
     en: 'Connections',
   },
+  schema: {
+    zh: '编解码',
+    en: 'Schema Registry',
+  },
   rule: {
     zh: '规则',
     en: 'Rule',

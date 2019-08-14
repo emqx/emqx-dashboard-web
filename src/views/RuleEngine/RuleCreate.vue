@@ -22,7 +22,7 @@
           </a-breadcrumb-item>
           <a-breadcrumb-item>
             <span class="btn btn-default raw">
-              {{ $t('RuleEngine.create') }}
+              {{ $t('Base.create') }}
             </span>
           </a-breadcrumb-item>
         </a-breadcrumb>
@@ -177,7 +177,7 @@
           {{ $t('RuleEngine.cancel') }}
         </el-button>
         <el-button type="primary" size="medium" @click="save">
-          {{ $t('RuleEngine.create') }}
+          {{ $t('Base.create') }}
         </el-button>
       </div>
 
@@ -362,7 +362,7 @@ export default {
 
 <style lang="scss">
 .rule-create {
-  @import './style.less';
+  @import './style.scss';
 
   .available-fields {
     transition: all 0.3s;

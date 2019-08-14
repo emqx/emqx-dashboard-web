@@ -243,7 +243,7 @@ export default {
 
 <style lang="scss">
 .rule-view {
-  @import "./style.less";
+  @import "./style.scss";
 
   .field-title {
     width: 100px;

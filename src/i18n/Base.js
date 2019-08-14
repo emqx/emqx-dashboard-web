@@ -45,4 +45,8 @@ export default
     zh: '首页',
     en: 'Home',
   },
+  create: {
+    zh: '创建',
+    en: 'Create',
+  },
 }
