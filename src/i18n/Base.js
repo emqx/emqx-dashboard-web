@@ -41,4 +41,8 @@ export default
     zh: '复制成功！',
     en: 'Copied!',
   },
+  homePage: {
+    zh: '首页',
+    en: 'Home',
+  },
 }

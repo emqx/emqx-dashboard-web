@@ -5,7 +5,7 @@
         <a-breadcrumb>
           <a-breadcrumb-item>
             <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('Overview.homePage') }}
+              {{ $t('Base.homePage') }}
             </router-link>
           </a-breadcrumb-item>
 

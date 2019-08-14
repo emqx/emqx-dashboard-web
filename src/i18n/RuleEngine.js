@@ -133,10 +133,6 @@ export default {
     zh: '全部资源',
     en: 'Resources',
   },
-  homePage: {
-    zh: '首页',
-    en: 'Home',
-  },
   resources: {
     zh: '资源',
     en: 'Resources',
