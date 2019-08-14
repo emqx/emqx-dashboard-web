@@ -1,41 +1,28 @@
 <template>
   <div class="connection-view">
-    <div class="page-header">
-      <div class="page-header-content">
-
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-          <a-breadcrumb-item>
-            <router-link to="/connections" tag="span" class="btn btn-default raw">
-              {{ $t('Connections.connect') }}
-            </router-link>
-          </a-breadcrumb-item>
-          <a-breadcrumb-item>{{ $t('Connections.connectionDetails') }}</a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-title-view">
-          <div style="display: flex;align-items: center">
-            <span class="title">
-              {{ clientId }}
-            </span>
-            <a-badge :status="connStatus" :text="connStatusText"></a-badge>
-          </div>
-        </div>
-
-        <el-tabs v-model="activeName" class="page-header-footer" @tab-click="handleTabClick">
-          <el-tab-pane :label="$t('Connections.basicInfo')" name="detail"></el-tab-pane>
-          <el-tab-pane :label="$t('Connections.subscriptions')" name="subscriptions"></el-tab-pane>
-        </el-tabs>
-
-        <div v-if="!record.disconnected" class="page-header-top-start">
-          <el-button type="danger" size="small" @click="handleDisconnect">{{ $t('Connections.disconnect') }}</el-button>
+    <page-header
+      :back-title="$t('Connections.connect')"
+      :oper="$t('Connections.connectionDetails')"
+      back-path="/connections"
+    >
+      <div class="page-header-title-view">
+        <div style="display: flex;align-items: center">
+          <span class="title">
+            {{ clientId }}
+          </span>
+          <a-badge :status="connStatus" :text="connStatusText"></a-badge>
         </div>
       </div>
-    </div>
+
+      <el-tabs v-model="activeName" class="page-header-footer" @tab-click="handleTabClick">
+        <el-tab-pane :label="$t('Connections.basicInfo')" name="detail"></el-tab-pane>
+        <el-tab-pane :label="$t('Connections.subscriptions')" name="subscriptions"></el-tab-pane>
+      </el-tabs>
+
+      <div v-if="!record.disconnected" class="page-header-top-start">
+        <el-button type="danger" size="small" @click="handleDisconnect">{{ $t('Connections.disconnect') }}</el-button>
+      </div>
+    </page-header>
 
     <div class="app-wrapper">
       <a-card v-if="activeName === 'detail'" class="detail-card">

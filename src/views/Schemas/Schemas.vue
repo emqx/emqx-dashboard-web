@@ -1,23 +1,26 @@
 <template>
-  <div class="rules">
+  <div class="schemas">
 
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
+    <page-header
+      :back-title="$t('Schemas.schema')"
+    >
+    </page-header>
 
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('Schemas.schema') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-      </div>
+    <div class="app-wrapper">
+      <a-card
+        class="emq-list-card"
+      >
+        <div class="emq-table-header">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            @click="$router.push('/schemas/create')"
+          >
+            {{ $t('Base.create') }}
+          </el-button>
+        </div>
+      </a-card>
     </div>
   </div>
 </template>
@@ -25,8 +28,6 @@
 
 <script>
 export default {
-  name: 'Rules',
-
-  props: {},
+  name: 'Schemas',
 }
 </script>

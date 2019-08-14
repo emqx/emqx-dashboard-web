@@ -7,27 +7,12 @@
       type="text"
     >
 
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-          <a-breadcrumb-item>
-            <router-link to="/rules" tag="span" class="btn btn-default raw">
-              {{ $t('RuleEngine.ruleEngine') }}
-            </router-link>
-          </a-breadcrumb-item>
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('Base.create') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-      </div>
-    </div>
+    <page-header
+      :back-title="$t('RuleEngine.ruleEngine')"
+      :oper="$t('Base.create')"
+      back-path="/rules"
+    >
+    </page-header>
 
     <div class="emq-list-body rule-wrapper app-wrapper">
       <a-card class="emq-list-card">

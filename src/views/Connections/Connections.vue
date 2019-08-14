@@ -1,25 +1,14 @@
 <template>
   <div class="connections">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-          <a-breadcrumb-item>
-            {{ $t('Connections.connect') }}
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-content-view">
-          <div class="content">
-            {{ $t('Connections.currentConnection') }}
-          </div>
+    <page-header
+      :back-title="$t('Connections.connect')"
+    >
+      <div class="page-header-content-view">
+        <div class="content">
+          {{ $t('Connections.currentConnection') }}
         </div>
       </div>
-    </div>
+    </page-header>
 
     <div class="app-wrapper">
       <a-card class="emq-list-card" :loading="listLoading">
@@ -31,15 +20,6 @@
               {{ searchValue ? $t('Connections.reset') : $t('Connections.refresh') }}
             </el-button>
           </div>
-
-          <!--<div>-->
-          <!--<el-radio-group v-model="showLevel" size="mini" @change="syncShowLevel">-->
-          <!--<el-radio-button label="simple">{{ $t('Connections.overview') }}</el-radio-button>-->
-          <!--<el-radio-button label="more">{{ $t('Connections.detailed') }}</el-radio-button>-->
-          <!--</el-radio-group>-->
-          <!--</div>-->
-
-
         </div>
 
         <el-table :data="tableData" class="data-list">
@@ -69,11 +49,14 @@
             </template>
           </el-table-column>
           <el-table-column v-if="showLevel === 'more'" prop="proto_ver" min-width="80px" :label="$t('Connections.protocolVersion')"></el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="clean_start" min-width="80px" :label="$t('Connections.clearSession')"
-                           :formatter="$ => $ ? 'true' : 'false'"
+          <el-table-column
+            v-if="showLevel === 'more'"
+            prop="clean_start"
+            min-width="80px"
+            :label="$t('Connections.clearSession')"
+            :formatter="$ => $ ? 'true' : 'false'"
           ></el-table-column>
           <el-table-column v-if="showLevel === 'more'" prop="peercert" min-width="80px" :label="$t('Connections.SSL')"></el-table-column>
-
 
           <el-table-column prop="connected_at" min-width="140px" :label="$t('Connections.connectionAt')"></el-table-column>
           <el-table-column prop="oper" width="120px" label="">
@@ -83,7 +66,6 @@
                 {{ row.disconnected ? $t('Connections.disconnected') : $t('Connections.disconnect') }}
               </el-button>
 
-              <!--<el-button size="mini" type="danger">Ban</el-button>-->
             </template>
           </el-table-column>
         </el-table>

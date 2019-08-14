@@ -1,24 +1,9 @@
 <template>
   <div class="plugins">
-
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('Plugins.plugin') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-      </div>
-    </div>
+    <page-header
+      :back-title="$t('Plugins.plugin')"
+    >
+    </page-header>
 
     <div class="app-wrapper">
 
@@ -45,19 +30,9 @@
 
         <div class="emq-table-header">
           <div>
-            <!--<emq-select-->
-            <!--v-model="nodeName"-->
-            <!--:field="{ api: loadNodes }"-->
-            <!--:field-name="{ label: 'name', value: 'name' }"-->
-            <!--size="mini"-->
-            <!--@change="loadData"-->
-            <!--&gt;-->
-            <!--</emq-select>-->
-
             <div class="emq-title">
               {{ $t('Plugins.pluginsList') }}
             </div>
-            <!--<span class="btn btn-default" style="margin-left: 12px">{{ $t('Plugins.selectNode') }}</span>-->
           </div>
 
           <div class="search-wrapper">
@@ -96,7 +71,6 @@
             </el-radio-group>
           </div>
         </div>
-
 
         <div class="plugin-wrapper">
           <template v-if="listTableData.length > 0">
@@ -154,13 +128,19 @@
           </div>
         </div>
 
-        <el-table v-if="false" :data="listTableData" :default-sort="{ prop: 'active', order: 'descending' }"
-                  class="data-list"
+        <el-table
+          v-if="false"
+          :data="listTableData"
+          :default-sort="{ prop: 'active', order: 'descending' }"
+          class="data-list"
         >
           <el-table-column prop="name" min-width="110px" :label="$t('Plugins.pluginName')"></el-table-column>
           <el-table-column prop="version" min-width="80px" :label="$t('Plugins.version')"></el-table-column>
-          <el-table-column prop="description" min-width="160px" show-overflow-tooltip
-                           :label="$t('Plugins.describe')"
+          <el-table-column
+            prop="description"
+            min-width="160px"
+            show-overflow-tooltip
+            :label="$t('Plugins.describe')"
           ></el-table-column>
           <el-table-column
             prop="type"
@@ -189,7 +169,6 @@
               <el-button size="mini" type="dashed">{{ $t('Plugins.config') }}</el-button>
             </template>
           </el-table-column>
-
         </el-table>
 
       </a-card>

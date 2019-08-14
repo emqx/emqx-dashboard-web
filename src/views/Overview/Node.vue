@@ -1,42 +1,26 @@
 <template>
   <div class="node">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('Overview.nodeData') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-title-view">
-          <div class="title">{{ name }}</div>
-        </div>
-
-        <div class="page-header-content-view">
-          <div class="content">
-            <p class="description">
-              {{ $t('Overview.currentNodeInfo') }}
-            </p>
-          </div>
-        </div>
-
-
-        <el-tabs v-model="activeName" class="page-header-footer" @tab-click="handleTabClick">
-          <el-tab-pane :label="$t('Overview.basicInfo')" name="basic"></el-tab-pane>
-          <el-tab-pane :label="$t('Overview.metric')" name="metrics"></el-tab-pane>
-          <el-tab-pane :label="$t('Overview.configuration')" name="config"></el-tab-pane>
-        </el-tabs>
-
+    <page-header
+      :back-title="$t('Overview.nodeData')"
+    >
+      <div class="page-header-title-view">
+        <div class="title">{{ name }}</div>
       </div>
-    </div>
+
+      <div class="page-header-content-view">
+        <div class="content">
+          <p class="description">
+            {{ $t('Overview.currentNodeInfo') }}
+          </p>
+        </div>
+      </div>
+
+      <el-tabs v-model="activeName" class="page-header-footer" @tab-click="handleTabClick">
+        <el-tab-pane :label="$t('Overview.basicInfo')" name="basic"></el-tab-pane>
+        <el-tab-pane :label="$t('Overview.metric')" name="metrics"></el-tab-pane>
+        <el-tab-pane :label="$t('Overview.configuration')" name="config"></el-tab-pane>
+      </el-tabs>
+    </page-header>
 
     <div class="app-wrapper">
       <div v-if="activeName === 'basic'" class="card-wrapper">

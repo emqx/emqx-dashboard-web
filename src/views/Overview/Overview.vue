@@ -455,11 +455,6 @@ export default {
     margin-top: 32px;
   }
 
-  .page-header {
-    font-size: 20px;
-    color: #101010;
-  }
-
   .app-card {
     @include trans-up-mixin(-1px);
     border-radius: 6px;

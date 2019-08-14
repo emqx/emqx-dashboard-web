@@ -1,47 +1,33 @@
 <template>
   <div class="websocket">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              WebSocket
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <el-tabs
-          v-model="activeTab"
-          class="page-header-footer"
-          addable
-          @edit="handleTabEdit"
+    <page-header
+      back-title="WebSocket"
+    >
+      <el-tabs
+        v-model="activeTab"
+        class="page-header-footer"
+        addable
+        @edit="handleTabEdit"
+      >
+        <el-tab-pane
+          v-for="(item, i) in tabs"
+          :key="i"
+          :closable="i > 0"
+          :name="item.name"
         >
-          <el-tab-pane
-            v-for="(item, i) in tabs"
-            :key="i"
-            :closable="i > 0"
-            :name="item.name"
-          >
-            <span slot="label">
-              <el-badge
-                class="message-count"
-                :hidden="item.messageCount === 0"
-                :value="item.messageCount"
-                :max="99"
-              >
-                {{ item.label }}
-              </el-badge>
-            </span>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-    </div>
+          <span slot="label">
+            <el-badge
+              class="message-count"
+              :hidden="item.messageCount === 0"
+              :value="item.messageCount"
+              :max="99"
+            >
+              {{ item.label }}
+            </el-badge>
+          </span>
+        </el-tab-pane>
+      </el-tabs>
+    </page-header>
 
     <div class="app-wrapper">
       <web-socket-item

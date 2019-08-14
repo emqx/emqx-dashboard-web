@@ -1,28 +1,14 @@
 <template>
   <div class="users">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link class="btn btn-default raw" to="/" tag="span">
-              {{ $t('Base.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('General.blacklist') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-content-view">
-          <div class="content">
-            {{ $t('General.manageDashboardUsers') }}
-          </div>
+    <page-header
+      :back-title="$t('General.blacklist')"
+    >
+      <div class="page-header-content-view">
+        <div class="content">
+          {{ $t('General.manageDashboardUsers') }}
         </div>
       </div>
-    </div>
+    </page-header>
 
     <div class="app-wrapper">
       <a-card
@@ -44,9 +30,9 @@
           <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')"></el-table-column>
           <el-table-column width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">{{ $t('General.edit') }}
+              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
+                {{ $t('General.edit') }}
               </el-button>
-
 
               <el-button
                 v-if="row.tags !== 'administrator' && row.username !== 'admin'"
