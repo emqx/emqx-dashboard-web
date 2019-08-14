@@ -12,11 +12,14 @@
       </el-header>
 
       <div :style="{ minHeight: '360px', minWidth: '600px', overflowX: 'hidden' }">
-        <keep-alive>
-          <router-view v-if="$route.meta.keepAlive"></router-view>
-        </keep-alive>
-
-        <router-view v-if="!$route.meta.keepAlive"></router-view>
+        <transition name="fade-transform" mode="out-in">
+          <keep-alive>
+            <router-view v-if="$route.meta.keepAlive"></router-view>
+          </keep-alive>
+        </transition>
+        <transition name="fade-transform" mode="out-in">
+          <router-view v-if="!$route.meta.keepAlive"></router-view>
+        </transition>
       </div>
     </el-main>
   </el-container>
@@ -59,6 +62,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/style/variables.scss";
+@import "../assets/style/transition.scss";
 
 .el-aside {
   background-color: $color-theme;
