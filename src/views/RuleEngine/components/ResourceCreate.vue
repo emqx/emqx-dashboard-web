@@ -105,8 +105,8 @@
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
-      <el-button size="small" @click="handleCache">{{ $t('RuleEngine.cancel') }}</el-button>
-      <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">{{ $t('RuleEngine.confirm') }}</el-button>
+      <el-button size="small" @click="handleCache">{{ $t('Base.cancel') }}</el-button>
+      <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">{{ $t('Base.confirm') }}</el-button>
     </div>
 
   </el-dialog>

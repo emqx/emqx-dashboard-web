@@ -127,8 +127,8 @@ export default {
         return
       }
       this.$msgbox.confirm(this.$t('Connections.willDisconnectTheConnection'), {
-        confirmButtonText: this.$t('Connections.confirm'),
-        cancelButtonText: this.$t('Connections.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await disconnectConnection(row.client_id)

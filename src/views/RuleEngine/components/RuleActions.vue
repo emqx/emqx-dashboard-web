@@ -197,10 +197,10 @@
 
       <div slot="footer" class="dialog-align-footer">
         <el-button size="small" @click="handleCache">
-          {{ $t('RuleEngine.cancel') }}
+          {{ $t('Base.cancel') }}
         </el-button>
         <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">
-          {{ $t('RuleEngine.confirm') }}
+          {{ $t('Base.confirm') }}
         </el-button>
       </div>
     </el-dialog>

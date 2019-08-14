@@ -69,14 +69,6 @@ export default {
     zh: '请输入',
     en: 'Please enter',
   },
-  confirm: {
-    zh: '确定',
-    en: 'Confirm',
-  },
-  cancel: {
-    zh: '取消',
-    en: 'Cancel',
-  },
   pleaseChoose: {
     zh: '请选择',
     en: 'Please select',

@@ -68,10 +68,6 @@ export default {
     zh: '时间',
     en: 'Time',
   },
-  cancel: {
-    zh: '取消',
-    en: 'Cancel',
-  },
   publish: {
     zh: '发布',
     en: 'Publish',

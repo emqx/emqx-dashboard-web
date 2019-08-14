@@ -204,8 +204,8 @@ export default {
     },
     deleteRule() {
       this.$msgbox.confirm(this.$t('RuleEngine.deleteRuleConfirm'), {
-        confirmButtonText: this.$t('RuleEngine.confirm'),
-        cancelButtonText: this.$t('RuleEngine.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await destroyRule(this.record.id)

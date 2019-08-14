@@ -100,14 +100,6 @@ export default {
     zh: '此操作将停止该插件,确认继续?',
     en: 'Confirm to stops the plugin?',
   },
-  confirm: {
-    zh: '确定',
-    en: 'Confirm',
-  },
-  cancel: {
-    zh: '取消',
-    en: 'Cancel',
-  },
   stopSuccess: {
     zh: '停止成功',
     en: 'Stop Success',

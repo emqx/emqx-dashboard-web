@@ -49,4 +49,20 @@ export default
     zh: '创建',
     en: 'Create',
   },
+  cancel: {
+    zh: '取消',
+    en: 'Cancel',
+  },
+  confirm: {
+    zh: '确定',
+    en: 'Confirm',
+  },
+  add: {
+    zh: '添加',
+    en: 'Add',
+  },
+  delete: {
+    zh: '删除',
+    en: 'Delete',
+  },
 }

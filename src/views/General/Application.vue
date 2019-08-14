@@ -150,8 +150,8 @@
       </el-form>
 
       <div v-if="accessType !== 'view'" slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="dialogVisible = false">{{ $t('General.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="save">{{ $t('General.confirm') }}</el-button>
+        <el-button plain size="small" @click="dialogVisible = false">{{ $t('Base.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -286,8 +286,8 @@ export default {
     deleteConfirm(item) {
       const vue = this
       this.$msgbox.confirm(this.$t('General.confirmDelete'), {
-        confirmButtonText: this.$t('General.confirm'),
-        cancelButtonText: this.$t('General.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         destroyAPP(item.app_id).then(() => {

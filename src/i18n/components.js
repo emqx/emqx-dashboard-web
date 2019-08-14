@@ -125,8 +125,4 @@ export default
     zh: '退出',
     en: 'Logout',
   },
-  cancel: {
-    zh: '取消',
-    en: 'Cancel',
-  },
 }

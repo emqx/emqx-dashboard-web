@@ -159,7 +159,7 @@
 
       <div style="text-align: center">
         <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
-          {{ $t('RuleEngine.cancel') }}
+          {{ $t('Base.cancel') }}
         </el-button>
         <el-button type="primary" size="medium" @click="save">
           {{ $t('Base.create') }}

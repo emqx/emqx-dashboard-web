@@ -77,14 +77,6 @@ export default {
     zh: '密钥',
     en: 'Secret',
   },
-  confirm: {
-    zh: '确定',
-    en: 'Confirm',
-  },
-  cancel: {
-    zh: '取消',
-    en: 'Cancel',
-  },
   disabled: {
     zh: '不启用',
     en: 'Disabled',
