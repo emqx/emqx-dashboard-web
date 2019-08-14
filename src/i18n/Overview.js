@@ -67,10 +67,6 @@ export default
     zh: '负载',
     en: 'Load',
   },
-  homePage: {
-    zh: '首页',
-    en: 'Home',
-  },
   monitor: {
     zh: '监控',
     en: 'Monitor',

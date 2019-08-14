@@ -1,10 +1,6 @@
 export default
 {
   __not: [],
-  homePage: {
-    zh: '首页',
-    en: 'Home',
-  },
   alarm: {
     zh: '告警',
     en: 'Alarm',

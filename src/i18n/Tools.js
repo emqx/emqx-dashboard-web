@@ -12,10 +12,6 @@ export default {
     zh: '新连接',
     en: 'New',
   },
-  homePage: {
-    zh: '首页',
-    en: 'Home',
-  },
   connectionConfiguration: {
     zh: '连接配置',
     en: 'Connection',

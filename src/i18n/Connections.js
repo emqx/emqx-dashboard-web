@@ -19,10 +19,6 @@ export default
     zh: '添加',
     en: 'Add',
   },
-  homePage: {
-    zh: '首页',
-    en: 'Home',
-  },
   connect: {
     zh: '连接',
     en: 'Connections',
