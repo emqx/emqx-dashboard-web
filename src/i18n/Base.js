@@ -49,6 +49,10 @@ export default
     zh: '保存',
     en: 'Save',
   },
+  apply: {
+    zh: '应用',
+    en: 'Apply',
+  },
   create: {
     zh: '创建',
     en: 'Create',
@@ -72,5 +76,9 @@ export default
   saveSuccess: {
     zh: '保存成功',
     en: 'Save Success',
+  },
+  applySuccess: {
+    zh: '应用成功',
+    en: 'Apply Success',
   },
 }

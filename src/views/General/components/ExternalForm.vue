@@ -263,11 +263,11 @@
     </el-form>
 
     <el-col class="button-group_center" :span="24">
-      <el-button disabled type="default" size="medium">
+      <el-button :disabled="cancelDisabled" type="default" size="medium" @click="cancel">
         {{ $t('Base.cancel') }}
       </el-button>
       <el-button :loading="btnLoading" type="primary" size="medium" @click="save">
-        {{ $t('Base.save') }}
+        {{ $t('Base.apply') }}
       </el-button>
     </el-col>
   </el-row>
@@ -293,6 +293,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    cancelDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    cancel: {
+      type: Function,
+      default: () => {},
+    },
     boolOptions: {
       type: Array,
       default: () => [],
@@ -316,11 +324,7 @@ export default {
   },
 
   data() {
-    return {
-    }
-  },
-
-  watch: {
+    return {}
   },
 
   methods: {
