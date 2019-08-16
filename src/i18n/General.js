@@ -121,6 +121,18 @@ export default {
     zh: '删除成功',
     en: 'Successful deletion',
   },
+  cancelConfirm: {
+    zh: '是否取消本次修改？',
+    en: 'You have unsaved changes, confirm cancel?',
+  },
+  confirm: {
+    zh: '确认信息',
+    en: 'Confirm',
+  },
+  no: {
+    zh: '不',
+    en: 'NO',
+  },
   user: {
     zh: '用户',
     en: 'Users',

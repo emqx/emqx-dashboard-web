@@ -28,6 +28,8 @@
             :record="externalRecord"
             :rules="rules"
             :btn-loading="saveLoading"
+            :cancel-disabled="disabled"
+            :cancel="cancel"
             v-bind="allOptions"
             @update="handleUpdate"
           >
@@ -39,6 +41,8 @@
             :record="internalRecord"
             :rules="rules"
             :btn-loading="saveLoading"
+            :cancel-disabled="disabled"
+            :cancel="cancel"
             v-bind="allOptions"
             @update="handleUpdate"
           >
@@ -52,6 +56,7 @@
 
 
 <script>
+import { setTimeout, clearTimeout } from 'timers'
 import { loadConfig, updateConfig } from '../../api/settings'
 import ExternalForm from './components/ExternalForm'
 import InternalForm from './components/InternalForm'
@@ -63,8 +68,6 @@ export default {
     ExternalForm,
     InternalForm,
   },
-
-  props: {},
 
   data() {
     const validRanger = (rule, value, callback, range) => {
@@ -80,9 +83,13 @@ export default {
       callback()
     }
     return {
+      timer: 0,
+      disabled: true,
       saveLoading: false,
       externalRecord: {},
+      initExternal: {},
       internalRecord: {},
+      initInternal: {},
       settingType: 'external',
       allOptions: {
         boolOptions: [
@@ -162,25 +169,69 @@ export default {
     }
   },
 
+  watch: {
+    // 当配置改变的时候，才可以取消恢复到原来的值
+    externalRecord: {
+      deep: true,
+      immediate: true,
+      handler: 'handleRecordChange',
+    },
+    internalRecord: {
+      deep: true,
+      immediate: true,
+      handler: 'handleRecordChange',
+    },
+  },
+
   created() {
     this.loadData()
   },
 
+  beforeDestroy() {
+    clearTimeout(this.timer)
+  },
+
   methods: {
+    handleRecordChange(val, oldVal) {
+      if (!oldVal || JSON.stringify(oldVal) === '{}') {
+        this.disabled = true
+        return
+      }
+      this.disabled = false
+    },
     async loadData() {
       const { externalRes, internalRes } = await loadConfig()
       if (externalRes && internalRes) {
         this.externalRecord = externalRes
         this.internalRecord = internalRes
+        // 加载数据重新赋值 init
+        Object.assign(this.initExternal, externalRes)
+        Object.assign(this.initInternal, internalRes)
       }
     },
     async handleUpdate(type, data) {
       this.saveLoading = true
       const res = await updateConfig(type, data)
       if (res) {
-        this.$message.success(this.$t('Base.saveSuccess'))
+        this.disabled = true
+        this.$message.success(this.$t('Base.applySuccess'))
+        // 保存成功后赋值到 init 的值
+        Object.assign(this.initExternal, this.externalRecord)
+        Object.assign(this.initInternal, this.internalRecord)
       }
       this.saveLoading = false
+    },
+    cancel() {
+      this.$confirm(this.$t('General.cancelConfirm'), this.$t('General.confirm'), {
+        cancelButtonText: this.$t('General.no'),
+      }).then(() => {
+        // 取消后还原 init 值
+        Object.assign(this.externalRecord, this.initExternal)
+        Object.assign(this.internalRecord, this.initInternal)
+        this.timer = setTimeout(() => {
+          this.disabled = true
+        }, 500)
+      }).catch(() => {})
     },
   },
 }
