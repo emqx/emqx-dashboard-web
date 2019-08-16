@@ -240,7 +240,7 @@ export default {
       if (!valid) {
         return
       }
-      this.$emit('update', 'external', this.record)
+      this.$emit('update', 'internal', this.record)
     },
   },
 }
