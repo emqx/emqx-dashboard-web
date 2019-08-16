@@ -245,6 +245,10 @@ export default {
     zh: '请输入查询字段',
     en: 'Please enter the select field',
   },
+  pleaseEnterTheSQL: {
+    zh: '请输入 SQL 语句',
+    en: 'Please enter the SQL field',
+  },
   nullCharacterError: {
     zh: '空字符错误',
     en: 'Null character error',

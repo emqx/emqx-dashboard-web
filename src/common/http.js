@@ -83,7 +83,6 @@ axios.interceptors.request.use((config) => {
 }, error => Promise.reject(error))
 
 function handleError(error) {
-  console.log(error)
   clearTimeout(timer)
   timer = setTimeout(() => {
     NProgress.done()

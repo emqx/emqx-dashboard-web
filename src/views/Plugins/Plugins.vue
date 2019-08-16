@@ -109,7 +109,7 @@
                   size="mini"
                   @click="togglePlugin(item)"
                 >
-                  {{ item.active ? $t('Plugins.stopped') : $t('Plugins.startRunning') }}
+                  {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
                 </el-button>
                 <span v-else>--</span>
                 <el-button

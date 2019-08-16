@@ -157,7 +157,7 @@
         </div>
       </a-card>
 
-      <div style="text-align: center">
+      <div class="button-group_center">
         <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
           {{ $t('Base.cancel') }}
         </el-button>
@@ -235,7 +235,7 @@ export default {
       },
       rules: {
         for: { required: true, message: this.$t('RuleEngine.pleaseSelectTheTriggerEvent') },
-        rawsql: { required: true, message: this.$t('RuleEngine.pleaseEnterTheSelectField') },
+        rawsql: { required: true, message: this.$t('RuleEngine.pleaseEnterTheSQL') },
       },
     }
   },
@@ -262,7 +262,7 @@ export default {
     handleForChange(val) {
       this.selectEvent = this.events.find($ => $.event === val)
       const { event } = this.selectEvent
-      this.record.rawsql = `SELECT\n\r *\n\rFROM\n\r "${event}"\n\rWHERE\n\r topic =~ 't/#`
+      this.record.rawsql = `SELECT\n\r *\n\rFROM\n\r "${event}"\n\rWHERE\n\r topic =~ 't/#'`
       this.handlePreSQLTest()
     },
     handlePreSQLTest() {
@@ -295,8 +295,8 @@ export default {
           }
         }
 
-        SQLTest(data).then((resp) => {
-          this.testOutPut = JSON.stringify(resp, null, 2)
+        SQLTest(data).then((res) => {
+          this.testOutPut = JSON.stringify(res, null, 2)
         }).catch((e) => {
           if (e === 'SQL Not Match') {
             this.testOutPut = this.$t('RuleEngine.resultIsEmpty')

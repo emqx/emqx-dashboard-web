@@ -77,6 +77,10 @@ export default
     zh: '用户',
     en: 'Users',
   },
+  setting: {
+    zh: '设置',
+    en: 'Setting',
+  },
   settings: {
     zh: '系统设置',
     en: 'Settings',
