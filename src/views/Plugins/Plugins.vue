@@ -112,14 +112,15 @@
                   {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
                 </el-button>
                 <span v-else>--</span>
-                <el-button
+                <!-- TODO: 暂时隐藏 进去后的插件配置暂时没用 -->
+                <!-- <el-button
                   v-if="!primaryList.includes(item.name)"
                   size="mini"
                   type="dashed"
                   @click="toConfig(item)"
                 >
                   {{ $t('Plugins.config') }}
-                </el-button>
+                </el-button> -->
               </div>
             </div>
           </template>
@@ -127,49 +128,6 @@
             <p>{{ $t('Plugins.listNull') }}</p>
           </div>
         </div>
-
-        <el-table
-          v-if="false"
-          :data="listTableData"
-          :default-sort="{ prop: 'active', order: 'descending' }"
-          class="data-list"
-        >
-          <el-table-column prop="name" min-width="110px" :label="$t('Plugins.pluginName')"></el-table-column>
-          <el-table-column prop="version" min-width="80px" :label="$t('Plugins.version')"></el-table-column>
-          <el-table-column
-            prop="description"
-            min-width="160px"
-            show-overflow-tooltip
-            :label="$t('Plugins.describe')"
-          ></el-table-column>
-          <el-table-column
-            prop="type"
-            min-width="100px"
-            :label="$t('Plugins.type')"
-            sortable
-            :filters="typeFilterOption"
-            :filter-method="typeFilterHandler"
-            :formatter="typeFormatter"
-          ></el-table-column>
-          <el-table-column min-width="70px" prop="active" :label="$t('Plugins.state')" sortable>
-            <template slot-scope="{ row }">
-              <a-badge
-                :status="row.active ? 'success' : 'error'"
-                :text="row.active ? $t('Plugins.running') : $t('Plugins.stopped')"
-                dot
-              >
-              </a-badge>
-            </template>
-          </el-table-column>
-          <el-table-column width="140px">
-            <template slot-scope="{ row }">
-              <el-button :type="row.active ? 'danger' : 'dashed'" size="mini" @click="togglePlugin(row)">
-                {{ row.active ? $t('Plugins.stopped') : $t('Plugins.startRunning') }}
-              </el-button>
-              <el-button size="mini" type="dashed">{{ $t('Plugins.config') }}</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
 
       </a-card>
     </div>
