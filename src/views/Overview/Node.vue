@@ -18,7 +18,6 @@
       <el-tabs v-model="activeName" class="page-header-footer" @tab-click="handleTabClick">
         <el-tab-pane :label="$t('Overview.basicInfo')" name="basic"></el-tab-pane>
         <el-tab-pane :label="$t('Overview.metric')" name="metrics"></el-tab-pane>
-        <el-tab-pane :label="$t('Overview.configuration')" name="config"></el-tab-pane>
       </el-tabs>
     </page-header>
 
@@ -53,7 +52,6 @@
 
       <div v-else-if="activeName === 'metrics'" class="card-wrapper">
 
-
         <a-card class="emq-list-card">
           <div class="emq-title">
             {{ $t('Overview.dataList') }}
@@ -61,7 +59,6 @@
               {{ $t('Overview.packetStatisticsOfNodes') }}
             </div>
           </div>
-
 
           <el-row :gutter="30">
             <el-col :span="8">
@@ -88,22 +85,6 @@
         </a-card>
       </div>
 
-      <a-card v-else-if="activeName === 'config'" class="emq-list-card">
-        <div class="emq-title">
-          {{ $t('Overview.mainConfiguration') }}
-        </div>
-
-        <ul class="field-info">
-          <li v-for="(item, i) in config" :key="i" class="field-info-item">
-            <div class="field-title" style="width: 200px">
-              {{ item.key }}:
-            </div>
-            <span class="field-value">
-              {{ item.value }}
-            </span>
-          </li>
-        </ul>
-      </a-card>
     </div>
   </div>
 </template>
@@ -111,7 +92,7 @@
 
 <script>
 import {
-  loadConfig, loadNodeDetail, loadListeners, loadMetrics,
+  loadNodeDetail, loadListeners, loadMetrics,
 } from '@/api/overview'
 
 import NodeBasicCard from './components/NodeBasicCard'
@@ -128,7 +109,6 @@ export default {
       activeName: 'basic',
       record: {},
       metrics: {},
-      config: {},
       listeners: [],
     }
   },
@@ -200,7 +180,6 @@ export default {
     async loadData() {
       this.record = await loadNodeDetail(this.name)
       this.metrics = await loadMetrics(this.name)
-      this.config = await loadConfig(this.name)
       this.listeners = await loadListeners(this.name)
     },
   },
@@ -234,7 +213,6 @@ export default {
   .page-header-content-view {
     height: 60px;
   }
-
 
   .card-wrapper {
     .emq-list-card {
