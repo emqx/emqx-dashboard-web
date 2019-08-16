@@ -207,7 +207,6 @@ body {
   }
 
   thead {
-    //color: #101010;
     border-bottom-color: #fff;
   }
 
@@ -367,6 +366,11 @@ body {
     background-color: #ebf9f3;
     color: #5dcfa0;
   }
+}
+
+// Text-aligin button group
+.button-group_center {
+  text-align: center;
 }
 
 #clipboard {

@@ -45,6 +45,10 @@ export default
     zh: '首页',
     en: 'Home',
   },
+  save: {
+    zh: '保存',
+    en: 'Save',
+  },
   create: {
     zh: '创建',
     en: 'Create',
@@ -64,5 +68,9 @@ export default
   delete: {
     zh: '删除',
     en: 'Delete',
+  },
+  saveSuccess: {
+    zh: '保存成功',
+    en: 'Save Success',
   },
 }

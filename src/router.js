@@ -175,6 +175,18 @@ const router = new Router({
         },
       ],
     },
+    // 设置
+    {
+      path: '/setting',
+      component: Layout,
+      children: [
+        {
+          path: '',
+          name: 'settings',
+          component: () => import('@/views/General/Settings'),
+        },
+      ],
+    },
     // 插件
     {
       path: '/plugins',
