@@ -82,6 +82,25 @@ export default {
       }
       callback()
     }
+    const validType = (rule, value, callback, { type, unit }) => {
+      let validMsg = ''
+      const regOptions = {
+        duration: /\d[smhd]$/,
+        bytes: /\dMB|GB|KB/,
+        number: /^\d{1,}$/,
+        float: /^\d+\.\d+$/,
+      }
+      let messageError = this.$t('General.errorUnit', { unit })
+      if (type === 'number' || type === 'float') {
+        messageError = this.$t('General.errorType', { type })
+      }
+      const regType = regOptions[type]
+      validMsg = regType.test(value) ? '' : messageError
+      if (validMsg !== '') {
+        callback(new Error(validMsg))
+      }
+      callback()
+    }
     return {
       timer: 0,
       disabled: true,
@@ -112,13 +131,24 @@ export default {
           { label: 'highest', value: 'highest' },
           { label: 'lowest', value: 'lowest' },
         ],
+        qosOptions: [
+          { label: '0', value: '0' },
+          { label: '1', value: '1' },
+          { label: '2', value: '2' },
+        ],
       },
       rules: {
         keepalive_backoff: [
           { required: true, message: this.$t('General.pleaseEnter') },
           {
             validator: (rule, value, callback) => {
-              validRanger(rule, value, callback, [0.2, 5])
+              validRanger(rule, value, callback, [0.2, 5.0])
+            },
+            trigger: 'blur',
+          },
+          {
+            validator: (rule, value, callback) => {
+              validType(rule, value, callback, { type: 'float' })
             },
             trigger: 'blur',
           },
@@ -159,12 +189,81 @@ export default {
             trigger: 'blur',
           },
         ],
-        idle_timeout: { required: true, message: this.$t('General.pleaseEnter') },
-        flapping_banned_expiry_interval: { required: true, message: this.$t('General.pleaseEnter') },
+        max_clientid_len: [
+          { required: true, message: this.$t('General.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validRanger(rule, value, callback, [23, 65535])
+            },
+            trigger: 'blur',
+          },
+        ],
+        max_topic_alias: [
+          { required: true, message: this.$t('General.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validRanger(rule, value, callback, [0, 65535])
+            },
+            trigger: 'blur',
+          },
+        ],
+        await_rel_timeout: [
+          { required: true, message: this.$t('General.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validType(rule, value, callback, { type: 'duration', unit: 's, h, m, d' })
+            },
+            trigger: 'blur',
+          },
+        ],
+        retry_interval: [
+          { required: true, message: this.$t('General.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validType(rule, value, callback, { type: 'duration', unit: 's, h, m, d' })
+            },
+            trigger: 'blur',
+          },
+        ],
+        idle_timeout: [
+          { required: true, message: this.$t('General.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validType(rule, value, callback, { type: 'duration', unit: 's, h, m, d' })
+            },
+            trigger: 'blur',
+          },
+        ],
+        flapping_banned_expiry_interval: [
+          { required: true, message: this.$t('General.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validType(rule, value, callback, { type: 'duration', unit: 's, h, m, d' })
+            },
+            trigger: 'blur',
+          },
+        ],
+        force_gc_policy: [
+          { required: true, message: this.$t('General.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validType(rule, value, callback, { type: 'bytes', unit: 'KB, MB, GB' })
+            },
+            trigger: 'blur',
+          },
+        ],
+        session_expiry_interval: [
+          { required: true, message: this.$t('General.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validType(rule, value, callback, { type: 'duration', unit: 's, h, m, d' })
+            },
+            trigger: 'blur',
+          },
+        ],
         flapping_threshold: { required: true, message: this.$t('General.pleaseEnter') },
-        force_gc_policy: { required: true, message: this.$t('General.pleaseEnter') },
-        await_rel_timeout: { required: true, message: this.$t('General.pleaseEnter') },
-        session_expiry_interval: { required: true, message: this.$t('General.pleaseEnter') },
+        max_packet_size: { required: true, message: this.$t('General.pleaseEnter') },
+        max_topic_levels: { required: true, message: this.$t('General.pleaseEnter') },
       },
     }
   },

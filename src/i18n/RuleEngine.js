@@ -178,8 +178,8 @@ export default {
     en: 'Condition',
   },
   definingRuleConditionsAndDataProcessing: {
-    zh: '规则引擎使用 SQL 定义规则条件与数据处理方式，内置多种灵活的数据处理方案',
-    en: 'Defining Rule Engine Conditions and Data Processing By SQL',
+    zh: '使用 SQL 设定规则，对消息数据筛选、编解码、变型，灵活地将处理后的数据无缝转发至数据库、流处理、API 网关等数据目的地',
+    en: 'Use SQL to set rules to filter, encode, decode, and modify message data, and seamlessly forward processed data to data destinations such as databases, stream processing, and API gateways',
   },
   triggerEvent: {
     zh: '触发事件',
