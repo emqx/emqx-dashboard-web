@@ -85,11 +85,91 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_subscriptions" prop="max_subscriptions">
-          <el-input v-model="record.max_subscriptions" class="settings-input"></el-input>
+          <el-input v-model="record.max_subscriptions" class="settings-input" placeholder="0"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
         {{ $t('General.max_subscriptions') }}
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="max_packet_size" prop="max_packet_size">
+          <el-input v-model="record.max_packet_size" class="settings-input" placeholder="1048576"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12" class="form-item-desc">
+        {{ $t('General.max_packet_size') }}
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="max_clientid_len" prop="max_clientid_len">
+          <el-input v-model="record.max_clientid_len" class="settings-input" placeholder="65535"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12" class="form-item-desc">
+        {{ $t('General.max_clientid_len') }}
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="max_topic_levels" prop="max_topic_levels">
+          <el-input v-model="record.max_topic_levels" class="settings-input" placeholder="0"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12" class="form-item-desc">
+        {{ $t('General.max_topic_levels') }}
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="max_qos_allowed" prop="max_qos_allowed">
+          <emq-select
+            v-model="record.max_qos_allowed"
+            :field="{ options: qosOptions }"
+          >
+          </emq-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12" class="form-item-desc">
+        {{ $t('General.max_qos_allowed') }}
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="max_topic_alias" prop="max_topic_alias">
+          <el-input v-model="record.max_topic_alias" class="settings-input" placeholder="0"></el-input>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12" class="form-item-desc">
+        {{ $t('General.max_topic_alias') }}
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="retain_available" prop="retain_available">
+          <emq-select
+            v-model="record.retain_available"
+            :field="{ options: boolOptions }"
+          >
+          </emq-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12" class="form-item-desc">
+        {{ $t('General.retain_available') }}
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="wildcard_subscription" prop="wildcard_subscription">
+          <emq-select
+            v-model="record.wildcard_subscription"
+            :field="{ options: boolOptions }"
+          >
+          </emq-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12" class="form-item-desc">
+        {{ $t('General.wildcard_subscription') }}
+      </el-col>
+      <el-col :span="12">
+        <el-form-item label="shared_subscription" prop="shared_subscription">
+          <emq-select
+            v-model="record.shared_subscription"
+            :field="{ options: boolOptions }"
+          >
+          </emq-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12" class="form-item-desc">
+        {{ $t('General.shared_subscription') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="ignore_loop_deliver" prop="ignore_loop_deliver">
@@ -117,7 +197,7 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="flapping_banned_expiry_interval" prop="flapping_banned_expiry_interval">
-          <el-input v-model="record.flapping_banned_expiry_interval" class="settings-input"></el-input>
+          <el-input v-model="record.flapping_banned_expiry_interval" class="settings-input" placeholder="1h"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
@@ -133,7 +213,7 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_awaiting_rel" prop="max_awaiting_rel">
-          <el-input v-model="record.max_awaiting_rel" class="settings-input"></el-input>
+          <el-input v-model="record.max_awaiting_rel" class="settings-input" placeholder="100"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
@@ -141,7 +221,7 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_inflight" prop="max_inflight">
-          <el-input v-model="record.max_inflight" class="settings-input"></el-input>
+          <el-input v-model="record.max_inflight" class="settings-input" placeholder="32"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
@@ -149,7 +229,7 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_mqueue_len" prop="max_mqueue_len">
-          <el-input v-model="record.max_mqueue_len" class="settings-input"></el-input>
+          <el-input v-model="record.max_mqueue_len" class="settings-input" placeholder="1000"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
@@ -225,6 +305,10 @@ export default {
       default: () => [],
     },
     priorityOptions: {
+      type: Array,
+      default: () => [],
+    },
+    qosOptions: {
       type: Array,
       default: () => [],
     },

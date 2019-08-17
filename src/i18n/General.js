@@ -101,6 +101,14 @@ export default {
     zh: '填写错误：数值范围为 {min} - {max}',
     en: 'Fill in the error: the number range is {min} - {max}',
   },
+  errorType: {
+    zh: '类型错误：请填写 {type} 类型',
+    en: 'Type error: please enter {type}',
+  },
+  errorUnit: {
+    zh: '单位错误：请填写 {unit} 单位',
+    en: 'Unit error: please enter {unit}',
+  },
   neverExpire: {
     zh: '永不过期',
     en: 'Never expire',
@@ -283,7 +291,7 @@ export default {
   },
   ignore_loop_deliver: {
     zh: '是否忽略消息循环传递，常用于消息桥接',
-    en: 'Whether to ignore loop delivery of messages',
+    en: 'Whether to ignore loop delivery of messages (for mqtt v3.1.1)',
   },
   idle_timeout: {
     zh: 'MQTT 连接空闲超时',
@@ -340,5 +348,37 @@ export default {
   upgrade_qos: {
     zh: '根据订阅强制升级 QoS',
     en: 'Force to upgrade QoS according to subscription',
+  },
+  max_packet_size: {
+    zh: '最大 MQTT 数据包大小',
+    en: 'Maximum MQTT packet size allowed',
+  },
+  max_clientid_len: {
+    zh: 'MQTT clientId 的长度限制',
+    en: 'Maximum length of MQTT clientId allowed',
+  },
+  max_topic_levels: {
+    zh: '主题层级限制，0 表示没有限制层级',
+    en: 'Maximum topic levels allowed. 0 means no limit',
+  },
+  max_qos_allowed: {
+    zh: '最大 QoS',
+    en: 'Maximum QoS allowed',
+  },
+  max_topic_alias: {
+    zh: '最大主题别名数量，0 表示不支持主题别名',
+    en: 'Maximum Topic Alias, 0 means no topic alias supported',
+  },
+  retain_available: {
+    zh: '是否启用 Retain 消息',
+    en: 'Whether the Server supports MQTT retained messages',
+  },
+  wildcard_subscription: {
+    zh: '是否启用通配符订阅',
+    en: 'Whether the Server supports MQTT Wildcard Subscriptions',
+  },
+  shared_subscription: {
+    zh: '是否启用共享订阅',
+    en: 'Whether the Server supports MQTT Shared Subscriptions',
   },
 }

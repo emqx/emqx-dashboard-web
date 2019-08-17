@@ -154,7 +154,7 @@ export default {
       tableData: [],
       listTableData: [],
       nodes: [],
-      primaryList: ['emqx_dashboard', 'emqx_management'],
+      primaryList: ['emqx_dashboard', 'emqx_management', 'emqx_conf'],
       nodeName: '',
       pluginTypes: {
         auth: this.$t('Plugins.authentication'),
