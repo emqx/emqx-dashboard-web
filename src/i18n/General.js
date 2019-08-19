@@ -258,11 +258,11 @@ export default {
     en: 'Allow or deny if no ACL rules matched',
   },
   acl_deny_action: {
-    zh: 'ACL 被拒绝是的处理动作',
+    zh: 'ACL 被拒绝时的处理动作',
     en: 'The action when acl check reject current operation',
   },
   enable_ban: {
-    zh: '是否启用被名单检查',
+    zh: '是否启用白名单检查',
     en: 'Enable ban check',
   },
   allow_anonymous: {
@@ -326,7 +326,7 @@ export default {
     en: 'Maximum queue length. Enqueued messages when persistent client disconnected, or inflight window is full. 0 means no limit',
   },
   await_rel_timeout: {
-    zh: '如果等待 pubrel 超时时间，超时将删除 qos2 消息（client 发送到 broker）',
+    zh: '如果等待 pubrel 超时时间，超时将删除 QoS2 消息（client 发送到 broker）',
     en: 'The QoS2 messages (Client -> Broker) will be dropped if awaiting PUBREL timeout',
   },
   enable_flapping_detect: {
