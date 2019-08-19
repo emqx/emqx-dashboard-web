@@ -52,6 +52,15 @@ export default {
       type: Array,
       default: () => [
         '#2CD3AE',
+        '#98DFF3',
+        '#6D7DA3',
+        '#53A5F7',
+        '#F2AF3D',
+        '#34C388',
+        '#2DC8B2',
+        '#AA86E6',
+        '#7C7BE2',
+        '#83A9FD',
       ],
     },
     axisColor: {

@@ -270,24 +270,12 @@ export default {
       },
       metricTitles: [],
       metricLog: {
-        sent: [
-          { xData: [], yData: [] },
-        ],
-        received: [
-          { xData: [], yData: [] },
-        ],
-        dropped: [
-          { xData: [], yData: [] },
-        ],
-        connection: [
-          { xData: [], yData: [] },
-        ],
-        route: [
-          { xData: [], yData: [] },
-        ],
-        subscriptions: [
-          { xData: [], yData: [] },
-        ],
+        sent: this.chartDataFill(32),
+        received: this.chartDataFill(32),
+        dropped: this.chartDataFill(32),
+        connection: this.chartDataFill(32),
+        route: this.chartDataFill(32),
+        subscriptions: this.chartDataFill(32),
       },
       currentMetricsLogs: {
         received: {
@@ -349,6 +337,12 @@ export default {
   },
 
   methods: {
+    chartDataFill(length) {
+      return Array.from(
+        { length },
+        () => ({ xData: [], yData: [] }),
+      )
+    },
     async loadNodes() {
       this.nodes = await loadNodesApi()
       this.nodeName = this.nodeName || (this.nodes[0] || {}).name
@@ -365,15 +359,13 @@ export default {
       this.tableLoading = true
       try {
         const data = await loadMetricsLog(false, this.dataType)
-        this.metricLog[this.dataType] = [
-          { xData: [], yData: [] },
-        ]
         this.metricTitles = Object.keys(data)
-        this.metricTitles.forEach((key) => {
-          const chartData = data[key]
-          chartData.forEach((chart) => {
-            this.metricLog[this.dataType][0].xData.push(_formatTime(chart[0]))
-            this.metricLog[this.dataType][0].yData.push(chart[1])
+        this.metricLog[this.dataType] = this.chartDataFill(this.metricTitles.length)
+        const currentData = this.metricLog[this.dataType]
+        this.metricTitles.forEach((key, index) => {
+          data[key].forEach((item) => {
+            currentData[index].xData.push(_formatTime(item[0]))
+            currentData[index].yData.push(item[1])
           })
         })
       } catch (e) {
