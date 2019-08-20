@@ -32,7 +32,7 @@ export default
     en: 'System Time',
   },
   uptime: {
-    zh: '启动时长',
+    zh: '运行时长',
     en: 'Uptime',
   },
   currentConnection: {
