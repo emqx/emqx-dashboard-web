@@ -355,7 +355,7 @@ export default {
       }
     },
     async loadMetricsLogData() {
-      const _formatTime = time => Moment(time).format('HH:mm:ss')
+      const _formatTime = time => Moment(time).utcOffset(0).format('HH:mm:ss')
       this.tableLoading = true
       try {
         const data = await loadMetricsLog(false, this.dataType)
