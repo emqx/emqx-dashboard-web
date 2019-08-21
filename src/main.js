@@ -7,16 +7,19 @@ import ElementLocale from 'element-ui/lib/locale'
 import lang from './i18n'
 
 import installer from '@/common/installer'
-import '@/assets/style/common.scss'
+import directive from '@/common/directive'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import '@/assets/style/common.scss'
+
+Vue.config.productionTip = false
 
 Vue.use(VueI18n)
-Vue.config.productionTip = false
 Vue.use(installer)
 Vue.use(ElementUI)
 Vue.use(Waves)
+Vue.use(directive)
 
 const i18n = new VueI18n({
   locale: store.state.lang,
