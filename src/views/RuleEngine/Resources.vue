@@ -46,8 +46,8 @@
           <!-- 资源类型 -->
           <el-table-column
             prop="config.title"
-            :label="$t('RuleEngine.resourceTypes')"
             show-overflow-tooltip
+            :label="$t('RuleEngine.resourceTypes')"
             :filters="filterOptions.resourceTypes"
             :filter-method="resourceTypesColumnFilter"
             filter-placement="bottom"
@@ -171,7 +171,7 @@ export default {
       this.$router.push({ path: `/resources/${row.id}` })
     },
     resourceTypesColumnFilter(value, row) {
-      return row.name === value
+      return row.config.name === value
     },
   },
 }
