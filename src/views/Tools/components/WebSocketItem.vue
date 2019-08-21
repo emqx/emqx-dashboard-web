@@ -145,9 +145,9 @@
             <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="180px"></el-table-column>
             <el-table-column prop="qos" label="QoS" width="80px"></el-table-column>
             <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
-            <el-table-column width="60px">
+            <el-table-column width="80px">
               <template slot-scope="{ row }">
-                <span class="btn" @click="_doUnSubscribe(row)">{{ $t('Base.cancel') }}</span>
+                <a class="btn" @click="_doUnSubscribe(row)">{{ $t('Base.cancel') }}</a>
               </template>
             </el-table-column>
           </el-table>
