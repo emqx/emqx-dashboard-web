@@ -3,7 +3,7 @@
     <page-header
       :back-title="$t('RuleEngine.resources')"
       :oper="$t('RuleEngine.details')"
-      back-path="/rules"
+      back-path="/resources"
     >
       <div class="page-header-title-view">
         <div class="title">

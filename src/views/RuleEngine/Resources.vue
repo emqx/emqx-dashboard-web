@@ -18,7 +18,7 @@
         </div>
 
         <el-table :data="tableData" class="data-list" @expand-change="handleExpandChange">
-          <el-table-column prop="id" type="expand">
+          <el-table-column class-name="expand-column" prop="id" type="expand" width="1px">
             <template slot-scope="{ row }">
               <!-- 列表展示每个节点上资源的状态 -->
               <a-card class="resource-node-wrapper" :loading="row.loading">
@@ -32,18 +32,6 @@
                     </div>
                     <resource-node :value="row" @change="handleExpandChange"></resource-node>
                   </el-col>
-                  <!--<el-col v-if="false" :span="16">-->
-                  <!--<div class="emq-title h3">-->
-                  <!--资源配置-->
-                  <!--<div class="sub-title btn btn-default" @click.stop="toggleShowConfig(row)">-->
-                  <!--{{ row.showConfig ? '收起配置' : '展开配置' }}-->
-                  <!--<i :class="row.showConfig ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>-->
-                  <!--</div>-->
-                  <!--</div>-->
-                  <!--<el-collapse-transition>-->
-                  <!--<resource-field v-if="row.showConfig" :config="row._config"></resource-field>-->
-                  <!--</el-collapse-transition>-->
-                  <!--</el-col>-->
                 </el-row>
               </a-card>
             </template>
@@ -69,7 +57,10 @@
             :label="$t('RuleEngine.remark')"
           ></el-table-column>
           <el-table-column width="120px" prop="id">
-            <template slot-scope="{ row }">
+            <template slot-scope="{ row, $index }">
+              <el-button type="dashed" size="mini" @click="viewResourcesStatus(row, $index)">
+                {{ $t('RuleEngine.status') }}
+              </el-button>
               <!--<el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">{{ $t('RuleEngine.reconnect') }}</el-button>-->
               <el-button type="dashed" size="mini" @click="deleteResource(row)">
                 {{ $t('RuleEngine.delete') }}
@@ -124,22 +115,22 @@ export default {
       this.$set(row, 'showConfig', showConfig)
     },
 
+    viewResourcesStatus(row, index) {
+      const elExpand = document.querySelectorAll('.el-table__expand-icon')[index]
+      if (elExpand) {
+        elExpand.click()
+      }
+    },
+
     async handleExpandChange(row, reload = false) {
-      if (reload !== true && row.status.length > 0) {
+      if (!reload && row.status.length > 0) {
         return
       }
-      try {
-        if (row.loading === undefined) {
-          this.$set(row, 'loading', true)
-        }
-        const resource = await loadResourceDetails(row.id)
+      const resource = await loadResourceDetails(row.id)
+      if (resource) {
         this.$set(row, 'status', resource.status)
         this.$set(row, 'typeInfo', resource.typeInfo)
         this.$set(row, '_config', resource._config)
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.$set(row, 'loading', false)
       }
     },
     deleteResource(row) {
@@ -197,6 +188,10 @@ export default {
     .ant-card-body {
       padding: 0 0 0 20px;
     }
+  }
+
+  .expand-column .cell {
+    visibility: hidden;
   }
 }
 </style>

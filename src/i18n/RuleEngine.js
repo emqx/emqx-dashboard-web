@@ -41,6 +41,10 @@ export default {
     zh: '节点上的资源状态信息',
     en: 'Resource status on nodes',
   },
+  status: {
+    zh: '状态',
+    en: 'Status',
+  },
   resourceStatus: {
     zh: '资源状态',
     en: 'Status',
