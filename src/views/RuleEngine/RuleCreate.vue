@@ -1,12 +1,5 @@
 <template>
   <div class="rule-create">
-    <!-- Hide copy text -->
-    <input
-      id="clipboard"
-      v-model="clipboardContent"
-      type="text"
-    >
-
     <page-header
       :back-title="$t('RuleEngine.ruleEngine')"
       :oper="$t('Base.create')"
@@ -123,8 +116,11 @@
               </div>
               <div class="tips-wrapper code">
                 <span
-                  v-for="key in availableFields" :key="key" class="available-fields"
-                  @click="selectAvailableFields(key)"
+                  v-for="key in availableFields"
+                  :key="key"
+                  v-clipboard:cpoy="key"
+                  v-clipboard:success="copyAvailableFieldsSuccess"
+                  class="available-fields"
                 >
                   {{ key }}
                 </span>
@@ -179,7 +175,6 @@ import {
 import CodeEditor from '@/components/CodeEditor'
 import { loadTopics } from '@/api/server'
 import RuleActions from './components/RuleActions'
-import { clearTimeout } from 'timers'
 
 export default {
   name: 'RuleCrate',
@@ -306,17 +301,11 @@ export default {
         })
       })
     },
-    selectAvailableFields(key) {
-      clearTimeout(this.timer)
-      this.clipboardContent = key
-      this.timer = setTimeout(() => {
-        this.clipboardStatus = this.$t('Base.copy')
-        document.querySelector('#clipboard').select()
-        document.execCommand('Copy')
-        setTimeout(() => {
-          this.clipboardStatus = ''
-        }, 3000)
-      }, 100)
+    copyAvailableFieldsSuccess() {
+      this.clipboardStatus = this.$t('Base.copy')
+      setTimeout(() => {
+        this.clipboardStatus = ''
+      }, 2000)
     },
     async save() {
       const valid = await this.$refs.record.validate()

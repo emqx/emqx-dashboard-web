@@ -13,10 +13,12 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/markLine'
 import 'echarts/lib/component/markPoint'
 
+import resizeChart from '@/mixins/resizeChart'
+
 export default {
   name: 'SimpleLine',
 
-  components: {},
+  mixins: [resizeChart],
 
   props: {
     value: {
