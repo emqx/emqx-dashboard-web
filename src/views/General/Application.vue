@@ -60,7 +60,7 @@
                 {{ $t('General.edit') }}
               </el-button>
               <el-button
-                type="dashed"
+                type="dashed danger"
                 size="mini"
                 @click="deleteConfirm(row)"
               >
@@ -303,19 +303,6 @@ export default {
 
 <style lang="scss">
 .application {
-  .link-item {
-    .icon {
-      width: 24px;
-      height: 24px;
-      line-height: 14px;
-      border-radius: 50%;
-      border: 1px solid #34C388;
-      padding: 4px;
-      text-align: center;
-      margin-right: 8px;
-      font-size: 12px;
-    }
-  }
 
   .el-select {
     width: 100%;

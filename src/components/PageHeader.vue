@@ -105,6 +105,17 @@ export default {
 
     .link-item {
       margin-right: 12px;
+      .icon {
+        width: 24px;
+        height: 24px;
+        line-height: 16px;
+        border-radius: 50%;
+        border: 1px solid #34C388;
+        padding: 4px;
+        text-align: center;
+        margin-right: 8px;
+        font-size: 12px;
+      }
     }
   }
 }

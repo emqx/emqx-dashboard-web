@@ -9,19 +9,39 @@ const { lang = 'zh' } = store.state
 
 import { en as enDocsLink, zh as zhDocsLink } from '@/common/link_urls'
 
+/**
+ * 获取基础的验证信息
+ * @param null
+ * @return User: object
+ */
 export function getBasicAuthInfo() {
   return store.state.user
 }
 
+/**
+ * 跳转到登录页面
+ * @param null
+ * @return null
+ */
 export function toLogin() {
   store.dispatch('UPDATE_USER_INFO', { logOut: true })
   router.push({ path: '/login', query: { to: router.fullPath } })
 }
 
+/**
+ * 将函数包装为异步函数
+ * @param Promise
+ * @return Promise
+ */
 export const awaitWrap = promise => promise
 .then(data => data)
 .catch(err => null)
 
+/**
+ * 安全的转化 JSON 字符串
+ * @param jsonStr: 被转化的 JSON 字符串，defaultValue: 失败时返回的默认值
+ * @return Object
+ */
 export function safeParser(jsonStr, defaultValue = {}) {
   try {
     return JSON.parse(jsonStr) || defaultValue
@@ -30,6 +50,11 @@ export function safeParser(jsonStr, defaultValue = {}) {
   }
 }
 
+/**
+ * 填充转化对象类型的 i18n
+ * @param data 转化的数据，key 对象的 key 值，autoSearch 是否自动搜索
+ * @return data: object
+ */
 function fillObjectI18n(data = {}) {
   const { lang = 'zh' } = store.state
 
@@ -46,7 +71,6 @@ function fillObjectI18n(data = {}) {
   })
   return data
 }
-
 // 将 [{ title: { en: 'Title', zh: '标题' } }] 翻译为 [{ title: '标题' }]
 export function fillI18n(data = [], keys = [], autoSearch = false) {
   if (!data) {
@@ -83,7 +107,6 @@ export function fillI18n(data = [], keys = [], autoSearch = false) {
       data[key] = data[key][lang]
     })
   }
-
   return data
 }
 
@@ -165,25 +188,28 @@ export function renderParamsForm(params = {}, propPrefix = '') {
   return { form, rules }
 }
 
+/**
+ * 根据语言获取跳转的链接
+ * @param name
+ * @return link: string
+ */
 export function getLink(name) {
   const { lang = 'zh' } = store.state
   const dictMap = lang === 'zh' ? zhDocsLink : enDocsLink
   return dictMap[name] || '/'
 }
 
-function checkLanguage(lang) {
-  if (['en', 'zh'].includes(lang)) {
-    return lang
-  }
-  return ''
-}
-
 /**
  * 获取默认语言
  * @param null
- * @return language
+ * @return language: string
  */
-
+function checkLanguage(language) {
+  if (['en', 'zh'].includes(language)) {
+    return language
+  }
+  return ''
+}
 export function getDefaultLanguage() {
   const browserLanguage = checkLanguage(navigator.language.substr(0, 2))
   const localStorageLanguage = checkLanguage(localStorage.getItem('language'))
@@ -191,10 +217,11 @@ export function getDefaultLanguage() {
   return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
 }
 
+
 /**
  * 复制到剪切板
  * @param el 复制指令绑定的元素，binding 剪切板配置，包括值value，成功失败时的回调函数
- * @return el
+ * @return el: DOM
  */
 export const cpoyToClipboard = (el, binding) => {
   const clipboard = new Clipboard(el, {
@@ -203,13 +230,13 @@ export const cpoyToClipboard = (el, binding) => {
     },
     acttion() {
       return 'copy'
-    }
+    },
   })
-  clipboard.on('success', e => {
+  clipboard.on('success', (e) => {
     const callback = el._v_clipboard_success
     callback && callback(e)
   })
-  clipboard.on('error', e => {
+  clipboard.on('error', (e) => {
     const callback = el._v_clipboard_error
     callback && callback(e)
   })
@@ -220,7 +247,7 @@ export const cpoyToClipboard = (el, binding) => {
 /**
  * sql 语句格式化
  * @param sql 传入的 sql 语句
- * @return sql
+ * @return sql: string
  */
 export const sqlExampleFormatter = (sql) => {
   const newSQL = sqlFormatter.format(sql)

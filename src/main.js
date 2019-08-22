@@ -11,7 +11,9 @@ import directive from '@/common/directive'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
 import '@/assets/style/common.scss'
+import '@/assets/style/element-reset.scss'
 
 Vue.config.productionTip = false
 

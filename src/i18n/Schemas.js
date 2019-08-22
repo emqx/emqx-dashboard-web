@@ -3,4 +3,65 @@ export default {
     zh: '编解码',
     en: 'Schema Registry',
   },
+  schemaDesc: {
+    zh: '自定义消息编解码，支持 avro、protobuf 与外部编解码网关',
+    en: 'Custom message codec, support avro, protobuf and external codec gateway',
+  },
+  docs: {
+    zh: '使用文档',
+    en: 'Document',
+  },
+  example: {
+    zh: '编解码示例',
+    en: 'Schema example',
+  },
+  name: {
+    zh: '名称',
+    en: 'name',
+  },
+  nameRequired: {
+    zh: '请输入名称',
+    en: 'Name is requried',
+  },
+  parser_type: {
+    zh: '编解码类型',
+    en: 'Parser Type',
+  },
+  parserTypeRequired: {
+    zh: '请选择转化类型',
+    en: 'Parser type is required',
+  },
+  description: {
+    zh: '备注',
+    en: 'Remark',
+  },
+  schemaRequired: {
+    zh: '请输入 Schema',
+    en: 'Schema is required',
+  },
+  version: {
+    zh: '版本',
+    en: 'Version',
+  },
+  parser_addr: {
+    zh: '编解码地址',
+    en: 'Parser Server:',
+  },
+  connect_timeout: {
+    zh: '连接超时时间',
+    en: 'Connect timeout',
+  },
+  parser_timeout: {
+    zh: '解码超时时间',
+    en: 'Parser Timeout',
+  },
+  '3rd_party_opts': {
+    zh: '编解码配置',
+    en: 'Parser Option',
+  },
+
+  confirmDelete: {
+    zh: '确认删除该编解码？',
+    en: 'Confirm delete schema?',
+  },
 }
