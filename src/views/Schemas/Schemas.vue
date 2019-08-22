@@ -9,7 +9,8 @@
           <p class="description">
             {{ $t('Schemas.schemaDesc') }}
           </p>
-          <div class="page-header-link">
+          <!-- TODO: 添加schema文档 和 用例文档 -->
+          <!-- <div class="page-header-link">
             <a href="javascript:;" target="_blank" class="link-item">
               <i class="icon el-icon-document"></i>
               {{ $t('Schemas.docs') }}
@@ -18,7 +19,7 @@
               <i class="icon iconfont icon-icon_fabu"></i>
               {{ $t('Schemas.example') }}
             </a>
-          </div>
+          </div> -->
         </div>
       </div>
     </page-header>
@@ -33,7 +34,9 @@
             type="primary"
             size="small"
             icon="el-icon-plus"
-            @click="$router.push('/schemas/create')"
+            @click="$router.push({
+              path: '/schemas/0', query: { oper: 'create' }
+            })"
           >
             {{ $t('Base.create') }}
           </el-button>
@@ -42,7 +45,14 @@
         <el-table :data="tableData" class="data-list">
           <el-table-column prop="name" :label="$t('Schemas.name')">
             <template slot-scope="{ row }">
-              <a href="javascript:;" @click="viewDetail(row)">{{ row.name }}</a>
+              <a
+                href="javascript:;"
+                @click="$router.push({
+                  path: `/schemas/${row.id}`, query: { oper: 'view' }
+                })"
+              >
+                {{ row.name }}
+              </a>
             </template>
           </el-table-column>
           <el-table-column prop="parser_type" :label="$t('Schemas.parser_type')">
@@ -59,7 +69,7 @@
               <el-button
                 type="dashed danger"
                 size="mini"
-                @click="deleteSchema(row)"
+                @click="deleteData(row)"
               >
                 {{ $t('RuleEngine.delete') }}
               </el-button>
@@ -73,7 +83,7 @@
 
 
 <script>
-import { loadSchemas, deleteSchema, viewSchema } from '@/api/schemas'
+import { loadSchemas, deleteSchema } from '@/api/schemas'
 
 export default {
   name: 'Schemas',
@@ -96,12 +106,7 @@ export default {
       }
     },
 
-    async viewDetail(row) {
-      const res = await viewSchema(row.id)
-      console.log(res)
-    },
-
-    deleteSchema(row) {
+    deleteData(row) {
       this.$confirm(this.$t('Schemas.confirmDelete'), {
         type: 'warning',
       }).then(async () => {

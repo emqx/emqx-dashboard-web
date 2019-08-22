@@ -208,10 +208,10 @@ body {
 // Text-aligin button group
 .button-group {
   margin-top: 24px;
-  &.center {
+  &__center {
     text-align: center;
   }
-  &.right {
+  &__right {
     text-align: right;
   }
 }
