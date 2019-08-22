@@ -52,13 +52,13 @@
               <el-radio-button label="0">
                 {{ $t('Plugins.stopped') }}
               </el-radio-button>
-              <el-radio-button label="wivwiv">
+              <el-radio-button label="all">
                 {{ $t('Plugins.all') }}
               </el-radio-button>
             </el-radio-group>
 
             <el-radio-group v-model="category" size="mini" border @change="loadData">
-              <el-radio-button label="wivwiv">
+              <el-radio-button label="all">
                 {{ $t('Plugins.all') }}
               </el-radio-button>
               <el-radio-button
@@ -149,7 +149,7 @@ export default {
   data() {
     return {
       loadNodes,
-      category: 'wivwiv',
+      category: 'all',
       status: '1',
       tableData: [],
       listTableData: [],
@@ -233,10 +233,10 @@ export default {
     },
     handleFilter() {
       let list = this.tableData
-      if (this.category !== 'wivwiv') {
+      if (this.category !== 'all') {
         list = list.filter($ => $.type === this.category)
       }
-      if (this.status !== 'wivwiv') {
+      if (this.status !== 'all') {
         const active = this.status === '1'
         list = list.filter($ => $.active === active)
       }
@@ -384,6 +384,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+html:lang(en) {
+  .plugins .oper .el-button{
+    width: 64px;
   }
 }
 </style>
