@@ -85,6 +85,7 @@ export default {
 
   created() {
     this.loadData()
+    this.setHtmlLangAttr(this.language)
   },
 
   mounted() {
@@ -92,10 +93,14 @@ export default {
   },
 
   methods: {
+    setHtmlLangAttr(lang) {
+      document.querySelector('html').setAttribute('lang', lang)
+    },
     handleLanguageDropdownCommand(command) {
       if (this.language === command) {
         return
       }
+      this.setHtmlLangAttr(command)
       this.$store.dispatch('SET_LANGUAGE', command)
     },
     clearAlert() {
