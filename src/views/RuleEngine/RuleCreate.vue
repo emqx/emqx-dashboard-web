@@ -174,6 +174,7 @@ import {
 } from '@/api/rules'
 import CodeEditor from '@/components/CodeEditor'
 import { loadTopics } from '@/api/server'
+import { sqlExampleFormatter } from '@/common/utils'
 import RuleActions from './components/RuleActions'
 
 export default {
@@ -256,8 +257,8 @@ export default {
   methods: {
     handleForChange(val) {
       this.selectEvent = this.events.find($ => $.event === val)
-      const { event } = this.selectEvent
-      this.record.rawsql = `SELECT\n\r *\n\rFROM\n\r "${event}"\n\rWHERE\n\r topic =~ 't/#'`
+      const { sql_example } = this.selectEvent
+      this.record.rawsql = sqlExampleFormatter(sql_example)
       this.handlePreSQLTest()
     },
     handlePreSQLTest() {
