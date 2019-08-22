@@ -348,7 +348,7 @@ export default {
     .settings-form {
       margin-top: 40px;
       .form-item-desc {
-        min-height: 50px;
+        min-height: 55px;
         font-size: 13px;
         color: #676767;
       }

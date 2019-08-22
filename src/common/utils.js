@@ -1,5 +1,6 @@
 /* eslint-disable */
 import Clipboard from 'clipboard'
+import sqlFormatter from 'sql-formatter'
 
 import store from '@/store'
 import router from '@/router'
@@ -177,6 +178,12 @@ function checkLanguage(lang) {
   return ''
 }
 
+/**
+ * 获取默认语言
+ * @param null
+ * @return language
+ */
+
 export function getDefaultLanguage() {
   const browserLanguage = checkLanguage(navigator.language.substr(0, 2))
   const localStorageLanguage = checkLanguage(localStorage.getItem('language'))
@@ -208,4 +215,23 @@ export const cpoyToClipboard = (el, binding) => {
   })
   el._v_clipboard = clipboard
   return el
+}
+
+/**
+ * sql 语句格式化
+ * @param sql 传入的 sql 语句
+ * @return sql
+ */
+export const sqlExampleFormatter = (sql) => {
+  const newSQL = sqlFormatter.format(sql)
+  let text = newSQL.replace(/= ~/g, '=~').replace(/\n/g, '!#!')
+  const paramsRe = text.match(/SELECT!#!(.+)!#!FROM/)
+  if (paramsRe) {
+    const paramsText = paramsRe[1]
+    if (paramsText) {
+      const newParamsText = paramsText.replace(/(!#!|\s)/g, '').split(/[,，]/).join(', ')
+      text = text.replace(paramsText, `  ${newParamsText}`)
+    }
+  }
+  return text.replace(/!#!/g, '\n\r')
 }
