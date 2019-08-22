@@ -363,7 +363,7 @@ export default {
       }
     }
 
-    .button-group_center {
+    .button-group.center {
       margin-top: 20px;
     }
 

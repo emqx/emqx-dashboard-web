@@ -96,11 +96,11 @@ export default {
         path: '/connections',
         icon: 'icon-zuzhiqunzu',
       },
-      // {
-      //   title: this.$t('components.schema'),
-      //   path: '/schemas',
-      //   icon: 'icon-ceshishenqing',
-      // },
+      {
+        title: this.$t('components.schema'),
+        path: '/schemas',
+        icon: 'icon-ceshishenqing',
+      },
       {
         title: this.$t('components.rule'),
         key: 'rules',

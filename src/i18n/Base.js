@@ -81,4 +81,12 @@ export default
     zh: '应用成功',
     en: 'Apply Success',
   },
+  createSuccess: {
+    zh: '创建成功',
+    en: 'Create Success',
+  },
+  deleteSuccess: {
+    zh: '删除成功',
+    en: 'Delete Success',
+  },
 }

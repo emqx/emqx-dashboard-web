@@ -68,7 +68,7 @@
           <el-table-column width="80px" prop="id">
             <template slot-scope="{ row }">
               <el-button
-                type="dashed"
+                type="dashed danger"
                 size="mini"
                 @click="deleteRule(row)"
               >
@@ -311,20 +311,6 @@ export default {
 
 
 <style lang="scss" scoped>
-.link-item {
-  .icon {
-    width: 24px;
-    height: 24px;
-    line-height: 16px;
-    border-radius: 50%;
-    border: 1px solid #34C388;
-    padding: 4px;
-    text-align: center;
-    margin-right: 8px;
-    font-size: 12px;
-  }
-}
-
 .description {
   max-width: 500px;
 }
