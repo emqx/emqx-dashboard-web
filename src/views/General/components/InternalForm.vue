@@ -249,7 +249,7 @@
       </el-col>
     </el-form>
 
-    <el-col class="button-group center" :span="24">
+    <el-col class="button-group__center" :span="24">
       <el-button :disabled="cancelDisabled" type="default" size="medium" @click="cancel">
         {{ $t('Base.cancel') }}
       </el-button>

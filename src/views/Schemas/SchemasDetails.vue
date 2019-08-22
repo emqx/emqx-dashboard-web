@@ -1,10 +1,22 @@
 <template>
-  <div class="schemas-create">
+  <div class="schemas-details details-page">
     <page-header
       :back-title="$t('Schemas.schema')"
-      :oper="$t('Base.create')"
+      :oper="accessTitle"
       back-path="/schemas"
     >
+      <template v-if="disabled">
+        <div class="page-header-title-view">
+          <div class="title">
+            {{ detailsID }}
+          </div>
+        </div>
+        <div class="page-header-top-start">
+          <el-button type="danger" size="small" @click="deleteData">
+            {{ $t('Base.delete') }}
+          </el-button>
+        </div>
+      </template>
     </page-header>
 
     <div class="emq-list-body schemas-wrapper app-wrapper">
@@ -13,14 +25,17 @@
         <el-row :gutter="20">
           <el-form
             ref="record"
+            :class="[disabled ? 'details-form__view' : '']"
             :model="record"
-            :rules="rules"
-            label-position="top"
+            :rules="disabled ? {} : rules"
+            :label-position="disabled ? 'left' : 'top'"
+            :label-suffix="disabled ? ':' : ''"
+            :label-width="disabled ? '120px' : ''"
             size="small"
           >
             <el-col :span="14">
               <el-form-item :label="$t('Schemas.name')" prop="name">
-                <el-input v-model="record.name"></el-input>
+                <el-input v-model="record.name" :disabled="disabled"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="10">
@@ -31,6 +46,7 @@
               <el-form-item :label="$t('Schemas.parser_type')" prop="parser_type">
                 <emq-select
                   v-model="record.parser_type"
+                  :disabled="disabled"
                   :field="{ list: ['avro', 'protobuf'] }"
                 >
                 </emq-select>
@@ -55,9 +71,27 @@
               </el-form-item>
             </template> -->
 
-            <el-col :span="14">
+            <!-- View -->
+            <template v-if="accessType === 'view'">
+              <el-col :span="14">
+                <el-form-item :label="$t('Schemas.description')">
+                  <el-input v-model="record.descr" :disabled="true"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+              </el-col>
+              <el-col :span="14">
+                <el-form-item :label="$t('Schemas.version')">
+                  <el-input v-model="record.version" :disabled="true"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+              </el-col>
+            </template>
+
+            <el-col v-else :span="14">
               <el-form-item :label="$t('Schemas.description')">
-                <el-input v-model="record.description"></el-input>
+                <el-input v-model="record.description" :disabled="disabled"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="10">
@@ -69,6 +103,7 @@
                   v-model="record.schema"
                   lang="application/json"
                   height="320px"
+                  :disabled="disabled"
                   :lint="false"
                 ></code-editor>
               </el-form-item>
@@ -79,7 +114,7 @@
           </el-form>
         </el-row>
 
-        <div class="button-group">
+        <div v-if="!disabled" class="button-group">
           <el-button :loading="saveLoading" type="primary" size="medium" @click="save">
             {{ $t('Base.create') }}
           </el-button>
@@ -96,20 +131,23 @@
 
 
 <script>
-import { createSchema } from '@/api/schemas'
+import { createSchema, viewSchema, deleteSchema } from '@/api/schemas'
+import detailsPage from '@/mixins/detailsPage'
 import CodeEditor from '@/components/CodeEditor'
+import { setTimeout } from 'timers'
 
 export default {
-  name: 'SchemasCreate',
+  name: 'SchemasDetails',
 
   components: {
     CodeEditor,
   },
 
+  mixins: [detailsPage],
+
   data() {
     return {
       THIRD_PARTY: '3rd-party',
-      saveLoading: false,
       record: {
         parser_type: 'avro',
         schema: '',
@@ -123,6 +161,11 @@ export default {
   },
 
   methods: {
+    routeToSchemas() {
+      setTimeout(() => {
+        this.$router.push({ path: '/schemas' })
+      }, 500)
+    },
     async save() {
       const valid = await this.$refs.record.validate()
       if (!valid) {
@@ -132,11 +175,28 @@ export default {
       const res = await createSchema(this.record)
       if (res) {
         this.$message.success(this.$t('Base.createSuccess'))
-        setTimeout(() => {
-          this.$router.push({ path: '/schemas' })
-        }, 500)
+        this.routeToSchemas()
       }
       this.saveLoading = false
+    },
+
+    async viewDetails(id) {
+      const res = await viewSchema(id)
+      if (res) {
+        this.record = res
+      }
+    },
+
+    deleteData() {
+      this.$confirm(this.$t('Schemas.confirmDelete'), {
+        type: 'warning',
+      }).then(async () => {
+        const res = await deleteSchema(this.detailsID)
+        if (res) {
+          this.$message.success(this.$t('Base.deleteSuccess'))
+          this.routeToSchemas()
+        }
+      }).catch(() => {})
     },
   },
 }

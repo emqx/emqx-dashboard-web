@@ -153,7 +153,7 @@
         </div>
       </a-card>
 
-      <div class="button-group center">
+      <div class="button-group__center">
         <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
           {{ $t('Base.cancel') }}
         </el-button>

@@ -41,6 +41,14 @@ export default
     zh: '复制成功！',
     en: 'Copied!',
   },
+  view: {
+    zh: '详情',
+    en: 'View',
+  },
+  edit: {
+    zh: '编辑',
+    en: 'Edit',
+  },
   homePage: {
     zh: '首页',
     en: 'Home',

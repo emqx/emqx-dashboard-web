@@ -78,9 +78,9 @@ const router = new Router({
           component: () => import('@/views/Schemas/Schemas'),
         },
         {
-          path: 'create',
-          name: 'schemas-create',
-          component: () => import('@/views/Schemas/SchemasCreate'),
+          path: ':id',
+          name: 'schemas-details',
+          component: () => import('@/views/Schemas/SchemasDetails'),
         },
       ],
     },

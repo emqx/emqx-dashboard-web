@@ -2,7 +2,15 @@ import http from '@/common/http'
 
 export const loadSchemas = () => http.get('/schemas')
 
-export const viewSchema = id => http.get(`/schemas/${id}`)
+export const viewSchema = async (id) => {
+  try {
+    const res = await http.get(`/schemas/${id}`)
+    return res[0]
+  } catch (error) {
+    console.error(error)
+    return false
+  }
+}
 
 export const deleteSchema = async (id) => {
   try {
@@ -27,7 +35,7 @@ export const createSchema = async (data) => {
       parser_timeout: data.parser_timeout,
     }
   } else {
-    body.schema = JSON.stringify(JSON.parse(data.schema))
+    body.schema = data.schema
   }
   try {
     return await http.post('/schemas', body)
