@@ -166,6 +166,7 @@ export default {
         this.$router.push({ path: '/schemas' })
       }, 500)
     },
+
     async save() {
       const valid = await this.$refs.record.validate()
       if (!valid) {
