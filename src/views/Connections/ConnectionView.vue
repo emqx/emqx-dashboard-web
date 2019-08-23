@@ -233,7 +233,6 @@ export default {
     },
     handleUnSubscription(row) {
       const title = this.$t('Connections.unsubscribeTitle')
-      console.log(this)
       this.$msgbox.confirm(
         title,
         {
