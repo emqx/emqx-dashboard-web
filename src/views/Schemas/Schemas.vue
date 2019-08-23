@@ -43,7 +43,7 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="name" :label="$t('Schemas.name')">
+          <el-table-column prop="id" label="ID">
             <template slot-scope="{ row }">
               <a
                 href="javascript:;"
@@ -51,9 +51,11 @@
                   path: `/schemas/${row.id}`, query: { oper: 'view' }
                 })"
               >
-                {{ row.name }}
+                {{ row.id }}
               </a>
             </template>
+          </el-table-column>
+          <el-table-column prop="name" :label="$t('Schemas.name')">
           </el-table-column>
           <el-table-column prop="parser_type" :label="$t('Schemas.parser_type')">
           </el-table-column>

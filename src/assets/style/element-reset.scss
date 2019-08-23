@@ -58,7 +58,6 @@
 .el-input,
 .el-textarea {
   transition: all 0.3s;
-
   &__inner:focus {
     box-shadow: 0 0 0 2px rgba(52, 195, 136, 0.2)
   }
