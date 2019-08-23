@@ -200,25 +200,6 @@ export function getLink(name) {
 }
 
 /**
- * 获取默认语言
- * @param null
- * @return language: string
- */
-function checkLanguage(language) {
-  if (['en', 'zh'].includes(language)) {
-    return language
-  }
-  return ''
-}
-export function getDefaultLanguage() {
-  const browserLanguage = checkLanguage(navigator.language.substr(0, 2))
-  const localStorageLanguage = checkLanguage(localStorage.getItem('language'))
-  const defaultLanguage = (window.EMQX_CONFIG || {}).language
-  return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
-}
-
-
-/**
  * 复制到剪切板
  * @param el 复制指令绑定的元素，binding 剪切板配置，包括值value，成功失败时的回调函数
  * @return el: DOM
