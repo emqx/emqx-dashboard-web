@@ -429,8 +429,15 @@ export default {
         return
       }
       const { topic, qos } = this.subscriptionsRecord
-      this.client.subscribe(topic, { qos }, (err) => {
-        if (err) {
+      this.client.subscribe(topic, { qos }, (err, res) => {
+        // 是否超过最大订阅数
+        let isMoreMaxSubs = false
+        res.forEach((item) => {
+          if (![0, 1, 2].includes(item.qos)) {
+            isMoreMaxSubs = true
+          }
+        })
+        if (err || isMoreMaxSubs) {
           this.$message.error(this.$t('Tools.subscriptionFailure'))
           return
         }
