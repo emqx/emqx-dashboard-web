@@ -113,9 +113,9 @@
             style="width: 330px"
             @visible-change="checkResource"
           >
-            <div slot="option" slot-scope="{ item }" class="resource-option">
-              <span class="resource-id">{{ item.id }}</span>
-              <span class="resource-name">{{ item.config.title }}</span>
+            <div slot="option" slot-scope="{ item }" class="custom-option">
+              <span class="key">{{ item.id }}</span>
+              <span class="value">{{ item.config.title }}</span>
             </div>
           </emq-select>
 
@@ -596,15 +596,6 @@ export default {
     .el-textarea {
       width: 330px;
     }
-  }
-}
-
-.resource-option {
-  .resource-name {
-    float: right;
-    font-size: 12px;
-    color: #888;
-    margin-left: 30px;
   }
 }
 

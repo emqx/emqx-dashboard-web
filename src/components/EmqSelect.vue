@@ -140,3 +140,18 @@ export default {
   },
 }
 </script>
+
+
+<style lang="scss">
+.el-select-dropdown {
+  /* 自定义的选项菜单样式 */
+  .custom-option {
+    .value {
+      float: right;
+      font-size: 12px;
+      color: #888;
+      margin-left: 30px;
+    }
+  }
+}
+</style>

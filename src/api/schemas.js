@@ -22,21 +22,31 @@ export const deleteSchema = async (id) => {
 }
 
 export const createSchema = async (data) => {
+  const THIRD_PARTY = '3rd-party'
+  const HTTP = 'HTTP'
+  const TCP = 'TCP'
+  const RESOURCES = 'Resources'
+
   const body = {
     name: data.name,
     description: data.description,
     parser_type: data.parser_type,
   }
-  if (data.parser_type === '3rd-party') {
-    body.parser_addr = data.parser_addr
-    body.parser_opts = {
-      '3rd_party_opts': data['3rd_party_opts'],
-      connect_timeout: data.connect_timeout,
-      parser_timeout: data.parser_timeout,
+
+  if (data.parser_type === THIRD_PARTY) {
+    body.parser_addr = {}
+    body.parser_opts = data.parser_opts
+    if (data.third_party_type === HTTP) {
+      body.parser_addr.url = data.parser_addr.url
+    } else if (data.third_party_type === TCP) {
+      body.parser_addr.server = data.parser_addr.server
+    } else if (data.third_party_type === RESOURCES) {
+      body.parser_addr.resource_id = data.parser_addr.resource_id
     }
   } else {
     body.schema = data.schema
   }
+
   try {
     return await http.post('/schemas', body)
   } catch (error) {
