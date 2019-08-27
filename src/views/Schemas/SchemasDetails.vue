@@ -42,12 +42,11 @@
             </el-col>
 
             <el-col :span="14">
-              <!-- TODO: 后期加上 json，3rd-party 类型 -->
               <el-form-item :label="$t('Schemas.parser_type')" prop="parser_type">
                 <emq-select
                   v-model="record.parser_type"
                   :disabled="disabled"
-                  :field="{ list: ['avro', 'protobuf'] }"
+                  :field="{ list: ['avro', 'protobuf', '3rd-party'] }"
                 >
                 </emq-select>
               </el-form-item>
@@ -55,21 +54,89 @@
             <el-col :span="10">
             </el-col>
 
-            <!-- TODO: 添加 3rd-party 支持的配置 -->
-            <!-- <template v-if="record.parser_type === THIRD_PARTY">
-              <el-form-item :label="$t('Schemas.parser_addr')">
-                <el-input v-model="record.parser_addr"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('Schemas.connect_timeout')">
-                <el-input v-model="record.connect_timeout" placeholder="15"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('Schemas.parser_timeout')">
-                <el-input v-model="record.parser_timeout" placeholder="15"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('Schemas.3rd_party_opts')">
-                <el-input v-model="record['3rd_party_opts']"></el-input>
-              </el-form-item>
-            </template> -->
+            <!-- 3rd-party -->
+            <template v-if="record.parser_type === THIRD_PARTY">
+              <el-col :span="14">
+                <el-form-item :label="$t('Schemas.third_party_type')" prop="third_party_type">
+                  <emq-select
+                    v-model="record.third_party_type"
+                    :disabled="disabled"
+                    :field="{ list: ['HTTP', 'TCP', 'Resources'] }"
+                    @change="handle3rdTypeChange"
+                  >
+                  </emq-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+              </el-col>
+
+              <!-- HTTP type -->
+              <template v-if="record.third_party_type === HTTP">
+                <el-col :span="14">
+                  <el-form-item label="URL" prop="parser_addr.url">
+                    <el-input v-model="record.parser_addr.url" :disabled="disabled" placeholder="http://127.0.0.1:8000/parser">
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                </el-col>
+              </template>
+
+              <!-- TCP type -->
+              <template v-if="record.third_party_type === TCP">
+                <el-col :span="14">
+                  <el-form-item :label="$t('Schemas.server')" prop="parser_addr.server">
+                    <el-input v-model="record.parser_addr.server" :disabled="disabled" placeholder="127.0.0.1:2291">
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                </el-col>
+              </template>
+
+              <!-- Resources type -->
+              <template v-if="record.third_party_type === RESOURCES">
+                <el-col :span="14">
+                  <el-form-item :label="$t('Schemas.resource')" prop="parser_addr.resource_id">
+                    <emq-select
+                      v-model="record.parser_addr.resource_id"
+                      :field="{ options: availableResources }"
+                      :field-name="{ label: 'id', value: 'id'}"
+                      :disabled="disabled"
+                    >
+                      <div slot="option" slot-scope="{ item }" class="custom-option">
+                        <span class="label">{{ item.id }}</span>
+                        <span class="value">{{ item.config.title }}</span>
+                      </div>
+                    </emq-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                </el-col>
+              </template>
+
+              <el-col :span="14">
+                <el-form-item :label="$t('Schemas.3rd_party_opts')" prop="parser_opts.3rd_party_opts">
+                  <el-input v-model="record.parser_opts['3rd_party_opts']" :disabled="disabled"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+              </el-col>
+              <el-col :span="14">
+                <el-form-item :label="$t('Schemas.connect_timeout')" prop="parser_opts.connect_timeout">
+                  <el-input v-model="record.parser_opts.connect_timeout" :disabled="disabled" placeholder="3"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+              </el-col>
+              <el-col :span="14">
+                <el-form-item :label="$t('Schemas.parser_timeout')" prop="parser_opts.parser_timeout">
+                  <el-input v-model="record.parser_opts.parser_timeout" :disabled="disabled" placeholder="5"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+              </el-col>
+            </template>
 
             <!-- View -->
             <template v-if="accessType === 'view'">
@@ -97,6 +164,7 @@
             <el-col :span="10">
             </el-col>
 
+            <!-- Schema code -->
             <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
               <el-form-item class="code-editor__item" label="Schema" prop="schema">
                 <code-editor
@@ -131,6 +199,7 @@
 
 
 <script>
+import { loadResource } from '@/api/rules'
 import { createSchema, viewSchema, deleteSchema } from '@/api/schemas'
 import detailsPage from '@/mixins/detailsPage'
 import CodeEditor from '@/components/CodeEditor'
@@ -148,15 +217,41 @@ export default {
   data() {
     return {
       THIRD_PARTY: '3rd-party',
+      HTTP: 'HTTP',
+      TCP: 'TCP',
+      RESOURCES: 'Resources',
       record: {
         parser_type: 'avro',
         schema: '',
+        third_party_type: 'HTTP',
+        parser_opts: {
+          '3rd_party_opts': undefined,
+          connect_timeout: undefined,
+          parser_timeout: undefined,
+        },
+        parser_addr: {
+          url: undefined,
+          server: undefined,
+          resource_id: undefined,
+        },
       },
       rules: {
         name: { required: true, message: this.$t('Schemas.nameRequired') },
         parser_type: { required: true, message: this.$t('Schemas.parserTypeRequired') },
         schema: { required: true, message: this.$t('Schemas.schemaRequired') },
+        third_party_type: { required: true, message: this.$t('Schemas.third_party_type_required') },
+        parser_addr: {
+          url: { required: true, message: this.$t('Schemas.url_required') },
+          server: { required: true, message: this.$t('Schemas.server_required') },
+          resource_id: { required: true, message: this.$t('Schemas.resource_required') },
+        },
+        parser_opts: {
+          '3rd_party_opts': { required: true, message: this.$t('Schemas.3rd_party_opts_required') },
+          connect_timeout: { required: true, message: this.$t('Schemas.connect_timeout_required') },
+          parser_timeout: { required: true, message: this.$t('Schemas.parser_timeout_required') },
+        },
       },
+      availableResources: [],
     }
   },
 
@@ -198,6 +293,16 @@ export default {
           this.routeToSchemas()
         }
       }).catch(() => {})
+    },
+
+    async handle3rdTypeChange(val) {
+      if (val === this.RESOURCES) {
+        const res = await loadResource()
+        if (res) {
+          const types = ['parser_tcp', 'parser_http']
+          this.availableResources = res.filter($ => types.includes($.type))
+        }
+      }
     },
   },
 }
