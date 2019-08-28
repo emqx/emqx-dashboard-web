@@ -1,11 +1,29 @@
 import http from '@/common/http'
 
+const THIRD_PARTY = '3rd-party'
+const HTTP = 'HTTP'
+const TCP = 'TCP'
+const RESOURCES = 'Resources'
+
 export const loadSchemas = () => http.get('/schemas')
 
 export const viewSchema = async (id) => {
   try {
-    const res = await http.get(`/schemas/${id}`)
-    return res[0]
+    const data = await http.get(`/schemas/${id}`)
+    const res = data[0]
+    const { parser_addr } = res
+    if (parser_addr) {
+      const { url, host, port } = parser_addr
+      if (url) {
+        res.third_party_type = HTTP
+      } else if (host && port) {
+        res.third_party_type = TCP
+        res.parser_addr.server = `${host}:${port}`
+      } else {
+        res.third_party_type = RESOURCES
+      }
+    }
+    return res
   } catch (error) {
     console.error(error)
     return false
@@ -22,11 +40,6 @@ export const deleteSchema = async (id) => {
 }
 
 export const createSchema = async (data) => {
-  const THIRD_PARTY = '3rd-party'
-  const HTTP = 'HTTP'
-  const TCP = 'TCP'
-  const RESOURCES = 'Resources'
-
   const body = {
     name: data.name,
     description: data.description,

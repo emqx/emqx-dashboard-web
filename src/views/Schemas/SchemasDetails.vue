@@ -30,7 +30,7 @@
             :rules="disabled ? {} : rules"
             :label-position="disabled ? 'left' : 'top'"
             :label-suffix="disabled ? ':' : ''"
-            :label-width="disabled ? '120px' : ''"
+            :label-width="disabled ? '140px' : ''"
             size="small"
           >
             <el-col :span="14">
@@ -86,7 +86,7 @@
               <template v-if="record.third_party_type === TCP">
                 <el-col :span="14">
                   <el-form-item :label="$t('Schemas.server')" prop="parser_addr.server">
-                    <el-input v-model="record.parser_addr.server" :disabled="disabled" placeholder="127.0.0.1:2291">
+                    <el-input v-model="record.parser_addr.server" :disabled="disabled" placeholder="127.0.0.1:8081">
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -130,8 +130,8 @@
               <el-col :span="10">
               </el-col>
               <el-col :span="14">
-                <el-form-item :label="$t('Schemas.parser_timeout')" prop="parser_opts.parser_timeout">
-                  <el-input v-model="record.parser_opts.parser_timeout" :disabled="disabled" placeholder="5"></el-input>
+                <el-form-item :label="$t('Schemas.parse_timeout')" prop="parser_opts.parse_timeout">
+                  <el-input v-model="record.parser_opts.parse_timeout" :disabled="disabled" placeholder="5"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="10">
@@ -227,7 +227,7 @@ export default {
         parser_opts: {
           '3rd_party_opts': undefined,
           connect_timeout: undefined,
-          parser_timeout: undefined,
+          parse_timeout: undefined,
         },
         parser_addr: {
           url: undefined,
@@ -248,7 +248,7 @@ export default {
         parser_opts: {
           '3rd_party_opts': { required: true, message: this.$t('Schemas.3rd_party_opts_required') },
           connect_timeout: { required: true, message: this.$t('Schemas.connect_timeout_required') },
-          parser_timeout: { required: true, message: this.$t('Schemas.parser_timeout_required') },
+          parse_timeout: { required: true, message: this.$t('Schemas.parse_timeout_required') },
         },
       },
       availableResources: [],
