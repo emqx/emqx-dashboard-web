@@ -56,7 +56,7 @@
             min-width="100px" prop="description" show-overflow-tooltip
             :label="$t('RuleEngine.remark')"
           ></el-table-column>
-          <el-table-column width="120px" prop="id">
+          <el-table-column width="160px" prop="id">
             <template slot-scope="{ row, $index }">
               <el-button type="dashed" size="mini" @click="viewResourcesStatus(row, $index)">
                 {{ $t('RuleEngine.status') }}

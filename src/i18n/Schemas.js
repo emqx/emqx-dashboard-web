@@ -55,11 +55,11 @@ export default {
     zh: '请填写连接超时时间',
     en: 'Connect timeout is required',
   },
-  parser_timeout: {
+  parse_timeout: {
     zh: '解码超时时间',
     en: 'Parser Timeout',
   },
-  parser_timeout_required: {
+  parse_timeout_required: {
     zh: '请填写解码超时时间',
     en: 'Parser Timeout is required',
   },

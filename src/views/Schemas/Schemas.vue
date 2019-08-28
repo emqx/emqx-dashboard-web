@@ -57,7 +57,13 @@
           </el-table-column>
           <el-table-column prop="name" :label="$t('Schemas.name')">
           </el-table-column>
-          <el-table-column prop="parser_type" :label="$t('Schemas.parser_type')">
+          <el-table-column
+            prop="parser_type"
+            :label="$t('Schemas.parser_type')"
+            :filters="parserTypes"
+            :filter-method="parserTypesColumnFilter"
+            filter-placement="bottom"
+          >
           </el-table-column>
           <el-table-column prop="version" :label="$t('Schemas.version')">
           </el-table-column>
@@ -93,6 +99,11 @@ export default {
   data() {
     return {
       tableData: [],
+      parserTypes: [
+        { text: 'avro', value: 'avro' },
+        { text: 'protobuf', value: 'protobuf' },
+        { text: '3rd-party', value: '3rd-party' },
+      ],
     }
   },
 
@@ -118,6 +129,10 @@ export default {
           this.$message.success(this.$t('Base.deleteSuccess'))
         }
       }).catch(() => {})
+    },
+
+    parserTypesColumnFilter(value, row) {
+      return value === row.parser_type
     },
   },
 }
