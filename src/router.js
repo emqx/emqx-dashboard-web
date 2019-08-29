@@ -183,7 +183,7 @@ const router = new Router({
         {
           path: '',
           name: 'settings',
-          component: () => import('@/views/General/Settings'),
+          component: () => import('@/views/Settings/Settings'),
         },
       ],
     },

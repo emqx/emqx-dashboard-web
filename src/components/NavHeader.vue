@@ -25,7 +25,6 @@
         <div class="user-info func-item">
           <span>{{ username }}</span>
           <el-dropdown-menu slot="dropdown">
-            <!--<el-dropdown-item command="setting">{{ $t('components.settings') }}</el-dropdown-item>-->
             <el-dropdown-item command="application">{{ $t('components.applicationManagement') }}</el-dropdown-item>
             <el-dropdown-item command="users">{{ $t('components.usersManagement') }}</el-dropdown-item>
             <el-dropdown-item divided command="login">{{ $t('components.logOut') }}</el-dropdown-item>
