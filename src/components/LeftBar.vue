@@ -141,6 +141,11 @@ export default {
         ],
       },
       {
+        title: this.$t('components.setting'),
+        path: '/setting',
+        icon: 'icon-icon_shezhi',
+      },
+      {
         title: this.$t('components.general'),
         key: 'function',
         icon: 'icon-fenzuguanli',
@@ -153,11 +158,6 @@ export default {
           {
             title: this.$t('components.user'),
             path: '/users',
-            parentKey: 'function',
-          },
-          {
-            title: this.$t('components.setting'),
-            path: '/setting',
             parentKey: 'function',
           },
         ],
