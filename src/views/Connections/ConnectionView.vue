@@ -14,115 +14,114 @@
         </div>
       </div>
 
-      <el-tabs v-model="activeName" class="page-header-footer" @tab-click="handleTabClick">
-        <el-tab-pane :label="$t('Connections.basicInfo')" name="detail"></el-tab-pane>
-        <el-tab-pane :label="$t('Connections.subscriptions')" name="subscriptions"></el-tab-pane>
-      </el-tabs>
-
       <div v-if="!record.disconnected" class="page-header-top-start">
         <el-button type="danger" size="small" @click="handleDisconnect">{{ $t('Connections.disconnect') }}</el-button>
       </div>
     </page-header>
 
     <div class="app-wrapper">
-      <a-card v-if="activeName === 'detail'" class="detail-card">
-        <el-row :gutter="40">
-          <el-col :span="9">
+      <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
+
+        <el-tab-pane :label="$t('Connections.basicInfo')" name="detail">
+          <a-card v-if="activeName === 'detail'" class="detail-card">
+            <el-row :gutter="40">
+              <el-col :span="9">
+                <div class="emq-title">
+                  {{ $t('Connections.connectionInfo') }}
+                </div>
+
+                <ul class="field-info">
+                  <li class="field-info-item">
+                    <div class="field-title">{{ $t('Connections.accessPoint') }}:</div>
+                    <span class="field-value">{{ record.node }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">Client ID:</div>
+                    <span class="field-value">{{ record.client_id }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">Username:</div>
+                    <span class="field-value">{{ record.username }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">{{ $t('Connections.connectionAt') }}:</div>
+                    <span class="field-value">{{ record.connected_at }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">Address:</div>
+                    <span class="field-value">{{ record.ipaddress ? `${record.ipaddress}:` : '' }}{{ record.port }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">Clean Start:</div>
+                    <span class="field-value">{{ record.clean_start }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">keepalive:</div>
+                    <span class="field-value">{{ record.keepalive }}</span>
+                  </li>
+                </ul>
+              </el-col>
+              <el-col :span="9">
+                <div class="emq-title">
+                  {{ $t('Connections.protocolInfo') }}
+                </div>
+
+                <ul class="field-info">
+                  <li class="field-info-item">
+                    <div class="field-title">{{ $t('Connections.bridge') }}:</div>
+                    <span class="field-value">{{ record.is_bridge ? $t('Connections.yes') : $t('Connections.no') }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">{{ $t('Connections.protocolType') }}:</div>
+                    <span class="field-value">{{ record.proto_name }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">{{ $t('Connections.protocolVersion') }}:</div>
+                    <span class="field-value">{{ record.proto_ver }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">{{ $t('Connections.sslCert') }}:</div>
+                    <span class="field-value">{{ record.peercert }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">{{ $t('Connections.zone') }}:</div>
+                    <span class="field-value">{{ record.zone }}</span>
+                  </li>
+                </ul>
+              </el-col>
+            </el-row>
+          </a-card>
+        </el-tab-pane>
+
+        <el-tab-pane :label="$t('Connections.subscriptions')" name="subscriptions">
+          <a-card v-if="activeName === 'subscriptions'">
             <div class="emq-title">
-              {{ $t('Connections.connectionInfo') }}
+              {{ $t('Connections.currentSubscription') }}
+
+              <div class="subscriptions-header">
+                <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">{{ $t('Connections.refresh') }}
+                </el-button>
+                <el-button plain size="mini" icon="el-icon-plus" @click="handlePreAdd">{{ $t('Connections.addASubscription')
+                }}
+                </el-button>
+              </div>
             </div>
+            <el-table :data="subscriptions" class="data-list">
+              <el-table-column prop="topic" min-width="110px" show-overflow-tooltip label="Topic"></el-table-column>
+              <el-table-column prop="qos" min-width="110px" label="QoS"></el-table-column>
+              <el-table-column prop="node" min-width="80px" :label="$t('Connections.node')"></el-table-column>
+              <el-table-column prop="client_id" width="100px">
+                <template slot-scope="{ row }">
+                  <el-button type="dashed" size="mini" @click="handleUnSubscription(row)">
+                    {{ $t('Connections.unsubscribe') }}
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </a-card>
+        </el-tab-pane>
 
-            <ul class="field-info">
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Connections.accessPoint') }}:</div>
-                <span class="field-value">{{ record.node }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">Client ID:</div>
-                <span class="field-value">{{ record.client_id }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">Username:</div>
-                <span class="field-value">{{ record.username }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Connections.connectionAt') }}:</div>
-                <span class="field-value">{{ record.connected_at }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">Address:</div>
-                <span class="field-value">{{ record.ipaddress ? `${record.ipaddress}:` : '' }}{{ record.port }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">Clean Start:</div>
-                <span class="field-value">{{ record.clean_start }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">keepalive:</div>
-                <span class="field-value">{{ record.keepalive }}</span>
-              </li>
-            </ul>
-          </el-col>
-          <el-col :span="9">
-            <div class="emq-title">
-              {{ $t('Connections.protocolInfo') }}
-            </div>
-
-            <ul class="field-info">
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Connections.bridge') }}:</div>
-                <span class="field-value">{{ record.is_bridge ? $t('Connections.yes') : $t('Connections.no') }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Connections.protocolType') }}:</div>
-                <span class="field-value">{{ record.proto_name }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Connections.protocolVersion') }}:</div>
-                <span class="field-value">{{ record.proto_ver }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Connections.sslCert') }}:</div>
-                <span class="field-value">{{ record.peercert }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Connections.zone') }}:</div>
-                <span class="field-value">{{ record.zone }}</span>
-              </li>
-            </ul>
-          </el-col>
-        </el-row>
-      </a-card>
-
-
-      <a-card v-if="activeName === 'subscriptions'">
-        <div class="emq-title">
-          {{ $t('Connections.currentSubscription') }}
-
-          <div class="subscriptions-header">
-            <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">{{ $t('Connections.refresh') }}
-            </el-button>
-            <el-button plain size="mini" icon="el-icon-plus" @click="handlePreAdd">{{ $t('Connections.addASubscription')
-            }}
-            </el-button>
-          </div>
-        </div>
-
-
-        <el-table :data="subscriptions" class="data-list">
-          <el-table-column prop="topic" min-width="110px" show-overflow-tooltip label="Topic"></el-table-column>
-          <el-table-column prop="qos" min-width="110px" label="QoS"></el-table-column>
-          <el-table-column prop="node" min-width="80px" :label="$t('Connections.node')"></el-table-column>
-          <el-table-column prop="client_id" width="100px">
-            <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="handleUnSubscription(row)">
-                {{ $t('Connections.unsubscribe') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-
-      </a-card>
+      </el-tabs>
     </div>
 
     <create-subscribe
@@ -270,42 +269,12 @@ export default {
     float: right;
   }
 
-  .search-wrapper {
-    width: 330px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .el-button {
-      margin-left: 12px;
-    }
-
-    clear: both;
-  }
-
   .data-list {
     clear: both;
   }
 
   .page-header {
-    height: 130px;
-  }
-
-  .page-header-footer {
-    position: absolute;
-    bottom: -14px;
-
-    .el-tabs__item {
-      font-weight: normal;
-
-      &.is-active {
-        font-weight: 500;
-      }
-    }
-
-    .el-tabs__nav-wrap::after {
-      height: 0;
-    }
+    min-height: 100px;
   }
 }
 </style>

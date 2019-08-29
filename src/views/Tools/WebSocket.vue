@@ -3,11 +3,15 @@
     <page-header
       back-title="WebSocket"
     >
+    </page-header>
+
+    <div class="app-wrapper">
+
       <el-tabs
         v-model="activeTab"
-        class="page-header-footer"
-        addable
-        @edit="handleTabEdit"
+        type="card"
+        :before-leave="handleBeforeLeave"
+        @tab-remove="handleTabEdit"
       >
         <el-tab-pane
           v-for="(item, i) in tabs"
@@ -26,10 +30,17 @@
             </el-badge>
           </span>
         </el-tab-pane>
+        <el-tab-pane
+          key="add"
+          class="add-btn"
+          name="add"
+        >
+          <span slot="label">
+            <i class="el-icon-plus"></i>
+          </span>
+        </el-tab-pane>
       </el-tabs>
-    </page-header>
 
-    <div class="app-wrapper">
       <web-socket-item
         v-for="(item, i) in tabs"
         v-show="item.name === activeTab"
@@ -37,6 +48,7 @@
         :key="i"
         :message-count.sync="item.messageCount"
       ></web-socket-item>
+
     </div>
 
   </div>
@@ -81,8 +93,16 @@ export default {
   },
 
   methods: {
-    handleTabEdit(targetName, action) {
-      if (action === 'add') {
+    // 活动标签切换时触发
+    handleBeforeLeave(currentName) {
+      if (currentName === 'add') {
+        this.handleTabEdit('add')
+        return false
+      }
+      return true
+    },
+    handleTabEdit(targetName) {
+      if (targetName === 'add') {
         if (this.tabs.length > 6) {
           this.$message.error(this.$t('Tools.maxSix'))
           return
@@ -114,7 +134,6 @@ export default {
       }
     },
   },
-
 }
 </script>
 
@@ -123,31 +142,18 @@ export default {
 .websocket {
   position: relative;
 
-  .page-header {
-    height: 130px;
+  .el-tabs {
+    .el-icon-plus {
+      font-weight: 600;
+    }
   }
 
   .el-badge__content {
+    background: #f56c6c;
     transform: scale(0.8);
+    border: none;
     &.is-fixed {
-      top: -3px !important;
-      right: -6px !important;
-    }
-  }
-
-  .page-header-footer {
-    position: absolute;
-    bottom: -14px;
-
-    .el-tabs__item {
-      .el-icon-close {
-        position: relative;
-        top: 2px;
-      }
-    }
-
-    .el-tabs__nav-wrap::after {
-      height: 0;
+      right: -14px;
     }
   }
 }

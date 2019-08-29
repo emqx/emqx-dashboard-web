@@ -618,6 +618,7 @@ export default {
   .emq-list-card {
     border-radius: 2px;
     box-shadow: none;
+    border: none;
     .el-card__body {
       padding: 24px 32px;
     }

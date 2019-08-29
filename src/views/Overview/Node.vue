@@ -14,76 +14,79 @@
           </p>
         </div>
       </div>
-
-      <el-tabs v-model="activeName" class="page-header-footer" @tab-click="handleTabClick">
-        <el-tab-pane :label="$t('Overview.basicInfo')" name="basic"></el-tab-pane>
-        <el-tab-pane :label="$t('Overview.metric')" name="metrics"></el-tab-pane>
-      </el-tabs>
     </page-header>
 
     <div class="app-wrapper">
-      <div v-if="activeName === 'basic'" class="card-wrapper">
-        <a-card class="emq-list-card">
-          <div class="emq-title">{{ $t('Overview.basic') }}</div>
-          <node-basic-card :value="record" :show-button="false"></node-basic-card>
-        </a-card>
+      <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
 
-        <a-card class="emq-list-card">
-          <div class="emq-title">
-            {{ $t('Overview.listener') }}
-            <div class="sub-title">
-              {{ $t('Overview.ListeningPorts') }}
-            </div>
+        <el-tab-pane :label="$t('Overview.basicInfo')" name="basic">
+          <div class="card-wrapper">
+            <a-card class="emq-list-card">
+              <div class="emq-title">{{ $t('Overview.basic') }}</div>
+              <node-basic-card :value="record" :show-button="false"></node-basic-card>
+            </a-card>
+
+            <a-card class="emq-list-card">
+              <div class="emq-title">
+                {{ $t('Overview.listener') }}
+                <div class="sub-title">
+                  {{ $t('Overview.ListeningPorts') }}
+                </div>
+              </div>
+
+              <el-table :data="listeners">
+                <el-table-column prop="protocol" min-width="100px" :label="$t('Overview.listenerProtocol')"></el-table-column>
+                <el-table-column prop="listen_on" min-width="80px" :label="$t('Overview.listenerAddress')"></el-table-column>
+                <el-table-column prop="acceptors" min-width="60px" label="Acceptors"></el-table-column>
+                <el-table-column prop="current_conns" min-width="120px" :label="$t('Overview.connectCurrentAndMax')">
+                  <template slot-scope="{ row }">
+                    {{ row.current_conns }}/{{ row.max_conns }}
+                  </template>
+                </el-table-column>
+              </el-table>
+
+            </a-card>
           </div>
+        </el-tab-pane>
 
-          <el-table :data="listeners">
-            <el-table-column prop="protocol" min-width="100px" :label="$t('Overview.listenerProtocol')"></el-table-column>
-            <el-table-column prop="listen_on" min-width="80px" :label="$t('Overview.listenerAddress')"></el-table-column>
-            <el-table-column prop="acceptors" min-width="60px" label="Acceptors"></el-table-column>
-            <el-table-column prop="current_conns" min-width="120px" :label="$t('Overview.connectCurrentAndMax')">
-              <template slot-scope="{ row }">
-                {{ row.current_conns }}/{{ row.max_conns }}
-              </template>
-            </el-table-column>
-          </el-table>
+        <el-tab-pane :label="$t('Overview.metric')" name="metrics">
+          <div class="card-wrapper">
 
-        </a-card>
-      </div>
+            <a-card class="emq-list-card">
+              <div class="emq-title">
+                {{ $t('Overview.dataList') }}
+                <div class="sub-title">
+                  {{ $t('Overview.packetStatisticsOfNodes') }}
+                </div>
+              </div>
 
-      <div v-else-if="activeName === 'metrics'" class="card-wrapper">
+              <el-row :gutter="30">
+                <el-col :span="8">
+                  <el-table :data="metricsData.packets">
+                    <el-table-column prop="key" :label="$t('Overview.mqttPackages')" min-width="100px"></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                  </el-table>
+                </el-col>
 
-        <a-card class="emq-list-card">
-          <div class="emq-title">
-            {{ $t('Overview.dataList') }}
-            <div class="sub-title">
-              {{ $t('Overview.packetStatisticsOfNodes') }}
-            </div>
+                <el-col :span="8">
+                  <el-table :data="metricsData.messages">
+                    <el-table-column prop="key" :label="$t('Overview.messageNumber')" min-width="100px"></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                  </el-table>
+                </el-col>
+
+                <el-col :span="8">
+                  <el-table :data="metricsData.bytes">
+                    <el-table-column prop="key" :label="$t('Overview.traffic')" min-width="100px"></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                  </el-table>
+                </el-col>
+              </el-row>
+            </a-card>
           </div>
+        </el-tab-pane>
 
-          <el-row :gutter="30">
-            <el-col :span="8">
-              <el-table :data="metricsData.packets">
-                <el-table-column prop="key" :label="$t('Overview.mqttPackages')" min-width="100px"></el-table-column>
-                <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
-              </el-table>
-            </el-col>
-
-            <el-col :span="8">
-              <el-table :data="metricsData.messages">
-                <el-table-column prop="key" :label="$t('Overview.messageNumber')" min-width="100px"></el-table-column>
-                <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
-              </el-table>
-            </el-col>
-
-            <el-col :span="8">
-              <el-table :data="metricsData.bytes">
-                <el-table-column prop="key" :label="$t('Overview.traffic')" min-width="100px"></el-table-column>
-                <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
-              </el-table>
-            </el-col>
-          </el-row>
-        </a-card>
-      </div>
+      </el-tabs>
 
     </div>
   </div>
@@ -208,10 +211,6 @@ export default {
     .el-tabs__nav-wrap::after {
       height: 0;
     }
-  }
-
-  .page-header-content-view {
-    height: 60px;
   }
 
   .card-wrapper {
