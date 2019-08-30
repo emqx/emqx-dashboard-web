@@ -142,10 +142,22 @@ export default {
 .websocket {
   position: relative;
 
-  .el-tabs {
-    .el-icon-plus {
-      font-weight: 600;
-    }
+  .el-tabs--card > .el-tabs__header
+  .el-tabs__item .el-icon-close, .el-icon-plus {
+    font-weight: 600;
+    overflow: visible;
+  }
+
+  .el-tabs--top.el-tabs--border-card>.el-tabs__header .el-tabs__item:nth-child(2),
+  .el-tabs--top.el-tabs--card>.el-tabs__header .el-tabs__item:nth-child(2),
+  .el-tabs--top .el-tabs--left>.el-tabs__header .el-tabs__item:nth-child(2),
+  .el-tabs--top .el-tabs--right>.el-tabs__header .el-tabs__item:nth-child(2) {
+    padding: 0 13px;
+  }
+
+  #tab-add.el-tabs__item {
+    width: 43px;
+    padding: 0 13px;
   }
 
   .el-badge__content {
@@ -154,6 +166,34 @@ export default {
     border: none;
     &.is-fixed {
       right: -14px;
+    }
+  }
+}
+
+/* padding: 0 13px; 解决hover时的字体偏移 */
+html:lang(zh) {
+  .websocket {
+    .el-tabs {
+      .el-tabs__item {
+        width: 86px;
+        padding: 0 13px;
+        &.is-active {
+          padding: 0 13px;
+        }
+      }
+    }
+  }
+}
+html:lang(en) {
+  .websocket {
+    .el-tabs {
+      .el-tabs__item {
+        width: 76px;
+        padding: 0 13px;
+        &.is-active {
+          padding: 0 13px;
+        }
+      }
     }
   }
 }

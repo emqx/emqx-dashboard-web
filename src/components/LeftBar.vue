@@ -97,11 +97,6 @@ export default {
         icon: 'icon-zuzhiqunzu',
       },
       {
-        title: this.$t('components.schema'),
-        path: '/schemas',
-        icon: 'icon-ceshishenqing',
-      },
-      {
         title: this.$t('components.rule'),
         key: 'rules',
         icon: 'icon-guizeyinqing',
@@ -114,6 +109,11 @@ export default {
           {
             title: this.$t('components.resources'),
             path: '/resources',
+            parentKey: 'rules',
+          },
+          {
+            title: this.$t('components.schema'),
+            path: '/schemas',
             parentKey: 'rules',
           },
         ],
