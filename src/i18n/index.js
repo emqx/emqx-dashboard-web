@@ -11,7 +11,17 @@ const lang = {
 }
 
 const model = [
-  'Alerts', 'Base', 'components', 'Connections', 'General', 'Overview', 'Plugins', 'RuleEngine', 'Tools', 'Schemas',
+  'Alerts',
+  'Base',
+  'components',
+  'Connections',
+  'General',
+  'Overview',
+  'Plugins',
+  'RuleEngine',
+  'Tools',
+  'Schemas',
+  'Settings',
 ]
 model.forEach((key) => {
   // eslint-disable-next-line

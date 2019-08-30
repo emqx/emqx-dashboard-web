@@ -41,6 +41,10 @@ export default
     zh: '复制成功！',
     en: 'Copied!',
   },
+  warning: {
+    zh: '警告',
+    en: 'Warning',
+  },
   view: {
     zh: '详情',
     en: 'View',

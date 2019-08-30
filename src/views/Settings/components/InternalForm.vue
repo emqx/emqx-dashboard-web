@@ -3,7 +3,7 @@
 
     <el-form
       ref="record"
-      class="settings-form"
+      class="basic-config-form"
       size="small"
       label-suffix=":"
       label-width="225px"
@@ -21,7 +21,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.enable_acl') }}
+        {{ $t('Settings.enable_acl') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="acl_nomatch" prop="acl_nomatch">
@@ -33,7 +33,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.acl_nomatch') }}
+        {{ $t('Settings.acl_nomatch') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="acl_deny_action" prop="acl_deny_action">
@@ -45,7 +45,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.acl_deny_action') }}
+        {{ $t('Settings.acl_deny_action') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="allow_anonymous" prop="allow_anonymous">
@@ -57,7 +57,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.allow_anonymous') }}
+        {{ $t('Settings.allow_anonymous') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="enable_stats" prop="enable_stats">
@@ -69,7 +69,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.enable_stats') }}
+        {{ $t('Settings.enable_stats') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="use_username_as_clientid" prop="use_username_as_clientid">
@@ -81,39 +81,39 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.use_username_as_clientid') }}
+        {{ $t('Settings.use_username_as_clientid') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_subscriptions" prop="max_subscriptions">
-          <el-input v-model="record.max_subscriptions" class="settings-input" placeholder="0"></el-input>
+          <el-input v-model="record.max_subscriptions" class="form-item-input" placeholder="0"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.max_subscriptions') }}
+        {{ $t('Settings.max_subscriptions') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_packet_size" prop="max_packet_size">
-          <el-input v-model="record.max_packet_size" class="settings-input" placeholder="1048576"></el-input>
+          <el-input v-model="record.max_packet_size" class="form-item-input" placeholder="1048576"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.max_packet_size') }}
+        {{ $t('Settings.max_packet_size') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_clientid_len" prop="max_clientid_len">
-          <el-input v-model="record.max_clientid_len" class="settings-input" placeholder="65535"></el-input>
+          <el-input v-model="record.max_clientid_len" class="form-item-input" placeholder="65535"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.max_clientid_len') }}
+        {{ $t('Settings.max_clientid_len') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_topic_levels" prop="max_topic_levels">
-          <el-input v-model="record.max_topic_levels" class="settings-input" placeholder="0"></el-input>
+          <el-input v-model="record.max_topic_levels" class="form-item-input" placeholder="0"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.max_topic_levels') }}
+        {{ $t('Settings.max_topic_levels') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_qos_allowed" prop="max_qos_allowed">
@@ -125,15 +125,15 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.max_qos_allowed') }}
+        {{ $t('Settings.max_qos_allowed') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_topic_alias" prop="max_topic_alias">
-          <el-input v-model="record.max_topic_alias" class="settings-input" placeholder="0"></el-input>
+          <el-input v-model="record.max_topic_alias" class="form-item-input" placeholder="0"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.max_topic_alias') }}
+        {{ $t('Settings.max_topic_alias') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="retain_available" prop="retain_available">
@@ -145,7 +145,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.retain_available') }}
+        {{ $t('Settings.retain_available') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="wildcard_subscription" prop="wildcard_subscription">
@@ -157,7 +157,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.wildcard_subscription') }}
+        {{ $t('Settings.wildcard_subscription') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="shared_subscription" prop="shared_subscription">
@@ -169,7 +169,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.shared_subscription') }}
+        {{ $t('Settings.shared_subscription') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="ignore_loop_deliver" prop="ignore_loop_deliver">
@@ -181,7 +181,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.ignore_loop_deliver') }}
+        {{ $t('Settings.ignore_loop_deliver') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="mqueue_store_qos0" prop="mqueue_store_qos0">
@@ -193,47 +193,47 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.mqueue_store_qos0') }}
+        {{ $t('Settings.mqueue_store_qos0') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="flapping_banned_expiry_interval" prop="flapping_banned_expiry_interval">
-          <el-input v-model="record.flapping_banned_expiry_interval" class="settings-input" placeholder="1h"></el-input>
+          <el-input v-model="record.flapping_banned_expiry_interval" class="form-item-input" placeholder="1h"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.flapping_banned_expiry_interval') }}
+        {{ $t('Settings.flapping_banned_expiry_interval') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="flapping_threshold" prop="flapping_threshold">
-          <el-input v-model="record.flapping_threshold" disabled class="settings-input"></el-input>
+          <el-input v-model="record.flapping_threshold" disabled class="form-item-input"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.flapping_threshold') }}
+        {{ $t('Settings.flapping_threshold') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_awaiting_rel" prop="max_awaiting_rel">
-          <el-input v-model="record.max_awaiting_rel" class="settings-input" placeholder="100"></el-input>
+          <el-input v-model="record.max_awaiting_rel" class="form-item-input" placeholder="100"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.max_awaiting_rel') }}
+        {{ $t('Settings.max_awaiting_rel') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_inflight" prop="max_inflight">
-          <el-input v-model="record.max_inflight" class="settings-input" placeholder="32"></el-input>
+          <el-input v-model="record.max_inflight" class="form-item-input" placeholder="32"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.max_inflight') }}
+        {{ $t('Settings.max_inflight') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="max_mqueue_len" prop="max_mqueue_len">
-          <el-input v-model="record.max_mqueue_len" class="settings-input" placeholder="1000"></el-input>
+          <el-input v-model="record.max_mqueue_len" class="form-item-input" placeholder="1000"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.max_mqueue_len') }}
+        {{ $t('Settings.max_mqueue_len') }}
       </el-col>
       <el-col :span="12">
         <el-form-item label="enable_flapping_detect" prop="enable_flapping_detect">
@@ -245,7 +245,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12" class="form-item-desc">
-        {{ $t('General.enable_flapping_detect') }}
+        {{ $t('Settings.enable_flapping_detect') }}
       </el-col>
     </el-form>
 
