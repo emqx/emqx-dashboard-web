@@ -35,7 +35,7 @@ export default {
     // Whether to display value points
     showSymbol: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     // Whether it is a ladder diagram and ladder diagram type
     stepType: {
@@ -105,7 +105,7 @@ export default {
   watch: {
     chartData: {
       deep: true,
-      handler: 'reDrawEchart',
+      handler: 'drawChart',
     },
   },
 

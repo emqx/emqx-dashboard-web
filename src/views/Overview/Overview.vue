@@ -327,13 +327,14 @@ export default {
     this.pageLoading = true
     this.loadData()
     this.loadLicenseData()
-    clearInterval(this.timer)
-    this.timer = setInterval(this.loadData, 10 * 1000)
+    clearInterval(this.timerData)
+    this.timerData = setInterval(this.loadData, 10 * 1000)
     this.dataTypeChange()
   },
 
   beforeDestroy() {
-    clearInterval(this.timer)
+    clearInterval(this.timerData)
+    clearInterval(this.timerMetrics)
   },
 
   methods: {
@@ -348,14 +349,31 @@ export default {
       this.nodeName = this.nodeName || (this.nodes[0] || {}).name
     },
     dataTypeChange() {
+      clearInterval(this.timerMetrics)
       if (this.dataType === 'basic') {
         this.loadNodes()
       } else {
         this.loadMetricsLogData()
       }
     },
+    async setMetricsLogsRealTime() {
+      const data = await loadMetricsLog(false, this.dataType)
+      const currentData = this.metricLog[this.dataType]
+      this.metricTitles.forEach((key, index) => {
+        const nodeMetric = data[key]
+        const lastData = nodeMetric[nodeMetric.length - 1]
+        if (currentData[index].xData.length >= 120) {
+          currentData[index].xData.shift()
+          currentData[index].yData.shift()
+        }
+        currentData[index].xData.push(this._formatTime(lastData[0]))
+        currentData[index].yData.push(lastData[1])
+      })
+    },
+    _formatTime(time) {
+      return Moment(time).utcOffset(0).format('HH:mm:ss')
+    },
     async loadMetricsLogData() {
-      const _formatTime = time => Moment(time).utcOffset(0).format('HH:mm:ss')
       this.tableLoading = true
       try {
         const data = await loadMetricsLog(false, this.dataType)
@@ -364,10 +382,11 @@ export default {
         const currentData = this.metricLog[this.dataType]
         this.metricTitles.forEach((key, index) => {
           data[key].forEach((item) => {
-            currentData[index].xData.push(_formatTime(item[0]))
+            currentData[index].xData.push(this._formatTime(item[0]))
             currentData[index].yData.push(item[1])
           })
         })
+        this.timerMetrics = setInterval(this.setMetricsLogsRealTime, 60000)
       } catch (e) {
         console.error(e)
       } finally {

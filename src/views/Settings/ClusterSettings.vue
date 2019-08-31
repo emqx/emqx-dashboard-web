@@ -31,10 +31,10 @@
           <el-col :span="12">
             <el-form-item :label="$t('Settings.currentNode')">
               <el-row v-for="(node, index) in currentNodes" :key="index">
-                <el-col :class="['join-status', node.joined ? 'is-join' : 'not-join']" :span="10">
+                <el-col :class="['join-status', node.joined ? 'is-join' : 'not-join']" :span="14">
                   {{ node.name }}
                 </el-col>
-                <el-col :span="14">
+                <el-col :span="10">
                   <a
                     v-if="node.joined"
                     href="javascript:;"
