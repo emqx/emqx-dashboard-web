@@ -12,11 +12,11 @@
         :before-leave="handleBeforeLeave"
       >
         <el-tab-pane :label="$t('Settings.basic')" name="basic">
-          <basic-config ref="basicConfig"></basic-config>
+          <basic-config v-if="activeName === 'basic'" ref="basicConfig"></basic-config>
         </el-tab-pane>
 
         <el-tab-pane :label="$t('Settings.cluster')" name="cluster">
-          <cluster-settings ref="clusterSettings"></cluster-settings>
+          <cluster-settings v-if="activeName === 'cluster'" ref="clusterSettings"></cluster-settings>
         </el-tab-pane>
 
       </el-tabs>

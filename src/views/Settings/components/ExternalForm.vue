@@ -418,9 +418,6 @@ export default {
       }
       this.$emit('update', 'external', this.record)
     },
-    initForm() {
-      this.$refs.record.clearValidate()
-    },
   },
 }
 </script>

@@ -8,6 +8,7 @@
     <el-tabs v-model="settingType">
       <el-tab-pane label="external" name="external">
         <external-form
+          v-if="settingType === 'external'"
           ref="externalForm"
           :record="externalRecord"
           :rules="rules"
@@ -22,6 +23,7 @@
 
       <el-tab-pane label="internal" name="internal">
         <internal-form
+          v-if="settingType === 'internal'"
           ref="internalForm"
           :record="internalRecord"
           :rules="rules"

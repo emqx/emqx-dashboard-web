@@ -245,11 +245,6 @@ export default {
           server: { required: true, message: this.$t('Schemas.server_required') },
           resource_id: { required: true, message: this.$t('Schemas.resource_required') },
         },
-        parser_opts: {
-          '3rd_party_opts': { required: true, message: this.$t('Schemas.3rd_party_opts_required') },
-          connect_timeout: { required: true, message: this.$t('Schemas.connect_timeout_required') },
-          parse_timeout: { required: true, message: this.$t('Schemas.parse_timeout_required') },
-        },
       },
       availableResources: [],
     }
