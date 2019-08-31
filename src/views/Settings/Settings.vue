@@ -12,11 +12,11 @@
         :before-leave="handleBeforeLeave"
       >
         <el-tab-pane :label="$t('Settings.basic')" name="basic">
-          <basic-config ref="basicConfig"></basic-config>
+          <basic-config v-if="activeName === 'basic'" ref="basicConfig"></basic-config>
         </el-tab-pane>
 
         <el-tab-pane :label="$t('Settings.cluster')" name="cluster">
-          <cluster-settings ref="clusterSettings"></cluster-settings>
+          <cluster-settings v-if="activeName === 'cluster'" ref="clusterSettings"></cluster-settings>
         </el-tab-pane>
 
       </el-tabs>
@@ -70,3 +70,32 @@ export default {
   },
 }
 </script>
+
+
+<style lang="scss">
+.settings {
+  .el-form {
+    margin-top: 32px;
+
+    .el-input.is-disabled .el-input__inner {
+      color: #676767;
+    }
+
+    .form-item-desc {
+      padding: 5px 0;
+      min-height: 55px;
+      font-size: 13px;
+      color: #676767;
+    }
+
+    .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before,
+    .el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap > .el-form-item__label:before {
+      color: transparent;
+    }
+  }
+
+  .button-group__center {
+    margin-top: 20px;
+  }
+}
+</style>

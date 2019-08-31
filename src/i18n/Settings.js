@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export default {
   basic: {
     zh: '基础设置',
@@ -7,6 +9,15 @@ export default {
     zh: '集群设置',
     en: 'Cluster',
   },
+  clusterInfo: {
+    zh: '集群信息',
+    en: 'Cluster Info',
+  },
+  zone: {
+    zh: 'Zone 列表',
+    en: 'Zone',
+  },
+  // 基础设置字段
   errorRange: {
     zh: '填写错误：数值范围为 {min} - {max}',
     en: 'Fill in the error: the number range is {min} - {max}',
@@ -190,5 +201,134 @@ export default {
   shared_subscription: {
     zh: '是否启用共享订阅',
     en: 'Whether the Server supports MQTT Shared Subscriptions',
+  },
+  // 集群设置字段
+  invite: {
+    zh: '邀请',
+    en: 'Invite',
+  },
+  inviteSuccess: {
+    zh: '邀请成功',
+    en: 'Invite Success',
+  },
+  clusterType: {
+    zh: '集群方式',
+    en: 'Cluster Type',
+  },
+  currentNode: {
+    zh: '当前节点',
+    en: 'Current Node',
+  },
+  nodeRequired: {
+    zh: '请输入节点',
+    en: 'Node is required',
+  },
+  dnsName: {
+    zh: 'DNS 名称',
+    en: 'DNS',
+  },
+  app: {
+    zh: '节点前缀',
+    en: 'Node Prefix',
+  },
+  app_desc: {
+    zh: '用于自动使用 IP 地址构造节点名称如：${name}@127.0.0.1',
+    en: 'Used to automatically construct a node name using an IP address: ${name}@127.0.0.1',
+  },
+  addr: {
+    zh: '组播地址',
+    en: 'Multicast Address',
+  },
+  ports: {
+    zh: '端口列表',
+    en: 'Ports',
+  },
+  iface: {
+    zh: '多播地址',
+    en: 'Iface',
+  },
+  ttl: {
+    zh: '多播 TTL',
+    en: 'TTL',
+  },
+  loop: {
+    zh: '循环多播',
+    en: 'Loop',
+  },
+  server: {
+    zh: 'Etcd 服务器',
+    en: 'Etcd Server',
+  },
+  prefix: {
+    zh: '路径前缀',
+    en: 'Path Prefix',
+  },
+  prefix_desc: {
+    zh: '用于构造节点路径，路径为 v2/keys/<prefix>/<cluster.name>/<node.name>',
+    en: 'Used to construct a node path with v2/keys/<prefix>/<cluster.name>/<node.name>',
+  },
+  apiserver: {
+    zh: 'k8s 服务器列表',
+    en: '',
+  },
+  service_name: {
+    zh: '服务器名称',
+    en: 'Service Name',
+  },
+  address_type: {
+    zh: '地址类型',
+    en: 'Address Type',
+  },
+  address_type_desc: {
+    zh: '用于从 k8s 服务中提取主机名',
+    en: 'Used to get hostname from the k8s service',
+  },
+  app_name: {
+    zh: '节点前缀',
+    en: 'App Name',
+  },
+  app_name_desc: {
+    zh: '用于构造节点名称',
+    en: 'Used to construct the node name',
+  },
+  namespace: {
+    zh: 'k8s 命名空间',
+    en: 'k8s Namespace',
+  },
+  suffix: {
+    zh: '主机后缀',
+    en: 'Suffix',
+  },
+  manual: {
+    zh: '手动集群',
+    en: 'Manual cluster',
+  },
+  dns: {
+    zh: 'DNS A 记录自动集群',
+    en: 'DNS A record automatic cluster',
+  },
+  static: {
+    zh: '静态节点列表自动集群',
+    en: 'Static node list automatic cluster',
+  },
+  mcast: {
+    zh: 'UDP 组播自动集群',
+    en: 'UDP multicast automatic cluster',
+  },
+  etcd: {
+    zh: '通过 etcd 自动集群',
+    en: 'By etcd automatic cluster',
+  },
+  k8s: {
+    zh: 'Kubernetes 服务自动集群',
+    en: 'Kubernetes service automatic cluster',
+  },
+  joined: {
+    zh: '已加入',
+    en: 'Joined',
+  },
+  notJoined: {
+    zh: '待加入',
+    en: 'Waiting to join',
   },
 }

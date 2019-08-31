@@ -2,40 +2,40 @@
   <a-card
     class="basic-config emq-list-card"
   >
-    <div class="basic-config-type">
-      <el-radio-group v-model="settingType" size="small" border>
-        <el-radio-button label="external">
-        </el-radio-button>
-        <el-radio-button label="internal">
-        </el-radio-button>
-      </el-radio-group>
-    </div>
 
-    <template v-if="settingType === 'external'">
-      <external-form
-        :record="externalRecord"
-        :rules="rules"
-        :btn-loading="saveLoading"
-        :cancel-disabled="disabled"
-        :cancel="cancel"
-        v-bind="allOptions"
-        @update="handleUpdate"
-      >
-      </external-form>
-    </template>
+    <div class="tabs-title">{{ $t('Settings.zone') }}</div>
 
-    <template v-if="settingType === 'internal'">
-      <internal-form
-        :record="internalRecord"
-        :rules="rules"
-        :btn-loading="saveLoading"
-        :cancel-disabled="disabled"
-        :cancel="cancel"
-        v-bind="allOptions"
-        @update="handleUpdate"
-      >
-      </internal-form>
-    </template>
+    <el-tabs v-model="settingType">
+      <el-tab-pane label="external" name="external">
+        <external-form
+          v-if="settingType === 'external'"
+          ref="externalForm"
+          :record="externalRecord"
+          :rules="rules"
+          :btn-loading="saveLoading"
+          :cancel-disabled="disabled"
+          :cancel="cancel"
+          v-bind="allOptions"
+          @update="handleUpdate"
+        >
+        </external-form>
+      </el-tab-pane>
+
+      <el-tab-pane label="internal" name="internal">
+        <internal-form
+          v-if="settingType === 'internal'"
+          ref="internalForm"
+          :record="internalRecord"
+          :rules="rules"
+          :btn-loading="saveLoading"
+          :cancel-disabled="disabled"
+          :cancel="cancel"
+          v-bind="allOptions"
+          @update="handleUpdate"
+        >
+        </internal-form>
+      </el-tab-pane>
+    </el-tabs>
 
   </a-card>
 </template>
@@ -333,30 +333,10 @@ export default {
 
 <style lang="scss">
 .basic-config {
-  .basic-config-form {
-    margin-top: 40px;
-    .form-item-desc {
-      min-height: 55px;
-      font-size: 13px;
-      color: #676767;
-    }
-
-    .form-item-input {
-      width: 60%;
-    }
-
-    .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before,
-    .el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap > .el-form-item__label:before {
-      color: transparent;
-    }
-  }
-
-  .button-group__center {
-    margin-top: 20px;
-  }
-
-  .el-select.emq-select {
-    width: 60%;
+  .tabs-title {
+    position: absolute;
+    right: 30px;
+    top: 36px;
   }
 }
 </style>
