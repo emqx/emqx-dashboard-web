@@ -326,6 +326,9 @@ export default {
       }
       this.$emit('update', 'internal', this.record)
     },
+    initForm() {
+      this.$refs.record.clearValidate()
+    },
   },
 }
 </script>
