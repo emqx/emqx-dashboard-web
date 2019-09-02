@@ -81,11 +81,21 @@ export default {
       color: #676767;
     }
 
+    .el-col {
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    .el-form-item {
+      margin-bottom: 0px;
+      flex: 1;
+    }
+
     .form-item-desc {
-      padding: 5px 0;
-      min-height: 55px;
       font-size: 13px;
       color: #676767;
+      flex: 1;
     }
 
     .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before,

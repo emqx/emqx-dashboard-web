@@ -58,15 +58,15 @@
             </el-radio-group>
 
             <el-radio-group v-model="category" size="mini" border @change="loadData">
-              <el-radio-button label="all">
-                {{ $t('Plugins.all') }}
-              </el-radio-button>
               <el-radio-button
                 v-for="item in typeFilterOption"
                 :key="item.value"
                 :label="item.value"
               >
                 {{ item.text }}
+              </el-radio-button>
+              <el-radio-button label="all">
+                {{ $t('Plugins.all') }}
               </el-radio-button>
             </el-radio-group>
           </div>
@@ -161,7 +161,7 @@ export default {
         backend: this.$t('Plugins.backend'),
         bridge: this.$t('Plugins.bridge'),
         protocol: this.$t('Plugins.protocol'),
-        feature: this.$t('Plugins.other'),
+        feature: this.$t('Plugins.feature'),
       },
       typeFilterOption: [],
       iconMap: {},
@@ -191,9 +191,9 @@ export default {
         backend: this.$t('Plugins.backend'),
         bridge: this.$t('Plugins.bridge'),
         protocol: this.$t('Plugins.protocol'),
-        feature: this.$t('Plugins.other'),
+        feature: this.$t('Plugins.feature'),
       }
-      return pluginTypes[type] || this.$t('Plugins.other')
+      return pluginTypes[type] || this.$t('Plugins.feature')
     },
     loadIcon() {
       const iconMap = {}
@@ -222,7 +222,7 @@ export default {
       return value === row.type
     },
     typeFormatter({ type }) {
-      return this.pluginTypes[type] || this.$t('Plugins.other')
+      return this.pluginTypes[type] || this.$t('Plugins.feature')
     },
     async loadData() {
       this.nodes = await loadNodes()

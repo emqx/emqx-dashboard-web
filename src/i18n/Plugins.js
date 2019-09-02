@@ -92,6 +92,10 @@ export default {
     zh: '协议',
     en: 'Protocol',
   },
+  feature: {
+    zh: '功能',
+    en: 'Feature',
+  },
   other: {
     zh: '其他',
     en: 'Other',

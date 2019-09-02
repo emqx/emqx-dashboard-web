@@ -12,7 +12,7 @@
 
     <div class="basic-info">
       <div class="title">
-        {{ record.sysdescr }}
+        <!-- {{ record.sysdescr }} -->
       </div>
 
       <el-row :gutter="20">
@@ -104,7 +104,6 @@
                 {{ record.load1 }} / {{ record.load5 }} / {{ record.load15 }}
               </span>
             </li>
-
 
           </ul>
         </el-col>

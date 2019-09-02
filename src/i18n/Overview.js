@@ -27,6 +27,10 @@ export default
     zh: '查看',
     en: 'View',
   },
+  viewMore: {
+    zh: '查看更多',
+    en: 'View More',
+  },
   systemTime: {
     zh: '系统时间',
     en: 'System Time',
