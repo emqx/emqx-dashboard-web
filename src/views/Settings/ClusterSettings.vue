@@ -27,8 +27,9 @@
         <el-col :span="12" class="form-item-desc">
           {{ descriptionDict[record.type] || '' }}
         </el-col>
+
         <template>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item :label="$t('Settings.currentNode')">
               <div v-for="(node, index) in currentNodes" :key="index">
                 <span :class="['join-status', node.joined ? 'is-join' : 'not-join']" :span="14">
@@ -36,10 +37,19 @@
                 </span>
                 <a
                   v-if="node.joined"
+                  class="node-oper"
                   href="javascript:;"
-                  @click="toDetails(node.name)"
+                  @click="toNodeDetails(node.name)"
                 >
                   {{ $t('Overview.view') }}
+                </a>
+                <a
+                  v-if="node.joined && currentNodes.length > 1 && record.type === 'manual'"
+                  class="node-oper danger"
+                  href="javascript:;"
+                  @click="removeNode(node.name)"
+                >
+                  {{ $t('Settings.remove') }}
                 </a>
                 <!-- static -->
                 <span
@@ -51,14 +61,12 @@
               </div>
             </el-form-item>
           </el-col>
-          <el-col :span="12" class="form-item-desc">
-          </el-col>
-
           <!-- manual -->
           <template v-if="record.type === 'manual'">
             <el-col :span="12">
               <el-form-item prop="config.node">
-                <el-input v-model="record.config.node"></el-input>
+                <el-input v-model="record.config.node" :placeholder="$t('Settings.nodeRequired')">
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12" class="form-item-desc">
@@ -67,7 +75,6 @@
               </a>
             </el-col>
           </template>
-
         </template>
 
         <!-- DNS -->
@@ -209,7 +216,9 @@
 
 
 <script>
-import { loadCluster, loadNodes, inviteNode } from '../../api/cluster'
+import {
+  loadCluster, loadNodes, inviteNode, forceLeaveNode,
+} from '../../api/cluster'
 
 export default {
   name: 'ClusterSettings',
@@ -219,11 +228,7 @@ export default {
       record: {
         config: {},
       },
-      rules: {
-        config: {
-          node: { required: true, message: this.$t('Settings.nodeRequired') },
-        },
-      },
+      rules: {},
       clusterTypes: [
         { label: this.$t('Settings.manual'), value: 'manual' },
         { label: this.$t('Settings.dns'), value: 'dns' },
@@ -260,13 +265,24 @@ export default {
         this.getCluster()
       }
     },
-    toDetails(name) {
+    toNodeDetails(name) {
       this.$router.push({
         path: '/monitor/node',
         query: {
           name,
         },
       })
+    },
+    removeNode(name) {
+      this.$confirm(this.$t('Settings.removeConfirm'), this.$t('Base.warning'), {
+        type: 'warning',
+      }).then(async () => {
+        const res = await forceLeaveNode(name)
+        if (res) {
+          this.$message.success(this.$t('Settings.removeSuccess'))
+          this.getCluster()
+        }
+      }).catch(() => {})
     },
     // Static 判断节点是否加入
     getNodes(currentNodes, seeds) {
@@ -322,6 +338,14 @@ export default {
     }
     .not-join__desc {
       color: #AFAFAF;
+    }
+    .node-oper {
+      & + .node-oper {
+        margin-left: 10px;
+      }
+      &.danger {
+        color: #f5222d;
+      }
     }
   }
 }

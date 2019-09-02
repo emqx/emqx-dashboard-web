@@ -1,7 +1,7 @@
 <template>
-  <pre ref="codeView" class="code-view">
-    <code :class="lang">{{ code }}</code>
-  </pre>
+  <div>
+    <pre ref="codeView" class="code-view"><code :class="lang">{{ code }}</code></pre>
+  </div>
 </template>
 
 
@@ -56,3 +56,13 @@ export default {
   },
 }
 </script>
+
+
+<style lang="scss">
+.code-view {
+  line-height: 1.3;
+  &.hljs {
+    padding: 20px;
+  }
+}
+</style>

@@ -46,6 +46,18 @@ export default {
     zh: '确认信息',
     en: 'Confirm',
   },
+  remove: {
+    zh: '移除',
+    en: 'Remove',
+  },
+  removeConfirm: {
+    zh: '是否移除该节点？',
+    en: 'This will remove the current node. Continue?',
+  },
+  removeSuccess: {
+    zh: '移除成功',
+    en: 'Remove Success',
+  },
   no: {
     zh: '不',
     en: 'NO',
@@ -220,8 +232,8 @@ export default {
     en: 'Current Node',
   },
   nodeRequired: {
-    zh: '请输入节点',
-    en: 'Node is required',
+    zh: '请输入节点名称',
+    en: 'Please enter the node name',
   },
   dnsName: {
     zh: 'DNS 名称',

@@ -40,4 +40,15 @@ export const inviteNode = async (data) => {
   }
 }
 
+// 集群移除节点
+export const forceLeaveNode = async (nodename) => {
+  try {
+    const res = await http.delete(`/cluster/force_leave/${nodename}`)
+    return res
+  } catch (error) {
+    console.error(error)
+    return false
+  }
+}
+
 export default {}
