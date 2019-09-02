@@ -63,6 +63,7 @@ export default {
   line-height: 1.3;
   &.hljs {
     padding: 20px;
+    border-radius: 2px;
   }
 }
 </style>

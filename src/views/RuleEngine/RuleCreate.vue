@@ -293,11 +293,11 @@ export default {
 
         SQLTest(data).then((res) => {
           this.testOutPut = JSON.stringify(res, null, 2)
-        }).catch((e) => {
-          if (e === 'SQL Not Match') {
+        }).catch((error) => {
+          if (error === 'SQL Not Match') {
             this.testOutPut = this.$t('RuleEngine.resultIsEmpty')
           } else {
-            this.testOutPut = this.$t('RuleEngine.checkForErrors')
+            this.testOutPut = `${this.$t('RuleEngine.checkForErrors')}:\n\n${error}`
           }
         })
       })
