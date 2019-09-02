@@ -30,27 +30,25 @@
         <template>
           <el-col :span="12">
             <el-form-item :label="$t('Settings.currentNode')">
-              <el-row v-for="(node, index) in currentNodes" :key="index">
-                <el-col :class="['join-status', node.joined ? 'is-join' : 'not-join']" :span="14">
+              <div v-for="(node, index) in currentNodes" :key="index">
+                <span :class="['join-status', node.joined ? 'is-join' : 'not-join']" :span="14">
                   {{ node.name }}
-                </el-col>
-                <el-col :span="10">
-                  <a
-                    v-if="node.joined"
-                    href="javascript:;"
-                    @click="toDetails(node.name)"
-                  >
-                    {{ $t('Overview.view') }}
-                  </a>
-                  <!-- static -->
-                  <span
-                    v-else-if="!node.joined && record.type === 'static'"
-                    class="not-join__desc"
-                  >
-                    {{ $t('Settings.notJoined') }}
-                  </span>
-                </el-col>
-              </el-row>
+                </span>
+                <a
+                  v-if="node.joined"
+                  href="javascript:;"
+                  @click="toDetails(node.name)"
+                >
+                  {{ $t('Overview.view') }}
+                </a>
+                <!-- static -->
+                <span
+                  v-else-if="!node.joined && record.type === 'static'"
+                  class="not-join__desc"
+                >
+                  {{ $t('Settings.notJoined') }}
+                </span>
+              </div>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc">
@@ -300,6 +298,8 @@ export default {
   }
   .cluster-form {
     .join-status {
+      display: inline-block;
+      min-width: 200px;
       &:not(.not-point)::before {
         content: '';
         display: inline-block;

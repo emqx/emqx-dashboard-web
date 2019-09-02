@@ -88,7 +88,7 @@ export default {
   },
   allow_anonymous: {
     zh: '如果未加载身份验证插件，则默认情况下允许匿名身份验证。建议在生产部署中禁用该选项！',
-    en: 'Allow anonymous authentication by default if no auth plugins loaded.Disable the option in production deployment!',
+    en: 'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
   },
   enable_stats: {
     zh: '启用连接状态统计，会降低部分性能',
@@ -96,7 +96,7 @@ export default {
   },
   use_username_as_clientid: {
     zh: '是否使用用户名替换客户端 ID',
-    en: 'Whether use username replace client id',
+    en: 'Whether use username replace clientid',
   },
   retry_interval: {
     zh: 'QoS 1/2 消息传递的重试间隔',
@@ -104,7 +104,7 @@ export default {
   },
   keepalive_backoff: {
     zh: 'MQTT keepalive 超时回退， keepalive * backoff * 2 时将断开连接',
-    en: 'The backoff for MQTT keepalive timeout. The broker will kick a connection out until Keepalive * backoff * 2 timeout',
+    en: 'The backoff for MQTT keepalive timeout. The broker will kick a connection out until keepalive * backoff * 2 timeout',
   },
   max_subscriptions: {
     zh: '允许的最大订阅数，0 表示无限制',
@@ -112,7 +112,7 @@ export default {
   },
   ignore_loop_deliver: {
     zh: '是否忽略消息循环传递，常用于消息桥接',
-    en: 'Whether to ignore loop delivery of messages (for mqtt v3.1.1)',
+    en: 'Whether to ignore loop delivery of messages (for MQTT v3.1.1)',
   },
   idle_timeout: {
     zh: 'MQTT 连接空闲超时',
@@ -128,7 +128,7 @@ export default {
   },
   flapping_threshold: {
     zh: '每分钟的状态更改次数，指定用于检测连接是否开始 flapping 的阈值',
-    en: 'The times of state change per min, specifying the threshold which is used to detect if the connection starts flapping',
+    en: 'The times of state change per minute, specifying the threshold which is used to detect if the connection starts flapping',
   },
   force_gc_policy: {
     zh: 'MQTT 连接/消息大小 GC 阈值',
@@ -175,12 +175,12 @@ export default {
     en: 'Maximum MQTT packet size allowed',
   },
   max_clientid_len: {
-    zh: 'MQTT clientId 的长度限制',
-    en: 'Maximum length of MQTT clientId allowed',
+    zh: 'MQTT clientid 的长度限制',
+    en: 'Maximum length of MQTT clientid allowed',
   },
   max_topic_levels: {
     zh: '主题层级限制，0 表示没有限制层级',
-    en: 'Maximum topic levels allowed. 0 means no limit',
+    en: 'Maximum topic levels allowed, 0 means no limit',
   },
   max_qos_allowed: {
     zh: '最大 QoS',
