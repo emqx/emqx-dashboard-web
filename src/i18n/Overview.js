@@ -28,7 +28,7 @@ export default
     en: 'View',
   },
   viewMore: {
-    zh: '查看更多',
+    zh: '查看详情',
     en: 'View More',
   },
   systemTime: {
@@ -74,6 +74,10 @@ export default
   monitor: {
     zh: '监控',
     en: 'Monitor',
+  },
+  nodeName: {
+    zh: '节点名称',
+    en: 'Node Name',
   },
   nodeData: {
     zh: '节点数据',

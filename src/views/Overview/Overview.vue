@@ -178,12 +178,12 @@
 
         <li class="item">
           <span class="key">{{ $t('Overview.issuedAt') }}:</span>
-          <div class="value broker">{{ license.issued_at }}</div>
+          <span class="value broker">{{ license.issued_at }}</span>
         </li>
 
         <li class="item">
           <span class="key">{{ $t('Overview.expireAt') }}:</span>
-          <div class="value broker">{{ license.expiry_at }}</div>
+          <span class="value broker">{{ license.expiry_at }}</span>
         </li>
       </ul>
 
@@ -328,7 +328,10 @@ export default {
     this.loadData()
     this.loadLicenseData()
     clearInterval(this.timerData)
-    this.timerData = setInterval(this.loadData, 10 * 1000)
+    this.timerData = setInterval(() => {
+      this.loadData()
+      this.loadNodes()
+    }, 10 * 1000)
     this.dataTypeChange()
   },
 
@@ -344,10 +347,6 @@ export default {
         () => ({ xData: [], yData: [] }),
       )
     },
-    async loadNodes() {
-      this.nodes = await loadNodesApi()
-      this.nodeName = this.nodeName || (this.nodes[0] || {}).name
-    },
     dataTypeChange() {
       clearInterval(this.timerMetrics)
       if (this.dataType === 'basic') {
@@ -356,7 +355,11 @@ export default {
         this.loadMetricsLogData()
       }
     },
-    async setMetricsLogsRealTime() {
+    async loadNodes() {
+      this.nodes = await loadNodesApi()
+      this.nodeName = this.nodeName || (this.nodes[0] || {}).name
+    },
+    async setMetricsChartRealTime() {
       const data = await loadMetricsLog(false, this.dataType)
       const currentData = this.metricLog[this.dataType]
       this.metricTitles.forEach((key, index) => {
@@ -371,7 +374,7 @@ export default {
       })
     },
     _formatTime(time) {
-      return Moment(time).utcOffset(0).format('HH:mm:ss')
+      return Moment(time).utcOffset(0).format('HH:mm')
     },
     async loadMetricsLogData() {
       this.tableLoading = true
@@ -386,7 +389,7 @@ export default {
             currentData[index].yData.push(item[1])
           })
         })
-        this.timerMetrics = setInterval(this.setMetricsLogsRealTime, 60000)
+        this.timerMetrics = setInterval(this.setMetricsChartRealTime, 60000)
       } catch (e) {
         console.error(e)
       } finally {
@@ -417,12 +420,12 @@ export default {
         return
       }
       this.currentMetrics = state
-      this.setCurrentMetricsLogs(state)
+      this.setCurrentMetricsLogsRealtime(state)
     },
     getNow() {
       return Moment().format('HH:mm:ss')
     },
-    setCurrentMetricsLogs(state = {}) {
+    setCurrentMetricsLogsRealtime(state = {}) {
       ['received', 'sent', 'subscription'].forEach((key) => {
         this.currentMetricsLogs[key] = this.currentMetricsLogs[key] || { x: [], y: [] }
         const currentValue = state[key] || 0
@@ -445,11 +448,6 @@ export default {
 .overview {
   .status-count {
     text-align: center;
-  }
-
-  .node-basic-card {
-    max-width: 1200px;
-    height: 364px;
   }
 
   .flux-wrapper {
