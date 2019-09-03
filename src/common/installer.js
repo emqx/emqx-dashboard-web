@@ -8,6 +8,7 @@ import 'ant-design-vue/lib/skeleton/style'
 import 'ant-design-vue/lib/breadcrumb/style'
 
 import EmqSelect from '@/components/EmqSelect'
+import PageHeader from '@/components/PageHeader'
 
 export default (Vue) => {
   Vue.component(Drawer.name, Drawer)
@@ -18,4 +19,5 @@ export default (Vue) => {
   Vue.component(Breadcrumb.Item.name, Breadcrumb.Item)
 
   Vue.component(EmqSelect.name, EmqSelect)
+  Vue.component(PageHeader.name, PageHeader)
 }

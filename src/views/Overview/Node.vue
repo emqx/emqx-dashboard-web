@@ -1,125 +1,93 @@
 <template>
   <div class="node">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('Overview.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('Overview.nodeData') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-title-view">
-          <div class="title">{{ name }}</div>
-        </div>
-
-        <div class="page-header-content-view">
-          <div class="content">
-            <p class="description">
-              {{ $t('Overview.currentNodeInfo') }}
-            </p>
-          </div>
-        </div>
-
-
-        <el-tabs v-model="activeName" class="page-header-footer" @tab-click="handleTabClick">
-          <el-tab-pane :label="$t('Overview.basicInfo')" name="basic"></el-tab-pane>
-          <el-tab-pane :label="$t('Overview.metric')" name="metrics"></el-tab-pane>
-          <el-tab-pane :label="$t('Overview.configuration')" name="config"></el-tab-pane>
-        </el-tabs>
-
+    <page-header
+      :back-title="$t('Overview.nodeData')"
+    >
+      <div class="page-header-title-view">
+        <div class="title">{{ name }}</div>
       </div>
-    </div>
+
+      <div class="page-header-content-view">
+        <div class="content">
+          <p class="description">
+            {{ $t('Overview.currentNodeInfo') }}
+          </p>
+        </div>
+      </div>
+    </page-header>
 
     <div class="app-wrapper">
-      <div v-if="activeName === 'basic'" class="card-wrapper">
-        <a-card class="emq-list-card">
-          <div class="emq-title">{{ $t('Overview.basic') }}</div>
-          <node-basic-card :value="record" :show-button="false"></node-basic-card>
-        </a-card>
+      <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
 
-        <a-card class="emq-list-card">
-          <div class="emq-title">
-            {{ $t('Overview.listener') }}
-            <div class="sub-title">
-              {{ $t('Overview.ListeningPorts') }}
-            </div>
+        <el-tab-pane :label="$t('Overview.basicInfo')" name="basic">
+          <div class="card-wrapper">
+            <a-card class="emq-list-card">
+              <div class="emq-title">{{ $t('Overview.basic') }}</div>
+              <node-basic-card :value="record" :show-button="false"></node-basic-card>
+            </a-card>
+
+            <a-card class="emq-list-card">
+              <div class="emq-title">
+                {{ $t('Overview.listener') }}
+                <div class="sub-title">
+                  {{ $t('Overview.ListeningPorts') }}
+                </div>
+              </div>
+
+              <el-table :data="listeners">
+                <el-table-column prop="protocol" min-width="100px" :label="$t('Overview.listenerProtocol')"></el-table-column>
+                <el-table-column prop="listen_on" min-width="80px" :label="$t('Overview.listenerAddress')"></el-table-column>
+                <el-table-column prop="acceptors" min-width="60px" label="Acceptors"></el-table-column>
+                <el-table-column prop="current_conns" min-width="120px" :label="$t('Overview.connectCurrentAndMax')">
+                  <template slot-scope="{ row }">
+                    {{ row.current_conns }}/{{ row.max_conns }}
+                  </template>
+                </el-table-column>
+              </el-table>
+
+            </a-card>
           </div>
+        </el-tab-pane>
 
-          <el-table :data="listeners">
-            <el-table-column prop="protocol" min-width="100px" :label="$t('Overview.listenerProtocol')"></el-table-column>
-            <el-table-column prop="listen_on" min-width="80px" :label="$t('Overview.listenerAddress')"></el-table-column>
-            <el-table-column prop="acceptors" min-width="60px" label="Acceptors"></el-table-column>
-            <el-table-column prop="current_conns" min-width="120px" :label="$t('Overview.connectCurrentAndMax')">
-              <template slot-scope="{ row }">
-                {{ row.current_conns }}/{{ row.max_conns }}
-              </template>
-            </el-table-column>
-          </el-table>
+        <el-tab-pane :label="$t('Overview.metric')" name="metrics">
+          <div class="card-wrapper">
 
-        </a-card>
-      </div>
+            <a-card class="emq-list-card">
+              <div class="emq-title">
+                {{ $t('Overview.dataList') }}
+                <div class="sub-title">
+                  {{ $t('Overview.packetStatisticsOfNodes') }}
+                </div>
+              </div>
 
-      <div v-else-if="activeName === 'metrics'" class="card-wrapper">
+              <el-row :gutter="30">
+                <el-col :span="8">
+                  <el-table :data="metricsData.packets">
+                    <el-table-column prop="key" :label="$t('Overview.mqttPackages')" min-width="100px"></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                  </el-table>
+                </el-col>
 
+                <el-col :span="8">
+                  <el-table :data="metricsData.messages">
+                    <el-table-column prop="key" :label="$t('Overview.messageNumber')" min-width="100px"></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                  </el-table>
+                </el-col>
 
-        <a-card class="emq-list-card">
-          <div class="emq-title">
-            {{ $t('Overview.dataList') }}
-            <div class="sub-title">
-              {{ $t('Overview.packetStatisticsOfNodes') }}
-            </div>
+                <el-col :span="8">
+                  <el-table :data="metricsData.bytes">
+                    <el-table-column prop="key" :label="$t('Overview.traffic')" min-width="100px"></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                  </el-table>
+                </el-col>
+              </el-row>
+            </a-card>
           </div>
+        </el-tab-pane>
 
+      </el-tabs>
 
-          <el-row :gutter="30">
-            <el-col :span="8">
-              <el-table :data="metricsData.packets">
-                <el-table-column prop="key" :label="$t('Overview.mqttPackages')" min-width="100px"></el-table-column>
-                <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
-              </el-table>
-            </el-col>
-
-            <el-col :span="8">
-              <el-table :data="metricsData.messages">
-                <el-table-column prop="key" :label="$t('Overview.messageNumber')" min-width="100px"></el-table-column>
-                <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
-              </el-table>
-            </el-col>
-
-            <el-col :span="8">
-              <el-table :data="metricsData.bytes">
-                <el-table-column prop="key" :label="$t('Overview.traffic')" min-width="100px"></el-table-column>
-                <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
-              </el-table>
-            </el-col>
-          </el-row>
-        </a-card>
-      </div>
-
-      <a-card v-else-if="activeName === 'config'" class="emq-list-card">
-        <div class="emq-title">
-          {{ $t('Overview.mainConfiguration') }}
-        </div>
-
-        <ul class="field-info">
-          <li v-for="(item, i) in config" :key="i" class="field-info-item">
-            <div class="field-title" style="width: 200px">
-              {{ item.key }}:
-            </div>
-            <span class="field-value">
-              {{ item.value }}
-            </span>
-          </li>
-        </ul>
-      </a-card>
     </div>
   </div>
 </template>
@@ -127,7 +95,7 @@
 
 <script>
 import {
-  loadConfig, loadNodeDetail, loadListeners, loadMetrics,
+  loadNodeDetail, loadListeners, loadMetrics,
 } from '@/api/overview'
 
 import NodeBasicCard from './components/NodeBasicCard'
@@ -144,7 +112,6 @@ export default {
       activeName: 'basic',
       record: {},
       metrics: {},
-      config: {},
       listeners: [],
     }
   },
@@ -216,7 +183,6 @@ export default {
     async loadData() {
       this.record = await loadNodeDetail(this.name)
       this.metrics = await loadMetrics(this.name)
-      this.config = await loadConfig(this.name)
       this.listeners = await loadListeners(this.name)
     },
   },
@@ -246,11 +212,6 @@ export default {
       height: 0;
     }
   }
-
-  .page-header-content-view {
-    height: 60px;
-  }
-
 
   .card-wrapper {
     .emq-list-card {

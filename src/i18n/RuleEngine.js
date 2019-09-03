@@ -41,6 +41,10 @@ export default {
     zh: '节点上的资源状态信息',
     en: 'Resource status on nodes',
   },
+  status: {
+    zh: '状态',
+    en: 'Status',
+  },
   resourceStatus: {
     zh: '资源状态',
     en: 'Status',
@@ -69,14 +73,6 @@ export default {
     zh: '请输入',
     en: 'Please enter',
   },
-  confirm: {
-    zh: '确定',
-    en: 'Confirm',
-  },
-  cancel: {
-    zh: '取消',
-    en: 'Cancel',
-  },
   pleaseChoose: {
     zh: '请选择',
     en: 'Please select',
@@ -96,6 +92,10 @@ export default {
   delete: {
     zh: '删除',
     en: 'Delete',
+  },
+  remove: {
+    zh: '移除',
+    en: 'Remove',
   },
   success: {
     zh: '成功',
@@ -129,17 +129,9 @@ export default {
     zh: '全部资源',
     en: 'Resources',
   },
-  homePage: {
-    zh: '首页',
-    en: 'Home',
-  },
   resources: {
     zh: '资源',
     en: 'Resources',
-  },
-  create: {
-    zh: '创建',
-    en: 'Create',
   },
   state: {
     zh: '状态',
@@ -190,8 +182,8 @@ export default {
     en: 'Condition',
   },
   definingRuleConditionsAndDataProcessing: {
-    zh: '规则引擎使用 SQL 定义规则条件与数据处理方式，内置多种灵活的数据处理方案',
-    en: 'Defining Rule Engine Conditions and Data Processing By SQL',
+    zh: '使用 SQL 设定规则，对消息数据筛选、编解码、变型，灵活地将处理后的数据无缝转发至数据库、流处理、API 网关等数据目的地',
+    en: 'Use SQL to set rules to filter, encode, decode, and modify message data, and seamlessly forward processed data to data destinations such as databases, stream processing, and API gateways',
   },
   triggerEvent: {
     zh: '触发事件',
@@ -204,6 +196,10 @@ export default {
   selectFiled: {
     zh: '查询字段',
     en: 'Select field',
+  },
+  sqlInput: {
+    zh: 'SQL 输入',
+    en: 'SQL',
   },
   availableField: {
     zh: '可用字段',
@@ -229,6 +225,10 @@ export default {
     zh: '当前事件可用字段',
     en: 'Current Event Available Field',
   },
+  exampleSql: {
+    zh: '规则 SQL 示例',
+    en: 'SQL Example',
+  },
   responseAction: {
     zh: '响应动作',
     en: 'Action',
@@ -248,6 +248,10 @@ export default {
   pleaseEnterTheSelectField: {
     zh: '请输入查询字段',
     en: 'Please enter the select field',
+  },
+  pleaseEnterTheSQL: {
+    zh: '请输入 SQL 语句',
+    en: 'Please enter the SQL field',
   },
   nullCharacterError: {
     zh: '空字符错误',
@@ -270,7 +274,7 @@ export default {
     en: 'Result is empty',
   },
   checkForErrors: {
-    zh: 'SQL 请检查',
+    zh: '请检查 SQL 语句',
     en: 'SQL is error',
   },
   quickStart: {

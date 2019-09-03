@@ -17,13 +17,13 @@
         <el-input v-model="record.topic" placeholder="Topic"></el-input>
       </el-form-item>
       <el-form-item prop="qos" label="QoS">
-        <emq-select v-model.sync="record.qos" :field="{ list: [0, 1, 2] }"></emq-select>
+        <emq-select v-model="record.qos" :field="{ list: [0, 1, 2] }"></emq-select>
       </el-form-item>
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
+      <el-button plain size="small" @click="close">{{ $t('Base.cancel') }}</el-button>
       <el-button type="primary" size="small" @click="handleAdd">{{ $t('Connections.add') }}</el-button>
-      <el-button plain size="small" @click="close">{{ $t('Connections.cancel') }}</el-button>
     </div>
   </el-dialog>
 </template>

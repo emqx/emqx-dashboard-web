@@ -32,8 +32,8 @@ export default new Vuex.Store({
     SET_LANGUAGE({ commit }, lang = 'en') {
       localStorage.setItem('language', lang)
       commit('SET_LANGUAGE', lang)
-      console.log('SET_LANGUAGE')
       setTimeout(() => {
+        // eslint-disable-next-line
         location.reload()
       }, 400)
     },

@@ -1,41 +1,22 @@
 <template>
   <div class="rule-view">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link class="btn btn-default raw" to="/" tag="span">
-              {{ $t('RuleEngine.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <router-link class="btn btn-default raw" to="/rules" tag="span">
-              {{ $t('RuleEngine.ruleEngine') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('RuleEngine.details') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-title-view">
-          <div class="title">
-            {{ ruleId }}
-          </div>
-        </div>
-
-        <div class="page-header-top-start">
-          <el-button type="danger" size="small" @click="deleteRule">
-            {{ $t('RuleEngine.delete') }}
-          </el-button>
+    <page-header
+      :back-title="$t('RuleEngine.ruleEngine')"
+      :oper="$t('RuleEngine.details')"
+      back-path="/rules"
+    >
+      <div class="page-header-title-view">
+        <div class="title">
+          {{ ruleId }}
         </div>
       </div>
-    </div>
 
+      <div class="page-header-top-start">
+        <el-button type="danger" size="small" @click="deleteRule">
+          {{ $t('RuleEngine.delete') }}
+        </el-button>
+      </div>
+    </page-header>
 
     <div class="emq-list-body rule-wrapper app-wrapper">
       <!-- 运行统计 -->
@@ -129,7 +110,6 @@
         </ul>
       </a-card>
 
-
       <!-- 响应动作 -->
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
@@ -145,7 +125,6 @@
         ></rule-actions>
       </a-card>
     </div>
-
 
   </div>
 </template>
@@ -225,8 +204,8 @@ export default {
     },
     deleteRule() {
       this.$msgbox.confirm(this.$t('RuleEngine.deleteRuleConfirm'), {
-        confirmButtonText: this.$t('RuleEngine.confirm'),
-        cancelButtonText: this.$t('RuleEngine.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await destroyRule(this.record.id)
@@ -243,7 +222,7 @@ export default {
 
 <style lang="scss">
 .rule-view {
-  @import "./style.less";
+  @import "./style.scss";
 
   .field-title {
     width: 100px;

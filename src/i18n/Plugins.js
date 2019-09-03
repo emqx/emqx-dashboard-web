@@ -4,10 +4,6 @@ export default {
     zh: '列表为空,请调整过滤条件再试',
     en: 'Empty. Please change the filter and try again',
   },
-  homePage: {
-    zh: '首页',
-    en: 'Home',
-  },
   unit: {
     zh: '个插件',
     en: '',
@@ -96,6 +92,10 @@ export default {
     zh: '协议',
     en: 'Protocol',
   },
+  feature: {
+    zh: '功能',
+    en: 'Feature',
+  },
   other: {
     zh: '其他',
     en: 'Other',
@@ -103,14 +103,6 @@ export default {
   thisActionWillStopThePlugIn: {
     zh: '此操作将停止该插件,确认继续?',
     en: 'Confirm to stops the plugin?',
-  },
-  confirm: {
-    zh: '确定',
-    en: 'Confirm',
-  },
-  cancel: {
-    zh: '取消',
-    en: 'Cancel',
   },
   stopSuccess: {
     zh: '停止成功',

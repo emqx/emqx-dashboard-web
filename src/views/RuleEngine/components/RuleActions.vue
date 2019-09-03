@@ -10,11 +10,11 @@
           v-if="!disabled"
           class="action-item-btn"
         >
-          <!--<span class="btn" @click="editAction(item)">-->
-          <!--编辑-->
-          <!--</span>-->
+          <span class="btn" @click="editAction(item, i)">
+            {{ $t('RuleEngine.edit') }}
+          </span>
           <span class="btn" @click="removeAction(i)">
-            {{ $t('RuleEngine.delete') }}
+            {{ $t('RuleEngine.remove') }}
           </span>
         </div>
 
@@ -66,9 +66,7 @@
           <span class="value">{{ item.failed }}</span>
         </div>
       </div>
-
     </div>
-
 
     <el-button
       v-if="!disabled"
@@ -80,7 +78,7 @@
     </el-button>
 
     <el-dialog
-      :visible.sync="addActionDialogVisible"
+      :visible.sync="actionDialogVisible"
       :title="$t('RuleEngine.addActions')"
       width="520px"
     >
@@ -115,12 +113,9 @@
             style="width: 330px"
             @visible-change="checkResource"
           >
-            <div slot="option" slot-scope="{ item }" class="resource-option">
-              <!--<span class="resource-state">-->
-              <!--<a-badge :status="item.status.is_alive ? 'success' : 'error'"></a-badge>-->
-              <!--</span>-->
-              <span class="resource-id">{{ item.id }}</span>
-              <span class="resource-name">{{ item.config.title }}</span>
+            <div slot="option" slot-scope="{ item }" class="custom-option">
+              <span class="key">{{ item.id }}</span>
+              <span class="value">{{ item.config.title }}</span>
             </div>
           </emq-select>
 
@@ -144,7 +139,7 @@
               :key="i"
               :span="item.type === 'textarea' ? 24 : 12"
             >
-              <el-form-item v-bind="item.formItemAttributes">
+              <el-form-item :class="item.key === 'sql' ? 'code-editor__item' : ''" v-bind="item.formItemAttributes">
                 <template v-if="item.formItemAttributes.description" slot="label">
                   {{ item.formItemAttributes.label }}
                   <el-popover trigger="hover" width="220" placement="top">
@@ -163,7 +158,13 @@
                     v-bind="item.bindAttributes"
                   >
                   </el-input>
-
+                  <code-editor
+                    v-else-if="item.key === 'sql'"
+                    v-model="record.params.sql"
+                    lang="text/x-sql"
+                    :lint="false"
+                  >
+                  </code-editor>
                   <el-input
                     v-else
                     v-model="record.params[item.key]"
@@ -195,11 +196,11 @@
 
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">{{
-          $t('RuleEngine.confirm') }}
-        </el-button>
         <el-button size="small" @click="handleCache">
-          {{ $t('RuleEngine.cancel') }}
+          {{ $t('Base.cancel') }}
+        </el-button>
+        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">
+          {{ $t('Base.confirm') }}
         </el-button>
       </div>
     </el-dialog>
@@ -213,11 +214,16 @@
 import { loadActionsList, loadResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
 import ResourceDialog from '@/views/RuleEngine/components/ResourceCreate'
+import CodeEditor from '@/components/CodeEditor'
+import { setTimeout } from 'timers'
 
 export default {
   name: 'RuleActions',
 
-  components: { ResourceDialog },
+  components: {
+    ResourceDialog,
+    CodeEditor,
+  },
 
   props: {
     value: {
@@ -236,12 +242,14 @@ export default {
 
   data() {
     return {
-      addActionDialogVisible: false,
+      actionDialogVisible: false,
       resourceDialogVisible: false,
       setRefresh: false,
       actionsMap: {},
       paramsList: [],
       paramsLoading: false,
+      currentEditIndex: 0,
+      currentOper: '',
       record: {
         name: '',
         params: {
@@ -292,12 +300,6 @@ export default {
     },
   },
 
-  watch: {
-    event() {
-
-    },
-  },
-
   created() {
     this.loadActions()
   },
@@ -307,17 +309,13 @@ export default {
       const { showList = false } = item
       this.$set(item, 'showList', !showList)
     },
-    editAction(item) {
-      this.record = { ...item }
-      this.addActionDialogVisible = true
-      this.actionTypeChange(item.name)
-    },
+
     atDialogClose() {
       setTimeout(() => {
         this.$refs.record.clearValidate()
-        this.$refs.record.resetFields()
       }, 10)
     },
+
     async handleCreate() {
       const valid = await this.$refs.record.validate()
       if (!valid) {
@@ -327,27 +325,35 @@ export default {
       if (action.params && !action.params.$resource) {
         delete action.params.$resource
       }
-      this.rawValue.push(action)
+      if (this.currentOper === 'edit') {
+        this.rawValue.splice(this.currentEditIndex, 1, action)
+      } else if (this.currentOper === 'add') {
+        this.rawValue.push(action)
+      }
       this.fillRawValue()
-      this.addActionDialogVisible = false
+      this.actionDialogVisible = false
       this.atDialogClose()
     },
+
     handleCache() {
-      this.addActionDialogVisible = false
+      this.actionDialogVisible = false
       this.atDialogClose()
     },
+
     checkResource(open = false) {
       if (open && this.availableResources.length === 0) {
         this.loadResourceData()
       }
     },
+
     toCreateResource() {
       const { types = [] } = this.selectedAction
       this.$refs.resource.setup({ types, action: 'create' })
-      this.addActionDialogVisible = false
+      this.actionDialogVisible = false
     },
+
     confirmResource(id) {
-      this.addActionDialogVisible = true
+      this.actionDialogVisible = true
       if (!id) {
         return
       }
@@ -355,40 +361,62 @@ export default {
         this.record.params.$resource = id
       })
     },
+
     async loadResourceData() {
       this.resources = await loadResource()
     },
-    loadParamsList() {
+
+    loadParamsList(oper) {
+      this.currentOper = oper
       const { params } = this.selectedAction
       const { form, rules } = renderParamsForm(params, 'params')
+      if (oper === 'add') {
+        this.record.params = {}
+        form.forEach(({ key, value }) => {
+          const _key = key
+          let _value = value
+          if (_key === 'sql' && _value === undefined) {
+            _value = ''
+          }
+          this.$set(this.record.params, _key, _value)
+        })
+        this.$set(this.record.params, '$resource', '')
+        if (this.$refs.record) {
+          setTimeout(this.$refs.record.clearValidate, 0)
+        }
+      }
       this.paramsList = form
       this.rules.params = {
         $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
         ...rules,
       }
-      this.record.params = {}
-      form.forEach(({ key, value }) => {
-        this.$set(this.record.params, key, value)
-      })
-      this.$set(this.record.params, '$resource', '')
-      if (this.$refs.record) {
-        setTimeout(this.$refs.record.clearValidate, 0)
-      }
       this.paramsLoading = false
     },
-    actionTypeChange(actionName) {
+
+    actionTypeChange(actionName, oper = 'add') {
       this.selectedAction = this.actionsMap[actionName]
       this.paramsList = []
       this.paramsLoading = true
-      setTimeout(this.loadParamsList, 200)
+      setTimeout(this.loadParamsList(oper), 200)
       this.loadResourceData()
     },
+
     addAction() {
-      this.addActionDialogVisible = true
+      this.actionTypeChange(this.record.name, 'add')
+      this.actionDialogVisible = true
     },
-    removeAction(i) {
-      this.rawValue.splice(i, 1)
+
+    editAction(item, index) {
+      this.currentEditIndex = index
+      this.actionTypeChange(item.name, 'edit')
+      this.record = { ...item }
+      this.actionDialogVisible = true
     },
+
+    removeAction(index) {
+      this.rawValue.splice(index, 1)
+    },
+
     async loadActions() {
       const actions = await loadActionsList()
       this.actions = actions
@@ -425,6 +453,15 @@ export default {
     border-bottom: 1px dashed #d8d8d8;
   }
 
+  .action-item-btn {
+    .btn {
+      margin-right: 5px;
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
+  }
+
   .metrics-detail {
     margin-top: 16px;
     padding: 4px 0;
@@ -450,10 +487,6 @@ export default {
     background-color: #f2f2f2;
     border: 1px dashed #f2f2f2;
     transition: border .3s;
-
-    /*&:hover {*/
-    /*border: 1px dashed #d8d8d8;*/
-    /*}*/
   }
 
   .action-item-head {
@@ -461,7 +494,6 @@ export default {
     justify-content: space-between;
     align-items: center;
     font-size: 12px;
-
 
     .action-item-type {
       font-size: 12px;
@@ -564,21 +596,6 @@ export default {
     .el-textarea {
       width: 330px;
     }
-
-
-  }
-}
-
-.resource-option {
-  .resource-state {
-
-  }
-
-  .resource-name {
-    float: right;
-    font-size: 12px;
-    color: #888;
-    margin-left: 30px;
   }
 }
 

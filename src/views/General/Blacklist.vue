@@ -1,28 +1,14 @@
 <template>
   <div class="users">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link class="btn btn-default raw" to="/" tag="span">
-              {{ $t('General.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('General.blacklist') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-content-view">
-          <div class="content">
-            {{ $t('General.manageDashboardUsers') }}
-          </div>
+    <page-header
+      :back-title="$t('General.blacklist')"
+    >
+      <div class="page-header-content-view">
+        <div class="content">
+          {{ $t('General.manageDashboardUsers') }}
         </div>
       </div>
-    </div>
+    </page-header>
 
     <div class="app-wrapper">
       <a-card
@@ -35,7 +21,7 @@
             icon="el-icon-plus"
             @click="showDialog('create')"
           >
-            {{ $t('General.create') }}
+            {{ $t('Base.create') }}
           </el-button>
         </div>
 
@@ -44,9 +30,9 @@
           <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')"></el-table-column>
           <el-table-column width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">{{ $t('General.edit') }}
+              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
+                {{ $t('General.edit') }}
               </el-button>
-
 
               <el-button
                 v-if="row.tags !== 'administrator' && row.username !== 'admin'"
@@ -103,8 +89,8 @@
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button type="primary" size="small" @click="save">{{ $t('General.confirm') }}</el-button>
-        <el-button plain size="small" @click="closeDialog">{{ $t('General.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
+        <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -254,8 +240,8 @@ export default {
       const vue = this
 
       this.$msgbox.confirm(this.$t('General.confirmDeleteUser'), {
-        confirmButtonText: this.$t('General.confirm'),
-        cancelButtonText: this.$t('General.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         destroyUser(item.username).then(() => {
@@ -267,9 +253,3 @@ export default {
   },
 }
 </script>
-
-
-<style lang="scss">
-.users {
-}
-</style>

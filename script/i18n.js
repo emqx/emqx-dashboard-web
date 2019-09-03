@@ -68,9 +68,8 @@ function getWords(str) {
 }
 
 async function getModelWord(fileModel = {}) {
-  const { name, model, file } = fileModel
+  const { model, file } = fileModel
   const rows = fs.readFileSync(file).toString()
-  const dictMap = {}
   const words = getWords(rows)
 
   // 存储进去

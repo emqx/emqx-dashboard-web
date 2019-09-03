@@ -4,14 +4,15 @@
       <img class="logo" src="../../../assets/emqx_logo.png" alt="logo">
       <div class="version">{{ record.version }}</div>
       <div class="jump">
-        <el-button v-if="showButton" type="dashed" size="mini" @click="toDetails">{{ $t('Overview.details') }}
+        <el-button v-if="showButton" type="dashed" size="mini" @click="toDetails">
+          {{ $t('Overview.view') }}
         </el-button>
       </div>
     </div>
 
     <div class="basic-info">
       <div class="title">
-        {{ record.sysdescr }}
+        <!-- {{ record.sysdescr }} -->
       </div>
 
       <el-row :gutter="20">
@@ -103,7 +104,6 @@
                 {{ record.load1 }} / {{ record.load5 }} / {{ record.load15 }}
               </span>
             </li>
-
 
           </ul>
         </el-col>

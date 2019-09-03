@@ -13,10 +13,12 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/markLine'
 import 'echarts/lib/component/markPoint'
 
+import resizeChart from '@/mixins/resizeChart'
+
 export default {
   name: 'SimpleLine',
 
-  components: {},
+  mixins: [resizeChart],
 
   props: {
     value: {
@@ -33,6 +35,7 @@ export default {
       default: 'line',
     },
   },
+
   data() {
     return {
       chart: null,
@@ -90,6 +93,7 @@ export default {
       deep: true,
       handler: 'setSeriesConfig',
     },
+    // eslint-disable-next-line
     '$store.state.leftBarCollapse': function () {
       setTimeout(this.setSeriesConfig, 500)
     },
@@ -127,9 +131,3 @@ export default {
   },
 }
 </script>
-
-
-<style lang="scss">
-.SimpleLine {
-}
-</style>

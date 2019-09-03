@@ -6,43 +6,31 @@
       </div>
     </div>
 
-    <!--<div class="search-wrapper">-->
-    <!---->
-    <!--</div>-->
-
-
     <div class="pull-right">
       <!-- TODO: 补充使用情况 -->
-      <!--<el-tooltip effect="dark" :content="$t('components.usingDocuments')" placement="bottom" :visible-arrow="false">-->
-      <!--<div class="document-link func-item">-->
-      <!--<i class="iconfont icon-icon_yiwenkongxin"></i>-->
-      <!--</div>-->
-      <!--</el-tooltip>-->
-
-
       <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
         <div class="alert-info func-item">
           <a-badge :count="alertCount">
-            <router-link to="/alerts/list" tag="i" class="iconfont icon-Notificationlisttongzhiliebiao"
-                         @click="clearAlert"
+            <router-link
+              to="/alerts/list"
+              tag="i"
+              class="iconfont icon-Notificationlisttongzhiliebiao"
+              @click="clearAlert"
             ></router-link>
           </a-badge>
         </div>
       </el-tooltip>
 
-
       <el-dropdown placement="bottom" class="user-info-dropdown" @command="handleDropdownCommand">
         <div class="user-info func-item">
           <span>{{ username }}</span>
           <el-dropdown-menu slot="dropdown">
-            <!--<el-dropdown-item command="setting">{{ $t('components.settings') }}</el-dropdown-item>-->
             <el-dropdown-item command="application">{{ $t('components.applicationManagement') }}</el-dropdown-item>
             <el-dropdown-item command="users">{{ $t('components.usersManagement') }}</el-dropdown-item>
             <el-dropdown-item divided command="login">{{ $t('components.logOut') }}</el-dropdown-item>
           </el-dropdown-menu>
         </div>
       </el-dropdown>
-
 
       <el-dropdown placement="bottom" class="user-info-dropdown" @command="handleLanguageDropdownCommand">
         <div class="user-info func-item">
@@ -55,7 +43,6 @@
           </el-dropdown-menu>
         </div>
       </el-dropdown>
-      <!--<div class="i18n-link func-item"></div>-->
     </div>
   </div>
 </template>
@@ -86,7 +73,9 @@ export default {
       return this.$store.state.user.username || this.$t('components.notLoggedIn')
     },
     alertText() {
-      return this.alertCount > 0 ? `${this.$t('components.theSystemHas')} ${this.alertCount} ${this.$t('components.noteAlertClickView')}` : this.$t('components.noWarning')
+      return this.alertCount > 0
+        ? `${this.$t('components.theSystemHas')} ${this.alertCount} ${this.$t('components.noteAlertClickView')}`
+        : this.$t('components.noWarning')
     },
     language() {
       return this.$store.state.lang
@@ -95,6 +84,7 @@ export default {
 
   created() {
     this.loadData()
+    this.setHtmlLangAttr(this.language)
   },
 
   mounted() {
@@ -102,11 +92,14 @@ export default {
   },
 
   methods: {
+    setHtmlLangAttr(lang) {
+      document.querySelector('html').setAttribute('lang', lang)
+    },
     handleLanguageDropdownCommand(command) {
       if (this.language === command) {
-        console.log(this.language === command)
         return
       }
+      this.setHtmlLangAttr(command)
       this.$store.dispatch('SET_LANGUAGE', command)
     },
     clearAlert() {
@@ -137,7 +130,7 @@ export default {
       }
       this.$msgbox.confirm(this.$t('components.whetherToLogOutOrNot'), {
         confirmButtonText: this.$t('components.signOut'),
-        cancelButtonText: this.$t('components.cancel'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(() => {
         this.logout()

@@ -23,16 +23,20 @@ export default
     zh: '当前活跃连接数',
     en: 'Currently active connections',
   },
-  details: {
+  view: {
     zh: '查看',
     en: 'View',
+  },
+  viewMore: {
+    zh: '查看更多',
+    en: 'View More',
   },
   systemTime: {
     zh: '系统时间',
     en: 'System Time',
   },
   uptime: {
-    zh: '启动时长',
+    zh: '运行时长',
     en: 'Uptime',
   },
   currentConnection: {
@@ -66,10 +70,6 @@ export default
   load: {
     zh: '负载',
     en: 'Load',
-  },
-  homePage: {
-    zh: '首页',
-    en: 'Home',
   },
   monitor: {
     zh: '监控',

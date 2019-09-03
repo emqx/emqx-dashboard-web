@@ -1,42 +1,26 @@
 <template>
   <div class="rules">
 
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link to="/" tag="span" class="btn btn-default raw">
-              {{ $t('RuleEngine.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
+    <page-header :back-title="$t('RuleEngine.ruleEngine')">
+      <div class="page-header-content-view">
+        <div class="content">
+          <p class="description">
+            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
+          </p>
+          <div class="page-header-link">
+            <a :href="docs.tutorial" target="_blank" class="link-item">
+              <i class="icon el-icon-position"></i>
+              {{ $t('RuleEngine.quickStart') }}
+            </a>
 
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('RuleEngine.ruleEngine') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-content-view">
-          <div class="content">
-            <p class="description">
-              {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
-            </p>
-            <div class="page-header-link">
-              <a :href="docs.tutorial" target="_blank" class="link-item">
-                <i class="icon el-icon-position"></i>
-                {{ $t('RuleEngine.quickStart') }}
-              </a>
-
-              <a :href="docs.tutorial" target="_blank" class="link-item">
-                <i class="icon el-icon-document"></i>
-                {{ $t('RuleEngine.productDocumentation') }}
-              </a>
-            </div>
+            <a :href="docs.tutorial" target="_blank" class="link-item">
+              <i class="icon el-icon-document"></i>
+              {{ $t('RuleEngine.productDocumentation') }}
+            </a>
           </div>
         </div>
       </div>
-    </div>
+    </page-header>
 
     <div class="app-wrapper">
       <a-card
@@ -45,15 +29,11 @@
       >
         <div class="emq-table-header">
           <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">
-            {{ $t('RuleEngine.create') }}
+            {{ $t('Base.create') }}
           </el-button>
         </div>
 
         <el-table v-bind="rulesTable" :data="tableData" class="data-list">
-          <!--<el-table-column-->
-          <!--type="selection"-->
-          <!--width="55">-->
-          <!--</el-table-column>-->
           <el-table-column prop="id" label="ID">
             <template slot-scope="{ row }">
               <router-link :to="{ path: `/rules/${row.id}` }">{{ row.id }}</router-link>
@@ -64,8 +44,10 @@
               <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
             </template>
           </el-table-column>
-          <el-table-column prop="description" show-overflow-tooltip
-                           :label="$t('RuleEngine.describe')"
+          <el-table-column
+            prop="description"
+            show-overflow-tooltip
+            :label="$t('RuleEngine.describe')"
           ></el-table-column>
           <el-table-column
             prop="for"
@@ -85,7 +67,13 @@
           </el-table-column>
           <el-table-column width="80px" prop="id">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="deleteRule(row)">{{ $t('RuleEngine.delete') }}</el-button>
+              <el-button
+                type="dashed danger"
+                size="mini"
+                @click="deleteRule(row)"
+              >
+                {{ $t('RuleEngine.delete') }}
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -179,13 +167,7 @@
             </ul>
           </div>
 
-          <!--<div class="metrics-item oper-wrapper">-->
-          <!--<el-button type="dashed" size="small">查看详情</el-button>-->
-          <!--</div>-->
-
-
         </div>
-
 
       </div>
     </a-drawer>
@@ -273,8 +255,8 @@ export default {
   methods: {
     deleteRule(row) {
       this.$msgbox.confirm(this.$t('RuleEngine.deleteRuleConfirm'), {
-        confirmButtonText: this.$t('RuleEngine.confirm'),
-        cancelButtonText: this.$t('RuleEngine.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await destroyRule(row.id)
@@ -329,23 +311,6 @@ export default {
 
 
 <style lang="scss" scoped>
-.rules {
-}
-
-.link-item {
-  .icon {
-    width: 24px;
-    height: 24px;
-    line-height: 14px;
-    border-radius: 50%;
-    border: 1px solid #34C388;
-    padding: 4px;
-    text-align: center;
-    margin-right: 8px;
-    font-size: 12px;
-  }
-}
-
 .description {
   max-width: 500px;
 }

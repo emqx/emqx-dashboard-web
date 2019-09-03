@@ -73,6 +73,7 @@ export function SQLTest(rule = {}) {
 export async function loadActionsList(params = {}) {
   const actions = await http.get('/actions', { params })
   return actions.map((action) => {
+    // eslint-disable-next-line
     action = fillI18n(action, ['title', 'description'])
     action.params = fillI18n(action.params, true)
     return action
@@ -111,20 +112,25 @@ export async function loadResourceDetails(id) {
       resourceTypes[item.name] = item
     })
   }
-  const resource = await http.get(`/resources/${id}`)
-  resource.typeInfo = resourceTypes[resource.type] || {}
-  resource._config = []
-  Object.keys(resource.config).forEach((key) => {
-    const value = resource.config[key]
-    const { title, description } = resource.typeInfo.params[key] || {}
-    resource._config.push({
-      key,
-      value,
-      title: title || value,
-      description,
+  try {
+    const resource = await http.get(`/resources/${id}`)
+    resource.typeInfo = resourceTypes[resource.type] || {}
+    resource._config = []
+    Object.keys(resource.config).forEach((key) => {
+      const value = resource.config[key]
+      const { title, description } = resource.typeInfo.params[key] || {}
+      resource._config.push({
+        key,
+        value,
+        title: title || value,
+        description,
+      })
     })
-  })
-  return resource
+    return resource
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }
 
 export function createResource(resource = {}, test = false) {

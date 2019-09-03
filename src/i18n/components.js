@@ -33,6 +33,10 @@ export default
     zh: '连接',
     en: 'Connections',
   },
+  schema: {
+    zh: '编解码',
+    en: 'Schema Registry',
+  },
   rule: {
     zh: '规则',
     en: 'Rule',
@@ -72,6 +76,10 @@ export default
   user: {
     zh: '用户',
     en: 'Users',
+  },
+  setting: {
+    zh: '设置',
+    en: 'Setting',
   },
   settings: {
     zh: '系统设置',
@@ -120,9 +128,5 @@ export default
   signOut: {
     zh: '退出',
     en: 'Logout',
-  },
-  cancel: {
-    zh: '取消',
-    en: 'Cancel',
   },
 }

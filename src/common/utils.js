@@ -1,6 +1,7 @@
-import moment from 'moment'
-
 /* eslint-disable */
+import Clipboard from 'clipboard'
+import sqlFormatter from 'sql-formatter'
+
 import store from '@/store'
 import router from '@/router'
 
@@ -8,19 +9,39 @@ const { lang = 'zh' } = store.state
 
 import { en as enDocsLink, zh as zhDocsLink } from '@/common/link_urls'
 
+/**
+ * 获取基础的验证信息
+ * @param null
+ * @return User: object
+ */
 export function getBasicAuthInfo() {
   return store.state.user
 }
 
+/**
+ * 跳转到登录页面
+ * @param null
+ * @return null
+ */
 export function toLogin() {
   store.dispatch('UPDATE_USER_INFO', { logOut: true })
   router.push({ path: '/login', query: { to: router.fullPath } })
 }
 
+/**
+ * 将函数包装为异步函数
+ * @param Promise
+ * @return Promise
+ */
 export const awaitWrap = promise => promise
 .then(data => data)
 .catch(err => null)
 
+/**
+ * 安全的转化 JSON 字符串
+ * @param jsonStr: 被转化的 JSON 字符串，defaultValue: 失败时返回的默认值
+ * @return Object
+ */
 export function safeParser(jsonStr, defaultValue = {}) {
   try {
     return JSON.parse(jsonStr) || defaultValue
@@ -29,6 +50,11 @@ export function safeParser(jsonStr, defaultValue = {}) {
   }
 }
 
+/**
+ * 填充转化对象类型的 i18n
+ * @param data 转化的数据，key 对象的 key 值，autoSearch 是否自动搜索
+ * @return data: object
+ */
 function fillObjectI18n(data = {}) {
   const { lang = 'zh' } = store.state
 
@@ -45,7 +71,6 @@ function fillObjectI18n(data = {}) {
   })
   return data
 }
-
 // 将 [{ title: { en: 'Title', zh: '标题' } }] 翻译为 [{ title: '标题' }]
 export function fillI18n(data = [], keys = [], autoSearch = false) {
   if (!data) {
@@ -82,7 +107,6 @@ export function fillI18n(data = [], keys = [], autoSearch = false) {
       data[key] = data[key][lang]
     })
   }
-
   return data
 }
 
@@ -164,52 +188,58 @@ export function renderParamsForm(params = {}, propPrefix = '') {
   return { form, rules }
 }
 
+/**
+ * 根据语言获取跳转的链接
+ * @param name
+ * @return link: string
+ */
 export function getLink(name) {
   const { lang = 'zh' } = store.state
   const dictMap = lang === 'zh' ? zhDocsLink : enDocsLink
   return dictMap[name] || '/'
 }
 
-export function toTableData(metric = {}) {
-  const data = []
-  const nodes = Object.keys(metric)
-  const itData = Object.values(metric)[0] || []
+/**
+ * 复制到剪切板
+ * @param el 复制指令绑定的元素，binding 剪切板配置，包括值value，成功失败时的回调函数
+ * @return el: DOM
+ */
+export const cpoyToClipboard = (el, binding) => {
+  const clipboard = new Clipboard(el, {
+    text() {
+      return binding.value
+    },
+    acttion() {
+      return 'copy'
+    },
+  })
+  clipboard.on('success', (e) => {
+    const callback = el._v_clipboard_success
+    callback && callback(e)
+  })
+  clipboard.on('error', (e) => {
+    const callback = el._v_clipboard_error
+    callback && callback(e)
+  })
+  el._v_clipboard = clipboard
+  return el
+}
 
-  for (let i = 0; i < itData.length; i++) {
-    const row = {}
-    const [ts, _] = itData[i] || []
-    if (!ts) {
-      continue
+/**
+ * sql 语句格式化
+ * @param sql 传入的 sql 语句
+ * @return sql: string
+ */
+export const sqlExampleFormatter = (sql) => {
+  const newSQL = sqlFormatter.format(sql)
+  let text = newSQL.replace(/= ~/g, '=~').replace(/\n/g, '!#!')
+  const paramsRe = text.match(/SELECT!#!(.+)!#!FROM/)
+  if (paramsRe) {
+    const paramsText = paramsRe[1]
+    if (paramsText) {
+      const newParamsText = paramsText.replace(/(!#!|\s)/g, '').split(/[,，]/).join(', ')
+      text = text.replace(paramsText, `  ${newParamsText}`)
     }
-    row.k = moment(ts).format('HH:mm:ss')
-
-    nodes.forEach((node) => {
-      const currentData = metric[node] || []
-      const kv = currentData[i]
-      if (!kv) {
-        return
-      }
-      const [_k, v] = kv
-      if (!v) {
-        return
-      }
-      row[node] = v
-    })
-    data.push(row)
   }
-  return { data, nodes }
-}
-
-function checkLanguage(lang) {
-  if (['en', 'zh'].includes(lang)) {
-    return lang
-  }
-  return ''
-}
-
-function getDefaultLanguage() {
-  const browserLanguage = checkLanguage(navigator.language.substr(0, 2))
-  const localStorageLanguage = checkLanguage(localStorage.getItem('language'))
-  const defaultLanguage = (window.EMQX_CONFIG || {}).language
-  return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
+  return text.replace(/!#!/g, '\n\r')
 }

@@ -1,42 +1,22 @@
 <template>
   <div class="resource-view">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link class="btn btn-default raw" to="/" tag="span">
-              {{ $t('RuleEngine.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <router-link class="btn btn-default raw" to="/resources" tag="span">
-              {{ $t('RuleEngine.resources') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('RuleEngine.details') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-title-view">
-          <div class="title">
-            {{ resourceId }}
-          </div>
-        </div>
-
-        <div class="page-header-top-start">
-          <el-button type="danger" size="small" @click="deleteResource">
-            {{ $t('RuleEngine.delete') }}
-          </el-button>
+    <page-header
+      :back-title="$t('RuleEngine.resources')"
+      :oper="$t('RuleEngine.details')"
+      back-path="/resources"
+    >
+      <div class="page-header-title-view">
+        <div class="title">
+          {{ resourceId }}
         </div>
       </div>
-    </div>
 
+      <div class="page-header-top-start">
+        <el-button type="danger" size="small" @click="deleteResource">
+          {{ $t('RuleEngine.delete') }}
+        </el-button>
+      </div>
+    </page-header>
 
     <div class="emq-list-body rule-wrapper app-wrapper">
       <!-- 基本信息 -->
@@ -169,8 +149,8 @@ export default {
   methods: {
     deleteResource() {
       this.$msgbox.confirm(this.$t('RuleEngine.deleteResource'), {
-        confirmButtonText: this.$t('RuleEngine.confirm'),
-        cancelButtonText: this.$t('RuleEngine.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await destroyResource(this.record.id)
@@ -207,7 +187,7 @@ export default {
 
 <style lang="scss">
 .resource-view {
-  @import "./style.less";
+  @import "./style.scss";
 
   .field-title {
     width: 110px;

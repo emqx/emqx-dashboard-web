@@ -25,10 +25,6 @@ export default {
     zh: '应用为调用 REST API 认证凭证，通过 REST API 可查询、调整 EMQ X 集群信息，对设备进行管理操作',
     en: 'In order to invoke the certificate of REST API, the application can query and adjust EMQ X cluster information through REST API, and manage and operate the equipment',
   },
-  homePage: {
-    zh: '首页',
-    en: 'Home',
-  },
   appId: {
     zh: '应用 ID',
     en: 'AppID',
@@ -40,10 +36,6 @@ export default {
   productDocumentation: {
     zh: '产品文档',
     en: 'Document',
-  },
-  create: {
-    zh: '创建',
-    en: 'Create',
   },
   appName: {
     zh: '应用名称',
@@ -85,14 +77,6 @@ export default {
     zh: '密钥',
     en: 'Secret',
   },
-  confirm: {
-    zh: '确定',
-    en: 'Confirm',
-  },
-  cancel: {
-    zh: '取消',
-    en: 'Cancel',
-  },
   disabled: {
     zh: '不启用',
     en: 'Disabled',
@@ -108,6 +92,10 @@ export default {
   pleaseChoose: {
     zh: '请选择',
     en: 'Please select',
+  },
+  pleaseEnter: {
+    zh: '请输入',
+    en: 'Please enter',
   },
   neverExpire: {
     zh: '永不过期',
@@ -128,6 +116,18 @@ export default {
   successfulDeletion: {
     zh: '删除成功',
     en: 'Successful deletion',
+  },
+  cancelConfirm: {
+    zh: '是否取消本次修改？',
+    en: 'You have unsaved changes, confirm cancel?',
+  },
+  confirm: {
+    zh: '确认信息',
+    en: 'Confirm',
+  },
+  no: {
+    zh: '不',
+    en: 'NO',
   },
   user: {
     zh: '用户',

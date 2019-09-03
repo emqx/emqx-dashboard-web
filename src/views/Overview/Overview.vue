@@ -1,7 +1,5 @@
 <template>
   <div class="overview app-wrapper">
-    <!--<div class="page-header">{{ $t('Overview.brokerStatus') }}</div>-->
-
     <el-row class="content-wrapper" :gutter="20">
 
       <el-col :span="6">
@@ -11,7 +9,6 @@
           </div>
 
           <div class="content">
-            <!--<emq-count-to v-model="currentMetrics.sent"></emq-count-to>-->
             <span>
               {{ currentMetrics.sent }}
             </span>
@@ -37,7 +34,6 @@
           </div>
 
           <div class="content">
-            <!--<emq-count-to v-model="currentMetrics.received"></emq-count-to>-->
             <span>
               {{ currentMetrics.received }}
             </span>
@@ -63,7 +59,6 @@
           </div>
 
           <div class="content">
-            <!--<emq-count-to v-model="currentMetrics.subscription"></emq-count-to>-->
             <span>
               {{ currentMetrics.subscription }}
             </span>
@@ -71,7 +66,6 @@
               <simple-line v-model="currentMetricsLogs.subscription" color="#58afff"></simple-line>
             </div>
           </div>
-
 
           <div class="app-footer">
             <div class="footer-item">
@@ -98,7 +92,6 @@
               >
               </el-progress>
             </div>
-            <!--<emq-count-to v-model="currentMetrics.connection"></emq-count-to>-->
           </div>
           <div class="app-footer">
             <div class="footer-item">
@@ -111,7 +104,7 @@
     </el-row>
 
     <a-card class="node-wrapper" :loading="pageLoading">
-      <div class="emq-title">
+      <div :class="['emq-title', dataType !== 'basic' ? 'node-chart-data' : '']">
         <div class="title">
           {{ $t('Overview.nodeData') }}
         </div>
@@ -129,17 +122,10 @@
         </div>
       </div>
 
-
       <div v-if="dataType === 'basic'" class="basic">
         <el-row :gutter="20">
-          <!--<el-col :span="18">-->
           <node-basic-card :value="currentNode"></node-basic-card>
-          <!--</el-col>-->
-          <!--<el-col :span="6">-->
-          <!--<node-item v-model="nodeName" :list="nodes"></node-item>-->
-          <!--</el-col>-->
         </el-row>
-
 
       </div>
 
@@ -148,19 +134,19 @@
           v-for="item in dataTypeFilter"
           :key="item.value"
           class="basic"
-          style="margin-bottom: -32px"
         >
           <template v-if="dataType === item.value">
-            <div v-if="metricLog[item.value].data.length === 0" class="data-list">
-              <p>{{ $t('Overview.noData') }}</p>
-            </div>
-            <metric-line v-else :value="metricLog[item.value]"></metric-line>
+            <metric-line
+              :ref="item.value"
+              :chart-id="`${item.value}-chart`"
+              :y-title="metricTitles"
+              :chart-data="metricLog[item.value]"
+            ></metric-line>
           </template>
         </div>
       </template>
 
     </a-card>
-
 
     <a-card class="license-card" :loading="pageLoading">
       <div class="emq-title">
@@ -176,8 +162,11 @@
         <li class="item">
           <span class="key">{{ $t('Overview.numberOfConnectionLines') }}:</span>
           <div class="content">
-            <el-progress :stroke-width="12" :percentage="licensePercentage" color="#34c388"
-                         :format="formatConnection"
+            <el-progress
+              :stroke-width="12"
+              :percentage="licensePercentage"
+              :format="formatConnection"
+              color="#34c388"
             ></el-progress>
           </div>
         </li>
@@ -216,7 +205,6 @@
 
 <script>
 import Moment from 'moment'
-import { toTableData } from '@/common/utils'
 import {
   loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo, loadMetricsLog,
 } from '@/api/overview'
@@ -224,7 +212,6 @@ import MetricLine from '@/views/Overview/components/MetricLine'
 import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
 
-window.Moment = Moment
 export default {
   name: 'Overview',
 
@@ -281,13 +268,14 @@ export default {
         version: '',
         type: 'trial',
       },
+      metricTitles: [],
       metricLog: {
-        sent: { data: [], nodes: {} },
-        received: { data: [], nodes: {} },
-        dropped: { data: [], nodes: {} },
-        connection: { data: [], nodes: {} },
-        route: { data: [], nodes: {} },
-        subscriptions: { data: [], nodes: {} },
+        sent: this.chartDataFill(32),
+        received: this.chartDataFill(32),
+        dropped: this.chartDataFill(32),
+        connection: this.chartDataFill(32),
+        route: this.chartDataFill(32),
+        subscriptions: this.chartDataFill(32),
       },
       currentMetricsLogs: {
         received: {
@@ -314,12 +302,6 @@ export default {
   },
 
   computed: {
-    activeMetrics() {
-      if (this.metricLog[this.dataType]) {
-        return this.metricLog[this.dataType]
-      }
-      return { nodes: [], data: [] }
-    },
     licensePercentage() {
       const { connection } = this.currentMetrics
       const { max_connections } = this.license
@@ -345,63 +327,68 @@ export default {
     this.pageLoading = true
     this.loadData()
     this.loadLicenseData()
-    clearInterval(this.timer)
-    this.timer = setInterval(this.loadData, 10 * 1000)
+    clearInterval(this.timerData)
+    this.timerData = setInterval(this.loadData, 10 * 1000)
     this.dataTypeChange()
   },
 
-  beforeRouteLeave(form, to, next) {
-    clearInterval(this.timer)
-    next()
-  },
-
-  filter: {
-    numFormat(num) {
-      let s = num
-      if (/[^0-9.]/.test(s)) return '0'
-      if (s == null || s === 'null' || s === '') {
-        return '0'
-      }
-      s = s.toString().replace(/^(\d*)$/, '$1.')
-      s = (`${s}00`).replace(/(\d*\.\d\d)\d*/, '$1')
-      s = s.replace('.', ',')
-      const re = /(\d)(\d{3},)/
-      while (re.test(s)) {
-        s = s.replace(re, '$1,$2')
-      }
-
-      s = s.replace(/,(\d\d)$/, '.$1')
-      const a = s.split('.')
-      if (a[1] === '00') {
-        s = a[0]
-      }
-      return s.replace('.00', '')
-    },
+  beforeDestroy() {
+    clearInterval(this.timerData)
+    clearInterval(this.timerMetrics)
   },
 
   methods: {
+    chartDataFill(length) {
+      return Array.from(
+        { length },
+        () => ({ xData: [], yData: [] }),
+      )
+    },
     async loadNodes() {
       this.nodes = await loadNodesApi()
       this.nodeName = this.nodeName || (this.nodes[0] || {}).name
     },
     dataTypeChange() {
-      const type = this.dataType
-      switch (type) {
-        case 'basic':
-          this.loadNodes()
-          break
-        default:
-          this.loadMetricsLogData()
-          break
+      clearInterval(this.timerMetrics)
+      if (this.dataType === 'basic') {
+        this.loadNodes()
+      } else {
+        this.loadMetricsLogData()
       }
+    },
+    async setMetricsLogsRealTime() {
+      const data = await loadMetricsLog(false, this.dataType)
+      const currentData = this.metricLog[this.dataType]
+      this.metricTitles.forEach((key, index) => {
+        const nodeMetric = data[key]
+        const lastData = nodeMetric[nodeMetric.length - 1]
+        if (currentData[index].xData.length >= 120) {
+          currentData[index].xData.shift()
+          currentData[index].yData.shift()
+        }
+        currentData[index].xData.push(this._formatTime(lastData[0]))
+        currentData[index].yData.push(lastData[1])
+      })
+    },
+    _formatTime(time) {
+      return Moment(time).utcOffset(0).format('HH:mm:ss')
     },
     async loadMetricsLogData() {
       this.tableLoading = true
       try {
         const data = await loadMetricsLog(false, this.dataType)
-        this.metricLog[this.dataType] = toTableData(data) || { nodes: [], data: [] }
+        this.metricTitles = Object.keys(data)
+        this.metricLog[this.dataType] = this.chartDataFill(this.metricTitles.length)
+        const currentData = this.metricLog[this.dataType]
+        this.metricTitles.forEach((key, index) => {
+          data[key].forEach((item) => {
+            currentData[index].xData.push(this._formatTime(item[0]))
+            currentData[index].yData.push(item[1])
+          })
+        })
+        this.timerMetrics = setInterval(this.setMetricsLogsRealTime, 60000)
       } catch (e) {
-        console.log(e)
+        console.error(e)
       } finally {
         this.tableLoading = false
       }
@@ -467,9 +454,6 @@ export default {
 
   .flux-wrapper {
     width: 100%;
-    /*position: absolute;*/
-    /*top: 0;*/
-    /*left: 0;*/
     box-sizing: border-box;
 
     .simple-line {
@@ -480,11 +464,6 @@ export default {
 
   .license-card {
     margin-top: 32px;
-  }
-
-  .page-header {
-    font-size: 20px;
-    color: #101010;
   }
 
   .app-card {
@@ -544,6 +523,9 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+    .node-chart-data {
+      margin-bottom: 32px;
     }
   }
 

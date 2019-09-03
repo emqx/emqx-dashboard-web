@@ -111,6 +111,11 @@ export default {
             path: '/resources',
             parentKey: 'rules',
           },
+          {
+            title: this.$t('components.schema'),
+            path: '/schemas',
+            parentKey: 'rules',
+          },
         ],
       },
       {
@@ -136,6 +141,11 @@ export default {
         ],
       },
       {
+        title: this.$t('components.setting'),
+        path: '/setting',
+        icon: 'icon-icon_shezhi',
+      },
+      {
         title: this.$t('components.general'),
         key: 'function',
         icon: 'icon-fenzuguanli',
@@ -145,21 +155,11 @@ export default {
             path: '/application',
             parentKey: 'function',
           },
-          // {
-          //   title: this.$t('components.blacklist'),
-          //   path: '/blacklist',
-          //   parentKey: 'function',
-          // },
           {
             title: this.$t('components.user'),
             path: '/users',
             parentKey: 'function',
           },
-          // {
-          //   title: this.$t('components.settings'),
-          //   path: '/setting',
-          //   parentKey: 'function',
-          // },
         ],
       },
     ]
@@ -230,7 +230,6 @@ export default {
     left: 0;
     z-index: 100;
     transition: left .5s;
-    // box-shadow: 0 2px 0 0 $color-theme--active;
     display: flex;
     align-items: center;
     padding: 0 20px;
@@ -242,10 +241,6 @@ export default {
     .logo-img {
       width: 48px;
       height: auto;
-    }
-
-    .unit {
-      /*font-style: italic;*/
     }
 
     .line {
@@ -265,7 +260,5 @@ export default {
       width: 200px;
     }
   }
-
-
 }
 </style>

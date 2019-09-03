@@ -1,23 +1,10 @@
 <template>
   <div class="resources">
 
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link class="btn btn-default raw" to="/" tag="span">
-              {{ $t('RuleEngine.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
-
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('RuleEngine.resources') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-      </div>
-    </div>
+    <page-header
+      :back-title="$t('RuleEngine.resources')"
+    >
+    </page-header>
 
     <div class="app-wrapper">
       <a-card
@@ -25,13 +12,13 @@
         :loading="listLoading"
       >
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">{{ $t('RuleEngine.create')
-          }}
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">
+            {{ $t('Base.create') }}
           </el-button>
         </div>
 
         <el-table :data="tableData" class="data-list" @expand-change="handleExpandChange">
-          <el-table-column prop="id" type="expand">
+          <el-table-column class-name="expand-column" prop="id" type="expand" width="1px">
             <template slot-scope="{ row }">
               <!-- 列表展示每个节点上资源的状态 -->
               <a-card class="resource-node-wrapper" :loading="row.loading">
@@ -45,19 +32,6 @@
                     </div>
                     <resource-node :value="row" @change="handleExpandChange"></resource-node>
                   </el-col>
-
-                  <!--<el-col v-if="false" :span="16">-->
-                  <!--<div class="emq-title h3">-->
-                  <!--资源配置-->
-                  <!--<div class="sub-title btn btn-default" @click.stop="toggleShowConfig(row)">-->
-                  <!--{{ row.showConfig ? '收起配置' : '展开配置' }}-->
-                  <!--<i :class="row.showConfig ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>-->
-                  <!--</div>-->
-                  <!--</div>-->
-                  <!--<el-collapse-transition>-->
-                  <!--<resource-field v-if="row.showConfig" :config="row._config"></resource-field>-->
-                  <!--</el-collapse-transition>-->
-                  <!--</el-col>-->
                 </el-row>
               </a-card>
             </template>
@@ -72,32 +46,23 @@
           <!-- 资源类型 -->
           <el-table-column
             prop="config.title"
-            :label="$t('RuleEngine.resourceTypes')"
             show-overflow-tooltip
+            :label="$t('RuleEngine.resourceTypes')"
             :filters="filterOptions.resourceTypes"
             :filter-method="resourceTypesColumnFilter"
             filter-placement="bottom"
           ></el-table-column>
-
           <el-table-column
             min-width="100px" prop="description" show-overflow-tooltip
             :label="$t('RuleEngine.remark')"
           ></el-table-column>
-          <!--<el-table-column min-width="70px" prop="status.is_alive" :label="$t('RuleEngine.state')">-->
-          <!--<template slot-scope="{ row }">-->
-          <!--<a-badge-->
-          <!--:status="getStatus(row.status) ? 'success' : 'error'"-->
-          <!--:text="getStateText(row.status)"-->
-          <!--dot-->
-          <!--&gt;-->
-          <!--</a-badge>-->
-          <!--</template>-->
-          <!--</el-table-column>-->
-
-          <el-table-column width="120px" prop="id">
-            <template slot-scope="{ row }">
+          <el-table-column width="160px" prop="id">
+            <template slot-scope="{ row, $index }">
+              <el-button type="dashed" size="mini" @click="viewResourcesStatus(row, $index)">
+                {{ $t('RuleEngine.status') }}
+              </el-button>
               <!--<el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">{{ $t('RuleEngine.reconnect') }}</el-button>-->
-              <el-button type="dashed" size="mini" @click="deleteResource(row)">
+              <el-button type="dashed danger" size="mini" @click="deleteResource(row)">
                 {{ $t('RuleEngine.delete') }}
               </el-button>
             </template>
@@ -150,28 +115,28 @@ export default {
       this.$set(row, 'showConfig', showConfig)
     },
 
+    viewResourcesStatus(row, index) {
+      const elExpand = document.querySelectorAll('.el-table__expand-icon')[index]
+      if (elExpand) {
+        elExpand.click()
+      }
+    },
+
     async handleExpandChange(row, reload = false) {
-      if (reload !== true && row.status.length > 0) {
+      if (!reload && row.status.length > 0) {
         return
       }
-      try {
-        if (row.loading === undefined) {
-          this.$set(row, 'loading', true)
-        }
-        const resource = await loadResourceDetails(row.id)
+      const resource = await loadResourceDetails(row.id)
+      if (resource) {
         this.$set(row, 'status', resource.status)
         this.$set(row, 'typeInfo', resource.typeInfo)
         this.$set(row, '_config', resource._config)
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.$set(row, 'loading', false)
       }
     },
     deleteResource(row) {
       this.$msgbox.confirm(this.$t('RuleEngine.deleteResource'), {
-        confirmButtonText: this.$t('RuleEngine.confirm'),
-        cancelButtonText: this.$t('RuleEngine.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await destroyResource(row.id)
@@ -206,7 +171,7 @@ export default {
       this.$router.push({ path: `/resources/${row.id}` })
     },
     resourceTypesColumnFilter(value, row) {
-      return row.name === value
+      return row.config.name === value
     },
   },
 }
@@ -223,6 +188,10 @@ export default {
     .ant-card-body {
       padding: 0 0 0 20px;
     }
+  }
+
+  .expand-column .cell {
+    visibility: hidden;
   }
 }
 </style>

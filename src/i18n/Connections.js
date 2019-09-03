@@ -11,17 +11,9 @@ export default
     zh: '请输入',
     en: 'Please enter',
   },
-  cancel: {
-    zh: '取消',
-    en: 'Cancel',
-  },
   add: {
     zh: '添加',
     en: 'Add',
-  },
-  homePage: {
-    zh: '首页',
-    en: 'Home',
   },
   connect: {
     zh: '连接',
@@ -90,10 +82,6 @@ export default
   willDisconnectTheConnection: {
     zh: '此操作将断开该连接,连接可能通过重连机制再次连接,确认继续?',
     en: 'This operation will disconnect the connection',
-  },
-  confirm: {
-    zh: '确定',
-    en: 'Confirm',
   },
   successfulDisconnection: {
     zh: '断开成功',

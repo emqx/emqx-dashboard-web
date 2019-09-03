@@ -1,37 +1,23 @@
 <template>
   <div class="application">
-    <div class="page-header">
-      <div class="page-header-content">
-        <a-breadcrumb>
-          <a-breadcrumb-item>
-            <router-link class="btn btn-default raw" to="/" tag="span">
-              {{ $t('General.homePage') }}
-            </router-link>
-          </a-breadcrumb-item>
+    <page-header
+      :back-title="$t('General.application')"
+    >
+      <div class="page-header-content-view">
+        <div class="content">
+          <p class="description">
+            {{ $t('General.applicationIsCalled') }}
+          </p>
 
-          <a-breadcrumb-item>
-            <span class="btn btn-default raw">
-              {{ $t('General.application') }}
-            </span>
-          </a-breadcrumb-item>
-        </a-breadcrumb>
-
-        <div class="page-header-content-view">
-          <div class="content">
-            <p class="description">
-              {{ $t('General.applicationIsCalled') }}
-            </p>
-
-            <div class="page-header-link">
-              <a :href="docs.restAPI" target="_blank" class="link-item">
-                <i class="icon el-icon-document"></i>
-                {{ $t('General.productDocumentation') }}
-              </a>
-            </div>
+          <div class="page-header-link">
+            <a :href="docs.restAPI" target="_blank" class="link-item">
+              <i class="icon el-icon-document"></i>
+              {{ $t('General.productDocumentation') }}
+            </a>
           </div>
         </div>
       </div>
-    </div>
+    </page-header>
 
     <div class="app-wrapper">
       <a-card class="emq-list-card">
@@ -42,10 +28,9 @@
             icon="el-icon-plus"
             @click="showDialog('create')"
           >
-            {{ $t('General.create') }}
+            {{ $t('Base.create') }}
           </el-button>
         </div>
-
 
         <el-table :data="tableData" class="data-list">
           <el-table-column prop="app_id" label="AppID">
@@ -75,7 +60,7 @@
                 {{ $t('General.edit') }}
               </el-button>
               <el-button
-                type="dashed"
+                type="dashed danger"
                 size="mini"
                 @click="deleteConfirm(row)"
               >
@@ -84,7 +69,6 @@
             </template>
           </el-table-column>
         </el-table>
-
 
       </a-card>
     </div>
@@ -166,8 +150,8 @@
       </el-form>
 
       <div v-if="accessType !== 'view'" slot="footer" class="dialog-align-footer">
-        <el-button type="primary" size="small" @click="save">{{ $t('General.confirm') }}</el-button>
-        <el-button plain size="small" @click="dialogVisible = false">{{ $t('General.cancel') }}</el-button>
+        <el-button plain size="small" @click="dialogVisible = false">{{ $t('Base.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -302,8 +286,8 @@ export default {
     deleteConfirm(item) {
       const vue = this
       this.$msgbox.confirm(this.$t('General.confirmDelete'), {
-        confirmButtonText: this.$t('General.confirm'),
-        cancelButtonText: this.$t('General.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         destroyAPP(item.app_id).then(() => {
@@ -319,19 +303,6 @@ export default {
 
 <style lang="scss">
 .application {
-  .link-item {
-    .icon {
-      width: 24px;
-      height: 24px;
-      line-height: 14px;
-      border-radius: 50%;
-      border: 1px solid #34C388;
-      padding: 4px;
-      text-align: center;
-      margin-right: 8px;
-      font-size: 12px;
-    }
-  }
 
   .el-select {
     width: 100%;

@@ -87,10 +87,6 @@ export function loadMetrics(node) {
   return http.get(`/nodes/${node}/metrics`)
 }
 
-export function loadConfig(node) {
-  return http.get(`/nodes/${node}/configs`)
-}
-
 export function loadListeners(node) {
   return http.get(`/nodes/${node}/listeners`)
 }

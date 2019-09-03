@@ -5,7 +5,6 @@
       <left-bar></left-bar>
     </el-aside>
 
-
     <el-main style="margin: 0;padding: 0;" :style="elMainStyle">
 
       <el-header style="height: 60px;padding: 0">
@@ -13,15 +12,19 @@
       </el-header>
 
       <div :style="{ minHeight: '360px', minWidth: '600px', overflowX: 'hidden' }">
-        <keep-alive>
-          <router-view v-if="$route.meta.keepAlive"></router-view>
-        </keep-alive>
-
-        <router-view v-if="!$route.meta.keepAlive"></router-view>
+        <transition name="fade-transform" mode="out-in">
+          <keep-alive>
+            <router-view v-if="$route.meta.keepAlive"></router-view>
+          </keep-alive>
+        </transition>
+        <transition name="fade-transform" mode="out-in">
+          <router-view v-if="!$route.meta.keepAlive"></router-view>
+        </transition>
       </div>
     </el-main>
   </el-container>
 </template>
+
 
 <script>
 import LeftBar from '@/components/LeftBar'
@@ -29,13 +32,19 @@ import NavHeader from '@/components/NavHeader'
 
 export default {
   name: 'Layout',
-  components: { NavHeader, LeftBar },
+
+  components: {
+    NavHeader,
+    LeftBar,
+  },
+
   data() {
     return {
       collapsed: false,
       theme: 'light',
     }
   },
+
   computed: {
     elAsideStyle() {
       return {
@@ -50,8 +59,10 @@ export default {
 }
 </script>
 
+
 <style lang="scss" scoped>
-@import "../assets/style/variables";
+@import "../assets/style/variables.scss";
+@import "../assets/style/transition.scss";
 
 .el-aside {
   background-color: $color-theme;
