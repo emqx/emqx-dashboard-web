@@ -104,6 +104,10 @@ export default {
     zh: '此操作将停止该插件,确认继续?',
     en: 'Confirm to stops the plugin?',
   },
+  runSuccess: {
+    zh: '开启成功',
+    en: 'Run Success',
+  },
   stopSuccess: {
     zh: '停止成功',
     en: 'Stop Success',
