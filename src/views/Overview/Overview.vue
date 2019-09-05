@@ -63,7 +63,7 @@
               {{ currentMetrics.subscription }}
             </span>
             <div class="flux-wrapper">
-              <simple-line v-model="currentMetricsLogs.subscription" color="#58afff"></simple-line>
+              <simple-line v-model="currentMetricsLogs.subscription" color="#58afff" type="bar"></simple-line>
             </div>
           </div>
 
@@ -82,16 +82,16 @@
           </div>
 
           <div class="content">
-            <div class="status-count">
-              <el-progress
-                :width="72"
-                :stroke-width="10"
-                type="circle"
-                :percentage="licensePercentage"
-                :format="formatConnection"
-              >
-              </el-progress>
-            </div>
+            <span>
+              {{ _formatNumber(currentMetrics.connection) }}
+            </span>
+            <el-progress
+              class="status-progress"
+              :stroke-width="20"
+              :percentage="licensePercentage"
+              :format="() => ''"
+              :color="getProgressColor(licensePercentage, '#2DC8B2')"
+            ></el-progress>
           </div>
           <div class="app-footer">
             <div class="footer-item">
@@ -163,10 +163,11 @@
           <span class="key">{{ $t('Overview.numberOfConnectionLines') }}:</span>
           <div class="content">
             <el-progress
+              class="license-progress"
               :stroke-width="12"
               :percentage="licensePercentage"
               :format="formatConnection"
-              color="#34c388"
+              :color="getProgressColor(licensePercentage, '#34c388')"
             ></el-progress>
           </div>
         </li>
@@ -405,8 +406,8 @@ export default {
     },
     _formatNumber(num) {
       if (num > 10000) {
-        const value = (num / 10000)
-        return `${parseInt(value * 100, 10) / 100}W`
+        const value = (num / 1000)
+        return `${parseInt(value * 100, 10) / 100}K`
       }
       return num
     },
@@ -436,6 +437,15 @@ export default {
           this.currentMetricsLogs[key].y.shift()
         }
       })
+    },
+    getProgressColor(val, primaryColor) {
+      let color = primaryColor
+      if (val === 100) {
+        color = '#f5222d'
+      } else if (val >= 85 && val < 100) {
+        color = '#faad14'
+      }
+      return color
     },
   },
 }
@@ -575,10 +585,6 @@ export default {
       }
 
       .el-progress {
-        .el-progress-bar {
-          padding-right: 0;
-        }
-
         .el-progress__text {
           display: block;
           padding-left: 0;
@@ -586,6 +592,20 @@ export default {
           margin-left: 0;
           font-size: 12px !important;
         }
+      }
+    }
+  }
+
+  .el-progress {
+    .el-progress-bar {
+      padding-right: 0;
+    }
+    &.status-progress {
+      .el-progress-bar__outer {
+        border-radius: 0px;
+      }
+      .el-progress-bar__inner {
+        border-radius: 0px;
       }
     }
   }
