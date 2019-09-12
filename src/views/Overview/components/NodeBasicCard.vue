@@ -107,7 +107,13 @@
         </el-form>
       </el-row>
 
-      <el-button class="form-btn" type="primary" size="small" @click="toDetails">
+      <el-button
+        v-if="showButton"
+        class="form-btn"
+        type="primary"
+        size="small"
+        @click="toDetails"
+      >
         {{ $t('Overview.viewMore') }}
       </el-button>
     </div>
