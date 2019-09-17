@@ -9,17 +9,12 @@
           <p class="description">
             {{ $t('Schemas.schemaDesc') }}
           </p>
-          <!-- TODO: 添加schema文档 和 用例文档 -->
-          <!-- <div class="page-header-link">
-            <a href="javascript:;" target="_blank" class="link-item">
-              <i class="icon el-icon-document"></i>
-              {{ $t('Schemas.docs') }}
+          <div class="page-header-link">
+            <a :href="docs.tutorial" target="_blank" class="link-item">
+              <i class="icon el-icon-position"></i>
+              {{ $t('Schemas.quickStart') }}
             </a>
-            <a href="javascript:;" target="_blank" class="link-item">
-              <i class="icon iconfont icon-icon_fabu"></i>
-              {{ $t('Schemas.example') }}
-            </a>
-          </div> -->
+          </div>
         </div>
       </div>
     </page-header>
@@ -92,12 +87,16 @@
 
 <script>
 import { loadSchemas, deleteSchema } from '@/api/schemas'
+import { getLink } from '@/common/utils'
 
 export default {
   name: 'Schemas',
 
   data() {
     return {
+      docs: {
+        tutorial: getLink('schemaTutorial'),
+      },
       tableData: [],
       parserTypes: [
         { text: 'avro', value: 'avro' },
