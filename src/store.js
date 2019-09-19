@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import config from './config'
+
 Vue.use(Vuex)
 
 function checkLanguage(lang) {
@@ -24,8 +26,12 @@ export default new Vuex.Store({
     lang: getDefaultLanguage(),
     leftBarCollapse: false, // localStorage.getItem('leftBarCollapse'),
     alertCount: 0,
+    config,
   },
   actions: {
+    UPDATE_CONFIG({ commit }, customConfig) {
+      commit('UPDATE_CONFIG', customConfig)
+    },
     SET_ALERT_COUNT({ commit }, count = 0) {
       commit('SET_ALERT_COUNT', count)
     },
@@ -58,6 +64,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    UPDATE_CONFIG(state, customConfig) {
+      state.config = customConfig
+    },
     SET_ALERT_COUNT(state, count) {
       state.alertCount = count
     },
