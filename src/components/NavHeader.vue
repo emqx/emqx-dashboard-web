@@ -21,7 +21,7 @@
         </div>
       </el-tooltip>
 
-      <el-dropdown placement="bottom" class="user-info-dropdown" @command="handleDropdownCommand">
+      <el-dropdown v-if="$hasShow('navbar.user')" placement="bottom" class="user-info-dropdown" @command="handleDropdownCommand">
         <div class="user-info func-item">
           <span>{{ username }}</span>
           <el-dropdown-menu slot="dropdown">
