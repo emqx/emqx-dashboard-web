@@ -1,6 +1,7 @@
 const mock = require('./script/mock.json')
+const config = require('./script/config.json')
 
-const { NODE_ENV } = process.env
+const { NODE_ENV, BUILD_ENV = 'base' } = process.env
 
 const before = (app) => {
   // 开发环境下可以使用 mock 数据
@@ -12,6 +13,11 @@ const before = (app) => {
       })
     })
   }
+}
+
+const customConfig = {
+  ...config.base,
+  ...(config[BUILD_ENV] || {}),
 }
 
 module.exports = {
@@ -39,5 +45,6 @@ module.exports = {
   },
 
   assetsDir: 'static',
+  publicPath: customConfig.publicPath,
   productionSourceMap: false,
 }
