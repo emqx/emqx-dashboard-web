@@ -1,4 +1,4 @@
 rm -rf ../emqx-enterprise-dashboard/priv/www/*
-echo "Deleted"
+echo "prive/www/* Deleted\n"
 cp -rf dist/* ../emqx-enterprise-dashboard/priv/www
-echo "Finished"
+echo "emqx-enterprise-dashboard Deployed\n"

@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import config from './config'
+import config from '../../script/config'
 
 Vue.use(Vuex)
+
+const BASE_ENV = 'base'
 
 function checkLanguage(lang) {
   if (['en', 'zh'].includes(lang)) {
@@ -11,12 +13,21 @@ function checkLanguage(lang) {
   }
   return ''
 }
-
 function getDefaultLanguage() {
   const browserLanguage = checkLanguage(navigator.language.substr(0, 2))
   const localStorageLanguage = checkLanguage(localStorage.getItem('language'))
   const defaultLanguage = (window.EMQX_CONFIG || {}).language
   return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
+}
+
+function getConfigState() {
+  const buildEnv = process.env.VUE_APP_BUILD_ENV || BASE_ENV
+  const envConfig = config[buildEnv] || config.base
+
+  return {
+    ...config.base,
+    ...envConfig,
+  }
 }
 
 export default new Vuex.Store({
@@ -26,7 +37,7 @@ export default new Vuex.Store({
     lang: getDefaultLanguage(),
     leftBarCollapse: false, // localStorage.getItem('leftBarCollapse'),
     alertCount: 0,
-    config,
+    config: getConfigState(),
   },
   actions: {
     UPDATE_CONFIG({ commit }, customConfig) {
