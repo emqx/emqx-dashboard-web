@@ -5,7 +5,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 import { getBasicAuthInfo, toLogin } from '@/common/utils'
-import store from '@/store'
+import store from '@/stores'
 
 let timer = 0
 

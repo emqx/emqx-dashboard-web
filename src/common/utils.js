@@ -2,8 +2,8 @@
 import Clipboard from 'clipboard'
 import sqlFormatter from 'sql-formatter'
 
-import store from '@/store'
-import router from '@/router'
+import store from '@/stores'
+import router from '@/routes'
 
 const { lang = 'zh' } = store.state
 
@@ -247,7 +247,12 @@ export const sqlExampleFormatter = (sql) => {
 /**
  * 是否隐藏页面元素
  * @param scope 查询的隐藏属性
+ * @return boolean
  */
 export const hasShow = (scope = '') => {
-  return !scope ? true : !(store.state.config.hide || []).includes(scope)
+  const hide = store.state.config.hide || { routes: [], children: [] }
+  if (!scope) {
+    return true
+  }
+  return !(hide.routes.includes(scope) || hide.children.includes(scope))
 }
