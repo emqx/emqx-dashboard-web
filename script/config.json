@@ -3,18 +3,25 @@
     "baseURL": "/api/v3",
     "httpTimeout": 15000,
     "publicPath": "/",
-    "hide": []
+    "hide": {
+      "routes": [],
+      "children": []
+    }
   },
   "cloud": {
     "baseURL": "api/v3",
     "publicPath": "./",
-    "hide": [
-      "navbar.user",
-      "monitor.connections",
-      "monitor.license",
-      "plugins",
-      "setting",
-      "function"
-    ]
+    "hide": {
+      "routes": [
+        "plugins",
+        "setting",
+        "general"
+      ],
+      "children": [
+        "navbar.user",
+        "monitor.connections",
+        "monitor.license"
+      ]
+    }
   }
 }
