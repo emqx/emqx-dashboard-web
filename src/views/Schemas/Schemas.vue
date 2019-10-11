@@ -38,19 +38,17 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="id" label="ID">
+          <el-table-column prop="name" :label="$t('Schemas.name')">
             <template slot-scope="{ row }">
               <a
                 href="javascript:;"
                 @click="$router.push({
-                  path: `/schemas/${row.id}`, query: { oper: 'view' }
+                  path: `/schemas/${row.name}`, query: { oper: 'view' }
                 })"
               >
-                {{ row.id }}
+                {{ row.name }}
               </a>
             </template>
-          </el-table-column>
-          <el-table-column prop="name" :label="$t('Schemas.name')">
           </el-table-column>
           <el-table-column
             prop="parser_type"
@@ -59,8 +57,6 @@
             :filter-method="parserTypesColumnFilter"
             filter-placement="bottom"
           >
-          </el-table-column>
-          <el-table-column prop="version" :label="$t('Schemas.version')">
           </el-table-column>
           <el-table-column
             prop="descr"
@@ -122,7 +118,7 @@ export default {
       this.$confirm(this.$t('Schemas.confirmDelete'), {
         type: 'warning',
       }).then(async () => {
-        const res = await deleteSchema(row.id)
+        const res = await deleteSchema(row.name)
         if (res) {
           this.loadData()
           this.$message.success(this.$t('Base.deleteSuccess'))
