@@ -138,9 +138,8 @@
 
 <script>
 import {
-  loadPlugins, startPlugin, stopPlugin,
-} from '@/api/plugins'
-import { loadNodes } from '@/api/common'
+  loadPlugins, loadNodes, startPlugin, stopPlugin,
+} from '@/api/common'
 
 export default {
   name: 'Plugins',
