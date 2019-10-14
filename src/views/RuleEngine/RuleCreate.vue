@@ -149,8 +149,7 @@
         </div>
 
         <div class="rule-action-wrapper">
-          <rule-actions ref="ruleAction" v-model="record.actions" :event="record.for">
-          </rule-actions>
+          <rule-actions ref="ruleAction" v-model="record.actions" :event="record.for"></rule-actions>
         </div>
       </a-card>
 
