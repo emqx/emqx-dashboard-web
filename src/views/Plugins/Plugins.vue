@@ -246,7 +246,6 @@ export default {
       if (!row.active) {
         await startPlugin(this.nodeName, row.name)
         row.active = true
-        this.$message.success(this.$t('Plugins.runSuccess'))
         return
       }
       this.$msgbox.confirm(this.$t('Plugins.thisActionWillStopThePlugIn'), {
