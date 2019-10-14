@@ -20,12 +20,27 @@
               {{ searchValue ? $t('Connections.reset') : $t('Connections.refresh') }}
             </el-button>
           </div>
+          <div class="search-wrapper">
+            <emq-select
+              v-model="nodeName"
+              class="node-select"
+              size="small"
+              :field="{ options: currentNodes }"
+              :field-name="{ label: 'name', value: 'name' }"
+              @change="handleNodeChange"
+            ></emq-select>
+          </div>
         </div>
 
         <el-table :data="tableData" class="data-list">
           <el-table-column prop="client_id" min-width="130px" label="Client ID">
             <template slot-scope="{ row }">
-              <router-link :to="{ path: '/connections/detail', query: { client_id: row.client_id } }">
+              <router-link
+                :to="{
+                  path: '/connections/detail',
+                  query: { client_id: row.client_id }
+                }"
+              >
                 {{ row.client_id }}
               </router-link>
             </template>
@@ -39,8 +54,12 @@
             </template>
           </el-table-column>
           <el-table-column prop="keepalive" label="Keepalive"></el-table-column>
-          <el-table-column prop="proto_name" :filters="filterOptions.protoName" :filter-method="protoNameColumnFilter"
-                           filter-placement="bottom" :label="$t('Connections.protocol')"
+          <el-table-column
+            prop="proto_name"
+            filter-placement="bottom"
+            :filters="filterOptions.protoName"
+            :filter-method="protoNameColumnFilter"
+            :label="$t('Connections.protocol')"
           >
             <template slot-scope="{ row }">
               <span class="">
@@ -48,7 +67,13 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="proto_ver" min-width="80px" :label="$t('Connections.protocolVersion')"></el-table-column>
+          <el-table-column
+            v-if="showLevel === 'more'"
+            prop="proto_ver"
+            min-width="80px"
+            :label="$t('Connections.protocolVersion')"
+          >
+          </el-table-column>
           <el-table-column
             v-if="showLevel === 'more'"
             prop="clean_start"
@@ -56,8 +81,8 @@
             :label="$t('Connections.clearSession')"
             :formatter="$ => $ ? 'true' : 'false'"
           ></el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="peercert" min-width="80px" :label="$t('Connections.SSL')"></el-table-column>
-
+          <el-table-column v-if="showLevel === 'more'" prop="peercert" min-width="80px" :label="$t('Connections.SSL')">
+          </el-table-column>
           <el-table-column prop="connected_at" min-width="140px" :label="$t('Connections.connectionAt')"></el-table-column>
           <el-table-column prop="oper" width="120px" label="">
             <template slot-scope="{ row }">
@@ -72,11 +97,12 @@
 
         <div class="emq-table-footer">
           <el-pagination
-            hide-on-single-page background
+            hide-on-single-page
+            background
             layout="total, sizes, prev, pager, next"
             :page-sizes="[20, 50, 100, 500]" :page-size.sync="params._limit"
             :current-page.sync="params._page" :total="count" @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
+            @current-change="handleCurrentPageChange"
           >
           </el-pagination>
         </div>
@@ -87,7 +113,10 @@
 
 
 <script>
-import { listConnections, searchConnections, disconnectConnection } from '@/api/connections'
+import {
+  searchNodeConnections, disconnectConnection, listNodeConnections,
+} from '@/api/connections'
+import { loadNodes } from '@/api/common'
 
 export default {
   name: 'Connections',
@@ -111,6 +140,8 @@ export default {
       filterOptions: {
         protoName: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M', 'Stomp'].map($ => ({ text: $, value: $ })),
       },
+      nodeName: '',
+      currentNodes: [],
     }
   },
 
@@ -119,6 +150,10 @@ export default {
   },
 
   methods: {
+    handleNodeChange() {
+      this.searchValue = ''
+      this.loadNodeConnections(true)
+    },
     syncShowLevel() {
       localStorage.setItem('SHOW_LEVEL', this.showLevel)
     },
@@ -133,37 +168,45 @@ export default {
       }).then(async () => {
         await disconnectConnection(row.client_id)
         this.$set(row, 'disconnected', true)
-        this.loadData()
+        this.loadNodeConnections()
         this.$message.success(this.$t('Connections.successfulDisconnection'))
       }).catch(() => { })
     },
     resetSearch() {
+      let reload = false
       if (this.searchValue) {
-        this.params._page = 1
+        reload = true
       }
       this.searchValue = ''
-      this.loadData()
+      this.loadNodeConnections(reload)
     },
     async handleSearch() {
       const clientID = this.searchValue.trim()
       if (!clientID) {
-        this.loadData()
+        this.loadNodeConnections()
         return
       }
       this.params._page = 1
       this.count = 0
-      this.tableData = await searchConnections(clientID)
+      this.tableData = await searchNodeConnections(this.nodeName, clientID)
     },
     handleSizeChange() {
-      this.params._page = 1
-      this.loadData()
+      this.loadNodeConnections(true)
     },
-    handleCurrentChange() {
-      this.loadData()
+    handleCurrentPageChange() {
+      this.loadNodeConnections()
     },
-    async loadData(params = {}) {
+    async loadData() {
+      this.currentNodes = await loadNodes()
+      this.nodeName = this.nodeName || (this.currentNodes[0] || {}).name
       this.listLoading = false
-      const data = await listConnections({ ...this.params, ...params })
+      this.loadNodeConnections()
+    },
+    async loadNodeConnections(reload, params = {}) {
+      if (reload) {
+        this.params._page = 1
+      }
+      const data = await listNodeConnections(this.nodeName, { ...this.params, ...params })
       const { items = [], meta: { count = 0 } } = data
       this.tableData = items
       this.count = count
@@ -183,6 +226,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    .node-select {
+      width: 100%;
+    }
 
     .el-button {
       margin-left: 12px;

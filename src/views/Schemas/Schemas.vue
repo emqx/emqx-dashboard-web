@@ -9,17 +9,12 @@
           <p class="description">
             {{ $t('Schemas.schemaDesc') }}
           </p>
-          <!-- TODO: 添加schema文档 和 用例文档 -->
-          <!-- <div class="page-header-link">
-            <a href="javascript:;" target="_blank" class="link-item">
-              <i class="icon el-icon-document"></i>
-              {{ $t('Schemas.docs') }}
+          <div class="page-header-link">
+            <a :href="docs.tutorial" target="_blank" class="link-item">
+              <i class="icon el-icon-position"></i>
+              {{ $t('Schemas.quickStart') }}
             </a>
-            <a href="javascript:;" target="_blank" class="link-item">
-              <i class="icon iconfont icon-icon_fabu"></i>
-              {{ $t('Schemas.example') }}
-            </a>
-          </div> -->
+          </div>
         </div>
       </div>
     </page-header>
@@ -43,19 +38,17 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="id" label="ID">
+          <el-table-column prop="name" :label="$t('Schemas.name')">
             <template slot-scope="{ row }">
               <a
                 href="javascript:;"
                 @click="$router.push({
-                  path: `/schemas/${row.id}`, query: { oper: 'view' }
+                  path: `/schemas/${row.name}`, query: { oper: 'view' }
                 })"
               >
-                {{ row.id }}
+                {{ row.name }}
               </a>
             </template>
-          </el-table-column>
-          <el-table-column prop="name" :label="$t('Schemas.name')">
           </el-table-column>
           <el-table-column
             prop="parser_type"
@@ -64,8 +57,6 @@
             :filter-method="parserTypesColumnFilter"
             filter-placement="bottom"
           >
-          </el-table-column>
-          <el-table-column prop="version" :label="$t('Schemas.version')">
           </el-table-column>
           <el-table-column
             prop="descr"
@@ -92,12 +83,16 @@
 
 <script>
 import { loadSchemas, deleteSchema } from '@/api/schemas'
+import { getLink } from '@/common/utils'
 
 export default {
   name: 'Schemas',
 
   data() {
     return {
+      docs: {
+        tutorial: getLink('schemaTutorial'),
+      },
       tableData: [],
       parserTypes: [
         { text: 'avro', value: 'avro' },
@@ -123,7 +118,7 @@ export default {
       this.$confirm(this.$t('Schemas.confirmDelete'), {
         type: 'warning',
       }).then(async () => {
-        const res = await deleteSchema(row.id)
+        const res = await deleteSchema(row.name)
         if (res) {
           this.loadData()
           this.$message.success(this.$t('Base.deleteSuccess'))

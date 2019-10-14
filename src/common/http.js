@@ -5,8 +5,8 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 import { getBasicAuthInfo, toLogin } from '@/common/utils'
-import config from '@/config'
-import store from '@/store'
+import store from '@/stores'
+import router from '@/routes'
 
 let timer = 0
 
@@ -32,6 +32,7 @@ const httpCode = {
     114: '旧密码错误',
     115: '主题错误',
     '-1': '需要登录',
+    '-2': '相关插件未开启',
   },
   en: {
     0: 'Success',
@@ -51,18 +52,21 @@ const httpCode = {
     114: 'Old password error',
     115: 'Bad topic',
     '-1': 'Login Required',
+    '-2': 'Plugin not started',
   },
 }
 
 const httpMap = httpCode[lang]
+
+const pluginPages = ['schemas', 'rules', 'resources', 'setting']
 
 Object.assign(axios.defaults, {
   headers: {
     'Content-Type': 'application/json',
     'Cache-Control': 'no-cache',
   },
-  baseURL: config.baseURL,
-  timeout: config.httpTimeout,
+  baseURL: store.state.config.baseURL,
+  timeout: store.state.httpTimeout,
   auth: {},
 })
 
@@ -88,7 +92,6 @@ function handleError(error) {
     NProgress.done()
   }, 300)
   if (!error.response) {
-    // Message.error(error.message)
     return Promise.reject(error.message)
   }
 
@@ -98,8 +101,11 @@ function handleError(error) {
   } else if (message) {
     error.message = message
   }
+  const { name: currentPage } = router.history.current
   if (status === 401) {
     toLogin()
+  } else if (status === 404 && pluginPages.includes(currentPage)) {
+    Message.error(httpMap['-2'])
   } else if (showMessage) {
     Message.error(error.message)
   }

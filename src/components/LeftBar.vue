@@ -8,7 +8,6 @@
     </div>
 
     <a-menu
-      style="width: 200px"
       class="menu-wrapper"
       :default-selected-keys="defaultSelectedKeys"
       :selected-keys="defaultSelectedKeys"
@@ -18,26 +17,24 @@
       @click="handleClick"
     >
       <template v-for="item in menus">
-        <a-sub-menu
-          v-if="item.children && item.children.length > 0"
-          :key="item.key"
-          @titleClick="titleClick(item)"
-        >
-          <span slot="title">
+        <template v-if="$hasShow(item.key)">
+          <a-sub-menu v-if="item.children && item.children.length > 0" :key="item.key" @titleClick="titleClick(item)">
+            <span slot="title">
+              <i class="iconfont" :class="item.icon"></i>
+              <span>{{ item.title }}</span>
+            </span>
+            <template v-for="item2 in item.children">
+              <a-menu-item v-if="$hasShow(item2.key)" :key="item2.path">
+                {{ item2.title }}
+              </a-menu-item>
+            </template>
+          </a-sub-menu>
+
+          <a-menu-item v-else-if="!item.children && $hasShow(item.key)" :key="item.path">
             <i class="iconfont" :class="item.icon"></i>
             <span>{{ item.title }}</span>
-          </span>
-          <template>
-            <a-menu-item v-for="item2 in item.children" :key="item2.path">
-              {{ item2.title }}
-            </a-menu-item>
-          </template>
-        </a-sub-menu>
-
-        <a-menu-item v-else-if="!item.children" :key="item.path">
-          <i class="iconfont" :class="item.icon"></i>
-          <span>{{ item.title }}</span>
-        </a-menu-item>
+          </a-menu-item>
+        </template>
       </template>
     </a-menu>
   </div>
@@ -103,16 +100,19 @@ export default {
         children: [
           {
             title: this.$t('components.ruleEngine'),
+            key: 'rules.ruleEngine',
             path: '/rules',
             parentKey: 'rules',
           },
           {
             title: this.$t('components.resources'),
+            key: 'rules.resources',
             path: '/resources',
             parentKey: 'rules',
           },
           {
             title: this.$t('components.schema'),
+            key: 'rules.schema',
             path: '/schemas',
             parentKey: 'rules',
           },
@@ -120,45 +120,51 @@ export default {
       },
       {
         title: this.$t('components.alarm'),
+        key: 'alerts',
         path: '/alerts',
         icon: 'icon-gaojingkongxin',
       },
       {
         title: this.$t('components.plugin'),
+        key: 'plugins',
         path: '/plugins',
         icon: 'icon-kongjian',
       },
       {
         title: this.$t('components.tool'),
-        key: 'tool',
+        key: 'tools',
         icon: 'icon-gongju',
         children: [
           {
             title: 'WebSocket',
+            key: 'tool.WebSocket',
             path: '/websocket',
-            parentKey: 'tool',
+            parentKey: 'tools',
           },
         ],
       },
       {
         title: this.$t('components.setting'),
+        key: 'setting',
         path: '/setting',
         icon: 'icon-icon_shezhi',
       },
       {
         title: this.$t('components.general'),
-        key: 'function',
+        key: 'general',
         icon: 'icon-fenzuguanli',
         children: [
           {
             title: this.$t('components.application'),
+            key: 'general.application',
             path: '/application',
-            parentKey: 'function',
+            parentKey: 'general',
           },
           {
             title: this.$t('components.user'),
+            key: 'general.user',
             path: '/users',
-            parentKey: 'function',
+            parentKey: 'general',
           },
         ],
       },
@@ -175,7 +181,7 @@ export default {
     initRouter() {
       const { path } = this.$route
       this.menus.forEach((item) => {
-        if (!item.key) {
+        if (!item.key || !item.children) {
           return
         }
         if (item.children.find($ => path.includes($.path) || path === $.path)) {
@@ -191,13 +197,14 @@ export default {
 
 
 <style lang="scss">
-@import "../assets/style/variables";
+@import '../assets/style/variables';
 
 .left-bar {
   min-height: calc(100vh - 80px);
   background-color: $color-theme;
 
   .menu-wrapper {
+    width: 200px;
     margin-top: 80px;
   }
   .ant-menu {
@@ -209,7 +216,8 @@ export default {
     }
   }
 
-  .ant-menu-sub, .ant-menu-dark {
+  .ant-menu-sub,
+  .ant-menu-dark {
     background-color: $color-theme;
   }
 
@@ -223,13 +231,13 @@ export default {
     font-size: 18px;
     height: 60px;
     line-height: 60px;
-    color: #34C388;
+    color: #34c388;
     overflow: hidden;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 100;
-    transition: left .5s;
+    transition: left 0.5s;
     display: flex;
     align-items: center;
     padding: 0 20px;
