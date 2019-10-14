@@ -252,10 +252,8 @@ let routes = [
   },
 ]
 
-if (hide.routes && hide.routes.length) {
-  hide.routes.forEach((hideRoute) => {
-    routes = routes.filter(route => route.meta.hideKey !== hideRoute)
-  })
-}
+hide.routes.forEach((hideRoute) => {
+  routes = routes.filter(route => route.meta.hideKey !== hideRoute)
+})
 
 export default routes
