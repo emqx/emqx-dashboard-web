@@ -10,7 +10,7 @@ export const loadSchemas = () => http.get('/schemas')
 export const viewSchema = async (id) => {
   try {
     const data = await http.get(`/schemas/${id}`)
-    const res = data
+    const res = data[0]
     const { parser_addr } = res
     if (parser_addr) {
       const { url, host, port } = parser_addr
