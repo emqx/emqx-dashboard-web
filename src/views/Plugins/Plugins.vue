@@ -245,7 +245,7 @@ export default {
     },
     async togglePlugin(row) {
       if (!row.active) {
-        await startPlugin(row.name)
+        await startPlugin(this.nodeName, row.name)
         row.active = true
         this.$message.success(this.$t('Plugins.runSuccess'))
         return
@@ -255,7 +255,7 @@ export default {
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
-        await stopPlugin(row.name)
+        await stopPlugin(this.nodeName, row.name)
         this.$message.success(this.$t('Plugins.stopSuccess'))
         row.active = false
       }).catch(() => {})
