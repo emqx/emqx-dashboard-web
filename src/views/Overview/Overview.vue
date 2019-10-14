@@ -75,7 +75,7 @@
         </a-card>
       </el-col>
 
-      <el-col v-if="$hasShow('monitor.connections')" :span="6">
+      <el-col :span="6">
         <a-card class="app-card" :bordered="true" hoverable :loading="pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.connectionNumber') }}
@@ -188,7 +188,7 @@
         </li>
       </ul>
 
-      <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
+      <div class="license-card-footer">
         <div class="description">
           {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>

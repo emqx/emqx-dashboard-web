@@ -34,8 +34,8 @@ export function toLogin() {
  * @return Promise
  */
 export const awaitWrap = promise => promise
-  .then(data => data)
-  .catch(err => null)
+.then(data => data)
+.catch(err => null)
 
 /**
  * 安全的转化 JSON 字符串
@@ -242,12 +242,4 @@ export const sqlExampleFormatter = (sql) => {
     }
   }
   return text.replace(/!#!/g, '\n\r')
-}
-
-/**
- * 是否隐藏页面元素
- * @param scope 查询的隐藏属性
- */
-export const hasShow = (scope = '') => {
-  return !scope ? true : !(store.state.config.hide || []).includes(scope)
 }

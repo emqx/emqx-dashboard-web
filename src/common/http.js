@@ -5,6 +5,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 import { getBasicAuthInfo, toLogin } from '@/common/utils'
+import config from '@/config'
 import store from '@/store'
 
 let timer = 0
@@ -60,8 +61,8 @@ Object.assign(axios.defaults, {
     'Content-Type': 'application/json',
     'Cache-Control': 'no-cache',
   },
-  baseURL: store.state.config.baseURL,
-  timeout: store.state.httpTimeout,
+  baseURL: config.baseURL,
+  timeout: config.httpTimeout,
   auth: {},
 })
 

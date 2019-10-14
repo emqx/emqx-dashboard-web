@@ -5,7 +5,6 @@ import Waves from 'vue-directive-waves'
 import VueI18n from 'vue-i18n'
 import ElementLocale from 'element-ui/lib/locale'
 import lang from './i18n'
-import './config'
 
 import installer from '@/common/installer'
 import directive from '@/common/directive'
