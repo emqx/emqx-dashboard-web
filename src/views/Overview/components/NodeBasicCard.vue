@@ -1,57 +1,52 @@
 <template>
   <div class="node-basic-card">
     <div class="version-wrapper">
-      <img class="logo" src="../../../assets/emqx_logo.png" alt="logo">
-      <div class="version">{{ record.version }}</div>
-      <div class="jump">
-        <el-button v-if="showButton" type="dashed" size="mini" @click="toDetails">
-          {{ $t('Overview.view') }}
-        </el-button>
+      <div class="version-title">
+        {{ $t('Overview.version') }}: {{ record.version }}
       </div>
     </div>
 
     <div class="basic-info">
-      <div class="title">
-        <!-- {{ record.sysdescr }} -->
-      </div>
-
-      <el-row :gutter="20">
-
-        <el-col :span="11">
-
-          <ul class="field-info">
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('Overview.systemTime') }}:
-              </div>
-              <span class="field-value">
-                {{ record.datetime }}
-              </span>
-            </li>
-
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('Overview.uptime') }}:
-              </div>
-              <span class="field-value">
-                {{ record.uptime }}
-              </span>
-            </li>
-
-            <li class="field-info-item">
-              <div class="field-title">
-                OTP Release:
-              </div>
-              <span class="field-value">
-                {{ record.otp_release }}
-              </span>
-            </li>
-
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('Overview.nodeState') }}:
-              </div>
-              <span class="field-value">
+      <el-row>
+        <el-form
+          class="node-form"
+          label-suffix=":"
+          label-position="left"
+          label-width="150px"
+        >
+          <el-col :span="12">
+            <el-form-item :label="$t('Overview.systemTime')">
+              <span class="form-item-value">{{ record.datetime }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Overview.memory')">
+              <span class="form-item-value">{{ record.memory_used }} / {{ record.memory_total }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Overview.uptime')">
+              <span class="form-item-value">{{ record.uptime }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Overview.maxFds')">
+              <span class="form-item-value">{{ record.max_fds }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="OTP Release">
+              <span class="form-item-value">{{ record.otp_release }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="`Erlang ${$t('Overview.process')}`">
+              <span class="form-item-value">{{ record.process_used }} / {{ record.process_available }}</span>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Overview.nodeState')">
+              <span class="form-item-value">
                 <a-badge
                   is-dot
                   :status="record.node_status === 'Running' ? 'success' : 'error'"
@@ -59,110 +54,68 @@
                 >
                 </a-badge>
               </span>
-            </li>
-
-
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('Overview.memory') }}:
-              </div>
-              <span class="field-value">
-                {{ record.memory_used }} / {{ record.memory_total }}
-              </span>
-            </li>
-
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('Overview.maxFds') }}:
-              </div>
-              <span class="field-value">
-                {{ record.max_fds }}
-              </span>
-            </li>
-
-            <li class="field-info-item">
-              <div class="field-title">
-                Erlang {{ $t('Overview.process') }}:
-              </div>
-              <span class="field-value">
-                {{ record.process_used }} / {{ record.process_available }}
-              </span>
-            </li>
-
-            <li class="field-info-item">
-              <div class="field-title">
-                CPU {{ $t('Overview.load') }}
-                <el-popover
-                  trigger="hover"
-                  content="load1/load4/load15"
-                >
-                  <i slot="reference" class="el-icon-question"></i>
-                </el-popover>
-                :
-              </div>
-              <span class="field-value">
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="`CPU ${$t('Overview.load')}`">
+              <span class="form-item-value">
                 {{ record.load1 }} / {{ record.load5 }} / {{ record.load15 }}
               </span>
-            </li>
-
-          </ul>
-        </el-col>
-
-        <el-col :span="2" class="v-line-wrapper">
-          <div class="v-line"></div>
-        </el-col>
-
-        <el-col :span="11">
-          <ul class="field-info stats">
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('Overview.currentConnection') }}:
-              </div>
-              <span class="field-value">
+              <el-popover
+                trigger="hover"
+                content="load1/load4/load15"
+              >
+                <i slot="reference" class="el-icon-question"></i>
+              </el-popover>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Overview.currentConnection')">
+              <span class="form-item-value">
                 {{ record['connections.count'] }} / {{ record['connections.max'] }}
               </span>
-            </li>
-
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('Overview.topics') }}:
-              </div>
-              <span class="field-value">
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Overview.topics')">
+              <span class="form-item-value">
                 {{ record['topics.count'] }} / {{ record['topics.max'] }}
               </span>
-            </li>
-
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('Overview.subscription') }}:
-              </div>
-              <span class="field-value">
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Overview.subscription')">
+              <span class="form-item-value">
                 {{ record['subscriptions.count'] }} / {{ record['subscriptions.max'] }}
               </span>
-            </li>
-
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('Overview.retained') }}:
-              </div>
-              <span class="field-value">
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Overview.retained')">
+              <span class="form-item-value">
                 {{ record['retained.count'] }} / {{ record['retained.max'] }}
               </span>
-            </li>
-
-
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('Overview.shareSubscription') }}:
-              </div>
-              <span class="field-value">
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Overview.shareSubscription')">
+              <span class="form-item-value">
                 {{ record['subscriptions.shared.count'] }} / {{ record['subscriptions.shared.max'] }}
               </span>
-            </li>
-          </ul>
-        </el-col>
-
+            </el-form-item>
+          </el-col>
+        </el-form>
       </el-row>
+
+      <el-button
+        v-if="showButton"
+        class="form-btn"
+        type="primary"
+        size="small"
+        @click="toDetails"
+      >
+        {{ $t('Overview.viewMore') }}
+      </el-button>
     </div>
   </div>
 </template>
@@ -259,13 +212,7 @@ export default {
 
 <style lang="scss">
 .node-basic-card {
-  padding: 16px;
-  display: flex;
-  align-items: center;
-
-  .field-title {
-    width: 110px;
-  }
+  padding: 10px;
 
   .field-info {
     &.stats {
@@ -274,57 +221,49 @@ export default {
       }
     }
   }
+
   .version-wrapper {
-    width: 100px;
-    text-align: center;
-    word-break: break-word;
-
-    .logo {
-      width: 48px;
-      height: auto;
-    }
-
-    .version {
-      margin-top: 12px;
-      font-size: 12px;
-      color: #34C388;
-      line-height: 1.2;
-    }
-
-    .jump {
-      margin-top: 12px;
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 2px;
+    background: #F8F8F8;
+    font-size: 14px;
+    .version-title {
+      color: #333333;
+      font-weight: bolder;
     }
   }
 
   .basic-info {
-    flex: 1;
-    margin-left: 32px;
-
-    .title {
-      font-size: 14px;
-      font-weight: bold;
-      color: #101010;
+    margin-top: 20px;
+    padding: 0px 16px;
+    .node-form {
+      .el-form-item {
+        margin-bottom: -6px;
+      }
+      .el-form-item__label {
+        color: #666;
+      }
+      .form-item-value {
+        color: #333;
+      }
     }
-  }
-
-  .v-line-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .v-line {
-      width: 1px;
-      height: 240px;
-      background-color: #d8d8d8;
+    .form-btn {
+      margin-top: 20px;
+      width: 120px;
     }
-  }
-
-  .ant-badge {
-    margin-top: -3px;
-
-    .ant-badge-status-text {
-      color: #101010;
-      font-size: 12px;
+    .ant-badge {
+      margin-top: -3px;
+      .ant-badge-status-text {
+        font-size: 14px;
+      }
+      .ant-badge-status-dot {
+        width: 8px;
+        height: 8px;
+      }
+    }
+    .el-icon-question {
+      margin-left: 6px;
     }
   }
 }

@@ -149,7 +149,8 @@
         </div>
 
         <div class="rule-action-wrapper">
-          <rule-actions v-model="record.actions" :event="record.for"></rule-actions>
+          <rule-actions ref="ruleAction" v-model="record.actions" :event="record.for">
+          </rule-actions>
         </div>
       </a-card>
 
@@ -260,6 +261,10 @@ export default {
       const { sql_example } = this.selectEvent
       this.record.rawsql = sqlExampleFormatter(sql_example)
       this.handlePreSQLTest()
+      const { ruleAction } = this.$refs
+      if (ruleAction) {
+        ruleAction.initData()
+      }
     },
     handlePreSQLTest() {
       this.record.ctx = {}

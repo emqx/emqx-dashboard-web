@@ -11,6 +11,10 @@ export default {
     zh: '使用文档',
     en: 'Document',
   },
+  quickStart: {
+    zh: '快速开始',
+    en: 'Quick Start',
+  },
   example: {
     zh: '编解码示例',
     en: 'Schema example',
