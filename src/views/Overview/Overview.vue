@@ -63,7 +63,7 @@
               {{ currentMetrics.subscription }}
             </span>
             <div class="flux-wrapper">
-              <simple-line v-model="currentMetricsLogs.subscription" color="#58afff" type="bar"></simple-line>
+              <simple-line v-model="currentMetricsLogs.subscription" color="#58afff"></simple-line>
             </div>
           </div>
 
@@ -75,23 +75,23 @@
         </a-card>
       </el-col>
 
-      <el-col v-if="$hasShow('monitor.connections')" :span="6">
+      <el-col :span="6">
         <a-card class="app-card" :bordered="true" hoverable :loading="pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.connectionNumber') }}
           </div>
 
           <div class="content">
-            <span>
-              {{ _formatNumber(currentMetrics.connection) }}
-            </span>
-            <el-progress
-              class="status-progress"
-              :stroke-width="20"
-              :percentage="licensePercentage"
-              :format="() => ''"
-              :color="getProgressColor(licensePercentage, '#2DC8B2')"
-            ></el-progress>
+            <div class="status-count">
+              <el-progress
+                :width="72"
+                :stroke-width="10"
+                type="circle"
+                :percentage="licensePercentage"
+                :format="formatConnection"
+              >
+              </el-progress>
+            </div>
           </div>
           <div class="app-footer">
             <div class="footer-item">
@@ -148,7 +148,7 @@
 
     </a-card>
 
-    <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="pageLoading">
+    <a-card class="license-card" :loading="pageLoading">
       <div class="emq-title">
         {{ $t('Overview.license') }}
       </div>
@@ -163,11 +163,10 @@
           <span class="key">{{ $t('Overview.numberOfConnectionLines') }}:</span>
           <div class="content">
             <el-progress
-              class="license-progress"
               :stroke-width="12"
               :percentage="licensePercentage"
               :format="formatConnection"
-              :color="getProgressColor(licensePercentage, '#34c388')"
+              color="#34c388"
             ></el-progress>
           </div>
         </li>
@@ -179,16 +178,16 @@
 
         <li class="item">
           <span class="key">{{ $t('Overview.issuedAt') }}:</span>
-          <span class="value broker">{{ license.issued_at }}</span>
+          <div class="value broker">{{ license.issued_at }}</div>
         </li>
 
         <li class="item">
           <span class="key">{{ $t('Overview.expireAt') }}:</span>
-          <span class="value broker">{{ license.expiry_at }}</span>
+          <div class="value broker">{{ license.expiry_at }}</div>
         </li>
       </ul>
 
-      <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
+      <div class="license-card-footer">
         <div class="description">
           {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>
@@ -329,10 +328,7 @@ export default {
     this.loadData()
     this.loadLicenseData()
     clearInterval(this.timerData)
-    this.timerData = setInterval(() => {
-      this.loadData()
-      this.loadNodes()
-    }, 10 * 1000)
+    this.timerData = setInterval(this.loadData, 10 * 1000)
     this.dataTypeChange()
   },
 
@@ -348,6 +344,10 @@ export default {
         () => ({ xData: [], yData: [] }),
       )
     },
+    async loadNodes() {
+      this.nodes = await loadNodesApi()
+      this.nodeName = this.nodeName || (this.nodes[0] || {}).name
+    },
     dataTypeChange() {
       clearInterval(this.timerMetrics)
       if (this.dataType === 'basic') {
@@ -356,11 +356,7 @@ export default {
         this.loadMetricsLogData()
       }
     },
-    async loadNodes() {
-      this.nodes = await loadNodesApi()
-      this.nodeName = this.nodeName || (this.nodes[0] || {}).name
-    },
-    async setMetricsChartRealTime() {
+    async setMetricsLogsRealTime() {
       const data = await loadMetricsLog(false, this.dataType)
       const currentData = this.metricLog[this.dataType]
       this.metricTitles.forEach((key, index) => {
@@ -375,7 +371,7 @@ export default {
       })
     },
     _formatTime(time) {
-      return Moment(time).utcOffset(0).format('HH:mm')
+      return Moment(time).utcOffset(0).format('HH:mm:ss')
     },
     async loadMetricsLogData() {
       this.tableLoading = true
@@ -390,7 +386,7 @@ export default {
             currentData[index].yData.push(item[1])
           })
         })
-        this.timerMetrics = setInterval(this.setMetricsChartRealTime, 60000)
+        this.timerMetrics = setInterval(this.setMetricsLogsRealTime, 60000)
       } catch (e) {
         console.error(e)
       } finally {
@@ -406,8 +402,8 @@ export default {
     },
     _formatNumber(num) {
       if (num > 10000) {
-        const value = (num / 1000)
-        return `${parseInt(value * 100, 10) / 100}K`
+        const value = (num / 10000)
+        return `${parseInt(value * 100, 10) / 100}W`
       }
       return num
     },
@@ -421,12 +417,12 @@ export default {
         return
       }
       this.currentMetrics = state
-      this.setCurrentMetricsLogsRealtime(state)
+      this.setCurrentMetricsLogs(state)
     },
     getNow() {
       return Moment().format('HH:mm:ss')
     },
-    setCurrentMetricsLogsRealtime(state = {}) {
+    setCurrentMetricsLogs(state = {}) {
       ['received', 'sent', 'subscription'].forEach((key) => {
         this.currentMetricsLogs[key] = this.currentMetricsLogs[key] || { x: [], y: [] }
         const currentValue = state[key] || 0
@@ -437,15 +433,6 @@ export default {
           this.currentMetricsLogs[key].y.shift()
         }
       })
-    },
-    getProgressColor(val, primaryColor) {
-      let color = primaryColor
-      if (val === 100) {
-        color = '#f5222d'
-      } else if (val >= 85 && val < 100) {
-        color = '#faad14'
-      }
-      return color
     },
   },
 }
@@ -458,6 +445,11 @@ export default {
 .overview {
   .status-count {
     text-align: center;
+  }
+
+  .node-basic-card {
+    max-width: 1200px;
+    height: 364px;
   }
 
   .flux-wrapper {
@@ -585,6 +577,10 @@ export default {
       }
 
       .el-progress {
+        .el-progress-bar {
+          padding-right: 0;
+        }
+
         .el-progress__text {
           display: block;
           padding-left: 0;
@@ -592,20 +588,6 @@ export default {
           margin-left: 0;
           font-size: 12px !important;
         }
-      }
-    }
-  }
-
-  .el-progress {
-    .el-progress-bar {
-      padding-right: 0;
-    }
-    &.status-progress {
-      .el-progress-bar__outer {
-        border-radius: 0px;
-      }
-      .el-progress-bar__inner {
-        border-radius: 0px;
       }
     }
   }

@@ -1,7 +1,6 @@
 <template>
   <div class="not-found">
-    <h1>404</h1>
-    <p>{{ $t('Base.resourcesNotFound') }}</p>
+    {{ $t('Base.resourcesNotFound') }}
   </div>
 </template>
 
@@ -27,7 +26,5 @@ export default {
 
 <style lang="scss" scoped>
 .not-found {
-  text-align: center;
-  margin-top: 40px;
 }
 </style>

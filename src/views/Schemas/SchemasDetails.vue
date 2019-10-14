@@ -147,6 +147,11 @@
               </el-col>
               <el-col :span="10">
               </el-col>
+              <el-col :span="14">
+                <el-form-item :label="$t('Schemas.version')">
+                  <el-input v-model="record.version" :disabled="true"></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :span="10">
               </el-col>
             </template>

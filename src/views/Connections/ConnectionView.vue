@@ -73,12 +73,11 @@
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">{{ $t('Connections.protocolType') }}:</div>
-                    <template v-if="record.proto_name === 'MQTT'">
-                      <span class="field-value">{{ record.proto_name }} {{ mqttVersionMap[record.proto_ver] }}</span>
-                    </template>
-                    <template v-else>
-                      <span class="field-value">{{ record.proto_name }} v{{ record.proto_ver }}</span>
-                    </template>
+                    <span class="field-value">{{ record.proto_name }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">{{ $t('Connections.protocolVersion') }}:</div>
+                    <span class="field-value">{{ record.proto_ver }}</span>
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">{{ $t('Connections.sslCert') }}:</div>
@@ -182,11 +181,6 @@ export default {
         username: 'undefined',
         zone: 'external',
         disconnected: false,
-      },
-      mqttVersionMap: {
-        3: 'v3.1',
-        4: 'v3.1.1',
-        5: 'v5.0',
       },
       subscriptions: [],
     }

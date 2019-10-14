@@ -2,8 +2,8 @@
 import Clipboard from 'clipboard'
 import sqlFormatter from 'sql-formatter'
 
-import store from '@/stores'
-import router from '@/routes'
+import store from '@/store'
+import router from '@/router'
 
 const { lang = 'zh' } = store.state
 
@@ -34,8 +34,8 @@ export function toLogin() {
  * @return Promise
  */
 export const awaitWrap = promise => promise
-  .then(data => data)
-  .catch(err => null)
+.then(data => data)
+.catch(err => null)
 
 /**
  * 安全的转化 JSON 字符串
@@ -242,17 +242,4 @@ export const sqlExampleFormatter = (sql) => {
     }
   }
   return text.replace(/!#!/g, '\n\r')
-}
-
-/**
- * 是否隐藏页面元素
- * @param scope 查询的隐藏属性
- * @return boolean
- */
-export const hasShow = (scope = '') => {
-  const hide = store.state.config.hide || { routes: [], children: [] }
-  if (!scope) {
-    return true
-  }
-  return !(hide.routes.includes(scope) || hide.children.includes(scope))
 }

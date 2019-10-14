@@ -1,3 +1,13 @@
 {
-  "api": []
+  "code": 0,
+  "data": {
+    "name": "emqxcl",
+    "type": "static",
+    "config": {
+      "seeds": [
+        "emqx@127.0.0.1",
+        "emqx2@192.168.6.75"
+      ]
+    }
+  }
 }

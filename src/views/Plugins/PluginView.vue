@@ -49,7 +49,7 @@
 
 
 <script>
-import { loadPluginDetail, updatePlugin } from '@/api/plugins'
+import { loadPluginDetail, updatePlugin } from '@/api/common'
 
 export default {
   name: 'PluginView',

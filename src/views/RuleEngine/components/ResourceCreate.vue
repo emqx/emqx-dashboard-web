@@ -19,7 +19,6 @@
       <el-form-item prop="type" :label="$t('RuleEngine.resourceTypes')">
         <emq-select
           v-model="record.type"
-          filterable
           :disabled="disabledSelect"
           :field-name="{ label: 'title', value: 'name' }"
           :field="{ options: availableTypes }"
