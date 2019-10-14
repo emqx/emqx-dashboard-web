@@ -305,15 +305,6 @@ export default {
   },
 
   methods: {
-    initData() {
-      this.record = {
-        name: '',
-        params: {
-          $resource: '',
-        },
-      }
-    },
-
     toggleShowMetrics(item) {
       const { showList = false } = item
       this.$set(item, 'showList', !showList)
