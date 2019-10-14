@@ -148,7 +148,7 @@
 
     </a-card>
 
-    <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="pageLoading">
+    <a-card class="license-card" :loading="pageLoading">
       <div class="emq-title">
         {{ $t('Overview.license') }}
       </div>

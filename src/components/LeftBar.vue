@@ -7,15 +7,7 @@
       </div>
     </div>
 
-    <a-menu
-      class="menu-wrapper"
-      :default-selected-keys="defaultSelectedKeys"
-      :selected-keys="defaultSelectedKeys"
-      :open-keys.sync="defaultOpenKeys"
-      mode="inline"
-      theme="dark"
-      @click="handleClick"
-    >
+    <a-menu style="width: 200px" class="menu-wrapper" :default-selected-keys="defaultSelectedKeys" :selected-keys="defaultSelectedKeys" :open-keys.sync="defaultOpenKeys" mode="inline" theme="dark" @click="handleClick">
       <template v-for="item in menus">
         <template v-if="$hasShow(item.key)">
           <a-sub-menu v-if="item.children && item.children.length > 0" :key="item.key" @titleClick="titleClick(item)">
@@ -132,14 +124,14 @@ export default {
       },
       {
         title: this.$t('components.tool'),
-        key: 'tools',
+        key: 'tool',
         icon: 'icon-gongju',
         children: [
           {
             title: 'WebSocket',
             key: 'tool.WebSocket',
             path: '/websocket',
-            parentKey: 'tools',
+            parentKey: 'tool',
           },
         ],
       },
@@ -151,20 +143,20 @@ export default {
       },
       {
         title: this.$t('components.general'),
-        key: 'general',
+        key: 'function',
         icon: 'icon-fenzuguanli',
         children: [
           {
             title: this.$t('components.application'),
-            key: 'general.application',
+            key: 'function.application',
             path: '/application',
-            parentKey: 'general',
+            parentKey: 'function',
           },
           {
             title: this.$t('components.user'),
-            key: 'general.user',
+            key: 'function.user',
             path: '/users',
-            parentKey: 'general',
+            parentKey: 'function',
           },
         ],
       },
@@ -204,7 +196,6 @@ export default {
   background-color: $color-theme;
 
   .menu-wrapper {
-    width: 200px;
     margin-top: 80px;
   }
   .ant-menu {
