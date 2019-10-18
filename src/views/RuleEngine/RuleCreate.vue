@@ -128,6 +128,15 @@
             </div>
 
             <div class="tips-item">
+              <div style="color: #606266">
+                <span class="notice">*</span> {{ $t('RuleEngine.upgradeTip') }}
+              </div>
+              <div class="tips-wrapper code">
+                {{ $t('RuleEngine.jsonDecodeUpgrade') }}
+              </div>
+            </div>
+
+            <div class="tips-item">
               <div style="color: #606266">{{ $t('RuleEngine.exampleSql') }}</div>
               <div class="tips-wrapper code">
                 <code>{{ selectEvent.sql_example }}</code>
@@ -381,6 +390,9 @@ export default {
   .tips-form {
     .tips-item {
       margin-bottom: 20px;
+      .notice {
+        color: #f5222d;
+      }
 
       .copy-success {
         color: #34C388;
