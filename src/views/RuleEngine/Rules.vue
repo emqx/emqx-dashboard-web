@@ -12,11 +12,6 @@
               <i class="icon el-icon-position"></i>
               {{ $t('RuleEngine.quickStart') }}
             </a>
-
-            <a :href="docs.tutorial" target="_blank" class="link-item">
-              <i class="icon el-icon-document"></i>
-              {{ $t('RuleEngine.productDocumentation') }}
-            </a>
           </div>
         </div>
       </div>
@@ -211,12 +206,12 @@ export default {
         }],
         rawsql: 'SELECT * FROM "client.connected"',
         event: {
-          columns: ['client_id', 'username', 'event', 'auth_result', 'clean_start', 'connack', 'connected_at', 'is_bridge', 'keepalive', 'mountpoint', 'peername', 'proto_ver', 'timestamp', 'node'],
+          columns: ['clientid', 'username', 'event', 'auth_result', 'clean_start', 'connack', 'connected_at', 'is_bridge', 'keepalive', 'mountpoint', 'peername', 'proto_ver', 'timestamp', 'node'],
           description: '连接建立',
           event: 'client.connected',
           sql_example: 'SELECT * FROM "client.connected"',
           test_columns: {
-            client_id: 'c_emqx',
+            clientid: 'c_emqx',
             username: 'u_emqx',
             auth_result: 'success',
             peername: '127.0.0.1:63412',

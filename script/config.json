@@ -19,7 +19,7 @@
       ],
       "children": [
         "navbar.user",
-        "monitor.connections",
+        "monitor.clients",
         "monitor.license"
       ]
     }

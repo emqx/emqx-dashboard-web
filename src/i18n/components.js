@@ -33,6 +33,10 @@ export default
     zh: '连接',
     en: 'Connections',
   },
+  clients: {
+    zh: '客户端',
+    en: 'Clients',
+  },
   schema: {
     zh: '编解码',
     en: 'Schema Registry',

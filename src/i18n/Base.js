@@ -101,4 +101,12 @@ export default
     zh: '删除成功',
     en: 'Delete Success',
   },
+  viewMore: {
+    zh: '查看更多',
+    en: 'View More',
+  },
+  collapse: {
+    zh: '收起',
+    en: 'Collapse',
+  },
 }

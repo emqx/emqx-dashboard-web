@@ -89,8 +89,8 @@ export default {
         icon: 'icon-yibiaopan',
       },
       {
-        title: this.$t('components.connect'),
-        path: '/connections',
+        title: this.$t('components.clients'),
+        path: '/clients',
         icon: 'icon-zuzhiqunzu',
       },
       {
