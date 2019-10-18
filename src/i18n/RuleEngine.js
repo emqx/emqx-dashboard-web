@@ -225,6 +225,14 @@ export default {
     zh: '当前事件可用字段',
     en: 'Current Event Available Field',
   },
+  upgradeTip: {
+    zh: '升级提示',
+    en: 'Upgrade Tip',
+  },
+  jsonDecodeUpgrade: {
+    zh: '当前版本取消对 payload 的自动 JSON 解码，选择 payload 中的字段请使用 json_decode 解码，如 SQL 示例。',
+    en: 'The current version cancels the automatic JSON decoding of the payload. Select the field in the payload and use json_decode to decode it, as in the SQL example.',
+  },
   exampleSql: {
     zh: '规则 SQL 示例',
     en: 'SQL Example',
