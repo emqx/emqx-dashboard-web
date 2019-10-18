@@ -14,7 +14,7 @@ const model = [
   'Alerts',
   'Base',
   'components',
-  'Connections',
+  'Clients',
   'General',
   'Overview',
   'Plugins',

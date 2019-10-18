@@ -46,22 +46,22 @@ let routes = [
   },
   // 连接
   {
-    path: '/connections',
+    path: '/clients',
     component: Layout,
     meta: {
-      hideKey: 'connections',
+      hideKey: 'clients',
       authRequired: true,
     },
     children: [
       {
         path: '',
-        name: 'connections',
-        component: () => import('@/views/Connections/Connections'),
+        name: 'clients',
+        component: () => import('@/views/Clients/Clients'),
       },
       {
         path: 'detail',
-        name: 'connections-view',
-        component: () => import('@/views/Connections/ConnectionView'),
+        name: 'clients-view',
+        component: () => import('@/views/Clients/ClientDetails'),
       },
     ],
   },

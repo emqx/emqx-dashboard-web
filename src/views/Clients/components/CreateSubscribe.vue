@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-bind="$attrs"
-    :title="$t('Connections.addASubscription')"
+    :title="$t('Clients.addASubscription')"
     width="400px"
     :visible.sync="rawVisible"
     class="create-subscribe"
@@ -10,8 +10,8 @@
     @open="open"
   >
     <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
-      <el-form-item v-if="!clientId" prop="client_id" label="Client ID">
-        <el-input v-model="record.client_id" placeholder="Client ID"></el-input>
+      <el-form-item v-if="!clientId" prop="clientid" label="Client ID">
+        <el-input v-model="record.clientid" placeholder="Client ID"></el-input>
       </el-form-item>
       <el-form-item prop="topic" label="Topic">
         <el-input v-model="record.topic" placeholder="Topic"></el-input>
@@ -23,14 +23,14 @@
 
     <div slot="footer" class="dialog-align-footer">
       <el-button plain size="small" @click="close">{{ $t('Base.cancel') }}</el-button>
-      <el-button type="primary" size="small" @click="handleAdd">{{ $t('Connections.add') }}</el-button>
+      <el-button type="primary" size="small" @click="handleAdd">{{ $t('Clients.add') }}</el-button>
     </div>
   </el-dialog>
 </template>
 
 
 <script>
-import { subscribe } from '@/api/connections'
+import { subscribe } from '@/api/clients'
 
 export default {
   name: 'CreateSubscribe',
@@ -53,18 +53,18 @@ export default {
   data() {
     return {
       record: {
-        client_id: this.client_id,
+        clientid: this.clientid,
         qos: 0,
         topic: '',
       },
       rules: {
-        client_id: {
+        clientid: {
           required: true,
-          message: this.$t('Connections.pleaseEnter'),
+          message: this.$t('Clients.pleaseEnter'),
         },
         topic: {
           required: true,
-          message: this.$t('Connections.pleaseEnter'),
+          message: this.$t('Clients.pleaseEnter'),
         },
       },
     }
@@ -86,7 +86,7 @@ export default {
 
   methods: {
     open() {
-      this.record.client_id = this.clientId
+      this.record.clientid = this.clientId
     },
     async handleAdd() {
       const valid = await this.$refs.record.validate()
