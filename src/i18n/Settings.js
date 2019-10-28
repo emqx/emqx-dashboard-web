@@ -126,6 +126,10 @@ export default {
     zh: '是否忽略消息循环传递，常用于消息桥接',
     en: 'Whether to ignore loop delivery of messages (for MQTT v3.1.1)',
   },
+  mqtt_ignore_loop_deliver: {
+    zh: '是否忽略消息循环传递，常用于消息桥接（对于 MQTT v3.1.1）',
+    en: 'Whether to ignore loop delivery of messages (for MQTT v3.1.1)',
+  },
   idle_timeout: {
     zh: 'MQTT 连接空闲超时',
     en: 'Idle timeout of the MQTT connections',
@@ -186,13 +190,29 @@ export default {
     zh: '最大 MQTT 数据包大小',
     en: 'Maximum MQTT packet size allowed',
   },
+  mqtt_max_packet_size: {
+    zh: '最大 MQTT 数据包大小',
+    en: 'Maximum MQTT packet size allowed',
+  },
   max_clientid_len: {
-    zh: 'MQTT clientid 的长度限制',
+    zh: 'MQTT 客户端 ID 的长度限制',
+    en: 'Maximum length of MQTT clientid allowed',
+  },
+  mqtt_max_clientid_len: {
+    zh: 'MQTT 客户端 ID 的长度限制',
     en: 'Maximum length of MQTT clientid allowed',
   },
   max_topic_levels: {
     zh: '主题层级限制，0 表示没有限制层级',
     en: 'Maximum topic levels allowed, 0 means no limit',
+  },
+  mqtt_max_topic_levels: {
+    zh: '主题层级限制，0 表示没有限制层级',
+    en: 'Maximum topic levels allowed, 0 means no limit',
+  },
+  mqtt_max_qos_allowed: {
+    zh: '最大 QoS',
+    en: 'Maximum QoS allowed',
   },
   max_qos_allowed: {
     zh: '最大 QoS',
@@ -202,7 +222,15 @@ export default {
     zh: '最大主题别名数量，0 表示不支持主题别名',
     en: 'Maximum Topic Alias, 0 means no topic alias supported',
   },
+  mqtt_max_topic_alias: {
+    zh: '最大主题别名数量，0 表示不支持主题别名',
+    en: 'Maximum Topic Alias, 0 means no topic alias supported',
+  },
   retain_available: {
+    zh: '是否启用 Retain 消息',
+    en: 'Whether the Server supports MQTT retained messages',
+  },
+  mqtt_retain_available: {
     zh: '是否启用 Retain 消息',
     en: 'Whether the Server supports MQTT retained messages',
   },
@@ -210,9 +238,37 @@ export default {
     zh: '是否启用通配符订阅',
     en: 'Whether the Server supports MQTT Wildcard Subscriptions',
   },
+  mqtt_wildcard_subscription: {
+    zh: '是否启用通配符订阅',
+    en: 'Whether the Server supports MQTT Wildcard Subscriptions',
+  },
   shared_subscription: {
     zh: '是否启用共享订阅',
     en: 'Whether the Server supports MQTT Shared Subscriptions',
+  },
+  mqtt_shared_subscription: {
+    zh: '是否启用共享订阅',
+    en: 'Whether the Server supports MQTT Shared Subscriptions',
+  },
+  hibernate_after: {
+    zh: '闲置后进入休眠状态的时间',
+    en: 'Hibernate after a duration of idle state',
+  },
+  acl_cache_max_size: {
+    zh: '可以为客户端缓存最大的 ACL 数量',
+    en: 'The maximum count of ACL entries can be cached for a client',
+  },
+  acl_cache_ttl: {
+    zh: 'ACL 缓存后将被删除的时间',
+    en: 'The time after which an ACL cache entry will be deleted',
+  },
+  enable_acl_cache: {
+    zh: '是否启用 ACL 缓存',
+    en: 'Whether to enable ACL cache',
+  },
+  flapping_detect_policy: {
+    zh: '指定全局的 flapping detect 策略',
+    en: 'Specify the global flapping detect policy',
   },
   // 集群设置字段
   invite: {

@@ -12,7 +12,7 @@
         :before-leave="handleBeforeLeave"
       >
         <el-tab-pane :label="$t('Settings.basic')" name="basic">
-          <basic-config v-if="activeName === 'basic'" ref="basicConfig"></basic-config>
+          <config-settings v-if="activeName === 'basic'" ref="basicConfig"></config-settings>
         </el-tab-pane>
 
         <el-tab-pane :label="$t('Settings.cluster')" name="cluster">
@@ -26,14 +26,14 @@
 
 
 <script>
-import BasicConfig from './BasicConfig'
+import ConfigSettings from './ConfigSettings'
 import ClusterSettings from './ClusterSettings'
 
 export default {
   name: 'Settings',
 
   components: {
-    BasicConfig,
+    ConfigSettings,
     ClusterSettings,
   },
 
