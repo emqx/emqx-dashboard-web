@@ -5,6 +5,7 @@
     width="520px"
     v-bind="$attrs"
     :visible.sync="dialogVisible"
+    :close-on-click-modal="false"
     v-on="$listeners"
     @open="loadData"
     @close="clearForm"

@@ -159,9 +159,9 @@
                   >
                   </el-input>
                   <code-editor
-                    class="sql"
                     v-else-if="item.key === 'sql'"
                     v-model="record.params.sql"
+                    class="sql"
                     lang="text/x-sql"
                     :lint="false"
                   >
