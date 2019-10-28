@@ -163,8 +163,8 @@
             <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
               <el-form-item class="code-editor__item" label="Schema" prop="schema">
                 <code-editor
-                  class="schema-code"
                   v-model="record.schema"
+                  class="schema-code"
                   lang="application/json"
                   height="320px"
                   :disabled="disabled"

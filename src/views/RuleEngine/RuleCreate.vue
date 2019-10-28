@@ -48,8 +48,8 @@
 
               <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
                 <code-editor
-                  class="sql"
                   v-model="record.rawsql"
+                  class="sql"
                   lang="text/x-sql"
                 ></code-editor>
               </el-form-item>
@@ -73,8 +73,8 @@
                   >
                     <template v-if="field === 'payload'">
                       <code-editor
-                        class="payload"
                         v-model="record.ctx[field]"
+                        class="payload"
                         lang="application/json"
                         :lint="false"
                       ></code-editor>
@@ -94,8 +94,8 @@
 
                   <el-form-item class="code-editor__item" :label="$t('RuleEngine.testOutput')">
                     <code-editor
-                      class="test-output"
                       v-model="testOutPut"
+                      class="test-output"
                       height="250px"
                       lang="application/json"
                       :lint="false"
