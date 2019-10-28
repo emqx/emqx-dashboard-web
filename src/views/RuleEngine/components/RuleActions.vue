@@ -159,6 +159,7 @@
                   >
                   </el-input>
                   <code-editor
+                    class="sql"
                     v-else-if="item.key === 'sql'"
                     v-model="record.params.sql"
                     lang="text/x-sql"
@@ -604,6 +605,11 @@ export default {
 
     .el-textarea {
       width: 330px;
+    }
+    .sql {
+      .CodeMirror-scroll {
+        min-height: 200px;
+      }
     }
   }
 }

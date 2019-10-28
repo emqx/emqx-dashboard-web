@@ -35,10 +35,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    height: {
-      type: String,
-      default: '200px',
-    },
     lineNumbers: {
       type: Boolean,
       default: true,
@@ -71,13 +67,13 @@ export default {
     initEditorption() {
       this.codeEditor = CodeMirror.fromTextArea(this.$refs.textarea, {
         lineNumbers: this.lineNumbers,
+        lineWrapping: true,
         mode: this.lang,
         gutters: ['CodeMirror-lint-markers'],
         theme: this.theme || 'default',
         lint: this.lint,
         readOnly: this.disabled,
       })
-      this.codeEditor.setSize('auto', this.height)
       this.codeEditor.setValue(this.value)
       this.codeEditor.on('change', cm => {
         this.$emit('changed', cm.getValue())

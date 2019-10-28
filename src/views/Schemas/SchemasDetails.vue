@@ -163,6 +163,7 @@
             <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
               <el-form-item class="code-editor__item" label="Schema" prop="schema">
                 <code-editor
+                  class="schema-code"
                   v-model="record.schema"
                   lang="application/json"
                   height="320px"
@@ -297,3 +298,14 @@ export default {
   },
 }
 </script>
+
+
+<style lang="scss">
+.schemas-details {
+  .schema-code {
+    .CodeMirror-scroll {
+      min-height: 200px;
+    }
+  }
+}
+</style>

@@ -48,8 +48,8 @@
 
               <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
                 <code-editor
+                  class="sql"
                   v-model="record.rawsql"
-                  height="320px"
                   lang="text/x-sql"
                 ></code-editor>
               </el-form-item>
@@ -73,6 +73,7 @@
                   >
                     <template v-if="field === 'payload'">
                       <code-editor
+                        class="payload"
                         v-model="record.ctx[field]"
                         lang="application/json"
                         :lint="false"
@@ -93,6 +94,7 @@
 
                   <el-form-item class="code-editor__item" :label="$t('RuleEngine.testOutput')">
                     <code-editor
+                      class="test-output"
                       v-model="testOutPut"
                       height="250px"
                       lang="application/json"
@@ -402,6 +404,21 @@ export default {
     &.code {
       border: none;
       padding: 10px;
+    }
+  }
+  .sql {
+    .CodeMirror-scroll {
+      min-height: 290px;
+    }
+  }
+  .payload {
+    .CodeMirror-scroll {
+      min-height: 200px;
+    }
+  }
+  .test-output {
+    .CodeMirror-scroll {
+      min-height: 250px;
     }
   }
 }
