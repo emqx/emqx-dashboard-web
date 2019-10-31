@@ -304,7 +304,7 @@ export default {
         port: this.getOption().port,
         protocols: this.getOption().protocols,
         clientId: this.getOption().clientId,
-        ssl: false,
+        ssl: this.getOption().ssl,
 
         endpoint: '/mqtt',
         username: '',
@@ -571,11 +571,13 @@ export default {
       })
     },
     getOption() {
+      const { protocol, hostname } = window.location
       return {
-        host: window.location.hostname,
-        protocols: window.location.protocol === 'http:' ? 'ws' : 'wss',
-        port: window.location.protocol === 'http:' ? 8083 : 8084,
+        host: hostname,
+        protocols: protocol === 'http:' ? 'ws' : 'wss',
+        port: protocol === 'http:' ? 8083 : 8084,
         clientId: `mqttjs_${Math.random().toString(16).substr(2, 8)}`,
+        ssl: protocol === 'https:',
       }
     },
     atSessionChange(i) {
