@@ -7,7 +7,9 @@ import router from '@/routes'
 
 const { lang = 'zh' } = store.state
 
-import { en as enDocsLink, zh as zhDocsLink } from '@/common/link_urls'
+import {
+  enDocsLink, zhDocsLink, pluginsZh, pluginsEn,
+} from '@/common/link_urls'
 
 /**
  * 获取基础的验证信息
@@ -197,6 +199,17 @@ export function getLink(name) {
   const { lang = 'zh' } = store.state
   const dictMap = lang === 'zh' ? zhDocsLink : enDocsLink
   return dictMap[name] || '/'
+}
+
+/**
+ * 根据语言获取插件教程的跳转链接
+ * @param name
+ * @return link: string
+ */
+export function getPluginsLink(name) {
+  const { lang = 'zh' } = store.state
+  const dictMap = lang === 'zh' ? pluginsZh : pluginsEn
+  return dictMap[name] || ''
 }
 
 /**

@@ -112,6 +112,16 @@
                   {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
                 </el-button>
                 <span v-else>--</span>
+                <template v-if="!primaryList.includes(item.name)">
+                  <el-button
+                    v-if="getLinks(item.name)"
+                    size="mini"
+                    type="dashed"
+                    @click="openTutorialLink(item.name)"
+                  >
+                    {{ $t('Plugins.tutorial') }}
+                  </el-button>
+                </template>
                 <!-- TODO: 暂时隐藏 进去后的插件配置暂时没用 -->
                 <!-- <el-button
                   v-if="!primaryList.includes(item.name)"
@@ -141,6 +151,7 @@ import {
   loadPlugins, startPlugin, stopPlugin,
 } from '@/api/plugins'
 import { loadNodes } from '@/api/common'
+import { getPluginsLink } from '@/common/utils'
 
 export default {
   name: 'Plugins',
@@ -259,6 +270,14 @@ export default {
         this.$message.success(this.$t('Plugins.stopSuccess'))
         row.active = false
       }).catch(() => {})
+    },
+    getLinks(name) {
+      return getPluginsLink(name)
+    },
+    openTutorialLink(name) {
+      const url = this.getLinks(name)
+      const windowUrl = window.open(url)
+      windowUrl.opener = null
     },
   },
 }

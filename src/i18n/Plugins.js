@@ -56,6 +56,10 @@ export default {
     zh: '配置',
     en: 'config',
   },
+  tutorial: {
+    zh: '教程',
+    en: 'Tutorial',
+  },
   pluginName: {
     zh: '插件名称',
     en: 'Name',
