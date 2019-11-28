@@ -66,8 +66,8 @@ export default
     en: 'Tool',
   },
   websocket: {
-    zh: 'websocket',
-    en: 'websocket',
+    zh: 'Websocket',
+    en: 'Websocket',
   },
   general: {
     zh: '通用',
