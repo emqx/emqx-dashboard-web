@@ -1,8 +1,6 @@
 <template>
   <div class="node">
-    <page-header
-      :back-title="$t('Overview.nodeData')"
-    >
+    <page-header>
       <div class="page-header-title-view">
         <div class="title">{{ name }}</div>
       </div>

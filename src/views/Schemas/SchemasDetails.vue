@@ -1,10 +1,6 @@
 <template>
   <div class="schemas-details details-page">
-    <page-header
-      :back-title="$t('Schemas.schema')"
-      :oper="accessTitle"
-      back-path="/schemas"
-    >
+    <page-header>
       <template v-if="disabled">
         <div class="page-header-title-view">
           <div class="title">

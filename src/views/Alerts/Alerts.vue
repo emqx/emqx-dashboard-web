@@ -1,10 +1,5 @@
 <template>
   <div class="alerts">
-    <page-header
-      :back-title="$t('Alerts.alarm')"
-    >
-    </page-header>
-
     <div class="app-wrapper">
       <a-card class="emq-list-card">
         <div class="emq-table-header">

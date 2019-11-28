@@ -49,6 +49,10 @@ export default
     zh: '详情',
     en: 'View',
   },
+  detail: {
+    zh: '详情',
+    en: 'View',
+  },
   edit: {
     zh: '编辑',
     en: 'Edit',

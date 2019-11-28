@@ -1,11 +1,6 @@
 <template>
   <div class="resources">
 
-    <page-header
-      :back-title="$t('RuleEngine.resources')"
-    >
-    </page-header>
-
     <div class="app-wrapper">
       <a-card
         class="emq-list-card"
@@ -168,7 +163,10 @@ export default {
       this.dialogVisible = true
     },
     showResource(row) {
-      this.$router.push({ path: `/resources/${row.id}` })
+      this.$router.push({
+        path: `/resources/${row.id}`,
+        query: { oper: 'view' },
+      })
     },
     resourceTypesColumnFilter(value, row) {
       return row.config.name === value

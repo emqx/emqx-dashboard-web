@@ -1,10 +1,6 @@
 <template>
   <div class="rule-view">
-    <page-header
-      :back-title="$t('RuleEngine.ruleEngine')"
-      :oper="$t('RuleEngine.details')"
-      back-path="/rules"
-    >
+    <page-header>
       <div class="page-header-title-view">
         <div class="title">
           {{ ruleId }}

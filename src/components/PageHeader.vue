@@ -1,28 +1,6 @@
 <template>
   <div class="page-header">
     <div class="page-header-content">
-      <a-breadcrumb>
-        <a-breadcrumb-item>
-          <router-link to="/" tag="span" class="btn btn-default raw">
-            {{ $t('Base.homePage') }}
-          </router-link>
-        </a-breadcrumb-item>
-
-        <a-breadcrumb-item>
-          <router-link v-if="backPath" :to="backPath" tag="span" class="btn btn-default raw">
-            {{ backTitle }}
-          </router-link>
-          <span v-else class="btn btn-default raw">
-            {{ backTitle }}
-          </span>
-        </a-breadcrumb-item>
-
-        <a-breadcrumb-item v-if="oper">
-          <span class="btn btn-default raw">
-            {{ oper }}
-          </span>
-        </a-breadcrumb-item>
-      </a-breadcrumb>
       <slot></slot>
     </div>
   </div>
@@ -32,21 +10,6 @@
 <script>
 export default {
   name: 'PageHeader',
-
-  props: {
-    backTitle: {
-      type: String,
-      required: true,
-    },
-    backPath: {
-      type: String,
-      default: '',
-    },
-    oper: {
-      type: String,
-      default: '',
-    },
-  },
 }
 </script>
 
@@ -70,11 +33,6 @@ export default {
     min-height: 100%;
     transition: .3s;
     padding: 16px 24px;
-    background: #fff;
-  }
-
-  .el-breadcrumb, .ant-breadcrumb {
-    margin-bottom: 12px;
   }
 
   .page-header-title-view {
@@ -89,14 +47,6 @@ export default {
       span {
         margin-right: 8px;
       }
-    }
-  }
-
-  .page-header-content-view {
-    margin-top: 12px;
-
-    .content {
-      margin-bottom: 14px;
     }
   }
 

@@ -1,10 +1,6 @@
 <template>
   <div class="client-details">
-    <page-header
-      :back-title="$t('Clients.clients')"
-      :oper="$t('Clients.clientDetails')"
-      back-path="/clients"
-    >
+    <page-header>
       <div class="page-header-title-view">
         <div style="display: flex;align-items: center">
           <span class="title">
@@ -391,10 +387,6 @@ export default {
 
   .data-list {
     clear: both;
-  }
-
-  .page-header {
-    min-height: 100px;
   }
 
   .view-more {

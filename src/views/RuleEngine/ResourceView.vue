@@ -1,10 +1,6 @@
 <template>
   <div class="resource-view">
-    <page-header
-      :back-title="$t('RuleEngine.resources')"
-      :oper="$t('RuleEngine.details')"
-      back-path="/resources"
-    >
+    <page-header>
       <div class="page-header-title-view">
         <div class="title">
           {{ resourceId }}

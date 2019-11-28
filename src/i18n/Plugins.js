@@ -50,7 +50,7 @@ export default {
   },
   startRunning: {
     zh: '启动',
-    en: 'Running',
+    en: 'Run',
   },
   config: {
     zh: '配置',

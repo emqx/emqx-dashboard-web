@@ -1,9 +1,7 @@
 <template>
   <div class="schemas">
 
-    <page-header
-      :back-title="$t('Schemas.schema')"
-    >
+    <page-header>
       <div class="page-header-content-view">
         <div class="content">
           <p class="description">

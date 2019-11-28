@@ -1,7 +1,7 @@
 <template>
   <div class="rules">
 
-    <page-header :back-title="$t('RuleEngine.ruleEngine')">
+    <page-header>
       <div class="page-header-content-view">
         <div class="content">
           <p class="description">
@@ -31,7 +31,12 @@
         <el-table v-bind="rulesTable" :data="tableData" class="data-list">
           <el-table-column prop="id" label="ID">
             <template slot-scope="{ row }">
-              <router-link :to="{ path: `/rules/${row.id}` }">{{ row.id }}</router-link>
+              <router-link
+                :to="{
+                  path: `/rules/${row.id}`,
+                  query: { oper: 'view' },
+                }"
+              >{{ row.id }}</router-link>
             </template>
           </el-table-column>
           <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">

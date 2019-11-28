@@ -1,10 +1,5 @@
 <template>
   <div class="plugins">
-    <page-header
-      :back-title="$t('Plugins.plugin')"
-    >
-    </page-header>
-
     <div class="app-wrapper">
 
       <a-card class="count-list">

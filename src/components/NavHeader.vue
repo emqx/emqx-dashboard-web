@@ -2,9 +2,15 @@
   <div class="nav-header" :style="navHeadStyle">
     <div class="pull-left">
       <div class="func-item" @click="toggleLeftNarCollapse">
-        <i :class="['iconfont', $store.state.leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"></i>
+        <i
+          :class="['iconfont', $store.state.leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
+          style="font-size: 20px; line-height: 51px;"
+        >
+        </i>
       </div>
     </div>
+
+    <breadcrumb></breadcrumb>
 
     <div class="pull-right">
       <!-- TODO: 补充使用情况 -->
@@ -21,17 +27,6 @@
         </div>
       </el-tooltip>
 
-      <el-dropdown v-if="$hasShow('navbar.user')" placement="bottom" class="user-info-dropdown" @command="handleDropdownCommand">
-        <div class="user-info func-item">
-          <span>{{ username }}</span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="application">{{ $t('components.applicationManagement') }}</el-dropdown-item>
-            <el-dropdown-item command="users">{{ $t('components.usersManagement') }}</el-dropdown-item>
-            <el-dropdown-item divided command="login">{{ $t('components.logOut') }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </div>
-      </el-dropdown>
-
       <el-dropdown placement="bottom" class="user-info-dropdown" @command="handleLanguageDropdownCommand">
         <div class="user-info func-item">
           <span>
@@ -43,18 +38,32 @@
           </el-dropdown-menu>
         </div>
       </el-dropdown>
+
+      <el-dropdown v-if="$hasShow('navbar.user')" placement="bottom" class="user-info-dropdown" @command="handleDropdownCommand">
+        <div class="user-info func-item">
+          <span>{{ username }}</span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="application">{{ $t('components.applicationManagement') }}</el-dropdown-item>
+            <el-dropdown-item command="users">{{ $t('components.usersManagement') }}</el-dropdown-item>
+            <el-dropdown-item divided command="login">{{ $t('components.logOut') }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </div>
+      </el-dropdown>
     </div>
   </div>
 </template>
 
 
 <script>
+import Breadcrumb from './Breadcrumb.vue'
 import { loadAlarm } from '@/api/common'
 
 export default {
   name: 'NavHeader',
 
-  components: {},
+  components: {
+    Breadcrumb,
+  },
 
   props: {},
 

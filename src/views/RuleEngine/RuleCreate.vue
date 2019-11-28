@@ -1,11 +1,5 @@
 <template>
   <div class="rule-create">
-    <page-header
-      :back-title="$t('RuleEngine.ruleEngine')"
-      :oper="$t('Base.create')"
-      back-path="/rules"
-    >
-    </page-header>
 
     <div class="emq-list-body rule-wrapper app-wrapper">
       <a-card class="emq-list-card">
