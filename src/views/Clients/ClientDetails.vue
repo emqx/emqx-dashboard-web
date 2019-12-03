@@ -10,7 +10,7 @@
         </div>
       </div>
 
-      <div v-if="!record.disconnected" class="page-header-top-start">
+      <div v-if="!record.disconnected" class="page-header-top-start btn">
         <el-button type="danger" size="small" @click="handleDisconnect">
           {{ $t('Clients.disconnect') }}
         </el-button>
@@ -302,6 +302,12 @@ export default {
     },
     connStatusText() {
       return this.record.disconnected ? this.$t('Clients.disconnected') : this.$t('Clients.onLine')
+    },
+  },
+
+  watch: {
+    $route() {
+      this.loadData()
     },
   },
 

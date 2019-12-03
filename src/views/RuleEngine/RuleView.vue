@@ -7,7 +7,7 @@
         </div>
       </div>
 
-      <div class="page-header-top-start">
+      <div class="page-header-top-start btn">
         <el-button type="danger" size="small" @click="deleteRule">
           {{ $t('RuleEngine.delete') }}
         </el-button>
@@ -185,6 +185,7 @@ export default {
 
   watch: {
     $route() {
+      this.record.rawsql = ''
       this.loadData()
     },
   },

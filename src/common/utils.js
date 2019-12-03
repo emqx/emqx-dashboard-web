@@ -269,3 +269,14 @@ export const hasShow = (scope = '') => {
   }
   return !(hide.routes.includes(scope) || hide.children.includes(scope))
 }
+
+/**
+ * 取 URL 具体的一个参数值
+ * @param url 查询的 url, key 参数的名称
+ * @return value string
+ */
+export const getParamValue = (url, key) => {
+  const regex = new RegExp(`${key}=([^&]*)`, 'i')
+  const value = url.match(regex)[1]
+  return decodeURIComponent(value)
+}

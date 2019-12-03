@@ -89,6 +89,18 @@ export default
     zh: '设置',
     en: 'Setting',
   },
+  node: {
+    zh: '节点数据',
+    en: 'Node',
+  },
+  ruleCreate: {
+    zh: '创建规则',
+    en: 'Rule Create',
+  },
+  schemaCreate: {
+    zh: '创建编解码',
+    en: 'Schema Create',
+  },
   settings: {
     zh: '系统设置',
     en: 'Settings',

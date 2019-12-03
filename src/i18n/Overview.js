@@ -81,7 +81,7 @@ export default
   },
   nodeData: {
     zh: '节点数据',
-    en: 'Nodes',
+    en: 'Node',
   },
   currentNodeInfo: {
     zh: '当前节点信息如下',

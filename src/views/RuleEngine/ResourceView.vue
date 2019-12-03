@@ -7,7 +7,7 @@
         </div>
       </div>
 
-      <div class="page-header-top-start">
+      <div class="page-header-top-start btn">
         <el-button type="danger" size="small" @click="deleteResource">
           {{ $t('RuleEngine.delete') }}
         </el-button>

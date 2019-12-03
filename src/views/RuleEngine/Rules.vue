@@ -7,8 +7,8 @@
           <p class="description">
             {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
           </p>
-          <div class="page-header-link">
-            <a :href="docs.tutorial" target="_blank" class="link-item">
+          <div class="page-header-top-start">
+            <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
               <i class="icon el-icon-position"></i>
               {{ $t('RuleEngine.quickStart') }}
             </a>
@@ -311,10 +311,6 @@ export default {
 
 
 <style lang="scss" scoped>
-.description {
-  max-width: 500px;
-}
-
 .rule-metrics {
   .metrics-item {
     margin-bottom: 50px;

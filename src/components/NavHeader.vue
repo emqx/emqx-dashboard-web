@@ -4,7 +4,7 @@
       <div class="func-item" @click="toggleLeftNarCollapse">
         <i
           :class="['iconfont', $store.state.leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
-          style="font-size: 20px; line-height: 51px;"
+          style="font-size: 20px; line-height: 41px;"
         >
         </i>
       </div>
@@ -155,7 +155,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+  height: 50px;
   padding: 0 20px 0 0;
   background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
@@ -175,8 +175,8 @@ export default {
 }
 
 .func-item {
-  height: 60px;
-  line-height: 60px;
+  height: 50px;
+  line-height: 53px;
   padding: 0 12px;
   transition: all .3s;
   cursor: pointer;

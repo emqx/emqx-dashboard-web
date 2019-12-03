@@ -1,15 +1,22 @@
 <template>
   <div class="rule-create">
 
+    <page-header>
+      <div class="page-header-title-view">
+        <div class="title">{{ $t('RuleEngine.condition') }}</div>
+      </div>
+
+      <div class="page-header-content-view">
+        <div class="content">
+          <p class="description">
+            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
+          </p>
+        </div>
+      </div>
+    </page-header>
+
     <div class="emq-list-body rule-wrapper app-wrapper">
       <a-card class="emq-list-card">
-        <div class="emq-title">
-          {{ $t('RuleEngine.condition') }}
-          <span class="sub-title">
-            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
-          </span>
-        </div>
-
         <el-row :gutter="20">
           <el-col :span="15">
             <el-form

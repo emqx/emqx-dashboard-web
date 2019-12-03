@@ -19,7 +19,6 @@ function getDefaultLanguage() {
   const defaultLanguage = (window.EMQX_CONFIG || {}).language
   return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
 }
-
 function getConfigState() {
   const buildEnv = process.env.VUE_APP_BUILD_ENV || BASE_ENV
   const envConfig = config[buildEnv] || config.base
@@ -28,6 +27,9 @@ function getConfigState() {
     ...config.base,
     ...envConfig,
   }
+}
+function getNavTabs() {
+  return JSON.parse(localStorage.getItem('navTabs')) || []
 }
 
 export default new Vuex.Store({
@@ -38,6 +40,7 @@ export default new Vuex.Store({
     leftBarCollapse: false, // localStorage.getItem('leftBarCollapse'),
     alertCount: 0,
     config: getConfigState(),
+    navTabs: getNavTabs(),
   },
   actions: {
     UPDATE_CONFIG({ commit }, customConfig) {
@@ -73,6 +76,21 @@ export default new Vuex.Store({
     LOADING({ commit }, loading = false) {
       commit('LOADING', loading)
     },
+    ADD_NAV_TABS({ commit }, tab) {
+      commit('ADD_NAV_TABS', tab)
+    },
+    REMOVE_NAV_TABS({ commit, state }, tab) {
+      const tabs = [...state.navTabs]
+      // eslint-disable-next-line
+      for (const [index, value] of tabs.entries()) {
+        if (value.url === tab.url) {
+          tabs.splice(index, 1)
+          break
+        }
+      }
+      commit('REMOVE_NAV_TABS', tabs)
+      return tabs
+    },
   },
   mutations: {
     UPDATE_CONFIG(state, customConfig) {
@@ -95,6 +113,14 @@ export default new Vuex.Store({
     },
     SET_LANGUAGE(state, lang) {
       state.lang = lang
+    },
+    ADD_NAV_TABS(state, tab) {
+      state.navTabs.push(tab)
+      localStorage.setItem('navTabs', JSON.stringify(state.navTabs))
+    },
+    REMOVE_NAV_TABS(state, tabs) {
+      state.navTabs = tabs
+      localStorage.setItem('navTabs', JSON.stringify(state.navTabs))
     },
   },
 })
