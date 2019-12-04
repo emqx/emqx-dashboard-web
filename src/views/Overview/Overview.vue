@@ -3,7 +3,10 @@
     <el-row class="content-wrapper" :gutter="20">
 
       <el-col :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading" hoverable>
+        <a-card
+          class="app-card" :bordered="true" :loading="pageLoading" hoverable
+          @click="clickToShowChart('sent')"
+        >
           <div class="app-card-title">
             {{ $t('Overview.messageOut') }}
           </div>
@@ -28,7 +31,10 @@
       </el-col>
 
       <el-col :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading" hoverable>
+        <a-card
+          class="app-card" :bordered="true" :loading="pageLoading" hoverable
+          @click="clickToShowChart('received')"
+        >
           <div class="app-card-title">
             {{ $t('Overview.messageIn') }}
           </div>
@@ -53,7 +59,10 @@
       </el-col>
 
       <el-col :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading" hoverable>
+        <a-card
+          class="app-card" :bordered="true" :loading="pageLoading" hoverable
+          @click="clickToShowChart('subscriptions')"
+        >
           <div class="app-card-title">
             {{ $t('Overview.subscriptionNumber') }}
           </div>
@@ -76,7 +85,10 @@
       </el-col>
 
       <el-col v-if="$hasShow('monitor.connections')" :span="6">
-        <a-card class="app-card" :bordered="true" hoverable :loading="pageLoading">
+        <a-card
+          class="app-card" :bordered="true" hoverable :loading="pageLoading"
+          @click="clickToShowChart('connection')"
+        >
           <div class="app-card-title">
             {{ $t('Overview.connectionNumber') }}
           </div>
@@ -193,8 +205,12 @@
           {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>
         <div v-if="license.type === 'trial'" class="oper">
-          <el-tooltip effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false">
-            <el-button type="danger" size="small" @click="upgradeLicense">{{ $t('Overview.trialEdition') }}</el-button>
+          <el-tooltip
+            effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false"
+          >
+            <el-button type="danger" size="small" @click="upgradeLicense">
+              {{ $t('Overview.trialEdition') }}
+            </el-button>
           </el-tooltip>
         </div>
       </div>
@@ -446,6 +462,13 @@ export default {
         color = '#faad14'
       }
       return color
+    },
+    clickToShowChart(dataType) {
+      if (this.dataType === dataType) {
+        return
+      }
+      this.dataType = dataType
+      this.dataTypeChange()
     },
   },
 }

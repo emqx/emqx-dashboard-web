@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-tabs" :style="{ left: !$store.state.leftBarCollapse ? '200px' : 0 }">
+  <div class="nav-tabs" :style="{ left: !$store.state.leftBarCollapse ? '201px' : '81px' }">
     <el-scrollbar ref="scrollContainer" :vertical="false" class="scroll-container">
       <el-button
         plain
@@ -125,11 +125,9 @@ export default {
       name = this.getTabName(name, oper)
       const tabIndex = this.tabs.findIndex($ => $.url === fullPath)
       if (tabIndex === -1) {
-        this.addTab({ name, url: fullPath })
+        const tab = { name, url: fullPath }
+        this.$store.dispatch('ADD_NAV_TABS', tab)
       }
-    },
-    addTab(tab) {
-      this.$store.dispatch('ADD_NAV_TABS', tab)
     },
     navTab(tab) {
       this.$router.push({ path: tab.url })
@@ -167,7 +165,7 @@ export default {
   background: #fcfcfc;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .1);
   z-index: 100;
-  transition: left .5s;
+  transition: all .3s;
   .el-button {
     min-width: 50px;
     transition: all .3s;
