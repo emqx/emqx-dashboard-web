@@ -1,8 +1,6 @@
 <template>
   <div class="clients">
-    <page-header
-      :back-title="$t('Clients.clients')"
-    >
+    <page-header>
       <div class="page-header-content-view">
         <div class="content">
           {{ $t('Clients.currentConnection') }}
@@ -18,7 +16,7 @@
             <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
               {{ $t('Clients.search') }}
             </el-button>
-            <el-button plain size="small" icon="el-icon-refresh" @click="resetSearch">
+            <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
               {{ searchValue ? $t('Clients.reset') : $t('Clients.refresh') }}
             </el-button>
           </div>
@@ -144,6 +142,7 @@ export default {
       },
       nodeName: '',
       currentNodes: [],
+      resetIcon: 'el-icon-refresh',
     }
   },
 
@@ -175,6 +174,7 @@ export default {
       }).catch(() => { })
     },
     resetSearch() {
+      this.resetIcon = 'el-icon-loading'
       let reload = false
       if (this.searchValue) {
         reload = true
@@ -212,6 +212,7 @@ export default {
       const { items = [], meta: { count = 0 } } = data
       this.tableData = items
       this.count = count
+      this.resetIcon = 'el-icon-refresh'
     },
     protoNameColumnFilter(value, row) {
       return value === row.proto_name

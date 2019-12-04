@@ -1,17 +1,13 @@
 <template>
   <div class="rule-view">
-    <page-header
-      :back-title="$t('RuleEngine.ruleEngine')"
-      :oper="$t('RuleEngine.details')"
-      back-path="/rules"
-    >
+    <page-header>
       <div class="page-header-title-view">
         <div class="title">
           {{ ruleId }}
         </div>
       </div>
 
-      <div class="page-header-top-start">
+      <div class="page-header-top-start btn">
         <el-button type="danger" size="small" @click="deleteRule">
           {{ $t('RuleEngine.delete') }}
         </el-button>
@@ -189,6 +185,7 @@ export default {
 
   watch: {
     $route() {
+      this.record.rawsql = ''
       this.loadData()
     },
   },

@@ -50,11 +50,15 @@ export default {
   },
   startRunning: {
     zh: '启动',
-    en: 'Running',
+    en: 'Run',
   },
   config: {
     zh: '配置',
     en: 'config',
+  },
+  tutorial: {
+    zh: '教程',
+    en: 'Tutorial',
   },
   pluginName: {
     zh: '插件名称',

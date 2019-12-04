@@ -44,6 +44,10 @@ export default {
     zh: '连接中',
     en: 'Connecting',
   },
+  disconnected: {
+    zh: '已断开连接',
+    en: 'Disconnected',
+  },
   connect: {
     zh: '连接',
     en: 'Connect',

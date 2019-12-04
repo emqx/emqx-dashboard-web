@@ -331,6 +331,15 @@ export default {
       if (!valid) {
         return
       }
+      // To boolean
+      if (this.record.params) {
+        Object.keys(this.record.params).forEach((key) => {
+          const value = this.record.params[key]
+          if (value === 'true' || value === 'false') {
+            this.record.params[key] = JSON.parse(value)
+          }
+        })
+      }
       const action = JSON.parse(JSON.stringify(this.record))
       if (action.params && !action.params.$resource) {
         delete action.params.$resource

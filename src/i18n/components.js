@@ -37,7 +37,7 @@ export default
     zh: '客户端',
     en: 'Clients',
   },
-  schema: {
+  schemas: {
     zh: '编解码',
     en: 'Schema Registry',
   },
@@ -45,7 +45,7 @@ export default
     zh: '规则',
     en: 'Rule',
   },
-  ruleEngine: {
+  rules: {
     zh: '规则引擎',
     en: 'Rule Engine',
   },
@@ -53,17 +53,21 @@ export default
     zh: '资源',
     en: 'Resources',
   },
-  alarm: {
+  alerts: {
     zh: '告警',
     en: 'Alarm',
   },
-  plugin: {
+  plugins: {
     zh: '插件',
     en: 'Plugin',
   },
   tool: {
     zh: '工具',
     en: 'Tool',
+  },
+  websocket: {
+    zh: 'Websocket',
+    en: 'Websocket',
   },
   general: {
     zh: '通用',
@@ -77,13 +81,25 @@ export default
     zh: '黑名单',
     en: 'Blacklist',
   },
-  user: {
+  users: {
     zh: '用户',
     en: 'Users',
   },
   setting: {
     zh: '设置',
     en: 'Setting',
+  },
+  node: {
+    zh: '节点数据',
+    en: 'Node',
+  },
+  ruleCreate: {
+    zh: '创建规则',
+    en: 'Rule Create',
+  },
+  schemaCreate: {
+    zh: '创建编解码',
+    en: 'Schema Create',
   },
   settings: {
     zh: '系统设置',

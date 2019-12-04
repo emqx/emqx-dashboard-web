@@ -1,10 +1,6 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
   <div class="plugin-view">
-    <page-header
-      :back-title="$t('Plugins.plugin')"
-      :oper="node"
-      back-path="/plugins"
-    >
+    <page-header>
       <div class="page-header-title-view">
         <div class="title">
           {{ $route.params.name }}

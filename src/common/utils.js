@@ -7,7 +7,9 @@ import router from '@/routes'
 
 const { lang = 'zh' } = store.state
 
-import { en as enDocsLink, zh as zhDocsLink } from '@/common/link_urls'
+import {
+  enDocsLink, zhDocsLink, pluginsZh, pluginsEn,
+} from '@/common/link_urls'
 
 /**
  * 获取基础的验证信息
@@ -200,6 +202,17 @@ export function getLink(name) {
 }
 
 /**
+ * 根据语言获取插件教程的跳转链接
+ * @param name
+ * @return link: string
+ */
+export function getPluginsLink(name) {
+  const { lang = 'zh' } = store.state
+  const dictMap = lang === 'zh' ? pluginsZh : pluginsEn
+  return dictMap[name] || ''
+}
+
+/**
  * 复制到剪切板
  * @param el 复制指令绑定的元素，binding 剪切板配置，包括值value，成功失败时的回调函数
  * @return el: DOM
@@ -255,4 +268,15 @@ export const hasShow = (scope = '') => {
     return true
   }
   return !(hide.routes.includes(scope) || hide.children.includes(scope))
+}
+
+/**
+ * 取 URL 具体的一个参数值
+ * @param url 查询的 url, key 参数的名称
+ * @return value string
+ */
+export const getParamValue = (url, key) => {
+  const regex = new RegExp(`${key}=([^&]*)`, 'i')
+  const value = url.match(regex)[1]
+  return decodeURIComponent(value)
 }

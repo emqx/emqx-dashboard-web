@@ -1,8 +1,6 @@
 <template>
   <div class="users">
-    <page-header
-      :back-title="$t('General.blacklist')"
-    >
+    <page-header>
       <div class="page-header-content-view">
         <div class="content">
           {{ $t('General.manageDashboardUsers') }}

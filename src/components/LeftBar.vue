@@ -99,7 +99,7 @@ export default {
         icon: 'icon-guizeyinqing',
         children: [
           {
-            title: this.$t('components.ruleEngine'),
+            title: this.$t('components.rules'),
             key: 'rules.ruleEngine',
             path: '/rules',
             parentKey: 'rules',
@@ -111,7 +111,7 @@ export default {
             parentKey: 'rules',
           },
           {
-            title: this.$t('components.schema'),
+            title: this.$t('components.schemas'),
             key: 'rules.schema',
             path: '/schemas',
             parentKey: 'rules',
@@ -119,13 +119,13 @@ export default {
         ],
       },
       {
-        title: this.$t('components.alarm'),
+        title: this.$t('components.alerts'),
         key: 'alerts',
         path: '/alerts',
         icon: 'icon-gaojingkongxin',
       },
       {
-        title: this.$t('components.plugin'),
+        title: this.$t('components.plugins'),
         key: 'plugins',
         path: '/plugins',
         icon: 'icon-kongjian',
@@ -161,7 +161,7 @@ export default {
             parentKey: 'general',
           },
           {
-            title: this.$t('components.user'),
+            title: this.$t('components.users'),
             key: 'general.user',
             path: '/users',
             parentKey: 'general',
@@ -219,6 +219,10 @@ export default {
   .ant-menu-sub,
   .ant-menu-dark {
     background-color: $color-theme;
+  }
+
+  .ant-menu-inline.ant-menu-sub {
+    background: #00000075;
   }
 
   .iconfont {

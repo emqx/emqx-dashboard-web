@@ -1,10 +1,5 @@
 <template>
   <div class="websocket">
-    <page-header
-      back-title="WebSocket"
-    >
-    </page-header>
-
     <div class="app-wrapper">
 
       <el-tabs
