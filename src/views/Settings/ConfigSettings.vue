@@ -1,14 +1,32 @@
 <template>
   <a-card
-    class="basic-config emq-list-card"
+    class="config-settings emq-list-card"
   >
 
     <div class="tabs-title">{{ $t('Settings.zone') }}</div>
 
     <el-tabs v-model="settingType">
+      <el-tab-pane label="base" name="mqtt">
+        <config-form
+          v-if="settingType === 'mqtt' && mqttRecord"
+          ref="mqttForm"
+          :record="mqttRecord"
+          :rules="rules"
+          :btn-loading="saveLoading"
+          :cancel-disabled="disabled"
+          :cancel="cancel"
+          v-bind="allOptions"
+          @update="handleUpdate(...arguments, 'mqtt')"
+        >
+        </config-form>
+        <template v-else>
+          <a-skeleton active></a-skeleton>
+        </template>
+      </el-tab-pane>
+
       <el-tab-pane label="external" name="external">
-        <external-form
-          v-if="settingType === 'external'"
+        <config-form
+          v-if="settingType === 'external' && externalRecord"
           ref="externalForm"
           :record="externalRecord"
           :rules="rules"
@@ -16,14 +34,14 @@
           :cancel-disabled="disabled"
           :cancel="cancel"
           v-bind="allOptions"
-          @update="handleUpdate"
+          @update="handleUpdate(...arguments, 'external')"
         >
-        </external-form>
+        </config-form>
       </el-tab-pane>
 
       <el-tab-pane label="internal" name="internal">
-        <internal-form
-          v-if="settingType === 'internal'"
+        <config-form
+          v-if="settingType === 'internal' && internalRecord"
           ref="internalForm"
           :record="internalRecord"
           :rules="rules"
@@ -31,9 +49,9 @@
           :cancel-disabled="disabled"
           :cancel="cancel"
           v-bind="allOptions"
-          @update="handleUpdate"
+          @update="handleUpdate(...arguments, 'internal')"
         >
-        </internal-form>
+        </config-form>
       </el-tab-pane>
     </el-tabs>
 
@@ -44,15 +62,13 @@
 <script>
 import { setTimeout, clearTimeout } from 'timers'
 import { loadConfig, updateConfig } from '../../api/settings'
-import ExternalForm from './components/ExternalForm'
-import InternalForm from './components/InternalForm'
+import ConfigForm from './components/ConfigForm'
 
 export default {
   name: 'BasicConfig',
 
   components: {
-    ExternalForm,
-    InternalForm,
+    ConfigForm,
   },
 
   data() {
@@ -91,11 +107,13 @@ export default {
       timer: 0,
       disabled: true,
       saveLoading: false,
-      externalRecord: {},
+      mqttRecord: null,
+      initMqtt: {},
+      externalRecord: null,
       initExternal: {},
-      internalRecord: {},
+      internalRecord: null,
       initInternal: {},
-      settingType: 'external',
+      settingType: 'mqtt',
       allOptions: {
         boolOptions: [
           { label: 'true', value: true },
@@ -184,7 +202,25 @@ export default {
             trigger: 'blur',
           },
         ],
+        mqtt_max_clientid_len: [
+          { required: true, message: this.$t('Settings.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validRanger(rule, value, callback, [23, 65535])
+            },
+            trigger: 'blur',
+          },
+        ],
         max_topic_alias: [
+          { required: true, message: this.$t('Settings.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validRanger(rule, value, callback, [0, 65535])
+            },
+            trigger: 'blur',
+          },
+        ],
+        mqtt_max_topic_alias: [
           { required: true, message: this.$t('Settings.pleaseEnter') },
           {
             validator: (rule, value, callback) => {
@@ -220,7 +256,7 @@ export default {
             trigger: 'blur',
           },
         ],
-        flapping_banned_expiry_interval: [
+        hibernate_after: [
           { required: true, message: this.$t('Settings.pleaseEnter') },
           {
             validator: (rule, value, callback) => {
@@ -247,15 +283,39 @@ export default {
             trigger: 'blur',
           },
         ],
-        flapping_threshold: { required: true, message: this.$t('Settings.pleaseEnter') },
+        acl_cache_ttl: [
+          { required: true, message: this.$t('Settings.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validType(rule, value, callback, { type: 'duration', unit: 's, h, m, d' })
+            },
+            trigger: 'blur',
+          },
+        ],
+        mqtt_max_packet_size: [
+          { required: true, message: this.$t('Settings.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validType(rule, value, callback, { type: 'bytes', unit: 'KB, MB, GB' })
+            },
+            trigger: 'blur',
+          },
+        ],
         max_packet_size: { required: true, message: this.$t('Settings.pleaseEnter') },
-        max_topic_levels: { required: true, message: this.$t('Settings.pleaseEnter') },
+        mqtt_max_topic_levels: { required: true, message: this.$t('Settings.pleaseEnter') },
+        acl_cache_max_size: { required: true, message: this.$t('Settings.pleaseEnter') },
+        flapping_detect_policy: { required: true, message: this.$t('Settings.pleaseEnter') },
       },
     }
   },
 
   watch: {
     // 当配置改变的时候，才可以取消恢复到原来的值
+    mqttRecord: {
+      deep: true,
+      immediate: true,
+      handler: 'handleRecordChange',
+    },
     externalRecord: {
       deep: true,
       immediate: true,
@@ -285,22 +345,25 @@ export default {
       this.disabled = false
     },
     async loadData() {
-      const { externalRes, internalRes } = await loadConfig()
+      const { externalRes, internalRes, mqttRes } = await loadConfig()
       if (externalRes && internalRes) {
         this.externalRecord = externalRes
         this.internalRecord = internalRes
+        this.mqttRecord = mqttRes
         // 加载数据重新赋值 init
+        Object.assign(this.initMqtt, mqttRes)
         Object.assign(this.initExternal, externalRes)
         Object.assign(this.initInternal, internalRes)
       }
     },
-    async handleUpdate(type, data) {
+    async handleUpdate(data, type) {
       this.saveLoading = true
       const res = await updateConfig(type, data)
       if (res) {
         this.disabled = true
         this.$message.success(this.$t('Base.applySuccess'))
         // 保存成功后赋值到 init 的值
+        Object.assign(this.initMqtt, this.mqttRecord)
         Object.assign(this.initExternal, this.externalRecord)
         Object.assign(this.initInternal, this.internalRecord)
       }
@@ -309,6 +372,7 @@ export default {
     cancel(needPrompt = true) {
       const confirmCancel = () => {
         // 取消后还原 init 值
+        Object.assign(this.mqttRecord, this.initMqtt)
         Object.assign(this.externalRecord, this.initExternal)
         Object.assign(this.internalRecord, this.initInternal)
         this.timer = setTimeout(() => {
@@ -332,7 +396,7 @@ export default {
 
 
 <style lang="scss">
-.basic-config {
+.config-settings {
   .tabs-title {
     position: absolute;
     right: 30px;

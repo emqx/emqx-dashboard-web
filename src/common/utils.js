@@ -237,7 +237,7 @@ export const sqlExampleFormatter = (sql) => {
   if (paramsRe) {
     const paramsText = paramsRe[1]
     if (paramsText) {
-      const newParamsText = paramsText.replace(/(!#!|\s)/g, '').split(/[,，]/).join(', ')
+      const newParamsText = paramsText.replace(/(!#!|\s)/g, ' ').split(/[,，]/).join(', ')
       text = text.replace(paramsText, `  ${newParamsText}`)
     }
   }
