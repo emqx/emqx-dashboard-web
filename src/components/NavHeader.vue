@@ -76,7 +76,7 @@ export default {
       return this.$store.state.alertCount
     },
     navHeadStyle() {
-      return { left: !this.$store.state.leftBarCollapse ? '201px' : 0 }
+      return { left: !this.$store.state.leftBarCollapse ? '201px' : '81px' }
     },
     username() {
       return this.$store.state.user.username || this.$t('components.notLoggedIn')
@@ -156,7 +156,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   height: 50px;
-  padding: 0 20px 0 0;
+  padding: 0 20px 0 8px;
   background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
   position: fixed;
@@ -164,7 +164,7 @@ export default {
   right: 0;
   left: 201px;
   z-index: 100;
-  transition: left .5s;
+  transition: all .3s;
 }
 
 .pull-right {

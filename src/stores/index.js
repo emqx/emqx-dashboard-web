@@ -31,13 +31,20 @@ function getConfigState() {
 function getNavTabs() {
   return JSON.parse(localStorage.getItem('navTabs')) || []
 }
+function getCollapse() {
+  const collapse = localStorage.getItem('leftBarCollapse')
+  if (collapse === null) {
+    return false
+  }
+  return JSON.parse(collapse)
+}
 
 export default new Vuex.Store({
   state: {
     loading: false,
     user: JSON.parse(localStorage.user || sessionStorage.user || '{}') || {},
     lang: getDefaultLanguage(),
-    leftBarCollapse: false, // localStorage.getItem('leftBarCollapse'),
+    leftBarCollapse: getCollapse(),
     alertCount: 0,
     config: getConfigState(),
     navTabs: getNavTabs(),
@@ -110,6 +117,7 @@ export default new Vuex.Store({
     SET_LEFT_BAR_COLLAPSE(state, collapse) {
       // eslint-disable-next-line
       state.leftBarCollapse = collapse
+      localStorage.setItem('leftBarCollapse', collapse)
     },
     SET_LANGUAGE(state, lang) {
       state.lang = lang
