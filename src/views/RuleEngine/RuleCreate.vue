@@ -3,7 +3,7 @@
 
     <page-header>
       <div class="page-header-title-view">
-        <div class="title">{{ $t('RuleEngine.condition') }}</div>
+        <div class="title">{{ $t('RuleEngine.createRules') }}</div>
       </div>
 
       <div class="page-header-content-view">

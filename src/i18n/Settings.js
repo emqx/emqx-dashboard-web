@@ -135,7 +135,7 @@ export default {
     en: 'Idle timeout of the MQTT connections',
   },
   mqueue_store_qos0: {
-    zh: 'QoS0 是否排队',
+    zh: '是否将 QoS0 的消息存储在队列中',
     en: 'Whether to enqueue QoS0 messages',
   },
   flapping_banned_expiry_interval: {
@@ -269,6 +269,14 @@ export default {
   flapping_detect_policy: {
     zh: '指定全局的 flapping detect 策略',
     en: 'Specify the global flapping detect policy',
+  },
+  strict_mode: {
+    zh: '是否在严格模式下解析 MQTT 帧',
+    en: 'Whether to parse the MQTT frame in strict mode',
+  },
+  mqtt_strict_mode: {
+    zh: '是否在严格模式下解析 MQTT 帧',
+    en: 'Whether to parse the MQTT frame in strict mode',
   },
   // 集群设置字段
   invite: {
