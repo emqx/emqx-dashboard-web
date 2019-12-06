@@ -98,18 +98,6 @@ export default {
       if (name === 'schemas' && oper === 'create') {
         return 'schemaCreate'
       }
-      if (name === 'clients' && oper === 'detail') {
-        return 'clientid'
-      }
-      if (name === 'rules' && oper === 'view') {
-        return 'ruleId'
-      }
-      if (name === 'resources' && oper === 'view') {
-        return 'resourceId'
-      }
-      if (name === 'schemas' && oper === 'view') {
-        return 'schemaName'
-      }
       return name
     },
     loadTabs() {
@@ -123,7 +111,7 @@ export default {
         return
       }
       name = this.getTabName(name, oper)
-      const tabIndex = this.tabs.findIndex($ => $.url === fullPath)
+      const tabIndex = this.tabs.findIndex($ => $.url === fullPath || $.name === name)
       if (tabIndex === -1) {
         const tab = { name, url: fullPath }
         this.$store.dispatch('ADD_NAV_TABS', tab)
@@ -144,7 +132,6 @@ export default {
           path = res[last].url
         }
         this.$router.push({ path })
-        this.loadTabs()
       })
     },
   },
