@@ -208,9 +208,7 @@
           <el-tooltip
             effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false"
           >
-            <el-button type="danger" size="small" @click="upgradeLicense">
-              {{ $t('Overview.trialEdition') }}
-            </el-button>
+            <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
           </el-tooltip>
         </div>
       </div>
@@ -576,7 +574,11 @@ export default {
 
       .oper {
         width: 100px;
-        text-align: right;
+        text-align: center;
+        font-size: 14px;
+        .el-tag {
+          display: block;
+        }
       }
     }
 
