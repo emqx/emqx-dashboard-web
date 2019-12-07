@@ -2,138 +2,172 @@
   <div class="plugins">
     <div class="app-wrapper">
 
-      <a-card class="count-list">
-        <div class="count-left">
-          <div class="count-title">{{ $t('Plugins.numberOfPlugIns') }}</div>
-          <div class="count-result">{{ state.count }}</div>
-        </div>
-        <div class="count-center">
-          <div class="count-title">
-            {{ $t('Plugins.running') }}
-          </div>
-          <div class="count-result">{{ state.running }}</div>
-        </div>
-        <div class="count-right">
-          <div class="count-title">
-            {{ $t('Plugins.stopped') }}
-          </div>
-          <div class="count-result">{{ state.stop }}</div>
-        </div>
-      </a-card>
+      <a-card class="search-wrapper">
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-radio-group v-model="status" size="small" border @change="loadData">
+              <el-radio-button label="all">
+                {{ $t('Plugins.all') }}({{ state.count }})
+              </el-radio-button>
+              <el-radio-button label="running">
+                {{ $t('Plugins.running') }}({{ state.running }})
+              </el-radio-button>
+              <el-radio-button label="stop">
+                {{ $t('Plugins.stopped') }}({{ state.stop }})
+              </el-radio-button>
+            </el-radio-group>
+          </el-col>
 
-      <a-card class="emq-list-card">
+          <el-col :span="4">
+            <el-radio-group v-model="displayType" size="small" border>
+              <el-radio-button label="cards">
+                <icon-font type="icon-qiapianmoshi_kuai"></icon-font>
+              </el-radio-button>
+              <el-radio-button label="list">
+                <icon-font type="icon-liebiaomoshi_kuai"></icon-font>
+              </el-radio-button>
+            </el-radio-group>
+          </el-col>
 
-        <div class="emq-table-header">
-          <div>
-            <div class="emq-title">
-              {{ $t('Plugins.pluginsList') }}
-            </div>
-          </div>
-
-          <div class="search-wrapper">
+          <el-col :span="5">
             <emq-select
               v-model="nodeName"
-              :field="{ api: loadNodes }"
+              :field="{ options: nodes }"
               :field-name="{ label: 'name', value: 'name' }"
-              size="mini"
+              size="small"
               @change="loadData"
             >
             </emq-select>
+          </el-col>
 
-            <el-radio-group v-model="status" size="mini" border @change="loadData">
-              <el-radio-button label="1">
-                {{ $t('Plugins.running') }}
-              </el-radio-button>
-              <el-radio-button label="0">
-                {{ $t('Plugins.stopped') }}
-              </el-radio-button>
-              <el-radio-button label="all">
-                {{ $t('Plugins.all') }}
-              </el-radio-button>
-            </el-radio-group>
+          <el-col :span="7">
+            <el-input
+              v-model="searchVal"
+              type="text"
+              class="search-input"
+              size="small"
+              clearable
+              :placeholder="$t('Plugins.searchByName')"
+              @input="searchPlugin"
+            >
+              <i v-if="!searchLoading" slot="prefix" class="el-icon-search"></i>
+              <i v-else slot="prefix" class="el-icon-loading"></i>
+            </el-input>
+          </el-col>
+        </el-row>
+      </a-card>
 
-            <el-radio-group v-model="category" size="mini" border @change="loadData">
-              <el-radio-button
-                v-for="item in typeFilterOption"
-                :key="item.value"
-                :label="item.value"
-              >
-                {{ item.text }}
-              </el-radio-button>
-              <el-radio-button label="all">
-                {{ $t('Plugins.all') }}
-              </el-radio-button>
-            </el-radio-group>
-          </div>
-        </div>
+      <el-row
+        v-if="displayType === 'cards' && listTableData.length > 0"
+        class="emq-list-card plugin-cards-wrapper"
+        :gutter="20"
+      >
+        <el-col v-for="(item, i) in listTableData" :key="i" :span="12">
+          <div class="plugin-item">
+            <img
+              class="logo"
+              :src="iconMap[item.name]"
+              alt="plugin-logo"
+              width="90"
+              height="90"
+            >
 
-        <div class="plugin-wrapper">
-          <template v-if="listTableData.length > 0">
-            <div v-for="(item, i) in listTableData" :key="i" :gutter="20" class="plugin-item">
-
-              <div class="logo">
-                <img
-                  :src="iconMap[item.name]"
-                  alt="plugin-logo"
-                >
-              </div>
-
-              <div class="header">
-                <div class="name">{{ item.name }}</div>
-                <div class="description">{{ item.description }}</div>
-              </div>
-
-              <div class="content">
-                <div class="type">{{ typeText(item.type) }}</div>
-                <div class="version">{{ item.version }}</div>
-              </div>
-
-              <div class="state">
+            <div class="header">
+              <div class="name">
                 <a-badge
                   :status="item.active ? 'success' : 'error'"
-                  :text="item.active ? $t('Plugins.running') : $t('Plugins.stopped')"
+                  :text="item.name"
                   dot
                 >
                 </a-badge>
               </div>
+              <div class="description">{{ item.description }}</div>
+              <div class="type-version">{{ item.version }} / {{ typeText(item.type) }}</div>
+            </div>
 
-              <div class="oper">
-                <el-button
-                  v-if="!primaryList.includes(item.name)"
-                  :type="item.active ? 'danger' : 'dashed'"
-                  size="mini"
-                  @click="togglePlugin(item)"
+            <div class="oper">
+              <el-button
+                v-if="!primaryList.includes(item.name)"
+                :type="item.active ? 'danger' : 'dashed'"
+                size="small"
+                @click="togglePlugin(item)"
+              >
+                {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
+              </el-button>
+              <span v-else>--</span>
+              <div v-if="!primaryList.includes(item.name)" class="tutorial">
+                <a
+                  v-if="getLinks(item.name)"
+                  href="javascript:;"
+                  @click="openTutorialLink(item.name)"
                 >
-                  {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
-                </el-button>
-                <span v-else>--</span>
-                <template v-if="!primaryList.includes(item.name)">
-                  <el-button
-                    v-if="getLinks(item.name)"
-                    size="mini"
-                    type="dashed"
-                    @click="openTutorialLink(item.name)"
-                  >
-                    {{ $t('Plugins.tutorial') }}
-                  </el-button>
-                </template>
-                <!-- TODO: 暂时隐藏 进去后的插件配置暂时没用 -->
-                <!-- <el-button
-                  v-if="!primaryList.includes(item.name)"
-                  size="mini"
-                  type="dashed"
-                  @click="toConfig(item)"
-                >
-                  {{ $t('Plugins.config') }}
-                </el-button> -->
+                  {{ $t('Plugins.tutorial') }}
+                </a>
               </div>
             </div>
-          </template>
-          <div v-else class="null-plugins">
-            <p>{{ $t('Plugins.listNull') }}</p>
+
+          </div>
+        </el-col>
+      </el-row>
+
+      <div
+        v-if="displayType === 'list' && listTableData.length > 0"
+        class="emq-list-card plugin-list-wrapper"
+      >
+        <div v-for="(item, i) in listTableData" :key="i" :gutter="20" class="plugin-item">
+
+          <img
+            class="logo"
+            :src="iconMap[item.name]"
+            alt="plugin-logo"
+            width="60"
+            height="60"
+          >
+
+          <div class="header">
+            <div class="name">{{ item.name }}</div>
+            <div class="description">{{ item.description }}</div>
+          </div>
+
+          <div class="content">
+            <div class="type">{{ typeText(item.type) }}</div>
+            <div class="version">{{ item.version }}</div>
+          </div>
+
+          <div class="state">
+            <a-badge
+              :status="item.active ? 'success' : 'error'"
+              :text="item.active ? $t('Plugins.running') : $t('Plugins.stopped')"
+              dot
+            >
+            </a-badge>
+          </div>
+
+          <div class="oper">
+            <el-button
+              v-if="!primaryList.includes(item.name)"
+              :type="item.active ? 'danger' : 'dashed'"
+              size="small"
+              @click="togglePlugin(item)"
+            >
+              {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
+            </el-button>
+            <span v-else>--</span>
+            <div v-if="!primaryList.includes(item.name)" class="tutorial">
+              <a
+                v-if="getLinks(item.name)"
+                href="javascript:;"
+                @click="openTutorialLink(item.name)"
+              >
+                {{ $t('Plugins.tutorial') }}
+              </a>
+            </div>
           </div>
         </div>
+      </div>
 
+      <a-card v-if="listTableData.length === 0" class="null-plugins">
+        <p>{{ $t('Plugins.listNull') }}</p>
       </a-card>
     </div>
 
@@ -146,7 +180,7 @@ import {
   loadPlugins, startPlugin, stopPlugin,
 } from '@/api/plugins'
 import { loadNodes } from '@/api/common'
-import { getPluginsLink } from '@/common/utils'
+import { getPluginsLink, matchSearch } from '@/common/utils'
 
 export default {
   name: 'Plugins',
@@ -155,9 +189,13 @@ export default {
 
   data() {
     return {
-      loadNodes,
-      category: 'all',
-      status: '1',
+      searchLoading: false,
+      status: 'running',
+      displayType: 'cards',
+      allCount: 0,
+      runningCount: 0,
+      stopCount: 0,
+      searchVal: '',
       tableData: [],
       listTableData: [],
       nodes: [],
@@ -170,7 +208,6 @@ export default {
         protocol: this.$t('Plugins.protocol'),
         feature: this.$t('Plugins.feature'),
       },
-      typeFilterOption: [],
       iconMap: {},
     }
   },
@@ -188,7 +225,6 @@ export default {
 
   created() {
     this.loadData()
-    this.typeFilterOption = Object.entries(this.pluginTypes).map(([value, text]) => ({ text, value }))
   },
 
   methods: {
@@ -237,14 +273,12 @@ export default {
       this.tableData = await loadPlugins(this.nodeName)
       this.handleFilter()
       this.iconMap = this.loadIcon()
+      this.searchVal = ''
     },
     handleFilter() {
       let list = this.tableData
-      if (this.category !== 'all') {
-        list = list.filter($ => $.type === this.category)
-      }
       if (this.status !== 'all') {
-        const active = this.status === '1'
+        const active = this.status === 'running'
         list = list.filter($ => $.active === active)
       }
       this.listTableData = list
@@ -274,6 +308,23 @@ export default {
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },
+    searchPlugin() {
+      this.searchLoading = true
+      if (this.searchVal === '') {
+        this.handleFilter()
+        this.searchLoading = false
+        return
+      }
+      setTimeout(async () => {
+        const res = await matchSearch(this.tableData, 'name', this.searchVal)
+        if (res) {
+          this.listTableData = res
+          this.searchLoading = false
+        } else {
+          this.searchLoading = false
+        }
+      }, 500)
+    },
   },
 }
 </script>
@@ -281,122 +332,110 @@ export default {
 
 <style lang="scss">
 .plugins {
-  .plugin-wrapper {
-    .plugin-item {
-      padding: 16px 0;
-      border-bottom: 1px solid #f1f1f1;
-      display: flex;
-      align-items: center;
-      position: relative;
-
-      .logo {
-        position: absolute;
-        top: 24px;
-        left: 0;
-        border-radius: 4px;
-        overflow: hidden;
-
-        img {
-          width: 48px;
-          height: 48px;
-        }
-      }
-
-      .header {
-        flex: 1.2;
-        padding-left: 70px;
-
-        .name {
-          margin-bottom: 4px;
-          color: rgba(0, 0, 0, .65);
-          font-size: 14px;
-          line-height: 22px;
-        }
-
-        .description {
+  .plugin-item {
+    position: relative;
+    margin: 0;
+    font-size: 14px;
+    margin: 0;
+    padding: 24px 32px;
+    background: #fff;
+    display: flex;
+    .logo {
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .name {
+      color: #101010;
+      font-size: 16px;
+      line-height: 22px;
+      margin-bottom: 12px;
+    }
+    .description {
+      color: rgba(0, 0, 0, .65);
+      font-size: 14px;
+      line-height: 22px;
+      max-width: 300px;
+    }
+    .oper {
+      .tutorial {
+        margin-top: 5px;
+        a {
+          margin-left: 5px;
           color: rgba(0, 0, 0, .45);
-          font-size: 14px;
-          line-height: 22px;
-          max-width: 300px;
+          border-bottom: 1px solid;
+          &:hover {
+            color: #34C388;
+          }
         }
       }
+    }
+  }
 
+  .plugin-cards-wrapper {
+    .plugin-item {
+      height: 140px;
+      margin-bottom: 20px;
+      .ant-badge-status-text {
+        color: #101010;
+        font-size: 16px;
+      }
+      .header {
+        flex: 1;
+        padding-left: 20px;
+        .type-version {
+          margin-top: 12px;
+          font-style: italic;
+        }
+      }
+    }
+  }
+
+  .plugin-list-wrapper {
+    .plugin-item {
+      height: 110px;
+      border-bottom: 1px solid #f1f1f1;
+      align-items: center;
+      .header {
+        flex: 1.5;
+        padding-left: 50px;
+      }
       .content {
         margin-left: 40px;
         flex: 1;
 
-        .type {
-          color: rgba(0, 0, 0, .45);
-          margin-top: 4px;
-          margin-bottom: 0;
-          line-height: 22px;
-        }
-
-        .version {
-          color: rgba(0, 0, 0, .45);
+        .type, .version {
+          color: rgba(0, 0, 0, .55);
           margin-top: 4px;
           margin-bottom: 0;
           line-height: 22px;
         }
       }
-
       .state {
         height: 18px;
         flex: 1;
       }
-
       .oper {
         flex: .6;
       }
     }
   }
 
-  .count-list {
-    overflow: hidden;
-    text-align: center;
-    padding: 10px 20px;
-    margin-bottom: 30px;
-
-    .count-left {
-      width: 140px;
-      float: left;
-    }
-
-    .count-center {
-      width: 140px;
-      display: inline-block;
-    }
-
-    .count-right {
-      width: 140px;
-      float: right;
-    }
-
-    .count-title {
-      color: #808080;
-      margin-bottom: 10px;
-    }
-
-    .count-result {
-      color: #101010;
-      font-size: 24px;
-      font-weight: 400;
-    }
-  }
-
-
   .search-wrapper {
-    .el-radio-group {
-      margin-left: 20px;
-    }
-  }
-
-  .emq-table-header {
     margin-bottom: 30px;
+    .el-radio-button--small .el-radio-button__inner {
+      font-size: 13px;
+    }
+    .search-input {
+      .el-icon-search, .el-icon-loading {
+        position: relative;
+        left: 4px;
+        top: 7px;
+      }
+    }
   }
 
   .null-plugins {
-    min-height: 140px;
+    min-height: 130px;
     display: flex;
     align-items: center;
     justify-content: center;
