@@ -233,11 +233,9 @@ let routes = [
         path: '',
         name: 'plugins',
         component: () => import('@/views/Plugins/Plugins'),
-      },
-      {
-        path: ':name',
-        name: 'plugins-config',
-        component: () => import('@/views/Plugins/PluginView'),
+        meta: {
+          keepAlive: true,
+        },
       },
     ],
   },
