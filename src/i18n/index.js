@@ -15,6 +15,7 @@ const model = [
   'Base',
   'components',
   'Clients',
+  'Topics',
   'General',
   'Overview',
   'Plugins',

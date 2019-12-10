@@ -65,6 +65,22 @@ let routes = [
       },
     ],
   },
+  // 主题
+  {
+    path: '/topics',
+    component: Layout,
+    meta: {
+      hideKey: 'topics',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'topics',
+        component: () => import('@/views/Topics/Topics'),
+      },
+    ],
+  },
   // Schemas
   {
     path: '/schemas',

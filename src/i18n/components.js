@@ -37,6 +37,10 @@ export default
     zh: '客户端',
     en: 'Clients',
   },
+  topics: {
+    zh: '主题',
+    en: 'Topics',
+  },
   schemas: {
     zh: '编解码',
     en: 'Schema Registry',

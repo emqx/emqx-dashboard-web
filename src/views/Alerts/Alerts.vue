@@ -18,7 +18,10 @@
               {{ $t('Alerts.system') }}
             </template>
           </el-table-column>
-          <el-table-column v-if="alertType === 'history'" prop="clear_at" width="180px" :label="$t('Alerts.clearanceTime')"></el-table-column>
+          <el-table-column
+            v-if="alertType === 'history'" prop="clear_at" width="180px" :label="$t('Alerts.clearanceTime')"
+          >
+          </el-table-column>
         </el-table>
 
       </a-card>
@@ -32,12 +35,6 @@ import { loadAlarm, loadHistoryAlarm } from '@/api/common'
 
 export default {
   name: 'Alerts',
-
-  components: {},
-
-  filters: {},
-
-  props: {},
 
   data() {
     return {

@@ -47,7 +47,10 @@
           </el-table-column>
 
           <el-table-column prop="username" min-width="120px" :label="$t('Clients.username')"></el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="node" min-width="120px" :label="$t('Clients.accessNode')"></el-table-column>
+          <el-table-column
+            v-if="showLevel === 'more'" prop="node" min-width="120px" :label="$t('Clients.accessNode')"
+          >
+          </el-table-column>
           <el-table-column prop="ipaddress" min-width="120px" :label="$t('Clients.ipAddress')">
             <template slot-scope="{ row }">
               {{ row.ip_address }}:{{ row.port }}
@@ -224,21 +227,6 @@ export default {
 
 <style lang="scss">
 .clients {
-  .search-wrapper {
-    width: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .node-select {
-      width: 100%;
-    }
-
-    .el-button {
-      margin-left: 12px;
-    }
-  }
-
   .data-list {
     clear: both;
   }
