@@ -106,6 +106,11 @@ export default {
       {
         title: this.$t('components.clients'),
         path: '/clients',
+        icon: 'icon-guanlianshebei',
+      },
+      {
+        title: this.$t('components.topics'),
+        path: '/topics',
         icon: 'icon-zuzhiqunzu',
       },
       {
