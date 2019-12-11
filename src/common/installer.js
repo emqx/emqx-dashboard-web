@@ -13,7 +13,7 @@ import { hasShow } from '@/common/utils'
 
 export default (Vue) => {
   const IconFont = Icon.createFromIconfontCN({
-    scriptUrl: 'iconfont.js',
+    scriptUrl: '/static/iconfont/iconfont.js',
   })
 
   Vue.component(Drawer.name, Drawer)

@@ -43,7 +43,6 @@ module.exports = {
       },
     },
   },
-
   assetsDir: 'static',
   publicPath: customConfig.publicPath,
   productionSourceMap: false,
