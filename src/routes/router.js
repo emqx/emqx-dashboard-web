@@ -120,9 +120,6 @@ let routes = [
         path: 'create',
         name: 'rules-create',
         component: () => import('@/views/RuleEngine/RuleCreate'),
-        meta: {
-          keepAlive: true,
-        },
       },
       {
         path: ':id',
