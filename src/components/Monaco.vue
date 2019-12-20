@@ -74,20 +74,23 @@ export default {
 
   methods: {
     initEditor() {
-      // Create
       const id = `monaco-${this.id}`
-      this.editor = monaco.editor.create(document.getElementById(id), {
+      const defaultOptions = {
         value: this.value,
         language: this.lang,
+        readOnly: this.disabled,
         fontSize: 14,
         automaticLayout: true,
-        readOnly: this.disabled,
+        scrollBeyondLastLine: false,
         lineNumbersMinChars: 2,
         theme: 'vs',
         minimap: {
           enabled: false,
         },
-      })
+      }
+      const options = this.beforeMonacoCreate(defaultOptions)
+      // Create
+      this.editor = monaco.editor.create(document.getElementById(id), options)
       // event changed
       this.editor.onDidChangeModelContent((event) => {
         const value = this.editor.getValue()
@@ -101,6 +104,16 @@ export default {
       this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
         this.$emit('qucik-save', this.value)
       })
+    },
+    beforeMonacoCreate(options) {
+      if (this.warp) {
+        const warpOptions = {
+          wordWrap: 'on',
+          wrappingIndent: 'indent',
+        }
+        Object.assign(options, warpOptions)
+      }
+      return options
     },
   },
 }

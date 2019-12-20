@@ -54,6 +54,7 @@
                     v-model="record.rawsql"
                     class="sql"
                     lang="sql"
+                    :warp="true"
                     @qucik-save="handleSQLTest"
                   ></monaco>
                 </div>
