@@ -160,14 +160,16 @@
             <!-- Schema code -->
             <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
               <el-form-item class="code-editor__item" label="Schema" prop="schema">
-                <code-editor
-                  v-model="record.schema"
-                  class="schema-code"
-                  lang="application/json"
-                  height="320px"
-                  :disabled="disabled"
-                  :lint="false"
-                ></code-editor>
+                <div class="monaco-container monaco-schema">
+                  <monaco
+                    id="schema"
+                    v-model="record.schema"
+                    class="schema-code"
+                    lang="plaintext"
+                    :disabled="disabled"
+                    @qucik-save="save"
+                  ></monaco>
+                </div>
               </el-form-item>
             </el-col>
             <el-col :span="10">
@@ -196,14 +198,14 @@
 import { loadResource } from '@/api/rules'
 import { createSchema, viewSchema, deleteSchema } from '@/api/schemas'
 import detailsPage from '@/mixins/detailsPage'
-import CodeEditor from '@/components/CodeEditor'
+import Monaco from '@/components/Monaco'
 import { setTimeout } from 'timers'
 
 export default {
   name: 'SchemasDetails',
 
   components: {
-    CodeEditor,
+    Monaco,
   },
 
   mixins: [detailsPage],
@@ -314,10 +316,8 @@ export default {
 
 <style lang="scss">
 .schemas-details {
-  .schema-code {
-    .CodeMirror-scroll {
-      min-height: 200px;
-    }
+  .monaco-schema {
+    height: 320px;
   }
 }
 </style>

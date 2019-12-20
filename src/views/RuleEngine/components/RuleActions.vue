@@ -158,14 +158,17 @@
                     v-bind="item.bindAttributes"
                   >
                   </el-input>
-                  <code-editor
+                  <div
                     v-else-if="item.key === 'sql'"
-                    v-model="record.params.sql"
-                    class="sql"
-                    lang="text/x-sql"
-                    :lint="false"
+                    class="monaco-container monaco-action__sql"
                   >
-                  </code-editor>
+                    <monaco
+                      id="action-sql"
+                      v-model="record.params.sql"
+                      lang="sql"
+                    >
+                    </monaco>
+                  </div>
                   <el-input
                     v-else
                     v-model="record.params[item.key]"
@@ -215,7 +218,7 @@
 import { loadActionsList, loadResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
 import ResourceDialog from '@/views/RuleEngine/components/ResourceCreate'
-import CodeEditor from '@/components/CodeEditor'
+import Monaco from '@/components/Monaco'
 import { setTimeout } from 'timers'
 
 export default {
@@ -223,7 +226,7 @@ export default {
 
   components: {
     ResourceDialog,
-    CodeEditor,
+    Monaco,
   },
 
   props: {
@@ -615,10 +618,9 @@ export default {
     .el-textarea {
       width: 330px;
     }
-    .sql {
-      .CodeMirror-scroll {
-        min-height: 200px;
-      }
+
+    .monaco-action__sql {
+      height: 200px;
     }
   }
 }
