@@ -48,16 +48,20 @@
               </el-form-item>
 
               <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
-                <code-editor
-                  v-model="record.rawsql"
-                  class="sql"
-                  lang="text/x-sql"
-                ></code-editor>
+                <div class="monaco-container monaco-sql">
+                  <monaco
+                    id="rule-sql"
+                    v-model="record.rawsql"
+                    class="sql"
+                    lang="sql"
+                    @qucik-save="handleSQLTest"
+                  ></monaco>
+                </div>
               </el-form-item>
 
               <el-form-item :label="$t('RuleEngine.sqlTest')">
                 <el-switch v-model="showTest" @change="handlePreSQLTest"></el-switch>
-                <el-popover width="220" placement="top" trigger="hover">
+                <el-popover width="220" placement="right" trigger="hover">
                   {{ $t('RuleEngine.inputMetadata') }}
                   <i slot="reference" class="icon el-icon-question"></i>
                 </el-popover>
@@ -73,12 +77,21 @@
                     :class="field === 'payload' ? 'code-editor__item' : ''"
                   >
                     <template v-if="field === 'payload'">
-                      <code-editor
-                        v-model="record.ctx[field]"
-                        class="payload"
-                        lang="application/json"
-                        :lint="false"
-                      ></code-editor>
+                      <div class="monaco-container monaco-payload">
+                        <monaco
+                          id="payload"
+                          v-model="record.ctx[field]"
+                          class="payload"
+                          :lang="payloadType"
+                          @qucik-save="handleSQLTest"
+                        ></monaco>
+                      </div>
+                      <div class="payload-type">
+                        <el-radio-group v-model="payloadType">
+                          <el-radio label="json">JSON</el-radio>
+                          <el-radio label="plaintext">RAW</el-radio>
+                        </el-radio-group>
+                      </div>
                     </template>
                     <template v-else>
                       <el-input v-model="record.ctx[field]" :rows="5">
@@ -97,10 +110,10 @@
                     <code-editor
                       v-model="testOutPut"
                       class="test-output"
-                      height="250px"
                       lang="application/json"
                       :lint="false"
                       :disabled="true"
+                      :line-numbers="false"
                     ></code-editor>
                   </el-form-item>
 
@@ -177,6 +190,7 @@ import {
   loadRuleEvents, SQLTest, createRule,
 } from '@/api/rules'
 import CodeEditor from '@/components/CodeEditor'
+import Monaco from '@/components/Monaco'
 import { loadTopics } from '@/api/server'
 import { sqlExampleFormatter } from '@/common/utils'
 import RuleActions from './components/RuleActions'
@@ -187,6 +201,7 @@ export default {
   components: {
     RuleActions,
     CodeEditor,
+    Monaco,
   },
 
   props: {},
@@ -194,6 +209,7 @@ export default {
   data() {
     return {
       loadRuleEvents,
+      payloadType: 'json',
       topics: [],
       events: [],
       testOutPut: '',
@@ -295,7 +311,7 @@ export default {
           try {
             data.ctx.payload = JSON.stringify(JSON.parse(data.ctx.payload))
           } catch (e) {
-            console.error(e)
+            console.log(e)
           }
         }
 
@@ -407,19 +423,31 @@ export default {
       padding: 10px;
     }
   }
-  .sql {
-    .CodeMirror-scroll {
-      min-height: 290px;
+
+  .monaco-container {
+    &.monaco-sql {
+      height: 320px;
+    }
+    &.monaco-payload {
+      height: 200px;
     }
   }
-  .payload {
-    .CodeMirror-scroll {
-      min-height: 200px;
+
+  .payload-type {
+    width: 100%;
+    padding: 2px 12px;
+    background: #f6f7fb;
+    border: 1px solid #D9D9D9;
+    border-top: none;
+    text-align: right;
+    .el-radio__label {
+      font-size: 13px;
     }
   }
+
   .test-output {
     .CodeMirror-scroll {
-      min-height: 250px;
+      min-height: 170px;
     }
   }
 }
