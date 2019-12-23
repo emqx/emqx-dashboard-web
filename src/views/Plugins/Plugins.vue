@@ -80,6 +80,20 @@
                   dot
                 >
                 </a-badge>
+                <el-tooltip
+                  effect="dark"
+                  :content="$t('Plugins.tutorial')"
+                  :open-delay="500"
+                  placement="top"
+                >
+                  <a
+                    v-if="!primaryList.includes(item.name) && getLinks(item.name)"
+                    class="tutorial"
+                    href="javascript:;" @click="openTutorialLink(item.name)"
+                  >
+                    <i class="iconfont icon-bangzhu"></i>
+                  </a>
+                </el-tooltip>
               </div>
               <div class="description">{{ item.description }}</div>
               <div class="type-version">{{ item.version }} / {{ typeText(item.type) }}</div>
@@ -95,17 +109,7 @@
                 {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
               </el-button>
               <span v-else>--</span>
-              <div v-if="!primaryList.includes(item.name)" class="tutorial">
-                <a
-                  v-if="getLinks(item.name)"
-                  href="javascript:;"
-                  @click="openTutorialLink(item.name)"
-                >
-                  {{ $t('Plugins.tutorial') }}
-                </a>
-              </div>
             </div>
-
           </div>
         </el-col>
       </el-row>
@@ -125,7 +129,23 @@
           >
 
           <div class="header">
-            <div class="name">{{ item.name }}</div>
+            <div class="name">
+              {{ item.name }}
+              <el-tooltip
+                effect="dark"
+                :content="$t('Plugins.tutorial')"
+                :open-delay="500"
+                placement="top"
+              >
+                <a
+                  v-if="!primaryList.includes(item.name) && getLinks(item.name)"
+                  class="tutorial"
+                  href="javascript:;" @click="openTutorialLink(item.name)"
+                >
+                  <i class="iconfont icon-bangzhu"></i>
+                </a>
+              </el-tooltip>
+            </div>
             <div class="description">{{ item.description }}</div>
           </div>
 
@@ -153,15 +173,6 @@
               {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
             </el-button>
             <span v-else>--</span>
-            <div v-if="!primaryList.includes(item.name)" class="tutorial">
-              <a
-                v-if="getLinks(item.name)"
-                href="javascript:;"
-                @click="openTutorialLink(item.name)"
-              >
-                {{ $t('Plugins.tutorial') }}
-              </a>
-            </div>
           </div>
         </div>
       </div>
@@ -350,24 +361,15 @@ export default {
       line-height: 22px;
       margin-bottom: 12px;
     }
+    .el-tooltip.tutorial {
+      position: relative;
+      top: 1px;
+    }
     .description {
       color: rgba(0, 0, 0, .65);
       font-size: 14px;
       line-height: 22px;
       max-width: 300px;
-    }
-    .oper {
-      .tutorial {
-        margin-top: 5px;
-        a {
-          margin-left: 5px;
-          color: rgba(0, 0, 0, .45);
-          border-bottom: 1px solid;
-          &:hover {
-            color: #34C388;
-          }
-        }
-      }
     }
   }
 
@@ -386,6 +388,9 @@ export default {
           margin-top: 12px;
           font-style: italic;
         }
+        .el-tooltip.tutorial {
+          left: 5px;
+        }
       }
     }
   }
@@ -398,6 +403,9 @@ export default {
       .header {
         flex: 1.5;
         padding-left: 50px;
+        .el-tooltip.tutorial {
+          left: 2px;
+        }
       }
       .content {
         margin-left: 40px;
