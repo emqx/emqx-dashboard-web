@@ -304,3 +304,22 @@ export const matchSearch = (data, searchKey, searchValue) => {
     }
   })
 }
+
+/**
+ * 将内存数值转化为 KB MB G
+ * @param number 需要转化的数值
+ * @return string 转化后的字符串
+ */
+export const formatNumberSize = number => {
+  const scale = 1000
+  const digitList = ['K', 'M', 'G', 'T']
+  let residue = Math.round(number%scale/100) // 小数点后数，1位
+  let $integer = Math.round(number/scale) // 最小单位kb
+  let digit = 0
+  while($integer > scale) {
+    residue = Math.round($integer%scale/100)
+    $integer = Math.round($integer/scale)
+    digit += 1
+  }
+  return `${$integer}.${residue}${digitList[digit]}B`
+}
