@@ -332,7 +332,11 @@ export default {
     currentNode() {
       const node = this.nodes.find($ => $.name === this.nodeName)
       if (node) {
-        return node
+        const { stats, ...withoutStats } = node
+        return {
+          ...stats,
+          ...withoutStats,
+        }
       }
       return this.initCurrentNode
     },
