@@ -113,6 +113,10 @@ export default {
     zh: '新增动作',
     en: 'Add Action',
   },
+  editActions: {
+    zh: '编辑动作',
+    en: 'Edit Action',
+  },
   useOfResources: {
     zh: '使用资源',
     en: 'Use of resources',
