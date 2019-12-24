@@ -79,7 +79,7 @@
 
     <el-dialog
       :visible.sync="actionDialogVisible"
-      :title="$t('RuleEngine.addActions')"
+      :title="actionDialogTitle"
       width="520px"
     >
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
@@ -246,6 +246,7 @@ export default {
 
   data() {
     return {
+      actionDialogTitle: this.$t('RuleEngine.addActions'),
       actionDialogVisible: false,
       resourceDialogVisible: false,
       setRefresh: false,
@@ -424,11 +425,13 @@ export default {
     },
 
     addAction() {
+      this.actionDialogTitle = this.$t('RuleEngine.addActions')
       this.actionTypeChange(this.record.name, 'add')
       this.actionDialogVisible = true
     },
 
     editAction(item, index) {
+      this.actionDialogTitle = this.$t('RuleEngine.editActions')
       this.currentEditIndex = index
       this.actionTypeChange(item.name, 'edit')
       this.record = { ...item }
