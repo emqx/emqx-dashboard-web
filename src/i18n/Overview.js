@@ -124,8 +124,8 @@ export default
     en: 'Address',
   },
   connectCurrentAndMax: {
-    zh: '连接(当前/最大)',
-    en: 'Connect(Current/Max)',
+    zh: '连接 (当前/最大)',
+    en: 'Connect (Current/Max)',
   },
   current: {
     zh: '当前',

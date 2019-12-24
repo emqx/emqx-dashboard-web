@@ -38,7 +38,7 @@
                 <el-table-column prop="acceptors" min-width="60px" label="Acceptors"></el-table-column>
                 <el-table-column prop="current_conns" min-width="120px" :label="$t('Overview.connectCurrentAndMax')">
                   <template slot-scope="{ row }">
-                    {{ row.current_conns }}/{{ row.max_conns }}
+                    {{ row.current_conns }} / {{ row.max_conns }}
                   </template>
                 </el-table-column>
               </el-table>
