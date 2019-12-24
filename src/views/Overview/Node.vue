@@ -58,7 +58,30 @@
                 </div>
               </div>
 
-              <el-row :gutter="30">
+              <el-row class="stats-row" :gutter="30">
+                <el-col :span="8">
+                  <el-table :data="metricsData.client">
+                    <el-table-column prop="key" :label="$t('Overview.client')" min-width="100px"></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                  </el-table>
+                </el-col>
+
+                <el-col :span="8">
+                  <el-table :data="metricsData.delivery">
+                    <el-table-column prop="key" label="Delivery" min-width="100px"></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                  </el-table>
+                </el-col>
+
+                <el-col :span="8">
+                  <el-table :data="metricsData.session">
+                    <el-table-column prop="key" :label="$t('Overview.session')" min-width="100px"></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                  </el-table>
+                </el-col>
+              </el-row>
+
+              <el-row class="stats-row" :gutter="30">
                 <el-col :span="8">
                   <el-table :data="metricsData.packets">
                     <el-table-column prop="key" :label="$t('Overview.mqttPackages')" min-width="100px"></el-table-column>
@@ -126,6 +149,9 @@ export default {
           packets: [],
           messages: [],
           bytes: [],
+          client: [],
+          session: [],
+          delivery: [],
         }
       }
 
@@ -133,11 +159,17 @@ export default {
         packets: ['received', 'sent', 'connect', 'connack', 'auth', 'disconnect.sent', 'disconnect.received', 'pingreq', 'pingresp', 'publish.received', 'publish.sent', 'puback.received', 'puback.sent', 'puback.missed', 'pubcomp.received', 'pubcomp.sent', 'pubcomp.missed', 'pubrec.received', 'pubrec.sent', 'pubrec.missed', 'pubrel.received', 'pubrel.sent', 'pubrel.missed', 'subscribe', 'suback', 'unsubscribe', 'unsuback'],
         messages: ['received', 'sent', 'dropped', 'retained', 'qos0.received', 'qos0.sent', 'qos1.received', 'qos1.sent', 'qos2.received', 'qos2.expired', 'qos2.sent', 'qos2.dropped'],
         bytes: ['received', 'sent'],
+        client: ['connected', 'authenticate', 'auth.anonymous', 'check_acl', 'subscribe', 'unsubscribe', 'disconnected'],
+        session: ['created', 'resumed', 'takeovered', 'discarded', 'terminated'],
+        delivery: ['dropped', 'dropped.no_local', 'dropped.too_large', 'dropped.qos0_msg', 'dropped.queue_full', 'dropped.expired'],
       }
       const dataMap = {
         packets: {},
         messages: {},
         bytes: {},
+        client: {},
+        session: {},
+        delivery: {},
       }
       data.forEach((item) => {
         const [_key, value] = item
@@ -168,6 +200,9 @@ export default {
         packets: magicMap('packets'),
         messages: magicMap('messages'),
         bytes: magicMap('bytes'),
+        client: magicMap('client'),
+        session: magicMap('session'),
+        delivery: magicMap('delivery'),
       }
     },
   },
@@ -192,6 +227,14 @@ export default {
 .node {
   .emq-title {
     margin-bottom: 40px;
+  }
+
+  .el-table .caret-wrapper {
+    left: -8px;
+  }
+
+  .el-row.stats-row {
+    margin-bottom: 20px;
   }
 
   .page-header-footer {

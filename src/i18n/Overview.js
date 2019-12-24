@@ -155,6 +155,14 @@ export default
     zh: '流量收发(字节)',
     en: 'Byte',
   },
+  client: {
+    zh: '客户端',
+    en: 'Client',
+  },
+  session: {
+    zh: '会话',
+    en: 'Session',
+  },
   mainConfiguration: {
     zh: '节点主要配置',
     en: 'Main Configuration',
