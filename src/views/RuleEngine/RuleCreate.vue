@@ -48,16 +48,20 @@
               </el-form-item>
 
               <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
-                <div class="monaco-container monaco-sql">
+                <div
+                  class="monaco-container monaco-sql"
+                  :style="{ height: `${editorHeight}px` }"
+                >
                   <monaco
                     id="rule-sql"
                     v-model="record.rawsql"
                     class="sql"
+                    warp
                     lang="sql"
-                    :warp="true"
                     @qucik-save="handleSQLTest"
                   ></monaco>
                 </div>
+                <stretch-height v-model="editorHeight"></stretch-height>
               </el-form-item>
 
               <el-form-item :label="$t('RuleEngine.sqlTest')">
@@ -190,10 +194,11 @@
 import {
   loadRuleEvents, SQLTest, createRule,
 } from '@/api/rules'
-import CodeEditor from '@/components/CodeEditor'
-import Monaco from '@/components/Monaco'
 import { loadTopics } from '@/api/server'
 import { sqlExampleFormatter } from '@/common/utils'
+import CodeEditor from '@/components/CodeEditor'
+import Monaco from '@/components/Monaco'
+import StretchHeight from '@/components/StretchHeight'
 import RuleActions from './components/RuleActions'
 
 export default {
@@ -203,6 +208,7 @@ export default {
     RuleActions,
     CodeEditor,
     Monaco,
+    StretchHeight,
   },
 
   props: {},
@@ -210,6 +216,7 @@ export default {
   data() {
     return {
       loadRuleEvents,
+      editorHeight: 320,
       payloadType: 'json',
       topics: [],
       events: [],
@@ -426,9 +433,6 @@ export default {
   }
 
   .monaco-container {
-    &.monaco-sql {
-      height: 320px;
-    }
     &.monaco-payload {
       height: 200px;
     }

@@ -160,16 +160,21 @@
             <!-- Schema code -->
             <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
               <el-form-item class="code-editor__item" label="Schema" prop="schema">
-                <div class="monaco-container monaco-schema">
+                <div
+                  class="monaco-container monaco-schema"
+                  :style="{ height: `${editorHeight}px` }"
+                >
                   <monaco
                     id="schema"
                     v-model="record.schema"
                     class="schema-code"
+                    warp
                     lang="plaintext"
                     :disabled="disabled"
                     @qucik-save="save"
                   ></monaco>
                 </div>
+                <stretch-height v-model="editorHeight"></stretch-height>
               </el-form-item>
             </el-col>
             <el-col :span="10">
@@ -199,6 +204,7 @@ import { loadResource } from '@/api/rules'
 import { createSchema, viewSchema, deleteSchema } from '@/api/schemas'
 import detailsPage from '@/mixins/detailsPage'
 import Monaco from '@/components/Monaco'
+import StretchHeight from '@/components/StretchHeight'
 import { setTimeout } from 'timers'
 
 export default {
@@ -206,12 +212,14 @@ export default {
 
   components: {
     Monaco,
+    StretchHeight,
   },
 
   mixins: [detailsPage],
 
   data() {
     return {
+      editorHeight: 320,
       THIRD_PARTY: '3rd-party',
       HTTP: 'HTTP',
       TCP: 'TCP',
@@ -315,9 +323,4 @@ export default {
 
 
 <style lang="scss">
-.schemas-details {
-  .monaco-schema {
-    height: 320px;
-  }
-}
 </style>
