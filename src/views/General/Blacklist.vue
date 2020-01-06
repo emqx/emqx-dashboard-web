@@ -1,11 +1,16 @@
 <template>
-  <div class="users">
+  <div class="blacklist">
     <page-header
       :back-title="$t('General.blacklist')"
     >
       <div class="page-header-content-view">
         <div class="content">
-          {{ $t('General.manageDashboardUsers') }}
+          <p class="description">
+            {{ $t('General.blacklistTips') }}
+            <a :href="docs.tutorial" target="_blank">
+              {{ $t('General.authDocs') }}
+            </a>
+          </p>
         </div>
       </div>
     </page-header>
@@ -19,78 +24,100 @@
             type="primary"
             size="small"
             icon="el-icon-plus"
-            @click="showDialog('create')"
+            @click="showDialog"
           >
             {{ $t('Base.create') }}
           </el-button>
         </div>
-
         <el-table :data="tableData" class="data-list">
-          <el-table-column min-width="120px" prop="username" :label="$t('General.userName')"></el-table-column>
-          <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')"></el-table-column>
-          <el-table-column width="120px">
+          <el-table-column prop="who" min-width="120px" :label="$t('General.who')">
+          </el-table-column>
+          <el-table-column prop="as" min-width="120px" :label="$t('General.as')">
+          </el-table-column>
+          <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')">
+          </el-table-column>
+          <el-table-column prop="desc" min-width="120px" :label="$t('General.desc')">
+          </el-table-column>
+          <el-table-column
+            prop="until" min-width="120px" :formatter="formatterUntil"
+            :label="$t('General.until')"
+          >
+          </el-table-column>
+          <el-table-column prop="oper" width="120px" label="">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
-                {{ $t('General.edit') }}
-              </el-button>
-
               <el-button
-                v-if="row.tags !== 'administrator' && row.username !== 'admin'"
                 type="danger"
                 size="mini"
                 @click="deleteConfirm(row)"
               >{{ $t('General.delete') }}
               </el-button>
-
             </template>
           </el-table-column>
         </el-table>
 
+        <div class="emq-table-footer">
+          <el-pagination
+            hide-on-single-page
+            background
+            layout="total, sizes, prev, pager, next"
+            :page-sizes="[20, 50, 100, 500]" :page-size.sync="params._limit"
+            :current-page.sync="params._page" :total="count" @size-change="handleSizeChange"
+            @current-change="handleCurrentPageChange"
+          >
+          </el-pagination>
+        </div>
       </a-card>
     </div>
 
-
     <el-dialog
       width="520px"
-      :title="accessType === 'edit' ? $t('General.editorUser') : $t('General.creatingUser')"
+      :title="$t('General.createBlacklist')"
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
-        <el-form-item prop="username" :label="$t('General.userName')">
-          <el-input
-            v-model="record.username"
-            :disabled="accessType === 'edit'"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="tags" :label="$t('General.remark')">
-          <el-input v-model="record.tags"></el-input>
-        </el-form-item>
-        <el-form-item
-          v-if="accessType !== 'edit' || allowChange"
-          prop="password"
-          :label="accessType === 'edit' ? $t('General.oldPassword') : $t('General.password')"
-        >
-          <el-input v-model="record.password" type="password"></el-input>
-        </el-form-item>
-        <el-form-item v-if="allowChange" prop="newPassword" :label="$t('General.newPassword')">
-          <el-input v-model="record.newPassword" type="password"></el-input>
-        </el-form-item>
-        <el-form-item v-if="allowChange" prop="repeatPassword" :label="$t('General.confirmPassword')">
-          <el-input v-model="record.repeatPassword" type="password"></el-input>
-        </el-form-item>
-        <el-link
-          v-if="accessType === 'edit'"
-          :underline="false"
-          @click="togglePassword"
-        >
-          {{ allowChange ? $t('General.dontChangePassword') : $t('General.changePassword') }}
-        </el-link>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item prop="as" :label="$t('General.as')">
+              <emq-select
+                v-model="record.as"
+                :field="{ options: asOptions }"
+              >
+              </emq-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item prop="who" :label="$t('General.who')">
+              <el-input v-model="record.who"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item prop="reason" :label="$t('General.reason')">
+              <el-input v-model="record.reason"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item prop="until" :label="$t('General.until')">
+              <el-date-picker
+                v-model="record.until"
+                type="date"
+                format="yyyy-MM-dd"
+                value-format="timestamp"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item prop="desc" :label="$t('General.desc')">
+              <el-input v-model="record.desc"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
         <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -98,67 +125,44 @@
 
 
 <script>
-import {
-  loadUser,
-  createUser,
-  updateUser,
-  destroyUser,
-  changePassword,
-} from '@/api/function'
+import moment from 'moment'
+import { loadBlacklist, createBlacklist, deleteBlacklist } from '@/api/function'
+import { getLink } from '@/common/utils'
 
 export default {
-  name: 'Users',
+  name: 'Blacklist',
 
   components: {},
 
   props: {},
 
   data() {
-    const validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(this.$t('General.pleaseEnterYourPasswordAgain')))
-      } else if (value !== this.record.newPassword) {
-        callback(new Error('两次输入密码不一致!'))
-      } else {
-        callback()
-      }
-    }
     return {
+      docs: {
+        tutorial: getLink('auth'),
+      },
       dialogVisible: false,
       tableData: [],
-      accessType: '',
-      allowChange: false,
-      record: {},
+      params: {
+        _page: 1,
+        _limit: 20,
+      },
+      count: 0,
+      asOptions: [
+        { label: 'client_id', value: 'client_id' },
+        { label: 'username', value: 'username' },
+        { label: 'ip_address', value: 'ip_address' },
+      ],
+      record: {
+        desc: '',
+        reason: '',
+      },
       rules: {
-        username: [
-          { required: true, message: this.$t('General.enterOneUserName') },
+        as: [
+          { required: true, message: this.$t('General.enterAs') },
         ],
-        tags: [
-          { required: true, message: this.$t('General.pleaseEnterNotes') },
-        ],
-        password: [{
-          required: true,
-          message: this.$t('General.pleaseEnterPassword'),
-          trigger: ['blur', 'change'],
-        }, {
-          min: 3,
-          max: 32,
-          message: this.$t('General.passwordLength'),
-          trigger: ['blur', 'change'],
-        }],
-        newPassword: [{
-          required: true,
-          message: this.$t('General.pleaseEnterNewPassword'),
-          trigger: ['blur', 'change'],
-        }, {
-          min: 3,
-          max: 32,
-          message: this.$t('General.passwordLength'),
-          trigger: ['blur', 'change'],
-        }],
-        repeatPassword: [
-          { required: true, message: this.$t('General.pleaseEnterAConfirmationPassword') },
-          { validator: validatePass, trigger: ['blur', 'change'] },
+        who: [
+          { required: true, message: this.$t('General.enterWho') },
         ],
       },
     }
@@ -169,87 +173,89 @@ export default {
   },
 
   methods: {
+    loadData() {
+      this.listBlackList()
+    },
+    async listBlackList(reload, params = {}) {
+      if (reload) {
+        this.params._page = 1
+      }
+      const data = await loadBlacklist({ ...this.params, ...params })
+      const { items = [], meta: { count = 0 } } = data
+      this.tableData = items
+      this.count = count
+    },
+    handleSizeChange() {
+      this.listBlackList(true)
+    },
+    handleCurrentPageChange() {
+      this.listBlackList()
+    },
     clearInput() {
       if (this.$refs.recordForm) {
         this.$refs.recordForm.resetFields()
       }
     },
-    async loadData() {
-      this.tableData = await loadUser()
-    },
-    showDialog(type, item) {
-      this.record = {}
-      this.accessType = 'create'
-      if (type === 'edit') {
-        this.record = item
-        this.accessType = 'edit'
+    showDialog() {
+      this.record = {
+        reason: '',
+        desc: '',
       }
       this.dialogVisible = true
     },
     closeDialog() {
       this.dialogVisible = false
-      this.allowChange = false
-    },
-    togglePassword() {
-      this.allowChange = !this.allowChange
-      // 取消修改密码，删除密码数据
-      if (!this.allowChange) {
-        this.record = {
-          tags: this.record.tags,
-          username: this.record.username,
-        }
-      }
     },
     async save() {
-      const vue = this
-      this.$refs.recordForm.validate(function (valid) {
+      this.$refs.recordForm.validate(async (valid) => {
         if (!valid) {
-          return false
+          return
         }
-        if (vue.accessType === 'edit') {
-          const { username, password } = vue.record
-          updateUser(username, vue.record).then(async () => {
-            if (vue.allowChange) {
-              const passwordData = {
-                new_pwd: vue.record.newPassword,
-                old_pwd: vue.record.password,
-              }
-              await changePassword(username, passwordData)
-              // 更新当前用户
-              this.$store.dispatch('UPDATE_USER_INFO', { username, password })
-            }
-            vue.$message.success(vue.$t('General.editorialSuccess'))
-            vue.dialogVisible = false
-            vue.allowChange = false
-            vue.accessType = ''
-            vue.record = {}
-            vue.loadData()
-          })
-        } else {
-          createUser(vue.record).then(() => {
-            vue.$message.success(vue.$t('General.createUserSuccess'))
-            vue.dialogVisible = false
-            vue.accessType = ''
-            vue.record = {}
-            vue.loadData()
-          })
+        const record = { ...this.record }
+        if (record.until && typeof record.until === 'number') {
+          try {
+            record.until = Math.floor(record.until / 1000)
+          } catch (e) {
+            record.until = null
+          }
+        }
+        const res = await createBlacklist(record)
+        if (res) {
+          this.$message.success(this.$t('General.createBlacklistSuccess'))
+          this.closeDialog()
+          this.listBlackList()
         }
       })
     },
     deleteConfirm(item) {
-      const vue = this
-
-      this.$msgbox.confirm(this.$t('General.confirmDeleteUser'), {
+      this.$msgbox.confirm(this.$t('General.determineToDeleteTheBlacklist'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
-        destroyUser(item.username).then(() => {
-          vue.$message.success(this.$t('General.successfulDeletion'))
-          vue.loadData()
-        })
+        const { who, as } = item
+        const res = await deleteBlacklist({ who, as })
+        if (res) {
+          this.$message.success(this.$t('General.successfulDeletion'))
+          this.listBlackList(true)
+        }
       }).catch(() => {})
+    },
+    formatterUntil({ until }) {
+      if (!until || typeof until !== 'number') {
+        return this.$t('General.neverExpire')
+      }
+      return moment(until * 1000).format('YYYY-MM-DD')
     },
   },
 }
 </script>
+
+
+<style lang="scss" scoped>
+.blacklist {
+  .description {
+    max-width: 500px;
+  }
+}
+</style>

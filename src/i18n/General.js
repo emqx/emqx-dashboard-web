@@ -10,13 +10,6 @@ export default {
     '密码长度为三到三十二位',
     '取消修改密码，删除密码数据',
   ],
-  blacklistTips: {
-    zh: '设置黑名单禁用客户端或',
-  },
-  blacklist: {
-    zh: '黑名单',
-    en: 'Blacklist',
-  },
   confirmDelete: {
     zh: '确认删除应用?',
     en: 'Confirm delete?',
@@ -216,5 +209,57 @@ export default {
   confirmDeleteUser: {
     zh: '确认删除该用户?',
     en: 'Confirm delete?',
+  },
+  blacklistTips: {
+    zh: '通过黑名单禁止客户端建立连接，该功能适用于管理少量客户端，客户端认证请使用',
+    en: 'The blacklist prohibits clients from establishing connections. This function is suitable for managing a small number of clients. For client authentication, view',
+  },
+  authDocs: {
+    zh: '认证文档',
+    en: 'authentication document',
+  },
+  blacklist: {
+    zh: '黑名单',
+    en: 'Blacklist',
+  },
+  createBlacklist: {
+    zh: '创建黑名单',
+    en: 'Create',
+  },
+  determineToDeleteTheBlacklist: {
+    zh: '确定删除该黑名单',
+    en: 'Determine to delete the blacklist',
+  },
+  createBlacklistSuccess: {
+    zh: '创建黑名单成功',
+    en: 'Create Blacklist Success',
+  },
+  who: {
+    zh: '禁用值',
+    en: 'Value',
+  },
+  as: {
+    zh: '禁用属性',
+    en: 'Property',
+  },
+  reason: {
+    zh: '原因',
+    en: 'Reason',
+  },
+  desc: {
+    zh: '描述',
+    en: 'Description',
+  },
+  until: {
+    zh: '到期时间',
+    en: 'Until',
+  },
+  enterWho: {
+    zh: '请输入禁用值',
+    en: 'Please enter value',
+  },
+  enterAs: {
+    zh: '请选择禁用属性',
+    en: 'Please select property',
   },
 }

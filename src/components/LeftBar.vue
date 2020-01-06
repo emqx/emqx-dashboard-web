@@ -166,6 +166,12 @@ export default {
             path: '/users',
             parentKey: 'general',
           },
+          {
+            title: this.$t('components.blacklist'),
+            key: 'general.blacklist',
+            path: '/blacklist',
+            parentKey: 'general',
+          },
         ],
       },
     ]
