@@ -185,6 +185,22 @@ let routes = [
       },
     ],
   },
+  // 黑名单
+  {
+    path: '/blacklist',
+    component: Layout,
+    meta: {
+      hideKey: 'general',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'blacklist',
+        component: () => import('@/views/General/Blacklist'),
+      },
+    ],
+  },
   // 应用
   {
     path: '/application',
