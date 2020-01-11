@@ -62,13 +62,17 @@
               <el-collapse-transition>
                 <div v-if="showTest">
                   <el-form-item
-                    v-for="(field, i) in Object.keys(selectEvent.test_columns)"
-                    :key="i"
-                    :prop="`ctx.${field}`"
-                    :label="field"
-                    :class="field === 'payload' ? 'code-editor__item' : ''"
+                    v-for="k in Object.keys(selectEvent.test_columns)"
+                    :key="k"
+                    :class="{ 'code-sql': k === 'payload', 'payload': k === 'payload' }"
+                    v-bind="{ label: k, prop: `ctx.${k}` }"
                   >
-                    <template v-if="field === 'payload'">
+                    <el-input
+                      v-if="k !== 'payload'"
+                      v-model="record.ctx[k]"
+                    >
+                    </el-input>
+                    <template v-else>
                       <div class="monaco-container monaco-payload">
                         <monaco
                           id="payload"
@@ -84,10 +88,6 @@
                           <el-radio label="plaintext">RAW</el-radio>
                         </el-radio-group>
                       </div>
-                    </template>
-                    <template v-else>
-                      <el-input v-model="record.ctx[field]" :rows="5">
-                      </el-input>
                     </template>
                   </el-form-item>
 
@@ -108,7 +108,6 @@
                       :line-numbers="false"
                     ></code-editor>
                   </el-form-item>
-
                 </div>
               </el-collapse-transition>
             </el-form>
@@ -354,9 +353,21 @@ export default {
       })
       this.$set(this.record, 'ctx', testFieldObject)
     },
+    beforeSqlValid(sql) {
+      const checkValues = ruleOldSqlCheck(sql)
+      if (!checkValues) {
+        return true
+      }
+      this.sqlParse(sql, checkValues[0])
+      return false
+    },
     handleSQLTest() {
+      this.needCheckSql = true
       this.$refs.record.validate(async (valid) => {
         if (!valid) {
+          return
+        }
+        if (!this.beforeSqlValid(this.record.rawsql)) {
           return
         }
         const data = JSON.parse(JSON.stringify(this.record))
