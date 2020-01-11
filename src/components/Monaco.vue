@@ -5,6 +5,7 @@
 
 <script>
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import { createMonacoComplete, createMonacoHover } from '@/common/monacoUtils'
 
 export default {
   name: 'Monaco',
@@ -30,11 +31,49 @@ export default {
       type: Boolean,
       default: false,
     },
+    provider: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   data() {
     return {
       editor: null,
+      providerDisposeID: null,
+      hoverDisposeID: null,
+      sqlHints: [
+        {
+          name: 'SELECT',
+          type: 'Keyword',
+          detail: 'SQL',
+          documentation: 'SQL selector.',
+        },
+        {
+          name: 'FROM',
+          type: 'Keyword',
+          detail: 'SQL',
+          documentation: 'What event.',
+        },
+        {
+          name: 'WHERE',
+          type: 'Keyword',
+          detail: 'SQL',
+          documentation: 'Filters a result set to include only records that fulfill a specified condition. ',
+        },
+        {
+          name: 'and',
+          type: 'Keyword',
+          detail: 'SQL',
+          documentation: 'Operator.',
+        },
+        {
+          name: 'or',
+          type: 'Keyword',
+          detail: 'SQL',
+          documentation: 'Operator.',
+        },
+      ],
     }
   },
 
@@ -60,6 +99,10 @@ export default {
         this.editor.layout()
       }
     }
+    if (this.provider.length) {
+      this.registerCustomHintsProvider()
+      this.registerCustomHoverProvider()
+    }
   },
 
   mounted() {
@@ -68,7 +111,15 @@ export default {
 
   beforeDestroy() {
     if (this.editor) {
+      this.editor.getModel().dispose()
       this.editor.dispose()
+      this.editor = null
+    }
+    if (this.providerDisposeID) {
+      this.providerDisposeID.dispose()
+    }
+    if (this.hoverDisposeID) {
+      this.hoverDisposeID.dispose()
     }
   },
 
@@ -87,6 +138,10 @@ export default {
         minimap: {
           enabled: false,
         },
+        hover: {
+          delay: 500,
+          enabled: true,
+        },
       }
       const options = this.beforeMonacoCreate(defaultOptions)
       // Create
@@ -104,6 +159,8 @@ export default {
       this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
         this.$emit('qucik-save', this.value)
       })
+      // Update editor options
+      this.editor.getModel().updateOptions({ tabSize: 2 })
     },
     beforeMonacoCreate(options) {
       if (this.warp) {
@@ -114,6 +171,45 @@ export default {
         Object.assign(options, warpOptions)
       }
       return options
+    },
+    getHints() {
+      const $hints = [...this.provider]
+      if (this.lang === 'sql') {
+        $hints.push(...this.sqlHints)
+      }
+      return $hints
+    },
+    registerCustomHintsProvider() {
+      this.providerDisposeID = monaco.languages.registerCompletionItemProvider(this.lang, {
+        provideCompletionItems: (model, position) => {
+          const wordObj = model.getWordUntilPosition(position)
+          const hints = this.getHints(wordObj)
+          const range = {
+            startLineNumber: position.lineNumber,
+            endLineNumber: position.lineNumber,
+            startColumn: wordObj.startColumn,
+            endColumn: wordObj.endColumn,
+          }
+          return {
+            suggestions: createMonacoComplete(hints, range, wordObj),
+          }
+        },
+        triggerCharacters: [' '],
+      })
+    },
+    registerCustomHoverProvider() {
+      monaco.languages.register({ id: this.lang })
+      this.hoverDisposeID = monaco.languages.registerHoverProvider(this.lang, {
+        provideHover: (model, position) => {
+          if (!model.getWordAtPosition(position)) {
+            return {}
+          }
+          const { word } = model.getWordAtPosition(position)
+          return {
+            contents: createMonacoHover(word, this.provider),
+          }
+        },
+      })
     },
   },
 }

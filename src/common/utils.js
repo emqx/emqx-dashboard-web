@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Clipboard from 'clipboard'
 import sqlFormatter from 'sql-formatter'
+import parser from "js-sql-parser";
 
 import store from '@/stores'
 import router from '@/routes'
@@ -251,7 +252,7 @@ export const sqlExampleFormatter = (sql) => {
     const paramsText = paramsRe[1]
     if (paramsText) {
       const newParamsText = paramsText.replace(/(!#!|\s)/g, ' ').split(/[,，]/).join(', ')
-      text = text.replace(paramsText, `  ${newParamsText}`)
+      text = text.replace(paramsText, `${newParamsText}`)
     }
   }
   return text.replace(/!#!/g, '\n\r')
@@ -323,3 +324,50 @@ export const formatNumberSize = number => {
   }
   return `${$integer}.${residue}${digitList[digit]}B`
 }
+
+export function ruleOldSqlCheck(sql) {
+  const $sql = sql.replace(/\"/g, '')
+  const oldEvent = [
+    'message.publish',
+    'message.deliver',
+    'message.acked',
+    'message.dropped',
+    'client.connected',
+    'client.disconnected',
+    'client.subscribe',
+    'client.unsubscribe',
+  ]
+  let matchRes = null
+  oldEvent.forEach((e) => {
+    const [eventType, eventValue] = e.split('.')
+    const eventReg = new RegExp(`${eventType}\\.${eventValue}`, 'gim')
+    if ($sql.match(eventReg)) {
+      matchRes = $sql.match(eventReg)
+    }
+  })
+  return matchRes
+}
+
+export function ruleNewSqlParser(sql, e) {
+  const oldEventDict = {
+    'message.publish': '',
+    'message.deliver': '$events/message_delivered',
+    'message.acked': '$events/message_acked',
+    'message.dropped': '$events/message_dropped',
+    'client.connected': '$events/client_connected',
+    'client.disconnected': '$events/client_disconnected',
+    'client.subscribe': '$events/session_subscribed',
+    'client.unsubscribe': '$events/session_unsubscribed',
+  }
+  let newEvent = oldEventDict[e]
+  const $sql = sql.replace(/\"/g, '')
+  const ast = parser.parse($sql)
+  if (newEvent === '') {
+    ast.value.where = null
+    newEvent = '#'
+  }
+  ast.value.from.value[0].value.value.value = `"${newEvent}"`
+  return parser.stringify(ast)
+}
+
+export default {}
