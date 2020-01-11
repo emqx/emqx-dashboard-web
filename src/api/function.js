@@ -40,4 +40,16 @@ export function destroyUser(username) {
   return http.delete(`/users/${username}`)
 }
 
+export function loadBlacklist(params = {}) {
+  return http.get('/banned', { params })
+}
+
+export function createBlacklist(body) {
+  return http.post('/banned', body)
+}
+
+export function deleteBlacklist({ who, as }) {
+  return http.delete(`/banned/${who}?as=${as}`)
+}
+
 export default {}

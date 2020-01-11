@@ -1,6 +1,7 @@
-import lang from '../i18n'
+import lang from '@/i18n'
+import store from '@/stores'
 
-const local = window.localStorage.language || window.EMQX_DASHBOARD_CONFIG.lang || 'en'
+const local = store.state.lang
 const VueI18n = lang[local]
 
 export const ruleEngineProvider = [
