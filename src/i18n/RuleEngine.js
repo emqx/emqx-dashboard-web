@@ -365,4 +365,76 @@ export default {
     zh: '命中规则的消息处理方式',
     en: 'Message processing for rule data',
   },
+  clientid_doc: {
+    en: 'Current MQTT clientid',
+    zh: '当前客户端 MQTT clientid',
+  },
+  username_doc: {
+    en: 'Current MQTT username',
+    zh: '当前客户端 MQTT username',
+  },
+  event_doc: {
+    en: 'Trigger event name',
+    zh: '触发事件名称',
+  },
+  id_doc: {
+    en: 'MQTT message id',
+    zh: 'MQTT message id',
+  },
+  payload_doc: {
+    en: 'The payload, if in JSON format, will be automatically decoded, and the object information will be obtained by using payload.x in SQL',
+    zh: '消息内容, 如果是 JSON 格式将自动解码, 在 SQL 中使用 payload.x 获取对象信息',
+  },
+  peername_doc: {
+    en: 'Client peer host',
+    zh: '客户端网络地址',
+  },
+  qos_doc: {
+    en: 'Enumeration of message QoS 0,1,2',
+    zh: '消息 QoS 0,1,2 中枚举',
+  },
+  timestamp_doc: {
+    en: 'Timestamp(millisecond)',
+    zh: '当前毫秒级时间戳',
+  },
+  topic_doc: {
+    en: 'Currently MQTT topic can be filtered by wildcards in SQL.  When multiple topics are included in subscribe and unsubscribe, only the first one will be obtained here. To obtain all topics, please use topic_filters',
+    zh: '当前 MQTT 主题, SQL 中可以使用通配符进行筛选.\nSubscribe 与 Unsubscribe 请求中包含多个主题时, 这里只会获取到第一个, 如需获取全部请使用 topic_filters',
+  },
+  node_doc: {
+    en: 'Node name of the trigger event',
+    zh: '触发事件的节点名称',
+  },
+  message_delivered: {
+    en: 'message delivered',
+    zh: '消息投递',
+  },
+  message_acked: {
+    en: 'message acked',
+    zh: '消息应答',
+  },
+  message_dropped: {
+    en: 'message dropped',
+    zh: '消息丢弃',
+  },
+  client_connected: {
+    en: 'client connected',
+    zh: '连接建立',
+  },
+  client_disconnected: {
+    en: 'client disconnected',
+    zh: '连接断开',
+  },
+  session_subscribed: {
+    en: 'session subscribed',
+    zh: '会话订阅',
+  },
+  session_unsubscribed: {
+    en: 'session unsubscribed',
+    zh: '会话取消订阅',
+  },
+  parse_confirm: {
+    en: 'Detected incompatible old SQL syntax, confirm to automatically convert it to the new version?',
+    zh: '检测到不兼容的旧版 SQL 语法，是否自动转换为新版语法？',
+  },
 }

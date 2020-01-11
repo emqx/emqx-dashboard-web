@@ -9,7 +9,7 @@ const before = (app) => {
   if (NODE_ENV === 'development' && mock) {
     const { api } = mock
     api.forEach((item) => {
-      app.get(`/api/v3${item.url}`, (req, res) => {
+      app.get(`/api/v4${item.url}`, (req, res) => {
         res.json(item.data)
       })
     })

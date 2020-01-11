@@ -21,6 +21,7 @@
     "element-ui": "^2.9.1",
     "glob": "^7.1.4",
     "highlight.js": "^9.15.8",
+    "js-sql-parser": "^1.2.1",
     "jsonlint": "^1.6.2",
     "moment": "^2.24.0",
     "monaco-editor": "^0.18.1",

@@ -39,6 +39,10 @@
               >{{ row.id }}</router-link>
             </template>
           </el-table-column>
+          <el-table-column
+            prop="for"
+            :label="$t('RuleEngine.topic')"
+          ></el-table-column>
           <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
             <template slot-scope="{ row }">
               <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
@@ -48,13 +52,6 @@
             prop="description"
             show-overflow-tooltip
             :label="$t('RuleEngine.describe')"
-          ></el-table-column>
-          <el-table-column
-            prop="for"
-            :filters="filterOptions.for"
-            :filter-method="forColumnFilter"
-            filter-placement="bottom"
-            :label="$t('RuleEngine.triggerEvent')"
           ></el-table-column>
           <el-table-column
             prop="actions"
