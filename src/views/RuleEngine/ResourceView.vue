@@ -1,17 +1,13 @@
 <template>
   <div class="resource-view">
-    <page-header
-      :back-title="$t('RuleEngine.resources')"
-      :oper="$t('RuleEngine.details')"
-      back-path="/resources"
-    >
+    <page-header>
       <div class="page-header-title-view">
         <div class="title">
           {{ resourceId }}
         </div>
       </div>
 
-      <div class="page-header-top-start">
+      <div class="page-header-top-start btn">
         <el-button type="danger" size="small" @click="deleteResource">
           {{ $t('RuleEngine.delete') }}
         </el-button>

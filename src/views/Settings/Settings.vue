@@ -1,10 +1,5 @@
 <template>
   <div class="settings">
-    <page-header
-      :back-title="$t('Settings.setting')"
-    >
-    </page-header>
-
     <div class="app-wrapper">
       <el-tabs
         v-model="activeName"

@@ -1,5 +1,6 @@
 const mock = require('./script/mock.json')
 const config = require('./script/config.json')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 const { NODE_ENV, VUE_APP_BUILD_ENV = 'base' } = process.env
 
@@ -8,7 +9,7 @@ const before = (app) => {
   if (NODE_ENV === 'development' && mock) {
     const { api } = mock
     api.forEach((item) => {
-      app.get(`/api/v3${item.url}`, (req, res) => {
+      app.get(`/api/v4${item.url}`, (req, res) => {
         res.json(item.data)
       })
     })
@@ -43,8 +44,15 @@ module.exports = {
       },
     },
   },
-
   assetsDir: 'static',
   publicPath: customConfig.publicPath,
   productionSourceMap: false,
+  configureWebpack: {
+    plugins: [
+      new MonacoWebpackPlugin({
+        output: 'static/',
+        languages: ['json', 'sql', 'plaintext', 'avro', 'protobuf'],
+      }),
+    ],
+  },
 }

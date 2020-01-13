@@ -2,8 +2,8 @@ export default
 {
   __not: [],
   userCreate: {
-    zh: 'https://docs.emqx.io/broker/v3/cn/commands.html#admins',
-    en: 'https://docs.emqx.io/broker/v3/en/commands.html#admins',
+    zh: 'https://docs.emqx.io/broker/v4/cn/commands.html#admins',
+    en: 'https://docs.emqx.io/broker/v4/en/commands.html#admins',
   },
   loginUserAccount: {
     zh: '使用 Dashboard 用户登录',
@@ -46,6 +46,10 @@ export default
     en: 'Warning',
   },
   view: {
+    zh: '详情',
+    en: 'View',
+  },
+  detail: {
     zh: '详情',
     en: 'View',
   },
@@ -100,5 +104,13 @@ export default
   deleteSuccess: {
     zh: '删除成功',
     en: 'Delete Success',
+  },
+  viewMore: {
+    zh: '查看更多',
+    en: 'View More',
+  },
+  collapse: {
+    zh: '收起',
+    en: 'Collapse',
   },
 }

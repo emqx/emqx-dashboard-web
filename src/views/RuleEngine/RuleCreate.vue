@@ -1,21 +1,22 @@
 <template>
   <div class="rule-create">
-    <page-header
-      :back-title="$t('RuleEngine.ruleEngine')"
-      :oper="$t('Base.create')"
-      back-path="/rules"
-    >
+
+    <page-header>
+      <div class="page-header-title-view">
+        <div class="title">{{ $t('RuleEngine.createRules') }}</div>
+      </div>
+
+      <div class="page-header-content-view">
+        <div class="content">
+          <p class="description">
+            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
+          </p>
+        </div>
+      </div>
     </page-header>
 
     <div class="emq-list-body rule-wrapper app-wrapper">
       <a-card class="emq-list-card">
-        <div class="emq-title">
-          {{ $t('RuleEngine.condition') }}
-          <span class="sub-title">
-            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
-          </span>
-        </div>
-
         <el-row :gutter="20">
           <el-col :span="15">
             <el-form
@@ -28,35 +29,31 @@
               label-suffix=":"
             >
 
-              <el-form-item prop="for" :label="$t('RuleEngine.triggerEvent')">
-                <emq-select
-                  v-model="record.for"
-                  :field="{ api: loadRuleEvents }"
-                  :field-name="{ label: 'title', value: 'event' }"
-                  @change="handleForChange"
+              <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
+                <div
+                  class="monaco-container monaco-sql"
+                  :style="{ height: `${editorHeight}px` }"
                 >
-                  <div slot="option" slot-scope="{ item }" class="emq-option-item">
-                    <span class="option-label">{{ item.title }}</span>
-                    <span class="option-value">{{ item.event }}</span>
-                  </div>
-                </emq-select>
+                  <monaco
+                    id="rule-sql"
+                    v-model="record.rawsql"
+                    class="sql"
+                    warp
+                    lang="sql"
+                    :provider="sqlProvider"
+                    @qucik-save="handleSQLTest"
+                  ></monaco>
+                </div>
+                <stretch-height v-model="editorHeight"></stretch-height>
               </el-form-item>
 
               <el-form-item prop="description" :label="$t('RuleEngine.remark')">
                 <el-input v-model="record.description"></el-input>
               </el-form-item>
 
-              <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
-                <code-editor
-                  v-model="record.rawsql"
-                  height="320px"
-                  lang="text/x-sql"
-                ></code-editor>
-              </el-form-item>
-
               <el-form-item :label="$t('RuleEngine.sqlTest')">
-                <el-switch v-model="showTest" @change="handlePreSQLTest"></el-switch>
-                <el-popover width="220" placement="top" trigger="hover">
+                <el-switch v-model="showTest" @change="initTestFormItem"></el-switch>
+                <el-popover width="220" placement="right" trigger="hover">
                   {{ $t('RuleEngine.inputMetadata') }}
                   <i slot="reference" class="icon el-icon-question"></i>
                 </el-popover>
@@ -65,22 +62,32 @@
               <el-collapse-transition>
                 <div v-if="showTest">
                   <el-form-item
-                    v-for="(field, i) in testField"
-                    :key="i"
-                    :prop="`ctx.${field}`"
-                    :label="field"
-                    :class="field === 'payload' ? 'code-editor__item' : ''"
+                    v-for="k in Object.keys(selectEvent.test_columns)"
+                    :key="k"
+                    :class="{ 'code-sql': k === 'payload', 'payload': k === 'payload' }"
+                    v-bind="{ label: k, prop: `ctx.${k}` }"
                   >
-                    <template v-if="field === 'payload'">
-                      <code-editor
-                        v-model="record.ctx[field]"
-                        lang="application/json"
-                        :lint="false"
-                      ></code-editor>
-                    </template>
+                    <el-input
+                      v-if="k !== 'payload'"
+                      v-model="record.ctx[k]"
+                    >
+                    </el-input>
                     <template v-else>
-                      <el-input v-model="record.ctx[field]" :rows="5">
-                      </el-input>
+                      <div class="monaco-container monaco-payload">
+                        <monaco
+                          id="payload"
+                          v-model="record.ctx.payload"
+                          class="payload"
+                          :lang="payloadType"
+                          @qucik-save="handleSQLTest"
+                        ></monaco>
+                      </div>
+                      <div class="payload-type">
+                        <el-radio-group v-model="payloadType">
+                          <el-radio label="json">JSON</el-radio>
+                          <el-radio label="plaintext">RAW</el-radio>
+                        </el-radio-group>
+                      </div>
                     </template>
                   </el-form-item>
 
@@ -94,13 +101,13 @@
                   <el-form-item class="code-editor__item" :label="$t('RuleEngine.testOutput')">
                     <code-editor
                       v-model="testOutPut"
-                      height="250px"
+                      class="test-output"
                       lang="application/json"
                       :lint="false"
                       :disabled="true"
+                      :line-numbers="false"
                     ></code-editor>
                   </el-form-item>
-
                 </div>
               </el-collapse-transition>
             </el-form>
@@ -149,7 +156,7 @@
         </div>
 
         <div class="rule-action-wrapper">
-          <rule-actions ref="ruleAction" v-model="record.actions" :event="record.for">
+          <rule-actions ref="ruleAction" v-model="record.actions">
           </rule-actions>
         </div>
       </a-card>
@@ -173,10 +180,13 @@
 import {
   loadRuleEvents, SQLTest, createRule,
 } from '@/api/rules'
-import CodeEditor from '@/components/CodeEditor'
 import { loadTopics } from '@/api/server'
-import { sqlExampleFormatter } from '@/common/utils'
+import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck } from '@/common/utils'
+import CodeEditor from '@/components/CodeEditor'
+import Monaco from '@/components/Monaco'
+import StretchHeight from '@/components/StretchHeight'
 import RuleActions from './components/RuleActions'
+import { ruleEngineProvider } from '@/common/provider'
 
 export default {
   name: 'RuleCrate',
@@ -184,6 +194,8 @@ export default {
   components: {
     RuleActions,
     CodeEditor,
+    Monaco,
+    StretchHeight,
   },
 
   props: {},
@@ -191,12 +203,15 @@ export default {
   data() {
     return {
       loadRuleEvents,
+      needCheckSql: true,
+      editorHeight: 320,
+      payloadType: 'json',
       topics: [],
       events: [],
       testOutPut: '',
       selectEvent: {
         columns: [
-          'client_id',
+          'clientid',
           'username',
           'event',
           'id',
@@ -207,31 +222,29 @@ export default {
           'topic',
           'node',
         ],
-        description: 'message publish',
-        event: 'message.publish',
-        sql_example: 'SELECT * FROM "message.publish" WHERE topic =~ \'t/#\'',
+        description: '$events/message_publish',
+        event: '$events/message_publish',
+        sql_example: 'SELECT * FROM "t/#"',
         test_columns: {
-          client_id: 'c_emqx',
+          clientid: 'c_emqx',
           username: 'u_emqx',
           topic: 't/a',
           qos: 1,
           payload: '{"msg": "hello"}',
         },
-        title: 'message publish',
+        title: '$events/message_publish',
       },
       timer: 0,
       showTest: false,
       clipboardContent: '',
       clipboardStatus: '',
       record: {
-        for: '',
         rawsql: 'SELECT * FROM',
         actions: [],
         description: '',
         ctx: {},
       },
       rules: {
-        for: { required: true, message: this.$t('RuleEngine.pleaseSelectTheTriggerEvent') },
         rawsql: { required: true, message: this.$t('RuleEngine.pleaseEnterTheSQL') },
       },
     }
@@ -244,45 +257,117 @@ export default {
     testField() {
       return Object.keys(this.selectEvent.test_columns)
     },
+    sqlProvider() {
+      return ruleEngineProvider
+    },
+  },
+
+  watch: {
+    'record.rawsql': 'handleSqlChanged',
   },
 
   async created() {
     this.events = await loadRuleEvents()
     this.selectEvent = this.events[0]
-    this.record.for = this.selectEvent.event
-    this.handleForChange(this.record.for)
     const data = await loadTopics()
     this.topics = data.items || []
+    this.initData('$events/message_publish')
   },
 
   methods: {
-    handleForChange(val) {
+    initData(val) {
       this.selectEvent = this.events.find($ => $.event === val)
       const { sql_example } = this.selectEvent
       this.record.rawsql = sqlExampleFormatter(sql_example)
-      this.handlePreSQLTest()
+      this.initTestFormItem()
       const { ruleAction } = this.$refs
       if (ruleAction) {
         ruleAction.initData()
       }
     },
-    handlePreSQLTest() {
-      this.record.ctx = {}
-      const { test_columns: testColumn } = this.selectEvent
-      if (this.showTest) {
-        Object.entries(testColumn).forEach(([k, v]) => {
-          const key = k
-          let value = v
-          if (typeof v === 'object') {
-            value = JSON.stringify(v)
-          }
-          this.$set(this.record.ctx, key, value)
-        })
+    handleSqlChanged(val) {
+      this.triggerEventChange(val)
+      if (!this.needCheckSql) {
+        return
       }
+      const checkValues = ruleOldSqlCheck(val)
+      if (!checkValues) {
+        return
+      }
+      this.sqlParse(val, checkValues[0])
+    },
+    sqlParse(sql, oldEvent) {
+      this.$confirm(this.$t('RuleEngine.parse_confirm'), this.$t('Base.warning'), {
+        confirmButtonClass: 'confirm-btn',
+        cancelButtonClass: 'cache-btn el-button--text',
+        type: 'warning',
+      }).then(() => {
+        this.record.rawsql = sqlExampleFormatter(ruleNewSqlParser(sql, oldEvent))
+      }).catch(() => {
+        this.needCheckSql = false
+      })
+    },
+    triggerEventChange(sql) {
+      const events = [
+        'events/message_delivered',
+        'events/message_acked',
+        'events/message_dropped',
+        'events/client_connected',
+        'events/client_disconnected',
+        'events/session_subscribed',
+        'events/session_unsubscribed',
+      ]
+      let values = null
+      let value = ''
+      events.forEach((e) => {
+        const [regType, regEvent] = e.split('/')
+        const reg = new RegExp(`\\$${regType}\\/${regEvent}`, 'gim')
+        if (sql.match(reg)) {
+          values = sql.match(reg)
+        }
+      })
+      if (values) {
+        value = values[0]
+      } else {
+        value = '$events/message_publish'
+      }
+      if (value === this.selectEvent.event) {
+        return
+      }
+      this.selectEvent = this.events.find($ => $.event === value) || { columns: {}, test_columns: {} }
+      this.sqlPrimaryKey = this.events.columns
+      this.initTestFormItem()
+    },
+    initTestFormItem() {
+      this.testOutPut = ''
+      const testFieldObject = {}
+
+      const { test_columns: testColumns } = this.selectEvent
+      Object.keys(testColumns).forEach((k) => {
+        let value = testColumns[k]
+
+        if (typeof value === 'object') {
+          value = JSON.stringify(value, null, 2)
+        }
+        testFieldObject[k] = value
+      })
+      this.$set(this.record, 'ctx', testFieldObject)
+    },
+    beforeSqlValid(sql) {
+      const checkValues = ruleOldSqlCheck(sql)
+      if (!checkValues) {
+        return true
+      }
+      this.sqlParse(sql, checkValues[0])
+      return false
     },
     handleSQLTest() {
+      this.needCheckSql = true
       this.$refs.record.validate(async (valid) => {
         if (!valid) {
+          return
+        }
+        if (!this.beforeSqlValid(this.record.rawsql)) {
           return
         }
         const data = JSON.parse(JSON.stringify(this.record))
@@ -292,7 +377,7 @@ export default {
           try {
             data.ctx.payload = JSON.stringify(JSON.parse(data.ctx.payload))
           } catch (e) {
-            console.error(e)
+            console.log(e)
           }
         }
 
@@ -323,7 +408,6 @@ export default {
         return
       }
       const record = {
-        for: this.record.for,
         rawsql: this.record.rawsql,
         actions: this.record.actions.map($ => ({ name: $.name, params: $.params })),
         description: this.record.description,
@@ -381,6 +465,9 @@ export default {
   .tips-form {
     .tips-item {
       margin-bottom: 20px;
+      .notice {
+        color: #f5222d;
+      }
 
       .copy-success {
         color: #34C388;
@@ -399,6 +486,30 @@ export default {
     &.code {
       border: none;
       padding: 10px;
+    }
+  }
+
+  .monaco-container {
+    &.monaco-payload {
+      height: 200px;
+    }
+  }
+
+  .payload-type {
+    width: 100%;
+    padding: 2px 12px;
+    background: #f6f7fb;
+    border: 1px solid #D9D9D9;
+    border-top: none;
+    text-align: right;
+    .el-radio__label {
+      font-size: 13px;
+    }
+  }
+
+  .test-output {
+    .CodeMirror-scroll {
+      min-height: 170px;
     }
   }
 }

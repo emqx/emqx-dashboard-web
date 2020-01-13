@@ -21,7 +21,9 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.memory')">
-              <span class="form-item-value">{{ record.memory_used }} / {{ record.memory_total }}</span>
+              <span class="form-item-value">
+                {{ record.memory_used | formatMemory }} / {{ record.memory_total | formatMemory }}
+              </span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -122,10 +124,21 @@
 
 
 <script>
+import { formatNumberSize } from '@/common/utils'
+
 export default {
   name: 'NodeBasicCard',
 
   components: {},
+
+  filters: {
+    formatMemory(val) {
+      if (typeof val === 'number') {
+        return formatNumberSize(val)
+      }
+      return val
+    },
+  },
 
   props: {
     value: {

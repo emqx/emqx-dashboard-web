@@ -46,22 +46,38 @@ let routes = [
   },
   // 连接
   {
-    path: '/connections',
+    path: '/clients',
     component: Layout,
     meta: {
-      hideKey: 'connections',
+      hideKey: 'clients',
       authRequired: true,
     },
     children: [
       {
         path: '',
-        name: 'connections',
-        component: () => import('@/views/Connections/Connections'),
+        name: 'clients',
+        component: () => import('@/views/Clients/Clients'),
       },
       {
         path: 'detail',
-        name: 'connections-view',
-        component: () => import('@/views/Connections/ConnectionView'),
+        name: 'clients-view',
+        component: () => import('@/views/Clients/ClientDetails'),
+      },
+    ],
+  },
+  // 主题
+  {
+    path: '/topics',
+    component: Layout,
+    meta: {
+      hideKey: 'topics',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'topics',
+        component: () => import('@/views/Topics/Topics'),
       },
     ],
   },
@@ -169,6 +185,22 @@ let routes = [
       },
     ],
   },
+  // 黑名单
+  {
+    path: '/blacklist',
+    component: Layout,
+    meta: {
+      hideKey: 'general',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'blacklist',
+        component: () => import('@/views/General/Blacklist'),
+      },
+    ],
+  },
   // 应用
   {
     path: '/application',
@@ -230,11 +262,9 @@ let routes = [
         path: '',
         name: 'plugins',
         component: () => import('@/views/Plugins/Plugins'),
-      },
-      {
-        path: ':name',
-        name: 'plugins-config',
-        component: () => import('@/views/Plugins/PluginView'),
+        meta: {
+          keepAlive: true,
+        },
       },
     ],
   },

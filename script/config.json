@@ -1,6 +1,6 @@
 {
   "base": {
-    "baseURL": "/api/v3",
+    "baseURL": "/api/v4",
     "httpTimeout": 15000,
     "publicPath": "/",
     "hide": {
@@ -9,7 +9,7 @@
     }
   },
   "cloud": {
-    "baseURL": "api/v3",
+    "baseURL": "api/v4",
     "publicPath": "./",
     "hide": {
       "routes": [
@@ -19,7 +19,7 @@
       ],
       "children": [
         "navbar.user",
-        "monitor.connections",
+        "monitor.clients",
         "monitor.license"
       ]
     }

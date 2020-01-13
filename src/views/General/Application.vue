@@ -1,16 +1,14 @@
 <template>
   <div class="application">
-    <page-header
-      :back-title="$t('General.application')"
-    >
+    <page-header>
       <div class="page-header-content-view">
         <div class="content">
           <p class="description">
             {{ $t('General.applicationIsCalled') }}
           </p>
 
-          <div class="page-header-link">
-            <a :href="docs.restAPI" target="_blank" class="link-item">
+          <div class="page-header-top-start">
+            <a rel="noopener" :href="docs.restAPI" target="_blank" class="link-item">
               <i class="icon el-icon-document"></i>
               {{ $t('General.productDocumentation') }}
             </a>

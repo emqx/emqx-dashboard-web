@@ -1,13 +1,16 @@
 /* eslint-disable */
 import Clipboard from 'clipboard'
 import sqlFormatter from 'sql-formatter'
+import parser from "js-sql-parser";
 
 import store from '@/stores'
 import router from '@/routes'
 
 const { lang = 'zh' } = store.state
 
-import { en as enDocsLink, zh as zhDocsLink } from '@/common/link_urls'
+import {
+  enDocsLink, zhDocsLink, pluginsZh, pluginsEn,
+} from '@/common/link_urls'
 
 /**
  * 获取基础的验证信息
@@ -200,6 +203,17 @@ export function getLink(name) {
 }
 
 /**
+ * 根据语言获取插件教程的跳转链接
+ * @param name
+ * @return link: string
+ */
+export function getPluginsLink(name) {
+  const { lang = 'zh' } = store.state
+  const dictMap = lang === 'zh' ? pluginsZh : pluginsEn
+  return dictMap[name] || ''
+}
+
+/**
  * 复制到剪切板
  * @param el 复制指令绑定的元素，binding 剪切板配置，包括值value，成功失败时的回调函数
  * @return el: DOM
@@ -238,7 +252,7 @@ export const sqlExampleFormatter = (sql) => {
     const paramsText = paramsRe[1]
     if (paramsText) {
       const newParamsText = paramsText.replace(/(!#!|\s)/g, ' ').split(/[,，]/).join(', ')
-      text = text.replace(paramsText, `  ${newParamsText}`)
+      text = text.replace(paramsText, `${newParamsText}`)
     }
   }
   return text.replace(/!#!/g, '\n\r')
@@ -256,3 +270,104 @@ export const hasShow = (scope = '') => {
   }
   return !(hide.routes.includes(scope) || hide.children.includes(scope))
 }
+
+/**
+ * 取 URL 具体的一个参数值
+ * @param url 查询的 url, key 参数的名称
+ * @return value string
+ */
+export const getParamValue = (url, key) => {
+  const regex = new RegExp(`${key}=([^&]*)`, 'i')
+  const value = url.match(regex)[1]
+  return decodeURIComponent(value)
+}
+
+/**
+ * 模糊查询搜索
+ * @param data 搜索的数据 searchKey 搜索的字段名称 searchValue 搜索的值
+ * @return value Promise<any>
+ */
+export const matchSearch = (data, searchKey, searchValue) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const filterData = data.filter(($) => {
+        if ($[searchKey]) {
+          const key = $[searchKey].toLowerCase().replace(/\s+/g, '')
+          const value = searchValue.toLocaleLowerCase().replace(/\s+/g, '')
+          return key.match(value)
+        } else {
+          return null
+        }
+      })
+      return resolve(filterData)
+    } catch (error) {
+      return reject(error)
+    }
+  })
+}
+
+/**
+ * 将内存数值转化为 KB MB G
+ * @param number 需要转化的数值
+ * @return string 转化后的字符串
+ */
+export const formatNumberSize = number => {
+  const scale = 1000
+  const digitList = ['K', 'M', 'G', 'T']
+  let residue = Math.round(number%scale/100) // 小数点后数，1位
+  let $integer = Math.round(number/scale) // 最小单位kb
+  let digit = 0
+  while($integer > scale) {
+    residue = Math.round($integer%scale/100)
+    $integer = Math.round($integer/scale)
+    digit += 1
+  }
+  return `${$integer}.${residue}${digitList[digit]}B`
+}
+
+export function ruleOldSqlCheck(sql) {
+  const $sql = sql.replace(/\"/g, '')
+  const oldEvent = [
+    'message.publish',
+    'message.deliver',
+    'message.acked',
+    'message.dropped',
+    'client.connected',
+    'client.disconnected',
+    'client.subscribe',
+    'client.unsubscribe',
+  ]
+  let matchRes = null
+  oldEvent.forEach((e) => {
+    const [eventType, eventValue] = e.split('.')
+    const eventReg = new RegExp(`${eventType}\\.${eventValue}`, 'gim')
+    if ($sql.match(eventReg)) {
+      matchRes = $sql.match(eventReg)
+    }
+  })
+  return matchRes
+}
+
+export function ruleNewSqlParser(sql, e) {
+  const oldEventDict = {
+    'message.publish': '',
+    'message.deliver': '$events/message_delivered',
+    'message.acked': '$events/message_acked',
+    'message.dropped': '$events/message_dropped',
+    'client.connected': '$events/client_connected',
+    'client.disconnected': '$events/client_disconnected',
+    'client.subscribe': '$events/session_subscribed',
+    'client.unsubscribe': '$events/session_unsubscribed',
+  }
+  let newEvent = oldEventDict[e]
+  const $sql = sql.replace(/\"/g, '')
+  const ast = parser.parse($sql)
+  if (newEvent === '') {
+    ast.value.where = null
+    newEvent = '#'
+  }
+  ast.value.from.value[0].value.value.value = `"${newEvent}"`
+  return parser.stringify(ast)
+}
+
+export default {}

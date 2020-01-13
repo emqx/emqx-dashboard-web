@@ -1,6 +1,6 @@
 <template>
-  <div class="left-bar">
-    <div class="logo" :style="logoStyle">
+  <div class="left-bar" :style="{ width: leftBarCollapse ? '80px' : '200px' }">
+    <div class="logo">
       <img class="logo-img" src="../assets/emqx_logo.png" alt="logo">
       <div class="title">
         Dashboard
@@ -14,13 +14,18 @@
       :open-keys.sync="defaultOpenKeys"
       mode="inline"
       theme="dark"
+      :inline-collapsed="leftBarCollapse"
       @click="handleClick"
     >
       <template v-for="item in menus">
         <template v-if="$hasShow(item.key)">
-          <a-sub-menu v-if="item.children && item.children.length > 0" :key="item.key" @titleClick="titleClick(item)">
+          <a-sub-menu
+            v-if="item.children && item.children.length > 0"
+            :key="item.key"
+            @titleClick="titleClick(item)"
+          >
             <span slot="title">
-              <i class="iconfont" :class="item.icon"></i>
+              <icon-font :type="item.icon"></icon-font>
               <span>{{ item.title }}</span>
             </span>
             <template v-for="item2 in item.children">
@@ -31,7 +36,7 @@
           </a-sub-menu>
 
           <a-menu-item v-else-if="!item.children && $hasShow(item.key)" :key="item.path">
-            <i class="iconfont" :class="item.icon"></i>
+            <icon-font :type="item.icon"></icon-font>
             <span>{{ item.title }}</span>
           </a-menu-item>
         </template>
@@ -66,6 +71,9 @@ export default {
   },
 
   computed: {
+    leftBarCollapse() {
+      return this.$store.state.leftBarCollapse
+    },
     defaultSelectedKeys() {
       const { path } = this.$route
       return [`/${path.split('/')[1]}`]
@@ -79,6 +87,13 @@ export default {
     $route() {
       this.initRouter()
     },
+    leftBarCollapse(val) {
+      if (val) {
+        this.defaultOpenKeys = []
+      } else {
+        this.initRouter()
+      }
+    },
   },
 
   created() {
@@ -89,8 +104,13 @@ export default {
         icon: 'icon-yibiaopan',
       },
       {
-        title: this.$t('components.connect'),
-        path: '/connections',
+        title: this.$t('components.clients'),
+        path: '/clients',
+        icon: 'icon-guanlianshebei',
+      },
+      {
+        title: this.$t('components.topics'),
+        path: '/topics',
         icon: 'icon-zuzhiqunzu',
       },
       {
@@ -99,7 +119,7 @@ export default {
         icon: 'icon-guizeyinqing',
         children: [
           {
-            title: this.$t('components.ruleEngine'),
+            title: this.$t('components.rules'),
             key: 'rules.ruleEngine',
             path: '/rules',
             parentKey: 'rules',
@@ -111,7 +131,7 @@ export default {
             parentKey: 'rules',
           },
           {
-            title: this.$t('components.schema'),
+            title: this.$t('components.schemas'),
             key: 'rules.schema',
             path: '/schemas',
             parentKey: 'rules',
@@ -119,13 +139,13 @@ export default {
         ],
       },
       {
-        title: this.$t('components.alarm'),
+        title: this.$t('components.alerts'),
         key: 'alerts',
         path: '/alerts',
         icon: 'icon-gaojingkongxin',
       },
       {
-        title: this.$t('components.plugin'),
+        title: this.$t('components.plugins'),
         key: 'plugins',
         path: '/plugins',
         icon: 'icon-kongjian',
@@ -161,9 +181,15 @@ export default {
             parentKey: 'general',
           },
           {
-            title: this.$t('components.user'),
+            title: this.$t('components.users'),
             key: 'general.user',
             path: '/users',
+            parentKey: 'general',
+          },
+          {
+            title: this.$t('components.blacklist'),
+            key: 'general.blacklist',
+            path: '/blacklist',
             parentKey: 'general',
           },
         ],
@@ -179,6 +205,9 @@ export default {
     titleClick() {
     },
     initRouter() {
+      if (this.leftBarCollapse) {
+        return
+      }
       const { path } = this.$route
       this.menus.forEach((item) => {
         if (!item.key || !item.children) {
@@ -202,9 +231,9 @@ export default {
 .left-bar {
   min-height: calc(100vh - 80px);
   background-color: $color-theme;
+  transition: all .3s;
 
   .menu-wrapper {
-    width: 200px;
     margin-top: 80px;
   }
   .ant-menu {
@@ -221,8 +250,13 @@ export default {
     background-color: $color-theme;
   }
 
-  .iconfont {
-    margin-right: 8px;
+  .ant-menu-inline.ant-menu-sub {
+    background: #00000075;
+  }
+
+  .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+    margin-right: 12px;
+    font-size: 18px;
   }
 
   .logo {
@@ -237,7 +271,7 @@ export default {
     top: 0;
     left: 0;
     z-index: 100;
-    transition: left 0.5s;
+    transition: all .3s;
     display: flex;
     align-items: center;
     padding: 0 20px;
@@ -249,6 +283,8 @@ export default {
     .logo-img {
       width: 48px;
       height: auto;
+      position: relative;
+      left: -3px;
     }
 
     .line {
@@ -260,13 +296,8 @@ export default {
   .el-scrollbar {
     height: 100vh;
   }
-
-  .el-menu {
-    min-height: calc(100% - 80px);
-
-    &:not(.el-menu--collapse) {
-      width: 200px;
-    }
-  }
+}
+.ant-menu-dark .ant-menu-sub {
+  background-color: #000000ce;
 }
 </style>

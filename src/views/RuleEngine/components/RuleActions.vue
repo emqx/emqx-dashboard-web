@@ -79,7 +79,7 @@
 
     <el-dialog
       :visible.sync="actionDialogVisible"
-      :title="$t('RuleEngine.addActions')"
+      :title="actionDialogTitle"
       width="520px"
     >
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
@@ -158,13 +158,17 @@
                     v-bind="item.bindAttributes"
                   >
                   </el-input>
-                  <code-editor
+                  <div
                     v-else-if="item.key === 'sql'"
-                    v-model="record.params.sql"
-                    lang="text/x-sql"
-                    :lint="false"
+                    class="monaco-container monaco-action__sql"
                   >
-                  </code-editor>
+                    <monaco
+                      id="action-sql"
+                      v-model="record.params.sql"
+                      lang="sql"
+                    >
+                    </monaco>
+                  </div>
                   <el-input
                     v-else
                     v-model="record.params[item.key]"
@@ -214,7 +218,7 @@
 import { loadActionsList, loadResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
 import ResourceDialog from '@/views/RuleEngine/components/ResourceCreate'
-import CodeEditor from '@/components/CodeEditor'
+import Monaco from '@/components/Monaco'
 import { setTimeout } from 'timers'
 
 export default {
@@ -222,7 +226,7 @@ export default {
 
   components: {
     ResourceDialog,
-    CodeEditor,
+    Monaco,
   },
 
   props: {
@@ -242,6 +246,7 @@ export default {
 
   data() {
     return {
+      actionDialogTitle: this.$t('RuleEngine.addActions'),
       actionDialogVisible: false,
       resourceDialogVisible: false,
       setRefresh: false,
@@ -420,11 +425,13 @@ export default {
     },
 
     addAction() {
+      this.actionDialogTitle = this.$t('RuleEngine.addActions')
       this.actionTypeChange(this.record.name, 'add')
       this.actionDialogVisible = true
     },
 
     editAction(item, index) {
+      this.actionDialogTitle = this.$t('RuleEngine.editActions')
       this.currentEditIndex = index
       this.actionTypeChange(item.name, 'edit')
       this.record = { ...item }
@@ -613,6 +620,10 @@ export default {
 
     .el-textarea {
       width: 330px;
+    }
+
+    .monaco-action__sql {
+      height: 200px;
     }
   }
 }

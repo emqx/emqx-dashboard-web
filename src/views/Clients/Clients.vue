@@ -1,11 +1,9 @@
 <template>
-  <div class="connections">
-    <page-header
-      :back-title="$t('Connections.connect')"
-    >
+  <div class="clients">
+    <page-header>
       <div class="page-header-content-view">
         <div class="content">
-          {{ $t('Connections.currentConnection') }}
+          {{ $t('Clients.currentConnection') }}
         </div>
       </div>
     </page-header>
@@ -14,10 +12,12 @@
       <a-card class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
           <div class="search-wrapper">
-            <el-input v-model="searchValue" size="small" placeholder="Client ID"></el-input>
-            <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">{{ $t('Connections.search') }}</el-button>
-            <el-button plain size="small" icon="el-icon-refresh" @click="resetSearch">
-              {{ searchValue ? $t('Connections.reset') : $t('Connections.refresh') }}
+            <el-input v-model="searchValue" size="small" :placeholder="$t('Clients.clientId')"></el-input>
+            <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
+              {{ $t('Clients.search') }}
+            </el-button>
+            <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
+              {{ searchValue ? $t('Clients.reset') : $t('Clients.refresh') }}
             </el-button>
           </div>
           <div class="search-wrapper">
@@ -33,33 +33,36 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="client_id" min-width="130px" label="Client ID">
+          <el-table-column prop="clientid" min-width="130px" :label="$t('Clients.clientId')">
             <template slot-scope="{ row }">
               <router-link
                 :to="{
-                  path: '/connections/detail',
-                  query: { client_id: row.client_id }
+                  path: '/clients/detail',
+                  query: { clientid: row.clientid }
                 }"
               >
-                {{ row.client_id }}
+                {{ row.clientid }}
               </router-link>
             </template>
           </el-table-column>
 
-          <el-table-column prop="username" min-width="120px" label="Username"></el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="node" min-width="120px" :label="$t('Connections.accessPoint')"></el-table-column>
-          <el-table-column prop="ipaddress" min-width="120px" label="Address">
+          <el-table-column prop="username" min-width="120px" :label="$t('Clients.username')"></el-table-column>
+          <el-table-column
+            v-if="showLevel === 'more'" prop="node" min-width="120px" :label="$t('Clients.accessNode')"
+          >
+          </el-table-column>
+          <el-table-column prop="ipaddress" min-width="120px" :label="$t('Clients.ipAddress')">
             <template slot-scope="{ row }">
-              {{ row.ipaddress }}:{{ row.port }}
+              {{ row.ip_address }}:{{ row.port }}
             </template>
           </el-table-column>
-          <el-table-column prop="keepalive" label="Keepalive"></el-table-column>
+          <el-table-column prop="keepalive" :label="$t('Clients.keepalive')"></el-table-column>
           <el-table-column
             prop="proto_name"
             filter-placement="bottom"
             :filters="filterOptions.protoName"
             :filter-method="protoNameColumnFilter"
-            :label="$t('Connections.protocol')"
+            :label="$t('Clients.protocol')"
           >
             <template slot-scope="{ row }">
               <span class="">
@@ -71,24 +74,24 @@
             v-if="showLevel === 'more'"
             prop="proto_ver"
             min-width="80px"
-            :label="$t('Connections.protocolVersion')"
+            :label="$t('Clients.protocolVersion')"
           >
           </el-table-column>
           <el-table-column
             v-if="showLevel === 'more'"
             prop="clean_start"
             min-width="80px"
-            :label="$t('Connections.clearSession')"
+            :label="$t('Clients.clearSession')"
             :formatter="$ => $ ? 'true' : 'false'"
           ></el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="peercert" min-width="80px" :label="$t('Connections.SSL')">
+          <el-table-column v-if="showLevel === 'more'" prop="peercert" min-width="80px" :label="$t('Clients.SSL')">
           </el-table-column>
-          <el-table-column prop="connected_at" min-width="140px" :label="$t('Connections.connectionAt')"></el-table-column>
+          <el-table-column prop="connected_at" min-width="140px" :label="$t('Clients.connectionAt')"></el-table-column>
           <el-table-column prop="oper" width="120px" label="">
             <template slot-scope="{ row }">
 
               <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
-                {{ row.disconnected ? $t('Connections.disconnected') : $t('Connections.disconnect') }}
+                {{ row.disconnected ? $t('Clients.disconnected') : $t('Clients.disconnect') }}
               </el-button>
 
             </template>
@@ -114,12 +117,12 @@
 
 <script>
 import {
-  searchNodeConnections, disconnectConnection, listNodeConnections,
-} from '@/api/connections'
+  searchNodeClients, disconnectClient, listNodeClients,
+} from '@/api/clients'
 import { loadNodes } from '@/api/common'
 
 export default {
-  name: 'Connections',
+  name: 'Clients',
 
   components: {},
 
@@ -142,6 +145,7 @@ export default {
       },
       nodeName: '',
       currentNodes: [],
+      resetIcon: 'el-icon-refresh',
     }
   },
 
@@ -152,7 +156,7 @@ export default {
   methods: {
     handleNodeChange() {
       this.searchValue = ''
-      this.loadNodeConnections(true)
+      this.loadNodeClients(true)
     },
     syncShowLevel() {
       localStorage.setItem('SHOW_LEVEL', this.showLevel)
@@ -161,55 +165,57 @@ export default {
       if (row.disconnected) {
         return
       }
-      this.$msgbox.confirm(this.$t('Connections.willDisconnectTheConnection'), {
+      this.$msgbox.confirm(this.$t('Clients.willDisconnectTheConnection'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
-        await disconnectConnection(row.client_id)
+        await disconnectClient(row.clientid)
         this.$set(row, 'disconnected', true)
-        this.loadNodeConnections()
-        this.$message.success(this.$t('Connections.successfulDisconnection'))
+        this.loadNodeClients()
+        this.$message.success(this.$t('Clients.successfulDisconnection'))
       }).catch(() => { })
     },
     resetSearch() {
+      this.resetIcon = 'el-icon-loading'
       let reload = false
       if (this.searchValue) {
         reload = true
       }
       this.searchValue = ''
-      this.loadNodeConnections(reload)
+      this.loadNodeClients(reload)
     },
     async handleSearch() {
       const clientID = this.searchValue.trim()
       if (!clientID) {
-        this.loadNodeConnections()
+        this.loadNodeClients()
         return
       }
       this.params._page = 1
       this.count = 0
-      this.tableData = await searchNodeConnections(this.nodeName, clientID)
+      this.tableData = await searchNodeClients(this.nodeName, clientID)
     },
     handleSizeChange() {
-      this.loadNodeConnections(true)
+      this.loadNodeClients(true)
     },
     handleCurrentPageChange() {
-      this.loadNodeConnections()
+      this.loadNodeClients()
     },
     async loadData() {
       this.currentNodes = await loadNodes()
       this.nodeName = this.nodeName || (this.currentNodes[0] || {}).name
       this.listLoading = false
-      this.loadNodeConnections()
+      this.loadNodeClients()
     },
-    async loadNodeConnections(reload, params = {}) {
+    async loadNodeClients(reload, params = {}) {
       if (reload) {
         this.params._page = 1
       }
-      const data = await listNodeConnections(this.nodeName, { ...this.params, ...params })
+      const data = await listNodeClients(this.nodeName, { ...this.params, ...params })
       const { items = [], meta: { count = 0 } } = data
       this.tableData = items
       this.count = count
+      this.resetIcon = 'el-icon-refresh'
     },
     protoNameColumnFilter(value, row) {
       return value === row.proto_name
@@ -220,22 +226,7 @@ export default {
 
 
 <style lang="scss">
-.connections {
-  .search-wrapper {
-    width: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .node-select {
-      width: 100%;
-    }
-
-    .el-button {
-      margin-left: 12px;
-    }
-  }
-
+.clients {
   .data-list {
     clear: both;
   }

@@ -34,6 +34,10 @@ export default {
     zh: '请输入',
     en: 'Please enter',
   },
+  pleaseSelect: {
+    zh: '请选择',
+    en: 'Please select',
+  },
   cancelConfirm: {
     zh: '是否取消本次修改？',
     en: 'You have unsaved changes, confirm cancel?',
@@ -135,7 +139,7 @@ export default {
     en: 'Idle timeout of the MQTT connections',
   },
   mqueue_store_qos0: {
-    zh: 'QoS0 是否排队',
+    zh: '是否将 QoS0 的消息存储在队列中',
     en: 'Whether to enqueue QoS0 messages',
   },
   flapping_banned_expiry_interval: {
@@ -210,11 +214,11 @@ export default {
     zh: '主题层级限制，0 表示没有限制层级',
     en: 'Maximum topic levels allowed, 0 means no limit',
   },
-  mqtt_max_qos_allowed: {
+  max_qos_allowed: {
     zh: '最大 QoS',
     en: 'Maximum QoS allowed',
   },
-  max_qos_allowed: {
+  mqtt_max_qos_allowed: {
     zh: '最大 QoS',
     en: 'Maximum QoS allowed',
   },
@@ -269,6 +273,14 @@ export default {
   flapping_detect_policy: {
     zh: '指定全局的 flapping detect 策略',
     en: 'Specify the global flapping detect policy',
+  },
+  strict_mode: {
+    zh: '是否在严格模式下解析 MQTT 帧',
+    en: 'Whether to parse the MQTT frame in strict mode',
+  },
+  mqtt_strict_mode: {
+    zh: '是否在严格模式下解析 MQTT 帧',
+    en: 'Whether to parse the MQTT frame in strict mode',
   },
   // 集群设置字段
   invite: {

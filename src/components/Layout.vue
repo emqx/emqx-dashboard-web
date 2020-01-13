@@ -1,14 +1,15 @@
 <template>
   <el-container class="layout" style="min-height: 100vh">
     <!-- 左侧 -->
-    <el-aside width="200px" :style="elAsideStyle">
+    <el-aside width="auto">
       <left-bar></left-bar>
     </el-aside>
 
     <el-main style="margin: 0;padding: 0;" :style="elMainStyle">
 
-      <el-header style="height: 60px;padding: 0">
+      <el-header style="height: 80px;padding: 0">
         <nav-header></nav-header>
+        <nav-tabs></nav-tabs>
       </el-header>
 
       <div :style="{ minHeight: '360px', minWidth: '600px', overflowX: 'hidden' }">
@@ -29,6 +30,7 @@
 <script>
 import LeftBar from '@/components/LeftBar'
 import NavHeader from '@/components/NavHeader'
+import NavTabs from '@/components/NavTabs.vue'
 
 export default {
   name: 'Layout',
@@ -36,6 +38,7 @@ export default {
   components: {
     NavHeader,
     LeftBar,
+    NavTabs,
   },
 
   data() {
@@ -46,14 +49,11 @@ export default {
   },
 
   computed: {
-    elAsideStyle() {
-      return {
-        left: !this.$store.state.leftBarCollapse ? 0 : '-200px',
-        boxShadow: this.$store.state.leftBarCollapse ? 'none' : '2px 0 8px 0 rgba(29,35,41,.05)',
-      }
+    elAsideWidth() {
+      return this.$store.state.leftBarCollapse ? 'auto' : '200px'
     },
     elMainStyle() {
-      return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : 0 }
+      return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px' }
     },
   },
 }
@@ -66,7 +66,7 @@ export default {
 
 .el-aside {
   background-color: $color-theme;
-  transition: left .5s;
+  transition: all .3s;
   position: fixed;
   top: 0;
   left: 0;
@@ -75,6 +75,6 @@ export default {
 }
 
 .el-main {
-  transition: margin-left .5s;
+  transition: margin-left .3s;
 }
 </style>

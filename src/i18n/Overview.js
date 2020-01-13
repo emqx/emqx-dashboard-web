@@ -81,7 +81,7 @@ export default
   },
   nodeData: {
     zh: '节点数据',
-    en: 'Nodes',
+    en: 'Node',
   },
   currentNodeInfo: {
     zh: '当前节点信息如下',
@@ -124,8 +124,8 @@ export default
     en: 'Address',
   },
   connectCurrentAndMax: {
-    zh: '连接(当前/最大)',
-    en: 'Connect(Current/Max)',
+    zh: '连接 (当前/最大)',
+    en: 'Connect (Current/Max)',
   },
   current: {
     zh: '当前',
@@ -154,6 +154,14 @@ export default
   traffic: {
     zh: '流量收发(字节)',
     en: 'Byte',
+  },
+  client: {
+    zh: '客户端',
+    en: 'Client',
+  },
+  session: {
+    zh: '会话',
+    en: 'Session',
   },
   mainConfiguration: {
     zh: '节点主要配置',

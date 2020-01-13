@@ -304,7 +304,7 @@ export default {
         port: this.getOption().port,
         protocols: this.getOption().protocols,
         clientId: this.getOption().clientId,
-        ssl: false,
+        ssl: this.getOption().ssl,
 
         endpoint: '/mqtt',
         username: '',
@@ -402,8 +402,14 @@ export default {
           this.connecting = false
           this.times = 0
           this.client.end()
+          this.$notify({
+            title: this.$t('Tools.disconnected'),
+            message: '',
+            type: 'success',
+          })
+          this.connecting = false
         } catch (e) {
-          console.log(e)
+          this.$message.error(e.toString())
         }
       }
     },
@@ -532,50 +538,62 @@ export default {
 
         this.connecting = true
         this.times = 0
-        this.client = mqtt.connect(this.connectUrl, {
-          port,
-          clientId,
-          username,
-          password,
-          reconnectPeriod,
-          keepalive,
-          clean,
-          connectTimeout,
-          will: will.topic ? will : undefined,
-        })
-        window.client = this.client
-        this.client.on('error', (error) => {
-          this.$message.error(error.toString())
-          this.connecting = false
-          try {
-            this.client.end()
-          } catch (e) {
-            console.log(e)
-          }
-        })
-        this.client.on('reconnect', () => {
-          if (this.times > this.maxTims) {
-            this.destroyConnection()
-            this.$message.error(this.$t('Tools.connectionDisconnected'))
-          }
-          if (this.connecting) {
-            this.times += 1
-          }
-        })
+        try {
+          this.client = mqtt.connect(this.connectUrl, {
+            port,
+            clientId,
+            username,
+            password,
+            reconnectPeriod,
+            keepalive,
+            clean,
+            connectTimeout,
+            will: will.topic ? will : undefined,
+          })
+          window.client = this.client
+          this.client.on('error', (error) => {
+            this.$message.error(error.toString())
+            this.connecting = false
+            try {
+              this.client.end()
+            } catch (e) {
+              this.$message.error(e.toString())
+            }
+          })
+          this.client.on('reconnect', () => {
+            if (this.times > this.maxTims) {
+              this.destroyConnection()
+              this.$message.error(this.$t('Tools.connectionDisconnected'))
+            }
+            if (this.connecting) {
+              this.times += 1
+            }
+          })
 
-        this.client.on('connect', () => {
+          this.client.on('connect', () => {
+            this.$notify({
+              title: this.$t('Tools.connected'),
+              message: '',
+              type: 'success',
+            })
+            this.connecting = false
+          })
+          this.client.on('message', this.onMessage)
+          this.client.on('reconnection', this.onMessage)
+        } catch (error) {
           this.connecting = false
-        })
-        this.client.on('message', this.onMessage)
-        this.client.on('reconnection', this.onMessage)
+          this.$message.error(error.toString())
+        }
       })
     },
     getOption() {
+      const { protocol, hostname } = window.location
       return {
-        host: window.location.hostname,
-        protocols: window.location.protocol === 'http:' ? 'ws' : 'wss',
-        port: window.location.protocol === 'http:' ? 8083 : 8084,
+        host: hostname,
+        protocols: protocol === 'http:' ? 'ws' : 'wss',
+        port: protocol === 'http:' ? 8083 : 8084,
         clientId: `mqttjs_${Math.random().toString(16).substr(2, 8)}`,
+        ssl: protocol === 'https:',
       }
     },
     atSessionChange(i) {

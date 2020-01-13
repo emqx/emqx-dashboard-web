@@ -1,22 +1,16 @@
 <template>
   <div class="schemas-details details-page">
-    <page-header
-      :back-title="$t('Schemas.schema')"
-      :oper="accessTitle"
-      back-path="/schemas"
-    >
-      <template v-if="disabled">
-        <div class="page-header-title-view">
-          <div class="title">
-            {{ detailsID }}
-          </div>
+    <page-header v-if="disabled">
+      <div class="page-header-title-view">
+        <div class="title">
+          {{ detailsID }}
         </div>
-        <div class="page-header-top-start">
-          <el-button type="danger" size="small" @click="deleteData">
-            {{ $t('Base.delete') }}
-          </el-button>
-        </div>
-      </template>
+      </div>
+      <div class="page-header-top-start btn">
+        <el-button type="danger" size="small" @click="deleteData">
+          {{ $t('Base.delete') }}
+        </el-button>
+      </div>
     </page-header>
 
     <div class="emq-list-body schemas-wrapper app-wrapper">
@@ -74,7 +68,11 @@
               <template v-if="record.third_party_type === HTTP">
                 <el-col :span="14">
                   <el-form-item label="URL" prop="parser_addr.url">
-                    <el-input v-model="record.parser_addr.url" :disabled="disabled" placeholder="http://127.0.0.1:8000/parser">
+                    <el-input
+                      v-model="record.parser_addr.url"
+                      :disabled="disabled"
+                      placeholder="http://127.0.0.1:8000/parser"
+                    >
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -162,13 +160,21 @@
             <!-- Schema code -->
             <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
               <el-form-item class="code-editor__item" label="Schema" prop="schema">
-                <code-editor
-                  v-model="record.schema"
-                  lang="application/json"
-                  height="320px"
-                  :disabled="disabled"
-                  :lint="false"
-                ></code-editor>
+                <div
+                  class="monaco-container monaco-schema"
+                  :style="{ height: `${editorHeight}px` }"
+                >
+                  <monaco
+                    id="schema"
+                    v-model="record.schema"
+                    class="schema-code"
+                    warp
+                    lang="plaintext"
+                    :disabled="disabled"
+                    @qucik-save="save"
+                  ></monaco>
+                </div>
+                <stretch-height v-model="editorHeight"></stretch-height>
               </el-form-item>
             </el-col>
             <el-col :span="10">
@@ -197,20 +203,23 @@
 import { loadResource } from '@/api/rules'
 import { createSchema, viewSchema, deleteSchema } from '@/api/schemas'
 import detailsPage from '@/mixins/detailsPage'
-import CodeEditor from '@/components/CodeEditor'
+import Monaco from '@/components/Monaco'
+import StretchHeight from '@/components/StretchHeight'
 import { setTimeout } from 'timers'
 
 export default {
   name: 'SchemasDetails',
 
   components: {
-    CodeEditor,
+    Monaco,
+    StretchHeight,
   },
 
   mixins: [detailsPage],
 
   data() {
     return {
+      editorHeight: 320,
       THIRD_PARTY: '3rd-party',
       HTTP: 'HTTP',
       TCP: 'TCP',
@@ -243,6 +252,20 @@ export default {
       },
       availableResources: [],
     }
+  },
+
+  watch: {
+    $route(val) {
+      const { id } = val.params
+      if (id !== '0') {
+        this.viewDetails(val.params.id)
+      } else {
+        setTimeout(() => {
+          this.$refs.record.clearValidate()
+          this.$refs.record.resetFields()
+        }, 500)
+      }
+    },
   },
 
   methods: {
@@ -297,3 +320,7 @@ export default {
   },
 }
 </script>
+
+
+<style lang="scss">
+</style>

@@ -88,7 +88,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 0 24px 0;
+  padding: 0px 0 24px 0;
+  .search-wrapper {
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .node-select {
+      width: 100%;
+    }
+
+    .el-button {
+      margin-left: 12px;
+    }
+  }
 }
 
 .emq-table-footer {
@@ -216,6 +230,10 @@ body {
   }
 }
 
+// Monaco editor
+.monaco-container {
+  border: 1px solid #D9D9D9;
+}
 // code-editor
 .code-editor {
   border: 1px solid #D9D9D9;
@@ -224,6 +242,7 @@ body {
   .CodeMirror {
     border-radius: 4px;
     color: #646775;
+    height: auto !important;
   }
   .CodeMirror-gutters {
     background-color: #F6F7FB;

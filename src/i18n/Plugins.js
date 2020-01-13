@@ -1,7 +1,7 @@
 export default {
   __not: [],
   listNull: {
-    zh: '列表为空,请调整过滤条件再试',
+    zh: '列表为空，请调整过滤条件再试',
     en: 'Empty. Please change the filter and try again',
   },
   unit: {
@@ -29,7 +29,7 @@ export default {
     en: '',
   },
   stop: {
-    zh: '停止',
+    zh: '停 止',
     en: 'Stop',
   },
   stopped: {
@@ -49,12 +49,16 @@ export default {
     en: 'All',
   },
   startRunning: {
-    zh: '启动',
-    en: 'Running',
+    zh: '启 动',
+    en: 'Run',
   },
   config: {
     zh: '配置',
     en: 'config',
+  },
+  tutorial: {
+    zh: '使用文档',
+    en: 'Tutorial',
   },
   pluginName: {
     zh: '插件名称',
@@ -135,5 +139,9 @@ export default {
   pleaseEnter: {
     zh: '请输入',
     en: 'Please enter',
+  },
+  searchByName: {
+    zh: '按插件名称搜索',
+    en: 'Search by plugin name',
   },
 }
