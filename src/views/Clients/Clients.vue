@@ -47,10 +47,6 @@
           </el-table-column>
 
           <el-table-column prop="username" min-width="120px" :label="$t('Clients.username')"></el-table-column>
-          <el-table-column
-            v-if="showLevel === 'more'" prop="node" min-width="120px" :label="$t('Clients.accessNode')"
-          >
-          </el-table-column>
           <el-table-column prop="ipaddress" min-width="120px" :label="$t('Clients.ipAddress')">
             <template slot-scope="{ row }">
               {{ row.ip_address }}:{{ row.port }}
@@ -70,28 +66,22 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column
-            v-if="showLevel === 'more'"
-            prop="proto_ver"
-            min-width="80px"
-            :label="$t('Clients.protocolVersion')"
-          >
-          </el-table-column>
-          <el-table-column
-            v-if="showLevel === 'more'"
-            prop="clean_start"
-            min-width="80px"
-            :label="$t('Clients.clearSession')"
-            :formatter="$ => $ ? 'true' : 'false'"
-          ></el-table-column>
-          <el-table-column v-if="showLevel === 'more'" prop="peercert" min-width="80px" :label="$t('Clients.SSL')">
+          <el-table-column prop="connected" width="120px" :label="$t('Clients.connectedStatus')">
+            <template slot-scope="{ row }">
+              <a-badge
+                is-dot
+                :status="row.connected ? 'success' : 'error'"
+                :text="row.connected ? $t('Clients.connected') : $t('Clients.disconnected')"
+              >
+              </a-badge>
+            </template>
           </el-table-column>
           <el-table-column prop="connected_at" min-width="140px" :label="$t('Clients.connectionAt')"></el-table-column>
-          <el-table-column prop="oper" width="120px" label="">
+          <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
 
               <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
-                {{ row.disconnected ? $t('Clients.disconnected') : $t('Clients.disconnect') }}
+                {{ row.connected ? $t('Clients.disconnect') : $t('Clients.cleanSession') }}
               </el-button>
 
             </template>
@@ -130,7 +120,6 @@ export default {
 
   data() {
     return {
-      showLevel: 'simple', // localStorage.getItem('showLevel') || 'simple',
       popoverVisible: false,
       listLoading: true,
       tableData: [],
@@ -158,22 +147,21 @@ export default {
       this.searchValue = ''
       this.loadNodeClients(true)
     },
-    syncShowLevel() {
-      localStorage.setItem('SHOW_LEVEL', this.showLevel)
-    },
     async handleDisconnect(row) {
-      if (row.disconnected) {
-        return
+      let warningMsg = this.$t('Clients.willDisconnectTheConnection')
+      let successMsg = this.$t('Clients.successfulDisconnection')
+      if (!row.connected) {
+        warningMsg = this.$t('Clients.willCleanSession')
+        successMsg = this.$t('Clients.successfulCleanSession')
       }
-      this.$msgbox.confirm(this.$t('Clients.willDisconnectTheConnection'), {
+      this.$msgbox.confirm(warningMsg, {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await disconnectClient(row.clientid)
-        this.$set(row, 'disconnected', true)
         this.loadNodeClients()
-        this.$message.success(this.$t('Clients.successfulDisconnection'))
+        this.$message.success(successMsg)
       }).catch(() => { })
     },
     resetSearch() {
