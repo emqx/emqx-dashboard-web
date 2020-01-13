@@ -138,7 +138,6 @@
         <el-row :gutter="20">
           <node-basic-card :value="currentNode"></node-basic-card>
         </el-row>
-
       </div>
 
       <template v-else>

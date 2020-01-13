@@ -10,7 +10,7 @@
         </div>
       </div>
 
-      <div v-if="!record.disconnected" class="page-header-top-start btn">
+      <div v-if="record.connected" class="page-header-top-start btn">
         <el-button type="danger" size="small" @click="handleDisconnect">
           {{ $t('Clients.disconnect') }}
         </el-button>
@@ -282,7 +282,7 @@ export default {
         send_pkt: 98,
         username: 'undefined',
         zone: 'external',
-        disconnected: false,
+        connected: false,
       },
       mqttVersionMap: {
         3: 'v3.1',
@@ -298,10 +298,10 @@ export default {
       return this.$route.query.clientid
     },
     connStatus() {
-      return this.record.disconnected ? 'error' : 'success'
+      return !this.record.connected ? 'error' : 'success'
     },
     connStatusText() {
-      return this.record.disconnected ? this.$t('Clients.disconnected') : this.$t('Clients.onLine')
+      return !this.record.connected ? this.$t('Clients.disconnected') : this.$t('Clients.onLine')
     },
   },
 
@@ -317,7 +317,7 @@ export default {
 
   methods: {
     async handleDisconnect() {
-      if (this.record.disconnected) {
+      if (!this.record.connected) {
         return
       }
       this.$msgbox.confirm(this.$t('Clients.willDisconnectTheConnection'), {
@@ -326,7 +326,7 @@ export default {
         type: 'warning',
       }).then(async () => {
         await disconnectClient(this.record.clientid)
-        this.$set(this.record, 'disconnected', true)
+        this.$set(this.record, 'connected', false)
         this.$message.success(this.$t('Clients.successfulDisconnection'))
       }).catch(() => {})
     },

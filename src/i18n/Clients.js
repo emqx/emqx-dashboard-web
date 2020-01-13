@@ -102,21 +102,41 @@ export default {
     zh: '连接时间',
     en: 'Connection At',
   },
+  connectedStatus: {
+    zh: '连接状态',
+    en: 'Connect Status',
+  },
+  connected: {
+    zh: '已连接',
+    en: 'Connected',
+  },
   disconnected: {
-    zh: '已断开',
+    zh: '未连接',
     en: 'Disconnected',
   },
   disconnect: {
-    zh: '断开',
+    zh: '断开连接',
     en: 'Disconnect',
   },
+  cleanSession: {
+    zh: '清除会话',
+    en: 'Clean Session',
+  },
   willDisconnectTheConnection: {
-    zh: '此操作将断开该连接,连接可能通过重连机制再次连接,确认继续?',
+    zh: '此操作将断开该连接，连接可能通过重连机制再次连接，确认继续?',
     en: 'This operation will disconnect the connection',
+  },
+  willCleanSession: {
+    zh: '确认清除会话？',
+    en: 'Confirm Clean Session?',
   },
   successfulDisconnection: {
     zh: '断开成功',
     en: 'Successful disconnection',
+  },
+  successfulCleanSession: {
+    zh: '成功清除会话',
+    en: 'Session cleared successfully',
   },
   clientDetails: {
     zh: '客户端详情',
