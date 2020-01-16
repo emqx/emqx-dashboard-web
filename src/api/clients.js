@@ -20,11 +20,9 @@ export function searchNodeClients(nodeName, clientId = '') {
   return http.get(`/nodes/${nodeName}/clients/${encodeURIComponent(clientId)}`)
 }
 
-// export function banClient(clientId) {}
-
 // 断开连接
 export function disconnectClient(clientId = '') {
-  return http.delete(`/clients/${clientId}`)
+  return http.delete(`/clients/${encodeURIComponent(clientId)}`)
 }
 
 // 获取连接的基础信息
