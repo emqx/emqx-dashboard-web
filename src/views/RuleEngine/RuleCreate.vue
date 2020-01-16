@@ -32,7 +32,7 @@
               <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
                 <div
                   class="monaco-container monaco-sql"
-                  :style="{ height: `${editorHeight}px` }"
+                  :style="{ height: `${sqlEditorHeight}px` }"
                 >
                   <monaco
                     id="rule-sql"
@@ -44,7 +44,7 @@
                     @qucik-save="handleSQLTest"
                   ></monaco>
                 </div>
-                <stretch-height v-model="editorHeight"></stretch-height>
+                <stretch-height v-model="sqlEditorHeight"></stretch-height>
               </el-form-item>
 
               <el-form-item prop="description" :label="$t('RuleEngine.remark')">
@@ -73,7 +73,10 @@
                     >
                     </el-input>
                     <template v-else>
-                      <div class="monaco-container monaco-payload">
+                      <div
+                        class="monaco-container monaco-payload"
+                        :style="{ height: `${payloadEditorHeight}px` }"
+                      >
                         <monaco
                           id="payload"
                           v-model="record.ctx.payload"
@@ -88,6 +91,8 @@
                           <el-radio label="plaintext">RAW</el-radio>
                         </el-radio-group>
                       </div>
+                      <stretch-height v-model="payloadEditorHeight" class="payload">
+                      </stretch-height>
                     </template>
                   </el-form-item>
 
@@ -204,7 +209,8 @@ export default {
     return {
       loadRuleEvents,
       needCheckSql: true,
-      editorHeight: 320,
+      sqlEditorHeight: 320,
+      payloadEditorHeight: 200,
       payloadType: 'json',
       topics: [],
       events: [],
@@ -489,9 +495,9 @@ export default {
     }
   }
 
-  .monaco-container {
-    &.monaco-payload {
-      height: 200px;
+  .payload.stretch-height {
+    .el-icon-more {
+      top: -11px;
     }
   }
 
