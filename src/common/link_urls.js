@@ -2,14 +2,14 @@ export const enDocsLink = {
   ruleEngineTutorial: 'https://docs.emqx.io/tutorial/v4/en/rule_engine/rule_engine.html',
   restAPI: 'https://docs.emqx.io/broker/v4/en/rest.html',
   schemaTutorial: 'https://docs.emqx.io/tutorial/v4/en/rule_engine/schema_register.html',
-  auth: 'https://docs.emqx.io/tutorial/v3/en/security/auth.html',
+  auth: 'https://docs.emqx.io/tutorial/v4/en/security/auth.html',
 }
 
 export const zhDocsLink = {
   ruleEngineTutorial: 'https://docs.emqx.io/tutorial/v4/cn/rule_engine/rule_engine.html',
   restAPI: 'https://docs.emqx.io/broker/v4/cn/rest.html',
   schemaTutorial: 'https://docs.emqx.io/tutorial/v4/cn/rule_engine/schema_register.html',
-  auth: 'https://docs.emqx.io/tutorial/v3/cn/security/auth.html',
+  auth: 'https://docs.emqx.io/tutorial/v4/cn/security/auth.html',
 }
 
 export const pluginsZh = {

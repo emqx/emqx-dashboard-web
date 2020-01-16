@@ -137,6 +137,10 @@ axios.interceptors.response.use((response) => {
     NProgress.done()
   }, 300)
 
+  if (res === '' && response.status === 204) {
+    return null
+  }
+
   if (error) {
     response.status = 400
     return handleError({
