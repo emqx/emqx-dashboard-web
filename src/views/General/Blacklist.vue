@@ -100,8 +100,8 @@
             <el-form-item prop="until" :label="$t('General.until')">
               <el-date-picker
                 v-model="record.until"
-                type="date"
-                format="yyyy-MM-dd"
+                type="datetime"
+                format="yyyy-MM-dd HH:mm:ss"
                 value-format="timestamp"
               >
               </el-date-picker>
@@ -240,7 +240,7 @@ export default {
       if (!until || typeof until !== 'number') {
         return this.$t('General.neverExpire')
       }
-      return moment(until * 1000).format('YYYY-MM-DD')
+      return moment(until * 1000).format('YYYY-MM-DD HH:mm:ss')
     },
   },
 }

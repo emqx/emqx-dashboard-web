@@ -296,7 +296,11 @@ export default {
     },
     async togglePlugin(row) {
       if (!row.active) {
-        await startPlugin(row.name)
+        const res = await startPlugin(row.name)
+        if (res === null) {
+          this.$message.error(this.$t('Plugins.runFailed'))
+          return
+        }
         row.active = true
         this.$message.success(this.$t('Plugins.runSuccess'))
         return
