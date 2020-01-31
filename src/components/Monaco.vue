@@ -1,5 +1,5 @@
 <template>
-  <div :id="`monaco-${id}`" class="minaco-view"></div>
+  <div :id="`monaco-${id}`" class="monaco-view"></div>
 </template>
 
 
@@ -217,7 +217,7 @@ export default {
 
 
 <style lang="scss">
-.minaco-view {
+.monaco-view {
   height: 100%;
   position: relative;
 }
