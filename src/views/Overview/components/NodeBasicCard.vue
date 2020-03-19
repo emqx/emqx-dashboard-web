@@ -214,7 +214,7 @@ export default {
       this.$router.push({
         path: '/monitor/node',
         query: {
-          name: this.record.name,
+          name: this.record.node,
         },
       })
     },

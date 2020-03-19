@@ -52,8 +52,8 @@ export async function loadNodes() {
 
   const nodes = await http.get('/nodes')
   return nodes.map(($) => {
-    const broker = brokerMap[$.name] || {}
-    const state = stateMap[$.name] || {}
+    const broker = brokerMap[$.node] || {}
+    const state = stateMap[$.node] || {}
     return {
       ...broker,
       ...state,

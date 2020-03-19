@@ -275,6 +275,7 @@ export default {
     display: flex;
     align-items: center;
     padding: 0 20px;
+    background: #2f333e;
 
     .title {
       margin-left: 12px;
