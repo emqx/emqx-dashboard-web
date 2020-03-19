@@ -3,10 +3,10 @@
     <div
       v-for="(item, i) in nodes"
       :key="i" class="item"
-      :class="{ active: rawValue === item.name }"
+      :class="{ active: rawValue === item.node }"
       @click="atClick(item)"
     >
-      {{ item.name }}
+      {{ item.node }}
     </div>
   </div>
 </template>
@@ -27,6 +27,7 @@ export default {
     },
     list: {
       type: Array,
+      default: () => [],
     },
     defaultSelect: {
       type: Boolean,
@@ -57,7 +58,7 @@ export default {
 
   methods: {
     atClick(item) {
-      this.rawValue = item.name
+      this.rawValue = item.node
     },
     async loadData() {
       if (this.list && this.list.length > 0) {
@@ -66,7 +67,7 @@ export default {
         this.nodes = await loadNodes()
       }
       if (this.defaultSelect && !this.value) {
-        this.rawValue = (this.nodes[0] || {}).name
+        this.rawValue = (this.nodes[0] || {}).node
       }
     },
   },

@@ -33,7 +33,7 @@
             <emq-select
               v-model="nodeName"
               :field="{ options: nodes }"
-              :field-name="{ label: 'name', value: 'name' }"
+              :field-name="{ label: 'name', value: 'node' }"
               size="small"
               @change="loadData"
             >
@@ -280,7 +280,7 @@ export default {
     },
     async loadData() {
       this.nodes = await loadNodes()
-      this.nodeName = this.nodeName || (this.nodes[0] || {}).name
+      this.nodeName = this.nodeName || (this.nodes[0] || {}).node
       this.tableData = await loadPlugins(this.nodeName)
       this.handleFilter()
       this.iconMap = this.loadIcon()

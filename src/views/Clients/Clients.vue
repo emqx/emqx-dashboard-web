@@ -26,7 +26,7 @@
               class="node-select"
               size="small"
               :field="{ options: currentNodes }"
-              :field-name="{ label: 'name', value: 'name' }"
+              :field-name="{ label: 'name', value: 'node' }"
               @change="handleNodeChange"
             ></emq-select>
           </div>
@@ -191,7 +191,7 @@ export default {
     },
     async loadData() {
       this.currentNodes = await loadNodes()
-      this.nodeName = this.nodeName || (this.currentNodes[0] || {}).name
+      this.nodeName = this.nodeName || (this.currentNodes[0] || {}).node
       this.listLoading = false
       this.loadNodeClients()
     },
