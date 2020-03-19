@@ -81,7 +81,7 @@
             <template slot-scope="{ row }">
 
               <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
-                {{ row.connected ? $t('Clients.disconnect') : $t('Clients.cleanSession') }}
+                {{ row.connected ? $t('Clients.kickOut') : $t('Clients.cleanSession') }}
               </el-button>
 
             </template>
@@ -217,18 +217,6 @@ export default {
 .clients {
   .data-list {
     clear: both;
-  }
-
-  .protocol-span {
-    width: 24px;
-    height: 24px;
-    line-height: 24px;
-    border-radius: 50%;
-    background-color: #34c388;
-    padding: 10px;
-    font-size: 12px;
-    color: #fff;
-    display: inline-block;
   }
 }
 </style>
