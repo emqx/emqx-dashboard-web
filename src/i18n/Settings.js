@@ -379,6 +379,10 @@ export default {
     zh: '主机后缀',
     en: 'Suffix',
   },
+  bypass_auth_plugins: {
+    zh: '允许 zone 的客户端绕过身份验证步骤',
+    en: `Allow the zone's clients to bypass authentication step`,
+  },
   manual: {
     zh: '手动集群',
     en: 'Manual cluster',
