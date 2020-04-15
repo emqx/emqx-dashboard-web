@@ -66,7 +66,7 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="connected" width="120px" :label="$t('Clients.connectedStatus')">
+          <el-table-column prop="connected" min-width="100px" :label="$t('Clients.connectedStatus')">
             <template slot-scope="{ row }">
               <a-badge
                 is-dot
