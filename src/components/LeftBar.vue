@@ -114,12 +114,12 @@ export default {
         icon: 'icon-zuzhiqunzu',
       },
       {
-        title: this.$t('components.rule'),
+        title: this.$t('components.rules'),
         key: 'rules',
         icon: 'icon-guizeyinqing',
         children: [
           {
-            title: this.$t('components.rules'),
+            title: this.$t('components.rule'),
             key: 'rules.ruleEngine',
             path: '/rules',
             parentKey: 'rules',
