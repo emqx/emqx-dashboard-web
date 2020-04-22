@@ -170,6 +170,10 @@ export default {
     zh: '请再次输入密码',
     en: 'Please enter your password again.',
   },
+  confirmNotMatch: {
+    zh: '两次输入密码不一致',
+    en: 'Two inputs don\'t match!',
+  },
   twoInconsistenciesInPasswordInput: {
     zh: '两次输入密码不一致',
     en: 'Two inconsistencies in password input',
