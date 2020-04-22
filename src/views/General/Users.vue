@@ -118,7 +118,7 @@ export default {
       if (value === '') {
         callback(new Error(this.$t('General.pleaseEnterYourPasswordAgain')))
       } else if (value !== this.record.newPassword) {
-        callback(new Error('两次输入密码不一致!'))
+        callback(new Error(this.$t('General.confirmNotMatch')))
       } else {
         callback()
       }
@@ -220,7 +220,7 @@ export default {
               }
               await changePassword(username, passwordData)
               // 更新当前用户
-              this.$store.dispatch('UPDATE_USER_INFO', { username, password })
+              vue.$store.dispatch('UPDATE_USER_INFO', { username, password })
             }
             vue.$message.success(vue.$t('General.editorialSuccess'))
             vue.dialogVisible = false
