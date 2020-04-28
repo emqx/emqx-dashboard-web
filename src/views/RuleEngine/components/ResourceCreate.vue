@@ -37,10 +37,9 @@
         </el-button>
       </el-form-item>
 
-      <el-form-item style="width: 330px" prop="description" :label="$t('RuleEngine.remark')">
+      <el-form-item style="width: 330px" prop="description" :label="$t('RuleEngine.resourceName')">
         <el-input v-model="record.description" :placeholder="$t('RuleEngine.pleaseEnter')"></el-input>
       </el-form-item>
-
 
       <el-row v-if="record.type" class="config-item-wrapper" :gutter="20">
         <div v-if="configLoading" class="params-loading-wrapper">
@@ -156,6 +155,7 @@ export default {
       },
       rules: {
         config: {},
+        description: { required: true, message: this.$t('RuleEngine.pleaseEnter') },
         type: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
       },
     }

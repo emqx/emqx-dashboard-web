@@ -145,4 +145,8 @@ export function createRule(rule = {}) {
   return http.post('/rules', rule)
 }
 
+export function updateRule(id, rule = {}) {
+  return http.put(`/rules/${id}`, rule)
+}
+
 export default {}

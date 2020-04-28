@@ -76,7 +76,7 @@ export default {
       return this.$store.state.alertCount
     },
     navHeadStyle() {
-      return { left: !this.$store.state.leftBarCollapse ? '201px' : '81px' }
+      return { left: !this.$store.state.leftBarCollapse ? '201px' : '80px' }
     },
     username() {
       return this.$store.state.user.username || this.$t('components.notLoggedIn')
