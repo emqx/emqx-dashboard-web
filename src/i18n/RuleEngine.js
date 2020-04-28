@@ -45,6 +45,14 @@ export default {
     zh: '状态',
     en: 'Status',
   },
+  ruleEnabled: {
+    zh: '已启动',
+    en: 'Enabled',
+  },
+  ruleDisabled: {
+    zh: '已停止',
+    en: 'Disabled',
+  },
   resourceStatus: {
     zh: '资源状态',
     en: 'Status',
@@ -60,6 +68,10 @@ export default {
   resourceTypes: {
     zh: '资源类型',
     en: 'Types',
+  },
+  resourceName: {
+    zh: '资源名称',
+    en: 'Resource Name',
   },
   testConnection: {
     zh: '测试连接',
@@ -280,6 +292,10 @@ export default {
   createSuccess: {
     zh: '创建成功',
     en: 'Create Success',
+  },
+  editSuccess: {
+    zh: '编辑成功',
+    en: 'Edit Success',
   },
   resultIsEmpty: {
     zh: '输出为空',
