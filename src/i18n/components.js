@@ -85,6 +85,10 @@ export default
     zh: '黑名单',
     en: 'Blacklist',
   },
+  backup: {
+    zh: '备份',
+    en: 'Backup',
+  },
   users: {
     zh: '用户',
     en: 'Users',

@@ -201,6 +201,20 @@ let routes = [
       },
     ],
   },
+  // 备份
+  {
+    path: '/backup',
+    component: Layout,
+    meta: {
+      hideKey: 'general',
+      authRequired: true,
+    },
+    children: [{
+      path: '',
+      name: 'backup',
+      component: () => import('@/views/General/Backup'),
+    }, ],
+  },
   // 应用
   {
     path: '/application',

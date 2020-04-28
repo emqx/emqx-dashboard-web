@@ -23,6 +23,7 @@ const model = [
   'Tools',
   'Schemas',
   'Settings',
+  'Backup',
 ]
 model.forEach((key) => {
   // eslint-disable-next-line

@@ -114,6 +114,13 @@ function handleError(error) {
 
 axios.interceptors.response.use((response) => {
   let res = response.data
+  if (response.config.url.includes('/data/file')) {
+    const { file, filename } = response.data
+    res.data = {
+      file,
+      filename,
+    }
+  }
   let error = ''
   let selfError = ''
   if (typeof res === 'object') {
