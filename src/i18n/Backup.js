@@ -36,8 +36,8 @@ export default {
     en: 'Select file',
   },
   uploadServer: {
-    zh: '上传到服务器',
-    en: 'Upload to server',
+    zh: '上传并恢复',
+    en: 'Upload and restore',
   },
   exportSuccess: {
     zh: '导出成功',
@@ -50,5 +50,13 @@ export default {
   uploadSuccess: {
     zh: '上传成功',
     en: 'Upload successful',
+  },
+  uploadFailed: {
+    zh: '上传失败',
+    en: 'Upload Failed',
+  },
+  fileTooBig: {
+    zh: '上传文件过大，请使用命令行工具上传',
+    en: 'The upload file is too large, please use the command line tool to upload',
   },
 }
