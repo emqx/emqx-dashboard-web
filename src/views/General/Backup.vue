@@ -25,6 +25,7 @@
             ref="upload"
             class="upload-backup"
             action="/api/v4/data/file"
+            accept=".json"
             :limit="1"
             :file-list="fileList"
             :auto-upload="false"
@@ -43,7 +44,11 @@
 
         <el-table :data="tableData" class="data-list">
           <el-table-column prop="filename" :label="$t('Backup.filename')"></el-table-column>
-          <el-table-column prop="size" :label="$t('Backup.size')"></el-table-column>
+          <el-table-column prop="size" :label="$t('Backup.size')">
+            <template slot-scope="{ row }">
+              {{ row.size | renderSize }}
+            </template>
+          </el-table-column>
           <el-table-column prop="created_at" :label="$t('Backup.createAt')"></el-table-column>
           <el-table-column width="250px">
             <template slot-scope="{ row }">
@@ -83,6 +88,21 @@ export default {
   name: 'Backup',
 
   components: {},
+
+  filters: {
+    renderSize(val) {
+      if (val === null || val === '') {
+        return '0 Bytes'
+      }
+      const unitArr = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+      let index = 0
+      const srcsize = parseFloat(val)
+      index = Math.floor(Math.log(srcsize) / Math.log(1024))
+      let size = srcsize / (1024 ** index)
+      size = size.toFixed(1)
+      return `${size} ${unitArr[index]}`
+    },
+  },
 
   props: {},
 
@@ -142,6 +162,11 @@ export default {
       }).catch(() => {})
     },
     handleChange(file) {
+      if (file.size >= 5242880) {
+        this.$message.warning(this.$t('Backup.fileTooBig'))
+        this.$refs.upload.clearFiles()
+        return
+      }
       const reader = new FileReader()
       reader.readAsText(file.raw)
       reader.onload = async (event) => {
@@ -156,6 +181,9 @@ export default {
           this.loadData()
           this.$refs.upload.clearFiles()
         }
+      }
+      reader.onerror = () => {
+        this.$message.error(this.$t('Backup.uploadFailed'))
       }
     },
     handleError(error) {
