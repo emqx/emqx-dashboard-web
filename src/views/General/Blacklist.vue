@@ -36,8 +36,6 @@
           </el-table-column>
           <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')">
           </el-table-column>
-          <el-table-column prop="desc" min-width="120px" :label="$t('General.desc')">
-          </el-table-column>
           <el-table-column
             prop="until" min-width="120px" :formatter="formatterUntil"
             :label="$t('General.until')"
@@ -107,11 +105,6 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item prop="desc" :label="$t('General.desc')">
-              <el-input v-model="record.desc"></el-input>
-            </el-form-item>
-          </el-col>
         </el-row>
       </el-form>
 
@@ -151,7 +144,6 @@ export default {
         { label: 'peerhost', value: 'peerhost' },
       ],
       record: {
-        desc: '',
         reason: '',
       },
       rules: {
@@ -194,7 +186,6 @@ export default {
     showDialog() {
       this.record = {
         reason: '',
-        desc: '',
       }
       this.dialogVisible = true
     },
