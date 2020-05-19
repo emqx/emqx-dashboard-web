@@ -51,19 +51,19 @@
         <div class="main-title">
           {{ $t('RuleEngine.actionMetricsTips') }}
         </div>
-        <div v-for="(item3, k) in item.metrics" :key="k" class="item">
+        <div v-for="(metric, k) in item.metrics" :key="k" class="item">
           <span class="title">
             {{ $t('RuleEngine.node') }}
           </span>
           <span class="value">
-            {{ item3.node }}
+            {{ metric.node }}
           </span>
 
           <span class="title">{{ $t('RuleEngine.success') }} </span>
-          <span class="value">{{ item.success }}</span>
+          <span class="value">{{ metric.success }}</span>
 
           <span class="title">{{ $t('RuleEngine.fail') }} </span>
-          <span class="value">{{ item.failed }}</span>
+          <span class="value">{{ metric.failed }}</span>
         </div>
       </div>
     </div>
@@ -195,9 +195,7 @@
             </el-col>
           </template>
         </el-row>
-
       </el-form>
-
 
       <div slot="footer" class="dialog-align-footer">
         <el-button size="small" @click="handleCache">
