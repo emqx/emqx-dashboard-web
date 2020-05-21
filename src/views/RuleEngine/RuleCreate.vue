@@ -424,7 +424,7 @@ export default {
       }
       const data = {
         rawsql: this.record.rawsql,
-        actions: this.record.actions.map($ => ({ name: $.name, params: $.params })),
+        actions: this.record.actions,
         description: this.record.description,
       }
       if (this.isEdit && this.currentRule) {
