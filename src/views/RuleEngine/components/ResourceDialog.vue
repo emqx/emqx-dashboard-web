@@ -187,11 +187,6 @@ export default {
     },
   },
 
-  watch: {},
-
-  created() {
-  },
-
   methods: {
     clearForm() {
       if (this.$refs.record) {

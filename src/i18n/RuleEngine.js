@@ -453,4 +453,16 @@ export default {
     en: 'Detected incompatible old SQL syntax, confirm to automatically convert it to the new version?',
     zh: '检测到不兼容的旧版 SQL 语法，是否自动转换为新版语法？',
   },
+  errorAction: {
+    en: 'Error Action',
+    zh: '错误操作',
+  },
+  errorActionCreate: {
+    en: 'Set the action that will be performed when an action execution error occurs (optional)',
+    zh: '设置发生动作执行错误时将执行的动作（可选）',
+  },
+  errorActionTip: {
+    en: 'Action to be performed when the action execution error',
+    zh: '动作执行错误时将执行的操作',
+  },
 }

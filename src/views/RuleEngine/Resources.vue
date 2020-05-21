@@ -79,7 +79,7 @@ import {
   loadResource, loadResourceTypes, destroyResource, loadResourceDetails,
 } from '@/api/rules'
 import ResourceNode from './components/ResourceNode'
-import ResourceDialog from './components/ResourceCreate'
+import ResourceDialog from './components/ResourceDialog.vue'
 
 export default {
   name: 'Resources',
