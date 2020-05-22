@@ -53,6 +53,10 @@ export default
     zh: '告警值',
     en: 'Alarm value',
   },
+  alarmTime: {
+    zh: '告警时间',
+    en: 'Create At',
+  },
   clearanceTime: {
     zh: '清除时间',
     en: 'Clearance time',
