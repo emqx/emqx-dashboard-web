@@ -333,11 +333,14 @@ export default {
 
     async updateRule(row) {
       const { id, enabled } = row
-      const res = updateRule(id, { enabled })
-      if (res) {
-        const msg = enabled ? this.$t('RuleEngine.ruleEnabled') : this.$t('RuleEngine.ruleDisabled')
-        this.$message.success(msg)
-      }
+      updateRule(id, { enabled }).then((res) => {
+        if (res) {
+          const msg = enabled ? this.$t('RuleEngine.ruleEnabled') : this.$t('RuleEngine.ruleDisabled')
+          this.$message.success(msg)
+        }
+      }).catch(() => {
+        row.enabled = row.enabled !== true
+      })
     },
     editRule(row) {
       this.$router.push(`/rules/create?rule=${row.id}`)

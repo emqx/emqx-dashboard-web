@@ -224,6 +224,7 @@ export default {
         return
       }
       const { config } = this.record
+      // String to Boolean
       Object.keys(config).forEach((label) => {
         const value = config[label]
         if (value === 'true') {
