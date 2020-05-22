@@ -19,7 +19,11 @@
             </template>
           </el-table-column>
           <el-table-column
-            v-if="alertType === 'history'" prop="clear_at" width="180px" :label="$t('Alerts.clearanceTime')"
+            v-if="alertType === 'history'" prop="clear_at" width="180px" :label="$t('Alerts.alarmTime')"
+          >
+          </el-table-column>
+          <el-table-column
+            v-else prop="create_at" width="180px" :label="$t('Alerts.alarmTime')"
           >
           </el-table-column>
         </el-table>
