@@ -223,6 +223,16 @@ export default {
       if (!valid) {
         return
       }
+      const { config } = this.record
+      Object.keys(config).forEach((label) => {
+        const value = config[label]
+        if (value === 'true') {
+          this.record.config[label] = true
+        }
+        if (value === 'false') {
+          this.record.config[label] = false
+        }
+      })
       const resource = await createResource(this.record, test)
       if (test) {
         this.$message.success(this.$t('RuleEngine.resourceAvailable'))
