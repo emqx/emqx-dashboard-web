@@ -21,7 +21,7 @@
               placement="top-start"
               trigger="hover"
               :open-delay="500"
-              :content="$t('RuleEngine.errorActionCreate')"
+              :content="$t('RuleEngine.fallbackActionCreate')"
             >
               <el-button
                 slot="reference"
@@ -29,7 +29,7 @@
                 icon="el-icon-plus"
                 @click="handleAddFallbacks(item)"
               >
-                {{ $t('RuleEngine.errorAction') }}
+                {{ $t('RuleEngine.fallbackAction') }}
               </el-button>
             </el-popover>
           </div>
@@ -106,10 +106,10 @@
                   placement="top-start"
                   trigger="hover"
                   :open-delay="500"
-                  :content="$t('RuleEngine.errorActionTip')"
+                  :content="$t('RuleEngine.fallbackActionTip')"
                 >
                   <span slot="reference">
-                    {{ $t('RuleEngine.errorAction') }}
+                    {{ $t('RuleEngine.fallbackAction') }}
                   </span>
                 </el-popover>
               </div>
