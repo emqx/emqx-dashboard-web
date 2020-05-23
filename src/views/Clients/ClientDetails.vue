@@ -10,9 +10,12 @@
         </div>
       </div>
 
-      <div v-if="!record.disconnected" class="page-header-top-start btn">
-        <el-button type="danger" size="small" @click="handleDisconnect">
-          {{ $t('Clients.disconnect') }}
+      <div class="page-header-top-start btn">
+        <el-button v-if="record.connected" type="danger" size="small" @click="handleDisconnect">
+          {{ $t('Clients.kickOut') }}
+        </el-button>
+        <el-button v-else type="danger" size="small" @click="handleDisconnect">
+          {{ $t('Clients.cleanSession') }}
         </el-button>
       </div>
     </page-header>
@@ -59,12 +62,20 @@
                     <span class="field-value">{{ record.port }}</span>
                   </li>
                   <li class="field-info-item">
-                    <div class="field-title">{{ $t('Clients.bridge') }}:</div>
-                    <span class="field-value">{{ record.is_bridge ? $t('Clients.yes') : $t('Clients.no') }}</span>
+                    <div class="field-title">{{ $t('Clients.keepalive') }}:</div>
+                    <span class="field-value">{{ record.keepalive }}</span>
                   </li>
                   <li class="field-info-item">
+                    <div class="field-title">{{ $t('Clients.bridge') }}:</div>
+                    <span class="field-value">{{ record.is_bridge }}</span>
+                  </li>
+                  <li v-if="record.connected" class="field-info-item">
                     <div class="field-title">{{ $t('Clients.connectionAt') }}:</div>
                     <span class="field-value">{{ record.connected_at }}</span>
+                  </li>
+                  <li v-else class="field-info-item">
+                    <div class="field-title">{{ $t('Clients.disConnectionAt') }}:</div>
+                    <span class="field-value">{{ record.disconnected_at }}</span>
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">{{ $t('Clients.zone') }}:</div>
@@ -83,10 +94,6 @@
                     <span class="field-value">{{ record.clean_start }}</span>
                   </li>
                   <li class="field-info-item">
-                    <div class="field-title">{{ $t('Clients.keepalive') }}:</div>
-                    <span class="field-value">{{ record.keepalive }}</span>
-                  </li>
-                  <li class="field-info-item">
                     <div class="field-title">{{ $t('Clients.expiryInterval') }}:</div>
                     <span class="field-value">{{ record.expiry_interval }}</span>
                   </li>
@@ -96,15 +103,19 @@
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">{{ $t('Clients.subscription') }}:</div>
-                    <span>{{ record.subscriptions_cnt }} / {{ record.max_subscriptions }}</span>
-                  </li>
-                  <li class="field-info-item">
-                    <div class="field-title">{{ $t('Clients.inflight') }}:</div>
-                    <span>{{ record.inflight }} / {{ record.max_inflight }}</span>
+                    <span>
+                      {{ record.subscriptions_cnt }} / {{ record.max_subscriptions | transToUnlimit }}
+                    </span>
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">{{ $t('Clients.mqueue') }}:</div>
                     <span>{{ record.mqueue_len }} / {{ record.max_mqueue }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">{{ $t('Clients.inflight') }}:</div>
+                    <span>
+                      {{ record.inflight }} / {{ record.max_inflight }}
+                    </span>
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">{{ $t('Clients.heapSize') }}:</div>
@@ -115,8 +126,12 @@
                     <span>{{ record.reductions }}</span>
                   </li>
                   <li class="field-info-item">
-                    <div class="field-title">{{ $t('Clients.mailbox') }}:</div>
-                    <span>{{ record.mailbox_len }}</span>
+                    <div class="field-title">{{ $t('Clients.awaiting_rel') }}:</div>
+                    <span>{{ record.awaiting_rel }}</span>
+                  </li>
+                  <li class="field-info-item">
+                    <div class="field-title">{{ $t('Clients.max_awaiting_rel') }}</div>
+                    <span>{{ record.max_awaiting_rel }}</span>
                   </li>
                 </ul>
               </el-col>
@@ -134,58 +149,40 @@
                 <el-col :span="12">
                   <ul class="field-info more-info">
                     <li class="field-info-item">
-                      <div class="field-title">awaiting_rel:</div>
-                      <span>{{ record.awaiting_rel }}</span>
-                      <span class="field-desc">{{ $t('Clients.awaiting_rel_desc') }}</span>
-                    </li>
-                    <li class="field-info-item">
-                      <div class="field-title">max_awaiting_rel:</div>
-                      <span>{{ record.max_awaiting_rel }}</span>
-                      <span class="field-desc">{{ $t('Clients.max_awaiting_rel_desc') }}</span>
-                    </li>
-                    <li class="field-info-item">
-                      <div class="field-title">recv_cnt:</div>
+                      <div class="field-title">{{ $t('Clients.recv_cnt_desc') }}: </div>
                       <span>{{ record.recv_cnt }}</span>
-                      <span class="field-desc">{{ $t('Clients.recv_cnt_desc') }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">recv_msg:</div>
+                      <div class="field-title">{{ $t('Clients.recv_msg_desc') }}: </div>
                       <span>{{ record.recv_msg }}</span>
-                      <span class="field-desc">{{ $t('Clients.recv_msg_desc') }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">recv_oct:</div>
+                      <div class="field-title">{{ $t('Clients.recv_oct_desc') }}: </div>
                       <span>{{ record.recv_oct }}</span>
-                      <span class="field-desc">{{ $t('Clients.recv_oct_desc') }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">recv_pkt:</div>
+                      <div class="field-title">{{ $t('Clients.recv_pkt_desc') }}: </div>
                       <span>{{ record.recv_pkt }}</span>
-                      <span class="field-desc">{{ $t('Clients.recv_pkt_desc') }}</span>
                     </li>
                   </ul>
                 </el-col>
                 <el-col :span="12">
                   <ul class="field-info more-info">
                     <li class="field-info-item">
-                      <div class="field-title">send_cnt:</div>
+                      <div class="field-title">{{ $t('Clients.send_cnt_desc') }}: </div>
                       <span>{{ record.send_cnt }}</span>
-                      <span class="field-desc">{{ $t('Clients.send_cnt_desc') }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">send_msg:</div>
+                      <div class="field-title">{{ $t('Clients.send_msg_desc') }}: </div>
                       <span>{{ record.send_msg }}</span>
-                      <span class="field-desc">{{ $t('Clients.send_msg_desc') }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">send_oct:</div>
+                      <div class="field-title">{{ $t('Clients.send_oct_desc') }}: </div>
                       <span>{{ record.send_oct }}</span>
-                      <span class="field-desc">{{ $t('Clients.send_oct_desc') }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">send_pkt:</div>
+                      <div class="field-title">{{ $t('Clients.send_pkt_desc') }}: </div>
                       <span>{{ record.send_pkt }}</span>
-                      <span class="field-desc">{{ $t('Clients.send_pkt_desc') }}</span>
                     </li>
                   </ul>
                 </el-col>
@@ -247,6 +244,12 @@ export default {
 
   components: { CreateSubscribe },
 
+  filters: {
+    transToUnlimit(val) {
+      return val === 0 ? 'Unlimited' : val
+    },
+  },
+
   props: {},
 
   data() {
@@ -282,7 +285,7 @@ export default {
         send_pkt: 98,
         username: 'undefined',
         zone: 'external',
-        disconnected: false,
+        connected: false,
       },
       mqttVersionMap: {
         3: 'v3.1',
@@ -298,10 +301,10 @@ export default {
       return this.$route.query.clientid
     },
     connStatus() {
-      return this.record.disconnected ? 'error' : 'success'
+      return !this.record.connected ? 'error' : 'success'
     },
     connStatusText() {
-      return this.record.disconnected ? this.$t('Clients.disconnected') : this.$t('Clients.onLine')
+      return !this.record.connected ? this.$t('Clients.disconnected') : this.$t('Clients.onLine')
     },
   },
 
@@ -317,18 +320,24 @@ export default {
 
   methods: {
     async handleDisconnect() {
-      if (this.record.disconnected) {
-        return
+      let warningMsg = this.$t('Clients.willDisconnectTheConnection')
+      let successMsg = this.$t('Clients.successfulDisconnection')
+      if (!this.record.connected) {
+        warningMsg = this.$t('Clients.willCleanSession')
+        successMsg = this.$t('Clients.successfulCleanSession')
       }
-      this.$msgbox.confirm(this.$t('Clients.willDisconnectTheConnection'), {
+      this.$msgbox.confirm(warningMsg, {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await disconnectClient(this.record.clientid)
-        this.$set(this.record, 'disconnected', true)
-        this.$message.success(this.$t('Clients.successfulDisconnection'))
-      }).catch(() => {})
+        this.$set(this.record, 'connected', false)
+        this.$message.success(successMsg)
+        setTimeout(() => {
+          this.$router.push({ path: '/clients' })
+        }, 500)
+      }).catch(() => { })
     },
     handlePreAdd() {
       this.dialogVisible = true
@@ -373,18 +382,16 @@ export default {
     min-width: 160px;
   }
 
-  .field-desc {
-    margin-left: 20px;
-    color: #999;
-    font-size: 13px;
-  }
-
   .detail-card {
     margin-bottom: 24px;
   }
 
   .emq-title {
-    margin-bottom: 40px;
+    margin-bottom: 28px;
+  }
+
+  .field-info-item {
+    margin-bottom: 5px;
   }
 
   .subscriptions-header {

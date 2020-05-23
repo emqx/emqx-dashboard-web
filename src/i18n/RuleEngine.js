@@ -45,6 +45,14 @@ export default {
     zh: '状态',
     en: 'Status',
   },
+  ruleEnabled: {
+    zh: '已启动',
+    en: 'Enabled',
+  },
+  ruleDisabled: {
+    zh: '已停止',
+    en: 'Disabled',
+  },
   resourceStatus: {
     zh: '资源状态',
     en: 'Status',
@@ -60,6 +68,10 @@ export default {
   resourceTypes: {
     zh: '资源类型',
     en: 'Types',
+  },
+  resourceName: {
+    zh: '资源名称',
+    en: 'Resource Name',
   },
   testConnection: {
     zh: '测试连接',
@@ -281,6 +293,10 @@ export default {
     zh: '创建成功',
     en: 'Create Success',
   },
+  editSuccess: {
+    zh: '编辑成功',
+    en: 'Edit Success',
+  },
   resultIsEmpty: {
     zh: '输出为空',
     en: 'Result is empty',
@@ -436,5 +452,17 @@ export default {
   parse_confirm: {
     en: 'Detected incompatible old SQL syntax, confirm to automatically convert it to the new version?',
     zh: '检测到不兼容的旧版 SQL 语法，是否自动转换为新版语法？',
+  },
+  fallbackAction: {
+    en: 'Fallback Actions',
+    zh: '失败备选动作',
+  },
+  fallbackActionCreate: {
+    en: 'Set the action that will be performed when an action execution error occurs (optional)',
+    zh: '设置发生动作执行错误时将执行的动作（可选）',
+  },
+  fallbackActionTip: {
+    en: 'Action to be performed when the action execution error',
+    zh: '动作执行错误时将执行的操作',
   },
 }

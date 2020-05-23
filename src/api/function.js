@@ -49,7 +49,7 @@ export function createBlacklist(body) {
 }
 
 export function deleteBlacklist({ who, as }) {
-  return http.delete(`/banned/${as}/${who}`)
+  return http.delete(`/banned/${as}/${encodeURIComponent(who)}`)
 }
 
 export default {}

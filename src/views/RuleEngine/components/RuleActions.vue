@@ -16,12 +16,28 @@
           <span class="btn" @click="removeAction(i)">
             {{ $t('RuleEngine.remove') }}
           </span>
+          <div v-if="!item.fallbacks.length" class="fallbacks">
+            <el-popover
+              placement="top-start"
+              trigger="hover"
+              :open-delay="500"
+              :content="$t('RuleEngine.fallbackActionCreate')"
+            >
+              <el-button
+                slot="reference"
+                type="text"
+                icon="el-icon-plus"
+                @click="handleAddFallbacks(item)"
+              >
+                {{ $t('RuleEngine.fallbackAction') }}
+              </el-button>
+            </el-popover>
+          </div>
         </div>
 
         <div v-else class="action-item-btn action-item-type">
           <span class="title">{{ $t('RuleEngine.success') }} </span>
           <span class="desc">{{ item.success }}</span>
-
           <span class="title">{{ $t('RuleEngine.fail') }} </span>
           <span class="desc">{{ item.failed }}</span>
         </div>
@@ -41,9 +57,9 @@
             </span>
           </div>
         </div>
-        <div v-for="(item2, j) in item._value" :key="j" class="action-item-field">
-          <div class="title">{{ item2.label }}</div>
-          <div class="value">{{ item2.value }}</div>
+        <div v-for="(itemValue, itemValueIndex) in item._value" :key="itemValueIndex" class="action-item-field">
+          <div class="title">{{ itemValue.label }}</div>
+          <div class="value">{{ itemValue.value }}</div>
         </div>
       </div>
 
@@ -51,21 +67,102 @@
         <div class="main-title">
           {{ $t('RuleEngine.actionMetricsTips') }}
         </div>
-        <div v-for="(item3, k) in item.metrics" :key="k" class="item">
+        <div v-for="(metric, itemMetricIndex) in item.metrics" :key="itemMetricIndex" class="item">
           <span class="title">
             {{ $t('RuleEngine.node') }}
           </span>
           <span class="value">
-            {{ item3.node }}
+            {{ metric.node }}
           </span>
 
           <span class="title">{{ $t('RuleEngine.success') }} </span>
-          <span class="value">{{ item.success }}</span>
+          <span class="value">{{ metric.success }}</span>
 
           <span class="title">{{ $t('RuleEngine.fail') }} </span>
-          <span class="value">{{ item.failed }}</span>
+          <span class="value">{{ metric.failed }}</span>
         </div>
       </div>
+
+      <template v-if="item.fallbacks && item.fallbacks.length">
+        <el-divider></el-divider>
+        <div v-for="(fallback, k) in item.fallbacks" :key="k" class="action-item error-action">
+          <div class="action-item-head">
+            <div class="action-item-type">
+              <div class="title">{{ $t('RuleEngine.actionType') }}</div>
+              <div class="desc">{{ (fallback._config || {}).title }} ({{ fallback.name }})</div>
+            </div>
+            <div
+              v-if="!disabled"
+              class="action-item-btn"
+            >
+              <span class="btn" @click="editFallback(item, fallback, i)">
+                {{ $t('RuleEngine.edit') }}
+              </span>
+              <span class="btn" @click="removeFallback(item)">
+                {{ $t('RuleEngine.remove') }}
+              </span>
+              <div class="fallbacks">
+                <el-popover
+                  placement="top-start"
+                  trigger="hover"
+                  :open-delay="500"
+                  :content="$t('RuleEngine.fallbackActionTip')"
+                >
+                  <span slot="reference">
+                    {{ $t('RuleEngine.fallbackAction') }}
+                  </span>
+                </el-popover>
+              </div>
+            </div>
+            <div v-else class="action-item-btn action-item-type">
+              <span class="title">{{ $t('RuleEngine.success') }} </span>
+              <span class="desc">{{ showFallbacksMtrics(fallback, 'success') }}</span>
+              <span class="title">{{ $t('RuleEngine.fail') }} </span>
+              <span class="desc">{{ showFallbacksMtrics(fallback, 'failed') }} </span>
+            </div>
+          </div>
+
+          <div class="action-item-description">
+            {{ (actionsMap[fallback.name] || {}).description }}
+          </div>
+
+          <div v-if="fallback._value" class="action-item-params">
+            <div v-if="disabled" class="action-item-field">
+              <div class="title">
+                {{ $t('RuleEngine.detailedMetrics') }}
+              </div>
+              <div class="value">
+                <span class="btn btn-default show-btn" @click="toggleShowMetrics(fallback)">
+                  {{ fallback.showList ? $t('RuleEngine.hide') : $t('RuleEngine.view') }}
+                </span>
+              </div>
+            </div>
+            <div v-for="(fallbackValue, fallbackValueIndex) in fallback._value" :key="fallbackValueIndex" class="action-item-field">
+              <div class="title">{{ fallbackValue.label }}</div>
+              <div class="value">{{ fallbackValue.value }}</div>
+            </div>
+          </div>
+
+          <div v-if="disabled && fallback.showList" class="metrics-detail">
+            <div class="main-title">
+              {{ $t('RuleEngine.actionMetricsTips') }}
+            </div>
+            <div v-for="(fallbackMetric, fallbackmetricIndex) in fallback.metrics" :key="fallbackmetricIndex" class="item">
+              <span class="title">
+                {{ $t('RuleEngine.node') }}
+              </span>
+              <span class="value">
+                {{ fallbackMetric.node }}
+              </span>
+              <span class="title">{{ $t('RuleEngine.success') }} </span>
+              <span class="value">{{ fallbackMetric.success }}</span>
+              <span class="title">{{ $t('RuleEngine.fail') }} </span>
+              <span class="value">{{ fallbackMetric.failed }}</span>
+            </div>
+          </div>
+        </div>
+      </template>
+
     </div>
 
     <el-button
@@ -108,13 +205,13 @@
           <emq-select
             v-model="record.params.$resource"
             :field="{ options: availableResources }"
-            :field-name="{ label: 'id', value: 'id'}"
+            :field-name="{ label: 'description', value: 'id'}"
             class="reset-width"
             style="width: 330px"
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="custom-option">
-              <span class="key">{{ item.id }}</span>
+              <span class="key">{{ item.description }}</span>
               <span class="value">{{ item.config.title }}</span>
             </div>
           </emq-select>
@@ -183,7 +280,6 @@
                     v-bind="item.bindAttributes"
                   >
                   </emq-select>
-
                   <emq-select
                     v-else
                     v-model="record.params[item.key]"
@@ -195,12 +291,10 @@
             </el-col>
           </template>
         </el-row>
-
       </el-form>
 
-
       <div slot="footer" class="dialog-align-footer">
-        <el-button size="small" @click="handleCache">
+        <el-button size="small" @click="handleCancel">
           {{ $t('Base.cancel') }}
         </el-button>
         <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">
@@ -209,7 +303,8 @@
       </div>
     </el-dialog>
 
-    <resource-dialog ref="resource" @created="confirmResource" @cache="confirmResource(false)"></resource-dialog>
+    <resource-dialog ref="resource" @created="confirmResource" @cache="confirmResource(false)">
+    </resource-dialog>
   </div>
 </template>
 
@@ -217,7 +312,7 @@
 <script>
 import { loadActionsList, loadResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
-import ResourceDialog from '@/views/RuleEngine/components/ResourceCreate'
+import ResourceDialog from '@/views/RuleEngine/components/ResourceDialog.vue'
 import Monaco from '@/components/Monaco'
 import { setTimeout } from 'timers'
 
@@ -249,17 +344,20 @@ export default {
       actionDialogTitle: this.$t('RuleEngine.addActions'),
       actionDialogVisible: false,
       resourceDialogVisible: false,
+      isFallbacks: false,
       setRefresh: false,
       actionsMap: {},
       paramsList: [],
       paramsLoading: false,
       currentEditIndex: 0,
       currentOper: '',
+      currentAction: {},
       record: {
         name: '',
         params: {
           $resource: '',
         },
+        fallbacks: [],
       },
       rules: {
         params: {
@@ -272,6 +370,7 @@ export default {
         params: {
           $resource: '',
         },
+        fallbacks: [],
       },
       actions: [], // 全部 actions
       resources: [], // 全部资源
@@ -305,6 +404,15 @@ export default {
     },
   },
 
+  watch: {
+    actionDialogVisible(val) {
+      if (!val) {
+        this.initData()
+        this.isFallbacks = false
+      }
+    },
+  },
+
   created() {
     this.loadActions()
   },
@@ -316,7 +424,9 @@ export default {
         params: {
           $resource: '',
         },
+        fallbacks: [],
       }
+      this.currentAction = {}
     },
 
     toggleShowMetrics(item) {
@@ -344,21 +454,30 @@ export default {
           }
         })
       }
-      const action = JSON.parse(JSON.stringify(this.record))
+      let action = {}
+      if (this.isFallbacks) {
+        action = { ...this.record }
+        if (this.currentOper === 'edit') {
+          this.currentAction.fallbacks = []
+        }
+        this.currentAction.fallbacks.push(action)
+      } else {
+        action = { ...this.record }
+        if (this.currentOper === 'edit') {
+          this.rawValue.splice(this.currentEditIndex, 1, action)
+        } else if (this.currentOper === 'add') {
+          this.rawValue.push(action)
+        }
+      }
       if (action.params && !action.params.$resource) {
         delete action.params.$resource
-      }
-      if (this.currentOper === 'edit') {
-        this.rawValue.splice(this.currentEditIndex, 1, action)
-      } else if (this.currentOper === 'add') {
-        this.rawValue.push(action)
       }
       this.fillRawValue()
       this.actionDialogVisible = false
       this.atDialogClose()
     },
 
-    handleCache() {
+    handleCancel() {
       this.actionDialogVisible = false
       this.atDialogClose()
     },
@@ -429,7 +548,6 @@ export default {
       this.actionTypeChange(this.record.name, 'add')
       this.actionDialogVisible = true
     },
-
     editAction(item, index) {
       this.actionDialogTitle = this.$t('RuleEngine.editActions')
       this.currentEditIndex = index
@@ -437,7 +555,6 @@ export default {
       this.record = { ...item }
       this.actionDialogVisible = true
     },
-
     removeAction(index) {
       this.rawValue.splice(index, 1)
     },
@@ -453,19 +570,56 @@ export default {
     },
 
     fillRawValue() {
+      const rawMethod = (row) => {
+        row.forEach((item) => {
+          // eslint-disable-next-line
+          item._config = this.actionsMap[item.name]
+          const { params, _config: { params: paramsTemplate }, fallbacks } = item
+          // eslint-disable-next-line
+          item._value = Object.entries(params).map(([k, v]) => ({
+            label: (paramsTemplate[k] || {}).title,
+            value: v,
+            key: k,
+            fallbacks,
+          }))
+        })
+      }
       const { rawValue } = this
+      rawMethod(rawValue)
       rawValue.forEach((item) => {
-        // eslint-disable-next-line
-        item._config = this.actionsMap[item.name]
-        const { params, _config: { params: paramsTemplate } } = item
-        // eslint-disable-next-line
-        item._value = Object.entries(params).map(([k, v]) => ({
-          label: (paramsTemplate[k] || {}).title,
-          value: v,
-          key: k,
-        }))
+        rawMethod(item.fallbacks)
       })
-      this.rawValue = rawValue
+    },
+
+    handleAddFallbacks(action) {
+      this.isFallbacks = true
+      this.actionDialogTitle = this.$t('RuleEngine.addActions')
+      this.actionDialogVisible = true
+      this.currentAction = action
+    },
+    editFallback(action, fallback, index) {
+      this.actionDialogTitle = this.$t('RuleEngine.editActions')
+      this.currentEditIndex = index
+      this.currentAction = action
+      this.isFallbacks = true
+      this.record = { ...fallback }
+      this.actionTypeChange(fallback.name, 'edit')
+      this.actionDialogVisible = true
+    },
+    removeFallback(action) {
+      action.fallbacks = []
+    },
+    showFallbacksMtrics({ metrics }, type) {
+      let success = 0
+      let failed = 0
+      metrics.forEach((item) => {
+        success += item.success
+        failed += item.failed
+      })
+      if (type === 'success') {
+        return success
+      }
+      return failed
     },
   },
 }
@@ -478,12 +632,31 @@ export default {
     border-bottom: 1px dashed #d8d8d8;
   }
 
-  .action-item-btn {
+  .action-item .action-item-btn {
     .btn {
       margin-right: 5px;
       &:last-child {
         margin-right: 0px;
       }
+    }
+    .fallbacks {
+      position: absolute;
+      bottom: 5px;
+      right: 22px;
+      .el-button {
+        font-size: 12px;
+      }
+      .el-button [class*="el-icon-"] + span {
+        margin-left: 0px;
+      }
+    }
+  }
+  .error-action .action-item-btn {
+    .fallbacks {
+      position: absolute;
+      bottom: -3px;
+      right: 5px;
+      color: #909399;
     }
   }
 
@@ -512,6 +685,11 @@ export default {
     background-color: #f2f2f2;
     border: 1px dashed #f2f2f2;
     transition: border .3s;
+    position: relative;
+  }
+  .action-item.error-action {
+    padding: 0;
+    margin-bottom: 0;
   }
 
   .action-item-head {
@@ -546,6 +724,7 @@ export default {
 
   .action-item-params {
     margin-top: 12px;
+    margin-bottom: 20px;
     font-size: 12px;
     display: flex;
     align-items: center;

@@ -65,7 +65,7 @@
               </span>
               <el-popover
                 trigger="hover"
-                content="load1/load4/load15"
+                content="load1/load5/load15"
               >
                 <i slot="reference" class="el-icon-question"></i>
               </el-popover>
@@ -214,7 +214,7 @@ export default {
       this.$router.push({
         path: '/monitor/node',
         query: {
-          name: this.record.name,
+          name: this.record.node,
         },
       })
     },

@@ -119,7 +119,7 @@ export function fillI18n(data = [], keys = [], autoSearch = false) {
  * @return {{form: Array, rules}}
  */
 export function renderParamsForm(params = {}, propPrefix = '') {
-  const form = []
+  let form = []
   const rules = {}
 
   for (const [k, v] of Object.entries(params)) {
@@ -173,8 +173,8 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       type: inputType,
       elType,
       value: defaultValue,
+      order,
     })
-
     // rules 的属性
     rules[k] = []
     const requiredInputText = lang === 'zh' ? '请输入' : 'Field required'
@@ -187,6 +187,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       rules[k].push({ type: 'enum', enum: enumValue })
     }
   }
+  form = form.sort((prev, next) => prev.order - next.order)
   // form 综合排序
   return { form, rules }
 }

@@ -54,6 +54,27 @@
             :label="$t('RuleEngine.describe')"
           ></el-table-column>
           <el-table-column
+            prop="status"
+            :label="$t('RuleEngine.status')"
+          >
+            <template slot-scope="{ row }">
+              <el-tooltip
+                :content="row.enabled ? $t('RuleEngine.ruleEnabled') : $t('RuleEngine.ruleDisabled')"
+                placement="left"
+              >
+                <el-switch
+                  v-model="row.enabled"
+                  active-text=""
+                  inactive-text=""
+                  active-color="#13ce66"
+                  inactive-color="#d0d3e0"
+                  @change="updateRule(row)"
+                >
+                </el-switch>
+              </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column
             prop="actions"
             :filters="filterOptions.actions"
             :filter-method="actionsColumnFilter"
@@ -62,8 +83,15 @@
             :label="$t('RuleEngine.responseAction')"
           >
           </el-table-column>
-          <el-table-column width="80px" prop="id">
+          <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
+              <el-button
+                type="dashed"
+                size="mini"
+                @click="editRule(row)"
+              >
+                {{ $t('RuleEngine.edit') }}
+              </el-button>
               <el-button
                 type="dashed danger"
                 size="mini"
@@ -175,7 +203,7 @@
 <script>
 import {
   loadRules, loadRuleDetails, loadActions, destroyRule,
-  loadRuleEvents,
+  loadRuleEvents, updateRule,
 } from '@/api/rules'
 import { getLink } from '@/common/utils'
 
@@ -301,6 +329,21 @@ export default {
 
     onMetricsClose() {
       this.metricsDrawerVisible = false
+    },
+
+    async updateRule(row) {
+      const { id, enabled } = row
+      updateRule(id, { enabled }).then((res) => {
+        if (res) {
+          const msg = enabled ? this.$t('RuleEngine.ruleEnabled') : this.$t('RuleEngine.ruleDisabled')
+          this.$message.success(msg)
+        }
+      }).catch(() => {
+        row.enabled = row.enabled !== true
+      })
+    },
+    editRule(row) {
+      this.$router.push(`/rules/create?rule=${row.id}`)
     },
   },
 }

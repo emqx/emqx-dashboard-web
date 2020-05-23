@@ -33,7 +33,7 @@
             <emq-select
               v-model="nodeName"
               :field="{ options: nodes }"
-              :field-name="{ label: 'name', value: 'name' }"
+              :field-name="{ label: 'name', value: 'node' }"
               size="small"
               @change="loadData"
             >
@@ -280,7 +280,7 @@ export default {
     },
     async loadData() {
       this.nodes = await loadNodes()
-      this.nodeName = this.nodeName || (this.nodes[0] || {}).name
+      this.nodeName = this.nodeName || (this.nodes[0] || {}).node
       this.tableData = await loadPlugins(this.nodeName)
       this.handleFilter()
       this.iconMap = this.loadIcon()
@@ -296,7 +296,11 @@ export default {
     },
     async togglePlugin(row) {
       if (!row.active) {
-        await startPlugin(row.name)
+        const res = await startPlugin(row.name)
+        if (res === null) {
+          this.$message.error(this.$t('Plugins.runFailed'))
+          return
+        }
         row.active = true
         this.$message.success(this.$t('Plugins.runSuccess'))
         return

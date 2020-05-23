@@ -38,6 +38,11 @@
             </template>
           </el-table-column>
 
+          <el-table-column
+            min-width="100px" prop="description" show-overflow-tooltip
+            :label="$t('RuleEngine.resourceName')"
+          ></el-table-column>
+
           <!-- 资源类型 -->
           <el-table-column
             prop="config.title"
@@ -46,10 +51,6 @@
             :filters="filterOptions.resourceTypes"
             :filter-method="resourceTypesColumnFilter"
             filter-placement="bottom"
-          ></el-table-column>
-          <el-table-column
-            min-width="100px" prop="description" show-overflow-tooltip
-            :label="$t('RuleEngine.remark')"
           ></el-table-column>
           <el-table-column width="160px" prop="id">
             <template slot-scope="{ row, $index }">
@@ -78,7 +79,7 @@ import {
   loadResource, loadResourceTypes, destroyResource, loadResourceDetails,
 } from '@/api/rules'
 import ResourceNode from './components/ResourceNode'
-import ResourceDialog from './components/ResourceCreate'
+import ResourceDialog from './components/ResourceDialog.vue'
 
 export default {
   name: 'Resources',

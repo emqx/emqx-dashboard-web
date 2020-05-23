@@ -37,10 +37,9 @@
         </el-button>
       </el-form-item>
 
-      <el-form-item style="width: 330px" prop="description" :label="$t('RuleEngine.remark')">
+      <el-form-item style="width: 330px" prop="description" :label="$t('RuleEngine.resourceName')">
         <el-input v-model="record.description" :placeholder="$t('RuleEngine.pleaseEnter')"></el-input>
       </el-form-item>
-
 
       <el-row v-if="record.type" class="config-item-wrapper" :gutter="20">
         <div v-if="configLoading" class="params-loading-wrapper">
@@ -156,6 +155,7 @@ export default {
       },
       rules: {
         config: {},
+        description: { required: true, message: this.$t('RuleEngine.pleaseEnter') },
         type: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
       },
     }
@@ -185,11 +185,6 @@ export default {
         this.$emit('update:value', val)
       },
     },
-  },
-
-  watch: {},
-
-  created() {
   },
 
   methods: {
@@ -228,6 +223,17 @@ export default {
       if (!valid) {
         return
       }
+      const { config } = this.record
+      // String to Boolean
+      Object.keys(config).forEach((label) => {
+        const value = config[label]
+        if (value === 'true') {
+          this.record.config[label] = true
+        }
+        if (value === 'false') {
+          this.record.config[label] = false
+        }
+      })
       const resource = await createResource(this.record, test)
       if (test) {
         this.$message.success(this.$t('RuleEngine.resourceAvailable'))

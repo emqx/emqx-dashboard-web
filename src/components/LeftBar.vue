@@ -114,12 +114,12 @@ export default {
         icon: 'icon-zuzhiqunzu',
       },
       {
-        title: this.$t('components.rule'),
+        title: this.$t('components.rules'),
         key: 'rules',
         icon: 'icon-guizeyinqing',
         children: [
           {
-            title: this.$t('components.rules'),
+            title: this.$t('components.rule'),
             key: 'rules.ruleEngine',
             path: '/rules',
             parentKey: 'rules',
@@ -190,6 +190,12 @@ export default {
             title: this.$t('components.blacklist'),
             key: 'general.blacklist',
             path: '/blacklist',
+            parentKey: 'general',
+          },
+          {
+            title: this.$t('components.backup'),
+            key: 'general.backup',
+            path: '/backup',
             parentKey: 'general',
           },
         ],
@@ -275,6 +281,7 @@ export default {
     display: flex;
     align-items: center;
     padding: 0 20px;
+    background: #2f333e;
 
     .title {
       margin-left: 12px;

@@ -1,6 +1,6 @@
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 const mock = require('./script/mock.json')
 const config = require('./script/config.json')
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 const { NODE_ENV, VUE_APP_BUILD_ENV = 'base' } = process.env
 

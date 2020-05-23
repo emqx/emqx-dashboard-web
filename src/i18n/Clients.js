@@ -102,21 +102,45 @@ export default {
     zh: '连接时间',
     en: 'Connection At',
   },
+  disConnectionAt: {
+    zh: '断开连接时间',
+    en: 'Disconnected At',
+  },
+  connectedStatus: {
+    zh: '连接状态',
+    en: 'Connect Status',
+  },
+  connected: {
+    zh: '已连接',
+    en: 'Connected',
+  },
   disconnected: {
-    zh: '已断开',
+    zh: '未连接',
     en: 'Disconnected',
   },
   disconnect: {
-    zh: '断开',
+    zh: '断开连接',
     en: 'Disconnect',
   },
+  cleanSession: {
+    zh: '清除会话',
+    en: 'Clean Session',
+  },
   willDisconnectTheConnection: {
-    zh: '此操作将断开该连接,连接可能通过重连机制再次连接,确认继续?',
-    en: 'This operation will disconnect the connection',
+    zh: '此操作将踢除该连接，连接可能通过重连机制再次连接，确认继续?',
+    en: 'This operation will kick out the connection, conifrm?',
+  },
+  willCleanSession: {
+    zh: '确认清除会话？',
+    en: 'Confirm Clean Session?',
   },
   successfulDisconnection: {
     zh: '断开成功',
     en: 'Successful disconnection',
+  },
+  successfulCleanSession: {
+    zh: '成功清除会话',
+    en: 'Session cleared successfully',
   },
   clientDetails: {
     zh: '客户端详情',
@@ -141,14 +165,6 @@ export default {
   bridge: {
     zh: '桥接设备',
     en: 'Bridge',
-  },
-  yes: {
-    zh: '是',
-    en: 'Yes',
-  },
-  no: {
-    zh: '否',
-    en: 'No',
   },
   protocolType: {
     zh: '协议类型',
@@ -245,5 +261,17 @@ export default {
   send_pkt_desc: {
     zh: '发送的 MQTT 报文数量',
     en: 'Number of MQTT messages sent',
+  },
+  kickOut: {
+    zh: '踢除',
+    en: 'Kick Out',
+  },
+  awaiting_rel: {
+    zh: '未确认的 PUBREC 数据包计数',
+    en: 'Unconfirmed PUBREC Packets Count',
+  },
+  max_awaiting_rel: {
+    zh: '最大未确认的 PUBREC 数据包计数',
+    en: 'Maximum Unconfirmed PUBREC Packets Count',
   },
 }

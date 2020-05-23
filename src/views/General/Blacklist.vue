@@ -36,8 +36,6 @@
           </el-table-column>
           <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')">
           </el-table-column>
-          <el-table-column prop="desc" min-width="120px" :label="$t('General.desc')">
-          </el-table-column>
           <el-table-column
             prop="until" min-width="120px" :formatter="formatterUntil"
             :label="$t('General.until')"
@@ -100,16 +98,11 @@
             <el-form-item prop="until" :label="$t('General.until')">
               <el-date-picker
                 v-model="record.until"
-                type="date"
-                format="yyyy-MM-dd"
+                type="datetime"
+                format="yyyy-MM-dd HH:mm:ss"
                 value-format="timestamp"
               >
               </el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item prop="desc" :label="$t('General.desc')">
-              <el-input v-model="record.desc"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -151,7 +144,6 @@ export default {
         { label: 'peerhost', value: 'peerhost' },
       ],
       record: {
-        desc: '',
         reason: '',
       },
       rules: {
@@ -194,7 +186,6 @@ export default {
     showDialog() {
       this.record = {
         reason: '',
-        desc: '',
       }
       this.dialogVisible = true
     },
@@ -240,7 +231,7 @@ export default {
       if (!until || typeof until !== 'number') {
         return this.$t('General.neverExpire')
       }
-      return moment(until * 1000).format('YYYY-MM-DD')
+      return moment(until * 1000).format('YYYY-MM-DD HH:mm:ss')
     },
   },
 }

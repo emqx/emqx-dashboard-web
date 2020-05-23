@@ -32,7 +32,7 @@
               <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
                 <div
                   class="monaco-container monaco-sql"
-                  :style="{ height: `${editorHeight}px` }"
+                  :style="{ height: `${sqlEditorHeight}px` }"
                 >
                   <monaco
                     id="rule-sql"
@@ -44,7 +44,7 @@
                     @qucik-save="handleSQLTest"
                   ></monaco>
                 </div>
-                <stretch-height v-model="editorHeight"></stretch-height>
+                <stretch-height v-model="sqlEditorHeight"></stretch-height>
               </el-form-item>
 
               <el-form-item prop="description" :label="$t('RuleEngine.remark')">
@@ -73,7 +73,10 @@
                     >
                     </el-input>
                     <template v-else>
-                      <div class="monaco-container monaco-payload">
+                      <div
+                        class="monaco-container monaco-payload"
+                        :style="{ height: `${payloadEditorHeight}px` }"
+                      >
                         <monaco
                           id="payload"
                           v-model="record.ctx.payload"
@@ -85,9 +88,11 @@
                       <div class="payload-type">
                         <el-radio-group v-model="payloadType">
                           <el-radio label="json">JSON</el-radio>
-                          <el-radio label="plaintext">RAW</el-radio>
+                          <el-radio label="plaintext">Plaintext</el-radio>
                         </el-radio-group>
                       </div>
+                      <stretch-height v-model="payloadEditorHeight" class="payload">
+                      </stretch-height>
                     </template>
                   </el-form-item>
 
@@ -166,7 +171,7 @@
           {{ $t('Base.cancel') }}
         </el-button>
         <el-button type="primary" size="medium" @click="save">
-          {{ $t('Base.create') }}
+          {{ isEdit ? $t('Base.confirm') : $t('Base.create') }}
         </el-button>
       </div>
 
@@ -178,7 +183,7 @@
 
 <script>
 import {
-  loadRuleEvents, SQLTest, createRule,
+  loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule,
 } from '@/api/rules'
 import { loadTopics } from '@/api/server'
 import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck } from '@/common/utils'
@@ -203,8 +208,10 @@ export default {
   data() {
     return {
       loadRuleEvents,
+      isEdit: false,
       needCheckSql: true,
-      editorHeight: 320,
+      sqlEditorHeight: 320,
+      payloadEditorHeight: 200,
       payloadType: 'json',
       topics: [],
       events: [],
@@ -260,6 +267,9 @@ export default {
     sqlProvider() {
       return ruleEngineProvider
     },
+    currentRule() {
+      return this.$route.query.rule
+    },
   },
 
   watch: {
@@ -271,12 +281,17 @@ export default {
     this.selectEvent = this.events[0]
     const data = await loadTopics()
     this.topics = data.items || []
-    this.initData('$events/message_publish')
+    if (this.currentRule) {
+      this.isEdit = true
+      this.loadRule()
+    } else {
+      this.initData('$events/message_publish')
+    }
   },
 
   methods: {
-    initData(val) {
-      this.selectEvent = this.events.find($ => $.event === val)
+    initData(eventName) {
+      this.selectEvent = this.events.find($ => $.event === eventName)
       const { sql_example } = this.selectEvent
       this.record.rawsql = sqlExampleFormatter(sql_example)
       this.initTestFormItem()
@@ -407,17 +422,33 @@ export default {
         this.$message.error(this.$t('RuleEngine.pleaseAddAResponseAction'))
         return
       }
-      const record = {
+      const data = {
         rawsql: this.record.rawsql,
-        actions: this.record.actions.map($ => ({ name: $.name, params: $.params })),
+        actions: this.record.actions,
         description: this.record.description,
       }
-      createRule(record).then(() => {
-        this.$message.success(this.$t('RuleEngine.createSuccess'))
-        setTimeout(() => {
-          this.$router.push({ path: '/rules' })
-        }, 600)
-      })
+      if (this.isEdit && this.currentRule) {
+        updateRule(this.currentRule, data).then(() => {
+          this.$message.success(this.$t('RuleEngine.editSuccess'))
+          setTimeout(() => {
+            this.$router.push({ path: '/rules' })
+          }, 600)
+        })
+      } else {
+        createRule(data).then(() => {
+          this.$message.success(this.$t('RuleEngine.createSuccess'))
+          setTimeout(() => {
+            this.$router.push({ path: '/rules' })
+          }, 600)
+        })
+      }
+    },
+    async loadRule() {
+      const rule = await loadRuleDetails(this.currentRule)
+      this.record = rule
+      setTimeout(() => {
+        this.$refs.ruleAction.loadActions()
+      }, 500)
     },
   },
 }
@@ -489,9 +520,9 @@ export default {
     }
   }
 
-  .monaco-container {
-    &.monaco-payload {
-      height: 200px;
+  .payload.stretch-height {
+    .el-icon-more {
+      top: -11px;
     }
   }
 

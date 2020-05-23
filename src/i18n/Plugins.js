@@ -112,6 +112,10 @@ export default {
     zh: '开启成功',
     en: 'Run Success',
   },
+  runFailed: {
+    zh: '开启失败',
+    en: 'Run Failed',
+  },
   stopSuccess: {
     zh: '停止成功',
     en: 'Stop Success',

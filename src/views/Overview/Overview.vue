@@ -123,7 +123,7 @@
         <div class="type-filter">
           <emq-select
             v-if="dataType === 'basic'" v-model="nodeName" size="mini" style="margin-right: 20px"
-            :field="{ options: nodes }" :field-name="{ label: 'name', value: 'name' }"
+            :field="{ options: nodes }" :field-name="{ label: 'name', value: 'node' }"
             @change="dataTypeChange"
           ></emq-select>
           <el-radio-group v-model="dataType" size="mini" @change="dataTypeChange">
@@ -138,7 +138,6 @@
         <el-row :gutter="20">
           <node-basic-card :value="currentNode"></node-basic-card>
         </el-row>
-
       </div>
 
       <template v-else>
@@ -251,7 +250,6 @@ export default {
         max_fds: 7168,
         memory_total: '126.59M',
         memory_used: '97.05M',
-        name: 'emqx@127.0.0.1',
         node: 'emqx@127.0.0.1',
         node_status: 'Running',
         otp_release: 'R21/10.3.4',
@@ -330,7 +328,7 @@ export default {
       return Object.entries(this.dataTypeMap).map(([value, text]) => ({ text, value }))
     },
     currentNode() {
-      const node = this.nodes.find($ => $.name === this.nodeName)
+      const node = this.nodes.find($ => $.node === this.nodeName)
       if (node) {
         const { stats, ...withoutStats } = node
         return {
@@ -376,7 +374,7 @@ export default {
     },
     async loadNodes() {
       this.nodes = await loadNodesApi()
-      this.nodeName = this.nodeName || (this.nodes[0] || {}).name
+      this.nodeName = this.nodeName || (this.nodes[0] || {}).node
     },
     async setMetricsChartRealTime() {
       const data = await loadMetricsLog(false, this.dataType)
