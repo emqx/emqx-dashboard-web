@@ -76,7 +76,7 @@ export default {
   },
   createdAt: {
     zh: '会话创建时间',
-    en: 'CreatedAt',
+    en: 'Created At',
   },
   accessNode: {
     zh: '接入节点',
@@ -273,5 +273,13 @@ export default {
   max_awaiting_rel: {
     zh: '最大未确认的 PUBREC 数据包计数',
     en: 'Maximum Unconfirmed PUBREC Packets Count',
+  },
+  collapse: {
+    zh: '折叠',
+    en: 'Collapse',
+  },
+  expand: {
+    zh: '展开',
+    en: 'Expand',
   },
 }
