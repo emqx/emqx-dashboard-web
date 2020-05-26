@@ -113,4 +113,12 @@ export default
     zh: '收起',
     en: 'Collapse',
   },
+  next: {
+    zh: '下一页',
+    en: 'Next',
+  },
+  prev: {
+    zh: '上一页',
+    en: 'Previous',
+  },
 }
