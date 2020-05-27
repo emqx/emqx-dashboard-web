@@ -114,6 +114,11 @@ export default {
         icon: 'icon-zuzhiqunzu',
       },
       {
+        title: this.$t('components.subscriptions'),
+        path: '/subscriptions',
+        icon: 'icon-shebeiguanli',
+      },
+      {
         title: this.$t('components.rules'),
         key: 'rules',
         icon: 'icon-guizeyinqing',

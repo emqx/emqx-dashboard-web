@@ -187,7 +187,6 @@ export default {
       listLoading: true,
       showMoreQuery: false,
       tableData: [],
-      searchValue: '',
       hasnext: false,
       params: {
         _page: 1,
@@ -239,7 +238,6 @@ export default {
     },
     resetSearch() {
       this.resetIcon = 'el-icon-loading'
-      this.searchValue = ''
       this.fuzzyParams = {
         comparator: '_gte',
       }
