@@ -347,7 +347,6 @@ export default {
         return
       }
       this.record = await loadClientDetail(this.clientId)
-      this.subscriptions = await loadSubscriptions(this.clientId)
       const { node } = this.record
       this.subscriptions = await loadSubscriptions(node, this.clientId)
     },
