@@ -81,6 +81,22 @@ let routes = [
       },
     ],
   },
+  // 订阅
+  {
+    path: '/subscriptions',
+    component: Layout,
+    meta: {
+      hideKey: 'subscriptions',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'subscriptions',
+        component: () => import('@/views/Subscriptions/Subscriptions'),
+      },
+    ],
+  },
   // Schemas
   {
     path: '/schemas',

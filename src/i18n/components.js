@@ -41,6 +41,10 @@ export default
     zh: '主题',
     en: 'Topics',
   },
+  subscriptions: {
+    zh: '订阅',
+    en: 'Subscriptions',
+  },
   schemas: {
     zh: '编解码',
     en: 'Schema Registry',
