@@ -296,6 +296,11 @@ let routes = [
           keepAlive: true,
         },
       },
+      {
+        path: '/plugins/:pluginName',
+        name: 'pluginsName',
+        component: () => import('@/views/Plugins/PluginsManage'),
+      },
     ],
   },
   {

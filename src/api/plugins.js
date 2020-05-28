@@ -35,4 +35,29 @@ export function updatePlugin(nodeName, pluginName) {
   return http.put(`/nodes/${nodeName}/plugin_configs/${pluginName}`)
 }
 
+// Load Auth clientid
+export function listAuthClientid() {
+  return http.get('/auth_clientid')
+}
+
+// Create Auth clientid
+export function addAuthClientid(body = {}) {
+  return http.post('/auth_clientid', body)
+}
+
+// Delete Auth clientid
+export function deleteAuthClientID(clientid) {
+  return http.delete(`/auth_clientid/${clientid}`)
+}
+
+// Auth clientid detail
+export function loadAuthClientid(clientid) {
+  return http.get(`/auth_clientid/${clientid}`)
+}
+
+// Update Auth clientid
+export function updateAuthClientid(clientid, body) {
+  return http.put(`/auth_clientid/${clientid}`, body)
+}
+
 export default {}

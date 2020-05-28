@@ -57,6 +57,7 @@
         </el-row>
       </a-card>
 
+      <!-- Cards -->
       <el-row
         v-if="displayType === 'cards' && listTableData.length > 0"
         class="emq-list-card plugin-cards-wrapper"
@@ -100,20 +101,33 @@
             </div>
 
             <div class="oper">
-              <el-button
-                v-if="!primaryList.includes(item.name)"
-                :type="item.active ? 'danger' : 'dashed'"
-                size="small"
-                @click="togglePlugin(item)"
-              >
-                {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
-              </el-button>
-              <span v-else>--</span>
+              <div class="run-stop-btn">
+                <el-button
+                  v-if="!primaryList.includes(item.name)"
+                  :type="item.active ? 'danger' : 'dashed'"
+                  size="small"
+                  @click="togglePlugin(item)"
+                >
+                  {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
+                </el-button>
+                <span v-else>--</span>
+              </div>
+              <div v-if="hasManagePage(item.name)" class="manage-btn">
+                <el-button
+                  type="dashed"
+                  :disabled="!item.active"
+                  size="small"
+                  @click="handleManage(item)"
+                >
+                  {{ $t('Plugins.manage') }}
+                </el-button>
+              </div>
             </div>
           </div>
         </el-col>
       </el-row>
 
+      <!-- List -->
       <div
         v-if="displayType === 'list' && listTableData.length > 0"
         class="emq-list-card plugin-list-wrapper"
@@ -173,6 +187,15 @@
               {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
             </el-button>
             <span v-else>--</span>
+            <el-button
+              v-if="hasManagePage(item.name)"
+              type="dashed"
+              :disabled="!item.active"
+              size="small"
+              @click="handleManage(item)"
+            >
+              {{ $t('Plugins.manage') }}
+            </el-button>
           </div>
         </div>
       </div>
@@ -323,6 +346,14 @@ export default {
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },
+    hasManagePage(name) {
+      const pluginsDict = {
+        emqx_auth_clientid: true,
+        emqx_auth_username: true,
+        emqx_auth_jwt: true,
+      }
+      return pluginsDict[name]
+    },
     searchPlugin() {
       this.searchLoading = true
       if (this.searchVal === '') {
@@ -339,6 +370,11 @@ export default {
           this.searchLoading = false
         }
       }, 500)
+    },
+    handleManage(row) {
+      this.$router.push({
+        path: `/plugins/${row.name}`,
+      })
     },
   },
 }
@@ -397,6 +433,18 @@ export default {
         }
       }
     }
+    .oper {
+      position: relative;
+      .el-button{
+        min-width: 64px;
+        float: right;
+      }
+      .manage-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+    }
   }
 
   .plugin-list-wrapper {
@@ -451,11 +499,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-}
-html:lang(en) {
-  .plugins .oper .el-button{
-    width: 64px;
   }
 }
 </style>

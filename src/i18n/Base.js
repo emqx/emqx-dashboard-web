@@ -121,4 +121,8 @@ export default
     zh: '上一页',
     en: 'Previous',
   },
+  editSuccess: {
+    zh: '编辑成功',
+    en: 'Edit Success',
+  },
 }
