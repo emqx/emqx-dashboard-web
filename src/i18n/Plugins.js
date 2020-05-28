@@ -160,4 +160,40 @@ export default {
     zh: '确认删除？',
     en: 'Confirm Delete?',
   },
+  algorithm: {
+    zh: '加密算法',
+    en: 'Algorithm',
+  },
+  payloadDesc: {
+    zh: '启用 verify_claims 时有效, 可以使用 %u，%c 占位符分别替换输入的 username 和 clientid，详见',
+    en: 'It is valid when verify_claims is enabled. You can use% u and% c placeholders to replace the entered user name and clientid respectively. For details, see',
+  },
+  jwtDoc: {
+    zh: 'JWT 认证',
+    en: 'JWT Authentication',
+  },
+  dataDesc: {
+    zh: '一行一组数据，使用逗号分割 username,clientid',
+    en: 'One line is a set of data, separated by comma username,clientid',
+  },
+  secret: {
+    zh: '密钥或私钥',
+    en: 'Secret or Private key',
+  },
+  secretRequired: {
+    zh: '请输入 Secret',
+    en: 'Secret is required',
+  },
+  payloadRequired: {
+    zh: '请输入 Payload 模版',
+    en: 'Payload template is required',
+  },
+  dataRequired: {
+    zh: '请填写 Payload 数据',
+    en: 'Payload data is required',
+  },
+  leaveTokenPage: {
+    zh: '离开页面后当前输入的配置与生成的 TOKEN 信息均不再保留，确认离开？',
+    en: 'After leaving the page, the currently entered configuration and generated TOKEN information are no longer retained. Continue?',
+  },
 }

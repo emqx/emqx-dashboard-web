@@ -6,6 +6,9 @@
     <template v-if="pluginName === 'emqx_auth_username'">
       <auth-username-table></auth-username-table>
     </template>
+    <template v-if="pluginName === 'emqx_auth_jwt'">
+      <generate-JWT></generate-JWT>
+    </template>
   </div>
 </template>
 
@@ -13,6 +16,7 @@
 <script>
 import AuthClientIdTable from './components/AuthClientIdTable.vue'
 import AuthUsernameTable from './components/AuthUsernameTable.vue'
+import GenerateJWT from './components/GenerateJWT.vue'
 
 export default {
   name: 'PluginsManage',
@@ -20,6 +24,7 @@ export default {
   components: {
     AuthClientIdTable,
     AuthUsernameTable,
+    GenerateJWT,
   },
 
   data() {

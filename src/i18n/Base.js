@@ -37,9 +37,17 @@ export default
     zh: '登录中...',
     en: 'logging in...',
   },
-  copy: {
+  copied: {
     zh: '复制成功！',
     en: 'Copied!',
+  },
+  copy: {
+    zh: '复制',
+    en: 'Copy',
+  },
+  generate: {
+    zh: '生成',
+    en: 'Generate',
   },
   warning: {
     zh: '警告',
@@ -124,5 +132,13 @@ export default
   editSuccess: {
     zh: '编辑成功',
     en: 'Edit Success',
+  },
+  day: {
+    zh: '天',
+    en: 'day | days',
+  },
+  year: {
+    zh: '年',
+    en: 'year | years',
   },
 }
