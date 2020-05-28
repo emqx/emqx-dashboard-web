@@ -148,4 +148,16 @@ export default {
     zh: '按插件名称搜索',
     en: 'Search by plugin name',
   },
+  manage: {
+    zh: '管理',
+    en: 'Manage',
+  },
+  authClientidRequired: {
+    zh: '请填写 Client ID 和密码',
+    en: 'Client ID or Password is required',
+  },
+  confirmDelete: {
+    zh: '确认删除？',
+    en: 'Confirm Delete?',
+  },
 }

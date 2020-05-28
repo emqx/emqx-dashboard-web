@@ -54,7 +54,9 @@ export default {
 
   methods: {
     getBreadcrumb() {
-      const { path, query } = this.$route
+      const {
+        path, query, name: routeName,
+      } = this.$route
       const pathList = path.split('/')
       const name = pathList[1]
       const oper = query.oper || pathList[2]
@@ -69,6 +71,10 @@ export default {
         this.backPath = `/${name}`
       } else if (oper === 'node') {
         this.currentTitle = this.$t('Overview.nodeData')
+      }
+      if (routeName === 'pluginsName' && this.$route.params.pluginName) {
+        this.oper = this.$route.params.pluginName
+        this.backPath = `/${name}`
       }
     },
   },
