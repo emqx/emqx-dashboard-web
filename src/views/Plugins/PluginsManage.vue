@@ -3,18 +3,23 @@
     <template v-if="pluginName === 'emqx_auth_clientid'">
       <auth-clientId-table></auth-clientId-table>
     </template>
+    <template v-if="pluginName === 'emqx_auth_username'">
+      <auth-username-table></auth-username-table>
+    </template>
   </div>
 </template>
 
 
 <script>
-import AuthClientIdTable from './components/AuthClientIdTable'
+import AuthClientIdTable from './components/AuthClientIdTable.vue'
+import AuthUsernameTable from './components/AuthUsernameTable.vue'
 
 export default {
   name: 'PluginsManage',
 
   components: {
     AuthClientIdTable,
+    AuthUsernameTable,
   },
 
   data() {

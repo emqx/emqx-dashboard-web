@@ -60,4 +60,29 @@ export function updateAuthClientid(clientid, body) {
   return http.put(`/auth_clientid/${clientid}`, body)
 }
 
+// Load Auth username
+export function listAuthUsername() {
+  return http.get('/auth_username')
+}
+
+// Create Auth username
+export function addAuthUsername(body = {}) {
+  return http.post('/auth_username', body)
+}
+
+// Delete Auth username
+export function deleteAuthUsername(username) {
+  return http.delete(`/auth_username/${username}`)
+}
+
+// Auth username detail
+export function loadAuthUsername(username) {
+  return http.get(`/auth_username/${username}`)
+}
+
+// Update Auth username
+export function updateAuthUsername(username, body) {
+  return http.put(`/auth_username/${username}`, body)
+}
+
 export default {}

@@ -23,6 +23,7 @@
     "highlight.js": "^9.15.8",
     "js-sql-parser": "^1.2.1",
     "jsonlint": "^1.6.2",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "monaco-editor": "^0.18.1",
     "mqtt": "^3.0.0",
