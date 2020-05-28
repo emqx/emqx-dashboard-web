@@ -408,7 +408,7 @@ export default {
       })
     },
     copyAvailableFieldsSuccess() {
-      this.clipboardStatus = this.$t('Base.copy')
+      this.clipboardStatus = this.$t('Base.copied')
       setTimeout(() => {
         this.clipboardStatus = ''
       }, 2000)
