@@ -144,6 +144,19 @@ export default {
         ],
       },
       {
+        title: this.$t('components.analysis'),
+        key: 'analysis',
+        icon: 'icon-shujukanban',
+        children: [
+          {
+            title: this.$t('components.topic_metrics'),
+            key: 'analysis.topic_metrics',
+            path: '/topic_metrics',
+            parentKey: 'analysis',
+          },
+        ],
+      },
+      {
         title: this.$t('components.alerts'),
         key: 'alerts',
         path: '/alerts',

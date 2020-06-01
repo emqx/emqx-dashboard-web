@@ -61,6 +61,14 @@ export default
     zh: '资源',
     en: 'Resources',
   },
+  analysis: {
+    zh: '统计分析',
+    en: 'Analysis',
+  },
+  topic_metrics: {
+    zh: '主题监控',
+    en: 'Topic metrics',
+  },
   alerts: {
     zh: '告警',
     en: 'Alarm',
