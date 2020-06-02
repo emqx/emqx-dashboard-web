@@ -222,7 +222,6 @@ export default {
         this.listLoading = false
         this.modClosed = false
       } catch (error) {
-        console.log(error)
         this.listLoading = false
         this.modClosed = true
       }
@@ -238,7 +237,7 @@ export default {
     },
     async handleModLoad() {
       await enableTopicMetrics()
-      this.$message.success(this.$t('Analysis.enableSuccess'))
+      this.$message.success(this.$t('Base.enableSuccess'))
       this.loadData()
       this.modClosed = false
     },

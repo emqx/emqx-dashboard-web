@@ -141,4 +141,12 @@ export default
     zh: '年',
     en: 'year | years',
   },
+  enableSuccess: {
+    zh: '启用成功',
+    en: 'Enable Success',
+  },
+  disabledSuccess: {
+    zh: '停用成功',
+    en: 'Disable Success',
+  },
 }
