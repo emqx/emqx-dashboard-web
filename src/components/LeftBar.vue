@@ -169,6 +169,12 @@ export default {
         icon: 'icon-kongjian',
       },
       {
+        title: this.$t('components.modules'),
+        key: 'modules',
+        path: '/modules',
+        icon: 'icon-changjingguanli',
+      },
+      {
         title: this.$t('components.tool'),
         key: 'tools',
         icon: 'icon-gongju',

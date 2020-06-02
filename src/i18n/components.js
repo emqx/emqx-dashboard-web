@@ -77,6 +77,10 @@ export default
     zh: '插件',
     en: 'Plugin',
   },
+  modules: {
+    zh: '模块',
+    en: 'Modules',
+  },
   tool: {
     zh: '工具',
     en: 'Tool',

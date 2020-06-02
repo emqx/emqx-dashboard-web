@@ -475,8 +475,7 @@ export default {
         flex: 1;
       }
       .oper {
-        flex: .6;
-        flex-basis: 50px;
+        flex: 50px;
       }
     }
   }

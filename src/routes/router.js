@@ -319,6 +319,22 @@ let routes = [
       },
     ],
   },
+  // 模块
+  {
+    path: '/modules',
+    component: Layout,
+    meta: {
+      hideKey: 'modules',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'modules',
+        component: () => import('@/views/Modules/Modules'),
+      },
+    ],
+  },
   {
     path: '*',
     component: Layout,

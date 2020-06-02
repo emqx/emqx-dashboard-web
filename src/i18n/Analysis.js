@@ -7,10 +7,6 @@ export default {
     zh: '启用',
     en: 'Enable',
   },
-  enableSuccess: {
-    zh: '启用成功',
-    en: 'Enable Success',
-  },
   addTopic: {
     zh: '添加主题',
     en: 'Add Topic',
