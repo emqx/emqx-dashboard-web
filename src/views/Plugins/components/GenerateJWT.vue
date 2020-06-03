@@ -116,14 +116,13 @@
 <script>
 import jwt from 'jsonwebtoken'
 import Monaco from '@/components/Monaco'
-import EmqSelect from '@/components/EmqSelect'
+import { getLink } from '@/common/utils'
 
 export default {
   name: 'GenerateJwt',
 
   components: {
     Monaco,
-    EmqSelect,
   },
 
   data() {
@@ -190,9 +189,7 @@ export default {
 
   computed: {
     jwtDoc() {
-      return this.$store.state.lang === 'en'
-        ? 'https://docs.emqx.io/broker/latest/en/plugins.html#jwt-authentication-plugin'
-        : 'https://docs.emqx.io/broker/latest/cn/advanced/auth-jwt.html'
+      return getLink('authJWT')
     },
   },
 

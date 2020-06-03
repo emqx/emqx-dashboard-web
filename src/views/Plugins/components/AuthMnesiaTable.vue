@@ -227,6 +227,7 @@ import {
   listMnesia, addAuthMnesia, deleteAuthMnesia, loadAuthMnesia, updateAuthMnesia,
   listMnesiaACL, addAuthMnesiaACL, deleteAuthMnesiaACL,
 } from '@/api/plugins'
+import { getLink } from '@/common/utils'
 
 export default {
   name: 'AuthMnesiaTable',
@@ -273,9 +274,7 @@ export default {
 
   computed: {
     mnesiaDoc() {
-      return this.$store.state.lang === 'en'
-        ? 'https://docs.emqx.io/broker/latest/en/advanced/auth-mnesia.html'
-        : 'https://docs.emqx.io/broker/latest/cn/advanced/auth-mnesia.html'
+      return getLink('mnesia')
     },
   },
 
