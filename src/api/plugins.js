@@ -85,4 +85,49 @@ export function updateAuthUsername(username, body) {
   return http.put(`/auth_username/${username}`, body)
 }
 
+// Load Auth mnesia
+export function listMnesia(params = {}) {
+  return http.get('/auth_user', { params })
+}
+
+// Create Auth mnesia
+export function addAuthMnesia(body) {
+  return http.post('/auth_user', body)
+}
+
+// Delete Auth mnesia
+export function deleteAuthMnesia(login) {
+  return http.delete(`/auth_user/${login}`)
+}
+
+// Auth mnesia Detail
+export function loadAuthMnesia(login) {
+  return http.get(`/auth_user/${login}`)
+}
+
+// Update Auth mnesia
+export function updateAuthMnesia(login, body) {
+  return http.put(`/auth_user/${login}`, body)
+}
+
+// Load Auth mnesia ACL
+export function listMnesiaACL(params = {}) {
+  return http.get('/emqx_acl', { params })
+}
+
+// Create Auth mnesia ACL
+export function addAuthMnesiaACL(body) {
+  return http.post('/emqx_acl', body)
+}
+
+// Delete Auth mnesia ACL
+export function deleteAuthMnesiaACL(login, topic) {
+  return http.delete(`/emqx_acl/${login}/${encodeURIComponent(topic)}`)
+}
+
+// Auth mnesia ACL Detail
+export function loadAuthMnesiaACL(login) {
+  return http.get(`/emqx_acl/${login}`)
+}
+
 export default {}

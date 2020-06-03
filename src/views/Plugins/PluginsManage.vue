@@ -6,6 +6,9 @@
     <template v-if="pluginName === 'emqx_auth_username'">
       <auth-username-table></auth-username-table>
     </template>
+    <template v-if="pluginName === 'emqx_auth_mnesia'">
+      <auth-mnesia-table></auth-mnesia-table>
+    </template>
     <template v-if="pluginName === 'emqx_auth_jwt'">
       <generate-JWT></generate-JWT>
     </template>
@@ -16,6 +19,7 @@
 <script>
 import AuthClientIdTable from './components/AuthClientIdTable.vue'
 import AuthUsernameTable from './components/AuthUsernameTable.vue'
+import AuthMnesiaTable from './components/AuthMnesiaTable.vue'
 import GenerateJWT from './components/GenerateJWT.vue'
 
 export default {
@@ -24,6 +28,7 @@ export default {
   components: {
     AuthClientIdTable,
     AuthUsernameTable,
+    AuthMnesiaTable,
     GenerateJWT,
   },
 
@@ -32,6 +37,7 @@ export default {
       pluginName: this.$route.params.pluginName,
     }
   },
+
   beforeRouteLeave(to, from, next) {
     if (this.pluginName === 'emqx_auth_jwt') {
       this.$confirm(this.$t('Plugins.leaveTokenPage'), this.$t('Base.warning'), {
