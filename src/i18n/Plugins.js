@@ -196,4 +196,44 @@ export default {
     zh: '离开页面后当前输入的配置与生成的 TOKEN 信息均不再保留，确认离开？',
     en: 'After leaving the page, the currently entered configuration and generated TOKEN information are no longer retained. Continue?',
   },
+  usernameOrClientid: {
+    zh: '用户名或 Client ID',
+    en: 'Username or Client ID',
+  },
+  mnesiaTip: {
+    zh: '默认使用 Username，以 auth.mnesia.as 配置为准',
+    en: 'Username is used by default, but follow the auth.mnesia.as configuration',
+  },
+  authMnesiaRequired: {
+    zh: '请填写完整的认证信息',
+    en: 'Authentication information is required',
+  },
+  auth: {
+    zh: '认证',
+    en: 'Authentication',
+  },
+  isAllow: {
+    zh: '是否允许',
+    en: 'Allowed',
+  },
+  allow: {
+    zh: '允许',
+    en: 'Allow',
+  },
+  disallow: {
+    zh: '不允许',
+    en: 'Disallow',
+  },
+  aclMnesiaRequired: {
+    zh: '请填写完整的 ACL 信息',
+    en: 'ACL information is required',
+  },
+  action: {
+    zh: '主题动作',
+    en: 'Action',
+  },
+  allUsers: {
+    zh: '全部用户',
+    en: 'All Users',
+  },
 }
