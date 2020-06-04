@@ -220,9 +220,9 @@ export default {
     zh: '允许',
     en: 'Allow',
   },
-  disallow: {
+  deny: {
     zh: '不允许',
-    en: 'Disallow',
+    en: 'Deny',
   },
   aclMnesiaRequired: {
     zh: '请填写完整的 ACL 信息',

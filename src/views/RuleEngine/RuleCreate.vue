@@ -313,8 +313,8 @@ export default {
     },
     sqlParse(sql, oldEvent) {
       this.$confirm(this.$t('RuleEngine.parse_confirm'), this.$t('Base.warning'), {
-        confirmButtonClass: 'confirm-btn',
-        cancelButtonClass: 'cache-btn el-button--text',
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(() => {
         this.record.rawsql = sqlExampleFormatter(ruleNewSqlParser(sql, oldEvent))

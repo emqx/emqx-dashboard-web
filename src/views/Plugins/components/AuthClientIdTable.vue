@@ -5,7 +5,12 @@
         <div class="emq-table-header">
           <el-row class="add-form" :gutter="20">
             <el-col :span="8">
-              <el-input v-model="record.clientid" size="small" :placeholder="$t('Clients.clientId')"></el-input>
+              <el-input
+                v-model="record.clientid"
+                size="small"
+                :placeholder="$t('Clients.clientId')"
+                @keyup.enter.native="save"
+              ></el-input>
             </el-col>
             <el-col :span="8">
               <el-input
@@ -13,6 +18,7 @@
                 size="small"
                 type="password"
                 :placeholder="$t('Base.password')"
+                @keyup.enter.native="save"
               >
               </el-input>
             </el-col>
@@ -76,9 +82,10 @@
         </el-row>
       </el-form>
 
-      <div slot="footer">
+      <div slot="footer" class="dialog-align-footer">
         <el-button
-          type="text"
+          plain
+          size="small"
           class="cache-btn"
           @click="editVisible = false"
         >
@@ -89,7 +96,7 @@
           size="small"
           @click="handleEdit"
         >
-          {{ $t('Base.add') }}
+          {{ $t('Base.confirm') }}
         </el-button>
       </div>
     </el-dialog>
@@ -145,8 +152,8 @@ export default {
     },
     handleDelete({ clientid }) {
       this.$confirm(this.$t('Plugins.confirmDelete'), this.$t('Base.warning'), {
-        confirmButtonClass: 'confirm-btn',
-        cancelButtonClass: 'cache-btn el-button--text',
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         const res = await deleteAuthClientID(clientid)
@@ -159,6 +166,8 @@ export default {
       this.editVisible = true
       const res = await loadAuthClientid(clientid)
       this.editRecord = res
+      this.editRecord.password = ''
+      this.$refs.editRecord.resetFields()
     },
     handleEdit() {
       this.$refs.editRecord.validate(async (valid) => {
