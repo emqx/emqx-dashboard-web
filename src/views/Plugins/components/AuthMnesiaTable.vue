@@ -7,11 +7,17 @@
           <div class="emq-table-header">
             <el-row class="add-form" :gutter="20">
               <el-col :span="8">
-                <el-input v-model="authRecord.login" size="small" :placeholder="$t('Plugins.usernameOrClientid')"></el-input>
+                <el-input
+                  v-model="authRecord.login"
+                  size="small"
+                  :placeholder="$t('Plugins.usernameOrClientid')"
+                  @keyup.enter.native="AuthSave"
+                ></el-input>
                 <el-popover
                   trigger="hover"
                   placement="top"
                   :content="$t('Plugins.mnesiaTip')"
+                  :tabindex="-1"
                 >
                   <a
                     slot="reference"
@@ -30,6 +36,7 @@
                   size="small"
                   type="password"
                   :placeholder="$t('Base.password')"
+                  @keyup.enter.native="AuthSave"
                 >
                 </el-input>
               </el-col>
@@ -87,11 +94,13 @@
                   :fetch-suggestions="queryACLSearch"
                   :placeholder="$t('Plugins.usernameOrClientid')"
                   @select="handleACLSelect"
+                  @keyup.enter.native="ACLSave"
                 ></el-autocomplete>
                 <el-popover
                   trigger="hover"
                   placement="top"
                   :content="$t('Plugins.mnesiaTip')"
+                  :tabindex="-1"
                 >
                   <a
                     slot="reference"
@@ -109,6 +118,7 @@
                   v-model="aclRecord.topic"
                   size="small"
                   :placeholder="$t('Topics.topic')"
+                  @keyup.enter.native="ACLSave"
                 >
                 </el-input>
               </el-col>
@@ -144,7 +154,7 @@
             </el-table-column>
             <el-table-column prop="allow" :label="$t('Plugins.isAllow')">
               <template slot-scope="{ row }">
-                {{ row.allow ? $t('Plugins.allow') : $t('Plugins.disallow') }}
+                {{ row.allow ? $t('Plugins.allow') : $t('Plugins.deny') }}
               </template>
             </el-table-column>
             <el-table-column prop="oper" width="120px">
@@ -201,9 +211,10 @@
         </el-row>
       </el-form>
 
-      <div slot="footer">
+      <div slot="footer" class="dialog-align-footer">
         <el-button
-          type="text"
+          plain
+          size="small"
           class="cache-btn"
           @click="editVisible = false"
         >
@@ -214,7 +225,7 @@
           size="small"
           @click="handleAuthEdit"
         >
-          {{ $t('Base.add') }}
+          {{ $t('Base.confirm') }}
         </el-button>
       </div>
     </el-dialog>
@@ -262,7 +273,7 @@ export default {
       aclCount: 0,
       allowOptions: [
         { label: this.$t('Plugins.allow'), value: true },
-        { label: this.$t('Plugins.disallow'), value: false },
+        { label: this.$t('Plugins.deny'), value: false },
       ],
       actionOptions: [
         { label: 'pub', value: 'pub' },
@@ -310,8 +321,8 @@ export default {
     },
     handleAuthDelete({ login }) {
       this.$confirm(this.$t('Plugins.confirmDelete'), this.$t('Base.warning'), {
-        confirmButtonClass: 'confirm-btn',
-        cancelButtonClass: 'cache-btn el-button--text',
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         const res = await deleteAuthMnesia(login)
@@ -324,6 +335,8 @@ export default {
       this.editVisible = true
       const res = await loadAuthMnesia(login)
       this.editRecord = res
+      this.editRecord.password = ''
+      this.$refs.editRecord.resetFields()
     },
     handleAuthEdit() {
       this.$refs.editRecord.validate(async (valid) => {
@@ -378,8 +391,8 @@ export default {
     },
     handleACLDelete({ login, topic }) {
       this.$confirm(this.$t('Plugins.confirmDelete'), this.$t('Base.warning'), {
-        confirmButtonClass: 'confirm-btn',
-        cancelButtonClass: 'cache-btn el-button--text',
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         const res = await deleteAuthMnesiaACL(login, topic)

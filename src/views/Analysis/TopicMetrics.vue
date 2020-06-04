@@ -243,8 +243,8 @@ export default {
     },
     deleteTopicMetric(row) {
       this.$confirm(this.$t('Plugins.confirmDelete'), this.$t('Base.warning'), {
-        confirmButtonClass: 'confirm-btn',
-        cancelButtonClass: 'cache-btn el-button--text',
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
         await deleteTopicMetrics(row.topic)
