@@ -283,6 +283,10 @@ export default
     zh: '速率',
     en: 'Rate',
   },
+  notPromptAgain: {
+    zh: '不再提示',
+    en: 'don\'t prompt again',
+  },
   licenseExpiryTip: {
     zh: `
     您的试用 License 已过期，请访问
