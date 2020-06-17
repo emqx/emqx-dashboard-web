@@ -213,6 +213,47 @@
       </div>
     </a-card>
 
+    <el-dialog
+      title="标题"
+      width="520px"
+      :visible.sync="licenseEvaluationVisible"
+      :close-on-click-modal="false"
+      class="create-subscribe"
+      @keyup.enter.native="handleAdd"
+    >
+      <div slot="title" class="tip-title">
+        <i class="el-icon-warning"></i>
+        <span>{{ $t('Base.warning') }}</span>
+      </div>
+      <div class="tip-content">
+        <p v-html="$t('Overview.licenseEvaluationTip')">
+          {{ $t('Overview.licenseEvaluationTip') }}
+        </p>
+      </div>
+      <div class="tip-checkbox">
+        <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">不再提示</el-checkbox>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      title="标题"
+      width="400px"
+      :visible.sync="licenseExpiryVisible"
+      :close-on-click-modal="false"
+      class="create-subscribe"
+      @keyup.enter.native="handleAdd"
+    >
+      <div slot="title" class="tip-title">
+        <i class="el-icon-warning"></i>
+        <span>{{ $t('Base.warning') }}</span>
+      </div>
+      <div class="tip-content">
+        <p v-html="$t('Overview.licenseExpiryTip')">
+          {{ $t('Overview.licenseExpiryTip') }}
+        </p>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -270,6 +311,9 @@ export default {
         subscriptions: this.$t('Overview.Subscription'),
       },
       nodes: [],
+      licenseExpiryVisible: false,
+      licenseEvaluationVisible: false,
+      noprompt: false,
       license: {
         customer: '',
         email: '',
@@ -280,6 +324,8 @@ export default {
         vendor: '',
         version: '',
         type: 'trial',
+        expiry: false,
+        customer_type: 0,
       },
       metricTitles: [],
       metricLog: {
@@ -341,6 +387,9 @@ export default {
   },
 
   created() {
+    if (localStorage.getItem('licenseEvaluationVisible') === 'false') {
+      this.licenseEvaluationVisible = false
+    }
     this.pageLoading = true
     this.loadData()
     this.loadLicenseData()
@@ -358,6 +407,14 @@ export default {
   },
 
   methods: {
+    liceEvaTipShowChange(e) {
+      if (e) {
+        localStorage.setItem('licenseEvaluationVisible', false)
+        setTimeout(() => {
+          this.licenseEvaluationVisible = false
+        }, 800)
+      }
+    },
     chartDataFill(length) {
       return Array.from(
         { length },
@@ -429,6 +486,16 @@ export default {
     },
     async loadLicenseData() {
       this.license = await loadLicenseInfo()
+      setTimeout(() => {
+        // evaluation 许可证
+        if (this.license.customer_type === 10 && localStorage.getItem('licenseEvaluationVisible') !== 'false') {
+          this.licenseEvaluationVisible = true
+        }
+        // 证书过期
+        if (this.license.expiry === true) {
+          this.licenseExpiryVisible = true
+        }
+      }, 1000)
     },
     async loadData() {
       const state = await loadCurrentMetrics()
@@ -646,6 +713,25 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .tip-title {
+    font-size: 18px;
+    .el-icon-warning {
+      color: #e6a23c;
+    }
+    span {
+      display:inline-block;
+      margin-left:10px;
+    }
+  }
+
+  .tip-content {
+    font-size: 15px;
+  }
+
+  .tip-checkbox {
+    margin-top: 10px;
   }
 }
 </style>

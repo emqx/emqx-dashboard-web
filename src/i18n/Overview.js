@@ -283,4 +283,28 @@ export default
     zh: '速率',
     en: 'Rate',
   },
+  licenseExpiryTip: {
+    zh: `
+    您的试用 License 已过期，请访问
+    <a href="https://www.emqx.io/cn/licenses#trial">https://www.emqx.io/cn/licenses#trial</a>
+    更新许可证。
+    `,
+    en: `
+    Your trial license has expired. Please visit
+    <a href="https://www.emqx.io/licenses#trial">https://www.emqx.io/licenses#trial</a>
+    update license.
+    `,
+  },
+  licenseEvaluationTip: {
+    zh: `
+    当前正在使用评估许可证，限制为10个连接。<br>请访问
+    <a href="https://www.emqx.io/cn/licenses#trial">https://www.emqx.io/cn/licenses#trial</a>
+    升级许可证。
+    `,
+    en: `
+    Using an evaluation license, restricted to 10 connections.<br>Please visit 
+    <a href="https://www.emqx.io/licenses#trial">https://www.emqx.io/licenses#trial</a>
+    upgrade license.
+    `,
+  },
 }
