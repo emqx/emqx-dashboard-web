@@ -386,8 +386,8 @@ export default {
   },
 
   methods: {
-    liceEvaTipShowChange(e) {
-      if (e) {
+    liceEvaTipShowChange(val) {
+      if (val) {
         localStorage.setItem('licenseTipVisible', false)
         setTimeout(() => {
           this.licenseTipVisible = false
