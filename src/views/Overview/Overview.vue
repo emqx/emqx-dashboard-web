@@ -232,7 +232,7 @@
         </p>
       </div>
       <div v-if="!isLicenseExpiry" class="tip-checkbox">
-        <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">不再提示</el-checkbox>
+        <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">{{ $t('Overview.notPromptAgain') }}</el-checkbox>
       </div>
     </el-dialog>
 
