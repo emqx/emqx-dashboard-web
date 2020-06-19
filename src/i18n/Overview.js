@@ -289,26 +289,22 @@ export default
   },
   licenseExpiryTip: {
     zh: `
-    您的试用 License 已过期，请访问
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">https://www.emqx.io/cn/licenses#trial</a>
-    更新许可证。
+    您的试用 License 已过期，请
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">更新许可证</a>。
     `,
     en: `
-    Your trial license has expired. Please visit
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">https://www.emqx.io/licenses#trial</a>
-    update license.
+    Your trial license has expired. Please
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">update license</a>.
     `,
   },
   licenseEvaluationTip: {
     zh: `
-    当前正在使用评估许可证，限制为10个连接。<br>请访问
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">https://www.emqx.io/cn/licenses#trial</a>
-    升级许可证。
+    当前正在使用评估许可证，限制为10个连接。请
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">升级许可证</a>。
     `,
     en: `
-    Using an evaluation license, restricted to 10 connections.<br>Please visit 
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">https://www.emqx.io/licenses#trial</a>
-    upgrade license.
+    Using an evaluation license, restricted to 10 connections.<br>Please
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">upgrade license</a>.
     `,
   },
 }
