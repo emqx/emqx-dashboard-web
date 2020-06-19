@@ -215,7 +215,7 @@
 
     <el-dialog
       title="标题"
-      width="520px"
+      width="460px"
       :visible.sync="licenseTipVisible"
       :close-on-click-modal="false"
     >
