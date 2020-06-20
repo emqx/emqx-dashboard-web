@@ -165,7 +165,7 @@
       </div>
 
       <ul class="license-field">
-        <li v-if="license.customer_type !== 10" class="item">
+        <li v-if="license.customer_type !== evaluation" class="item">
           <span class="key">{{ $t('Overview.customer') }}:</span>
           <span class="value">{{ license.customer }}</span>
         </li>
@@ -182,25 +182,26 @@
             ></el-progress>
           </div>
         </li>
+        <template v-if="license.customer_type !== evaluation">
+          <li class="item">
+            <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
+            <span class="value">{{ license.email }}</span>
+          </li>
 
-        <li v-if="license.customer_type !== 10" class="item">
-          <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
-          <span class="value">{{ license.email }}</span>
-        </li>
+          <li class="item">
+            <span class="key">{{ $t('Overview.issuedAt') }}:</span>
+            <span class="value broker">{{ license.issued_at }}</span>
+          </li>
 
-        <li v-if="license.customer_type !== 10" class="item">
-          <span class="key">{{ $t('Overview.issuedAt') }}:</span>
-          <span class="value broker">{{ license.issued_at }}</span>
-        </li>
-
-        <li v-if="license.customer_type !== 10" class="item">
-          <span class="key">{{ $t('Overview.expireAt') }}:</span>
-          <span class="value broker">{{ license.expiry_at }}</span>
-        </li>
+          <li class="item">
+            <span class="key">{{ $t('Overview.expireAt') }}:</span>
+            <span class="value broker">{{ license.expiry_at }}</span>
+          </li>
+        </template>
       </ul>
 
       <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
-        <div v-if="license.customer_type === 10" class="description" v-html="$t('Overview.licenseEvaluationTip')">
+        <div v-if="license.customer_type === evaluation" class="description" v-html="$t('Overview.licenseEvaluationTip')">
           {{ $t('Overview.licenseEvaluationTip') }}
         </div>
         <div v-else-if="license.expiry === true" class="description" v-html="$t('Overview.licenseExpiryTip')">
@@ -209,7 +210,7 @@
         <div v-else class="description">
           {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>
-        <div v-if="license.type === 'trial' && license.customer_type !== 10 && license.expiry === false" class="oper">
+        <div v-if="license.type === 'trial' && license.customer_type !== evaluation && license.expiry === false" class="oper">
           <el-tooltip
             effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false"
           >
@@ -271,6 +272,7 @@ export default {
 
   data() {
     return {
+      evaluation: 10,
       pageLoading: true,
       tableLoading: false,
       nodeName: '',
@@ -477,7 +479,7 @@ export default {
       this.license = await loadLicenseInfo()
       setTimeout(() => {
         // evaluation 许可证
-        if (this.license.customer_type === 10 && localStorage.getItem('licenseTipVisible') !== 'false') {
+        if (this.license.customer_type === this.evaluation && localStorage.getItem('licenseTipVisible') !== 'false') {
           this.licenseTipVisible = true
           this.isLicenseExpiry = false
           this.licenseTipWidth = 500
@@ -721,7 +723,7 @@ export default {
 
   .tip-content {
     font-size: 16px;
-    p{
+    p {
       word-break: break-word;
     }
   }

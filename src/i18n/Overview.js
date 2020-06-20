@@ -294,7 +294,7 @@ export default
     或联系销售人员更新许可证。
     `,
     en: `
-    Your license has expired.Please
+    Your license has expired. Please
     <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">update license</a>
     or contact our customer services for an updated license.
     `,
