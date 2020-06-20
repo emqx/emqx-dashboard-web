@@ -165,7 +165,7 @@
       </div>
 
       <ul class="license-field">
-        <li class="item">
+        <li v-if="license.customer_type !== 10" class="item">
           <span class="key">{{ $t('Overview.customer') }}:</span>
           <span class="value">{{ license.customer }}</span>
         </li>
@@ -183,27 +183,33 @@
           </div>
         </li>
 
-        <li class="item">
+        <li v-if="license.customer_type !== 10" class="item">
           <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
           <span class="value">{{ license.email }}</span>
         </li>
 
-        <li class="item">
+        <li v-if="license.customer_type !== 10" class="item">
           <span class="key">{{ $t('Overview.issuedAt') }}:</span>
           <span class="value broker">{{ license.issued_at }}</span>
         </li>
 
-        <li class="item">
+        <li v-if="license.customer_type !== 10" class="item">
           <span class="key">{{ $t('Overview.expireAt') }}:</span>
           <span class="value broker">{{ license.expiry_at }}</span>
         </li>
       </ul>
 
       <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
-        <div class="description">
+        <div v-if="license.customer_type === 10" class="description" v-html="$t('Overview.licenseEvaluationTip')">
+          {{ $t('Overview.licenseEvaluationTip') }}
+        </div>
+        <div v-else-if="license.expiry === true" class="description" v-html="$t('Overview.licenseExpiryTip')">
+          {{ $t('Overview.licenseExpiryTip') }}
+        </div>
+        <div v-else class="description">
           {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>
-        <div v-if="license.type === 'trial'" class="oper">
+        <div v-if="license.type === 'trial' && license.customer_type !== 10 && license.expiry === false" class="oper">
           <el-tooltip
             effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false"
           >
@@ -215,7 +221,7 @@
 
     <el-dialog
       title="标题"
-      width="460px"
+      :width="`${licenseTipWidth}px`"
       :visible.sync="licenseTipVisible"
       :close-on-click-modal="false"
     >
@@ -233,6 +239,9 @@
       </div>
       <div v-if="!isLicenseExpiry" class="tip-checkbox">
         <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">{{ $t('Overview.notPromptAgain') }}</el-checkbox>
+      </div>
+      <div class="tip-button">
+        <el-button type="primary" size="small" @click="licenseTipVisible=false">{{ $t('Overview.konw') }}</el-button>
       </div>
     </el-dialog>
 
@@ -296,6 +305,7 @@ export default {
       licenseTipVisible: false,
       isLicenseExpiry: false,
       noprompt: false,
+      licenseTipWidth: 460,
       license: {
         customer: '',
         email: '',
@@ -391,7 +401,7 @@ export default {
         localStorage.setItem('licenseTipVisible', false)
         setTimeout(() => {
           this.licenseTipVisible = false
-        }, 800)
+        }, 600)
       }
     },
     chartDataFill(length) {
@@ -470,11 +480,13 @@ export default {
         if (this.license.customer_type === 10 && localStorage.getItem('licenseTipVisible') !== 'false') {
           this.licenseTipVisible = true
           this.isLicenseExpiry = false
+          this.licenseTipWidth = 500
         }
         // 证书过期
         if (this.license.expiry === true) {
           this.licenseTipVisible = true
           this.isLicenseExpiry = true
+          this.licenseTipWidth = 560
         }
       }, 1000)
     },
@@ -708,11 +720,21 @@ export default {
   }
 
   .tip-content {
-    font-size: 15px;
+    font-size: 16px;
+    p{
+      word-break: break-word;
+    }
   }
 
   .tip-checkbox {
     margin-top: 10px;
+    .el-checkbox {
+      color: #aaa
+    }
+  }
+
+  .tip-button {
+    text-align: right;
   }
 }
 </style>
