@@ -290,8 +290,8 @@ export default
   licenseExpiryTip: {
     zh: `
     您的试用 License 已过期，请
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">更新许可证</a>
-    或联系销售人员更新许可证。
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">更新 License </a>
+    或联系销售人员更新 License。
     `,
     en: `
     Your license has expired. Please
@@ -301,8 +301,8 @@ export default
   },
   licenseEvaluationTip: {
     zh: `
-    当前正在使用评估许可证，限制为10个连接。请
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">升级许可证</a> 。如已购买
+    当前正在使用评估 License，限制为10个连接。请
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">升级 License</a> 。<br>如已购买
     License，请<a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/enterprise/latest/cn/getting-started/start.html#license"> 替换 </a>正式的 License。
     `,
     en: `

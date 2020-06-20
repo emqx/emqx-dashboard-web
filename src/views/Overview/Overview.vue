@@ -482,13 +482,13 @@ export default {
         if (this.license.customer_type === this.evaluation && localStorage.getItem('licenseTipVisible') !== 'false') {
           this.licenseTipVisible = true
           this.isLicenseExpiry = false
-          this.licenseTipWidth = 500
+          this.licenseTipWidth = 520
         }
         // 证书过期
         if (this.license.expiry === true) {
           this.licenseTipVisible = true
           this.isLicenseExpiry = true
-          this.licenseTipWidth = 560
+          this.licenseTipWidth = 600
         }
       }, 1000)
     },
