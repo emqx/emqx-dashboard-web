@@ -100,6 +100,12 @@
               </template>
             </el-form-item>
           </el-col>
+          <div v-if="wholeConfigList.length > 8" class="show-more">
+            <a href="javascript:;" @click="showWholeList">
+              {{ showMoreItem ? $t('Clients.collapse') : $t('Clients.expand') }}
+              <i :class="showMoreItem ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+            </a>
+          </div>
         </template>
       </el-row>
 
@@ -137,10 +143,12 @@ export default {
 
   data() {
     return {
+      showMoreItem: false,
       configLoading: false,
       selfVisible: false,
       resourceTypes: [],
       configList: [],
+      wholeConfigList: [],
       types: [],
       selectedResource: {
         name: '',
@@ -188,10 +196,20 @@ export default {
   },
 
   methods: {
+    showWholeList() {
+      if (this.showMoreItem === false) {
+        this.showMoreItem = true
+        this.configList = this.wholeConfigList
+      } else {
+        this.showMoreItem = false
+        this.configList = this.wholeConfigList.slice(0, 8)
+      }
+    },
     clearForm() {
       if (this.$refs.record) {
         setTimeout(() => {
           this.$refs.record.resetFields()
+          this.wholeConfigList = []
           this.configList = []
         }, 10)
       }
@@ -201,6 +219,7 @@ export default {
       this.selectedResource = this.resourceTypes.find($ => $.name === name)
 
       this.configLoading = true
+      this.wholeConfigList = []
       this.configList = []
 
       setTimeout(this.loadConfigList, 200)
@@ -211,7 +230,13 @@ export default {
       this.rules.config = rules
 
       this.record.config = {}
-      this.configList = form
+      this.wholeConfigList = form
+      this.showMoreItem = false
+      if (form.length > 8) {
+        this.configList = form.slice(0, 8)
+      } else {
+        this.configList = form
+      }
       form.forEach(({ key, value }) => {
         this.$set(this.record.config, key, value)
       })
@@ -272,6 +297,34 @@ export default {
     width: 95%;
     margin: 30px auto 28px auto;
     background-color: #EDEEF2;
+  }
+
+  .show-more {
+    text-align: center;
+    a {
+      position: relative;
+      text-decoration: none;
+    }
+    a::before {
+      content: '';
+      position: absolute;
+      left: -215px;
+      top: 8px;
+      z-index: 9;
+      width: 200px;
+      height: 1px;
+      background-color: #EDEEF2;
+    }
+    a::after {
+      content: '';
+      position: absolute;
+      right: -215px;
+      top: 8px;
+      z-index: 9;
+      width: 200px;
+      height: 1px;
+      background-color: #EDEEF2;
+    }
   }
 
   .el-form-item {
