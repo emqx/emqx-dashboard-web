@@ -340,6 +340,7 @@ export default {
       }
       .show-more {
         margin-left: 12px;
+        text-decoration: none;
       }
       .el-col-8 {
         margin-bottom: 20px;
