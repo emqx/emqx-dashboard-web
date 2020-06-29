@@ -50,7 +50,9 @@
                       <span class="field-value">{{ record.proto_name }} {{ mqttVersionMap[record.proto_ver] }}</span>
                     </template>
                     <template v-else>
-                      <span class="field-value">{{ record.proto_name }} v{{ record.proto_ver }}</span>
+                      <span class="field-value">{{ record.proto_name }}
+                        <span v-if="record.proto_ver"> v{{ record.proto_ver }}</span>
+                      </span>
                     </template>
                   </li>
                   <li class="field-info-item">
