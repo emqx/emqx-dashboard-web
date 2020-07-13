@@ -492,6 +492,11 @@ export default {
       const { types = [] } = this.selectedAction
       this.$refs.resource.setup({ types, action: 'create' })
       this.actionDialogVisible = false
+      sessionStorage.setItem('currentAction', JSON.stringify({
+        record: this.record,
+        paramsList: this.paramsList,
+        types,
+      }))
     },
 
     confirmResource(id) {
@@ -499,9 +504,16 @@ export default {
       if (!id) {
         return
       }
-      this.loadResourceData().then(() => {
-        this.record.params.$resource = id
-      })
+      const currentAction = sessionStorage.getItem('currentAction')
+      if (currentAction) {
+        const { record, paramsList, types } = JSON.parse(currentAction)
+        this.record = record
+        this.paramsList = paramsList
+        this.selectedAction.types = types
+        sessionStorage.removeItem('currentAction')
+      }
+      this.loadResourceData()
+      this.record.params.$resource = id
     },
 
     async loadResourceData() {
