@@ -83,7 +83,11 @@
         <ul class="field-info">
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.topic') }}:</div>
-            <span v-if="configItem.event" class="field-value">{{ configItem.event.title }} ({{ record.for[0] }})</span>
+            <span v-if="configItem.events" class="field-value">
+              <span v-for="(event, index) in configItem.events" :key="index">
+                {{ event.title }} ({{ event.event }})
+              </span>
+            </span>
           </li>
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.remark') }}:</div>
