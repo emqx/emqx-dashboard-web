@@ -41,8 +41,15 @@
           </el-table-column>
           <el-table-column
             prop="for"
+            min-width="120"
             :label="$t('RuleEngine.topic')"
-          ></el-table-column>
+          >
+            <template slot-scope="{ row }">
+              <div v-for="(item, index) in row.for" :key="index">
+                {{ item }}
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
             <template slot-scope="{ row }">
               <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>

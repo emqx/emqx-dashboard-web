@@ -22,7 +22,7 @@ export function loadRules(params) {
 export async function loadRuleDetails(id) {
   const rule = await http.get(`/rules/${id}`)
   await loadRuleEvents()
-  rule.event = eventsMap[rule.for[0]]
+  rule.events = rule.for.map(item => eventsMap[item])
   rule.metricsData = {}
   rule.metrics.forEach((item) => {
     ['matched', 'speed', 'speed_last5m', 'speed_max'].forEach((key) => {
