@@ -11,7 +11,7 @@ export default
   },
   value: {
     zh: '值',
-    en: 'value',
+    en: 'Value',
   },
   add: {
     zh: '添加',
