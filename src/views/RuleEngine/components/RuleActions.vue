@@ -306,7 +306,7 @@
       </div>
     </el-dialog>
 
-    <resource-dialog ref="resource" @created="confirmResource" @cache="confirmResource(false)">
+    <resource-dialog ref="resource" @created="confirmResource" @cache="confirmResource(null)">
     </resource-dialog>
   </div>
 </template>
@@ -506,9 +506,6 @@ export default {
 
     confirmResource(id) {
       this.actionDialogVisible = true
-      if (!id) {
-        return
-      }
       const currentAction = sessionStorage.getItem('currentAction')
       if (currentAction) {
         const { record, paramsList, types } = JSON.parse(currentAction)
@@ -517,8 +514,10 @@ export default {
         this.selectedAction.types = types
         sessionStorage.removeItem('currentAction')
       }
+      if (id) {
+        this.record.params.$resource = id
+      }
       this.loadResourceData()
-      this.record.params.$resource = id
     },
 
     async loadResourceData() {
@@ -553,7 +552,7 @@ export default {
     },
 
     actionTypeChange(actionName, oper = 'add') {
-      this.selectedAction = this.actionsMap[actionName]
+      this.selectedAction = JSON.parse(JSON.stringify(this.actionsMap[actionName]))
       this.paramsList = []
       this.paramsLoading = true
       setTimeout(this.loadParamsList(oper), 200)
