@@ -172,7 +172,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       key: k,
       type: inputType,
       elType,
-      value: defaultValue,
+      value: elType === 'object' ? {} : defaultValue,
       order,
     })
     // rules 的属性

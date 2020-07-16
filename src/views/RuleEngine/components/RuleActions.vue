@@ -234,7 +234,7 @@
             <el-col
               v-for="(item, i) in paramsList"
               :key="i"
-              :span="item.type === 'textarea' ? 24 : 12"
+              :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
             >
               <el-form-item :class="item.key === 'sql' ? 'code-editor__item' : ''" v-bind="item.formItemAttributes">
                 <template v-if="item.formItemAttributes.description" slot="label">
@@ -248,7 +248,10 @@
                     <i slot="reference" class="el-icon-question"></i>
                   </el-popover>
                 </template>
-                <template v-if="item.elType !== 'select'">
+                <template v-if="item.elType === 'object'">
+                  <key-and-value-editor v-model="record.params[item.key]"></key-and-value-editor>
+                </template>
+                <template v-else-if="item.elType !== 'select'">
                   <el-input
                     v-if="item.type === 'number'"
                     v-model.number="record.params[item.key]"
@@ -315,6 +318,7 @@ import { renderParamsForm } from '@/common/utils'
 import ResourceDialog from '@/views/RuleEngine/components/ResourceDialog.vue'
 import Monaco from '@/components/Monaco'
 import { setTimeout } from 'timers'
+import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 
 export default {
   name: 'RuleActions',
@@ -322,6 +326,7 @@ export default {
   components: {
     ResourceDialog,
     Monaco,
+    KeyAndValueEditor,
   },
 
   props: {
