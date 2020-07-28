@@ -2,9 +2,6 @@
   <div class="left-bar" :style="{ width: leftBarCollapse ? '80px' : '200px' }">
     <div class="logo">
       <img class="logo-img" src="../assets/emqx_logo.png" alt="logo">
-      <div class="title">
-        Dashboard
-      </div>
     </div>
 
     <a-menu
@@ -264,7 +261,7 @@ export default {
   transition: all .3s;
 
   .menu-wrapper {
-    margin-top: 80px;
+    margin-top: 90px;
   }
   .ant-menu {
     border-right-color: transparent;
@@ -293,7 +290,6 @@ export default {
     text-align: center;
     width: 200px;
     font-size: 18px;
-    height: 60px;
     line-height: 60px;
     color: #34c388;
     overflow: hidden;
@@ -312,10 +308,8 @@ export default {
     }
 
     .logo-img {
-      width: 48px;
       height: auto;
-      position: relative;
-      left: -3px;
+      margin-top: 10px;
     }
 
     .line {

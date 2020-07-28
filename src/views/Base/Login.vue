@@ -3,9 +3,6 @@
     <a-card v-if="isNeedAuth" class="login-card emq-list-card">
 
       <div class="split-wrapper">
-        <div class="logo-wrapper">
-        </div>
-
         <div :span="12" class="login-wrapper">
           <div class="emq-title">
             {{ $t('Base.signIn') }}
@@ -187,10 +184,7 @@ export default {
   }
 
   .login-wrapper {
-    width: 50%;
-    float: left;
     padding: 24px;
-    height: 512px;
   }
 
   .login-card {
