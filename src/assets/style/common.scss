@@ -234,22 +234,6 @@ body {
 .monaco-container {
   border: 1px solid #D9D9D9;
 }
-// code-editor
-.code-editor {
-  border: 1px solid #D9D9D9;
-  border-radius: 4px;
-
-  .CodeMirror {
-    border-radius: 4px;
-    color: #646775;
-    height: auto !important;
-  }
-  .CodeMirror-gutters {
-    background-color: #F6F7FB;
-    border-right: 1px solid #D9D9D9;
-  }
-}
-
 /* 修复 Safari 浏览器的光标问题 */
 input {
   line-height: normal !important;

@@ -104,14 +104,15 @@
                   </el-form-item>
 
                   <el-form-item class="code-editor__item" :label="$t('RuleEngine.testOutput')">
-                    <code-editor
-                      v-model="testOutPut"
-                      class="test-output"
-                      lang="application/json"
-                      :lint="false"
-                      :disabled="true"
-                      :line-numbers="false"
-                    ></code-editor>
+                    <div class="monaco-container monaco-test-output" style="height: 200px">
+                      <monaco
+                        id="testOutput"
+                        v-model="testOutPut"
+                        class="test-output"
+                        lang="json"
+                        :disabled="true"
+                      ></monaco>
+                    </div>
                   </el-form-item>
                 </div>
               </el-collapse-transition>
@@ -187,7 +188,6 @@ import {
 } from '@/api/rules'
 import { loadTopics } from '@/api/server'
 import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck } from '@/common/utils'
-import CodeEditor from '@/components/CodeEditor'
 import Monaco from '@/components/Monaco'
 import StretchHeight from '@/components/StretchHeight'
 import RuleActions from './components/RuleActions'
@@ -198,7 +198,6 @@ export default {
 
   components: {
     RuleActions,
-    CodeEditor,
     Monaco,
     StretchHeight,
   },
@@ -535,12 +534,6 @@ export default {
     text-align: right;
     .el-radio__label {
       font-size: 13px;
-    }
-  }
-
-  .test-output {
-    .CodeMirror-scroll {
-      min-height: 170px;
     }
   }
 }
