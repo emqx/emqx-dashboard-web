@@ -171,7 +171,10 @@ export default {
 
   computed: {
     availableTypes() {
-      return this.types.length > 0 ? this.resourceTypes.filter($ => this.types.includes($.name)) : this.resourceTypes
+      const types = this.types.length > 0
+        ? this.resourceTypes.filter($ => this.types.includes($.name))
+        : this.resourceTypes
+      return types.sort((prev, next) => prev.title.localeCompare(next.title))
     },
     disabledSelect() {
       return this.types.length === 1

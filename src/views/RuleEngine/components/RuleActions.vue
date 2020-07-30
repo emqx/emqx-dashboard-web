@@ -392,7 +392,9 @@ export default {
       },
     },
     availableActions() {
-      const data = this.actions.filter($ => ['$any', this.event].includes($.for))
+      const data = this.actions
+        .filter($ => ['$any', this.event].includes($.for))
+        .sort((prev, next) => prev.title.localeCompare(next.title))
       if (!this.record.name && data[0]) {
         // eslint-disable-next-line
         this.record.name = data[0].name
