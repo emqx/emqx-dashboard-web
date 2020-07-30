@@ -100,12 +100,12 @@
               </template>
             </el-form-item>
           </el-col>
-          <div v-if="wholeConfigList.length > 8" class="show-more">
+          <el-col v-if="wholeConfigList.length > 8" :span="24" class="show-more">
             <a href="javascript:;" @click="showWholeList">
               {{ showMoreItem ? $t('Clients.collapse') : $t('Clients.expand') }}
               <i :class="showMoreItem ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
             </a>
-          </div>
+          </el-col>
         </template>
       </el-row>
 
