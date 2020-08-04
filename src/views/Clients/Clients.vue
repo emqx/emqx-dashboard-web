@@ -18,6 +18,9 @@
 
     <div class="app-wrapper">
       <a-card class="emq-list-card" :loading="listLoading">
+        <el-button type="primary" icon="el-icon-plus" size="small" class="add-button" @click="showDialog('create')">
+          {{ $t('Base.create') }}
+        </el-button>
         <div class="emq-table-header">
           <el-row class="search-wrapper" :gutter="20">
             <el-col :span="8">
@@ -164,6 +167,26 @@
         </div>
       </a-card>
     </div>
+
+    <el-dialog
+      width="520px"
+      :title="accessType === 'edit' ? $t('Clients.editEquipment') : $t('Clients.createEquipment')"
+      :visible.sync="dialogVisible"
+      @close="clearInput"
+    >
+      <el-form ref="recordForm" size="small" :model="record" :rules="rules">
+        <el-form-item prop="clientId" :label="$t('Clients.clientId')">
+          <el-input v-model="record.clientId"></el-input>
+        </el-form-item>
+        <el-form-item prop="username" :label="$t('Clients.username')">
+          <el-input v-model="record.username"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-align-footer">
+        <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -208,6 +231,17 @@ export default {
         'CoAP',
         'LwM2M',
       ],
+      dialogVisible: false,
+      accessType: '',
+      record: {},
+      rules: {
+        clientId: [
+          { required: true, message: this.$t('Clients.enterEquipId') },
+        ],
+        username: [
+          { required: true, message: this.$t('Clients.enterEquipName') },
+        ],
+      },
     }
   },
 
@@ -216,6 +250,27 @@ export default {
   },
 
   methods: {
+    showDialog(type, item) {
+      this.record = {
+        clientId: '',
+        username: '',
+      }
+      this.accessType = 'create'
+      if (type === 'edit') {
+        Object.assign(this.record, item)
+        this.accessType = 'edit'
+      }
+      this.dialogVisible = true
+    },
+    closeDialog() {
+      this.dialogVisible = false
+    },
+    clearInput() {
+      if (this.$refs.recordForm) {
+        this.$refs.recordForm.resetFields()
+      }
+    },
+    save() {},
     handleNodeChange() {
       this.loadNodeClients(true)
     },
@@ -319,6 +374,9 @@ export default {
   .data-list {
     clear: both;
   }
+  .page-header {
+    margin: 0!important;
+  }
   .page-header-content-view {
     .content {
       display: flex;
@@ -327,6 +385,10 @@ export default {
     }
   }
   .app-wrapper {
+    padding: 0!important;
+    .add-button {
+      margin-bottom: 20px;
+    }
     .search-wrapper {
       display: block;
       width: 100%;

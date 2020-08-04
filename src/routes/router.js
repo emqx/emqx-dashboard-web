@@ -65,6 +65,37 @@ let routes = [
       },
     ],
   },
+   // 产品中心
+   {
+    path: '/products',
+    component: Layout,
+    meta: {
+      hideKey: 'products',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'products',
+        component: () => import('@/views/Products/Products'),
+      },
+      {
+        path: 'view',
+        name: 'products-view',
+        component: () => import('@/views/Products/ProductDetails'),
+      },
+      {
+        path: 'create/models',
+        name: 'model-create',
+        component: () => import('@/views/Models/ModelCreate'),
+      },
+      {
+        path: 'view/models',
+        name: 'model-view',
+        component: () => import('@/views/Models/ModelView'),
+      },
+    ],
+  },
   // 主题
   {
     path: '/topics',

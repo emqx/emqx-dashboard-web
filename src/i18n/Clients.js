@@ -282,4 +282,28 @@ export default {
     zh: '展开',
     en: 'Expand',
   },
+  createEquipment: {
+    zh: '创建设备',
+    en: 'Create',
+  },
+  editEquipment: {
+    zh: '编辑设备',
+    en: 'Edit',
+  },
+  equipId: {
+    zh: '设备ID',
+    en: 'ID',
+  },
+  equipName: {
+    zh: '设备名称',
+    en: 'Name',
+  },
+  enterEquipId: {
+    zh: '请输入设备ID',
+    en: 'Please enter the ID',
+  },
+  enterEquipName: {
+    zh: '请输入设备名',
+    en: 'Please enter the name',
+  },
 }
