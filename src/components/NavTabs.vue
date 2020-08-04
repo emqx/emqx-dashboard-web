@@ -88,7 +88,7 @@ export default {
   },
 
   methods: {
-    getTabName(name, oper) {
+    getTabName(name, subName, oper) {
       if (name === 'monitor' && oper === 'node') {
         return 'node'
       }
@@ -98,6 +98,9 @@ export default {
       if (name === 'schemas' && oper === 'create') {
         return 'schemaCreate'
       }
+      if (subName === 'models' && oper === 'create') {
+        return 'modelCreate'
+      }
       return name
     },
     loadTabs() {
@@ -105,12 +108,13 @@ export default {
       const pathList = path.split('/')
       let name = pathList[1]
       const oper = query.oper || pathList[2]
+      const subName = pathList[3]
 
       this.isIndex = path === '/monitor'
       if (this.isIndex) {
         return
       }
-      name = this.getTabName(name, oper)
+      name = this.getTabName(name, subName, oper)
       const tabIndex = this.tabs.findIndex($ => $.url === fullPath || $.name === name)
       if (tabIndex === -1) {
         const tab = { name, url: fullPath }

@@ -33,9 +33,21 @@ export default
     zh: '连接',
     en: 'Connections',
   },
+  products: {
+    zh: '产品中心',
+    en: 'Products',
+  },
   clients: {
-    zh: '客户端',
-    en: 'Clients',
+    zh: '设备管理',
+    en: 'Equipments',
+  },
+  apps: {
+    zh: 'APP管理',
+    en: 'Apps',
+  },
+  models: {
+    zh: '模型管理',
+    en: 'Models',
   },
   topics: {
     zh: '主题',
@@ -124,6 +136,10 @@ export default
   schemaCreate: {
     zh: '创建编解码',
     en: 'Schema Create',
+  },
+  modelCreate: {
+    zh: '创建模型',
+    en: 'Model Create',
   },
   settings: {
     zh: '系统设置',

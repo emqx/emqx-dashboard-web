@@ -101,8 +101,8 @@ export default {
         icon: 'icon-yibiaopan',
       },
       {
-        title: this.$t('components.clients'),
-        path: '/clients',
+        title: this.$t('components.products'),
+        path: '/products',
         icon: 'icon-guanlianshebei',
       },
       {

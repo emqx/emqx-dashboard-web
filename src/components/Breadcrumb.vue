@@ -17,6 +17,12 @@
           </span>
         </a-breadcrumb-item>
 
+        <a-breadcrumb-item v-if="subTitle">
+          <span class="btn btn-default raw">
+            {{ subTitle }}
+          </span>
+        </a-breadcrumb-item>
+
         <a-breadcrumb-item v-if="oper">
           <span class="btn btn-default raw">
             {{ oper }}
@@ -39,6 +45,7 @@ export default {
       backPath: undefined,
       currentTitle: '',
       oper: '',
+      subTitle: '',
     }
   },
 
@@ -65,8 +72,9 @@ export default {
       this.oper = ''
       this.backPath = undefined
       this.currentTitle = this.$t(`components.${name}`)
+      this.subTitle = pathList[3]
 
-      if (['create', 'view', 'detail'].includes(oper)) {
+      if (['create', 'view', 'detail', 'edit'].includes(oper)) {
         this.oper = this.$t(`Base.${oper}`)
         this.backPath = `/${name}`
       } else if (oper === 'node') {
@@ -75,6 +83,10 @@ export default {
       if (routeName === 'pluginsName' && this.$route.params.pluginName) {
         this.oper = this.$route.params.pluginName
         this.backPath = `/${name}`
+      }
+      if (this.subTitle) {
+        this.subTitle = this.$t(`components.${this.subTitle}`)
+        this.backPath = `/${name}/view`
       }
     },
   },
