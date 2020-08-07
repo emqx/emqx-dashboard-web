@@ -95,8 +95,11 @@
             <template slot-scope="{ row }">
               <router-link
                 :to="{
-                  path: '/clients/detail',
-                  query: { clientid: row.clientid }
+                  path: '/products/view/clients',
+                  query: {
+                    id: id,
+                    clientid: row.clientid
+                  }
                 }"
               >
                 {{ row.clientid }}
@@ -203,6 +206,13 @@ export default {
 
   components: {
     CustomPagination,
+  },
+
+  props: {
+    id: {
+      required: true,
+      type: Number,
+    },
   },
 
   data() {

@@ -170,4 +170,12 @@ export default {
     zh: '查看模型',
     en: 'View Model',
   },
+  dataFormat: {
+    zh: '数据格式',
+    en: 'Data Foramt',
+  },
+  binary: {
+    zh: '二进制',
+    en: 'Binary',
+  },
 }

@@ -44,27 +44,6 @@ let routes = [
       },
     ],
   },
-  // 连接
-  {
-    path: '/clients',
-    component: Layout,
-    meta: {
-      hideKey: 'clients',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'clients',
-        component: () => import('@/views/Clients/Clients'),
-      },
-      {
-        path: 'detail',
-        name: 'clients-view',
-        component: () => import('@/views/Clients/ClientDetails'),
-      },
-    ],
-  },
    // 产品中心
    {
     path: '/products',
@@ -93,6 +72,11 @@ let routes = [
         path: 'view/models',
         name: 'model-view',
         component: () => import('@/views/Models/ModelView'),
+      },
+      {
+        path: 'view/clients',
+        name: 'clients-view',
+        component: () => import('@/views/Clients/ClientDetails'),
       },
     ],
   },

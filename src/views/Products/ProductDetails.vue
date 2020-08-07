@@ -36,10 +36,12 @@
           </a-card>
         </el-tab-pane>
         <el-tab-pane :label="$t('components.clients')" name="clients">
-          <Clients></Clients>
+          <Clients v-if="id" :id="id"></Clients>
+          <Clients v-else></Clients>
         </el-tab-pane>
         <el-tab-pane :label="$t('components.models')" name="models">
-          <Models :id="id"></Models>
+          <Models v-if="id" :id="id"></Models>
+          <Models v-else></Models>
         </el-tab-pane>
         <el-tab-pane :label="$t('components.apps')" name="apps">
           <Apps></Apps>
@@ -74,7 +76,12 @@ export default {
   },
 
   created() {
-    this.id = this.$route.query.id
+    if (this.$route.query.id) {
+      this.id = parseInt(this.$route.query.id, 10)
+    }
+    if (this.$route.query.tab) {
+      this.activeName = this.$route.query.tab
+    }
   },
 }
 </script>

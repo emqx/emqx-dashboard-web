@@ -18,9 +18,9 @@
         </a-breadcrumb-item>
 
         <a-breadcrumb-item v-if="subTitle">
-          <span class="btn btn-default raw">
+          <router-link v-if="subBackPath" :to="subBackPath" tag="span" class="btn btn-default raw">
             {{ subTitle }}
-          </span>
+          </router-link>
         </a-breadcrumb-item>
 
         <a-breadcrumb-item v-if="oper">
@@ -46,6 +46,7 @@ export default {
       currentTitle: '',
       oper: '',
       subTitle: '',
+      subBackPath: undefined,
     }
   },
 
@@ -85,8 +86,10 @@ export default {
         this.backPath = `/${name}`
       }
       if (this.subTitle) {
+        const tabName = this.subTitle
         this.subTitle = this.$t(`components.${this.subTitle}`)
-        this.backPath = `/${name}/view`
+        this.backPath = `/${name}`
+        this.subBackPath = `/${name}/view?id=${query.id}&tab=${tabName}`
       }
     },
   },
