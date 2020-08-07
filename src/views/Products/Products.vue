@@ -168,6 +168,7 @@ export default {
       if (type === 'edit') {
         const record = { ...item }
         this.record = record
+        this.dialogVisible = true
       } else if (type === 'view') {
         this.$router.push({
           path: '/products/view',
@@ -182,8 +183,8 @@ export default {
           deviceModel: '',
           description: '',
         }
+        this.dialogVisible = true
       }
-      this.dialogVisible = true
     },
     updateProducts(item) {
       updateApp(item.id, item).then(() => {

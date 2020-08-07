@@ -15,6 +15,21 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
+              <el-form-item prop="dataFormat" :label="$t('Models.dataFormat')">
+                <el-select
+                  v-model="modelRecord.dataFormat" :disabled="accessType === 'view'"
+                >
+                  <el-option
+                    v-for="(item, index) in modelTypeList"
+                    :key="index"
+                    :value="item.value"
+                    :label="item.label"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
               <el-form-item :label="$t('General.remark')">
                 <el-input v-model="modelRecord.remark"></el-input>
               </el-form-item>
@@ -109,12 +124,22 @@
                 :disabled="accessType === 'view'"
                 @change="dataTypeChange"
               >
-                <el-radio
-                  v-for="item in dataTypeList"
-                  :key="item.value" :label="item.label" class="radio-item"
-                >
-                  {{ item.value }}
-                </el-radio>
+                <template v-if="modelRecord.dataFormat === 'json'">
+                  <el-radio
+                    v-for="item in jsonDataTypeList"
+                    :key="item.value" :label="item.label" class="radio-item"
+                  >
+                    {{ item.value }}
+                  </el-radio>
+                </template>
+                <template v-else>
+                  <el-radio
+                    v-for="item in dataTypeList"
+                    :key="item.value" :label="item.label" class="radio-item"
+                  >
+                    {{ item.value }}
+                  </el-radio>
+                </template>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -192,6 +217,10 @@
 
 
 <script>
+import {
+  dataTypeList, jsonDataTypeList, dataTypeDic, lengthList,
+} from '@/common/modelData'
+
 export default {
   name: 'ModelCreate',
 
@@ -226,50 +255,6 @@ export default {
       dialogVisible: false,
       tableData: [],
       accessType: '',
-      dataTypeList: [
-        { label: 'integer', value: this.$t('Models.integer') },
-        { label: 'fixString', value: this.$t('Models.fixString') },
-        { label: 'fixBinary', value: this.$t('Models.fixBinary') },
-        { label: 'unsignInt', value: this.$t('Models.unsignInt') },
-        { label: 'unfixString', value: this.$t('Models.unfixString') },
-        { label: 'unfixBinary', value: this.$t('Models.unfixBinary') },
-        { label: 'timeStamp', value: this.$t('Models.timeStamp') },
-        { label: 'float', value: this.$t('Models.float') },
-        { label: 'double', value: this.$t('Models.double') },
-      ],
-      dataTypeDic: {
-        integer: this.$t('Models.integer'),
-        fixString: this.$t('Models.fixString'),
-        fixBinary: this.$t('Models.fixBinary'),
-        unsignInt: this.$t('Models.unsignInt'),
-        unfixString: this.$t('Models.unfixString'),
-        unfixBinary: this.$t('Models.unfixBinary'),
-        timeStamp: this.$t('Models.timeStamp'),
-        float: this.$t('Models.float'),
-        double: this.$t('Models.double'),
-      },
-      lengthList: {
-        integer: [
-          { label: this.$t('Models.oneByte'), value: 1 },
-          { label: this.$t('Models.twoBytes'), value: 2 },
-          { label: this.$t('Models.fourBytes'), value: 4 },
-        ],
-        unsignInt: [
-          { label: this.$t('Models.oneByte'), value: 1 },
-          { label: this.$t('Models.twoBytes'), value: 2 },
-          { label: this.$t('Models.fourBytes'), value: 4 },
-          { label: this.$t('Models.eightBytes'), value: 8 },
-        ],
-        float: [
-          { label: this.$t('Models.fourBytes'), value: 4 },
-        ],
-        double: [
-          { label: this.$t('Models.eightBytes'), value: 8 },
-        ],
-        timeStamp: [
-          { label: this.$t('Models.eightBytes'), value: 8 },
-        ],
-      },
       record: {
         dataType: 'integer',
       },
@@ -285,8 +270,28 @@ export default {
       modelRecord: {},
       modelRules: {
         name: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
+        dataFormat: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
       },
+      modelTypeList: [
+        { label: 'JSON', value: 'json' },
+        { label: this.$t('Models.binary'), value: 'bianry' },
+      ],
     }
+  },
+
+  computed: {
+    dataTypeList() {
+      return dataTypeList
+    },
+    jsonDataTypeList() {
+      return jsonDataTypeList
+    },
+    dataTypeDic() {
+      return dataTypeDic
+    },
+    lengthList() {
+      return lengthList
+    },
   },
 
   methods: {
