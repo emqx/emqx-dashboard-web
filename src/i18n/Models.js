@@ -111,6 +111,10 @@ export default {
     zh: 'double浮点型',
     en: 'Double',
   },
+  array: {
+    zh: '数组类型',
+    en: 'Array',
+  },
   oneByte: {
     zh: '1字节',
     en: 'One Byte',
