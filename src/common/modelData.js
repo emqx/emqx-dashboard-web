@@ -4,7 +4,7 @@ import store from '@/stores'
 const local = store.state.lang
 const VueI18n = lang[local]
 
-export const dataTypeList = [
+const dataTypeList = [
   { label: 'integer', value: VueI18n.Models.integer },
   { label: 'fixString', value: VueI18n.Models.fixString },
   { label: 'fixBinary', value: VueI18n.Models.fixBinary },
@@ -16,7 +16,7 @@ export const dataTypeList = [
   { label: 'double', value: VueI18n.Models.double },
 ]
 
-export const jsonDataTypeList = [
+const jsonDataTypeList = [
   { label: 'integer', value: VueI18n.Models.integer },
   { label: 'fixString', value: VueI18n.Models.fixString },
   { label: 'unsignInt', value: VueI18n.Models.unsignInt },
@@ -24,9 +24,10 @@ export const jsonDataTypeList = [
   { label: 'timeStamp', value: VueI18n.Models.timeStamp },
   { label: 'float', value: VueI18n.Models.float },
   { label: 'double', value: VueI18n.Models.double },
+  { label: 'array', value: VueI18n.Models.array },
 ]
 
-export const dataTypeDic = {
+const dataTypeDic = {
   integer: VueI18n.Models.integer,
   fixString: VueI18n.Models.fixString,
   fixBinary: VueI18n.Models.fixBinary,
@@ -38,7 +39,7 @@ export const dataTypeDic = {
   double: VueI18n.Models.double,
 }
 
-export const lengthList = {
+const lengthList = {
   integer: [
     { label: VueI18n.Models.oneByte, value: 1 },
     { label: VueI18n.Models.twoBytes, value: 2 },
@@ -62,7 +63,7 @@ export const lengthList = {
 }
 
 
-export default {
+export {
   dataTypeList,
   jsonDataTypeList,
   dataTypeDic,
