@@ -32,12 +32,7 @@
                   </el-select>
                 </el-col>
                 <el-col :span="16">
-                  <el-input
-                    v-model="fuzzyParams.topic"
-                    type="text"
-                    size="small"
-                  >
-                  </el-input>
+                  <el-input v-model="fuzzyParams.topic" type="text" size="small"> </el-input>
                 </el-col>
               </el-row>
             </el-col>
@@ -50,12 +45,7 @@
                 </el-select>
               </el-col>
               <el-col :span="8">
-                <el-input
-                  v-model="fuzzyParams.share"
-                  type="text"
-                  size="small"
-                  :placeholder="$t('Subs.share')"
-                >
+                <el-input v-model="fuzzyParams.share" type="text" size="small" :placeholder="$t('Subs.share')">
                 </el-input>
               </el-col>
             </template>
@@ -85,8 +75,11 @@
             v-if="count > 10"
             background
             layout="total, sizes, prev, pager, next"
-            :page-sizes="[20, 50, 100, 500]" :page-size.sync="params._limit"
-            :current-page.sync="params._page" :total="count" @size-change="handleSizeChange"
+            :page-sizes="[20, 50, 100, 500]"
+            :page-size.sync="params._limit"
+            :current-page.sync="params._page"
+            :total="count"
+            @size-change="handleSizeChange"
             @current-change="handleCurrentPageChange"
           >
           </el-pagination>
@@ -104,12 +97,9 @@
   </div>
 </template>
 
-
 <script>
 import CustomPagination from '@/components/CustomPagination.vue'
-import {
-  listNodeSubscriptions,
-} from '@/api/subs'
+import { listNodeSubscriptions } from '@/api/subs'
 import { loadNodes } from '@/api/common'
 
 export default {
@@ -161,9 +151,7 @@ export default {
     },
     genQueryParams(params) {
       let newParams = {}
-      const {
-        clientid, topic, qos, share, match,
-      } = params
+      const { clientid, topic, qos, share, match } = params
       newParams = {
         clientid: clientid || undefined,
         qos: qos === '' ? undefined : qos,
@@ -207,7 +195,10 @@ export default {
         this.params._page = 1
       }
       const data = await listNodeSubscriptions(this.nodeName, { ...this.params, ...params })
-      const { items = [], meta: { count = 0, hasnext = false } } = data
+      const {
+        items = [],
+        meta: { count = 0, hasnext = false },
+      } = data
       this.tableData = items
       this.count = count
       this.hasnext = hasnext
@@ -216,7 +207,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .subscriptions {

@@ -1,6 +1,4 @@
-import {
-  Drawer, Card, Badge, Skeleton, Breadcrumb, Icon,
-} from 'ant-design-vue'
+import { Drawer, Card, Badge, Skeleton, Breadcrumb, Icon } from 'ant-design-vue'
 import 'ant-design-vue/lib/drawer/style'
 import 'ant-design-vue/lib/card/style'
 import 'ant-design-vue/lib/badge/style'

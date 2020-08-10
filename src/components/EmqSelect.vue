@@ -1,10 +1,5 @@
 <template>
-  <el-select
-    :value="rawValue"
-    v-bind="$attrs"
-    class="emq-select"
-    v-on="$listeners"
-  >
+  <el-select :value="rawValue" v-bind="$attrs" class="emq-select" v-on="$listeners">
     <slot>
       <el-option
         v-for="(item, i) in options"
@@ -18,7 +13,6 @@
     </slot>
   </el-select>
 </template>
-
 
 <script>
 import http from '@/common/http'
@@ -68,7 +62,7 @@ export default {
       set(val) {
         let value = null
         const valueKey = this.fieldName.value
-        const item = this.options.find($ => $[valueKey] === val)
+        const item = this.options.find(($) => $[valueKey] === val)
         if (item && this.parserField[valueKey]) {
           value = val === 'true'
         }
@@ -122,14 +116,12 @@ export default {
       return this.disabledItem.includes(item[this.fieldName.value])
     },
     async getOptions() {
-      const {
-        api, url, options, list,
-      } = this.field
+      const { api, url, options, list } = this.field
       let value = []
       if (options) {
         value = options
       } else if (list) {
-        value = list.map($ => ({ label: $, value: $ }))
+        value = list.map(($) => ({ label: $, value: $ }))
       } else if (api) {
         value = await api()
       } else if (url) {
@@ -140,7 +132,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .el-select-dropdown {

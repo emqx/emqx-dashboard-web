@@ -21,13 +21,12 @@
           {{ $t('RuleEngine.basicInfo') }}
         </div>
 
-
         <ul class="field-info">
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.state') }}:</div>
             <span class="field-value">
               <a-badge
-                style="font-size: 12px"
+                style="font-size: 12px;"
                 :status="isAlive ? 'success' : 'error'"
                 :text="isAlive ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')"
                 dot
@@ -37,13 +36,12 @@
                 v-if="!isAlive"
                 :loading="reloading"
                 size="mini"
-                style="margin-left: 12px"
+                style="margin-left: 12px;"
                 type="primary"
                 @click="reconnectResource"
               >
                 {{ $t('RuleEngine.reconnect') }}
               </el-button>
-
             </span>
           </li>
 
@@ -61,7 +59,6 @@
             <span class="field-value">{{ record.typeInfo.description }}</span>
           </li>
 
-
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.detailedStatus') }}:</div>
             <span class="field-value">
@@ -76,10 +73,8 @@
               <resource-node :value="record" @change="loadData"></resource-node>
             </el-collapse-transition>
           </li>
-
         </ul>
       </a-card>
-
 
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
@@ -87,13 +82,9 @@
         </div>
         <resource-field :config="record._config"></resource-field>
       </a-card>
-
     </div>
-
-
   </div>
 </template>
-
 
 <script>
 import { loadResourceDetails, reconnectResource, destroyResource } from '@/api/rules'
@@ -128,7 +119,7 @@ export default {
       if (status.length === 0) {
         return true
       }
-      return !status.find($ => $.is_alive === false)
+      return !status.find(($) => $.is_alive === false)
     },
   },
 
@@ -144,29 +135,34 @@ export default {
 
   methods: {
     deleteResource() {
-      this.$msgbox.confirm(this.$t('RuleEngine.deleteResource'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(async () => {
-        await destroyResource(this.record.id)
-        this.$message.success(this.$t('RuleEngine.successfulDeletion'))
-        setTimeout(() => {
-          this.$router.push({ path: '/resources' })
-        }, 500)
-      }).catch(() => {})
+      this.$msgbox
+        .confirm(this.$t('RuleEngine.deleteResource'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await destroyResource(this.record.id)
+          this.$message.success(this.$t('RuleEngine.successfulDeletion'))
+          setTimeout(() => {
+            this.$router.push({ path: '/resources' })
+          }, 500)
+        })
+        .catch(() => {})
     },
     toggleShowConfig() {
       this.showConfig = !this.showConfig
     },
     async reconnectResource() {
       this.reloading = true
-      reconnectResource(this.resourceId).then(() => {
-        this.reloading = false
-        this.loadData()
-      }).catch(() => {
-        this.reloading = false
-      })
+      reconnectResource(this.resourceId)
+        .then(() => {
+          this.reloading = false
+          this.loadData()
+        })
+        .catch(() => {
+          this.reloading = false
+        })
     },
     async loadData() {
       try {
@@ -180,10 +176,9 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .resource-view {
-  @import "./style.scss";
+  @import './style.scss';
 
   .field-title {
     width: 110px;

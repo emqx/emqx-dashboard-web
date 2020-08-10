@@ -1,5 +1,4 @@
-export default
-{
+export default {
   __not: [],
   key: {
     zh: '键',

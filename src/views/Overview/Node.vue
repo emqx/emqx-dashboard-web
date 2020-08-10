@@ -16,7 +16,6 @@
 
     <div class="app-wrapper">
       <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
-
         <el-tab-pane :label="$t('Overview.basicInfo')" name="basic">
           <div class="card-wrapper">
             <a-card class="emq-list-card">
@@ -33,23 +32,27 @@
               </div>
 
               <el-table :data="listeners">
-                <el-table-column prop="protocol" min-width="100px" :label="$t('Overview.listenerProtocol')"></el-table-column>
-                <el-table-column prop="listen_on" min-width="80px" :label="$t('Overview.listenerAddress')"></el-table-column>
+                <el-table-column
+                  prop="protocol"
+                  min-width="100px"
+                  :label="$t('Overview.listenerProtocol')"
+                ></el-table-column>
+                <el-table-column
+                  prop="listen_on"
+                  min-width="80px"
+                  :label="$t('Overview.listenerAddress')"
+                ></el-table-column>
                 <el-table-column prop="acceptors" min-width="60px" label="Acceptors"></el-table-column>
                 <el-table-column prop="current_conns" min-width="120px" :label="$t('Overview.connectCurrentAndMax')">
-                  <template slot-scope="{ row }">
-                    {{ row.current_conns }} / {{ row.max_conns }}
-                  </template>
+                  <template slot-scope="{ row }"> {{ row.current_conns }} / {{ row.max_conns }} </template>
                 </el-table-column>
               </el-table>
-
             </a-card>
           </div>
         </el-tab-pane>
 
         <el-tab-pane :label="$t('Overview.metric')" name="metrics">
           <div class="card-wrapper">
-
             <a-card class="emq-list-card">
               <div class="emq-title">
                 {{ $t('Overview.dataList') }}
@@ -84,14 +87,22 @@
               <el-row class="stats-row" :gutter="30">
                 <el-col :span="8">
                   <el-table :data="metricsData.packets">
-                    <el-table-column prop="key" :label="$t('Overview.mqttPackages')" min-width="100px"></el-table-column>
+                    <el-table-column
+                      prop="key"
+                      :label="$t('Overview.mqttPackages')"
+                      min-width="100px"
+                    ></el-table-column>
                     <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
                   </el-table>
                 </el-col>
 
                 <el-col :span="8">
                   <el-table :data="metricsData.messages">
-                    <el-table-column prop="key" :label="$t('Overview.messageNumber')" min-width="100px"></el-table-column>
+                    <el-table-column
+                      prop="key"
+                      :label="$t('Overview.messageNumber')"
+                      min-width="100px"
+                    ></el-table-column>
                     <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
                   </el-table>
                 </el-col>
@@ -106,18 +117,13 @@
             </a-card>
           </div>
         </el-tab-pane>
-
       </el-tabs>
-
     </div>
   </div>
 </template>
 
-
 <script>
-import {
-  loadNodeDetail, loadListeners, loadMetrics,
-} from '@/api/overview'
+import { loadNodeDetail, loadListeners, loadMetrics } from '@/api/overview'
 
 import NodeBasicCard from './components/NodeBasicCard'
 
@@ -156,12 +162,68 @@ export default {
       }
 
       const indexTable = {
-        packets: ['received', 'sent', 'connect', 'connack', 'auth', 'disconnect.sent', 'disconnect.received', 'pingreq', 'pingresp', 'publish.received', 'publish.sent', 'puback.received', 'puback.sent', 'puback.missed', 'pubcomp.received', 'pubcomp.sent', 'pubcomp.missed', 'pubrec.received', 'pubrec.sent', 'pubrec.missed', 'pubrel.received', 'pubrel.sent', 'pubrel.missed', 'subscribe', 'suback', 'unsubscribe', 'unsuback'],
-        messages: ['received', 'sent', 'dropped', 'retained', 'qos0.received', 'qos0.sent', 'qos1.received', 'qos1.sent', 'qos2.received', 'qos2.expired', 'qos2.sent', 'qos2.dropped'],
+        packets: [
+          'received',
+          'sent',
+          'connect',
+          'connack',
+          'auth',
+          'disconnect.sent',
+          'disconnect.received',
+          'pingreq',
+          'pingresp',
+          'publish.received',
+          'publish.sent',
+          'puback.received',
+          'puback.sent',
+          'puback.missed',
+          'pubcomp.received',
+          'pubcomp.sent',
+          'pubcomp.missed',
+          'pubrec.received',
+          'pubrec.sent',
+          'pubrec.missed',
+          'pubrel.received',
+          'pubrel.sent',
+          'pubrel.missed',
+          'subscribe',
+          'suback',
+          'unsubscribe',
+          'unsuback',
+        ],
+        messages: [
+          'received',
+          'sent',
+          'dropped',
+          'retained',
+          'qos0.received',
+          'qos0.sent',
+          'qos1.received',
+          'qos1.sent',
+          'qos2.received',
+          'qos2.expired',
+          'qos2.sent',
+          'qos2.dropped',
+        ],
         bytes: ['received', 'sent'],
-        client: ['connected', 'authenticate', 'auth.anonymous', 'check_acl', 'subscribe', 'unsubscribe', 'disconnected'],
+        client: [
+          'connected',
+          'authenticate',
+          'auth.anonymous',
+          'check_acl',
+          'subscribe',
+          'unsubscribe',
+          'disconnected',
+        ],
         session: ['created', 'resumed', 'takeovered', 'discarded', 'terminated'],
-        delivery: ['dropped', 'dropped.no_local', 'dropped.too_large', 'dropped.qos0_msg', 'dropped.queue_full', 'dropped.expired'],
+        delivery: [
+          'dropped',
+          'dropped.no_local',
+          'dropped.too_large',
+          'dropped.qos0_msg',
+          'dropped.queue_full',
+          'dropped.expired',
+        ],
       }
       const dataMap = {
         packets: {},
@@ -221,7 +283,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .node {

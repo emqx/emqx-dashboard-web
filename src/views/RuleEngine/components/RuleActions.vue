@@ -6,10 +6,7 @@
           <div class="title">{{ $t('RuleEngine.actionType') }}</div>
           <div class="desc">{{ (item._config || {}).title }} ({{ item.name }})</div>
         </div>
-        <div
-          v-if="!disabled"
-          class="action-item-btn"
-        >
+        <div v-if="!disabled" class="action-item-btn">
           <span class="btn" @click="editAction(item, i)">
             {{ $t('RuleEngine.edit') }}
           </span>
@@ -23,12 +20,7 @@
               :open-delay="500"
               :content="$t('RuleEngine.fallbackActionCreate')"
             >
-              <el-button
-                slot="reference"
-                type="text"
-                icon="el-icon-plus"
-                @click="handleAddFallbacks(item)"
-              >
+              <el-button slot="reference" type="text" icon="el-icon-plus" @click="handleAddFallbacks(item)">
                 {{ $t('RuleEngine.fallbackAction') }}
               </el-button>
             </el-popover>
@@ -91,10 +83,7 @@
               <div class="title">{{ $t('RuleEngine.actionType') }}</div>
               <div class="desc">{{ (fallback._config || {}).title }} ({{ fallback.name }})</div>
             </div>
-            <div
-              v-if="!disabled"
-              class="action-item-btn"
-            >
+            <div v-if="!disabled" class="action-item-btn">
               <span class="btn" @click="editFallback(item, fallback, i)">
                 {{ $t('RuleEngine.edit') }}
               </span>
@@ -137,7 +126,11 @@
                 </span>
               </div>
             </div>
-            <div v-for="(fallbackValue, fallbackValueIndex) in fallback._value" :key="fallbackValueIndex" class="action-item-field">
+            <div
+              v-for="(fallbackValue, fallbackValueIndex) in fallback._value"
+              :key="fallbackValueIndex"
+              class="action-item-field"
+            >
               <div class="title">{{ fallbackValue.label }}</div>
               <div class="value">{{ fallbackValue.value }}</div>
             </div>
@@ -147,7 +140,11 @@
             <div class="main-title">
               {{ $t('RuleEngine.actionMetricsTips') }}
             </div>
-            <div v-for="(fallbackMetric, fallbackmetricIndex) in fallback.metrics" :key="fallbackmetricIndex" class="item">
+            <div
+              v-for="(fallbackMetric, fallbackmetricIndex) in fallback.metrics"
+              :key="fallbackmetricIndex"
+              class="item"
+            >
               <span class="title">
                 {{ $t('RuleEngine.node') }}
               </span>
@@ -162,38 +159,25 @@
           </div>
         </div>
       </template>
-
     </div>
 
-    <el-button
-      v-if="!disabled"
-      size="small"
-      icon="el-icon-plus"
-      @click="addAction"
-    >
+    <el-button v-if="!disabled" size="small" icon="el-icon-plus" @click="addAction">
       {{ $t('RuleEngine.addAction') }}
     </el-button>
 
-    <el-dialog
-      :visible.sync="actionDialogVisible"
-      :title="actionDialogTitle"
-      width="520px"
-    >
+    <el-dialog :visible.sync="actionDialogVisible" :title="actionDialogTitle" width="520px">
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
         <el-form-item prop="name" :label="$t('RuleEngine.actionType')">
           <emq-select
             v-model="record.name"
             :field="{ options: availableActions }"
-            :field-name="{ label: 'title', value: 'name'}"
+            :field-name="{ label: 'title', value: 'name' }"
             @change="actionTypeChange"
           >
           </emq-select>
         </el-form-item>
 
-        <div
-          v-if="(selectedAction.title.length - selectedAction.description.length) > 18"
-          class="action-description"
-        >
+        <div v-if="selectedAction.title.length - selectedAction.description.length > 18" class="action-description">
           {{ selectedAction.description }}
         </div>
 
@@ -205,9 +189,9 @@
           <emq-select
             v-model="record.params.$resource"
             :field="{ options: availableResources }"
-            :field-name="{ label: 'description', value: 'id'}"
+            :field-name="{ label: 'description', value: 'id' }"
             class="reset-width"
-            style="width: 330px"
+            style="width: 330px;"
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="custom-option">
@@ -223,10 +207,7 @@
 
         <div v-if="selectedAction.params.$resource" class="line"></div>
 
-        <el-row
-          v-if="paramsLoading || paramsList.length > 0"
-          class="params-item-wrapper" :gutter="50"
-        >
+        <el-row v-if="paramsLoading || paramsList.length > 0" class="params-item-wrapper" :gutter="50">
           <div v-if="paramsLoading" class="params-loading-wrapper">
             <a-skeleton active></a-skeleton>
           </div>
@@ -240,11 +221,7 @@
                 <template v-if="item.formItemAttributes.description" slot="label">
                   {{ item.formItemAttributes.label }}
                   <el-popover trigger="hover" width="220" placement="top">
-                    <div
-                      class="emq-popover-content"
-                      v-html="item.formItemAttributes.description"
-                    >
-                    </div>
+                    <div class="emq-popover-content" v-html="item.formItemAttributes.description"></div>
                     <i slot="reference" class="el-icon-question"></i>
                   </el-popover>
                 </template>
@@ -258,23 +235,10 @@
                     v-bind="item.bindAttributes"
                   >
                   </el-input>
-                  <div
-                    v-else-if="item.key === 'sql'"
-                    class="monaco-container monaco-action__sql"
-                  >
-                    <monaco
-                      id="action-sql"
-                      v-model="record.params.sql"
-                      lang="sql"
-                    >
-                    </monaco>
+                  <div v-else-if="item.key === 'sql'" class="monaco-container monaco-action__sql">
+                    <monaco id="action-sql" v-model="record.params.sql" lang="sql"> </monaco>
                   </div>
-                  <el-input
-                    v-else
-                    v-model="record.params[item.key]"
-                    v-bind="item.bindAttributes"
-                  >
-                  </el-input>
+                  <el-input v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </el-input>
                 </template>
                 <template v-else>
                   <emq-select
@@ -283,12 +247,7 @@
                     v-bind="item.bindAttributes"
                   >
                   </emq-select>
-                  <emq-select
-                    v-else
-                    v-model="record.params[item.key]"
-                    v-bind="item.bindAttributes"
-                  >
-                  </emq-select>
+                  <emq-select v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </emq-select>
                 </template>
               </el-form-item>
             </el-col>
@@ -306,11 +265,9 @@
       </div>
     </el-dialog>
 
-    <resource-dialog ref="resource" @created="confirmResource" @cache="confirmResource(null)">
-    </resource-dialog>
+    <resource-dialog ref="resource" @created="confirmResource" @cache="confirmResource(null)"> </resource-dialog>
   </div>
 </template>
-
 
 <script>
 import { loadActionsList, loadResource } from '@/api/rules'
@@ -393,7 +350,7 @@ export default {
     },
     availableActions() {
       const data = this.actions
-        .filter($ => ['$any', this.event].includes($.for))
+        .filter(($) => ['$any', this.event].includes($.for))
         .sort((prev, next) => prev.title.localeCompare(next.title))
       if (!this.record.name && data[0]) {
         // eslint-disable-next-line
@@ -407,7 +364,7 @@ export default {
       if (!types) {
         return []
       }
-      return this.resources.filter($ => types.includes($.type))
+      return this.resources.filter(($) => types.includes($.type))
     },
   },
 
@@ -499,11 +456,14 @@ export default {
       const { types = [] } = this.selectedAction
       this.$refs.resource.setup({ types, action: 'create' })
       this.actionDialogVisible = false
-      sessionStorage.setItem('currentAction', JSON.stringify({
-        record: this.record,
-        paramsList: this.paramsList,
-        types,
-      }))
+      sessionStorage.setItem(
+        'currentAction',
+        JSON.stringify({
+          record: this.record,
+          paramsList: this.paramsList,
+          types,
+        }),
+      )
     },
 
     confirmResource(id) {
@@ -592,7 +552,11 @@ export default {
         row.forEach((item) => {
           // eslint-disable-next-line
           item._config = this.actionsMap[item.name]
-          const { params, _config: { params: paramsTemplate }, fallbacks } = item
+          const {
+            params,
+            _config: { params: paramsTemplate },
+            fallbacks,
+          } = item
           // eslint-disable-next-line
           item._value = Object.entries(params).map(([k, v]) => ({
             label: (paramsTemplate[k] || {}).title,
@@ -643,7 +607,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .rule-actions {
   .show-btn {
@@ -664,7 +627,7 @@ export default {
       .el-button {
         font-size: 12px;
       }
-      .el-button [class*="el-icon-"] + span {
+      .el-button [class*='el-icon-'] + span {
         margin-left: 0px;
       }
     }
@@ -702,7 +665,7 @@ export default {
     margin-bottom: 20px;
     background-color: #f2f2f2;
     border: 1px dashed #f2f2f2;
-    transition: border .3s;
+    transition: border 0.3s;
     position: relative;
   }
   .action-item.error-action {
@@ -730,7 +693,6 @@ export default {
         color: #444;
         margin-right: 20px;
       }
-
     }
   }
 
@@ -763,7 +725,6 @@ export default {
       margin-left: 8px;
       color: #444;
     }
-
   }
 
   .el-form {
@@ -811,7 +772,8 @@ export default {
       padding: 0 32px;
     }
 
-    .el-input, .el-select {
+    .el-input,
+    .el-select {
       width: 200px !important;
     }
 

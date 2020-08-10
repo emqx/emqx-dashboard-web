@@ -1,6 +1,6 @@
 /* Reset element ui style */
-@import "variables.scss";
-@import "element-variables";
+@import 'variables.scss';
+@import 'element-variables';
 
 /* Button */
 .el-button {
@@ -13,7 +13,6 @@
   }
 
   &--dashed.danger {
-
     &:focus,
     &:hover {
       color: $--color-danger;
@@ -59,7 +58,7 @@
 .el-textarea {
   transition: all 0.3s;
   &__inner:focus {
-    box-shadow: 0 0 0 2px rgba(52, 195, 136, 0.2)
+    box-shadow: 0 0 0 2px rgba(52, 195, 136, 0.2);
   }
 }
 
@@ -75,7 +74,7 @@
   &.is-error {
     .el-input__inner,
     .el-textarea__inner {
-      box-shadow: 0 0 0 2px rgba(245, 34, 45, 0.2)
+      box-shadow: 0 0 0 2px rgba(245, 34, 45, 0.2);
     }
   }
   &.is-success {
@@ -166,9 +165,9 @@
     font-weight: normal;
   }
   &[border] {
-    .el-radio-button__orig-radio:checked+.el-radio-button__inner {
+    .el-radio-button__orig-radio:checked + .el-radio-button__inner {
       background-color: #fff;
-      color: #34C388;
+      color: #34c388;
     }
   }
 }
@@ -183,7 +182,7 @@
 
 /* Tabs */
 .el-tabs.el-tabs--card {
-  &>.el-tabs__header {
+  & > .el-tabs__header {
     border-bottom: 0px;
     margin-bottom: 0px;
     .el-tabs__nav {
@@ -191,7 +190,7 @@
     }
     .el-tabs__item {
       transition: all 0.5s;
-      background:#FAFAFA;
+      background: #fafafa;
       border-radius: 4px 4px 0 0;
       margin-right: 3px;
       border: 1px solid transparent;
@@ -209,8 +208,8 @@
       }
     }
     .el-tabs__new-tab {
-      color: #34C388;
-      border-color: #34C388;
+      color: #34c388;
+      border-color: #34c388;
       line-height: 17px;
       i {
         font-weight: 600;
@@ -230,14 +229,18 @@
 .el-icon-question {
   cursor: pointer;
 }
-.ant-menu-inline-collapsed>.ant-menu-item .anticon,
-.ant-menu-inline-collapsed>.ant-menu-item-group>.ant-menu-item-group-list>.ant-menu-item .anticon,
-.ant-menu-inline-collapsed>.ant-menu-item-group>.ant-menu-item-group-list>.ant-menu-submenu>.ant-menu-submenu-title .anticon,
-.ant-menu-inline-collapsed>.ant-menu-submenu>.ant-menu-submenu-title .anticon {
+.ant-menu-inline-collapsed > .ant-menu-item .anticon,
+.ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .anticon,
+.ant-menu-inline-collapsed
+  > .ant-menu-item-group
+  > .ant-menu-item-group-list
+  > .ant-menu-submenu
+  > .ant-menu-submenu-title
+  .anticon,
+.ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .anticon {
   font-size: 20px;
   margin-right: 0px;
 }
-
 
 /* Anti Design */
 .ant-breadcrumb {

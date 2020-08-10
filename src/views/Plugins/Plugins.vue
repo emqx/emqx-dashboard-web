@@ -1,20 +1,13 @@
 <template>
   <div class="plugins">
     <div class="app-wrapper">
-
       <a-card class="search-wrapper">
         <el-row :gutter="20">
           <el-col :span="8">
             <el-radio-group v-model="status" size="small" border @change="loadData">
-              <el-radio-button label="all">
-                {{ $t('Plugins.all') }}({{ state.count }})
-              </el-radio-button>
-              <el-radio-button label="running">
-                {{ $t('Plugins.running') }}({{ state.running }})
-              </el-radio-button>
-              <el-radio-button label="stop">
-                {{ $t('Plugins.stopped') }}({{ state.stop }})
-              </el-radio-button>
+              <el-radio-button label="all"> {{ $t('Plugins.all') }}({{ state.count }}) </el-radio-button>
+              <el-radio-button label="running"> {{ $t('Plugins.running') }}({{ state.running }}) </el-radio-button>
+              <el-radio-button label="stop"> {{ $t('Plugins.stopped') }}({{ state.stop }}) </el-radio-button>
             </el-radio-group>
           </el-col>
 
@@ -65,32 +58,17 @@
       >
         <el-col v-for="(item, i) in listTableData" :key="i" :span="12">
           <div class="plugin-item">
-            <img
-              class="logo"
-              :src="iconMap[item.name]"
-              alt="plugin-logo"
-              width="90"
-              height="90"
-            >
+            <img class="logo" :src="iconMap[item.name]" alt="plugin-logo" width="90" height="90" />
 
             <div class="header">
               <div class="name">
-                <a-badge
-                  :status="item.active ? 'success' : 'error'"
-                  :text="item.name"
-                  dot
-                >
-                </a-badge>
-                <el-tooltip
-                  effect="dark"
-                  :content="$t('Plugins.tutorial')"
-                  :open-delay="500"
-                  placement="top"
-                >
+                <a-badge :status="item.active ? 'success' : 'error'" :text="item.name" dot> </a-badge>
+                <el-tooltip effect="dark" :content="$t('Plugins.tutorial')" :open-delay="500" placement="top">
                   <a
                     v-if="!primaryList.includes(item.name) && getLinks(item.name)"
                     class="tutorial"
-                    href="javascript:;" @click="openTutorialLink(item.name)"
+                    href="javascript:;"
+                    @click="openTutorialLink(item.name)"
                   >
                     <i class="iconfont icon-bangzhu"></i>
                   </a>
@@ -113,12 +91,7 @@
                 <span v-else>--</span>
               </div>
               <div v-if="hasManagePage(item.name)" class="manage-btn">
-                <el-button
-                  type="dashed"
-                  :disabled="!item.active"
-                  size="small"
-                  @click="handleManage(item)"
-                >
+                <el-button type="dashed" :disabled="!item.active" size="small" @click="handleManage(item)">
                   {{ $t('Plugins.manage') }}
                 </el-button>
               </div>
@@ -128,33 +101,19 @@
       </el-row>
 
       <!-- List -->
-      <div
-        v-if="displayType === 'list' && listTableData.length > 0"
-        class="emq-list-card plugin-list-wrapper"
-      >
+      <div v-if="displayType === 'list' && listTableData.length > 0" class="emq-list-card plugin-list-wrapper">
         <div v-for="(item, i) in listTableData" :key="i" :gutter="20" class="plugin-item">
-
-          <img
-            class="logo"
-            :src="iconMap[item.name]"
-            alt="plugin-logo"
-            width="60"
-            height="60"
-          >
+          <img class="logo" :src="iconMap[item.name]" alt="plugin-logo" width="60" height="60" />
 
           <div class="header">
             <div class="name">
               {{ item.name }}
-              <el-tooltip
-                effect="dark"
-                :content="$t('Plugins.tutorial')"
-                :open-delay="500"
-                placement="top"
-              >
+              <el-tooltip effect="dark" :content="$t('Plugins.tutorial')" :open-delay="500" placement="top">
                 <a
                   v-if="!primaryList.includes(item.name) && getLinks(item.name)"
                   class="tutorial"
-                  href="javascript:;" @click="openTutorialLink(item.name)"
+                  href="javascript:;"
+                  @click="openTutorialLink(item.name)"
                 >
                   <i class="iconfont icon-bangzhu"></i>
                 </a>
@@ -204,15 +163,11 @@
         <p>{{ $t('Plugins.listNull') }}</p>
       </a-card>
     </div>
-
   </div>
 </template>
 
-
 <script>
-import {
-  loadPlugins, startPlugin, stopPlugin,
-} from '@/api/plugins'
+import { loadPlugins, startPlugin, stopPlugin } from '@/api/plugins'
 import { loadNodes } from '@/api/common'
 import { getPluginsLink, matchSearch } from '@/common/utils'
 
@@ -251,8 +206,8 @@ export default {
       const tableData = this.tableData || []
       return {
         count: tableData.length,
-        running: tableData.filter($ => !!$.active).length,
-        stop: tableData.filter($ => !$.active).length,
+        running: tableData.filter(($) => !!$.active).length,
+        stop: tableData.filter(($) => !$.active).length,
       }
     },
   },
@@ -313,7 +268,7 @@ export default {
       let list = this.tableData
       if (this.status !== 'all') {
         const active = this.status === 'running'
-        list = list.filter($ => $.active === active)
+        list = list.filter(($) => $.active === active)
       }
       this.listTableData = list
     },
@@ -328,15 +283,18 @@ export default {
         this.$message.success(this.$t('Plugins.runSuccess'))
         return
       }
-      this.$msgbox.confirm(this.$t('Plugins.thisActionWillStopThePlugIn'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(async () => {
-        await stopPlugin(row.name)
-        this.$message.success(this.$t('Plugins.stopSuccess'))
-        row.active = false
-      }).catch(() => {})
+      this.$msgbox
+        .confirm(this.$t('Plugins.thisActionWillStopThePlugIn'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await stopPlugin(row.name)
+          this.$message.success(this.$t('Plugins.stopSuccess'))
+          row.active = false
+        })
+        .catch(() => {})
     },
     getLinks(name) {
       return getPluginsLink(name)
@@ -381,7 +339,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .plugins {
   .plugin-item {
@@ -407,7 +364,7 @@ export default {
       top: 1px;
     }
     .description {
-      color: rgba(0, 0, 0, .65);
+      color: rgba(0, 0, 0, 0.65);
       font-size: 14px;
       line-height: 22px;
       max-width: 300px;
@@ -436,7 +393,7 @@ export default {
     }
     .oper {
       position: relative;
-      .el-button{
+      .el-button {
         min-width: 64px;
         float: right;
       }
@@ -464,8 +421,9 @@ export default {
         margin-left: 40px;
         flex: 1;
 
-        .type, .version {
-          color: rgba(0, 0, 0, .55);
+        .type,
+        .version {
+          color: rgba(0, 0, 0, 0.55);
           margin-top: 4px;
           margin-bottom: 0;
           line-height: 22px;
@@ -487,7 +445,8 @@ export default {
       font-size: 13px;
     }
     .search-input {
-      .el-icon-search, .el-icon-loading {
+      .el-icon-search,
+      .el-icon-loading {
         position: relative;
         left: 4px;
         top: 7px;

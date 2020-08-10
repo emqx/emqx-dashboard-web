@@ -1,10 +1,8 @@
 <template>
   <div class="login">
     <a-card v-if="isNeedAuth" class="login-card emq-list-card">
-
       <div class="split-wrapper">
-        <div class="logo-wrapper">
-        </div>
+        <div class="logo-wrapper"></div>
 
         <div :span="12" class="login-wrapper">
           <div class="emq-title">
@@ -24,13 +22,7 @@
             :show-message="false"
             @keyup.enter.native="nativeLogin"
           >
-            <el-alert
-              v-if="loginError"
-              :title="loginError"
-              type="error"
-              @close="loginError = ''"
-            >
-            </el-alert>
+            <el-alert v-if="loginError" :title="loginError" type="error" @close="loginError = ''"> </el-alert>
 
             <el-form-item prop="username">
               <el-input v-model="record.username" :placeholder="$t('Base.userName')"></el-input>
@@ -50,7 +42,6 @@
     </a-card>
   </div>
 </template>
-
 
 <script>
 import { auth } from '@/api/common'
@@ -91,32 +82,34 @@ export default {
       auth({
         username,
         password,
-      }).then((res) => {
-        if (!res) {
-          return
-        }
-        this.loginError = ''
-        this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember })
-        setTimeout(() => {
-          const { to = '/' } = this.$route.query
-          this.$router.replace({
-            path: to,
-          })
+      })
+        .then((res) => {
+          if (!res) {
+            return
+          }
+          this.loginError = ''
+          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember })
+          setTimeout(() => {
+            const { to = '/' } = this.$route.query
+            this.$router.replace({
+              path: to,
+            })
+            if (!this.isNeedAuth) {
+              this.fullLoading.close()
+            }
+          }, 500)
+        })
+        .catch((error) => {
           if (!this.isNeedAuth) {
             this.fullLoading.close()
           }
-        }, 500)
-      }).catch((error) => {
-        if (!this.isNeedAuth) {
-          this.fullLoading.close()
-        }
-        this.isNeedAuth = true
-        this.loginError = error
-      })
+          this.isNeedAuth = true
+          this.loginError = error
+        })
     },
 
     async nativeLogin() {
-      if (!await awaitWrap(this.$refs.record.validate())) {
+      if (!(await awaitWrap(this.$refs.record.validate()))) {
         return
       }
       this.login()
@@ -142,12 +135,11 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .login {
   width: 100vw;
   min-height: 100vh;
-  box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08);
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
 
   .ant-card-body {
     padding: 0;
@@ -162,7 +154,7 @@ export default {
   }
 
   .logo-wrapper {
-    background-image: url("../../assets/emqx_banner.png");
+    background-image: url('../../assets/emqx_banner.png');
     background-size: 100%;
     background-repeat: no-repeat;
     position: relative;

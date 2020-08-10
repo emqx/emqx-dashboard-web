@@ -2,7 +2,6 @@
   <div ref="chart" class="simple-line"></div>
 </template>
 
-
 <script>
 import echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/line'
@@ -110,22 +109,24 @@ export default {
       const { color } = this
       const { type } = this
       this.chart = echarts.init(this.$refs.chart)
-      this.option.series = [{
-        data: this.value.y,
-        smooth: true,
-        type,
-        symbolSize: 0,
-        lineStyle: {
-          color,
+      this.option.series = [
+        {
+          data: this.value.y,
+          smooth: true,
+          type,
+          symbolSize: 0,
+          lineStyle: {
+            color,
+          },
+          label: {
+            show: false,
+          },
+          areaStyle: {
+            color,
+            opacity: 1,
+          },
         },
-        label: {
-          show: false,
-        },
-        areaStyle: {
-          color,
-          opacity: 1,
-        },
-      }]
+      ]
       this.chart.setOption(this.option)
     },
   },

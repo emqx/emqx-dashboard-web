@@ -1,11 +1,7 @@
 <template>
   <div class="settings">
     <div class="app-wrapper">
-      <el-tabs
-        v-model="activeName"
-        type="card"
-        :before-leave="handleBeforeLeave"
-      >
+      <el-tabs v-model="activeName" type="card" :before-leave="handleBeforeLeave">
         <el-tab-pane :label="$t('Settings.basic')" name="basic">
           <config-settings v-if="activeName === 'basic'" ref="basicConfig"></config-settings>
         </el-tab-pane>
@@ -13,12 +9,10 @@
         <el-tab-pane :label="$t('Settings.cluster')" name="cluster">
           <cluster-settings v-if="activeName === 'cluster'" ref="clusterSettings"></cluster-settings>
         </el-tab-pane>
-
       </el-tabs>
     </div>
   </div>
 </template>
-
 
 <script>
 import ConfigSettings from './ConfigSettings'
@@ -45,14 +39,10 @@ export default {
         const { basicConfig } = this.$refs
         const { disabled } = basicConfig._data
         if (!disabled) {
-          const status = await this.$confirm(
-            this.$t('Settings.noSaveConfirm'),
-            this.$t('Base.warning'),
-            {
-              type: 'warning',
-              cancelButtonText: this.$t('Settings.no'),
-            },
-          )
+          const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
+            type: 'warning',
+            cancelButtonText: this.$t('Settings.no'),
+          })
           if (status === 'confirm') {
             basicConfig.cancel(false)
             return true
@@ -65,7 +55,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .settings {

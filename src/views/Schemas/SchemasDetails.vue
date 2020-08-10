@@ -15,7 +15,6 @@
 
     <div class="emq-list-body schemas-wrapper app-wrapper">
       <a-card class="emq-list-card">
-
         <el-row :gutter="20">
           <el-form
             ref="record"
@@ -32,8 +31,7 @@
                 <el-input v-model="record.name" :disabled="disabled"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="10">
-            </el-col>
+            <el-col :span="10"> </el-col>
 
             <el-col :span="14">
               <el-form-item :label="$t('Schemas.parser_type')" prop="parser_type">
@@ -45,8 +43,7 @@
                 </emq-select>
               </el-form-item>
             </el-col>
-            <el-col :span="10">
-            </el-col>
+            <el-col :span="10"> </el-col>
 
             <!-- 3rd-party -->
             <template v-if="record.parser_type === THIRD_PARTY">
@@ -61,8 +58,7 @@
                   </emq-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="10">
-              </el-col>
+              <el-col :span="10"> </el-col>
 
               <!-- HTTP type -->
               <template v-if="record.third_party_type === HTTP">
@@ -76,8 +72,7 @@
                     </el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="10">
-                </el-col>
+                <el-col :span="10"> </el-col>
               </template>
 
               <!-- TCP type -->
@@ -88,8 +83,7 @@
                     </el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="10">
-                </el-col>
+                <el-col :span="10"> </el-col>
               </template>
 
               <!-- Resources type -->
@@ -99,7 +93,7 @@
                     <emq-select
                       v-model="record.parser_addr.resource_id"
                       :field="{ options: availableResources }"
-                      :field-name="{ label: 'id', value: 'id'}"
+                      :field-name="{ label: 'id', value: 'id' }"
                       :disabled="disabled"
                     >
                       <div slot="option" slot-scope="{ item }" class="custom-option">
@@ -109,8 +103,7 @@
                     </emq-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="10">
-                </el-col>
+                <el-col :span="10"> </el-col>
               </template>
 
               <el-col :span="14">
@@ -118,22 +111,23 @@
                   <el-input v-model="record.parser_opts['3rd_party_opts']" :disabled="disabled"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="10">
-              </el-col>
+              <el-col :span="10"> </el-col>
               <el-col :span="14">
                 <el-form-item :label="$t('Schemas.connect_timeout')" prop="parser_opts.connect_timeout">
-                  <el-input v-model="record.parser_opts.connect_timeout" :disabled="disabled" placeholder="3"></el-input>
+                  <el-input
+                    v-model="record.parser_opts.connect_timeout"
+                    :disabled="disabled"
+                    placeholder="3"
+                  ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="10">
-              </el-col>
+              <el-col :span="10"> </el-col>
               <el-col :span="14">
                 <el-form-item :label="$t('Schemas.parse_timeout')" prop="parser_opts.parse_timeout">
                   <el-input v-model="record.parser_opts.parse_timeout" :disabled="disabled" placeholder="5"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="10">
-              </el-col>
+              <el-col :span="10"> </el-col>
             </template>
 
             <!-- View -->
@@ -143,10 +137,8 @@
                   <el-input v-model="record.descr" :disabled="true"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="10">
-              </el-col>
-              <el-col :span="10">
-              </el-col>
+              <el-col :span="10"> </el-col>
+              <el-col :span="10"> </el-col>
             </template>
 
             <el-col v-else :span="14">
@@ -154,16 +146,12 @@
                 <el-input v-model="record.description" :disabled="disabled"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="10">
-            </el-col>
+            <el-col :span="10"> </el-col>
 
             <!-- Schema code -->
             <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
               <el-form-item class="code-editor__item" label="Schema" prop="schema">
-                <div
-                  class="monaco-container monaco-schema"
-                  :style="{ height: `${editorHeight}px` }"
-                >
+                <div class="monaco-container monaco-schema" :style="{ height: `${editorHeight}px` }">
                   <monaco
                     id="schema"
                     v-model="record.schema"
@@ -177,9 +165,7 @@
                 <stretch-height v-model="editorHeight"></stretch-height>
               </el-form-item>
             </el-col>
-            <el-col :span="10">
-            </el-col>
-
+            <el-col :span="10"> </el-col>
           </el-form>
         </el-row>
 
@@ -191,13 +177,10 @@
             {{ $t('Base.cancel') }}
           </el-button>
         </div>
-
       </a-card>
-
     </div>
   </div>
 </template>
-
 
 <script>
 import { loadResource } from '@/api/rules'
@@ -299,13 +282,15 @@ export default {
     deleteData() {
       this.$confirm(this.$t('Schemas.confirmDelete'), {
         type: 'warning',
-      }).then(async () => {
-        const res = await deleteSchema(this.detailsID)
-        if (res) {
-          this.$message.success(this.$t('Base.deleteSuccess'))
-          this.routeToSchemas()
-        }
-      }).catch(() => {})
+      })
+        .then(async () => {
+          const res = await deleteSchema(this.detailsID)
+          if (res) {
+            this.$message.success(this.$t('Base.deleteSuccess'))
+            this.routeToSchemas()
+          }
+        })
+        .catch(() => {})
     },
 
     async handle3rdTypeChange(val) {
@@ -313,7 +298,7 @@ export default {
         const res = await loadResource()
         if (res) {
           const types = ['parser_tcp', 'parser_http']
-          this.availableResources = res.filter($ => types.includes($.type))
+          this.availableResources = res.filter(($) => types.includes($.type))
         }
       }
     },
@@ -321,6 +306,4 @@ export default {
 }
 </script>
 
-
-<style lang="scss">
-</style>
+<style lang="scss"></style>
