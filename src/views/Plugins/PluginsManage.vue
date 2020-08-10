@@ -15,7 +15,6 @@
   </div>
 </template>
 
-
 <script>
 import AuthClientIdTable from './components/AuthClientIdTable.vue'
 import AuthUsernameTable from './components/AuthUsernameTable.vue'
@@ -44,10 +43,11 @@ export default {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(() => {
-        next()
-      }).catch(() => {
       })
+        .then(() => {
+          next()
+        })
+        .catch(() => {})
     } else {
       next()
     }
@@ -55,6 +55,4 @@ export default {
 }
 </script>
 
-
-<style lang="scss">
-</style>
+<style lang="scss"></style>

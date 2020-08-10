@@ -1,16 +1,14 @@
 /* eslint-disable */
 import Clipboard from 'clipboard'
 import sqlFormatter from 'sql-formatter'
-import parser from "js-sql-parser";
+import parser from 'js-sql-parser'
 
 import store from '@/stores'
 import router from '@/routes'
 
 const { lang = 'zh' } = store.state
 
-import {
-  enDocsLink, zhDocsLink, pluginsZh, pluginsEn,
-} from '@/common/link_urls'
+import { enDocsLink, zhDocsLink, pluginsZh, pluginsEn } from '@/common/link_urls'
 
 /**
  * 获取基础的验证信息
@@ -36,9 +34,7 @@ export function toLogin() {
  * @param Promise
  * @return Promise
  */
-export const awaitWrap = promise => promise
-  .then(data => data)
-  .catch(err => null)
+export const awaitWrap = (promise) => promise.then((data) => data).catch((err) => null)
 
 /**
  * 安全的转化 JSON 字符串
@@ -61,7 +57,7 @@ export function safeParser(jsonStr, defaultValue = {}) {
 function fillObjectI18n(data = {}) {
   const { lang = 'zh' } = store.state
 
-  Object.keys(data).forEach(key => {
+  Object.keys(data).forEach((key) => {
     let value = data[key]
     if (typeof value !== 'object') {
       return
@@ -127,9 +123,15 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       continue
     }
     const {
-      default: defaultValue, description = '',
-      enum: enumValue, title, type,
-      input = 'text', order = 10, format, required = false,
+      default: defaultValue,
+      description = '',
+      enum: enumValue,
+      title,
+      type,
+      input = 'text',
+      order = 10,
+      format,
+      required = false,
     } = v
     let inputType = type
     let elType = 'input'
@@ -252,7 +254,10 @@ export const sqlExampleFormatter = (sql) => {
   if (paramsRe) {
     const paramsText = paramsRe[1]
     if (paramsText) {
-      const newParamsText = paramsText.replace(/(!#!|\s)/g, ' ').split(/[,，]/).join(', ')
+      const newParamsText = paramsText
+        .replace(/(!#!|\s)/g, ' ')
+        .split(/[,，]/)
+        .join(', ')
       text = text.replace(paramsText, `${newParamsText}`)
     }
   }
@@ -312,15 +317,15 @@ export const matchSearch = (data, searchKey, searchValue) => {
  * @param number 需要转化的数值
  * @return string 转化后的字符串
  */
-export const formatNumberSize = number => {
+export const formatNumberSize = (number) => {
   const scale = 1000
   const digitList = ['K', 'M', 'G', 'T']
-  let residue = Math.round(number%scale/100) // 小数点后数，1位
-  let $integer = Math.round(number/scale) // 最小单位kb
+  let residue = Math.round((number % scale) / 100) // 小数点后数，1位
+  let $integer = Math.round(number / scale) // 最小单位kb
   let digit = 0
-  while($integer > scale) {
-    residue = Math.round($integer%scale/100)
-    $integer = Math.round($integer/scale)
+  while ($integer > scale) {
+    residue = Math.round(($integer % scale) / 100)
+    $integer = Math.round($integer / scale)
     digit += 1
   }
   return `${$integer}.${residue}${digitList[digit]}B`

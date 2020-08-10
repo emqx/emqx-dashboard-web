@@ -23,7 +23,6 @@
   </div>
 </template>
 
-
 <script>
 export default {
   name: 'RuleMetricsTable',
@@ -58,7 +57,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .rule-metrics-table {

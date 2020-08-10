@@ -1,8 +1,5 @@
 <template>
-  <a-card
-    class="config-settings emq-list-card"
-  >
-
+  <a-card class="config-settings emq-list-card">
     <div class="tabs-title">{{ $t('Settings.zone') }}</div>
 
     <el-tabs v-model="settingType">
@@ -54,10 +51,8 @@
         </config-form>
       </el-tab-pane>
     </el-tabs>
-
   </a-card>
 </template>
-
 
 <script>
 import { setTimeout, clearTimeout } from 'timers'
@@ -76,7 +71,7 @@ export default {
       const getValidMsg = (_range, _value) => {
         const [min, max] = _range.sort((prev, next) => prev - next)
         const floatValue = parseFloat(_value, 10)
-        return (floatValue > max || floatValue < min) ? this.$t('Settings.errorRange', { min, max }) : ''
+        return floatValue > max || floatValue < min ? this.$t('Settings.errorRange', { min, max }) : ''
       }
       const validMsg = getValidMsg(range, value)
       if (validMsg !== '') {
@@ -383,9 +378,11 @@ export default {
         this.$confirm(this.$t('Settings.cancelConfirm'), this.$t('Base.warning'), {
           type: 'warning',
           cancelButtonText: this.$t('Settings.no'),
-        }).then(() => {
-          confirmCancel()
-        }).catch(() => {})
+        })
+          .then(() => {
+            confirmCancel()
+          })
+          .catch(() => {})
       } else {
         confirmCancel()
       }
@@ -393,7 +390,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .config-settings {

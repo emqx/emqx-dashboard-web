@@ -2,7 +2,6 @@
   <div class="websocket-item">
     <el-card class="emq-list-card">
       <div class="websocket-config">
-
         <div class="emq-title">
           {{ $t('Tools.connectionConfiguration') }}
         </div>
@@ -16,7 +15,6 @@
           :rules="connectionRules"
           @keyup.enter.native="createConnection"
         >
-
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item prop="host" :label="$t('Tools.host')">
@@ -25,8 +23,11 @@
             </el-col>
             <el-col :span="8">
               <el-form-item prop="port" :label="$t('Tools.port')">
-                <el-input v-model.number="connection.port" type="number" placeholder="8083/8084"
-                          :readonly="client.connected"
+                <el-input
+                  v-model.number="connection.port"
+                  type="number"
+                  placeholder="8083/8084"
+                  :readonly="client.connected"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -36,32 +37,35 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-
               <el-form-item prop="clientId" label="Client ID">
                 <el-input v-model="connection.clientId" :readonly="client.connected">
-                  <i slot="suffix" :title="$t('Tools.randomGeneration')" :disabled="client.connected"
-                     class="el-icon-refresh el-input_icon" @click="refreshClientId"
+                  <i
+                    slot="suffix"
+                    :title="$t('Tools.randomGeneration')"
+                    :disabled="client.connected"
+                    class="el-icon-refresh el-input_icon"
+                    @click="refreshClientId"
                   ></i>
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-
               <el-form-item prop="username" label="Username">
                 <el-input v-model="connection.username" :readonly="client.connected"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-
               <el-form-item prop="password" label="Password">
                 <el-input v-model="connection.password" :readonly="client.connected"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-
               <el-form-item prop="keepalive" label="Keepalive">
-                <el-input v-model.number="connection.keepalive" :readonly="client.connected" type="number"
-                          placeholder="60"
+                <el-input
+                  v-model.number="connection.keepalive"
+                  :readonly="client.connected"
+                  type="number"
+                  placeholder="60"
                 ></el-input>
               </el-form-item>
             </el-col>
@@ -74,7 +78,6 @@
               <el-checkbox v-model="connection.ssl" :disabled="client.connected" @change="protocolsChange">
                 SSL
               </el-checkbox>
-
             </el-col>
 
             <el-col :span="24" class="footer-area">
@@ -82,12 +85,13 @@
                 type="primary"
                 size="small"
                 class="conn-btn"
-                style="margin-right: 20px"
+                style="margin-right: 20px;"
                 :disabled="client.connected || connecting"
                 @click="createConnection"
               >
-                {{ client.connected ? $t('Tools.connected') : connecting ? $t('Tools.inConnection') :
-                  $t('Tools.connect') }}
+                {{
+                  client.connected ? $t('Tools.connected') : connecting ? $t('Tools.inConnection') : $t('Tools.connect')
+                }}
               </el-button>
 
               <el-button
@@ -100,9 +104,7 @@
                 {{ connecting ? $t('Tools.cancelConnection') : $t('Tools.disconnect') }}
               </el-button>
             </el-col>
-
           </el-row>
-
         </el-form>
       </div>
     </el-card>
@@ -152,7 +154,6 @@
             </el-table-column>
           </el-table>
         </el-col>
-
       </el-row>
     </el-card>
 
@@ -164,7 +165,8 @@
       <div class="connection-wrapper">
         <el-form
           ref="pubForm"
-          hide-required-asterisk label-position="top"
+          hide-required-asterisk
+          label-position="top"
           :model="messageRecord"
           :rules="messageRecordRules"
           size="small"
@@ -183,20 +185,18 @@
             </el-col>
             <el-col :span="6">
               <el-form-item prop="qos" label="QoS">
-                <emq-select v-model.number="messageRecord.qos" :field="{ list: [0, 1, 2] }" size="small">
-                </emq-select>
+                <emq-select v-model.number="messageRecord.qos" :field="{ list: [0, 1, 2] }" size="small"> </emq-select>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item>
                 <span slot="label">&nbsp;</span>
-                <el-checkbox v-model="messageRecord.retain" style="margin-right: 20px">Retain</el-checkbox>
-                <el-button type="primary" size="small" class="conn-btn" style="float: right" @click="_doPublish">
+                <el-checkbox v-model="messageRecord.retain" style="margin-right: 20px;">Retain</el-checkbox>
+                <el-button type="primary" size="small" class="conn-btn" style="float: right;" @click="_doPublish">
                   {{ $t('Tools.publish') }}
                 </el-button>
               </el-form-item>
             </el-col>
-
           </el-row>
         </el-form>
       </div>
@@ -210,9 +210,7 @@
           <el-table class="list-table" :data="messageIn" max-height="400px" style="margin-top: 10px;">
             <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="120px"></el-table-column>
             <el-table-column prop="qos" label="QoS" width="80px">
-              <template slot-scope="{ row }">
-                {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
-              </template>
+              <template slot-scope="{ row }"> {{ row.qos }} {{ row.retain ? ' Retain' : '' }} </template>
             </el-table-column>
             <el-table-column show-overflow-tooltip prop="payload" label="Payload" min-width="180px">
               <template slot-scope="{ row }">
@@ -231,9 +229,7 @@
           <el-table class="list-table" :data="messageOut" max-height="400px" style="margin-top: 10px;">
             <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="120px"></el-table-column>
             <el-table-column prop="qos" label="QoS" width="80px">
-              <template slot-scope="{ row }">
-                {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
-              </template>
+              <template slot-scope="{ row }"> {{ row.qos }} {{ row.retain ? ' Retain' : '' }} </template>
             </el-table-column>
             <el-table-column show-overflow-tooltip prop="payload" label="Payload" min-width="180px">
               <template slot-scope="{ row }">
@@ -244,11 +240,9 @@
           </el-table>
         </el-col>
       </el-row>
-
     </el-card>
   </div>
 </template>
-
 
 <script>
 import mqtt from 'mqtt'
@@ -281,17 +275,23 @@ export default {
       },
       connectionRules: {
         host: { required: true },
-        port: [{ type: 'number', required: true, message: this.$t('Tools.pleaseEnter') }, {
-          type: 'number',
-          min: 1,
-          max: 65535,
-          message: this.$t('Tools.rangeError'),
-        }],
-        keepalive: [{ type: 'number', required: true, message: this.$t('Tools.pleaseEnter') }, {
-          type: 'number',
-          min: 0,
-          message: this.$t('Tools.rangeError'),
-        }],
+        port: [
+          { type: 'number', required: true, message: this.$t('Tools.pleaseEnter') },
+          {
+            type: 'number',
+            min: 1,
+            max: 65535,
+            message: this.$t('Tools.rangeError'),
+          },
+        ],
+        keepalive: [
+          { type: 'number', required: true, message: this.$t('Tools.pleaseEnter') },
+          {
+            type: 'number',
+            min: 0,
+            message: this.$t('Tools.rangeError'),
+          },
+        ],
       },
       subscriptionsRules: {
         topic: [{ required: true, message: this.$t('Tools.pleaseEnter') }],
@@ -353,9 +353,7 @@ export default {
       return text
     },
     connectUrl() {
-      const {
-        host, port, ssl, endpoint,
-      } = this.connection
+      const { host, port, ssl, endpoint } = this.connection
       const protocol = ssl ? 'wss://' : 'ws://'
       return `${protocol}${host}:${port}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`
     },
@@ -387,7 +385,7 @@ export default {
       }
       this.addMessages('messageIn', message)
       let { messageCount } = this
-      this.$emit('update:messageCount', messageCount += 1)
+      this.$emit('update:messageCount', (messageCount += 1))
     },
     handleConnect() {
       if (this.client.connected) {
@@ -422,7 +420,7 @@ export default {
         if (error) {
           return
         }
-        this.subscriptions = this.subscriptions.filter($ => $.topic !== item.topic)
+        this.subscriptions = this.subscriptions.filter(($) => $.topic !== item.topic)
       })
     },
     async _doSubscribe() {
@@ -447,7 +445,7 @@ export default {
           this.$message.error(this.$t('Tools.subscriptionFailure'))
           return
         }
-        if (this.subscriptions.find($ => $.topic === topic)) {
+        if (this.subscriptions.find(($) => $.topic === topic)) {
           return
         }
         this.subscriptions.unshift({
@@ -466,26 +464,30 @@ export default {
         this.$message.error(this.$t('Tools.clientNotConnected'))
         return
       }
-      const {
-        topic, qos, payload, retain,
-      } = this.messageRecord
-      this.client.publish(topic, payload, {
-        qos, retain,
-      }, (err) => {
-        if (err) {
-          this.$message.error(this.$t('Tools.publishingFailure'))
-          return
-        }
-        const message = {
-          out: true,
-          createAt: this.getNow(),
-          topic,
-          payload,
+      const { topic, qos, payload, retain } = this.messageRecord
+      this.client.publish(
+        topic,
+        payload,
+        {
           qos,
           retain,
-        }
-        this.addMessages('messageOut', message)
-      })
+        },
+        (err) => {
+          if (err) {
+            this.$message.error(this.$t('Tools.publishingFailure'))
+            return
+          }
+          const message = {
+            out: true,
+            createAt: this.getNow(),
+            topic,
+            payload,
+            qos,
+            retain,
+          }
+          this.addMessages('messageOut', message)
+        },
+      )
     },
     _getDefaultConnection() {
       return {
@@ -532,8 +534,15 @@ export default {
           return
         }
         const {
-          clientId, username, port,
-          password, reconnectPeriod, keepalive, clean, connectTimeout, will,
+          clientId,
+          username,
+          port,
+          password,
+          reconnectPeriod,
+          keepalive,
+          clean,
+          connectTimeout,
+          will,
         } = this.connection
 
         this.connecting = true
@@ -616,7 +625,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .websocket-item {

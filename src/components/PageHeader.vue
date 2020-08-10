@@ -6,13 +6,11 @@
   </div>
 </template>
 
-
 <script>
 export default {
   name: 'PageHeader',
 }
 </script>
-
 
 <style lang="scss">
 .page-header {
@@ -35,7 +33,7 @@ export default {
     width: 100%;
     height: 100%;
     min-height: 100%;
-    transition: .3s;
+    transition: 0.3s;
     padding: 16px 24px;
     p {
       margin-bottom: 0px;
@@ -46,7 +44,7 @@ export default {
     .title {
       display: inline-block;
       padding-right: 12px;
-      color: rgba(0, 0, 0, .85);
+      color: rgba(0, 0, 0, 0.85);
       font-weight: 700;
       font-size: 16px;
       line-height: 1.4;
@@ -68,7 +66,7 @@ export default {
       height: 24px;
       line-height: 16px;
       border-radius: 50%;
-      border: 1px solid #34C388;
+      border: 1px solid #34c388;
       padding: 4px;
       text-align: center;
       margin-right: 8px;

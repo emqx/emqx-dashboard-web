@@ -225,11 +225,13 @@ let routes = [
       hideKey: 'general',
       authRequired: true,
     },
-    children: [{
-      path: '',
-      name: 'backup',
-      component: () => import('@/views/General/Backup'),
-    }, ],
+    children: [
+      {
+        path: '',
+        name: 'backup',
+        component: () => import('@/views/General/Backup'),
+      },
+    ],
   },
   // 应用
   {
@@ -351,7 +353,7 @@ let routes = [
 
 if (hide.routes && hide.routes.length) {
   hide.routes.forEach((hideRoute) => {
-    routes = routes.filter(route => route.meta.hideKey !== hideRoute)
+    routes = routes.filter((route) => route.meta.hideKey !== hideRoute)
   })
 }
 

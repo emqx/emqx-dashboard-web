@@ -20,12 +20,7 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card">
         <div class="emq-table-header">
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-plus"
-            @click="showDialog('create')"
-          >
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
             {{ $t('Base.create') }}
           </el-button>
         </div>
@@ -39,7 +34,11 @@
             </template>
           </el-table-column>
           <el-table-column prop="name" :label="$t('General.appName')"></el-table-column>
-          <el-table-column prop="expired" :formatter="formatterExpired" :label="$t('General.expireAt')"></el-table-column>
+          <el-table-column
+            prop="expired"
+            :formatter="formatterExpired"
+            :label="$t('General.expireAt')"
+          ></el-table-column>
           <el-table-column prop="desc" :label="$t('General.remark')"></el-table-column>
           <el-table-column :label="$t('General.isEnabled')">
             <template slot-scope="{ row }">
@@ -57,17 +56,12 @@
               <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
                 {{ $t('General.edit') }}
               </el-button>
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="deleteConfirm(row)"
-              >
+              <el-button type="dashed danger" size="mini" @click="deleteConfirm(row)">
                 {{ $t('General.delete') }}
               </el-button>
             </template>
           </el-table-column>
         </el-table>
-
       </a-card>
     </div>
 
@@ -77,50 +71,29 @@
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
-      <el-form
-        ref="recordForm"
-        size="small"
-        :model="record"
-        :rules="accessType === 'view' ? {} : rules"
-      >
+      <el-form ref="recordForm" size="small" :model="record" :rules="accessType === 'view' ? {} : rules">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item prop="app_id" label="AppID">
-              <el-input
-                v-model="record.app_id"
-                :readonly="accessType !== 'create'"
-                :disabled="accessType === 'edit'"
-              >
+              <el-input v-model="record.app_id" :readonly="accessType !== 'create'" :disabled="accessType === 'edit'">
               </el-input>
             </el-form-item>
           </el-col>
           <el-col v-if="accessType === 'view'" :span="12">
             <el-form-item prop="secret" :label="$t('General.secret')">
-              <el-input
-                v-model="record.secret"
-                :disabled="accessType === 'edit'"
-                :readonly="accessType !== 'create'"
-              >
+              <el-input v-model="record.secret" :disabled="accessType === 'edit'" :readonly="accessType !== 'create'">
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="name" :label="$t('General.appName')">
-              <el-input
-                v-model="record.name"
-                :disabled="accessType === 'edit'"
-                :readonly="accessType === 'view'"
-              >
+              <el-input v-model="record.name" :disabled="accessType === 'edit'" :readonly="accessType === 'view'">
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="status" :label="$t('General.isEnabled')">
-              <emq-select
-                v-model="record.status"
-                :field="{ options: enableOption }"
-                :disabled="accessType === 'view'"
-              >
+              <emq-select v-model="record.status" :field="{ options: enableOption }" :disabled="accessType === 'view'">
               </emq-select>
             </el-form-item>
           </el-col>
@@ -138,10 +111,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item prop="desc" :label="$t('General.remark')">
-              <el-input
-                v-model="record.desc"
-                :readonly="accessType === 'view'"
-              ></el-input>
+              <el-input v-model="record.desc" :readonly="accessType === 'view'"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -155,17 +125,10 @@
   </div>
 </template>
 
-
 <script>
 import moment from 'moment'
 
-import {
-  loadApp,
-  createApp,
-  showApp,
-  updateApp,
-  destroyAPP,
-} from '@/api/function'
+import { loadApp, createApp, showApp, updateApp, destroyAPP } from '@/api/function'
 import { getLink } from '@/common/utils'
 
 export default {
@@ -183,7 +146,10 @@ export default {
       dialogVisible: false,
       tableData: [],
       accessType: '',
-      enableOption: [{ label: this.$t('General.enabled'), value: true }, { label: this.$t('General.disabled'), value: false }],
+      enableOption: [
+        { label: this.$t('General.enabled'), value: true },
+        { label: this.$t('General.disabled'), value: false },
+      ],
       record: {
         status: true, // 是否启用
         desc: '',
@@ -283,25 +249,26 @@ export default {
     },
     deleteConfirm(item) {
       const vue = this
-      this.$msgbox.confirm(this.$t('General.confirmDelete'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(async () => {
-        destroyAPP(item.app_id).then(() => {
-          vue.$message.success(this.$t('General.successfulDeletion'))
-          vue.loadData()
+      this.$msgbox
+        .confirm(this.$t('General.confirmDelete'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
         })
-      }).catch(() => {})
+        .then(async () => {
+          destroyAPP(item.app_id).then(() => {
+            vue.$message.success(this.$t('General.successfulDeletion'))
+            vue.loadData()
+          })
+        })
+        .catch(() => {})
     },
   },
 }
 </script>
 
-
 <style lang="scss">
 .application {
-
   .el-select {
     width: 100%;
   }

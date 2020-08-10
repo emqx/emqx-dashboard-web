@@ -1,8 +1,6 @@
 <template>
-  <div :id="chartId" :style="{height: height, width: '100%'}">
-  </div>
+  <div :id="chartId" :style="{ height: height, width: '100%' }"></div>
 </template>
-
 
 <script>
 import echarts from 'echarts/lib/echarts'

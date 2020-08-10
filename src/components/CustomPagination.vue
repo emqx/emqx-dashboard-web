@@ -11,7 +11,6 @@
   </div>
 </template>
 
-
 <script>
 export default {
   name: 'CustomPagination',
@@ -38,15 +37,14 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .custom-pagination {
   margin-top: 10px;
   a {
-    transition: all .3s ease;
+    transition: all 0.3s ease;
     color: #fff;
     margin-right: 10px;
-    background: #34C388;
+    background: #34c388;
     display: inline-block;
     border-radius: 4px;
     padding: 5px 8px;
@@ -56,7 +54,7 @@ export default {
     }
   }
   a.disabled {
-    transition: all .3s ease;
+    transition: all 0.3s ease;
     color: #606266;
     background: transparent;
     cursor: not-allowed;

@@ -39,7 +39,12 @@
         </div>
       </el-dropdown>
 
-      <el-dropdown v-if="$hasShow('navbar.user')" placement="bottom" class="user-info-dropdown" @command="handleDropdownCommand">
+      <el-dropdown
+        v-if="$hasShow('navbar.user')"
+        placement="bottom"
+        class="user-info-dropdown"
+        @command="handleDropdownCommand"
+      >
         <div class="user-info func-item">
           <span>{{ username }}</span>
           <el-dropdown-menu slot="dropdown">
@@ -52,7 +57,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import Breadcrumb from './Breadcrumb.vue'
@@ -137,18 +141,20 @@ export default {
         this.$router.push({ path: `/${command}` })
         return
       }
-      this.$msgbox.confirm(this.$t('components.whetherToLogOutOrNot'), {
-        confirmButtonText: this.$t('components.signOut'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(() => {
-        this.logout()
-      }).catch(() => {})
+      this.$msgbox
+        .confirm(this.$t('components.whetherToLogOutOrNot'), {
+          confirmButtonText: this.$t('components.signOut'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(() => {
+          this.logout()
+        })
+        .catch(() => {})
     },
   },
 }
 </script>
-
 
 <style lang="scss" scoped>
 .nav-header {
@@ -158,13 +164,13 @@ export default {
   height: 50px;
   padding: 0 20px 0 8px;
   background-color: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   position: fixed;
   top: 0;
   right: 0;
   left: 201px;
   z-index: 100;
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 .pull-right {
@@ -178,7 +184,7 @@ export default {
   height: 50px;
   line-height: 53px;
   padding: 0 12px;
-  transition: all .3s;
+  transition: all 0.3s;
   cursor: pointer;
 
   &:hover {

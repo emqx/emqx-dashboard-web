@@ -2,7 +2,8 @@
   <div class="node-item">
     <div
       v-for="(item, i) in nodes"
-      :key="i" class="item"
+      :key="i"
+      class="item"
       :class="{ active: rawValue === item.node }"
       @click="atClick(item)"
     >
@@ -10,7 +11,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import { loadNodes } from '@/api/common'
@@ -74,19 +74,19 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .node-item {
   padding: 16px;
 
   .item {
     padding: 2px 0 2px 12px;
-    transition: all .3s;
+    transition: all 0.3s;
     cursor: pointer;
     border-left: 3px solid #fff;
 
-    &:hover, &.active {
-      border-left: 3px solid #34C388;
+    &:hover,
+    &.active {
+      border-left: 3px solid #34c388;
     }
   }
 }

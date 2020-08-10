@@ -1,12 +1,7 @@
 <template>
   <div class="nav-tabs" :style="{ left: !$store.state.leftBarCollapse ? '201px' : '80px' }">
     <el-scrollbar ref="scrollContainer" :vertical="false" class="scroll-container">
-      <el-button
-        plain
-        size="mini"
-        :class="{ active: isIndex }"
-        @click="$router.push('/')"
-      >
+      <el-button plain size="mini" :class="{ active: isIndex }" @click="$router.push('/')">
         {{ $t('Base.homePage') }}
       </el-button>
       <el-button
@@ -23,9 +18,7 @@
         <template v-else-if="tab.name === 'clientid'">
           {{ tab.url | getClientId }}
         </template>
-        <template
-          v-else-if="tab.name === 'ruleId' || tab.name === 'resourceId' || tab.name === 'schemaName'"
-        >
+        <template v-else-if="tab.name === 'ruleId' || tab.name === 'resourceId' || tab.name === 'schemaName'">
           {{ tab.url | getParamsId }}
         </template>
         <template v-else>
@@ -38,7 +31,6 @@
     </el-scrollbar>
   </div>
 </template>
-
 
 <script>
 import { getParamValue } from '@/common/utils'
@@ -111,7 +103,7 @@ export default {
         return
       }
       name = this.getTabName(name, oper)
-      const tabIndex = this.tabs.findIndex($ => $.url === fullPath || $.name === name)
+      const tabIndex = this.tabs.findIndex(($) => $.url === fullPath || $.name === name)
       if (tabIndex === -1) {
         const tab = { name, url: fullPath }
         this.$store.dispatch('ADD_NAV_TABS', tab)
@@ -138,7 +130,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .nav-tabs {
   position: fixed;
@@ -150,25 +141,25 @@ export default {
   height: 30px;
   line-height: 30px;
   background: #fcfcfc;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, .1);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.1);
   z-index: 100;
-  transition: all .3s;
+  transition: all 0.3s;
   .el-button {
     min-width: 50px;
-    transition: all .3s;
+    transition: all 0.3s;
     &.active,
     &.active:hover,
     &.active:focus {
-      border-color: #34C388;
+      border-color: #34c388;
       color: #fff;
-      background: #34C388;
+      background: #34c388;
       .btn-close {
         color: #fff;
       }
     }
     .btn-close {
       color: #606266;
-      transition: all .3s;
+      transition: all 0.3s;
       border-radius: 50%;
       display: inline-block;
       width: 13px;

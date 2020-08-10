@@ -28,7 +28,6 @@
   </el-dialog>
 </template>
 
-
 <script>
 import { subscribe } from '@/api/clients'
 
@@ -81,8 +80,7 @@ export default {
     },
   },
 
-  created() {
-  },
+  created() {},
 
   methods: {
     open() {
@@ -105,10 +103,10 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .create-subscribe {
-  .el-select, .el-input {
+  .el-select,
+  .el-input {
     width: 100%;
   }
 }

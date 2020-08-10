@@ -1,5 +1,4 @@
-export default
-{
+export default {
   __not: [],
   userCreate: {
     zh: 'https://docs.emqx.io/broker/v4/cn/commands.html#admins',

@@ -4,7 +4,6 @@
   </div>
 </template>
 
-
 <script>
 /* eslint-disable */
 import CodeMirror from 'codemirror'
@@ -47,7 +46,7 @@ export default {
 
   data() {
     return {
-      codeEditor: false
+      codeEditor: false,
     }
   },
 
@@ -75,7 +74,7 @@ export default {
         readOnly: this.disabled,
       })
       this.codeEditor.setValue(this.value)
-      this.codeEditor.on('change', cm => {
+      this.codeEditor.on('change', (cm) => {
         this.$emit('changed', cm.getValue())
         this.$emit('input', cm.getValue())
       })
@@ -92,13 +91,12 @@ export default {
 }
 </script>
 
-
 <style scoped>
 .code-editor {
   height: 100%;
   position: relative;
 }
 .code-editor >>> .cm-s-rubyblue span.cm-string {
-  color: #F08047;
+  color: #f08047;
 }
 </style>

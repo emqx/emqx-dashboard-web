@@ -1,6 +1,5 @@
 <template>
   <div class="topics">
-
     <div class="app-wrapper">
       <a-card class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
@@ -25,8 +24,11 @@
             hide-on-single-page
             background
             layout="total, sizes, prev, pager, next"
-            :page-sizes="[20, 50, 100, 500]" :page-size.sync="params._limit"
-            :current-page.sync="params._page" :total="count" @size-change="handleSizeChange"
+            :page-sizes="[20, 50, 100, 500]"
+            :page-size.sync="params._limit"
+            :current-page.sync="params._page"
+            :total="count"
+            @size-change="handleSizeChange"
             @current-change="handleCurrentPageChange"
           >
           </el-pagination>
@@ -35,7 +37,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import { listTopics, searchTopics } from '@/api/topics'
@@ -95,7 +96,10 @@ export default {
         this.params._page = 1
       }
       const data = await listTopics({ ...this.params, ...params })
-      const { items = [], meta: { count = 0 } } = data
+      const {
+        items = [],
+        meta: { count = 0 },
+      } = data
       this.listLoading = false
       this.tableData = items
       this.count = count
