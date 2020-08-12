@@ -115,6 +115,10 @@ export default {
     zh: '数组类型',
     en: 'Array',
   },
+  boolean: {
+    zh: '布尔类型',
+    en: 'Boolean',
+  },
   oneByte: {
     zh: '1字节',
     en: 'One Byte',

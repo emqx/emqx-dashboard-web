@@ -35,13 +35,16 @@
             </el-row>
           </a-card>
         </el-tab-pane>
-        <el-tab-pane :label="$t('components.clients')" name="clients">
-          <Clients v-if="id" :id="id"></Clients>
-          <Clients v-else></Clients>
+        <el-tab-pane :label="$t('components.services')" name="services">
+          <Service></Service>
         </el-tab-pane>
         <el-tab-pane :label="$t('components.models')" name="models">
           <Models v-if="id" :id="id"></Models>
           <Models v-else></Models>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('components.clients')" name="clients">
+          <Clients v-if="id" :id="id"></Clients>
+          <Clients v-else></Clients>
         </el-tab-pane>
         <el-tab-pane :label="$t('components.apps')" name="apps">
           <Apps></Apps>
@@ -56,6 +59,7 @@
 import Clients from '../Clients/Clients'
 import Models from '../Models/Models'
 import Apps from '../Apps/Apps'
+import Service from '../Service/Service'
 
 
 export default {
@@ -65,6 +69,7 @@ export default {
     Clients,
     Models,
     Apps,
+    Service,
   },
 
   data() {
