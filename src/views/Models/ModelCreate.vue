@@ -145,11 +145,11 @@
           </el-col>
 
           <template v-if="record.dataType !== 'timeStamp'">
-            <template v-if="record.dataType && !record.dataType.includes('unfix')">
+            <template v-if="record.dataType && !record.dataType.includes('unfix') && record.dataType !== 'boolean'">
               <el-col :span="12">
                 <el-form-item prop="length" :label="$t('Models.length')">
                   <el-select
-                    v-if="record.dataType && !record.dataType.includes('fix')"
+                    v-if="record.dataType && !record.dataType.includes('fix') && record.dataType !== 'array'"
                     v-model="record.length" :disabled="accessType === 'view'"
                   >
                     <el-option
@@ -168,7 +168,10 @@
                 </el-form-item>
               </el-col>
             </template>
-            <template v-if="record.dataType && !record.dataType.includes('fix')">
+            <template
+              v-if="record.dataType && !record.dataType.includes('fix') &&
+                record.dataType !== 'array' && record.dataType !== 'boolean'"
+            >
               <el-col :span="12">
                 <el-form-item prop="minimum" :label="$t('Models.minimum')">
                   <el-input v-model.number="record.minimum" :disabled="accessType === 'view'">

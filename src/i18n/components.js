@@ -49,6 +49,10 @@ export default
     zh: '模型管理',
     en: 'Models',
   },
+  services: {
+    zh: '服务管理',
+    en: 'Services',
+  },
   topics: {
     zh: '主题',
     en: 'Topics',

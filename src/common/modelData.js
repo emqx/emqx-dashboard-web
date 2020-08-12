@@ -25,6 +25,7 @@ const jsonDataTypeList = [
   { label: 'float', value: VueI18n.Models.float },
   { label: 'double', value: VueI18n.Models.double },
   { label: 'array', value: VueI18n.Models.array },
+  { label: 'boolean', value: VueI18n.Models.boolean },
 ]
 
 const dataTypeDic = {
