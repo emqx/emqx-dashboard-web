@@ -282,17 +282,16 @@ export default {
       }
     },
     save() {
-      const vue = this
       this.$refs.recordForm.validate((valid) => {
         if (!valid) {
           return
         }
         const record = { ...this.record }
         createDevice(record).then(() => {
-          vue.$message.success(this.$t('General.successfulAppCreation'))
-          vue.dialogVisible = false
-          vue.accessType = ''
-          vue.loadData()
+          this.$message.success(this.$t('General.successfulAppCreation'))
+          this.dialogVisible = false
+          this.accessType = ''
+          this.loadData()
         })
       })
     },

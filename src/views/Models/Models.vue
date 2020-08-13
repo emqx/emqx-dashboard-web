@@ -82,15 +82,14 @@ export default {
     //   this.tableData = await loadApp()
     // },
     deleteConfirm(item) {
-      const vue = this
       this.$msgbox.confirm(this.$t('Models.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(async () => {
+      }).then(() => {
         destroyAPP(item.id).then(() => {
-          vue.$message.success(this.$t('General.successfulDeletion'))
-          vue.loadData()
+          this.$message.success(this.$t('General.successfulDeletion'))
+          this.loadData()
         })
       }).catch(() => {})
     },

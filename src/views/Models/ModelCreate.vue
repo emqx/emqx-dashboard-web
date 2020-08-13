@@ -363,7 +363,7 @@ export default {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(async () => {
+      }).then(() => {
         if (this.tableData.length === 1) {
           this.tableData = []
         } else {
