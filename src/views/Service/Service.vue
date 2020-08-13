@@ -185,15 +185,14 @@ export default {
       })
     },
     deleteConfirm(item) {
-      const vue = this
       this.$msgbox.confirm(this.$t('General.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(async () => {
+      }).then(() => {
         destroyService(item.serviceID).then(() => {
-          vue.$message.success(this.$t('General.successfulDeletion'))
-          vue.loadData()
+          this.$message.success(this.$t('General.successfulDeletion'))
+          this.loadData()
         })
       }).catch(() => {})
     },

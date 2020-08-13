@@ -231,7 +231,6 @@ export default {
       })
     },
     save() {
-      const vue = this
       this.$refs.recordForm.validate((valid) => {
         if (!valid) {
           return
@@ -244,34 +243,33 @@ export default {
             record.expired = null
           }
         }
-        if (vue.accessType === 'edit') {
-          const { app_id } = vue.record
+        if (this.accessType === 'edit') {
+          const { app_id } = this.record
           updateApp(app_id, record).then(() => {
-            vue.$message.success(this.$t('General.editorialSuccess'))
-            vue.dialogVisible = false
-            vue.accessType = ''
-            vue.loadData()
+            this.$message.success(this.$t('General.editorialSuccess'))
+            this.dialogVisible = false
+            this.accessType = ''
+            this.loadData()
           })
         } else {
           createApp(record).then(() => {
-            vue.$message.success(this.$t('General.successfulAppCreation'))
-            vue.dialogVisible = false
-            vue.accessType = ''
-            vue.loadData()
+            this.$message.success(this.$t('General.successfulAppCreation'))
+            this.dialogVisible = false
+            this.accessType = ''
+            this.loadData()
           })
         }
       })
     },
     deleteConfirm(item) {
-      const vue = this
       this.$msgbox.confirm(this.$t('General.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(async () => {
+      }).then(() => {
         destroyAPP(item.app_id).then(() => {
-          vue.$message.success(this.$t('General.successfulDeletion'))
-          vue.loadData()
+          this.$message.success(this.$t('General.successfulDeletion'))
+          this.loadData()
         })
       }).catch(() => {})
     },
