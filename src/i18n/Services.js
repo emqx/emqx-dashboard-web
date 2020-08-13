@@ -3,24 +3,20 @@ export default {
     en: 'Name',
     zh: '服务名称',
   },
-  remark: {
-    en: 'Remark',
-    zh: '服务标识',
-  },
   type: {
     en: 'Type',
     zh: '服务类型',
   },
   topic: {
-    en: 'topic',
+    en: 'Topic',
     zh: '服务主题',
   },
   post: {
-    en: 'post',
+    en: 'Report equipment data',
     zh: '设备数据上报',
   },
   send: {
-    en: 'send',
+    en: 'Deliver equipment data',
     zh: '设备数据下发',
   },
 }

@@ -13,15 +13,19 @@
       </div>
 
       <el-table :data="tableData" class="data-list">
-        <el-table-column prop="name" :label="$t('Services.name')">
+        <el-table-column prop="serviceName" :label="$t('Services.name')">
           <template slot-scope="{ row }">
             <span class="btn" @click="showDialog('view', row)">
-              {{ row.name }}
+              {{ row.serviceName }}
             </span>
           </template>
         </el-table-column>
-        <el-table-column prop="remark" :label="$t('Services.remark')"></el-table-column>
-        <el-table-column prop="type" :label="$t('Services.type')"></el-table-column>
+        <el-table-column prop="serviceID" label="ID"></el-table-column>
+        <el-table-column prop="serviceType" :label="$t('Services.type')">
+          <template slot-scope="scope">
+            <span>{{ typeDic[scope.row.type] }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="topic" :label="$t('Services.topic')"></el-table-column>
         <el-table-column>
           <template slot-scope="{ row }">
@@ -52,18 +56,18 @@
       >
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item prop="name" :label="$t('Services.name')">
+            <el-form-item prop="serviceName" :label="$t('Services.name')">
               <el-input
-                v-model="record.name"
+                v-model="record.serviceName"
                 :readonly="accessType === 'view'"
               >
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="remark" :label="$t('Services.remark')">
+            <el-form-item prop="serviceID" label="ID">
               <el-input
-                v-model="record.remark"
+                v-model="record.serviceID"
                 :readonly="accessType === 'view'"
               >
               </el-input>
@@ -79,9 +83,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="type" :label="$t('Services.type')">
+            <el-form-item prop="serviceType" :label="$t('Services.type')">
               <el-select
-                v-model="record.type"
+                v-model="record.serviceType"
                 :readonly="accessType === 'view'"
               >
                 <el-option
@@ -106,10 +110,7 @@
 </template>
 
 <script>
-import {
-  showApp,
-  destroyAPP,
-} from '@/api/function'
+import { createService, destroyService, loadService } from '@/api/services'
 
 export default {
   name: 'Services',
@@ -125,20 +126,24 @@ export default {
       accessType: '',
       record: {},
       rules: {
-        name: [{ required: true, message: this.$t('Models.isRequired') }],
-        remark: [{ required: true, message: this.$t('Models.isRequired') }],
-        type: [{ required: true, message: this.$t('Models.isRequired') }],
+        serviceName: [{ required: true, message: this.$t('Models.isRequired') }],
+        serviceID: [{ required: true, message: this.$t('Models.isRequired') }],
+        serviceType: [{ required: true, message: this.$t('Models.isRequired') }],
         topic: [{ required: true, message: this.$t('Models.isRequired') }],
       },
       typeList: [
-        { label: this.$t('Services.post'), value: 0 },
-        { label: this.$t('Services.send'), value: 1 },
+        { label: this.$t('Services.post'), value: 1 },
+        { label: this.$t('Services.send'), value: 2 },
       ],
+      typeDic: {
+        1: this.$t('Services.post'),
+        2: this.$t('Services.send'),
+      },
     }
   },
 
   created() {
-    // this.loadData()
+    this.loadData()
   },
 
   methods: {
@@ -147,30 +152,36 @@ export default {
         this.$refs.recordForm.resetFields()
       }
     },
-    // async loadData() {
-    //   this.tableData = await loadApp()
-    // },
-    // 请求一组数据
-    async loadAppData(id) {
-      const record = await showApp(id)
-      this.record = record
+    async loadData() {
+      this.tableData = await loadService()
     },
     showDialog(type, item) {
       this.accessType = type
       if (type === 'view') {
-        this.loadAppData(item.app_id)
+        this.record = item
       } else {
-        this.record = {}
+        this.record = {
+          serviceID: Math.random().toString(16).slice(3),
+          serviceName: '',
+          serviceType: '',
+          topic: '',
+          productID: this.id,
+        }
       }
       this.dialogVisible = true
     },
     save() {
       this.$refs.recordForm.validate((valid) => {
         if (!valid) {
-          return false
+          return
         }
-        return true
-        // const record = { ...this.record }
+        const record = { ...this.record }
+        createService(record).then(() => {
+          this.$message.success(this.$t('General.successfulAppCreation'))
+          this.dialogVisible = false
+          this.accessType = ''
+          this.loadData()
+        })
       })
     },
     deleteConfirm(item) {
@@ -180,9 +191,9 @@ export default {
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       }).then(async () => {
-        destroyAPP(item.app_id).then(() => {
+        destroyService(item.serviceID).then(() => {
           vue.$message.success(this.$t('General.successfulDeletion'))
-          // vue.loadData()
+          vue.loadData()
         })
       }).catch(() => {})
     },

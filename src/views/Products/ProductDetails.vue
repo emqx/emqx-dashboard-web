@@ -13,22 +13,22 @@
               >
                 <el-col :span="12">
                   <el-form-item :label="$t('Products.productName')">
-                    <span class="form-item-value">{{ data.name }}</span>
+                    <span class="form-item-value">{{ data.productName }}</span>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="ID">
-                    <span class="form-item-value">{{ data.id }}</span>
+                    <span class="form-item-value">{{ data.productID }}</span>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item :label="$t('Products.deviceModel')">
-                    <span class="form-item-value">{{ data.deviceModel }}</span>
+                    <span class="form-item-value">{{ data.productMoel }}</span>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item :label="$t('Products.productDes')" class="description">
-                    <div class="form-item-value item-block">{{ data.description }}</div>
+                    <div class="form-item-value item-block">{{ data.productDesp }}</div>
                   </el-form-item>
                 </el-col>
               </el-form>
@@ -54,13 +54,12 @@
   </div>
 </template>
 
-
 <script>
 import Clients from '../Clients/Clients'
 import Models from '../Models/Models'
 import Apps from '../Apps/Apps'
 import Service from '../Service/Service'
-
+import { showProduct } from '@/api/products'
 
 export default {
   name: 'ProductDetails',
@@ -82,15 +81,21 @@ export default {
 
   created() {
     if (this.$route.query.id) {
-      this.id = parseInt(this.$route.query.id, 10)
+      this.id = this.$route.query.id
+      this.loadProductData(this.id)
     }
     if (this.$route.query.tab) {
       this.activeName = this.$route.query.tab
     }
   },
+
+  methods: {
+    async loadProductData(id) {
+      this.data = await showProduct(id)
+    },
+  },
 }
 </script>
-
 
 <style lang="scss">
   .product-details {

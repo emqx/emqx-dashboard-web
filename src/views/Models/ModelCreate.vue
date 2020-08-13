@@ -10,14 +10,14 @@
         >
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item :label="$t('Models.modelName')" prop="name">
-                <el-input v-model="modelRecord.name"></el-input>
+              <el-form-item :label="$t('Models.modelName')" prop="thingName">
+                <el-input v-model="modelRecord.thingName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="dataFormat" :label="$t('Models.dataFormat')">
+              <el-form-item prop="dataType" :label="$t('Models.dataFormat')">
                 <el-select
-                  v-model="modelRecord.dataFormat" :disabled="accessType === 'view'"
+                  v-model="modelRecord.dataType" :disabled="accessType === 'view'"
                 >
                   <el-option
                     v-for="(item, index) in modelTypeList"
@@ -31,7 +31,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item :label="$t('General.remark')">
-                <el-input v-model="modelRecord.remark"></el-input>
+                <el-input v-model="modelRecord.thingDesp"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -272,8 +272,8 @@ export default {
       dataLength: 0,
       modelRecord: {},
       modelRules: {
-        name: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
-        dataFormat: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
+        thingName: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
+        dataType: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
       },
       modelTypeList: [
         { label: 'JSON', value: 'json' },
