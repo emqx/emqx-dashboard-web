@@ -178,11 +178,11 @@
       @close="clearInput"
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
-        <el-form-item prop="clientId" :label="$t('Clients.clientId')">
-          <el-input v-model="record.clientId"></el-input>
+        <el-form-item prop="clientID" :label="$t('Clients.clientId')">
+          <el-input v-model="record.clientID"></el-input>
         </el-form-item>
-        <el-form-item prop="username" :label="$t('Clients.username')">
-          <el-input v-model="record.username"></el-input>
+        <el-form-item prop="userName" :label="$t('Clients.username')">
+          <el-input v-model="record.userName"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-align-footer">
@@ -200,6 +200,7 @@ import {
   disconnectClient, listNodeClients,
 } from '@/api/clients'
 import { loadNodes } from '@/api/common'
+import { createDevice } from '@/api/devices'
 
 export default {
   name: 'Clients',
@@ -211,7 +212,7 @@ export default {
   props: {
     id: {
       required: true,
-      type: Number,
+      type: String,
     },
   },
 
@@ -245,10 +246,10 @@ export default {
       accessType: '',
       record: {},
       rules: {
-        clientId: [
+        clientID: [
           { required: true, message: this.$t('Clients.enterEquipId') },
         ],
-        username: [
+        userName: [
           { required: true, message: this.$t('Clients.enterEquipName') },
         ],
       },
@@ -262,8 +263,8 @@ export default {
   methods: {
     showDialog(type, item) {
       this.record = {
-        clientId: '',
-        username: '',
+        clientID: Math.random().toString(16).slice(3),
+        userName: '',
       }
       this.accessType = 'create'
       if (type === 'edit') {
@@ -280,7 +281,21 @@ export default {
         this.$refs.recordForm.resetFields()
       }
     },
-    save() {},
+    save() {
+      const vue = this
+      this.$refs.recordForm.validate((valid) => {
+        if (!valid) {
+          return
+        }
+        const record = { ...this.record }
+        createDevice(record).then(() => {
+          vue.$message.success(this.$t('General.successfulAppCreation'))
+          vue.dialogVisible = false
+          vue.accessType = ''
+          vue.loadData()
+        })
+      })
+    },
     handleNodeChange() {
       this.loadNodeClients(true)
     },
