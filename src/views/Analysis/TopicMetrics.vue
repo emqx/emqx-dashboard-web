@@ -9,10 +9,7 @@
     </page-header>
 
     <div class="app-wrapper">
-      <a-card
-        class="emq-list-card"
-        :loading="listLoading"
-      >
+      <a-card class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
           <el-button
             v-if="!modClosed"
@@ -24,13 +21,7 @@
           >
             {{ $t('Base.create') }}
           </el-button>
-          <el-button
-            v-else
-            size="small"
-            class="confirm-btn"
-            type="primary"
-            @click="handleModLoad"
-          >
+          <el-button v-else size="small" class="confirm-btn" type="primary" @click="handleModLoad">
             {{ $t('Analysis.enable') }}
           </el-button>
         </div>
@@ -87,9 +78,7 @@
                     <div>
                       {{ $t('Analysis.messageDrop') }}
                       <span class="message-rate">
-                        {{ $t('Analysis.rateItem', [getCurrentTopicDropRate(
-                          currentTopic['messages.dropped.rate']
-                        )]) }}
+                        {{ $t('Analysis.rateItem', [getCurrentTopicDropRate(currentTopic['messages.dropped.rate'])]) }}
                         {{ $t('Analysis.rate') }}
                       </span>
                     </div>
@@ -107,18 +96,10 @@
           <el-table-column prop="messageDrop" :label="$t('Analysis.messageDrop')"></el-table-column>
           <el-table-column>
             <template slot-scope="{ row, $index }">
-              <el-button
-                size="mini"
-                type="dashed"
-                @click="viewTopicDetails(row, $index)"
-              >
+              <el-button size="mini" type="dashed" @click="viewTopicDetails(row, $index)">
                 {{ $t('Base.view') }}
               </el-button>
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="deleteTopicMetric(row)"
-              >
+              <el-button type="dashed danger" size="mini" @click="deleteTopicMetric(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -134,14 +115,7 @@
       class="create-subscribe"
       @keyup.enter.native="handleAdd"
     >
-      <el-form
-        ref="record"
-        class="el-form--public"
-        :model="record"
-        :rules="rules"
-        size="small"
-        label-position="top"
-      >
+      <el-form ref="record" class="el-form--public" :model="record" :rules="rules" size="small" label-position="top">
         <el-form-item prop="topic" :label="$t('Topics.topic')">
           <el-input v-model="record.topic" placeholder="Topic"></el-input>
         </el-form-item>
@@ -152,14 +126,16 @@
         <el-button type="primary" size="small" @click="handleAdd">{{ $t('Base.confirm') }}</el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
-
 <script>
 import {
-  listTopicMetrics, enableTopicMetrics, addTopicMetrics, deleteTopicMetrics, loadTopicMetrics,
+  listTopicMetrics,
+  enableTopicMetrics,
+  addTopicMetrics,
+  deleteTopicMetrics,
+  loadTopicMetrics,
 } from '@/api/analysis'
 
 export default {
@@ -246,10 +222,12 @@ export default {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(async () => {
-        await deleteTopicMetrics(row.topic)
-        this.loadData()
-      }).catch(() => {})
+      })
+        .then(async () => {
+          await deleteTopicMetrics(row.topic)
+          this.loadData()
+        })
+        .catch(() => {})
     },
     handleAdd() {
       this.$refs.record.validate(async (valid) => {
@@ -330,7 +308,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .topic-metrics {
   .el-table {
@@ -348,13 +325,13 @@ export default {
       padding: 6px 12px;
       color: #fff;
       &.in {
-        background: linear-gradient(0.25turn, #3E3AB4, #4C5AE0);
+        background: linear-gradient(0.25turn, #3e3ab4, #4c5ae0);
       }
       &.out {
-        background: linear-gradient(0.25turn, #0C7CD1, #19BCC2);
+        background: linear-gradient(0.25turn, #0c7cd1, #19bcc2);
       }
       &.drop {
-        background: linear-gradient(0.25turn, #00AC70, #34C388);
+        background: linear-gradient(0.25turn, #00ac70, #34c388);
       }
       .message-card--body {
         font-size: 28px;

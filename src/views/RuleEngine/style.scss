@@ -1,5 +1,4 @@
 .rule-wrapper {
-
   .el-input,
   .el-select,
   .el-autocomplete,
@@ -13,7 +12,7 @@
     font-size: 13px;
     padding: 4px;
     border: 1px dashed #fff;
-    transition: all .3s;
+    transition: all 0.3s;
     line-height: 24px;
 
     &.code-border {
@@ -29,7 +28,8 @@
     }
   }
 
-  .icon, .tips {
+  .icon,
+  .tips {
     margin-left: 12px;
   }
 
@@ -41,7 +41,7 @@
   .line {
     width: 95%;
     margin: 30px auto 28px auto;
-    background-color: #EDEEF2;
+    background-color: #edeef2;
   }
 }
 

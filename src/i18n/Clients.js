@@ -1,7 +1,5 @@
 export default {
-  __not: [
-    '确认继续',
-  ],
+  __not: ['确认继续'],
   addASubscription: {
     zh: '添加订阅',
     en: 'Add',

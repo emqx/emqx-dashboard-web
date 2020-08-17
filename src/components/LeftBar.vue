@@ -1,7 +1,7 @@
 <template>
   <div class="left-bar" :style="{ width: leftBarCollapse ? '80px' : '200px' }">
     <div class="logo">
-      <img class="logo-img" src="../assets/emqx_logo.png" alt="logo">
+      <img class="logo-img" src="../assets/emqx_logo.png" alt="logo" />
     </div>
 
     <a-menu
@@ -16,11 +16,7 @@
     >
       <template v-for="item in menus">
         <template v-if="$hasShow(item.key)">
-          <a-sub-menu
-            v-if="item.children && item.children.length > 0"
-            :key="item.key"
-            @titleClick="titleClick(item)"
-          >
+          <a-sub-menu v-if="item.children && item.children.length > 0" :key="item.key" @titleClick="titleClick(item)">
             <span slot="title">
               <icon-font :type="item.icon"></icon-font>
               <span>{{ item.title }}</span>
@@ -41,7 +37,6 @@
     </a-menu>
   </div>
 </template>
-
 
 <script>
 import { Menu } from 'ant-design-vue'
@@ -229,8 +224,7 @@ export default {
     handleClick(e) {
       this.$router.push({ path: e.key })
     },
-    titleClick() {
-    },
+    titleClick() {},
     initRouter() {
       if (this.leftBarCollapse) {
         return
@@ -240,7 +234,7 @@ export default {
         if (!item.key || !item.children) {
           return
         }
-        if (item.children.find($ => path.includes($.path) || path === $.path)) {
+        if (item.children.find(($) => path.includes($.path) || path === $.path)) {
           if (!this.defaultOpenKeys.includes(item.key)) {
             this.defaultOpenKeys.push(item.key)
           }
@@ -251,14 +245,13 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 @import '../assets/style/variables';
 
 .left-bar {
   min-height: calc(100vh - 80px);
   background-color: $color-theme;
-  transition: all .3s;
+  transition: all 0.3s;
 
   .menu-wrapper {
     margin-top: 90px;
@@ -281,7 +274,8 @@ export default {
     background: #00000075;
   }
 
-  .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+  .ant-menu-item .anticon,
+  .ant-menu-submenu-title .anticon {
     margin-right: 12px;
     font-size: 18px;
   }
@@ -297,7 +291,7 @@ export default {
     top: 0;
     left: 0;
     z-index: 100;
-    transition: all .3s;
+    transition: all 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -4,7 +4,6 @@
   </div>
 </template>
 
-
 <script>
 import hljs from 'highlight.js/lib/highlight'
 import 'highlight.js/styles/solarized-dark.css'
@@ -56,7 +55,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .code-view {

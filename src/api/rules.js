@@ -30,7 +30,7 @@ export async function loadRuleDetails(id) {
   })
   rule.metricsData = {}
   rule.metrics.forEach((item) => {
-    ['matched', 'speed', 'speed_last5m', 'speed_max'].forEach((key) => {
+    ;['matched', 'speed', 'speed_last5m', 'speed_max'].forEach((key) => {
       rule.metricsData[key] = rule.metricsData[key] || 0
       rule.metricsData[key] += item[key] || 0
     })

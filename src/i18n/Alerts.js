@@ -1,5 +1,4 @@
-export default
-{
+export default {
   __not: [],
   alarm: {
     zh: '告警',

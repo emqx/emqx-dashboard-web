@@ -1,13 +1,6 @@
 <template>
-  <count-to
-    v-bind="$attrs"
-    class="emq-count-to"
-    :start-val="startVal"
-    :end-val="endVal"
-  >
-  </count-to>
+  <count-to v-bind="$attrs" class="emq-count-to" :start-val="startVal" :end-val="endVal"> </count-to>
 </template>
-
 
 <script>
 import countTo from 'vue-count-to'

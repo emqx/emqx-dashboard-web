@@ -2,12 +2,7 @@
   <div class="apps">
     <div class="app-wrapper">
       <a-card class="emq-list-card">
-        <el-form
-          ref="modelRecord"
-          :model="modelRecord"
-          :rules="modelRules"
-          size="small"
-        >
+        <el-form ref="modelRecord" :model="modelRecord" :rules="modelRules" size="small">
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item :label="$t('Models.modelName')" prop="thingName">
@@ -16,14 +11,25 @@
             </el-col>
             <el-col :span="12">
               <el-form-item prop="dataType" :label="$t('Models.dataFormat')">
-                <el-select
-                  v-model="modelRecord.dataType" :disabled="accessType === 'view'"
-                >
+                <el-select v-model="modelRecord.dataType">
                   <el-option
                     v-for="(item, index) in modelTypeList"
                     :key="index"
                     :value="item.value"
                     :label="item.label"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item prop="serviceID" :label="$t('Services.name')">
+                <el-select v-model="modelRecord.serviceID">
+                  <el-option
+                    v-for="(item, index) in serviceData"
+                    :key="index"
+                    :value="item.serviceID"
+                    :label="item.serviceName"
                   >
                   </el-option>
                 </el-select>
@@ -53,9 +59,7 @@
           </el-table-column>
           <el-table-column :label="$t('Models.dataSchema')" min-width="150px">
             <template slot-scope="scope">
-              <span v-show="scope.row.length">
-                {{ $t('Models.length') }}：{{ scope.row.length }}
-              </span>
+              <span v-show="scope.row.length"> {{ $t('Models.length') }}：{{ scope.row.length }} </span>
               <span v-show="scope.row.minimum">
                 {{ $t('Models.range') }}：{{ scope.row.minimum }}-{{ scope.row.maximum }}
               </span>
@@ -69,23 +73,13 @@
               <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
                 {{ $t('General.edit') }}
               </el-button>
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="deleteConfirm(row.id)"
-              >
+              <el-button type="dashed danger" size="mini" @click="deleteConfirm(row.id)">
                 {{ $t('General.delete') }}
               </el-button>
             </template>
           </el-table-column>
         </el-table>
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-plus"
-          class="add-model-button"
-          @click="createModel"
-        >
+        <el-button type="primary" size="small" icon="el-icon-plus" class="add-model-button" @click="createModel">
           {{ $t('Models.createModel') }}
         </el-button>
       </a-card>
@@ -107,36 +101,24 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item prop="propertyName" :label="$t('Models.attrName')">
-              <el-input v-model="record.propertyName" :disabled="accessType === 'view'">
-              </el-input>
+              <el-input v-model="record.propertyName" :disabled="accessType === 'view'"> </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="identifier" :label="$t('Models.attrMark')">
-              <el-input v-model="record.identifier" :disabled="accessType === 'view'">
-              </el-input>
+              <el-input v-model="record.identifier" :disabled="accessType === 'view'"> </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item prop="dataType" :label="$t('Models.dataType')">
-              <el-radio-group
-                v-model="record.dataType"
-                :disabled="accessType === 'view'"
-                @change="dataTypeChange"
-              >
+              <el-radio-group v-model="record.dataType" :disabled="accessType === 'view'" @change="dataTypeChange">
                 <template v-if="modelRecord.dataFormat === 'json'">
-                  <el-radio
-                    v-for="item in jsonDataTypeList"
-                    :key="item.value" :label="item.label" class="radio-item"
-                  >
+                  <el-radio v-for="item in jsonDataTypeList" :key="item.value" :label="item.label" class="radio-item">
                     {{ item.value }}
                   </el-radio>
                 </template>
                 <template v-else>
-                  <el-radio
-                    v-for="item in dataTypeList"
-                    :key="item.value" :label="item.label" class="radio-item"
-                  >
+                  <el-radio v-for="item in dataTypeList" :key="item.value" :label="item.label" class="radio-item">
                     {{ item.value }}
                   </el-radio>
                 </template>
@@ -150,7 +132,8 @@
                 <el-form-item prop="length" :label="$t('Models.length')">
                   <el-select
                     v-if="record.dataType && !record.dataType.includes('fix') && record.dataType !== 'array'"
-                    v-model="record.length" :disabled="accessType === 'view'"
+                    v-model="record.length"
+                    :disabled="accessType === 'view'"
                   >
                     <el-option
                       v-for="(item, index) in lengthList[record.dataType]"
@@ -160,28 +143,26 @@
                     >
                     </el-option>
                   </el-select>
-                  <el-input
-                    v-else
-                    v-model.number="record.length" :placeholder="$t('General.pleaseEnter')"
-                  >
-                  </el-input>
+                  <el-input v-else v-model.number="record.length" :placeholder="$t('General.pleaseEnter')"> </el-input>
                 </el-form-item>
               </el-col>
             </template>
             <template
-              v-if="record.dataType && !record.dataType.includes('fix') &&
-                record.dataType !== 'array' && record.dataType !== 'boolean'"
+              v-if="
+                record.dataType &&
+                !record.dataType.includes('fix') &&
+                record.dataType !== 'array' &&
+                record.dataType !== 'boolean'
+              "
             >
               <el-col :span="12">
                 <el-form-item prop="minimum" :label="$t('Models.minimum')">
-                  <el-input v-model.number="record.minimum" :disabled="accessType === 'view'">
-                  </el-input>
+                  <el-input v-model.number="record.minimum" :disabled="accessType === 'view'"> </el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item prop="maximum" :label="$t('Models.maximum')">
-                  <el-input v-model.number="record.maximum" :disabled="accessType === 'view'">
-                  </el-input>
+                  <el-input v-model.number="record.maximum" :disabled="accessType === 'view'"> </el-input>
                 </el-form-item>
               </el-col>
             </template>
@@ -218,18 +199,14 @@
   </div>
 </template>
 
-
 <script>
-import {
-  dataTypeList, jsonDataTypeList, dataTypeDic, lengthList,
-} from '@/common/modelData'
+import { dataTypeList, jsonDataTypeList, dataTypeDic, lengthList } from '@/common/modelData'
+import { loadService } from '@/api/services'
 
 export default {
   name: 'ModelCreate',
 
   components: {},
-
-  props: {},
 
   data() {
     const verifyIsMin = (rule, value, callBack) => {
@@ -237,7 +214,7 @@ export default {
         callBack(new Error(this.$t('Models.isRequired')))
       } else if (!Number.isInteger(Math.abs(value))) {
         callBack(new Error(this.$t('Models.IntErrMsg')))
-      } else if (this.record.maximum && (value >= this.record.maximum)) {
+      } else if (this.record.maximum && value >= this.record.maximum) {
         callBack(new Error(this.$t('Models.valErrMsg')))
       } else {
         callBack()
@@ -248,7 +225,7 @@ export default {
         callBack(new Error(this.$t('Models.isRequired')))
       } else if (!Number.isInteger(Math.abs(value))) {
         callBack(new Error(this.$t('Models.IntErrMsg')))
-      } else if (this.record.minimum && (value <= this.record.minimum)) {
+      } else if (this.record.minimum && value <= this.record.minimum) {
         callBack(new Error(this.$t('Models.valErrMsg')))
       } else {
         callBack()
@@ -274,11 +251,13 @@ export default {
       modelRules: {
         thingName: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
         dataType: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
+        serviceID: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
       },
       modelTypeList: [
         { label: 'JSON', value: 'json' },
         { label: this.$t('Models.binary'), value: 'bianry' },
       ],
+      serviceData: [],
     }
   },
 
@@ -297,7 +276,16 @@ export default {
     },
   },
 
+  created() {
+    if (this.$route.query.productID) {
+      this.loadServiceData(this.$route.query.productID)
+    }
+  },
+
   methods: {
+    async loadServiceData(productID) {
+      this.serviceData = await loadService(productID)
+    },
     dataTypeChange(val) {
       if (val) {
         this.record = {
@@ -359,33 +347,34 @@ export default {
       })
     },
     deleteConfirm(id) {
-      this.$msgbox.confirm(this.$t('Models.deleteAttr'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(() => {
-        if (this.tableData.length === 1) {
-          this.tableData = []
-        } else {
-          this.tableData.forEach((item) => {
-            if (item.id === id) {
-              const index = this.tableData.indexOf(item)
-              this.tableData.splice(index, 1)
-            }
-          })
-        }
-        this.$message.success(this.$t('Base.deleteSuccess'))
-      }).catch(() => {})
+      this.$msgbox
+        .confirm(this.$t('Models.deleteAttr'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(() => {
+          if (this.tableData.length === 1) {
+            this.tableData = []
+          } else {
+            this.tableData.forEach((item) => {
+              if (item.id === id) {
+                const index = this.tableData.indexOf(item)
+                this.tableData.splice(index, 1)
+              }
+            })
+          }
+          this.$message.success(this.$t('Base.deleteSuccess'))
+        })
+        .catch(() => {})
     },
     createModel() {},
   },
 }
 </script>
 
-
 <style lang="scss">
 .apps {
-
   .el-select {
     width: 100%;
   }
@@ -405,7 +394,7 @@ export default {
   }
 
   .add-enum-button {
-    color: #34C388;
+    color: #34c388;
     cursor: pointer;
     margin-top: 20px;
   }

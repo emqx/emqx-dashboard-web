@@ -3,12 +3,7 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card">
         <div class="emq-table-header">
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-plus"
-            @click="showDialog('create')"
-          >
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
             {{ $t('Base.create') }}
           </el-button>
         </div>
@@ -21,26 +16,20 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="productID" label="ID">
-          </el-table-column>
-          <el-table-column prop="productMoel" :label="$t('Products.deviceModel')"></el-table-column>
-          <el-table-column prop="productDesp" :label="$t('Products.productDes')"></el-table-column>
+          <el-table-column prop="productID" label="ID"> </el-table-column>
+          <el-table-column prop="productModel" :label="$t('Products.deviceModel')"></el-table-column>
+          <el-table-column prop="description" :label="$t('Products.productDes')"></el-table-column>
           <el-table-column align="right">
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
                 {{ $t('General.edit') }}
               </el-button>
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="deleteConfirm(row)"
-              >
+              <el-button type="dashed danger" size="mini" @click="deleteConfirm(row)">
                 {{ $t('General.delete') }}
               </el-button>
             </template>
           </el-table-column>
         </el-table>
-
       </a-card>
     </div>
 
@@ -50,48 +39,26 @@
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
-      <el-form
-        ref="recordForm"
-        size="small"
-        :model="record"
-        :rules="accessType === 'view' ? {} : rules"
-      >
+      <el-form ref="recordForm" size="small" :model="record" :rules="accessType === 'view' ? {} : rules">
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col v-if="accessType !== 'create'" :span="12">
             <el-form-item prop="productID" label="ID">
-              <el-input
-                v-model="record.productID"
-                :readonly="accessType !== 'create'"
-                :disabled="accessType === 'edit'"
-              >
-              </el-input>
+              <el-input v-model="record.productID" :disabled="accessType === 'edit'"> </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="productName" :label="$t('Products.productName')">
-              <el-input
-                v-model="record.productName"
-                :readonly="accessType === 'view'"
-              >
-              </el-input>
+              <el-input v-model="record.productName"> </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="productMoel" :label="$t('Products.deviceModel')">
-              <el-input
-                v-model="record.productMoel"
-                :readonly="accessType === 'view'"
-              >
-              </el-input>
+            <el-form-item prop="productModel" :label="$t('Products.deviceModel')">
+              <el-input v-model="record.productModel"> </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="productDesp" :label="$t('Products.productDes')">
-              <el-input
-                v-model="record.productDesp"
-                :readonly="accessType === 'view'"
-                type="textarea"
-              ></el-input>
+            <el-form-item prop="description" :label="$t('Products.productDes')">
+              <el-input v-model="record.description" type="textarea"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -106,9 +73,7 @@
 </template>
 
 <script>
-import {
-  loadProduct, createProduct, updateProduct, destroyProduct,
-} from '@/api/products'
+import { loadProduct, createProduct, updateProduct, destroyProduct } from '@/api/products'
 
 export default {
   name: 'Products',
@@ -124,8 +89,8 @@ export default {
         {
           productID: 'aaa111',
           productName: 'device',
-          productMoel: 'product-01',
-          productDesp: 'xxxxx',
+          productModel: 'product-01',
+          description: 'xxxxx',
         },
       ],
       accessType: '',
@@ -133,8 +98,8 @@ export default {
       rules: {
         productName: [{ required: true, message: this.$t('Models.isRequired') }],
         productID: [{ required: true, message: this.$t('Models.isRequired') }],
-        productMoel: [{ required: true, message: this.$t('Models.isRequired') }],
-        productDesp: [{ required: true, message: this.$t('Models.isRequired') }],
+        productModel: [{ required: true, message: this.$t('Models.isRequired') }],
+        description: [{ required: true, message: this.$t('Models.isRequired') }],
       },
     }
   },
@@ -167,10 +132,9 @@ export default {
         })
       } else {
         this.record = {
-          productID: Math.random().toString(16).slice(3),
           productName: '',
-          productMoel: '',
-          productDesp: '',
+          productModel: '',
+          description: '',
         }
         this.dialogVisible = true
       }
@@ -205,16 +169,19 @@ export default {
       })
     },
     deleteConfirm(item) {
-      this.$msgbox.confirm(this.$t('Products.confirmDelete'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(() => {
-        destroyProduct(item.productID).then(() => {
-          this.$message.success(this.$t('General.successfulDeletion'))
-          this.loadData()
+      this.$msgbox
+        .confirm(this.$t('Products.confirmDelete'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
         })
-      }).catch(() => {})
+        .then(() => {
+          destroyProduct(item.productID).then(() => {
+            this.$message.success(this.$t('General.successfulDeletion'))
+            this.loadData()
+          })
+        })
+        .catch(() => {})
     },
   },
 }

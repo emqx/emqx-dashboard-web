@@ -1,6 +1,5 @@
 <template>
   <div class="schemas">
-
     <page-header>
       <div class="page-header-content-view">
         <div class="content">
@@ -18,18 +17,18 @@
     </page-header>
 
     <div class="app-wrapper">
-      <a-card
-        class="emq-list-card"
-      >
-
+      <a-card class="emq-list-card">
         <div class="emq-table-header">
           <el-button
             type="primary"
             size="small"
             icon="el-icon-plus"
-            @click="$router.push({
-              path: '/schemas/0', query: { oper: 'create' }
-            })"
+            @click="
+              $router.push({
+                path: '/schemas/0',
+                query: { oper: 'create' },
+              })
+            "
           >
             {{ $t('Base.create') }}
           </el-button>
@@ -40,9 +39,12 @@
             <template slot-scope="{ row }">
               <a
                 href="javascript:;"
-                @click="$router.push({
-                  path: `/schemas/${row.name}`, query: { oper: 'view' }
-                })"
+                @click="
+                  $router.push({
+                    path: `/schemas/${row.name}`,
+                    query: { oper: 'view' },
+                  })
+                "
               >
                 {{ row.name }}
               </a>
@@ -56,18 +58,10 @@
             filter-placement="bottom"
           >
           </el-table-column>
-          <el-table-column
-            prop="descr"
-            show-overflow-tooltip
-            :label="$t('Schemas.description')"
-          ></el-table-column>
+          <el-table-column prop="descr" show-overflow-tooltip :label="$t('Schemas.description')"></el-table-column>
           <el-table-column width="80px">
             <template slot-scope="{ row }">
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="deleteData(row)"
-              >
+              <el-button type="dashed danger" size="mini" @click="deleteData(row)">
                 {{ $t('RuleEngine.delete') }}
               </el-button>
             </template>
@@ -77,7 +71,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import { loadSchemas, deleteSchema } from '@/api/schemas'
@@ -115,13 +108,15 @@ export default {
     deleteData(row) {
       this.$confirm(this.$t('Schemas.confirmDelete'), {
         type: 'warning',
-      }).then(async () => {
-        const res = await deleteSchema(row.name)
-        if (res) {
-          this.loadData()
-          this.$message.success(this.$t('Base.deleteSuccess'))
-        }
-      }).catch(() => {})
+      })
+        .then(async () => {
+          const res = await deleteSchema(row.name)
+          if (res) {
+            this.loadData()
+            this.$message.success(this.$t('Base.deleteSuccess'))
+          }
+        })
+        .catch(() => {})
     },
 
     parserTypesColumnFilter(value, row) {

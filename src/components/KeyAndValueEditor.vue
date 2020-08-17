@@ -3,7 +3,14 @@
   <el-table class="key-and-value-editor" :data="tableData" size="mini">
     <el-table-column prop="key" :label="$t('components.key')" min-width="80px">
       <template slot-scope="{ row }">
-        <el-input v-model="row.key" style="width: 120px !important;" class="key-input" size="mini" :placeholder="$t('components.objectKey')" @input="atInputChange"></el-input>
+        <el-input
+          v-model="row.key"
+          style="width: 120px !important;"
+          class="key-input"
+          size="mini"
+          :placeholder="$t('components.objectKey')"
+          @input="atInputChange"
+        ></el-input>
       </template>
     </el-table-column>
     <el-table-column prop="value" :label="$t('components.value')" min-width="150px">
@@ -23,7 +30,6 @@
     </el-table-column>
   </el-table>
 </template>
-
 
 <script>
 export default {
@@ -79,7 +85,7 @@ export default {
       this.$emit('update', data)
     },
     deleteItem(row) {
-      this.tableData = this.tableData.filter($ => $.key !== row.key)
+      this.tableData = this.tableData.filter(($) => $.key !== row.key)
       this.atInputChange()
     },
     addColumn() {
@@ -92,7 +98,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .key-and-value-editor {
@@ -110,6 +115,4 @@ export default {
     min-height: 40px;
   }
 }
-
-
 </style>

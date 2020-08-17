@@ -3,12 +3,13 @@ import http from '@/common/http'
 // 加载节点
 export const loadNodes = async () => {
   const res = await http.get('/nodes')
-  const nodes = res.map($ => $.node)
+  const nodes = res.map(($) => $.node)
   return nodes
 }
 
 // 加载集群信息
-const formateSeconds = (time) => { // 秒转化为毫秒
+const formateSeconds = (time) => {
+  // 秒转化为毫秒
   let ss = time
   if (typeof ss !== 'number') {
     ss = parseInt(ss, 10)

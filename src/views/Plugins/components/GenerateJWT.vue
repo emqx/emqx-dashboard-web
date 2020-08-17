@@ -2,7 +2,6 @@
   <div class="generate-jwt">
     <div class="app-wrapper">
       <a-card class="emq-list-card">
-
         <el-row :gutter="20">
           <el-col :span="14">
             <el-form ref="record" :model="record" :rules="rules">
@@ -22,12 +21,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item prop="secret">
-                    <el-input
-                      v-model="record.secret"
-                      :placeholder="$t('Plugins.secret')"
-                      size="small"
-                    >
-                    </el-input>
+                    <el-input v-model="record.secret" :placeholder="$t('Plugins.secret')" size="small"> </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -38,16 +32,12 @@
 
               <template v-if="payloadVisible">
                 <p class="jwt-payload-desc">
-                  {{ $t('Plugins.payloadDesc') }} <a :href="jwtDoc" target="_blank" rel="noopener">{{ $t('Plugins.jwtDoc') }}</a>
+                  {{ $t('Plugins.payloadDesc') }}
+                  <a :href="jwtDoc" target="_blank" rel="noopener">{{ $t('Plugins.jwtDoc') }}</a>
                 </p>
                 <el-form-item prop="payload">
                   <div class="monaco-container" style="height: 200px;">
-                    <monaco
-                      id="jwt-payload"
-                      v-model="record.payload"
-                      lang="json"
-                    >
-                    </monaco>
+                    <monaco id="jwt-payload" v-model="record.payload" lang="json"> </monaco>
                   </div>
                 </el-form-item>
                 <p class="jwt-payload-desc">
@@ -55,12 +45,7 @@
                 </p>
                 <el-form-item prop="data">
                   <div class="monaco-container" style="height: 200px;">
-                    <monaco
-                      id="jwt-data"
-                      v-model="record.data"
-                      lang="plaintext"
-                    >
-                    </monaco>
+                    <monaco id="jwt-data" v-model="record.data" lang="plaintext"> </monaco>
                   </div>
                 </el-form-item>
               </template>
@@ -76,12 +61,7 @@
                 </el-date-picker>
               </el-form-item>
 
-              <el-button
-                type="primary"
-                class="add"
-                size="small"
-                @click="save"
-              >
+              <el-button type="primary" class="add" size="small" @click="save">
                 {{ $t('Base.generate') }}
               </el-button>
             </el-form>
@@ -106,12 +86,10 @@
             </template>
           </el-table-column>
         </el-table>
-
       </a-card>
     </div>
   </div>
 </template>
-
 
 <script>
 import jwt from 'jsonwebtoken'
@@ -129,10 +107,14 @@ export default {
     return {
       record: {
         alg: 'HS256',
-        payload: JSON.stringify({
-          username: '%u',
-          clientid: '%c',
-        }, null, 2),
+        payload: JSON.stringify(
+          {
+            username: '%u',
+            clientid: '%c',
+          },
+          null,
+          2,
+        ),
         data: '',
       },
       rules: {
@@ -140,17 +122,7 @@ export default {
         payload: { required: true, message: this.$t('Plugins.payloadRequired') },
         data: { required: true, message: this.$t('Plugins.dataRequired') },
       },
-      algsOptions: [
-        'HS256',
-        'HS384',
-        'HS512',
-        'RS256',
-        'RS384',
-        'RS512',
-        'ES256',
-        'ES384',
-        'ES512',
-      ],
+      algsOptions: ['HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'ES512'],
       payloadVisible: false,
       pickerOptions: {
         disabledDate(time) {
@@ -161,7 +133,7 @@ export default {
             text: `180 ${this.$tc('Base.day', 180)}`,
             onClick(picker) {
               const date = new Date()
-              date.setTime(date.getTime() + (3600 * 1000 * 24 * 180))
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 180)
               picker.$emit('pick', date)
             },
           },
@@ -169,7 +141,7 @@ export default {
             text: `1 ${this.$tc('Base.year', 1)}`,
             onClick(picker) {
               const date = new Date()
-              date.setTime(date.getTime() + (3600 * 1000 * 24 * 365))
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 365)
               picker.$emit('pick', date)
             },
           },
@@ -177,7 +149,7 @@ export default {
             text: `3 ${this.$tc('Base.year', 3)}`,
             onClick(picker) {
               const date = new Date()
-              date.setTime(date.getTime() + (3600 * 1000 * 24 * 1095))
+              date.setTime(date.getTime() + 3600 * 1000 * 24 * 1095)
               picker.$emit('pick', date)
             },
           },
@@ -200,10 +172,7 @@ export default {
           return
         }
         if (this.payloadVisible) {
-          this.records = this.getPayloadJWTData(
-            this.record.payload,
-            this.record.data,
-          )
+          this.records = this.getPayloadJWTData(this.record.payload, this.record.data)
         } else {
           this.records = this.getPrivateKeyJWTData()
         }
@@ -221,11 +190,7 @@ export default {
         if (this.record.expired) {
           payload.exp = this.record.expired / 1000
         }
-        const token = jwt.sign(
-          payload,
-          this.record.secret,
-          options,
-        )
+        const token = jwt.sign(payload, this.record.secret, options)
         return {
           username,
           clientid,
@@ -238,13 +203,9 @@ export default {
       if (this.record.expired) {
         payload.exp = this.record.expired / 1000
       }
-      const token = jwt.sign(
-        payload,
-        this.record.secret,
-        {
-          algorithm: this.record.alg,
-        },
-      )
+      const token = jwt.sign(payload, this.record.secret, {
+        algorithm: this.record.alg,
+      })
       return [
         {
           clientid: '',
@@ -259,7 +220,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .generate-jwt {
