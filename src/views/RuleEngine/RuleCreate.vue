@@ -1,6 +1,5 @@
 <template>
   <div class="rule-create">
-
     <page-header>
       <div class="page-header-title-view">
         <div class="title">{{ $t('RuleEngine.createRules') }}</div>
@@ -28,12 +27,8 @@
               size="small"
               label-suffix=":"
             >
-
               <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
-                <div
-                  class="monaco-container monaco-sql"
-                  :style="{ height: `${sqlEditorHeight}px` }"
-                >
+                <div class="monaco-container monaco-sql" :style="{ height: `${sqlEditorHeight}px` }">
                   <monaco
                     id="rule-sql"
                     v-model="record.rawsql"
@@ -64,19 +59,12 @@
                   <el-form-item
                     v-for="k in Object.keys(selectEvent.test_columns)"
                     :key="k"
-                    :class="{ 'code-sql': k === 'payload', 'payload': k === 'payload' }"
+                    :class="{ 'code-sql': k === 'payload', payload: k === 'payload' }"
                     v-bind="{ label: k, prop: `ctx.${k}` }"
                   >
-                    <el-input
-                      v-if="k !== 'payload'"
-                      v-model="record.ctx[k]"
-                    >
-                    </el-input>
+                    <el-input v-if="k !== 'payload'" v-model="record.ctx[k]"> </el-input>
                     <template v-else>
-                      <div
-                        class="monaco-container monaco-payload"
-                        :style="{ height: `${payloadEditorHeight}px` }"
-                      >
+                      <div class="monaco-container monaco-payload" :style="{ height: `${payloadEditorHeight}px` }">
                         <monaco
                           id="payload"
                           v-model="record.ctx.payload"
@@ -91,8 +79,7 @@
                           <el-radio label="plaintext">Plaintext</el-radio>
                         </el-radio-group>
                       </div>
-                      <stretch-height v-model="payloadEditorHeight" class="payload">
-                      </stretch-height>
+                      <stretch-height v-model="payloadEditorHeight" class="payload"> </stretch-height>
                     </template>
                   </el-form-item>
 
@@ -120,7 +107,7 @@
 
           <el-col :span="9" class="tips-form">
             <div class="tips-item">
-              <div style="color: #606266">
+              <div style="color: #606266;">
                 {{ $t('RuleEngine.currentEventAvailableField') }}
                 <transition name="el-fade-in-linear">
                   <span v-if="clipboardStatus" class="copy-success">{{ clipboardStatus }}</span>
@@ -140,14 +127,13 @@
             </div>
 
             <div class="tips-item">
-              <div style="color: #606266">{{ $t('RuleEngine.exampleSql') }}</div>
+              <div style="color: #606266;">{{ $t('RuleEngine.exampleSql') }}</div>
               <div class="tips-wrapper code">
                 <code>{{ selectEvent.sql_example }}</code>
               </div>
             </div>
           </el-col>
         </el-row>
-
       </a-card>
 
       <a-card class="emq-list-card">
@@ -161,8 +147,7 @@
         </div>
 
         <div class="rule-action-wrapper">
-          <rule-actions ref="ruleAction" v-model="record.actions">
-          </rule-actions>
+          <rule-actions ref="ruleAction" v-model="record.actions"> </rule-actions>
         </div>
       </a-card>
 
@@ -174,17 +159,12 @@
           {{ isEdit ? $t('Base.confirm') : $t('Base.create') }}
         </el-button>
       </div>
-
     </div>
-
   </div>
 </template>
 
-
 <script>
-import {
-  loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule,
-} from '@/api/rules'
+import { loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule } from '@/api/rules'
 import { loadTopics } from '@/api/server'
 import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck } from '@/common/utils'
 import CodeEditor from '@/components/CodeEditor'
@@ -217,18 +197,7 @@ export default {
       events: [],
       testOutPut: '',
       selectEvent: {
-        columns: [
-          'clientid',
-          'username',
-          'event',
-          'id',
-          'payload',
-          'peername',
-          'qos',
-          'timestamp',
-          'topic',
-          'node',
-        ],
+        columns: ['clientid', 'username', 'event', 'id', 'payload', 'peername', 'qos', 'timestamp', 'topic', 'node'],
         description: '$events/message_publish',
         event: '$events/message_publish',
         sql_example: 'SELECT * FROM "t/#"',
@@ -291,7 +260,7 @@ export default {
 
   methods: {
     initData(eventName) {
-      this.selectEvent = this.events.find($ => $.event === eventName)
+      this.selectEvent = this.events.find(($) => $.event === eventName)
       const { sql_example } = this.selectEvent
       this.record.rawsql = sqlExampleFormatter(sql_example)
       this.initTestFormItem()
@@ -316,11 +285,13 @@ export default {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(() => {
-        this.record.rawsql = sqlExampleFormatter(ruleNewSqlParser(sql, oldEvent))
-      }).catch(() => {
-        this.needCheckSql = false
       })
+        .then(() => {
+          this.record.rawsql = sqlExampleFormatter(ruleNewSqlParser(sql, oldEvent))
+        })
+        .catch(() => {
+          this.needCheckSql = false
+        })
     },
     triggerEventChange(sql) {
       const events = [
@@ -349,7 +320,7 @@ export default {
       if (value === this.selectEvent.event) {
         return
       }
-      this.selectEvent = this.events.find($ => $.event === value) || { columns: {}, test_columns: {} }
+      this.selectEvent = this.events.find(($) => $.event === value) || { columns: {}, test_columns: {} }
       this.sqlPrimaryKey = this.events.columns
       this.initTestFormItem()
     },
@@ -396,15 +367,17 @@ export default {
           }
         }
 
-        SQLTest(data).then((res) => {
-          this.testOutPut = JSON.stringify(res, null, 2)
-        }).catch((error) => {
-          if (error === 'SQL Not Match') {
-            this.testOutPut = this.$t('RuleEngine.resultIsEmpty')
-          } else {
-            this.testOutPut = `${this.$t('RuleEngine.checkForErrors')}:\n\n${error}`
-          }
-        })
+        SQLTest(data)
+          .then((res) => {
+            this.testOutPut = JSON.stringify(res, null, 2)
+          })
+          .catch((error) => {
+            if (error === 'SQL Not Match') {
+              this.testOutPut = this.$t('RuleEngine.resultIsEmpty')
+            } else {
+              this.testOutPut = `${this.$t('RuleEngine.checkForErrors')}:\n\n${error}`
+            }
+          })
       })
     },
     copyAvailableFieldsSuccess() {
@@ -454,7 +427,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .rule-create {
   @import './style.scss';
@@ -470,7 +442,7 @@ export default {
     line-height: 2.3;
 
     &:hover {
-      color: #34C388;
+      color: #34c388;
     }
   }
 
@@ -501,7 +473,7 @@ export default {
       }
 
       .copy-success {
-        color: #34C388;
+        color: #34c388;
         float: right;
       }
     }
@@ -530,7 +502,7 @@ export default {
     width: 100%;
     padding: 2px 12px;
     background: #f6f7fb;
-    border: 1px solid #D9D9D9;
+    border: 1px solid #d9d9d9;
     border-top: none;
     text-align: right;
     .el-radio__label {

@@ -29,11 +29,9 @@
           </span>
         </a-breadcrumb-item>
       </template>
-
     </a-breadcrumb>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -62,9 +60,7 @@ export default {
 
   methods: {
     getBreadcrumb() {
-      const {
-        path, query, name: routeName,
-      } = this.$route
+      const { path, query, name: routeName } = this.$route
       const pathList = path.split('/')
       const name = pathList[1]
       const oper = query.oper || pathList[2]
@@ -95,7 +91,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .breadcrumb {

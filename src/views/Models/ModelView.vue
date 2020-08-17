@@ -37,7 +37,6 @@
   </div>
 </template>
 
-
 <script>
 import CodeEditor from '@/components/CodeEditor'
 
@@ -61,27 +60,25 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
-  .model {
-
-    .content {
-      position: relative;
-    }
-
-    .copy-button {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-    }
-
-    .description {
-      max-width: unset;
-      width: 100%;
-    }
-
-    .copy-tip {
-      margin-top: 5px;
-    }
+.model {
+  .content {
+    position: relative;
   }
+
+  .copy-button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+  .description {
+    max-width: unset;
+    width: 100%;
+  }
+
+  .copy-tip {
+    margin-top: 5px;
+  }
+}
 </style>

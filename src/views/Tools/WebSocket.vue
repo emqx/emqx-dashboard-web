@@ -1,35 +1,15 @@
 <template>
   <div class="websocket">
     <div class="app-wrapper">
-
-      <el-tabs
-        v-model="activeTab"
-        type="card"
-        :before-leave="handleBeforeLeave"
-        @tab-remove="handleTabEdit"
-      >
-        <el-tab-pane
-          v-for="(item, i) in tabs"
-          :key="i"
-          :closable="i > 0"
-          :name="item.name"
-        >
+      <el-tabs v-model="activeTab" type="card" :before-leave="handleBeforeLeave" @tab-remove="handleTabEdit">
+        <el-tab-pane v-for="(item, i) in tabs" :key="i" :closable="i > 0" :name="item.name">
           <span slot="label">
-            <el-badge
-              class="message-count"
-              :hidden="item.messageCount === 0"
-              :value="item.messageCount"
-              :max="99"
-            >
+            <el-badge class="message-count" :hidden="item.messageCount === 0" :value="item.messageCount" :max="99">
               {{ item.label }}
             </el-badge>
           </span>
         </el-tab-pane>
-        <el-tab-pane
-          key="add"
-          class="add-btn"
-          name="add"
-        >
+        <el-tab-pane key="add" class="add-btn" name="add">
           <span slot="label">
             <i class="el-icon-plus"></i>
           </span>
@@ -43,12 +23,9 @@
         :key="i"
         :message-count.sync="item.messageCount"
       ></web-socket-item>
-
     </div>
-
   </div>
 </template>
-
 
 <script>
 import WebSocketItem from './components/WebSocketItem'
@@ -75,8 +52,8 @@ export default {
 
   watch: {
     activeTab(val, oldVal) {
-      const ins = this.tabs.find($ => $.name === val)
-      const insOld = this.tabs.find($ => $.name === oldVal)
+      const ins = this.tabs.find(($) => $.name === val)
+      const insOld = this.tabs.find(($) => $.name === oldVal)
 
       if (insOld) {
         insOld.messageCount = 0
@@ -125,28 +102,27 @@ export default {
             }
           }
         })
-        this.tabs = this.tabs.filter($ => $.name !== targetName)
+        this.tabs = this.tabs.filter(($) => $.name !== targetName)
       }
     },
   },
 }
 </script>
 
-
 <style lang="scss">
 .websocket {
   position: relative;
 
-  .el-tabs--card > .el-tabs__header
-  .el-tabs__item .el-icon-close, .el-icon-plus {
+  .el-tabs--card > .el-tabs__header .el-tabs__item .el-icon-close,
+  .el-icon-plus {
     font-weight: 600;
     overflow: visible;
   }
 
-  .el-tabs--top.el-tabs--border-card>.el-tabs__header .el-tabs__item:nth-child(2),
-  .el-tabs--top.el-tabs--card>.el-tabs__header .el-tabs__item:nth-child(2),
-  .el-tabs--top .el-tabs--left>.el-tabs__header .el-tabs__item:nth-child(2),
-  .el-tabs--top .el-tabs--right>.el-tabs__header .el-tabs__item:nth-child(2) {
+  .el-tabs--top.el-tabs--border-card > .el-tabs__header .el-tabs__item:nth-child(2),
+  .el-tabs--top.el-tabs--card > .el-tabs__header .el-tabs__item:nth-child(2),
+  .el-tabs--top .el-tabs--left > .el-tabs__header .el-tabs__item:nth-child(2),
+  .el-tabs--top .el-tabs--right > .el-tabs__header .el-tabs__item:nth-child(2) {
     padding: 0 13px;
   }
 

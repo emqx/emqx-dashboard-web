@@ -10,13 +10,7 @@
     @open="loadData"
     @close="clearForm"
   >
-    <el-form
-      ref="record"
-      :model="record"
-      :rules="rules"
-      label-position="top"
-      size="small"
-    >
+    <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
       <el-form-item prop="type" :label="$t('RuleEngine.resourceTypes')">
         <emq-select
           v-model="record.type"
@@ -27,17 +21,12 @@
           @change="resourceTypeChange"
         >
         </emq-select>
-        <el-button
-          :disabled="!record.type"
-          type="primary"
-          style="margin-left: 20px"
-          @click="handleCreate(true)"
-        >
+        <el-button :disabled="!record.type" type="primary" style="margin-left: 20px;" @click="handleCreate(true)">
           {{ $t('RuleEngine.testConnection') }}
         </el-button>
       </el-form-item>
 
-      <el-form-item style="width: 330px" prop="description" :label="$t('RuleEngine.resourceName')">
+      <el-form-item style="width: 330px;" prop="description" :label="$t('RuleEngine.resourceName')">
         <el-input v-model="record.description" :placeholder="$t('RuleEngine.pleaseEnter')"></el-input>
       </el-form-item>
 
@@ -72,12 +61,7 @@
                 >
                 </el-input>
 
-                <el-input
-                  v-else
-                  v-model="record.config[item.key]"
-                  v-bind="item.bindAttributes"
-                >
-                </el-input>
+                <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes"> </el-input>
               </template>
 
               <!-- select -->
@@ -90,12 +74,7 @@
                 >
                 </emq-select>
 
-                <emq-select
-                  v-else
-                  v-model="record.config[item.key]"
-                  v-bind="item.bindAttributes"
-                  class="reset-width"
-                >
+                <emq-select v-else v-model="record.config[item.key]" v-bind="item.bindAttributes" class="reset-width">
                 </emq-select>
               </template>
             </el-form-item>
@@ -108,17 +87,16 @@
           </div>
         </template>
       </el-row>
-
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
       <el-button size="small" @click="handleCache">{{ $t('Base.cancel') }}</el-button>
-      <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">{{ $t('Base.confirm') }}</el-button>
+      <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">{{
+        $t('Base.confirm')
+      }}</el-button>
     </div>
-
   </el-dialog>
 </template>
-
 
 <script>
 import { loadResourceTypes, createResource } from '@/api/rules'
@@ -171,7 +149,7 @@ export default {
 
   computed: {
     availableTypes() {
-      return this.types.length > 0 ? this.resourceTypes.filter($ => this.types.includes($.name)) : this.resourceTypes
+      return this.types.length > 0 ? this.resourceTypes.filter(($) => this.types.includes($.name)) : this.resourceTypes
     },
     disabledSelect() {
       return this.types.length === 1
@@ -216,7 +194,7 @@ export default {
     },
     resourceTypeChange(name) {
       this.record.name = name
-      this.selectedResource = this.resourceTypes.find($ => $.name === name)
+      this.selectedResource = this.resourceTypes.find(($) => $.name === name)
 
       this.configLoading = true
       this.wholeConfigList = []
@@ -290,13 +268,12 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .resource-dialog {
   .line {
     width: 95%;
     margin: 30px auto 28px auto;
-    background-color: #EDEEF2;
+    background-color: #edeef2;
   }
 
   .show-more {
@@ -313,7 +290,7 @@ export default {
       z-index: 9;
       width: 200px;
       height: 1px;
-      background-color: #EDEEF2;
+      background-color: #edeef2;
     }
     a::after {
       content: '';
@@ -323,7 +300,7 @@ export default {
       z-index: 9;
       width: 200px;
       height: 1px;
-      background-color: #EDEEF2;
+      background-color: #edeef2;
     }
   }
 
@@ -353,7 +330,8 @@ export default {
       padding: 0 32px;
     }
 
-    .el-input, .el-select {
+    .el-input,
+    .el-select {
       width: 200px !important;
     }
   }

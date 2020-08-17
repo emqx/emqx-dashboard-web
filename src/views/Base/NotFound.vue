@@ -5,7 +5,6 @@
   </div>
 </template>
 
-
 <script>
 export default {
   name: 'NotFound',
@@ -23,7 +22,6 @@ export default {
   methods: {},
 }
 </script>
-
 
 <style lang="scss" scoped>
 .not-found {

@@ -1,6 +1,5 @@
 .details-page {
   .details-form {
-
     &__view {
       .el-input.is-disabled {
         .el-input__inner {
@@ -12,13 +11,12 @@
       }
 
       .el-select .el-input .el-select__caret {
-        visibility: hidden
+        visibility: hidden;
       }
 
       .el-form-item__label {
         color: #999;
       }
     }
-
   }
 }

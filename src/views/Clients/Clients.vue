@@ -24,21 +24,29 @@
         <div class="emq-table-header">
           <el-row class="search-wrapper" :gutter="20">
             <el-col :span="8">
-              <el-input v-model="fuzzyParams._like_clientid" size="small" :placeholder="$t('Clients.clientId')"></el-input>
+              <el-input
+                v-model="fuzzyParams._like_clientid"
+                size="small"
+                :placeholder="$t('Clients.clientId')"
+              ></el-input>
             </el-col>
             <el-col :span="8">
-              <el-input v-model="fuzzyParams._like_username" size="small" :placeholder="$t('Clients.username')"></el-input>
+              <el-input
+                v-model="fuzzyParams._like_username"
+                size="small"
+                :placeholder="$t('Clients.username')"
+              ></el-input>
             </el-col>
             <template v-if="showMoreQuery">
               <el-col :span="8">
-                <el-input v-model="fuzzyParams.ip_address" size="small" :placeholder="$t('Clients.ipAddress')"></el-input>
+                <el-input
+                  v-model="fuzzyParams.ip_address"
+                  size="small"
+                  :placeholder="$t('Clients.ipAddress')"
+                ></el-input>
               </el-col>
               <el-col :span="8">
-                <el-select
-                  v-model="fuzzyParams.conn_state"
-                  size="small"
-                  :placeholder="$t('Clients.connectedStatus')"
-                >
+                <el-select v-model="fuzzyParams.conn_state" size="small" :placeholder="$t('Clients.connectedStatus')">
                   <el-option value="connected"></el-option>
                   <el-option value="disconnected"></el-option>
                 </el-select>
@@ -66,12 +74,7 @@
               </el-col>
               <el-col :span="8">
                 <el-select v-model="fuzzyParams.proto_name" size="small" :placeholder="$t('Clients.protocol')">
-                  <el-option
-                    v-for="name in protoNames"
-                    :key="name"
-                    :value="name"
-                  >
-                  </el-option>
+                  <el-option v-for="name in protoNames" :key="name" :value="name"> </el-option>
                 </el-select>
               </el-col>
             </template>
@@ -98,8 +101,8 @@
                   path: '/products/view/clients',
                   query: {
                     id: id,
-                    clientid: row.clientid
-                  }
+                    clientid: row.clientid,
+                  },
                 }"
               >
                 {{ row.clientid }}
@@ -109,9 +112,7 @@
 
           <el-table-column prop="username" min-width="120px" :label="$t('Clients.username')"></el-table-column>
           <el-table-column prop="ipaddress" min-width="120px" :label="$t('Clients.ipAddress')">
-            <template slot-scope="{ row }">
-              {{ row.ip_address }}:{{ row.port }}
-            </template>
+            <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template>
           </el-table-column>
           <el-table-column prop="keepalive" :label="$t('Clients.keepalive')"></el-table-column>
           <el-table-column
@@ -140,11 +141,9 @@
           <el-table-column prop="connected_at" min-width="140px" :label="$t('Clients.connectionAt')"></el-table-column>
           <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
-
               <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
                 {{ row.connected ? $t('Clients.kickOut') : $t('Clients.cleanSession') }}
               </el-button>
-
             </template>
           </el-table-column>
         </el-table>
@@ -154,8 +153,11 @@
             v-if="count > 10"
             background
             layout="total, sizes, prev, pager, next"
-            :page-sizes="[20, 50, 100, 500]" :page-size.sync="params._limit"
-            :current-page.sync="params._page" :total="count" @size-change="handleSizeChange"
+            :page-sizes="[20, 50, 100, 500]"
+            :page-size.sync="params._limit"
+            :current-page.sync="params._page"
+            :total="count"
+            @size-change="handleSizeChange"
             @current-change="handleCurrentPageChange"
           >
           </el-pagination>
@@ -193,12 +195,9 @@
   </div>
 </template>
 
-
 <script>
 import CustomPagination from '@/components/CustomPagination.vue'
-import {
-  disconnectClient, listNodeClients,
-} from '@/api/clients'
+import { disconnectClient, listNodeClients } from '@/api/clients'
 import { loadNodes } from '@/api/common'
 import { createDevice } from '@/api/devices'
 
@@ -207,13 +206,6 @@ export default {
 
   components: {
     CustomPagination,
-  },
-
-  props: {
-    id: {
-      required: true,
-      type: String,
-    },
   },
 
   data() {
@@ -228,7 +220,7 @@ export default {
       },
       count: 0,
       filterOptions: {
-        protoName: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M', 'Stomp'].map($ => ({ text: $, value: $ })),
+        protoName: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M', 'Stomp'].map(($) => ({ text: $, value: $ })),
       },
       nodeName: '',
       currentNodes: [],
@@ -236,22 +228,13 @@ export default {
       fuzzyParams: {
         comparator: '_gte',
       },
-      protoNames: [
-        'MQTT',
-        'MQTT-SN',
-        'CoAP',
-        'LwM2M',
-      ],
+      protoNames: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M'],
       dialogVisible: false,
       accessType: '',
       record: {},
       rules: {
-        clientID: [
-          { required: true, message: this.$t('Clients.enterEquipId') },
-        ],
-        userName: [
-          { required: true, message: this.$t('Clients.enterEquipName') },
-        ],
+        clientID: [{ required: true, message: this.$t('Clients.enterEquipId') }],
+        userName: [{ required: true, message: this.$t('Clients.enterEquipName') }],
       },
     }
   },
@@ -305,15 +288,18 @@ export default {
         warningMsg = this.$t('Clients.willCleanSession')
         successMsg = this.$t('Clients.successfulCleanSession')
       }
-      this.$msgbox.confirm(warningMsg, {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(async () => {
-        await disconnectClient(row.clientid)
-        this.loadNodeClients()
-        this.$message.success(successMsg)
-      }).catch(() => { })
+      this.$msgbox
+        .confirm(warningMsg, {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await disconnectClient(row.clientid)
+          this.loadNodeClients()
+          this.$message.success(successMsg)
+        })
+        .catch(() => {})
     },
     resetSearch() {
       this.resetIcon = 'el-icon-loading'
@@ -329,10 +315,7 @@ export default {
     },
     genQueryParams(params) {
       let newParams = {}
-      const {
-        _like_clientid, _like_username, ip_address, conn_state,
-        proto_name, comparator, _connected_at,
-      } = params
+      const { _like_clientid, _like_username, ip_address, conn_state, proto_name, comparator, _connected_at } = params
       newParams = {
         _like_clientid: _like_clientid || undefined,
         _like_username: _like_username || undefined,
@@ -379,7 +362,10 @@ export default {
         this.params._page = 1
       }
       const data = await listNodeClients(this.nodeName, { ...this.params, ...params })
-      const { items = [], meta: { count = 0, hasnext = false } } = data
+      const {
+        items = [],
+        meta: { count = 0, hasnext = false },
+      } = data
       this.tableData = items
       this.count = count
       this.hasnext = hasnext
@@ -392,14 +378,13 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .clients {
   .data-list {
     clear: both;
   }
   .page-header {
-    margin: 0!important;
+    margin: 0 !important;
   }
   .page-header-content-view {
     .content {
@@ -409,7 +394,7 @@ export default {
     }
   }
   .app-wrapper {
-    padding: 0!important;
+    padding: 0 !important;
     .add-button {
       margin-bottom: 20px;
     }

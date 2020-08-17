@@ -13,19 +13,8 @@
                   :placeholder="$t('Plugins.usernameOrClientid')"
                   @keyup.enter.native="AuthSave"
                 ></el-input>
-                <el-popover
-                  trigger="hover"
-                  placement="top"
-                  :content="$t('Plugins.mnesiaTip')"
-                  :tabindex="-1"
-                >
-                  <a
-                    slot="reference"
-                    class="tutorial"
-                    :href="mnesiaDoc"
-                    target="_blank"
-                    rel="noopener"
-                  >
+                <el-popover trigger="hover" placement="top" :content="$t('Plugins.mnesiaTip')" :tabindex="-1">
+                  <a slot="reference" class="tutorial" :href="mnesiaDoc" target="_blank" rel="noopener">
                     <i class="iconfont icon-bangzhu"></i>
                   </a>
                 </el-popover>
@@ -48,22 +37,13 @@
             </el-row>
           </div>
           <el-table :data="authTableData" class="data-list">
-            <el-table-column prop="login" :label="$t('Plugins.usernameOrClientid')">
-            </el-table-column>
+            <el-table-column prop="login" :label="$t('Plugins.usernameOrClientid')"> </el-table-column>
             <el-table-column prop="oper" width="120px">
               <template slot-scope="{ row }">
-                <el-button
-                  type="dashed"
-                  size="mini"
-                  @click="showAuthEdit(row)"
-                >
+                <el-button type="dashed" size="mini" @click="showAuthEdit(row)">
                   {{ $t('Base.edit') }}
                 </el-button>
-                <el-button
-                  type="dashed danger"
-                  size="mini"
-                  @click="handleAuthDelete(row)"
-                >
+                <el-button type="dashed danger" size="mini" @click="handleAuthDelete(row)">
                   {{ $t('Base.delete') }}
                 </el-button>
               </template>
@@ -74,8 +54,11 @@
               v-if="authCount > 10"
               background
               layout="total, sizes, prev, pager, next"
-              :page-sizes="[10, 50, 100, 500]" :page-size.sync="authParams._limit"
-              :current-page.sync="authParams._page" :total="authCount" @size-change="handleAuthSizeChange"
+              :page-sizes="[10, 50, 100, 500]"
+              :page-size.sync="authParams._limit"
+              :current-page.sync="authParams._page"
+              :total="authCount"
+              @size-change="handleAuthSizeChange"
               @current-change="handleAuthCurrentPageChange"
             >
             </el-pagination>
@@ -96,19 +79,8 @@
                   @select="handleACLSelect"
                   @keyup.enter.native="ACLSave"
                 ></el-autocomplete>
-                <el-popover
-                  trigger="hover"
-                  placement="top"
-                  :content="$t('Plugins.mnesiaTip')"
-                  :tabindex="-1"
-                >
-                  <a
-                    slot="reference"
-                    class="tutorial"
-                    :href="mnesiaDoc"
-                    target="_blank"
-                    rel="noopener"
-                  >
+                <el-popover trigger="hover" placement="top" :content="$t('Plugins.mnesiaTip')" :tabindex="-1">
+                  <a slot="reference" class="tutorial" :href="mnesiaDoc" target="_blank" rel="noopener">
                     <i class="iconfont icon-bangzhu"></i>
                   </a>
                 </el-popover>
@@ -123,20 +95,10 @@
                 </el-input>
               </el-col>
               <el-col :span="4">
-                <emq-select
-                  v-model="aclRecord.allow"
-                  size="small"
-                  :field="{ options: allowOptions }"
-                >
-                </emq-select>
+                <emq-select v-model="aclRecord.allow" size="small" :field="{ options: allowOptions }"> </emq-select>
               </el-col>
               <el-col :span="4">
-                <emq-select
-                  v-model="aclRecord.action"
-                  size="small"
-                  :field="{ options: actionOptions }"
-                >
-                </emq-select>
+                <emq-select v-model="aclRecord.action" size="small" :field="{ options: actionOptions }"> </emq-select>
               </el-col>
               <div class="col-oper">
                 <el-button type="primary" icon="el-icon-plus" size="small" @click="ACLSave">
@@ -146,12 +108,9 @@
             </el-row>
           </div>
           <el-table :data="aclTableData" class="data-list">
-            <el-table-column prop="login" :label="$t('Plugins.usernameOrClientid')">
-            </el-table-column>
-            <el-table-column prop="topic" :label="$t('Topics.topic')">
-            </el-table-column>
-            <el-table-column prop="action" :label="$t('Plugins.action')">
-            </el-table-column>
+            <el-table-column prop="login" :label="$t('Plugins.usernameOrClientid')"> </el-table-column>
+            <el-table-column prop="topic" :label="$t('Topics.topic')"> </el-table-column>
+            <el-table-column prop="action" :label="$t('Plugins.action')"> </el-table-column>
             <el-table-column prop="allow" :label="$t('Plugins.isAllow')">
               <template slot-scope="{ row }">
                 {{ row.allow ? $t('Plugins.allow') : $t('Plugins.deny') }}
@@ -159,11 +118,7 @@
             </el-table-column>
             <el-table-column prop="oper" width="120px">
               <template slot-scope="{ row }">
-                <el-button
-                  type="dashed danger"
-                  size="mini"
-                  @click="handleACLDelete(row)"
-                >
+                <el-button type="dashed danger" size="mini" @click="handleACLDelete(row)">
                   {{ $t('Base.delete') }}
                 </el-button>
               </template>
@@ -174,8 +129,11 @@
               v-if="aclCount > 10"
               background
               layout="total, sizes, prev, pager, next"
-              :page-sizes="[10, 50, 100, 500]" :page-size.sync="aclParams._limit"
-              :current-page.sync="aclParams._page" :total="aclCount" @size-change="handleACLSizeChange"
+              :page-sizes="[10, 50, 100, 500]"
+              :page-size.sync="aclParams._limit"
+              :current-page.sync="aclParams._page"
+              :total="aclCount"
+              @size-change="handleACLSizeChange"
               @current-change="handleACLCurrentPageChange"
             >
             </el-pagination>
@@ -184,19 +142,8 @@
       </a-card>
     </div>
 
-    <el-dialog
-      :visible.sync="editVisible"
-      width="400px"
-      :title="$t('Base.edit')"
-      @keyup.enter.native="handleAuthEdit"
-    >
-      <el-form
-        ref="editRecord"
-        class="el-form--public app-info"
-        size="medium"
-        :rules="rules"
-        :model="editRecord"
-      >
+    <el-dialog :visible.sync="editVisible" width="400px" :title="$t('Base.edit')" @keyup.enter.native="handleAuthEdit">
+      <el-form ref="editRecord" class="el-form--public app-info" size="medium" :rules="rules" :model="editRecord">
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item prop="login" :label="$t('Plugins.usernameOrClientid')">
@@ -212,19 +159,10 @@
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button
-          plain
-          size="small"
-          class="cache-btn"
-          @click="editVisible = false"
-        >
+        <el-button plain size="small" class="cache-btn" @click="editVisible = false">
           {{ $t('Base.cancel') }}
         </el-button>
-        <el-button
-          type="primary"
-          size="small"
-          @click="handleAuthEdit"
-        >
+        <el-button type="primary" size="small" @click="handleAuthEdit">
           {{ $t('Base.confirm') }}
         </el-button>
       </div>
@@ -232,11 +170,16 @@
   </div>
 </template>
 
-
 <script>
 import {
-  listMnesia, addAuthMnesia, deleteAuthMnesia, loadAuthMnesia, updateAuthMnesia,
-  listMnesiaACL, addAuthMnesiaACL, deleteAuthMnesiaACL,
+  listMnesia,
+  addAuthMnesia,
+  deleteAuthMnesia,
+  loadAuthMnesia,
+  updateAuthMnesia,
+  listMnesiaACL,
+  addAuthMnesiaACL,
+  deleteAuthMnesiaACL,
 } from '@/api/plugins'
 import { getLink } from '@/common/utils'
 
@@ -300,7 +243,10 @@ export default {
         this.authParams._page = 1
       }
       const data = await listMnesia({ ...this.authParams })
-      const { items = [], meta: { count = 0 } } = data
+      const {
+        items = [],
+        meta: { count = 0 },
+      } = data
       this.authTableData = items
       this.authCount = count
       this.listLoading = false
@@ -324,12 +270,14 @@ export default {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(async () => {
-        const res = await deleteAuthMnesia(login)
-        if (res) {
-          this.loadMnesia(true)
-        }
-      }).catch(() => {})
+      })
+        .then(async () => {
+          const res = await deleteAuthMnesia(login)
+          if (res) {
+            this.loadMnesia(true)
+          }
+        })
+        .catch(() => {})
     },
     async showAuthEdit({ login }) {
       this.editVisible = true
@@ -368,7 +316,10 @@ export default {
         this.aclParams._page = 1
       }
       const data = await listMnesiaACL({ ...this.aclParams })
-      const { items = [], meta: { count = 0 } } = data
+      const {
+        items = [],
+        meta: { count = 0 },
+      } = data
       this.aclTableData = items
       this.aclCount = count
       this.listLoading = false
@@ -394,17 +345,17 @@ export default {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(async () => {
-        const res = await deleteAuthMnesiaACL(login, topic)
-        if (res) {
-          this.loadACL(true)
-        }
-      }).catch(() => {})
+      })
+        .then(async () => {
+          const res = await deleteAuthMnesiaACL(login, topic)
+          if (res) {
+            this.loadACL(true)
+          }
+        })
+        .catch(() => {})
     },
     queryACLSearch(queryString, cb) {
-      const results = [
-        { value: '$all', label: this.$t('Plugins.allUsers') },
-      ]
+      const results = [{ value: '$all', label: this.$t('Plugins.allUsers') }]
       cb(results)
     },
     handleACLSelect(row) {
@@ -419,7 +370,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .auth-mnesia-table {

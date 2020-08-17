@@ -1,13 +1,8 @@
 <template>
-  <div
-    id="stretch-height"
-    class="stretch-height"
-    @mousedown="handleMousedown"
-  >
+  <div id="stretch-height" class="stretch-height" @mousedown="handleMousedown">
     <i class="el-icon-more"></i>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -26,8 +21,7 @@ export default {
   },
 
   data() {
-    return {
-    }
+    return {}
   },
 
   created() {
@@ -49,7 +43,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .stretch-height {

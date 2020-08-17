@@ -19,31 +19,28 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card" :loading="listLoading">
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="name" width="250" :label="$t('Modules.name')">
-          </el-table-column>
-          <el-table-column prop="description" min-width="350" :label="$t('Modules.description')">
-          </el-table-column>
+          <el-table-column prop="name" width="250" :label="$t('Modules.name')"> </el-table-column>
+          <el-table-column prop="description" min-width="350" :label="$t('Modules.description')"> </el-table-column>
           <el-table-column
             prop="active"
             width="150"
             filter-placement="bottom"
             :filter-method="handleStatusFilter"
-            :filters="[{ text: $t('Modules.disabled'), value: false }, { text: $t('Modules.enabled'), value: true }]"
+            :filters="[
+              { text: $t('Modules.disabled'), value: false },
+              { text: $t('Modules.enabled'), value: true },
+            ]"
             :label="$t('RuleEngine.status')"
           >
             <template slot-scope="props">
               <span :class="[props.row.active ? 'running' : '', 'status']">
-                {{ props.row.active ? $t('Modules.enabled'): $t('Modules.disabled') }}
+                {{ props.row.active ? $t('Modules.enabled') : $t('Modules.disabled') }}
               </span>
             </template>
           </el-table-column>
           <el-table-column width="160">
             <template slot-scope="props">
-              <el-button
-                size="mini"
-                :type="`dashed ${props.row.active ? 'danger' : ''}`"
-                @click="update(props.row)"
-              >
+              <el-button size="mini" :type="`dashed ${props.row.active ? 'danger' : ''}`" @click="update(props.row)">
                 {{ props.row.active ? $t('Modules.disable') : $t('Modules.enable') }}
               </el-button>
             </template>
@@ -54,11 +51,8 @@
   </div>
 </template>
 
-
 <script>
-import {
-  listModules, updateModules,
-} from '@/api/modules'
+import { listModules, updateModules } from '@/api/modules'
 import { loadNodes } from '@/api/common'
 
 export default {
@@ -83,9 +77,7 @@ export default {
     },
     async update(row) {
       await updateModules(this.nodeName, row)
-      this.$message.success(
-        `${row.active ? this.$t('Base.disabledSuccess') : this.$t('Base.enableSuccess')}`,
-      )
+      this.$message.success(`${row.active ? this.$t('Base.disabledSuccess') : this.$t('Base.enableSuccess')}`)
       this.loadModuels()
     },
     async loadData() {
@@ -105,7 +97,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .modules {
   .data-list {
@@ -120,7 +111,7 @@ export default {
   }
   /* Running Status */
   .status:before {
-    content: "";
+    content: '';
     display: inline-block;
     height: 8px;
     width: 8px;
@@ -136,7 +127,7 @@ export default {
     }
     &.stopped.danger {
       &:before {
-        background-color: #F56C6C;
+        background-color: #f56c6c;
       }
     }
     &.running:before {

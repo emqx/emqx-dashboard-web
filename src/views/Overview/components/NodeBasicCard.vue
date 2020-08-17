@@ -1,19 +1,12 @@
 <template>
   <div class="node-basic-card">
     <div class="version-wrapper">
-      <div class="version-title">
-        {{ $t('Overview.version') }}: {{ record.version }}
-      </div>
+      <div class="version-title">{{ $t('Overview.version') }}: {{ record.version }}</div>
     </div>
 
     <div class="basic-info">
       <el-row>
-        <el-form
-          class="node-form"
-          label-suffix=":"
-          label-position="left"
-          label-width="150px"
-        >
+        <el-form class="node-form" label-suffix=":" label-position="left" label-width="150px">
           <el-col :span="12">
             <el-form-item :label="$t('Overview.systemTime')">
               <span class="form-item-value">{{ record.datetime }}</span>
@@ -60,29 +53,20 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="`CPU ${$t('Overview.load')}`">
-              <span class="form-item-value">
-                {{ record.load1 }} / {{ record.load5 }} / {{ record.load15 }}
-              </span>
-              <el-popover
-                trigger="hover"
-                content="load1/load5/load15"
-              >
+              <span class="form-item-value"> {{ record.load1 }} / {{ record.load5 }} / {{ record.load15 }} </span>
+              <el-popover trigger="hover" content="load1/load5/load15">
                 <i slot="reference" class="el-icon-question"></i>
               </el-popover>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.currentConnection')">
-              <span class="form-item-value">
-                {{ record['connections.count'] }} / {{ record['connections.max'] }}
-              </span>
+              <span class="form-item-value"> {{ record['connections.count'] }} / {{ record['connections.max'] }} </span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.topics')">
-              <span class="form-item-value">
-                {{ record['topics.count'] }} / {{ record['topics.max'] }}
-              </span>
+              <span class="form-item-value"> {{ record['topics.count'] }} / {{ record['topics.max'] }} </span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -94,9 +78,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.retained')">
-              <span class="form-item-value">
-                {{ record['retained.count'] }} / {{ record['retained.max'] }}
-              </span>
+              <span class="form-item-value"> {{ record['retained.count'] }} / {{ record['retained.max'] }} </span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -109,19 +91,12 @@
         </el-form>
       </el-row>
 
-      <el-button
-        v-if="showButton"
-        class="form-btn"
-        type="primary"
-        size="small"
-        @click="toDetails"
-      >
+      <el-button v-if="showButton" class="form-btn" type="primary" size="small" @click="toDetails">
         {{ $t('Overview.viewMore') }}
       </el-button>
     </div>
   </div>
 </template>
-
 
 <script>
 import { formatNumberSize } from '@/common/utils'
@@ -222,7 +197,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .node-basic-card {
   padding: 10px;
@@ -239,7 +213,7 @@ export default {
     width: 100%;
     padding: 8px 16px;
     border-radius: 2px;
-    background: #F8F8F8;
+    background: #f8f8f8;
     font-size: 14px;
     .version-title {
       color: #333333;

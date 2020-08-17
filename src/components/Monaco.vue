@@ -2,7 +2,6 @@
   <div :id="`monaco-${id}`" class="monaco-view"></div>
 </template>
 
-
 <script>
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 import { createMonacoComplete, createMonacoHover } from '@/common/monacoUtils'
@@ -214,7 +213,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .monaco-view {

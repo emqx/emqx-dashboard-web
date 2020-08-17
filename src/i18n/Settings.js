@@ -104,7 +104,8 @@ export default {
   },
   allow_anonymous: {
     zh: '如果未加载身份验证插件，则默认情况下允许匿名身份验证。建议在生产部署中禁用该选项！',
-    en: 'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
+    en:
+      'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
   },
   enable_stats: {
     zh: '启用连接状态统计，会降低部分性能',
@@ -120,7 +121,8 @@ export default {
   },
   keepalive_backoff: {
     zh: 'MQTT keepalive 超时回退， keepalive * backoff * 2 时将断开连接',
-    en: 'The backoff for MQTT keepalive timeout. The broker will kick a connection out until keepalive * backoff * 2 timeout',
+    en:
+      'The backoff for MQTT keepalive timeout. The broker will kick a connection out until keepalive * backoff * 2 timeout',
   },
   max_subscriptions: {
     zh: '允许的最大订阅数，0 表示无限制',
@@ -148,7 +150,8 @@ export default {
   },
   flapping_threshold: {
     zh: '每分钟的状态更改次数，指定用于检测连接是否开始 flapping 的阈值',
-    en: 'The times of state change per minute, specifying the threshold which is used to detect if the connection starts flapping',
+    en:
+      'The times of state change per minute, specifying the threshold which is used to detect if the connection starts flapping',
   },
   force_gc_policy: {
     zh: 'MQTT 连接/消息大小 GC 阈值',
@@ -164,7 +167,8 @@ export default {
   },
   max_mqueue_len: {
     zh: '排队消息的最大长度，0 表示没有限制',
-    en: 'Maximum queue length. Enqueued messages when persistent client disconnected, or inflight window is full. 0 means no limit',
+    en:
+      'Maximum queue length. Enqueued messages when persistent client disconnected, or inflight window is full. 0 means no limit',
   },
   await_rel_timeout: {
     zh: '如果等待 pubrel 超时时间，超时将删除 QoS2 消息（client 发送到 broker）',

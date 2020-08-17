@@ -1,6 +1,5 @@
 <template>
   <el-row :gutter="20" class="config-form">
-
     <el-form
       ref="record"
       class="basic-config-form"
@@ -11,70 +10,35 @@
       :model="record"
       :rules="rules"
     >
-      <div
-        v-for="(key, index) in recordKeys"
-        :key="index"
-      >
-        <el-col
-          :span="12"
-        >
+      <div v-for="(key, index) in recordKeys" :key="index">
+        <el-col :span="12">
           <el-form-item :label="key" :prop="key">
-
             <template v-if="deepRecord[key] === 'true' || deepRecord[key] === 'false'">
-              <emq-select
-                v-model="record[key]"
-                :field="{ options: boolOptions }"
-              >
-              </emq-select>
+              <emq-select v-model="record[key]" :field="{ options: boolOptions }"> </emq-select>
             </template>
 
             <template v-else-if="deepRecord[key] === 'allow' || deepRecord[key] === 'deny'">
-              <emq-select
-                v-model="record[key]"
-                :field="{ options: permitOptions }"
-              >
-              </emq-select>
+              <emq-select v-model="record[key]" :field="{ options: permitOptions }"> </emq-select>
             </template>
 
             <template v-else-if="deepRecord[key] === 'ignore' || deepRecord[key] === 'disconnect'">
-              <emq-select
-                v-model="record[key]"
-                :field="{ options: actionOptions }"
-              >
-              </emq-select>
+              <emq-select v-model="record[key]" :field="{ options: actionOptions }"> </emq-select>
             </template>
 
             <template v-else-if="deepRecord[key] === 'on' || deepRecord[key] === 'off'">
-              <emq-select
-                v-model="record[key]"
-                :field="{ options: enableOptions }"
-              >
-              </emq-select>
+              <emq-select v-model="record[key]" :field="{ options: enableOptions }"> </emq-select>
             </template>
 
             <template v-else-if="deepRecord[key] === 'highest' || deepRecord[key] === 'lowest'">
-              <emq-select
-                v-model="record[key]"
-                :field="{ options: priorityOptions }"
-              >
-              </emq-select>
+              <emq-select v-model="record[key]" :field="{ options: priorityOptions }"> </emq-select>
             </template>
 
             <template v-else-if="key === 'max_qos_allowed' || key === 'mqtt_max_qos_allowed'">
-              <emq-select
-                v-model="record[key]"
-                :field="{ options: qosOptions }"
-              >
-              </emq-select>
+              <emq-select v-model="record[key]" :field="{ options: qosOptions }"> </emq-select>
             </template>
 
             <template v-else>
-              <el-input
-                v-model="record[key]"
-                class="form-item-input"
-                :placeholder="record[key]"
-              >
-              </el-input>
+              <el-input v-model="record[key]" class="form-item-input" :placeholder="record[key]"> </el-input>
             </template>
           </el-form-item>
         </el-col>
@@ -94,7 +58,6 @@
     </el-col>
   </el-row>
 </template>
-
 
 <script>
 export default {

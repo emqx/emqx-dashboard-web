@@ -52,21 +52,9 @@ const lengthList = {
     { label: VueI18n.Models.fourBytes, value: 4 },
     { label: VueI18n.Models.eightBytes, value: 8 },
   ],
-  float: [
-    { label: VueI18n.Models.fourBytes, value: 4 },
-  ],
-  double: [
-    { label: VueI18n.Models.eightBytes, value: 8 },
-  ],
-  timeStamp: [
-    { label: VueI18n.Models.eightBytes, value: 8 },
-  ],
+  float: [{ label: VueI18n.Models.fourBytes, value: 4 }],
+  double: [{ label: VueI18n.Models.eightBytes, value: 8 }],
+  timeStamp: [{ label: VueI18n.Models.eightBytes, value: 8 }],
 }
 
-
-export {
-  dataTypeList,
-  jsonDataTypeList,
-  dataTypeDic,
-  lengthList,
-}
+export { dataTypeList, jsonDataTypeList, dataTypeDic, lengthList }

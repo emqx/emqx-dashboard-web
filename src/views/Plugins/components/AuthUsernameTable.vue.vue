@@ -31,22 +31,13 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="username" :label="$t('Clients.username')">
-          </el-table-column>
+          <el-table-column prop="username" :label="$t('Clients.username')"> </el-table-column>
           <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
-              <el-button
-                type="dashed"
-                size="mini"
-                @click="showEdit(row)"
-              >
+              <el-button type="dashed" size="mini" @click="showEdit(row)">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="handleDelete(row)"
-              >
+              <el-button type="dashed danger" size="mini" @click="handleDelete(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -55,19 +46,8 @@
       </a-card>
     </div>
 
-    <el-dialog
-      :visible.sync="editVisible"
-      width="400px"
-      :title="$t('Base.edit')"
-      @keyup.enter.native="handleEdit"
-    >
-      <el-form
-        ref="editRecord"
-        class="el-form--public app-info"
-        size="medium"
-        :rules="rules"
-        :model="editRecord"
-      >
+    <el-dialog :visible.sync="editVisible" width="400px" :title="$t('Base.edit')" @keyup.enter.native="handleEdit">
+      <el-form ref="editRecord" class="el-form--public app-info" size="medium" :rules="rules" :model="editRecord">
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item prop="username" :label="$t('Clients.username')">
@@ -83,19 +63,10 @@
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button
-          plain
-          size="small"
-          class="cache-btn"
-          @click="editVisible = false"
-        >
+        <el-button plain size="small" class="cache-btn" @click="editVisible = false">
           {{ $t('Base.cancel') }}
         </el-button>
-        <el-button
-          type="primary"
-          size="small"
-          @click="handleEdit"
-        >
+        <el-button type="primary" size="small" @click="handleEdit">
           {{ $t('Base.confirm') }}
         </el-button>
       </div>
@@ -103,10 +74,13 @@
   </div>
 </template>
 
-
 <script>
 import {
-  listAuthUsername, addAuthUsername, deleteAuthUsername, loadAuthUsername, updateAuthUsername,
+  listAuthUsername,
+  addAuthUsername,
+  deleteAuthUsername,
+  loadAuthUsername,
+  updateAuthUsername,
 } from '@/api/plugins'
 
 export default {
@@ -133,7 +107,7 @@ export default {
   methods: {
     async loadData() {
       const data = await listAuthUsername()
-      this.tableData = data.map(item => ({
+      this.tableData = data.map((item) => ({
         username: item,
       }))
       this.listLoading = false
@@ -155,12 +129,14 @@ export default {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(async () => {
-        const res = await deleteAuthUsername(username)
-        if (res) {
-          this.loadData()
-        }
-      }).catch(() => {})
+      })
+        .then(async () => {
+          const res = await deleteAuthUsername(username)
+          if (res) {
+            this.loadData()
+          }
+        })
+        .catch(() => {})
     },
     async showEdit({ username }) {
       this.editVisible = true
@@ -189,7 +165,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .auth-username-table {

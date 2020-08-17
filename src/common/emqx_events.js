@@ -125,7 +125,10 @@ export default [
       clientid: 'c_emqx',
       event: 'client.subscribe',
       peername: '127.0.0.1:63412',
-      topic_filters: [{ topic: 't/a', qos: 0 }, { topic: 't/b', qos: 1 }],
+      topic_filters: [
+        { topic: 't/a', qos: 0 },
+        { topic: 't/b', qos: 1 },
+      ],
       topic: 't/a',
       qos: 0,
       username: 'u_emqx',
