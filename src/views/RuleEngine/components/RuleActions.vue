@@ -168,13 +168,29 @@
     <el-dialog :visible.sync="actionDialogVisible" :title="actionDialogTitle" width="520px">
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
         <el-form-item prop="name" :label="$t('RuleEngine.actionType')">
-          <emq-select
-            v-model="record.name"
-            :field="{ options: availableActions }"
-            :field-name="{ label: 'title', value: 'name' }"
-            @change="actionTypeChange"
-          >
-          </emq-select>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <el-select class="reset-width" v-model="actionCategory" @change="actionCategoryChange">
+                <el-option
+                  v-for="(value, index) in actionCategoryOptions"
+                  :key="index"
+                  :label="$t(`RuleEngine.${value}`)"
+                  :value="value"
+                ></el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="16">
+              <emq-select
+                class="reset-width"
+                v-model="record.name"
+                :field="{ options: availableActions[actionCategory] }"
+                :field-name="{ label: 'title', value: 'name' }"
+                style="width: 240px;"
+                @change="actionTypeChange"
+              >
+              </emq-select>
+            </el-col>
+          </el-row>
         </el-form-item>
 
         <div v-if="selectedAction.title.length - selectedAction.description.length > 18" class="action-description">
@@ -191,7 +207,7 @@
             :field="{ options: availableResources }"
             :field-name="{ label: 'description', value: 'id' }"
             class="reset-width"
-            style="width: 330px;"
+            style="width: 403px;"
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="custom-option">
@@ -270,6 +286,7 @@
 </template>
 
 <script>
+/* eslint-disable vue/no-side-effects-in-computed-properties */
 import { loadActionsList, loadResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
 import ResourceDialog from '@/views/RuleEngine/components/ResourceDialog.vue'
@@ -314,6 +331,8 @@ export default {
       currentEditIndex: 0,
       currentOper: '',
       currentAction: {},
+      actionCategory: '',
+      actionCategoryOptions: [],
       record: {
         name: '',
         params: {
@@ -322,6 +341,7 @@ export default {
         fallbacks: [],
       },
       rules: {
+        name: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
         params: {
           $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
         },
@@ -352,12 +372,24 @@ export default {
       const data = this.actions
         .filter(($) => ['$any', this.event].includes($.for))
         .sort((prev, next) => prev.title.localeCompare(next.title))
+      const unique = (arr) => [...new Set(arr)]
+      this.actionCategoryOptions = unique(data.map((item) => item.category))
+      const actionCategoryDict = {}
+      this.actionCategoryOptions.forEach((item) => {
+        const res = []
+        data.forEach((cate) => {
+          if (cate.category === item) {
+            res.push(cate)
+            actionCategoryDict[item] = res
+          }
+        })
+      })
       if (!this.record.name && data[0]) {
-        // eslint-disable-next-line
         this.record.name = data[0].name
         this.actionTypeChange(this.record.name)
+        this.actionCategory = this.actionCategoryOptions[0]
       }
-      return data
+      return actionCategoryDict
     },
     availableResources() {
       const { types } = this.selectedAction
@@ -461,6 +493,8 @@ export default {
         JSON.stringify({
           record: this.record,
           paramsList: this.paramsList,
+          actionCategory: this.actionCategory,
+          actionCategoryOptions: this.actionCategoryOptions,
           types,
         }),
       )
@@ -470,10 +504,12 @@ export default {
       this.actionDialogVisible = true
       const currentAction = sessionStorage.getItem('currentAction')
       if (currentAction) {
-        const { record, paramsList, types } = JSON.parse(currentAction)
+        const { record, paramsList, types, actionCategoryOptions, actionCategory } = JSON.parse(currentAction)
         this.record = record
         this.paramsList = paramsList
         this.selectedAction.types = types
+        this.actionCategory = actionCategory
+        this.actionCategoryOptions = actionCategoryOptions
         sessionStorage.removeItem('currentAction')
       }
       if (id) {
@@ -520,7 +556,13 @@ export default {
       setTimeout(this.loadParamsList(oper), 200)
       this.loadResourceData()
     },
-
+    actionCategoryChange(cateName) {
+      const changeActions = this.availableActions[cateName]
+      if (changeActions[0]) {
+        this.record.name = changeActions[0].name
+        this.actionTypeChange(this.record.name)
+      }
+    },
     addAction() {
       this.actionDialogTitle = this.$t('RuleEngine.addActions')
       this.actionTypeChange(this.record.name, 'add')
