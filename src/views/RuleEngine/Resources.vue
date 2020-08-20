@@ -55,7 +55,6 @@
               <el-button type="dashed" size="mini" @click="viewResourcesStatus(row, $index)">
                 {{ $t('RuleEngine.status') }}
               </el-button>
-              <!--<el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">{{ $t('RuleEngine.reconnect') }}</el-button>-->
               <el-button type="dashed danger" size="mini" @click="deleteResource(row)">
                 {{ $t('RuleEngine.delete') }}
               </el-button>

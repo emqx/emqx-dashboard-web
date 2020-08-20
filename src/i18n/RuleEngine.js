@@ -471,4 +471,20 @@ export default {
     en: 'Action to be performed when the action execution error',
     zh: '动作执行错误时将执行的操作',
   },
+  data_persist: {
+    zh: '数据持久化',
+    en: 'Data persist',
+  },
+  offline_msgs: {
+    zh: '离线消息',
+    en: 'Offline messages',
+  },
+  data_forward: {
+    zh: '数据转发',
+    en: 'Data forward',
+  },
+  debug: {
+    zh: '调试',
+    en: 'Debug',
+  },
 }
