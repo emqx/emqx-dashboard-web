@@ -487,4 +487,8 @@ export default {
     zh: '调试',
     en: 'Debug',
   },
+  server_side_subscription: {
+    zh: '代理订阅',
+    en: 'Server side subscription',
+  },
 }
