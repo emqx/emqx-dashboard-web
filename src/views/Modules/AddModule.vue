@@ -208,7 +208,6 @@ export default {
         this.selectedModule = {
           paramsData: params,
           type: val.name,
-          status: val.status,
         }
       } else {
         const id = this.addedModules[val.name]
@@ -232,7 +231,7 @@ export default {
     },
     async loadData() {
       this.allFeatures = await loadAllFeatures()
-      this.getImg()
+      this.getImgs()
       Object.values(this.allFeatures).forEach((item) => {
         this.allModuleList = this.allModuleList.concat(item)
       })
@@ -245,7 +244,7 @@ export default {
         }
       })
     },
-    getImg() {
+    getImgs() {
       this.classList.forEach((item) => {
         const { id } = item
         this.allFeatures[id].forEach((one) => {

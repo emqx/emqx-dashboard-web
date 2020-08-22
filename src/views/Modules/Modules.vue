@@ -72,7 +72,7 @@
       from="modules"
       :visible.sync="dialogVisible"
       oper="edit"
-      :moduleData="selectModule"
+      :moduleData="selectedModule"
       @updateList="loadData()"
     ></module-dialog>
   </div>
@@ -98,7 +98,7 @@ export default {
       showList: [],
       dialogVisible: false,
       moduleCount: 0,
-      selectModule: {},
+      selectedModule: {},
     }
   },
 
@@ -147,7 +147,7 @@ export default {
       }, 500)
     },
     toEditModule(item) {
-      this.selectModule = item
+      this.selectedModule = item
       this.dialogVisible = true
     },
     async loadData() {
