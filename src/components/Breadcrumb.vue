@@ -62,7 +62,7 @@ export default {
       this.backPath = undefined
       this.currentTitle = this.$t(`components.${name}`)
 
-      if (['create', 'view', 'detail'].includes(oper)) {
+      if (['create', 'view', 'detail', 'add'].includes(oper)) {
         this.oper = this.$t(`Base.${oper}`)
         this.backPath = `/${name}`
       } else if (oper === 'node') {

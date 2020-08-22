@@ -90,6 +90,9 @@ export default {
       if (name === 'schemas' && oper === 'create') {
         return 'schemaCreate'
       }
+      if (name === 'modules' && oper === 'add') {
+        return 'addModule'
+      }
       return name
     },
     loadTabs() {

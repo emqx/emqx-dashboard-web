@@ -4,66 +4,101 @@
       <div class="page-header-content-view">
         <div class="content">
           {{ $t('Modules.modules') }}
-          <emq-select
-            v-model="nodeName"
-            class="node-select"
-            size="small"
-            :field="{ options: currentNodes }"
-            :field-name="{ label: 'name', value: 'node' }"
-            @change="handleNodeChange"
-          ></emq-select>
+          <span class="modules-num">{{ moduleCount }}</span>
+          <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/add')">
+            {{ $t('Base.add') }}
+          </el-button>
+          <el-col :span="6" :offset="1">
+            <el-input
+              v-model="searchVal"
+              type="text"
+              class="search-input"
+              size="small"
+              clearable
+              :placeholder="$t('Modules.searchTip')"
+              @input="searchModule"
+            >
+              <i v-if="!searchLoading" slot="prefix" class="el-icon-search"></i>
+              <i v-else slot="prefix" class="el-icon-loading"></i>
+            </el-input>
+          </el-col>
         </div>
       </div>
     </page-header>
 
     <div class="app-wrapper">
-      <a-card class="emq-list-card" :loading="listLoading">
-        <el-table :data="tableData" class="data-list">
-          <el-table-column prop="name" width="250" :label="$t('Modules.name')"> </el-table-column>
-          <el-table-column prop="description" min-width="350" :label="$t('Modules.description')"> </el-table-column>
-          <el-table-column
-            prop="active"
-            width="150"
-            filter-placement="bottom"
-            :filter-method="handleStatusFilter"
-            :filters="[
-              { text: $t('Modules.disabled'), value: false },
-              { text: $t('Modules.enabled'), value: true },
-            ]"
-            :label="$t('RuleEngine.status')"
-          >
-            <template slot-scope="props">
-              <span :class="[props.row.active ? 'running' : '', 'status']">
-                {{ props.row.active ? $t('Modules.enabled') : $t('Modules.disabled') }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column width="160">
-            <template slot-scope="props">
-              <el-button size="mini" :type="`dashed ${props.row.active ? 'danger' : ''}`" @click="update(props.row)">
-                {{ props.row.active ? $t('Modules.disable') : $t('Modules.enable') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+      <el-row v-if="showList.length" :gutter="20" class="emq-list-card plugin-cards-wrapper">
+        <el-col v-for="item in list" :key="item.id" :span="8">
+          <div class="module-item" @click="toEditModule(item)">
+            <!-- <div class="item-error-tip">
+              <span>error</span>
+              <el-button class="reconnect-btn" plain size="mini">{{ $t('Modules.reconnect') }}</el-button>
+            </div> -->
+            <div class="left-box">
+              <img :src="item.img" alt="" class="item-img" />
+              <div class="item-content">
+                <div class="item-title">{{ item.type }}</div>
+                <div class="item-des">
+                  {{ item.description }}
+                </div>
+              </div>
+            </div>
+            <div class="item-handle">
+              <el-button
+                v-if="item.enabled"
+                class="stop-btn"
+                plain
+                size="mini"
+                type="danger"
+                @click.stop="updataModule(item, false)"
+                >{{ $t('Modules.stop') }}</el-button
+              >
+              <el-button v-else class="start-btn" plain size="mini" @click.stop="updataModule(item, true)">{{
+                $t('Modules.run')
+              }}</el-button>
+              <a @click.stop="toReadMore" class="know-more">
+                {{ $t('Modules.readMore') }}
+              </a>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+      <a-card v-else class="null-modules">
+        <p v-if="list.length">{{ $t('Plugins.listNull') }}</p>
+        <p v-else>{{ $t('Modules.noData') }}</p>
       </a-card>
     </div>
+    <module-dialog
+      from="modules"
+      :visible.sync="dialogVisible"
+      oper="edit"
+      :moduleData="selectModule"
+      @updateList="loadData()"
+    ></module-dialog>
   </div>
 </template>
 
 <script>
-import { listModules, updateModules } from '@/api/modules'
-import { loadNodes } from '@/api/common'
+import { loadCreatedFeatures, updateFeature } from '@/api/modules'
+import { matchSearch } from '@/common/utils'
+import moduleDialog from '@/views/Modules/components/moduleDialog.vue'
 
 export default {
   name: 'Modules',
 
+  components: {
+    moduleDialog,
+  },
+
   data() {
     return {
-      listLoading: true,
-      tableData: [],
-      nodeName: '',
-      currentNodes: [],
+      searchLoading: false,
+      searchVal: '',
+      list: [],
+      showList: [],
+      dialogVisible: false,
+      moduleCount: 0,
+      selectModule: {},
     }
   },
 
@@ -72,67 +107,87 @@ export default {
   },
 
   methods: {
-    handleNodeChange() {
-      this.loadModuels()
+    async updataModule(item, val) {
+      const data = { ...item }
+      data.enabled = val
+      if (!val) {
+        this.$msgbox
+          .confirm(this.$t('Modules.thisActionWillStopTheModule'), {
+            confirmButtonText: this.$t('Base.confirm'),
+            cancelButtonText: this.$t('Base.cancel'),
+            type: 'warning',
+          })
+          .then(async () => {
+            await updateFeature(item.id, data)
+            this.$message.success(this.$t('Modules.stopSuccess'))
+            item.enabled = val
+          })
+          .catch(() => {})
+      } else {
+        await updateFeature(item.id, data)
+        this.$message.success(this.$t('Modules.startSuccess'))
+        item.enabled = val
+      }
     },
-    async update(row) {
-      await updateModules(this.nodeName, row)
-      this.$message.success(`${row.active ? this.$t('Base.disabledSuccess') : this.$t('Base.enableSuccess')}`)
-      this.loadModuels()
+    searchModule() {
+      this.searchLoading = true
+      if (this.searchVal === '') {
+        this.showList = this.list
+        this.searchLoading = false
+        return
+      }
+      setTimeout(async () => {
+        const res = await matchSearch(this.list, 'name', this.searchVal)
+        if (res) {
+          this.showList = res
+          this.searchLoading = false
+        } else {
+          this.searchLoading = false
+        }
+      }, 500)
+    },
+    toEditModule(item) {
+      this.selectModule = item
+      this.dialogVisible = true
     },
     async loadData() {
-      this.currentNodes = await loadNodes()
-      this.nodeName = this.nodeName || (this.currentNodes[0] || {}).node
-      this.listLoading = false
-      this.loadModuels()
+      const addedModules = {}
+      this.list = []
+      this.list = await loadCreatedFeatures()
+      this.moduleCount = this.list.length
+      if (this.moduleCount) {
+        this.list.forEach((item) => {
+          // eslint-disable-next-line global-require
+          item.img = require('../../assets/plugin_icon/emqx_backend_mysql.png')
+          addedModules[item.type] = item.id
+        })
+        localStorage.setItem('addedModules', JSON.stringify(addedModules))
+      } else {
+        localStorage.removeItem('addedModules')
+      }
+      this.showList = this.list
     },
-    async loadModuels(params = {}) {
-      const data = await listModules(this.nodeName, { ...params })
-      this.tableData = data
-    },
-    handleStatusFilter(value, row) {
-      return value === row.active
+    toReadMore() {
+      window.open('https://docs.emqx.net')
     },
   },
 }
 </script>
 
-<style lang="scss">
-.modules {
-  .data-list {
-    clear: both;
-  }
-  .page-header-content-view {
-    .content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  }
-  /* Running Status */
-  .status:before {
-    content: '';
-    display: inline-block;
-    height: 8px;
-    width: 8px;
-    margin-right: 3px;
-    border-radius: 4px;
-  }
-  .status {
-    &:before {
-      background-color: #a7a7a7;
-    }
-    &.running {
-      color: #34c388;
-    }
-    &.stopped.danger {
-      &:before {
-        background-color: #f56c6c;
-      }
-    }
-    &.running:before {
-      background-color: #34c388;
-    }
-  }
+<style lang="scss" scoped>
+@import '../../assets/style/module.scss';
+
+.stop-btn {
+  width: 52px;
+  color: #ff0000;
+  border: 1px solid #ff0000;
+  font-size: 14px;
+  margin-bottom: 20px;
+  background-color: #fbf2f2;
+}
+
+.module-item {
+  cursor: pointer;
+  background-color: #fff;
 }
 </style>
