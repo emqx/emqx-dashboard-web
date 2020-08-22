@@ -172,4 +172,8 @@ export default {
     zh: '退出',
     en: 'Logout',
   },
+  addModule: {
+    zh: '添加模块',
+    en: 'Module Add',
+  },
 }
