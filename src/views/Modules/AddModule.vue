@@ -138,11 +138,11 @@ export default {
       searchVal: '',
       canAddCount: 0,
       classList: [
-        { name: '认证鉴权', id: 'auth' },
-        { name: '协议拓展', id: 'protocol' },
-        { name: '消息下发', id: 'message' },
-        { name: '运维监控', id: 'devops' },
-        { name: '内部模块', id: 'module' },
+        { name: this.$t('Modules.authentication'), id: 'auth' },
+        { name: this.$t('Modules.protocols'), id: 'protocol' },
+        { name: this.$t('Modules.messagePublish'), id: 'message' },
+        { name: this.$t('Modules.monitor'), id: 'devops' },
+        { name: this.$t('Modules.localModules'), id: 'module' },
       ],
       activeNavId: 'auth',
       allFeatures: {},
@@ -163,7 +163,7 @@ export default {
       return store.state.lang
     },
     addedModules() {
-      return JSON.parse(localStorage.getItem('addedModules')) || []
+      return JSON.parse(localStorage.getItem('addedModules')) || {}
     },
   },
 
@@ -287,11 +287,11 @@ export default {
         &::before {
           content: '';
           position: absolute;
-          width: 62px;
+          width: 100%;
           height: 2px;
           background: #34c388;
           bottom: -15px;
-          left: -2px;
+          left: 0px;
         }
       }
     }

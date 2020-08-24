@@ -95,4 +95,24 @@ export default {
     zh: '此操作将删除该模块,确认继续?',
     en: 'Confirm to delete the Module?',
   },
+  authentication: {
+    zh: '认证鉴权',
+    en: 'Authentication',
+  },
+  protocols: {
+    zh: '协议拓展',
+    en: 'Protocols',
+  },
+  messagePublish: {
+    zh: '消息下发',
+    en: 'Message Publish',
+  },
+  monitor: {
+    zh: '运维监控',
+    en: 'Monitoring',
+  },
+  localModules: {
+    zh: '内部模块',
+    en: 'Local Modules',
+  },
 }
