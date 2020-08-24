@@ -9,16 +9,16 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="productName" :label="$t('Products.productName')">
+          <el-table-column prop="product_name" :label="$t('Products.productName')">
             <template slot-scope="{ row }">
               <span class="btn" @click="showDialog('view', row)">
-                {{ row.productName }}
+                {{ row.product_name }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="productID" label="ID"> </el-table-column>
-          <el-table-column prop="productModel" :label="$t('Products.deviceModel')"></el-table-column>
-          <el-table-column prop="description" :label="$t('Products.productDes')"></el-table-column>
+          <el-table-column prop="id" label="ID"> </el-table-column>
+          <el-table-column prop="product_model" :label="$t('Products.deviceModel')"></el-table-column>
+          <el-table-column prop="product_desp" :label="$t('Products.productDes')"></el-table-column>
           <el-table-column align="right">
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
@@ -41,24 +41,19 @@
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="accessType === 'view' ? {} : rules">
         <el-row :gutter="20">
-          <el-col v-if="accessType !== 'create'" :span="12">
-            <el-form-item prop="productID" label="ID">
-              <el-input v-model="record.productID" :disabled="accessType === 'edit'"> </el-input>
+          <el-col :span="12">
+            <el-form-item prop="product_name" :label="$t('Products.productName')">
+              <el-input v-model="record.product_name"> </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="productName" :label="$t('Products.productName')">
-              <el-input v-model="record.productName"> </el-input>
+            <el-form-item prop="product_model" :label="$t('Products.deviceModel')">
+              <el-input v-model="record.product_model"> </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="productModel" :label="$t('Products.deviceModel')">
-              <el-input v-model="record.productModel"> </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item prop="description" :label="$t('Products.productDes')">
-              <el-input v-model="record.description" type="textarea"></el-input>
+            <el-form-item prop="product_desp" :label="$t('Products.productDes')">
+              <el-input v-model="record.product_desp" type="textarea"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -85,21 +80,14 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      tableData: [
-        {
-          productID: 'aaa111',
-          productName: 'device',
-          productModel: 'product-01',
-          description: 'xxxxx',
-        },
-      ],
+      tableData: [],
       accessType: '',
       record: {},
       rules: {
-        productName: [{ required: true, message: this.$t('Models.isRequired') }],
-        productID: [{ required: true, message: this.$t('Models.isRequired') }],
-        productModel: [{ required: true, message: this.$t('Models.isRequired') }],
-        description: [{ required: true, message: this.$t('Models.isRequired') }],
+        product_name: [{ required: true, message: this.$t('Models.isRequired') }],
+        id: [{ required: true, message: this.$t('Models.isRequired') }],
+        product_model: [{ required: true, message: this.$t('Models.isRequired') }],
+        product_desp: [{ required: true, message: this.$t('Models.isRequired') }],
       },
     }
   },
@@ -115,7 +103,8 @@ export default {
       }
     },
     async loadData() {
-      this.tableData = await loadProduct()
+      const data = await loadProduct()
+      this.tableData = data.items
     },
     showDialog(type, item) {
       this.accessType = type
@@ -127,20 +116,20 @@ export default {
         this.$router.push({
           path: '/products/view',
           query: {
-            id: item.productID,
+            id: item.id,
           },
         })
       } else {
         this.record = {
-          productName: '',
-          productModel: '',
-          description: '',
+          product_name: '',
+          product_model: '',
+          product_desp: '',
         }
         this.dialogVisible = true
       }
     },
     updateProducts(item) {
-      updateProduct(item.productID, item).then(() => {
+      updateProduct(item.id, item).then(() => {
         this.$message.success(this.$t('General.editorialSuccess'))
       })
     },
@@ -151,8 +140,8 @@ export default {
         }
         const record = { ...this.record }
         if (this.accessType === 'edit') {
-          const { productID } = this.record
-          updateProduct(productID, record).then(() => {
+          const { id } = this.record
+          updateProduct(id, record).then(() => {
             this.$message.success(this.$t('General.editorialSuccess'))
             this.dialogVisible = false
             this.accessType = ''
@@ -176,7 +165,7 @@ export default {
           type: 'warning',
         })
         .then(() => {
-          destroyProduct(item.productID).then(() => {
+          destroyProduct(item.id).then(() => {
             this.$message.success(this.$t('General.successfulDeletion'))
             this.loadData()
           })

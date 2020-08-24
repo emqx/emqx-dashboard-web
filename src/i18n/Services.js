@@ -19,4 +19,16 @@ export default {
     en: 'Deliver equipment data',
     zh: '设备数据下发',
   },
+  createService: {
+    en: 'Create Service',
+    zh: '创建服务',
+  },
+  editService: {
+    en: 'Edit Service',
+    zh: '编辑服务',
+  },
+  viewService: {
+    en: 'View Service',
+    zh: '查看服务',
+  },
 }

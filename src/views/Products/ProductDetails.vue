@@ -8,22 +8,22 @@
               <el-form class="node-form" label-suffix=":" label-position="left" label-width="150px">
                 <el-col :span="12">
                   <el-form-item :label="$t('Products.productName')">
-                    <span class="form-item-value">{{ data.productName }}</span>
+                    <span class="form-item-value">{{ data.product_name }}</span>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="ID">
-                    <span class="form-item-value">{{ data.productID }}</span>
+                    <span class="form-item-value">{{ data.id }}</span>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item :label="$t('Products.deviceModel')">
-                    <span class="form-item-value">{{ data.productModel }}</span>
+                    <span class="form-item-value">{{ data.product_model }}</span>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
                   <el-form-item :label="$t('Products.productDes')" class="description">
-                    <div class="form-item-value item-block">{{ data.description }}</div>
+                    <div class="form-item-value item-block">{{ data.product_desp }}</div>
                   </el-form-item>
                 </el-col>
               </el-form>
@@ -84,7 +84,8 @@ export default {
 
   methods: {
     async loadProductData(id) {
-      this.data = await showProduct(id)
+      const data = await showProduct(id)
+      this.data = data.items[0]
     },
     handleTabClick(tab) {
       this.activeName = tab.name
