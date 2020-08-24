@@ -175,7 +175,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/style/module.scss';
+@import './style/module.scss';
 
 .stop-btn {
   width: 52px;

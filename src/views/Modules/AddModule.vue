@@ -258,7 +258,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/style/module.scss';
+@import './style/module.scss';
 
 .module-add {
   .page-header-content-view {
