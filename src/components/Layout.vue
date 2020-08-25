@@ -1,12 +1,12 @@
 <template>
   <el-container class="layout" style="min-height: 100vh;">
     <!-- 左侧 -->
-    <el-aside width="auto">
+    <el-aside v-if="!fromCloud" width="auto">
       <left-bar></left-bar>
     </el-aside>
 
-    <el-main style="margin: 0; padding: 0;" :style="elMainStyle">
-      <el-header style="height: 80px; padding: 0;">
+    <el-main style="margin: 0; padding: 0;" :style="!fromCloud ? elMainStyle : ''">
+      <el-header v-if="!fromCloud" style="height: 80px; padding: 0;">
         <nav-header></nav-header>
         <nav-tabs></nav-tabs>
       </el-header>
@@ -47,6 +47,9 @@ export default {
   },
 
   computed: {
+    fromCloud() {
+      return this.$route.query.iframe
+    },
     elAsideWidth() {
       return this.$store.state.leftBarCollapse ? 'auto' : '200px'
     },
