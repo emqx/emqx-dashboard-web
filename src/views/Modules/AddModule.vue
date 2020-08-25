@@ -1,8 +1,8 @@
 <template>
-  <div class="modules module-add">
-    <page-header>
-      <div class="page-header-content-view">
-        <div class="content">
+  <div class="modules add-module">
+    <div class="header-box">
+      <div class="inner-box">
+        <div class="content" :style="contentStyle">
           <span class="content-title">{{ $t('components.addModule') }}</span>
           <span class="modules-num">{{ canAddCount }}</span>
           <div
@@ -29,7 +29,7 @@
           </el-col>
         </div>
       </div>
-    </page-header>
+    </div>
     <div class="content-box app-wrapper">
       <template v-if="!searchVal">
         <div v-for="item in classList" :key="item.id" :id="item.id" class="link-content">
@@ -37,7 +37,50 @@
             {{ item.name }}
           </p>
           <el-row v-if="allFeatures[item.id]" :gutter="20">
-            <el-col v-for="(one, index) in allFeatures[item.id]" :key="index" :span="8">
+            <el-col v-for="(one, index) in allFeatures[item.id]" :key="index" :span="12">
+              <el-card shadow="hover">
+                <div class="module-item">
+                  <!-- <div class="item-error-tip">
+                  <span>error</span>
+                  <el-button class="reconnect-btn" plain size="mini">重连</el-button>
+                </div> -->
+                  <div class="left-box">
+                    <img :src="one.img" alt="" class="item-img" />
+                    <div class="item-content">
+                      <div class="item-title">{{ one.title[lang] }}</div>
+                      <div class="item-des">
+                        {{ one.description[lang] }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="item-handle">
+                    <el-button
+                      v-if="one.status === 'unadd'"
+                      class="select-btn"
+                      type="dashed"
+                      size="mini"
+                      @click="toModuleDialog(one, 'add')"
+                    >
+                      {{ $t('Modules.select') }}
+                      <!-- {{ $t('Modules.guide') }} -->
+                    </el-button>
+                    <el-button v-else class="start-btn" plain size="mini" @click="toModuleDialog(one, 'edit')">
+                      {{ $t('Modules.added') }}
+                    </el-button>
+                    <a href="https://docs.emqx.net" target="_blank" rel="noopener norefferrer" class="know-more">
+                      {{ $t('Modules.readMore') }}
+                    </a>
+                  </div>
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
+        </div>
+      </template>
+      <template v-else>
+        <el-row v-if="searchModuleInfo.length" :gutter="20">
+          <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
+            <el-card shadow="hover">
               <div class="module-item">
                 <!-- <div class="item-error-tip">
                   <span>error</span>
@@ -71,46 +114,7 @@
                   </a>
                 </div>
               </div>
-            </el-col>
-          </el-row>
-        </div>
-      </template>
-      <template v-else>
-        <el-row v-if="searchModuleInfo.length" :gutter="20">
-          <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="8">
-            <div class="module-item">
-              <!-- <div class="item-error-tip">
-                  <span>error</span>
-                  <el-button class="reconnect-btn" plain size="mini">重连</el-button>
-                </div> -->
-              <div class="left-box">
-                <img :src="one.img" alt="" class="item-img" />
-                <div class="item-content">
-                  <div class="item-title">{{ one.title[lang] }}</div>
-                  <div class="item-des">
-                    {{ one.description[lang] }}
-                  </div>
-                </div>
-              </div>
-              <div class="item-handle">
-                <el-button
-                  v-if="one.status === 'unadd'"
-                  class="select-btn"
-                  type="dashed"
-                  size="mini"
-                  @click="toModuleDialog(one, 'add')"
-                >
-                  {{ $t('Modules.select') }}
-                  <!-- {{ $t('Modules.guide') }} -->
-                </el-button>
-                <el-button v-else class="start-btn" plain size="mini" @click="toModuleDialog(one, 'edit')">
-                  {{ $t('Modules.added') }}
-                </el-button>
-                <a href="https://docs.emqx.net" target="_blank" rel="noopener norefferrer" class="know-more">
-                  {{ $t('Modules.readMore') }}
-                </a>
-              </div>
-            </div>
+            </el-card>
           </el-col>
         </el-row>
         <a-card v-else class="null-modules">
@@ -124,7 +128,7 @@
 </template>
 
 <script>
-import { loadAllFeatures, showCreatedFeatureInfo } from '@/api/modules'
+import { loadAllModules, showCreatedModuleInfo } from '@/api/modules'
 import { fillI18n, matchSearch } from '@/common/utils'
 import store from '@/stores'
 import moduleDialog from '@/views/Modules/components/moduleDialog.vue'
@@ -151,6 +155,7 @@ export default {
       allModuleList: [],
       searchModuleInfo: [],
       oper: 'add',
+      scrollTop: 0,
     }
   },
 
@@ -165,10 +170,21 @@ export default {
     addedModules() {
       return JSON.parse(localStorage.getItem('addedModules')) || {}
     },
+    contentStyle() {
+      return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px' }
+    },
   },
 
   created() {
     this.loadData()
+  },
+
+  mounted() {
+    window.addEventListener('scroll', this.scrollToTop)
+  },
+
+  destroyed() {
+    window.removeEventListener('scroll', this.scrollToTop)
   },
 
   methods: {
@@ -205,6 +221,7 @@ export default {
         const data = { ...val }
         this.parseI18n([data])
         const { params } = data
+        console.log('params params', params)
         this.selectedModule = {
           paramsData: params,
           type: val.name,
@@ -220,17 +237,22 @@ export default {
       this.dialogVisible = true
     },
     async getAddedModuleInfo(id) {
-      const data = await showCreatedFeatureInfo(id)
+      const data = await showCreatedModuleInfo(id)
       return data
     },
     changeNav(id) {
       this.searchModuleInfo = []
       this.searchVal = ''
       this.activeNavId = id
-      this.$el.querySelector(`#${id}`).scrollIntoView(true)
+      setTimeout(() => {
+        if (id === 'auth') {
+          this.backTop()
+        }
+        this.$el.querySelector(`#${id}`).scrollIntoView(true)
+      }, 5)
     },
     async loadData() {
-      this.allFeatures = await loadAllFeatures()
+      this.allFeatures = await loadAllModules()
       this.getImgs()
       Object.values(this.allFeatures).forEach((item) => {
         this.allModuleList = this.allModuleList.concat(item)
@@ -253,6 +275,20 @@ export default {
         })
       })
     },
+    backTop() {
+      const timer = setInterval(() => {
+        const ispeed = Math.floor(-this.scrollTop / 5)
+        document.documentElement.scrollTop = this.scrollTop + ispeed
+        document.body.scrollTop = this.scrollTop + ispeed
+        if (this.scrollTop === 0) {
+          clearInterval(timer)
+        }
+      }, 16)
+    },
+    scrollToTop() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      this.scrollTop = scrollTop
+    },
   },
 }
 </script>
@@ -260,9 +296,27 @@ export default {
 <style lang="scss" scoped>
 @import './style/module.scss';
 
-.module-add {
-  .page-header-content-view {
+.add-module {
+  .header-box {
+    width: 100%;
+    height: 112px;
+    position: fixed;
+    top: 80px;
+    right: 0;
+    z-index: 9;
+
+    .inner-box {
+      background: #f0f2f5;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
     .content {
+      height: 64px;
+      padding-left: 24px;
+      box-sizing: border-box;
+      background-color: #fff;
+
       span {
         flex-shrink: 0;
       }
@@ -311,12 +365,11 @@ export default {
   .content-box {
     padding: 16px 24px;
     margin: 24px;
+    margin-top: 112px;
     background-color: #fff;
   }
 
   .module-item {
-    border: 1px solid #c8c8c8;
-
     .item-handle {
       text-align: center;
       font-size: 14px;
@@ -340,8 +393,8 @@ export default {
   }
 
   .link-content {
-    padding-top: 80px;
-    margin-top: -80px;
+    padding-top: 200px;
+    margin-top: -200px;
   }
 }
 </style>

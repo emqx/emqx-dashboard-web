@@ -18,14 +18,15 @@
     }
   }
 
+  .el-card {
+    margin-bottom: 20px;
+  }
+
   .module-item {
-    padding: 20px;
-    padding-right: 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
-    margin-bottom: 20px;
 
     .item-error-tip {
       position: absolute;
