@@ -1,35 +1,35 @@
 import http from '@/common/http'
 
-export function listModules(nodeName) {
-  return http.get(`/nodes/${nodeName}/modules`)
+// export function listModules(nodeName) {
+//   return http.get(`/nodes/${nodeName}/modules`)
+// }
+
+// export function updateModules(nodeName, { active, name }) {
+//   const operation = active ? 'unload' : 'load'
+//   return http.put(`/nodes/${nodeName}/modules/${name}/${operation}`)
+// }
+
+export function loadAllModules() {
+  return http.get('/module_types')
 }
 
-export function updateModules(nodeName, { active, name }) {
-  const operation = active ? 'unload' : 'load'
-  return http.put(`/nodes/${nodeName}/modules/${name}/${operation}`)
+export function createModule(body = {}) {
+  return http.post('/modules', body)
 }
 
-export function loadAllFeatures() {
-  return http.get('/feature_types')
+export function loadCreatedModules() {
+  return http.get('/modules')
 }
 
-export function createFeature(body = {}) {
-  return http.post('/features', body)
+export function showCreatedModuleInfo(id) {
+  return http.get(`/modules/${id}`)
 }
 
-export function loadCreatedFeatures() {
-  return http.get('/features')
+export function destroyModule(id) {
+  return http.delete(`/modules/${id}`)
 }
 
-export function showCreatedFeatureInfo(id) {
-  return http.get(`/features/${id}`)
-}
-
-export function destroyFeature(id) {
-  return http.delete(`/features/${id}`)
-}
-
-export function updateFeature(id, body = {}) {
-  return http.put(`/features/${id}`, body)
+export function updateModule(id, body = {}) {
+  return http.put(`/modules/${id}`, body)
 }
 export default {}

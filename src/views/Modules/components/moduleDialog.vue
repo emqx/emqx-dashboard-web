@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { createFeature, loadAllFeatures, updateFeature, destroyFeature } from '@/api/modules'
+import { createModule, loadAllModules, updateModule, destroyModule } from '@/api/modules'
 import { renderParamsForm, fillI18n } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 
@@ -220,7 +220,7 @@ export default {
 
       if (this.oper === 'add') {
         this.record.type = this.moduleData.type
-        await createFeature(this.record)
+        await createModule(this.record)
         this.$message.success(this.$t('Modules.moduleAddSuccess'))
         this.$router.push('/modules')
       } else {
@@ -232,7 +232,7 @@ export default {
           description,
           config: this.record.config,
         }
-        await updateFeature(id, data)
+        await updateModule(id, data)
         this.$message.success(this.$t('Modules.moduleEditSuccess'))
       }
       this.closeDialog()
@@ -251,7 +251,7 @@ export default {
     },
     async loadParams() {
       // 拿到当前编辑的模块的params
-      const allFeatures = await loadAllFeatures()
+      const allFeatures = await loadAllModules()
       Object.values(allFeatures).forEach((item) => {
         this.allModuleList = this.allModuleList.concat(item)
       })
@@ -275,7 +275,7 @@ export default {
           type: 'warning',
         })
         .then(async () => {
-          await destroyFeature(this.moduleData.id)
+          await destroyModule(this.moduleData.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
           this.closeDialog()
         })
@@ -292,14 +292,14 @@ export default {
             type: 'warning',
           })
           .then(async () => {
-            await updateFeature(this.moduleData.id, data)
+            await updateModule(this.moduleData.id, data)
             this.$message.success(this.$t('Modules.stopSuccess'))
             this.moduleData.enabled = val
             this.closeDialog()
           })
           .catch(() => {})
       } else {
-        await updateFeature(this.moduleData.id, data)
+        await updateModule(this.moduleData.id, data)
         this.$message.success(this.$t('Modules.startSuccess'))
         this.moduleData.enabled = val
         this.closeDialog()

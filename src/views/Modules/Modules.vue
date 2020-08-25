@@ -28,39 +28,41 @@
 
     <div class="app-wrapper">
       <el-row v-if="showList.length" :gutter="20" class="emq-list-card plugin-cards-wrapper">
-        <el-col v-for="item in list" :key="item.id" :span="8">
-          <div class="module-item" @click="toEditModule(item)">
-            <!-- <div class="item-error-tip">
+        <el-col v-for="item in list" :key="item.id" :span="12">
+          <el-card shadow="hover">
+            <div class="module-item" @click="toEditModule(item)">
+              <!-- <div class="item-error-tip">
               <span>error</span>
               <el-button class="reconnect-btn" plain size="mini">{{ $t('Modules.reconnect') }}</el-button>
             </div> -->
-            <div class="left-box">
-              <img :src="item.img" alt="" class="item-img" />
-              <div class="item-content">
-                <div class="item-title">{{ item.type }}</div>
-                <div class="item-des">
-                  {{ item.description }}
+              <div class="left-box">
+                <img :src="item.img" alt="" class="item-img" />
+                <div class="item-content">
+                  <div class="item-title">{{ item.type }}</div>
+                  <div class="item-des">
+                    {{ item.description }}
+                  </div>
                 </div>
               </div>
+              <div class="item-handle">
+                <el-button
+                  v-if="item.enabled"
+                  class="stop-btn"
+                  plain
+                  size="mini"
+                  type="danger"
+                  @click.stop="updataModule(item, false)"
+                  >{{ $t('Modules.stop') }}</el-button
+                >
+                <el-button v-else class="start-btn" plain size="mini" @click.stop="updataModule(item, true)">{{
+                  $t('Modules.run')
+                }}</el-button>
+                <a @click.stop="toReadMore" class="know-more">
+                  {{ $t('Modules.readMore') }}
+                </a>
+              </div>
             </div>
-            <div class="item-handle">
-              <el-button
-                v-if="item.enabled"
-                class="stop-btn"
-                plain
-                size="mini"
-                type="danger"
-                @click.stop="updataModule(item, false)"
-                >{{ $t('Modules.stop') }}</el-button
-              >
-              <el-button v-else class="start-btn" plain size="mini" @click.stop="updataModule(item, true)">{{
-                $t('Modules.run')
-              }}</el-button>
-              <a @click.stop="toReadMore" class="know-more">
-                {{ $t('Modules.readMore') }}
-              </a>
-            </div>
-          </div>
+          </el-card>
         </el-col>
       </el-row>
       <a-card v-else class="null-modules">
@@ -79,7 +81,7 @@
 </template>
 
 <script>
-import { loadCreatedFeatures, updateFeature } from '@/api/modules'
+import { loadCreatedModules, updateModule } from '@/api/modules'
 import { matchSearch } from '@/common/utils'
 import moduleDialog from '@/views/Modules/components/moduleDialog.vue'
 
@@ -118,13 +120,13 @@ export default {
             type: 'warning',
           })
           .then(async () => {
-            await updateFeature(item.id, data)
+            await updateModule(item.id, data)
             this.$message.success(this.$t('Modules.stopSuccess'))
             item.enabled = val
           })
           .catch(() => {})
       } else {
-        await updateFeature(item.id, data)
+        await updateModule(item.id, data)
         this.$message.success(this.$t('Modules.startSuccess'))
         item.enabled = val
       }
@@ -153,7 +155,7 @@ export default {
     async loadData() {
       const addedModules = {}
       this.list = []
-      this.list = await loadCreatedFeatures()
+      this.list = await loadCreatedModules()
       this.moduleCount = this.list.length
       if (this.moduleCount) {
         this.list.forEach((item) => {
@@ -188,6 +190,5 @@ export default {
 
 .module-item {
   cursor: pointer;
-  background-color: #fff;
 }
 </style>
