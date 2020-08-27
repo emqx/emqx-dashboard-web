@@ -1,5 +1,6 @@
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
 import enLocale from 'element-ui/lib/locale/lang/en'
+import jaLocale from 'element-ui/lib/locale/lang/ja'
 
 const lang = {
   en: {
@@ -7,6 +8,9 @@ const lang = {
   },
   zh: {
     ...zhLocale,
+  },
+  ja: {
+    ...jaLocale,
   },
 }
 
@@ -33,12 +37,14 @@ model.forEach((key) => {
   const value = require(`./${key}`).default
 
   Object.keys(value).forEach((k) => {
-    const { en, zh } = value[k]
+    const { en, zh, ja } = value[k]
     lang.en[key] = lang.en[key] || {}
     lang.zh[key] = lang.zh[key] || {}
+    lang.ja[key] = lang.ja[key] || {}
 
     lang.en[key][k] = en
     lang.zh[key][k] = zh
+    lang.ja[key][k] = ja
   })
 })
 

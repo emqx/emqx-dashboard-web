@@ -8,7 +8,7 @@ Vue.use(Vuex)
 const BASE_ENV = 'base'
 
 function checkLanguage(lang) {
-  if (['en', 'zh'].includes(lang)) {
+  if (['en', 'zh', 'ja'].includes(lang)) {
     return lang
   }
   return ''

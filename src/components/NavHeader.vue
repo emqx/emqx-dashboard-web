@@ -33,8 +33,9 @@
             <i class="iconfont icon-i18n"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="en" :class="{ active: language === 'en' }">English</el-dropdown-item>
             <el-dropdown-item command="zh" :class="{ active: language === 'zh' }">中文</el-dropdown-item>
+            <el-dropdown-item command="en" :class="{ active: language === 'en' }">English</el-dropdown-item>
+            <el-dropdown-item command="ja" :class="{ active: language === 'ja' }">日本語</el-dropdown-item>
           </el-dropdown-menu>
         </div>
       </el-dropdown>
