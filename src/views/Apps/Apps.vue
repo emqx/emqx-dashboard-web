@@ -15,16 +15,20 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" :label="$t('General.appName')"></el-table-column>
-        <el-table-column prop="expired" :formatter="formatterExpired" :label="$t('General.expireAt')"></el-table-column>
-        <el-table-column prop="desc" :label="$t('General.remark')"></el-table-column>
+        <el-table-column prop="app_name" :label="$t('General.appName')"></el-table-column>
         <el-table-column :label="$t('General.isEnabled')">
           <template slot-scope="{ row }">
-            <el-switch v-model="row.status" active-color="#13ce66" inactive-color="#d0d3e0" @change="updateApps(row)">
+            <el-switch
+              disabled
+              v-model="switchDic[row.app_status]"
+              active-color="#13ce66"
+              inactive-color="#d0d3e0"
+              @change="updateApps(row)"
+            >
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column>
+        <!-- <el-table-column>
           <template slot-scope="{ row }">
             <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
               {{ $t('General.edit') }}
@@ -33,13 +37,13 @@
               {{ $t('General.delete') }}
             </el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </a-card>
 
     <el-dialog
       width="600px"
-      :title="accessType === 'edit' ? $t('General.editApp') : $t('General.createApp')"
+      :title="accessType === 'view' ? $t('General.viewApp') : $t('General.createApp')"
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
@@ -51,39 +55,20 @@
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col v-if="accessType === 'view'" :span="12">
-            <el-form-item prop="secret" :label="$t('General.secret')">
-              <el-input v-model="record.secret" :disabled="accessType === 'edit'" :readonly="accessType !== 'create'">
+          <el-col :span="12">
+            <el-form-item prop="app_name" :label="$t('General.appName')">
+              <el-input v-model="record.app_name" :disabled="accessType === 'edit'" :readonly="accessType === 'view'">
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="name" :label="$t('General.appName')">
-              <el-input v-model="record.name" :disabled="accessType === 'edit'" :readonly="accessType === 'view'">
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item prop="status" :label="$t('General.isEnabled')">
-              <emq-select v-model="record.status" :field="{ options: enableOption }" :disabled="accessType === 'view'">
-              </emq-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item prop="expired" :label="$t('General.expireAt')">
-              <el-date-picker
-                v-model="record.expired"
-                type="date"
-                format="yyyy-MM-dd"
-                value-format="yyyy-MM-dd"
-                :readonly="accessType === 'view'"
+            <el-form-item prop="app_status" :label="$t('General.isEnabled')">
+              <emq-select
+                v-model="record.app_status"
+                :field="{ options: enableOption }"
+                :disabled="accessType === 'view'"
               >
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item prop="desc" :label="$t('General.remark')">
-              <el-input v-model="record.desc" :readonly="accessType === 'view'"></el-input>
+              </emq-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -98,10 +83,7 @@
 </template>
 
 <script>
-import moment from 'moment'
-
-import { loadApp, createApp, showApp, updateApp, destroyAPP } from '@/api/function'
-import { getLink } from '@/common/utils'
+import { loadApp, createApp, showApp, updateApp, destroyAPP } from '@/api/apps'
 
 export default {
   name: 'Apps',
@@ -117,24 +99,24 @@ export default {
 
   data() {
     return {
-      docs: {
-        restAPI: getLink('restAPI'),
-      },
       dialogVisible: false,
       tableData: [],
       accessType: '',
       enableOption: [
-        { label: this.$t('General.enabled'), value: true },
-        { label: this.$t('General.disabled'), value: false },
+        { label: this.$t('General.enabled'), value: 1 },
+        { label: this.$t('General.disabled'), value: 0 },
       ],
       record: {
-        status: true, // 是否启用
-        desc: '',
+        app_status: 1, // 是否启用
       },
       rules: {
-        name: [{ required: true, message: this.$t('General.pleaseEnterAppName') }],
+        app_name: [{ required: true, message: this.$t('General.pleaseEnterAppName') }],
         app_id: [{ required: true, message: this.$t('General.pleaseEnterTheAppId') }],
-        status: [{ required: true, message: this.$t('General.pleaseChoose') }],
+        app_status: [{ required: true, message: this.$t('General.pleaseChoose') }],
+      },
+      switchDic: {
+        0: false,
+        1: true,
       },
     }
   },
@@ -148,45 +130,32 @@ export default {
   },
 
   methods: {
-    formatterExpired({ expired }) {
-      if (!expired || typeof expired !== 'number') {
-        return this.$t('General.neverExpire')
-      }
-      return moment(expired * 1000).format('YYYY-MM-DD')
-    },
     clearInput() {
       if (this.$refs.recordForm) {
         this.$refs.recordForm.resetFields()
       }
     },
     async loadData() {
-      this.tableData = await loadApp()
+      const data = await loadApp(this.$route.query.id)
+      this.tableData = data.items
     },
     // 请求一组数据
     async loadAppData(id) {
       const record = await showApp(id)
-      if (record.expired && typeof record.expired === 'number') {
-        record.expired = moment(record.expired * 1000).format('YYYY-MM-DD')
-      }
-      this.record = record
+      this.record = record.items[0]
     },
     showDialog(type, item) {
       this.accessType = type
       if (type === 'edit') {
         const record = { ...item }
-        if (record.expired && typeof record.expired === 'number') {
-          record.expired = moment(record.expired * 1000).format('YYYY-MM-DD')
-        } else {
-          record.expired = undefined
-        }
         this.record = record
       } else if (type === 'view') {
-        this.loadAppData(item.app_id)
+        this.loadAppData(item.id)
       } else {
         this.record = {
           app_id: Math.random().toString(16).slice(3),
-          status: true,
-          desc: '',
+          app_status: 1,
+          product_id: parseInt(this.$route.query.id, 10),
         }
       }
       this.dialogVisible = true
@@ -202,13 +171,6 @@ export default {
           return
         }
         const record = { ...this.record }
-        if (record.expired && typeof record.expired === 'string') {
-          try {
-            record.expired = Math.floor(new Date(record.expired).getTime() / 1000)
-          } catch (e) {
-            record.expired = null
-          }
-        }
         if (this.accessType === 'edit') {
           const { app_id } = this.record
           updateApp(app_id, record).then(() => {

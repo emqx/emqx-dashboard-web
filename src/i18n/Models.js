@@ -186,4 +186,12 @@ export default {
     zh: '二进制',
     en: 'Binary',
   },
+  serviceID: {
+    zh: '服务 ID',
+    en: 'Service ID',
+  },
+  emptyProps: {
+    zh: '属性不能为空!',
+    en: 'The properties cannot be null!',
+  },
 }

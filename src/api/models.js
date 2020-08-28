@@ -5,7 +5,7 @@ export function createModel(body = {}) {
 }
 
 export function loadModel(productID) {
-  return http.get(`/things/?productID=${productID}`)
+  return http.get(`/product_things/${productID}`)
 }
 
 export function destroyModel(modelID) {

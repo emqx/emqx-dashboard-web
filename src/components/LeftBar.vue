@@ -100,16 +100,16 @@ export default {
         path: '/products',
         icon: 'icon-guanlianshebei',
       },
-      {
-        title: this.$t('components.topics'),
-        path: '/topics',
-        icon: 'icon-zuzhiqunzu',
-      },
-      {
-        title: this.$t('components.subscriptions'),
-        path: '/subscriptions',
-        icon: 'icon-shebeiguanli',
-      },
+      // {
+      //   title: this.$t('components.topics'),
+      //   path: '/topics',
+      //   icon: 'icon-zuzhiqunzu',
+      // },
+      // {
+      //   title: this.$t('components.subscriptions'),
+      //   path: '/subscriptions',
+      //   icon: 'icon-shebeiguanli',
+      // },
       {
         title: this.$t('components.rules'),
         key: 'rules',
@@ -135,37 +135,37 @@ export default {
           },
         ],
       },
-      {
-        title: this.$t('components.analysis'),
-        key: 'analysis',
-        icon: 'icon-shujukanban',
-        children: [
-          {
-            title: this.$t('components.topic_metrics'),
-            key: 'analysis.topic_metrics',
-            path: '/topic_metrics',
-            parentKey: 'analysis',
-          },
-        ],
-      },
+      // {
+      //   title: this.$t('components.analysis'),
+      //   key: 'analysis',
+      //   icon: 'icon-shujukanban',
+      //   children: [
+      //     {
+      //       title: this.$t('components.topic_metrics'),
+      //       key: 'analysis.topic_metrics',
+      //       path: '/topic_metrics',
+      //       parentKey: 'analysis',
+      //     },
+      //   ],
+      // },
       {
         title: this.$t('components.alerts'),
         key: 'alerts',
         path: '/alerts',
         icon: 'icon-gaojingkongxin',
       },
-      {
-        title: this.$t('components.plugins'),
-        key: 'plugins',
-        path: '/plugins',
-        icon: 'icon-kongjian',
-      },
-      {
-        title: this.$t('components.modules'),
-        key: 'modules',
-        path: '/modules',
-        icon: 'icon-changjingguanli',
-      },
+      // {
+      //   title: this.$t('components.plugins'),
+      //   key: 'plugins',
+      //   path: '/plugins',
+      //   icon: 'icon-kongjian',
+      // },
+      // {
+      //   title: this.$t('components.modules'),
+      //   key: 'modules',
+      //   path: '/modules',
+      //   icon: 'icon-changjingguanli',
+      // },
       {
         title: this.$t('components.tool'),
         key: 'tools',

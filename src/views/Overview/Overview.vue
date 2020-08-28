@@ -162,97 +162,103 @@
       </template>
     </a-card>
 
-    <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="pageLoading">
-      <div class="emq-title">
-        {{ $t('Overview.license') }}
-      </div>
+    <template v-if="false">
+      <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="pageLoading">
+        <div class="emq-title">
+          {{ $t('Overview.license') }}
+        </div>
 
-      <ul class="license-field">
-        <li v-if="license.customer_type !== evaluation" class="item">
-          <span class="key">{{ $t('Overview.customer') }}:</span>
-          <span class="value">{{ license.customer }}</span>
-        </li>
+        <ul class="license-field">
+          <li v-if="license.customer_type !== evaluation" class="item">
+            <span class="key">{{ $t('Overview.customer') }}:</span>
+            <span class="value">{{ license.customer }}</span>
+          </li>
 
-        <li class="item">
-          <span class="key">{{ $t('Overview.numberOfConnectionLines') }}:</span>
-          <div class="content">
-            <el-progress
-              class="license-progress"
-              :stroke-width="12"
-              :percentage="licensePercentage"
-              :format="formatConnection"
-              :color="getProgressColor(licensePercentage, '#34c388')"
-            ></el-progress>
+          <li class="item">
+            <span class="key">{{ $t('Overview.numberOfConnectionLines') }}:</span>
+            <div class="content">
+              <el-progress
+                class="license-progress"
+                :stroke-width="12"
+                :percentage="licensePercentage"
+                :format="formatConnection"
+                :color="getProgressColor(licensePercentage, '#34c388')"
+              ></el-progress>
+            </div>
+          </li>
+          <template v-if="license.customer_type !== evaluation">
+            <li class="item">
+              <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
+              <span class="value">{{ license.email }}</span>
+            </li>
+
+            <li class="item">
+              <span class="key">{{ $t('Overview.issuedAt') }}:</span>
+              <span class="value broker">{{ license.issued_at }}</span>
+            </li>
+
+            <li class="item">
+              <span class="key">{{ $t('Overview.expireAt') }}:</span>
+              <span class="value broker">{{ license.expiry_at }}</span>
+            </li>
+          </template>
+        </ul>
+
+        <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
+          <div
+            v-if="license.customer_type === evaluation"
+            class="description"
+            v-html="$t('Overview.licenseEvaluationTip')"
+          >
+            {{ $t('Overview.licenseEvaluationTip') }}
           </div>
-        </li>
-        <template v-if="license.customer_type !== evaluation">
-          <li class="item">
-            <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
-            <span class="value">{{ license.email }}</span>
-          </li>
-
-          <li class="item">
-            <span class="key">{{ $t('Overview.issuedAt') }}:</span>
-            <span class="value broker">{{ license.issued_at }}</span>
-          </li>
-
-          <li class="item">
-            <span class="key">{{ $t('Overview.expireAt') }}:</span>
-            <span class="value broker">{{ license.expiry_at }}</span>
-          </li>
-        </template>
-      </ul>
-
-      <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
-        <div
-          v-if="license.customer_type === evaluation"
-          class="description"
-          v-html="$t('Overview.licenseEvaluationTip')"
-        >
-          {{ $t('Overview.licenseEvaluationTip') }}
+          <div v-else-if="license.expiry === true" class="description" v-html="$t('Overview.licenseExpiryTip')">
+            {{ $t('Overview.licenseExpiryTip') }}
+          </div>
+          <div v-else class="description">
+            {{ $t('Overview.beforeTheCertificateExpires') }}
+          </div>
+          <div
+            v-if="license.type === 'trial' && license.customer_type !== evaluation && license.expiry === false"
+            class="oper"
+          >
+            <el-tooltip effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false">
+              <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
+            </el-tooltip>
+          </div>
         </div>
-        <div v-else-if="license.expiry === true" class="description" v-html="$t('Overview.licenseExpiryTip')">
-          {{ $t('Overview.licenseExpiryTip') }}
-        </div>
-        <div v-else class="description">
-          {{ $t('Overview.beforeTheCertificateExpires') }}
-        </div>
-        <div
-          v-if="license.type === 'trial' && license.customer_type !== evaluation && license.expiry === false"
-          class="oper"
-        >
-          <el-tooltip effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false">
-            <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
-          </el-tooltip>
-        </div>
-      </div>
-    </a-card>
+      </a-card>
 
-    <el-dialog
-      title="标题"
-      :width="`${licenseTipWidth}px`"
-      :visible.sync="licenseTipVisible"
-      :close-on-click-modal="false"
-    >
-      <div slot="title" class="tip-title">
-        <i class="el-icon-warning"></i>
-        <span>{{ $t('Base.warning') }}</span>
-      </div>
-      <div class="tip-content">
-        <p v-if="!isLicenseExpiry" v-html="$t('Overview.licenseEvaluationTip')">
-          {{ $t('Overview.licenseEvaluationTip') }}
-        </p>
-        <p v-else v-html="$t('Overview.licenseExpiryTip')">
-          {{ $t('Overview.licenseExpiryTip') }}
-        </p>
-      </div>
-      <div v-if="!isLicenseExpiry" class="tip-checkbox">
-        <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">{{ $t('Overview.notPromptAgain') }}</el-checkbox>
-      </div>
-      <div class="tip-button">
-        <el-button type="primary" size="small" @click="licenseTipVisible = false">{{ $t('Overview.konw') }}</el-button>
-      </div>
-    </el-dialog>
+      <el-dialog
+        title="标题"
+        :width="`${licenseTipWidth}px`"
+        :visible.sync="licenseTipVisible"
+        :close-on-click-modal="false"
+      >
+        <div slot="title" class="tip-title">
+          <i class="el-icon-warning"></i>
+          <span>{{ $t('Base.warning') }}</span>
+        </div>
+        <div class="tip-content">
+          <p v-if="!isLicenseExpiry" v-html="$t('Overview.licenseEvaluationTip')">
+            {{ $t('Overview.licenseEvaluationTip') }}
+          </p>
+          <p v-else v-html="$t('Overview.licenseExpiryTip')">
+            {{ $t('Overview.licenseExpiryTip') }}
+          </p>
+        </div>
+        <div v-if="!isLicenseExpiry" class="tip-checkbox">
+          <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">{{
+            $t('Overview.notPromptAgain')
+          }}</el-checkbox>
+        </div>
+        <div class="tip-button">
+          <el-button type="primary" size="small" @click="licenseTipVisible = false">{{
+            $t('Overview.konw')
+          }}</el-button>
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 
