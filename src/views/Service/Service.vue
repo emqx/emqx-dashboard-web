@@ -172,7 +172,7 @@ export default {
           })
         } else {
           createService(record).then(() => {
-            this.$message.success(this.$t('General.successfulAppCreation'))
+            this.$message.success(this.$t('Base.createSuccess'))
             this.dialogVisible = false
             this.accessType = ''
             this.loadData()
