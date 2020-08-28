@@ -19,7 +19,7 @@
           <el-table-column prop="id" label="ID"> </el-table-column>
           <el-table-column prop="product_model" :label="$t('Products.deviceModel')"></el-table-column>
           <el-table-column prop="product_desp" :label="$t('Products.productDes')"></el-table-column>
-          <el-table-column align="right">
+          <!-- <el-table-column align="right">
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
                 {{ $t('General.edit') }}
@@ -28,7 +28,7 @@
                 {{ $t('General.delete') }}
               </el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
       </a-card>
     </div>

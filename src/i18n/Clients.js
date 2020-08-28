@@ -284,6 +284,10 @@ export default {
     zh: '创建设备',
     en: 'Create',
   },
+  viewEquipment: {
+    zh: '查看设备',
+    en: 'View',
+  },
   editEquipment: {
     zh: '编辑设备',
     en: 'Edit',
@@ -303,5 +307,9 @@ export default {
   enterEquipName: {
     zh: '请输入设备名',
     en: 'Please enter the name',
+  },
+  modelId: {
+    zh: '模型 ID',
+    en: 'Model ID',
   },
 }

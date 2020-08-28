@@ -5,13 +5,13 @@
         <el-form ref="modelRecord" :model="modelRecord" :rules="modelRules" size="small">
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item :label="$t('Models.modelName')" prop="thingName">
-                <el-input v-model="modelRecord.thingName"></el-input>
+              <el-form-item :label="$t('Models.modelName')" prop="thing_name">
+                <el-input v-model="modelRecord.thing_name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="dataType" :label="$t('Models.dataFormat')">
-                <el-select v-model="modelRecord.dataType">
+              <el-form-item prop="data_type" :label="$t('Models.dataFormat')">
+                <el-select v-model="modelRecord.data_type">
                   <el-option
                     v-for="(item, index) in modelTypeList"
                     :key="index"
@@ -23,13 +23,13 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="serviceID" :label="$t('Services.name')">
-                <el-select v-model="modelRecord.serviceID">
+              <el-form-item prop="service_id" :label="$t('Services.name')">
+                <el-select v-model="modelRecord.service_id">
                   <el-option
                     v-for="(item, index) in serviceData"
                     :key="index"
-                    :value="item.serviceID"
-                    :label="item.serviceName"
+                    :value="item.id"
+                    :label="item.service_name"
                   >
                   </el-option>
                 </el-select>
@@ -37,7 +37,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item :label="$t('General.remark')">
-                <el-input v-model="modelRecord.thingDesp"></el-input>
+                <el-input v-model="modelRecord.thing_desp"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -112,7 +112,7 @@
           <el-col :span="24">
             <el-form-item prop="dataType" :label="$t('Models.dataType')">
               <el-radio-group v-model="record.dataType" :disabled="accessType === 'view'" @change="dataTypeChange">
-                <template v-if="modelRecord.dataFormat === 'json'">
+                <template v-if="modelRecord.data_type === 1">
                   <el-radio v-for="item in jsonDataTypeList" :key="item.value" :label="item.label" class="radio-item">
                     {{ item.value }}
                   </el-radio>
@@ -202,6 +202,7 @@
 <script>
 import { dataTypeList, jsonDataTypeList, dataTypeDic, lengthList } from '@/common/modelData'
 import { loadService } from '@/api/services'
+import { createModel } from '@/api/models'
 
 export default {
   name: 'ModelCreate',
@@ -249,13 +250,13 @@ export default {
       dataLength: 0,
       modelRecord: {},
       modelRules: {
-        thingName: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
-        dataType: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
-        serviceID: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
+        thing_name: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
+        data_type: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
+        service_id: [{ required: true, message: this.$t('Models.isRequired'), trigger: 'blur' }],
       },
       modelTypeList: [
-        { label: 'JSON', value: 'json' },
-        { label: this.$t('Models.binary'), value: 'bianry' },
+        { label: 'JSON', value: 1 },
+        { label: this.$t('Models.binary'), value: 2 },
       ],
       serviceData: [],
     }
@@ -277,14 +278,15 @@ export default {
   },
 
   created() {
-    if (this.$route.query.productID) {
-      this.loadServiceData(this.$route.query.productID)
+    if (this.$route.query.id) {
+      this.loadServiceData(this.$route.query.id)
     }
   },
 
   methods: {
-    async loadServiceData(productID) {
-      this.serviceData = await loadService(productID)
+    async loadServiceData(id) {
+      const data = await loadService(id)
+      this.serviceData = data.items
     },
     dataTypeChange(val) {
       if (val) {
@@ -368,7 +370,27 @@ export default {
         })
         .catch(() => {})
     },
-    createModel() {},
+    createModel() {
+      this.$refs.modelRecord.validate((valid) => {
+        if (!valid) {
+          return
+        }
+        if (!this.tableData.length) {
+          this.$message.error(this.$t('Models.emptyProps'))
+          return
+        }
+        const data = { ...this.modelRecord }
+        data.properties = this.tableData
+        createModel(data)
+          .then((res) => {
+            if (res.items.length) {
+              this.$message.success(this.$t('Base.createSuccess'))
+              this.$router.replace(`/products/view?id=${this.$route.query.id}&tab=models`)
+            }
+          })
+          .catch(() => {})
+      })
+    },
   },
 }
 </script>

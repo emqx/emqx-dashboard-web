@@ -22,7 +22,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="topic" :label="$t('Services.topic')"></el-table-column>
-        <el-table-column>
+        <!-- <el-table-column>
           <template slot-scope="{ row }">
             <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
               {{ $t('General.edit') }}
@@ -31,7 +31,7 @@
               {{ $t('General.delete') }}
             </el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </a-card>
 

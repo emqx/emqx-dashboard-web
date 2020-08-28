@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
+// eslint-disable-next-line import/no-extraneous-dependencies
 const inquirer = require('inquirer')
 const { spawn } = require('child_process')
 const { promisify } = require('util')
+
 const spawnAsync = promisify(spawn)
 
 async function buildConfig() {

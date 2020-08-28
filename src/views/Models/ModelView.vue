@@ -24,35 +24,59 @@
       </div>
     </page-header>
     <div class="app-wrapper">
-      <a-card class="emq-list-card">
-        <code-editor
-          v-model="modelData"
-          class="model-data"
-          lang="application/json"
-          :lint="false"
-          :disabled="true"
-        ></code-editor>
-      </a-card>
+      <el-card class="emq-list-card">
+        <div :style="{ height: height + 'px' }">
+          <monaco :id="`modelView${modelID}`" v-model="modelData" lang="json"> </monaco>
+        </div>
+      </el-card>
     </div>
   </div>
 </template>
 
 <script>
-import CodeEditor from '@/components/CodeEditor'
+import { showModel } from '@/api/models'
+import Monaco from '@/components/Monaco'
 
 export default {
   name: 'ModelView',
 
   components: {
-    CodeEditor,
+    Monaco,
   },
 
   data() {
     return {
       modelData: '',
+      modelID: 0,
+      height: 500,
     }
   },
+
+  created() {
+    this.height = document.body.clientHeight - 280
+    this.modelID = this.$route.query.modelId
+    this.loadData(this.$route.query.modelId)
+  },
+
   methods: {
+    async loadData(modelID) {
+      await showModel(modelID)
+        .then((res) => {
+          const { thing_name, thing_desp, data_type, id, service_id, properties } = res.items[0]
+          const params = {
+            ModelInfo: {
+              id,
+              thing_name,
+              thing_desp,
+              data_type,
+              service_id,
+            },
+            properties: JSON.parse(properties),
+          }
+          this.modelData = JSON.stringify(params, null, 2)
+        })
+        .catch()
+    },
     copySuccessed() {
       this.$message.success(this.$t('Base.copied'))
     },
