@@ -147,7 +147,7 @@ export default {
           service_name: '',
           service_type: '',
           topic: '',
-          product_id: this.product_id,
+          product_id: parseInt(this.product_id, 10),
         }
       } else {
         this.dialogTitle = this.$t('Services.editService')

@@ -96,9 +96,8 @@ export default {
       accessType: '',
       record: {},
       rules: {
-        client_id: [{ required: true, message: this.$t('Clients.enterEquipId') }],
-        user_name: [{ required: true, message: this.$t('Clients.enterEquipName') }],
-        thing_id: [{ required: true }],
+        client_id: [{ required: true, message: this.$t('Models.isRequired') }],
+        thing_id: [{ required: true, message: this.$t('Models.isRequired') }],
       },
       ModelData: [],
     }

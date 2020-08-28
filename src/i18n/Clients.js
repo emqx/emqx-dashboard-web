@@ -49,8 +49,8 @@ export default {
     en: 'Detailed',
   },
   clientId: {
-    zh: '客户端 ID',
-    en: 'Client ID',
+    zh: '客户端 ID (唯一标识)',
+    en: 'Client ID (A unique identifier)',
   },
   username: {
     zh: '用户名',
