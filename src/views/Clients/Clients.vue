@@ -25,12 +25,12 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="user_name" min-width="120px" :label="$t('Clients.username')">
+          <el-table-column prop="client_id" min-width="120px" :label="$t('Clients.clientId')">
             <template slot-scope="{ row }">
-              <span class="btn" @click="showDialog('view', row)">{{ row.user_name }}</span>
+              <span class="btn" @click="showDialog('view', row)">{{ row.client_id }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="client_id" min-width="120px" :label="$t('Clients.clientId')"> </el-table-column>
+          <el-table-column prop="user_name" min-width="120px" :label="$t('Clients.username')"> </el-table-column>
           <el-table-column prop="thing_id" min-width="120px" :label="$t('Clients.modelId')"> </el-table-column>
         </el-table>
       </a-card>
