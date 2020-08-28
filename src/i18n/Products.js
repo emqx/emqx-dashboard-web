@@ -4,8 +4,8 @@ export default {
     en: 'Product Name',
   },
   deviceModel: {
-    zh: '设备型号',
-    en: 'Device Model',
+    zh: '产品型号',
+    en: 'Product Model',
   },
   productDes: {
     zh: '产品描述',
