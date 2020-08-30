@@ -7,19 +7,19 @@
         <template v-if="row[item].elType !== 'select'">
           <el-input
             v-if="row[item].type === 'number'"
-            v-model.number="row.config[row[item].key]"
+            v-model.number="row[row[item].key]"
             v-bind="row[item].bindAttributes"
             @input="atInputChange"
           >
           </el-input>
-          <el-input v-else v-model="row.config[row[item].key]" v-bind="row[item].bindAttributes" @input="atInputChange">
+          <el-input v-else v-model="row[row[item].key]" v-bind="row[item].bindAttributes" @input="atInputChange">
           </el-input>
         </template>
         <!-- select -->
         <template v-else>
           <emq-select
             v-if="row[item].type === 'number'"
-            v-model.number="row.config[row[item].key]"
+            v-model.number="row[row[item].key]"
             v-bind="row[item].bindAttributes"
             class="reset-width"
             @change="atInputChange"
@@ -27,7 +27,7 @@
           </emq-select>
           <emq-select
             v-else
-            v-model="row.config[row[item].key]"
+            v-model="row[row[item].key]"
             v-bind="row[item].bindAttributes"
             class="reset-width"
             @change="atInputChange"
@@ -80,6 +80,7 @@ export default {
       tableData: [],
       headers: [],
       oneRow: {},
+      defaultConfig: {},
     }
   },
 
@@ -92,16 +93,16 @@ export default {
   methods: {
     initData() {
       const { form } = this.data
-      const defaultConfig = {}
       // eslint-disable-next-line no-unused-vars
       Object.entries(form).forEach(([k, v]) => {
         const labelName = v.formItemAttributes.label
         this.headers.push(labelName)
         this.oneRow[labelName] = v
         const { key, value } = v
-        defaultConfig[key] = value
+        this.oneRow[key] = value
+        this.defaultConfig[key] = value
       })
-      this.addColumn(defaultConfig)
+      this.addColumn()
     },
     labelHeads(h, { column }) {
       return h('span', { class: 'table-head', style: { width: '100%' } }, [column.label])
@@ -109,8 +110,11 @@ export default {
     atInputChange() {
       const data = []
       this.tableData.forEach((item) => {
-        const { config } = item
-        data.push(config)
+        const tempConfig = {}
+        Object.keys(this.defaultConfig).forEach((key) => {
+          tempConfig[key] = item[key]
+        })
+        data.push(tempConfig)
       })
       this.$emit('update', data)
     },
@@ -118,10 +122,9 @@ export default {
       this.tableData = this.tableData.filter(($) => $.key !== row.key)
       this.atInputChange()
     },
-    addColumn(defaultConfig) {
+    addColumn() {
       const row = { ...this.oneRow }
       row.key = new Date().getTime()
-      row.config = defaultConfig || {}
       this.tableData.push(row)
     },
   },

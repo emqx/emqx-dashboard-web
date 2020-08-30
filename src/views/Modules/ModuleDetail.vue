@@ -117,12 +117,12 @@
 import { createModule, loadAllModules, updateModule, destroyModule } from '@/api/modules'
 import { renderParamsForm, fillI18n } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
-import mulObjectEditor from '@/components/mulObjectEditor'
+import MulObjectEditor from '@/components/MulObjectEditor'
 
 export default {
   name: 'ModuleDetail',
 
-  components: { KeyAndValueEditor, mulObjectEditor },
+  components: { KeyAndValueEditor, MulObjectEditor },
 
   inheritAttrs: false,
 
@@ -215,7 +215,6 @@ export default {
         this.record.type = this.moduleData.type
         await createModule(this.record)
         this.$message.success(this.$t('Modules.moduleAddSuccess'))
-        this.$router.push('/modules')
       } else {
         const { type, id, enabled, description } = this.moduleData
         const data = {
