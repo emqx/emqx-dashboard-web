@@ -40,7 +40,7 @@
                 <div class="item-content">
                   <div class="item-title">{{ item.type }}</div>
                   <div class="item-des">
-                    {{ item.description }}
+                    {{ item.description[lang] }}
                   </div>
                 </div>
               </div>
@@ -70,27 +70,15 @@
         <p v-else>{{ $t('Modules.noData') }}</p>
       </a-card>
     </div>
-    <module-dialog
-      from="modules"
-      :visible.sync="dialogVisible"
-      oper="edit"
-      :moduleData="selectedModule"
-      @updateList="loadData()"
-    ></module-dialog>
   </div>
 </template>
 
 <script>
 import { loadCreatedModules, updateModule } from '@/api/modules'
 import { matchSearch } from '@/common/utils'
-import moduleDialog from '@/views/Modules/components/moduleDialog.vue'
 
 export default {
   name: 'Modules',
-
-  components: {
-    moduleDialog,
-  },
 
   data() {
     return {
@@ -98,10 +86,15 @@ export default {
       searchVal: '',
       list: [],
       showList: [],
-      dialogVisible: false,
       moduleCount: 0,
       selectedModule: {},
     }
+  },
+
+  computed: {
+    lang() {
+      return this.$store.state.lang
+    },
   },
 
   created() {
@@ -150,7 +143,10 @@ export default {
     },
     toEditModule(item) {
       this.selectedModule = item
-      this.dialogVisible = true
+      this.selectedModule.from = 'modules'
+      this.selectedModule.oper = 'edit'
+      this.$store.dispatch('UPDATE_MODULE', this.selectedModule)
+      this.$router.push('/modules/detail')
     },
     async loadData() {
       const addedModules = {}
