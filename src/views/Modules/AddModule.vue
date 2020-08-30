@@ -122,8 +122,6 @@
         </a-card>
       </template>
     </div>
-    <module-dialog :visible.sync="dialogVisible" :moduleData="selectedModule" :oper="oper" @moduleChange="loadData">
-    </module-dialog>
   </div>
 </template>
 
@@ -131,7 +129,6 @@
 import { loadAllModules, showCreatedModuleInfo } from '@/api/modules'
 import { fillI18n, matchSearch } from '@/common/utils'
 import store from '@/stores'
-import moduleDialog from '@/views/Modules/components/moduleDialog.vue'
 
 export default {
   name: 'ModuleAdd',
@@ -150,17 +147,12 @@ export default {
       ],
       activeNavId: 'auth',
       allFeatures: {},
-      dialogVisible: false,
       selectedModule: {},
       allModuleList: [],
       searchModuleInfo: [],
       oper: 'add',
       scrollTop: 0,
     }
-  },
-
-  components: {
-    moduleDialog,
   },
 
   computed: {
@@ -197,7 +189,7 @@ export default {
         return
       }
       setTimeout(async () => {
-        const res = await matchSearch(this.allModuleList, 'name', this.searchVal)
+        const res = await matchSearch(this.allModuleList, 'localTitle', this.searchVal)
         if (res) {
           this.searchModuleInfo = res
           this.searchLoading = false
@@ -221,20 +213,27 @@ export default {
         const data = { ...val }
         this.parseI18n([data])
         const { params } = data
-        console.log('params params', params)
         this.selectedModule = {
           paramsData: params,
           type: val.name,
+          oper,
+          title: val.title,
+          description: val.description,
         }
+        this.$store.dispatch('UPDATE_MODULE', this.selectedModule)
       } else {
         const id = this.addedModules[val.name]
         this.getAddedModuleInfo(id)
           .then((res) => {
             this.selectedModule = res
+            this.selectedModule.oper = oper
+            this.selectedModule.title = val.title
+            this.selectedModule.description = val.description
+            this.$store.dispatch('UPDATE_MODULE', this.selectedModule)
           })
           .catch()
       }
-      this.dialogVisible = true
+      this.$router.push('/modules/detail')
     },
     async getAddedModuleInfo(id) {
       const data = await showCreatedModuleInfo(id)
@@ -248,7 +247,7 @@ export default {
         if (id === 'auth') {
           this.backTop()
         }
-        this.$el.querySelector(`#${id}`).scrollIntoView(true)
+        this.$el.querySelector(`#${id}`).scrollIntoView({ behavior: 'smooth' })
       }, 5)
     },
     async loadData() {
@@ -258,6 +257,7 @@ export default {
         this.allModuleList = this.allModuleList.concat(item)
       })
       this.allModuleList.forEach((item) => {
+        item.localTitle = item.title[this.lang]
         if (Object.keys(this.addedModules).includes(item.name)) {
           item.status = 'added'
         } else {
@@ -363,6 +363,7 @@ export default {
   }
 
   .content-box {
+    scroll-behavior: smooth;
     padding: 16px 24px;
     margin: 24px;
     margin-top: 112px;

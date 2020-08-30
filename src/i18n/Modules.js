@@ -115,4 +115,8 @@ export default {
     zh: '内部模块',
     en: 'Local Modules',
   },
+  configuration: {
+    zh: '配置信息',
+    en: 'Configuration',
+  },
 }

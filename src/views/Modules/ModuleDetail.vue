@@ -1,0 +1,381 @@
+<template>
+  <div class="module-detail">
+    <page-header>
+      <div class="page-header-title-view">
+        <div class="title">
+          <!-- {{ moduleData.title[lang] }} -->
+        </div>
+      </div>
+      <div class="page-header-content-view">
+        <div class="content">
+          <p class="description">
+            {{ moduleData.description[lang] }}
+          </p>
+        </div>
+      </div>
+
+      <div v-if="oper === 'edit'" class="page-header-top-start btn" @click="deleteModule">
+        <el-button type="danger" size="small">
+          {{ $t('RuleEngine.delete') }}
+        </el-button>
+      </div>
+    </page-header>
+    <div class="app-wrapper">
+      <el-card>
+        <div class="emq-title">
+          {{ $t('Modules.configuration') }}
+        </div>
+        <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
+          <el-row class="config-item-wrapper" :gutter="30">
+            <div v-if="configLoading" class="params-loading-wrapper">
+              <a-skeleton active></a-skeleton>
+            </div>
+
+            <template v-else-if="configList.length > 0">
+              <el-col :span="16">
+                <el-col :span="24">
+                  <div v-for="(item, i) in configList" :key="i">
+                    <el-col
+                      :span="item.type === 'textarea' || item.type === 'object' || item.type === 'mulobject' ? 24 : 12"
+                    >
+                      <el-form-item v-bind="item.formItemAttributes">
+                        <template v-if="item.formItemAttributes.description" slot="label">
+                          {{ item.formItemAttributes.label }}
+                          <el-popover width="220" trigger="hover" placement="top">
+                            <div class="emq-popover-content" v-html="item.formItemAttributes.description"></div>
+                            <i slot="reference" class="el-icon-question"></i>
+                          </el-popover>
+                        </template>
+                        <template v-if="item.elType === 'object'">
+                          <key-and-value-editor v-model="record.config[item.key]"></key-and-value-editor>
+                        </template>
+                        <template v-else-if="item.elType === 'mulobject'">
+                          <mul-object-editor
+                            v-model="record.config[item.key]"
+                            :data="item.mulObjectData"
+                          ></mul-object-editor>
+                        </template>
+                        <!-- input -->
+                        <template v-else-if="item.elType !== 'select'">
+                          <el-input
+                            v-if="item.type === 'number'"
+                            v-model.number="record.config[item.key]"
+                            v-bind="item.bindAttributes"
+                          >
+                          </el-input>
+
+                          <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes"> </el-input>
+                        </template>
+
+                        <!-- select -->
+                        <template v-else>
+                          <emq-select
+                            v-if="item.type === 'number'"
+                            v-model.number="record.config[item.key]"
+                            v-bind="item.bindAttributes"
+                            class="reset-width"
+                          >
+                          </emq-select>
+
+                          <emq-select
+                            v-else
+                            v-model="record.config[item.key]"
+                            v-bind="item.bindAttributes"
+                            class="reset-width"
+                          >
+                          </emq-select>
+                        </template>
+                      </el-form-item>
+                    </el-col>
+                  </div>
+                </el-col>
+                <el-col :span="24">
+                  <div class="button-group__center">
+                    <template v-if="oper == 'edit'">
+                      <el-button v-if="!moduleData.enabled" size="small" @click="toggleStatus(true)">
+                        {{ $t('Modules.run') }}
+                      </el-button>
+                      <el-button v-else size="small" @click="toggleStatus(false)">{{ $t('Modules.stop') }}</el-button>
+                    </template>
+                    <el-button size="small" @click="exitDetail">{{ $t('Base.cancel') }}</el-button>
+                    <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate()">
+                      <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>
+                      <span v-else>{{ $t('Base.confirm') }}</span>
+                    </el-button>
+                  </div>
+                </el-col>
+              </el-col>
+            </template>
+          </el-row>
+        </el-form>
+      </el-card>
+    </div>
+  </div>
+</template>
+
+<script>
+import { createModule, loadAllModules, updateModule, destroyModule } from '@/api/modules'
+import { renderParamsForm, fillI18n } from '@/common/utils'
+import KeyAndValueEditor from '@/components/KeyAndValueEditor'
+import mulObjectEditor from '@/components/mulObjectEditor'
+
+export default {
+  name: 'ModuleDetail',
+
+  components: { KeyAndValueEditor, mulObjectEditor },
+
+  inheritAttrs: false,
+
+  data() {
+    return {
+      configLoading: false,
+      configList: [],
+      record: {
+        config: {},
+      },
+      rules: {
+        config: {},
+      },
+      allModuleList: [],
+    }
+  },
+
+  computed: {
+    oper() {
+      return this.$store.state.selectedModule.oper
+    },
+    moduleData() {
+      return this.$store.state.selectedModule
+    },
+    from() {
+      return this.$store.state.selectedModule.from
+    },
+    lang() {
+      return this.$store.state.lang
+    },
+  },
+
+  created() {
+    this.loadData()
+  },
+
+  methods: {
+    loadData() {
+      if (this.oper === 'add') {
+        this.loadConfigList(this.moduleData.paramsData)
+      } else {
+        this.loadParams()
+          .then((res) => {
+            this.loadConfigList(res)
+          })
+          .catch()
+      }
+    },
+    clearForm() {
+      if (this.$refs.record) {
+        setTimeout(() => {
+          this.$refs.record.resetFields()
+          this.configList = []
+        }, 10)
+      }
+    },
+    loadConfigList(paramsData) {
+      this.configLoading = true
+      const configData = renderParamsForm(paramsData, 'config')
+      const { form, rules } = configData
+      this.configList = form
+      this.rules.config = rules
+      this.record.config = {}
+      form.forEach(({ key, value }) => {
+        this.$set(this.record.config, key, value)
+      })
+      this.configLoading = false
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
+    },
+    async handleCreate() {
+      const valid = await this.$refs.record.validate()
+      if (!valid) {
+        return
+      }
+      const { config } = this.record
+      // String to Boolean
+      Object.keys(config).forEach((label) => {
+        const value = config[label]
+        if (value === 'true') {
+          this.record.config[label] = true
+        }
+        if (value === 'false') {
+          this.record.config[label] = false
+        }
+      })
+
+      if (this.oper === 'add') {
+        this.record.type = this.moduleData.type
+        await createModule(this.record)
+        this.$message.success(this.$t('Modules.moduleAddSuccess'))
+        this.$router.push('/modules')
+      } else {
+        const { type, id, enabled, description } = this.moduleData
+        const data = {
+          type,
+          id,
+          enabled,
+          description,
+          config: this.record.config,
+        }
+        await updateModule(id, data)
+        this.$message.success(this.$t('Modules.moduleEditSuccess'))
+      }
+      this.exitDetail()
+    },
+    parseI18n(val) {
+      const data = fillI18n(val, ['title', 'description']).map((item) => {
+        item.params = fillI18n(item.params, true)
+        return item
+      })
+      return data
+    },
+    async loadParams() {
+      // 拿到当前编辑的模块的params
+      const allFeatures = await loadAllModules()
+      Object.values(allFeatures).forEach((item) => {
+        this.allModuleList = this.allModuleList.concat(item)
+      })
+      const currentModule = this.allModuleList.find((item) => item.name === this.moduleData.type)
+      this.parseI18n([currentModule])
+      const { params } = currentModule
+
+      // 赋值
+      Object.keys(params).forEach((item) => {
+        if (this.moduleData.config[item]) {
+          params[item].default = this.moduleData.config[item]
+        }
+      })
+      return params
+    },
+    deleteModule() {
+      this.$msgbox
+        .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await destroyModule(this.moduleData.id)
+          this.$message.success(this.$t('Base.deleteSuccess'))
+          this.exitDetail()
+        })
+        .catch(() => {})
+    },
+    async toggleStatus(val) {
+      const data = { ...this.moduleData }
+      data.enabled = val
+      if (!val) {
+        this.$msgbox
+          .confirm(this.$t('Modules.thisActionWillStopTheModule'), {
+            confirmButtonText: this.$t('Base.confirm'),
+            cancelButtonText: this.$t('Base.cancel'),
+            type: 'warning',
+          })
+          .then(async () => {
+            await updateModule(this.moduleData.id, data)
+            this.$message.success(this.$t('Modules.stopSuccess'))
+            this.moduleData.enabled = val
+            this.exitDetail()
+          })
+          .catch(() => {})
+      } else {
+        await updateModule(this.moduleData.id, data)
+        this.$message.success(this.$t('Modules.startSuccess'))
+        this.moduleData.enabled = val
+        this.exitDetail()
+      }
+    },
+    exitDetail() {
+      this.clearForm()
+      setTimeout(() => {
+        if (this.oper === 'edit') {
+          if (this.from === 'modules') {
+            this.$router.push('/modules')
+          } else {
+            this.$router.push('/modules/add')
+          }
+        } else {
+          this.$router.push('/modules/add')
+        }
+      }, 10)
+    },
+  },
+}
+</script>
+
+<style lang="scss">
+.module-detail {
+  .show-more {
+    text-align: center;
+    a {
+      position: relative;
+      text-decoration: none;
+    }
+    a::before {
+      content: '';
+      position: absolute;
+      left: -215px;
+      top: 8px;
+      z-index: 9;
+      width: 200px;
+      height: 1px;
+      background-color: #edeef2;
+    }
+    a::after {
+      content: '';
+      position: absolute;
+      right: -215px;
+      top: 8px;
+      z-index: 9;
+      width: 200px;
+      height: 1px;
+      background-color: #edeef2;
+    }
+  }
+
+  .el-form-item {
+    .el-input {
+      width: 100%;
+    }
+
+    .el-select {
+      &:not(.reset-width) {
+        width: 330px;
+      }
+
+      width: 100%;
+    }
+
+    .el-form-item__label {
+      // padding-bottom: 0;
+      font-size: 14px;
+      color: #606266;
+    }
+  }
+
+  .config-item-wrapper {
+    min-height: 100px;
+
+    .params-loading-wrapper {
+      padding: 0 32px;
+    }
+
+    // .el-input,
+    // .el-select {
+    //   width: 200px !important;
+    // }
+  }
+
+  .button-group__center {
+    margin-top: 24px;
+  }
+}
+</style>

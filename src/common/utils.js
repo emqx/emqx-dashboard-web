@@ -117,6 +117,7 @@ export function fillI18n(data = [], keys = [], autoSearch = false) {
 export function renderParamsForm(params = {}, propPrefix = '') {
   let form = []
   const rules = {}
+  let mulObjectData = {}
 
   for (const [k, v] of Object.entries(params)) {
     if (k === '$resource') {
@@ -132,6 +133,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       order = 10,
       format,
       required = false,
+      schema,
     } = v
     let inputType = type
     let elType = 'input'
@@ -151,13 +153,16 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       case 'object':
         elType = 'object'
         break
+      case 'mulobject':
+        mulObjectData = renderParamsForm(schema, 'config')
+        defaultValue = []
+        elType = 'mulobject'
     }
     if (enumValue) {
       elType = 'select'
       field = { list: enumValue }
     }
     const inputPlaceholder = description.length < 24 ? description : ''
-
     // 表单类型, 渲染使用的属性
     form.push({
       formItemAttributes: {
@@ -176,6 +181,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       elType,
       value: elType === 'object' ? {} : defaultValue,
       order,
+      mulObjectData,
     })
     // rules 的属性
     rules[k] = []

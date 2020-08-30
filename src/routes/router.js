@@ -340,6 +340,11 @@ let routes = [
         name: 'module-add',
         component: () => import('@/views/Modules/AddModule'),
       },
+      {
+        path: 'detail',
+        name: 'module-detail',
+        component: () => import('@/views/Modules/ModuleDetail'),
+      },
     ],
   },
   {
