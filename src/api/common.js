@@ -30,7 +30,7 @@ export async function loadNodes() {
 }
 
 export async function loadAlarm() {
-  const list = await http.get('/alarms/present')
+  const list = await http.get('/alarms/activated')
   const data = []
   list.forEach((item) => {
     const { node, alarms } = item
@@ -43,7 +43,7 @@ export async function loadAlarm() {
 }
 
 export async function loadHistoryAlarm() {
-  const list = await http.get('/alarms/history')
+  const list = await http.get('/alarms/deactivated')
   const data = []
   list.forEach((item) => {
     const { node, alarms } = item

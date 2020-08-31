@@ -384,4 +384,18 @@ export function ruleNewSqlParser(sql, e) {
   return parser.stringify(ast)
 }
 
+export function getDateDiff(beginTime, endTime) {
+  const dateDiff = endTime - beginTime
+  const leave1 = dateDiff % (24 * 3600 * 1000)
+  const hours = Math.floor(leave1 / (3600 * 1000))
+
+  const leave2 = leave1 % (3600 * 1000)
+  const minutes = Math.floor(leave2 / (60 * 1000))
+
+  const leave3 = leave2 % (60 * 1000)
+  const seconds = Math.round(leave3 / 1000)
+
+  return `${hours}:${minutes}:${seconds}`
+}
+
 export default {}
