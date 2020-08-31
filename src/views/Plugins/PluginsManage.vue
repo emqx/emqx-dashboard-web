@@ -33,7 +33,7 @@ export default {
 
   data() {
     return {
-      pluginName: this.$route.params.pluginName,
+      pluginName: this.$route.params.pluginName || 'emqx_auth_mnesia',
     }
   },
 

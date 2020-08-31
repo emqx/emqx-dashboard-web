@@ -202,6 +202,10 @@ export default {
     zh: '用户名或 Client ID',
     en: 'Username or Client ID',
   },
+  username: {
+    zh: '用户名',
+    en: 'Username',
+  },
   mnesiaTip: {
     zh: '默认使用 Username，以 auth.mnesia.as 配置为准',
     en: 'Username is used by default, but follow the auth.mnesia.as configuration',

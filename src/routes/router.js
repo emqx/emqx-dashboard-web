@@ -44,6 +44,22 @@ let routes = [
       },
     ],
   },
+  // 认证鉴权
+  {
+    path: '/users_and_acl',
+    component: Layout,
+    meta: {
+      hideKey: 'usersAcl',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'users_and_acl',
+        component: () => import('@/views/Plugins/PluginsManage'),
+      },
+    ],
+  },
   // 连接
   {
     path: '/clients',

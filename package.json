@@ -3,6 +3,7 @@
   "version": "4.1.0",
   "private": true,
   "scripts": {
+    "dev-cloud": "export VUE_APP_BUILD_ENV=cloud && yarn serve",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:config": "node ./script/build.config.js",
