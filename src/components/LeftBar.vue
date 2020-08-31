@@ -2,9 +2,7 @@
   <div class="left-bar" :style="{ width: leftBarCollapse ? '80px' : '200px' }">
     <div class="logo">
       <img class="logo-img" src="../assets/emqx_logo.png" alt="logo" />
-      <div class="title">
-        Dashboard
-      </div>
+      <div class="title">Dashboard</div>
     </div>
 
     <a-menu
@@ -96,7 +94,14 @@ export default {
       {
         title: this.$t('components.monitor'),
         path: '/monitor',
+        key: 'monitor',
         icon: 'icon-yibiaopan',
+      },
+      {
+        title: this.$t('components.usersAcl'),
+        path: '/users_and_acl',
+        key: 'usersAcl',
+        icon: 'icon-kongjian',
       },
       {
         title: this.$t('components.clients'),

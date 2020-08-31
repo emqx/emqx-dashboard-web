@@ -10,10 +10,17 @@
                 <el-input
                   v-model="authRecord.login"
                   size="small"
-                  :placeholder="$t('Plugins.usernameOrClientid')"
+                  :placeholder="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')"
                   @keyup.enter.native="AuthSave"
-                ></el-input>
-                <el-popover trigger="hover" placement="top" :content="$t('Plugins.mnesiaTip')" :tabindex="-1">
+                >
+                </el-input>
+                <el-popover
+                  v-if="!fromCloud"
+                  trigger="hover"
+                  placement="top"
+                  :content="$t('Plugins.mnesiaTip')"
+                  :tabindex="-1"
+                >
                   <a slot="reference" class="tutorial" :href="mnesiaDoc" target="_blank" rel="noopener">
                     <i class="iconfont icon-bangzhu"></i>
                   </a>
@@ -37,7 +44,11 @@
             </el-row>
           </div>
           <el-table :data="authTableData" class="data-list">
-            <el-table-column prop="login" :label="$t('Plugins.usernameOrClientid')"> </el-table-column>
+            <el-table-column
+              prop="login"
+              :label="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')"
+            >
+            </el-table-column>
             <el-table-column prop="oper" width="120px">
               <template slot-scope="{ row }">
                 <el-button type="dashed" size="mini" @click="showAuthEdit(row)">
@@ -75,11 +86,18 @@
                   size="small"
                   value-key="label"
                   :fetch-suggestions="queryACLSearch"
-                  :placeholder="$t('Plugins.usernameOrClientid')"
+                  :placeholder="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')"
                   @select="handleACLSelect"
                   @keyup.enter.native="ACLSave"
-                ></el-autocomplete>
-                <el-popover trigger="hover" placement="top" :content="$t('Plugins.mnesiaTip')" :tabindex="-1">
+                >
+                </el-autocomplete>
+                <el-popover
+                  v-if="!fromCloud"
+                  trigger="hover"
+                  placement="top"
+                  :content="$t('Plugins.mnesiaTip')"
+                  :tabindex="-1"
+                >
                   <a slot="reference" class="tutorial" :href="mnesiaDoc" target="_blank" rel="noopener">
                     <i class="iconfont icon-bangzhu"></i>
                   </a>
@@ -108,7 +126,11 @@
             </el-row>
           </div>
           <el-table :data="aclTableData" class="data-list">
-            <el-table-column prop="login" :label="$t('Plugins.usernameOrClientid')"> </el-table-column>
+            <el-table-column
+              prop="login"
+              :label="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')"
+            >
+            </el-table-column>
             <el-table-column prop="topic" :label="$t('Topics.topic')"> </el-table-column>
             <el-table-column prop="action" :label="$t('Plugins.action')"> </el-table-column>
             <el-table-column prop="allow" :label="$t('Plugins.isAllow')">
@@ -146,7 +168,10 @@
       <el-form ref="editRecord" class="el-form--public app-info" size="medium" :rules="rules" :model="editRecord">
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item prop="login" :label="$t('Plugins.usernameOrClientid')">
+            <el-form-item
+              prop="login"
+              :label="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')"
+            >
               <el-input v-model="editRecord.login" disabled></el-input>
             </el-form-item>
           </el-col>
@@ -182,6 +207,7 @@ import {
   deleteAuthMnesiaACL,
 } from '@/api/plugins'
 import { getLink } from '@/common/utils'
+import store from '@/stores'
 
 export default {
   name: 'AuthMnesiaTable',
@@ -223,6 +249,7 @@ export default {
         { label: 'sub', value: 'sub' },
         { label: 'pubsub', value: 'pubsub' },
       ],
+      fromCloud: false,
     }
   },
 
@@ -233,6 +260,9 @@ export default {
   },
 
   created() {
+    if (store.state.config.baseURL === '/dashboard') {
+      this.fromCloud = true
+    }
     this.loadMnesia()
     this.loadACL()
   },

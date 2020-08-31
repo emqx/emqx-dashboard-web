@@ -6,7 +6,7 @@
     </el-aside>
 
     <el-main style="margin: 0; padding: 0;" :style="elMainStyle">
-      <el-header style="height: 80px; padding: 0;">
+      <el-header v-if="$hasShow('nav-header')" style="height: 80px; padding: 0;">
         <nav-header></nav-header>
         <nav-tabs></nav-tabs>
       </el-header>

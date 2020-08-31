@@ -32,6 +32,10 @@ export default {
     zh: '连接',
     en: 'Connections',
   },
+  usersAcl: {
+    zh: '认证鉴权',
+    en: 'Users & ACL',
+  },
   clients: {
     zh: '客户端',
     en: 'Clients',

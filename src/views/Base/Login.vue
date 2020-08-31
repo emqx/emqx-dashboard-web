@@ -46,6 +46,7 @@
 <script>
 import { auth } from '@/api/common'
 import { awaitWrap } from '@/common/utils'
+import store from '@/stores'
 
 export default {
   name: 'Login',
@@ -68,10 +69,26 @@ export default {
       },
       isNeedAuth: true,
       fullLoading: false,
+      fromCloud: false,
     }
   },
 
+  computed: {
+    lang() {
+      return this.$store.state.lang
+    },
+  },
+
   created() {
+    if (store.state.config.baseURL === '/dashboard') {
+      this.fromCloud = true
+    }
+    const { lang } = this.$route.query
+    if (['en', 'zh'].indexOf(lang) !== -1 && this.language !== lang && this.fromCloud) {
+      document.querySelector('html').setAttribute('lang', lang)
+      localStorage.setItem('language', lang)
+      this.$i18n.locale = lang
+    }
     this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
     this.autoLogin()
   },
@@ -90,7 +107,7 @@ export default {
           this.loginError = ''
           this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember })
           setTimeout(() => {
-            const { to = '/' } = this.$route.query
+            const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query
             this.$router.replace({
               path: to,
             })
