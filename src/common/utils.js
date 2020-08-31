@@ -155,7 +155,9 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         break
       case 'mulobject':
         mulObjectData = renderParamsForm(schema, 'config')
-        defaultValue = []
+        if(!defaultValue.length) {
+          defaultValue = []
+        }
         elType = 'mulobject'
     }
     if (enumValue) {
@@ -179,7 +181,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       key: k,
       type: inputType,
       elType,
-      value: elType === 'object' ? {} : defaultValue,
+      value: elType === 'object' && !Object.keys(defaultValue).length ? {} : defaultValue,
       order,
       mulObjectData,
     })
