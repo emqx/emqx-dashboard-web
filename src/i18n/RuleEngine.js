@@ -592,27 +592,27 @@ export default {
   },
   data_persist: {
     zh: '数据持久化',
-    ja: '',
+    ja: 'データの永続化',
     en: 'Data persist',
   },
   offline_msgs: {
     zh: '离线消息',
-    ja: '',
+    ja: 'オフラインメッセージ',
     en: 'Offline messages',
   },
   data_forward: {
     zh: '数据转发',
-    ja: '',
+    ja: 'データ転送',
     en: 'Data forward',
   },
   debug: {
     zh: '调试',
-    ja: '',
+    ja: 'デバッグ',
     en: 'Debug',
   },
   server_side_subscription: {
     zh: '代理订阅',
-    ja: '',
+    ja: 'サーバー・サイド・サブスクリプション',
     en: 'Server side subscription',
   },
   resourceID: {
