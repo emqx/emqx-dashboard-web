@@ -107,7 +107,7 @@ export function loadAuthMnesia(login) {
 
 // Update Auth mnesia
 export function updateAuthMnesia(login, body) {
-  return http.put(`/auth_user/${login}`, body)
+  return http.put(`/auth_user/${encodeURIComponent(login)}`, body)
 }
 
 // Load Auth mnesia ACL
@@ -122,12 +122,12 @@ export function addAuthMnesiaACL(body) {
 
 // Delete Auth mnesia ACL
 export function deleteAuthMnesiaACL(login, topic) {
-  return http.delete(`/emqx_acl/${login}/${encodeURIComponent(topic)}`)
+  return http.delete(`/emqx_acl/${encodeURIComponent(login)}/${encodeURIComponent(topic)}`)
 }
 
 // Auth mnesia ACL Detail
 export function loadAuthMnesiaACL(login) {
-  return http.get(`/emqx_acl/${login}`)
+  return http.get(`/emqx_acl/${encodeURIComponent(login)}`)
 }
 
 export default {}
