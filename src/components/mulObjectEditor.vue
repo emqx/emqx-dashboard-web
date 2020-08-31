@@ -91,6 +91,17 @@ export default {
   },
 
   methods: {
+    assignValue() {
+      if (this.value.length) {
+        for (let i = 0; i < this.value.length; i += 1) {
+          this.addColumn()
+        }
+        this.value.forEach((item) => {
+          const index = this.value.indexOf(item)
+          Object.assign(this.tableData[index], item)
+        })
+      }
+    },
     initData() {
       const { form } = this.data
       // eslint-disable-next-line no-unused-vars
@@ -102,7 +113,7 @@ export default {
         this.oneRow[key] = value
         this.defaultConfig[key] = value
       })
-      this.addColumn()
+      this.assignValue()
     },
     labelHeads(h, { column }) {
       return h('span', { class: 'table-head', style: { width: '100%' } }, [column.label])
@@ -124,7 +135,7 @@ export default {
     },
     addColumn() {
       const row = { ...this.oneRow }
-      row.key = new Date().getTime()
+      row.key = Math.random().toString(16).slice(3)
       this.tableData.push(row)
     },
   },
