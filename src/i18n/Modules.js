@@ -119,4 +119,48 @@ export default {
     zh: '配置信息',
     en: 'Configuration',
   },
+  listener: {
+    zh: '监听器',
+    en: 'Listeners',
+  },
+  addListener: {
+    zh: '添加监听器',
+    en: 'Add Listener',
+  },
+  editListener: {
+    zh: '编辑监听器',
+    en: 'Edit Listener',
+  },
+  edit: {
+    zh: '编辑',
+    en: 'Edit',
+  },
+  remove: {
+    zh: '移除',
+    en: 'Remove',
+  },
+  listen_on: {
+    zh: '监听地址',
+    en: 'Listener',
+  },
+  listener_type: {
+    zh: '监听类型',
+    en: 'Listener Type',
+  },
+  acceptors: {
+    zh: '接收器个数',
+    en: 'Acceptors',
+  },
+  active_n: {
+    zh: 'Active',
+    en: 'Active',
+  },
+  max_conn_rate: {
+    zh: '每秒最大连接数',
+    en: 'Max CPS',
+  },
+  max_connections: {
+    zh: '最大连接数',
+    en: 'Max Connections',
+  },
 }
