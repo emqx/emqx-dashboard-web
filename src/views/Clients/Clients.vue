@@ -30,8 +30,22 @@
               <span class="btn" @click="showDialog('view', row)">{{ row.client_id }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="user_name" min-width="120px" :label="$t('Clients.username')"> </el-table-column>
-          <el-table-column prop="thing_id" min-width="120px" :label="$t('Clients.modelId')"> </el-table-column>
+          <el-table-column prop="ip_addr" min-width="140px" :label="$t('Clients.ipAddress')">
+            <template slot-scope="{ row }"> {{ row.ip_addr }}</template>
+          </el-table-column>
+          <el-table-column prop="thing_id" :label="$t('Clients.modelId')"> </el-table-column>
+          <el-table-column prop="user_name" :label="$t('Clients.username')"> </el-table-column>
+          <el-table-column prop="protocol" :label="$t('Clients.protocol')"> </el-table-column>
+          <el-table-column prop="conn_status" :label="$t('Clients.connectedStatus')">
+            <template slot-scope="{ row }">
+              <a-badge
+                is-dot
+                :status="row.conn_status ? 'success' : 'error'"
+                :text="row.conn_status ? $t('Clients.connected') : $t('Clients.disconnected')"
+              >
+              </a-badge>
+            </template>
+          </el-table-column>
         </el-table>
       </a-card>
     </div>
@@ -50,16 +64,21 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="user_name" :label="$t('Clients.username')">
-              <el-input v-model="record.user_name"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item prop="thing_id" :label="$t('Models.modelName')">
               <el-select v-model="record.thing_id">
                 <el-option v-for="(item, index) in ModelData" :key="index" :value="item.id" :label="item.thing_name">
                 </el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item prop="user_name" :label="$t('Clients.username')">
+              <el-input v-model="record.user_name"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="accessType === 'view'" :span="12">
+            <el-form-item prop="password" :label="$t('Base.password')">
+              <el-input v-model="devicePwd[record.client_id]"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -101,6 +120,12 @@ export default {
       },
       ModelData: [],
     }
+  },
+
+  computed: {
+    devicePwd() {
+      return JSON.parse(localStorage.getItem('devicePwd')) || {}
+    },
   },
 
   watch: {
@@ -146,7 +171,9 @@ export default {
         }
         const record = { ...this.record }
         record.product_id = parseInt(this.$route.query.id, 10)
-        createDevice(record).then(() => {
+        createDevice(record).then((res) => {
+          this.devicePwd[record.client_id] = res.items[0].password
+          localStorage.setItem('devicePwd', JSON.stringify(this.devicePwd))
           this.$message.success(this.$t('Base.createSuccess'))
           this.dialogVisible = false
           this.accessType = ''

@@ -20,7 +20,7 @@
           <template slot-scope="{ row }">
             <el-switch
               disabled
-              v-model="switchDic[row.app_status]"
+              v-model="row.app_status"
               active-color="#13ce66"
               inactive-color="#d0d3e0"
               @change="updateApps(row)"
@@ -107,7 +107,7 @@ export default {
         { label: this.$t('General.disabled'), value: 0 },
       ],
       record: {
-        app_status: 1, // 是否启用
+        app_status: true, // 是否启用
       },
       rules: {
         app_name: [{ required: true, message: this.$t('General.pleaseEnterAppName') }],
@@ -154,7 +154,7 @@ export default {
       } else {
         this.record = {
           app_id: Math.random().toString(16).slice(3),
-          app_status: 1,
+          app_status: true,
           product_id: parseInt(this.$route.query.id, 10),
         }
       }
