@@ -3,7 +3,7 @@
     <page-header>
       <div class="page-header-title-view">
         <div class="title">
-          <!-- {{ moduleData.title[lang] }} -->
+          {{ moduleData.title[lang] }}
         </div>
       </div>
       <div class="page-header-content-view">
@@ -33,8 +33,8 @@
 
             <template v-else-if="configList.length > 0">
               <el-col :span="16">
-                <el-col :span="24">
-                  <div v-for="(item, i) in configList" :key="i">
+                <div v-for="(item, i) in configList" :key="i">
+                  <template v-if="item.key !== 'listener'">
                     <el-col
                       :span="item.type === 'textarea' || item.type === 'object' || item.type === 'mulobject' ? 24 : 12"
                     >
@@ -87,29 +87,35 @@
                         </template>
                       </el-form-item>
                     </el-col>
-                  </div>
-                </el-col>
-                <el-col :span="24">
-                  <div class="button-group__center">
-                    <template v-if="oper == 'edit'">
-                      <el-button v-if="!moduleData.enabled" size="small" @click="toggleStatus(true)">
-                        {{ $t('Modules.run') }}
-                      </el-button>
-                      <el-button v-else size="small" @click="toggleStatus(false)">{{ $t('Modules.stop') }}</el-button>
-                    </template>
-                    <el-button size="small" @click="exitDetail">{{ $t('Base.cancel') }}</el-button>
-                    <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate()">
-                      <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>
-                      <span v-else>{{ $t('Base.confirm') }}</span>
-                    </el-button>
-                  </div>
-                </el-col>
+                  </template>
+                </div>
               </el-col>
             </template>
           </el-row>
         </el-form>
       </el-card>
+      <el-card v-if="listener" class="listener-wrapper">
+        <div class="emq-title">
+          {{ $t('Modules.listener') }}
+        </div>
+        <Listeners v-model="record.config['listeners']" :listenerData="listener"> </Listeners>
+      </el-card>
     </div>
+    <el-col :span="16">
+      <div class="button-group__center">
+        <template v-if="oper == 'edit'">
+          <el-button v-if="!moduleData.enabled" size="small" @click="toggleStatus(true)">
+            {{ $t('Modules.run') }}
+          </el-button>
+          <el-button v-else size="small" @click="toggleStatus(false)">{{ $t('Modules.stop') }}</el-button>
+        </template>
+        <el-button size="small" @click="exitDetail">{{ $t('Base.cancel') }}</el-button>
+        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate()">
+          <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>
+          <span v-else>{{ $t('Base.confirm') }}</span>
+        </el-button>
+      </div>
+    </el-col>
   </div>
 </template>
 
@@ -118,11 +124,12 @@ import { createModule, loadAllModules, updateModule, destroyModule } from '@/api
 import { renderParamsForm, fillI18n } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import MulObjectEditor from '@/components/MulObjectEditor'
+import Listeners from './components/Listeners'
 
 export default {
   name: 'ModuleDetail',
 
-  components: { KeyAndValueEditor, MulObjectEditor },
+  components: { KeyAndValueEditor, MulObjectEditor, Listeners },
 
   inheritAttrs: false,
 
@@ -137,6 +144,7 @@ export default {
         config: {},
       },
       allModuleList: [],
+      listener: {},
     }
   },
 
@@ -157,6 +165,7 @@ export default {
 
   created() {
     this.loadData()
+    this.initListeners()
   },
 
   methods: {
@@ -179,7 +188,9 @@ export default {
         }, 10)
       }
     },
-    loadConfigList(paramsData) {
+    loadConfigList(params) {
+      const { listener, ...paramsData } = params
+      this.listener = listener
       this.configLoading = true
       const configData = renderParamsForm(paramsData, 'config')
       const { form, rules } = configData
@@ -189,6 +200,7 @@ export default {
       form.forEach(({ key, value }) => {
         this.$set(this.record.config, key, value)
       })
+      this.initListeners()
       this.configLoading = false
       if (this.$refs.record) {
         setTimeout(this.$refs.record.clearValidate, 10)
@@ -213,7 +225,10 @@ export default {
 
       if (this.oper === 'add') {
         this.record.type = this.moduleData.type
-        await createModule(this.record)
+        const data = await createModule(this.record)
+        const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+        addedModules[data.type] = data.id
+        localStorage.setItem('addedModules', JSON.stringify(addedModules))
         this.$message.success(this.$t('Modules.moduleAddSuccess'))
       } else {
         const { type, id, enabled, description } = this.moduleData
@@ -264,6 +279,9 @@ export default {
         .then(async () => {
           await destroyModule(this.moduleData.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          delete addedModules[this.moduleData.type]
+          localStorage.setItem('addedModules', JSON.stringify(addedModules))
           this.exitDetail()
         })
         .catch(() => {})
@@ -306,40 +324,18 @@ export default {
         }
       }, 10)
     },
+    initListeners() {
+      if (this.listener) {
+        const { listeners } = this.moduleData.config
+        this.record.config.listeners = listeners || []
+      }
+    },
   },
 }
 </script>
 
 <style lang="scss">
 .module-detail {
-  .show-more {
-    text-align: center;
-    a {
-      position: relative;
-      text-decoration: none;
-    }
-    a::before {
-      content: '';
-      position: absolute;
-      left: -215px;
-      top: 8px;
-      z-index: 9;
-      width: 200px;
-      height: 1px;
-      background-color: #edeef2;
-    }
-    a::after {
-      content: '';
-      position: absolute;
-      right: -215px;
-      top: 8px;
-      z-index: 9;
-      width: 200px;
-      height: 1px;
-      background-color: #edeef2;
-    }
-  }
-
   .el-form-item {
     .el-input {
       width: 100%;
@@ -354,7 +350,6 @@ export default {
     }
 
     .el-form-item__label {
-      // padding-bottom: 0;
       font-size: 14px;
       color: #606266;
     }
@@ -366,14 +361,13 @@ export default {
     .params-loading-wrapper {
       padding: 0 32px;
     }
-
-    // .el-input,
-    // .el-select {
-    //   width: 200px !important;
-    // }
   }
 
   .button-group__center {
+    margin-bottom: 24px;
+  }
+
+  .listener-wrapper {
     margin-top: 24px;
   }
 }

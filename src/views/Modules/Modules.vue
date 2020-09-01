@@ -38,7 +38,7 @@
               <div class="left-box">
                 <img :src="item.img" alt="" class="item-img" />
                 <div class="item-content">
-                  <div class="item-title">{{ item.type }}</div>
+                  <div class="item-title">{{ item.title[lang] }}</div>
                   <div class="item-des">
                     {{ item.description[lang] }}
                   </div>
@@ -132,7 +132,7 @@ export default {
         return
       }
       setTimeout(async () => {
-        const res = await matchSearch(this.list, 'name', this.searchVal)
+        const res = await matchSearch(this.list, 'localTitle', this.searchVal)
         if (res) {
           this.showList = res
           this.searchLoading = false
@@ -155,6 +155,7 @@ export default {
       this.moduleCount = this.list.length
       if (this.moduleCount) {
         this.list.forEach((item) => {
+          item.localTitle = item.title[this.lang]
           // eslint-disable-next-line global-require
           item.img = require('../../assets/plugin_icon/emqx_backend_mysql.png')
           addedModules[item.type] = item.id
