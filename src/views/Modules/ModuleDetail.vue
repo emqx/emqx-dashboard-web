@@ -22,7 +22,7 @@
     </page-header>
     <div class="app-wrapper">
       <el-card>
-        <div class="emq-title">
+        <div class="emq-title module-title">
           {{ $t('Modules.configuration') }}
         </div>
         <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
@@ -95,7 +95,7 @@
         </el-form>
       </el-card>
       <el-card v-if="listener" class="listener-wrapper">
-        <div class="emq-title">
+        <div class="emq-title listener-title">
           {{ $t('Modules.listener') }}
         </div>
         <Listeners v-model="record.config['listeners']" :listenerData="listener"> </Listeners>
@@ -209,6 +209,10 @@ export default {
     async handleCreate() {
       const valid = await this.$refs.record.validate()
       if (!valid) {
+        return
+      }
+      if (this.listener && !this.record.config.listeners.length) {
+        this.$message.error(this.$t('Modules.emptyListenerTip'))
         return
       }
       const { config } = this.record
@@ -340,6 +344,21 @@ export default {
 
 <style lang="scss">
 .module-detail {
+  .module-title {
+    margin-bottom: 10px;
+  }
+
+  .listener-title {
+    margin-bottom: 20px;
+
+    &::before {
+      content: '*';
+      color: #f5222d;
+      font-size: 12px;
+      vertical-align: text-bottom;
+    }
+  }
+
   .el-form-item {
     .el-input {
       width: 100%;

@@ -1,14 +1,5 @@
 import http from '@/common/http'
 
-// export function listModules(nodeName) {
-//   return http.get(`/nodes/${nodeName}/modules`)
-// }
-
-// export function updateModules(nodeName, { active, name }) {
-//   const operation = active ? 'unload' : 'load'
-//   return http.put(`/nodes/${nodeName}/modules/${name}/${operation}`)
-// }
-
 export function loadAllModules() {
   return http.get('/module_types')
 }
@@ -31,5 +22,9 @@ export function destroyModule(id) {
 
 export function updateModule(id, body = {}) {
   return http.put(`/modules/${id}`, body)
+}
+
+export function loadConfig(type) {
+  return http.get(`/module_types/${type}`)
 }
 export default {}

@@ -301,6 +301,7 @@ export default {
 @import './style/module.scss';
 
 .add-module {
+  transform: none;
   .header-box {
     width: 100%;
     height: 112px;
