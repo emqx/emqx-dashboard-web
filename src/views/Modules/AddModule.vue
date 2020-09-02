@@ -13,7 +13,7 @@
           >
             {{ item.name }}
           </div>
-          <el-col :span="6" :offset="2">
+          <el-col :span="6" :offset="1">
             <el-input
               v-model="searchVal"
               type="text"
@@ -326,8 +326,7 @@ export default {
       }
 
       .modules-num {
-        margin-left: 12px;
-        margin-right: 20px;
+        margin: 0 12px;
       }
 
       .module-class {
