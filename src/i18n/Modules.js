@@ -163,4 +163,8 @@ export default {
     zh: '最大连接数',
     en: 'Max Connections',
   },
+  emptyListenerTip: {
+    zh: '请添加监听器！',
+    en: 'Please add Listener!',
+  },
 }

@@ -49,10 +49,8 @@
                       v-bind="item.bindAttributes"
                     >
                     </el-input>
-
                     <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes"> </el-input>
                   </template>
-
                   <!-- select -->
                   <template v-else>
                     <emq-select
@@ -181,13 +179,13 @@ export default {
         this.$set(optionRecordConfig, key, value)
       })
       this.record.config = Object.assign(commonRecordConfig, optionRecordConfig)
-      this.record.config.listener_type = type
       this.rules.config = Object.assign(commonRulesConfig, rules)
       if (this.currentOper === 'edit') {
         Object.assign(this.record.config, this.selectedListener)
       }
+      this.record.config.listener_type = type
     },
-    clearOldData() {
+    cleanOldData() {
       this.commonConfigs = []
       this.commonRules.config = {}
       this.rules.config = {}
@@ -196,7 +194,7 @@ export default {
       this.showConfigList = []
     },
     loadConfigList() {
-      this.clearOldData()
+      this.cleanOldData()
       this.configLoading = true
       const { ...allData } = this.listenerData
       Object.keys(allData).forEach((item) => {
@@ -225,14 +223,12 @@ export default {
       }
       this.configLoading = false
     },
-
     atDialogClose() {
       setTimeout(() => {
         this.$refs.record.clearValidate()
         this.listenerDialogVisible = false
       }, 10)
     },
-
     async handleCreate() {
       const valid = await this.$refs.record.validate()
       if (!valid) {
@@ -295,6 +291,7 @@ export default {
     border: 1px dashed #f2f2f2;
     transition: border 0.3s;
     position: relative;
+    border-radius: 4px;
 
     .listener-item-head {
       display: flex;

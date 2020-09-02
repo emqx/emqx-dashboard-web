@@ -23,23 +23,18 @@
               <span>{{ row.message }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="node" :label="$t('Alerts.triggerNode')" min-width="120px"></el-table-column>
-          <el-table-column prop="node" :label="$t('Alerts.alarmLevel')" min-width="100px">
+          <el-table-column prop="node" :label="$t('Alerts.triggerNode')"></el-table-column>
+          <el-table-column prop="node" :label="$t('Alerts.alarmLevel')">
             <template>
               {{ $t('Alerts.system') }}
             </template>
           </el-table-column>
-          <el-table-column prop="activate_at" width="180px" :label="$t('Alerts.activateAt')">
+          <el-table-column prop="activate_at" :label="$t('Alerts.activateAt')">
             <template slot-scope="{ row }">
               {{ dateFormat(row.activate_at) }}
             </template>
           </el-table-column>
-          <el-table-column
-            v-if="alertType === 'history'"
-            prop="deactivate_at"
-            width="180px"
-            :label="$t('Alerts.deactivateAt')"
-          >
+          <el-table-column v-if="alertType === 'history'" prop="deactivate_at" :label="$t('Alerts.deactivateAt')">
             <template slot-scope="{ row }">
               {{ dateFormat(row.deactivate_at) }}
             </template>

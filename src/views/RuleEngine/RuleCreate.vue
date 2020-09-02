@@ -457,10 +457,14 @@ export default {
   }
 
   .required-title {
-    &:after {
+    position: relative;
+    &::before {
       content: '*';
       color: #f5222d;
-      margin-right: 4px;
+      font-size: 12px;
+      position: absolute;
+      left: -10px;
+      top: 3px;
     }
   }
 

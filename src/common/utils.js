@@ -155,7 +155,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         break
       case 'mulobject':
         mulObjectData = renderParamsForm(schema, 'config')
-        if(!defaultValue.length) {
+        if (!defaultValue.length) {
           defaultValue = []
         }
         elType = 'mulobject'
