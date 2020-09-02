@@ -229,15 +229,15 @@ export default {
     },
     loadIcon() {
       const iconMap = {}
-      this.tableData.forEach((item) => {
-        const { name } = item
-        try {
-          // eslint-disable-next-line
-          iconMap[name] = require(`../../assets/plugin_icon/${name}.png`)
-        } catch (e) {
-          console.log(e)
-        }
-      })
+      // this.tableData.forEach((item) => {
+      //   const { name } = item
+      //   try {
+      //     // eslint-disable-next-line
+      //     iconMap[name] = require(`../../assets/plugin_icon/${name}.png`)
+      //   } catch (e) {
+      //     console.log(e)
+      //   }
+      // })
       return iconMap
     },
     toConfig(item = {}) {
