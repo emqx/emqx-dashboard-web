@@ -156,8 +156,12 @@ export default {
       if (this.moduleCount) {
         this.list.forEach((item) => {
           item.localTitle = item.title[this.lang]
-          // eslint-disable-next-line global-require
-          item.img = require('../../assets/plugin_icon/emqx_backend_mysql.png')
+          try {
+            // eslint-disable-next-line
+            item.img = require(`../../assets/module_icon/${item.type}.png`)
+          } catch (e) {
+            console.log(e)
+          }
           addedModules[item.type] = item.id
         })
         localStorage.setItem('addedModules', JSON.stringify(addedModules))

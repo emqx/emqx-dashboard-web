@@ -270,8 +270,12 @@ export default {
       this.classList.forEach((item) => {
         const { id } = item
         this.allFeatures[id].forEach((one) => {
-          // eslint-disable-next-line global-require
-          one.img = require('../../assets/plugin_icon/emqx_backend_mysql.png')
+          try {
+            // eslint-disable-next-line
+            one.img = require(`../../assets/module_icon/${one.name}.png`)
+          } catch (e) {
+            console.log(e)
+          }
         })
       })
     },
