@@ -326,8 +326,12 @@ export default {
     },
     initListeners() {
       if (this.listener) {
-        const { listeners } = this.moduleData.config
-        this.record.config.listeners = listeners || []
+        if (this.oper === 'add') {
+          this.record.config.listeners = []
+        } else {
+          const { listeners } = this.moduleData.config
+          this.record.config.listeners = listeners || []
+        }
       }
     },
   },
