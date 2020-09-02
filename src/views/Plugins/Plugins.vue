@@ -227,19 +227,6 @@ export default {
       }
       return pluginTypes[type] || this.$t('Plugins.feature')
     },
-    loadIcon() {
-      const iconMap = {}
-      // this.tableData.forEach((item) => {
-      //   const { name } = item
-      //   try {
-      //     // eslint-disable-next-line
-      //     iconMap[name] = require(`../../assets/plugin_icon/${name}.png`)
-      //   } catch (e) {
-      //     console.log(e)
-      //   }
-      // })
-      return iconMap
-    },
     toConfig(item = {}) {
       const { name } = item
       const node = this.nodeName
@@ -261,7 +248,6 @@ export default {
       this.nodeName = this.nodeName || (this.nodes[0] || {}).node
       this.tableData = await loadPlugins(this.nodeName)
       this.handleFilter()
-      this.iconMap = this.loadIcon()
       this.searchVal = ''
     },
     handleFilter() {
