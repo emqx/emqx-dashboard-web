@@ -39,9 +39,6 @@
         <el-tab-pane :label="$t('components.clients')" name="clients">
           <Clients :tab="activeName"></Clients>
         </el-tab-pane>
-        <el-tab-pane :label="$t('components.apps')" name="apps">
-          <Apps :tab="activeName"></Apps>
-        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -50,7 +47,6 @@
 <script>
 import Clients from '../Clients/Clients'
 import Models from '../Models/Models'
-import Apps from '../Apps/Apps'
 import Service from '../Service/Service'
 import { showProduct } from '@/api/products'
 
@@ -60,7 +56,6 @@ export default {
   components: {
     Clients,
     Models,
-    Apps,
     Service,
   },
 

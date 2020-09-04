@@ -8,13 +8,7 @@
       </div>
 
       <el-table :data="tableData" class="data-list">
-        <el-table-column prop="service_name" :label="$t('Services.name')">
-          <template slot-scope="{ row }">
-            <span class="btn" @click="showDialog('view', row)">
-              {{ row.service_name }}
-            </span>
-          </template>
-        </el-table-column>
+        <el-table-column prop="service_name" :label="$t('Services.name')"></el-table-column>
         <el-table-column prop="id" label="ID"></el-table-column>
         <el-table-column prop="service_type" :label="$t('Services.type')">
           <template slot-scope="scope">
@@ -35,28 +29,28 @@
       </el-table>
     </a-card>
 
-    <el-dialog width="600px" :title="dialogTitle" :visible.sync="dialogVisible" @close="clearInput">
+    <el-dialog width="520px" :title="dialogTitle" :visible.sync="dialogVisible" @close="clearInput">
       <el-form ref="recordForm" size="small" :model="record" :rules="accessType === 'view' ? {} : rules">
-        <el-row :gutter="20">
-          <el-col :span="12">
+        <el-row>
+          <el-col :span="24">
             <el-form-item prop="service_name" :label="$t('Services.name')">
               <el-input v-model="record.service_name" :readonly="accessType === 'view'"> </el-input>
             </el-form-item>
           </el-col>
-          <el-col v-if="accessType !== 'create'" :span="12">
+          <el-col v-if="accessType !== 'create'" :span="24">
             <el-form-item prop="id" label="ID">
               <el-input v-model="record.id" :readonly="accessType === 'view'" :disabled="accessType === 'edit'">
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item prop="topic" :label="$t('Services.topic')">
               <el-input v-model="record.topic" :readonly="accessType === 'view'"> </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item prop="service_type" :label="$t('Services.type')">
-              <el-select v-model="record.service_type" :readonly="accessType === 'view'">
+              <el-select v-model="record.service_type" :disabled="accessType === 'view'">
                 <el-option v-for="(item, index) in typeList" :key="index" :value="item.value" :label="item.label">
                 </el-option>
               </el-select>

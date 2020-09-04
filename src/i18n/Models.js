@@ -8,8 +8,8 @@ export default {
     en: 'Edit',
   },
   modelName: {
-    zh: '模型名称',
-    en: 'Model Name',
+    zh: '模型',
+    en: 'Model',
   },
   confirmDelete: {
     zh: '确认删除此物模型?',
@@ -193,5 +193,33 @@ export default {
   emptyProps: {
     zh: '属性不能为空!',
     en: 'The properties cannot be null!',
+  },
+  downTest: {
+    zh: '下行数据召测',
+    en: 'Downlink data call test',
+  },
+  upTest: {
+    zh: '上行数据召测',
+    en: 'Uplink data call test',
+  },
+  downSend: {
+    zh: '下行参数下发',
+    en: 'Down parameter issue',
+  },
+  upSend: {
+    zh: '上行参数下发',
+    en: 'Uplink parameter release',
+  },
+  downControl: {
+    zh: '下行操作控制',
+    en: 'Downlink operation control',
+  },
+  upControl: {
+    zh: '上行操作控制',
+    en: 'Uplink operation control',
+  },
+  reportData: {
+    zh: '上报数据',
+    en: 'Reported data',
   },
 }

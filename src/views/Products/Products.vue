@@ -34,24 +34,24 @@
     </div>
 
     <el-dialog
-      width="600px"
+      width="520px"
       :title="accessType === 'edit' ? $t('Products.editProduct') : $t('Products.createProduct')"
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="accessType === 'view' ? {} : rules">
-        <el-row :gutter="20">
-          <el-col :span="12">
+        <el-row>
+          <el-col :span="24">
             <el-form-item prop="product_name" :label="$t('Products.productName')">
               <el-input v-model="record.product_name"> </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item prop="product_model" :label="$t('Products.deviceModel')">
               <el-input v-model="record.product_model"> </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item prop="product_desp" :label="$t('Products.productDes')">
               <el-input v-model="record.product_desp" type="textarea"></el-input>
             </el-form-item>
@@ -85,9 +85,7 @@ export default {
       record: {},
       rules: {
         product_name: [{ required: true, message: this.$t('Models.isRequired') }],
-        id: [{ required: true, message: this.$t('Models.isRequired') }],
         product_model: [{ required: true, message: this.$t('Models.isRequired') }],
-        product_desp: [{ required: true, message: this.$t('Models.isRequired') }],
       },
     }
   },
