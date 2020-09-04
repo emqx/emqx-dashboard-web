@@ -7,11 +7,26 @@
         </el-button>
         <div class="emq-table-header">
           <el-row class="search-wrapper" :gutter="20">
-            <el-col :span="8">
-              <el-input v-model="fuzzyParams.user_name" size="small" :placeholder="$t('Clients.username')"></el-input>
-            </el-col>
-            <el-col :span="8">
-              <el-input v-model="fuzzyParams.client_id" size="small" :placeholder="$t('Clients.clientId')"></el-input>
+            <el-col :span="19">
+              <el-col :span="6">
+                <el-input v-model="fuzzyParams.client_id" size="small" :placeholder="$t('Clients.clientId')"></el-input>
+              </el-col>
+              <el-col :span="6">
+                <el-input v-model="fuzzyParams.user_name" size="small" :placeholder="$t('Clients.username')"></el-input>
+              </el-col>
+              <el-col :span="6">
+                <el-input v-model="fuzzyParams.ip_addr" size="small" :placeholder="$t('Clients.ipAddress')"></el-input>
+              </el-col>
+              <el-col :span="6">
+                <el-select v-model="fuzzyParams.conn_status" size="small">
+                  <el-option
+                    v-for="(item, index) in connectStatusList"
+                    :key="index"
+                    :value="item.value"
+                    :label="item.label"
+                  ></el-option>
+                </el-select>
+              </el-col>
             </el-col>
             <div class="col-oper">
               <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
@@ -30,11 +45,11 @@
               <span class="btn" @click="showDialog('view', row)">{{ row.client_id }}</span>
             </template>
           </el-table-column>
+          <el-table-column prop="user_name" :label="$t('Clients.username')"> </el-table-column>
           <el-table-column prop="ip_addr" min-width="140px" :label="$t('Clients.ipAddress')">
             <template slot-scope="{ row }"> {{ row.ip_addr }}</template>
           </el-table-column>
-          <el-table-column prop="thing_id" :label="$t('Clients.modelId')"> </el-table-column>
-          <el-table-column prop="user_name" :label="$t('Clients.username')"> </el-table-column>
+          <el-table-column prop="thing_name" :label="$t('Models.modelName')"> </el-table-column>
           <el-table-column prop="protocol" :label="$t('Clients.protocol')"> </el-table-column>
           <el-table-column prop="conn_status" :label="$t('Clients.connectedStatus')">
             <template slot-scope="{ row }">
@@ -51,39 +66,39 @@
     </div>
 
     <el-dialog
-      width="600px"
+      width="520px"
       :title="accessType === 'view' ? $t('Clients.viewEquipment') : $t('Clients.createEquipment')"
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
-        <el-row :gutter="20">
-          <el-col :span="12">
+        <el-row>
+          <el-col :span="24">
             <el-form-item prop="client_id" :label="$t('Clients.clientId')">
-              <el-input v-model="record.client_id"></el-input>
+              <el-input v-model="record.client_id" :readonly="accessType === 'view'"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item prop="thing_id" :label="$t('Models.modelName')">
-              <el-select v-model="record.thing_id">
+              <el-select v-model="record.thing_id" :disabled="accessType === 'view'">
                 <el-option v-for="(item, index) in ModelData" :key="index" :value="item.id" :label="item.thing_name">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="24">
             <el-form-item prop="user_name" :label="$t('Clients.username')">
-              <el-input v-model="record.user_name"></el-input>
+              <el-input v-model="record.user_name" :readonly="accessType === 'view'"></el-input>
             </el-form-item>
           </el-col>
-          <el-col v-if="accessType === 'view'" :span="12">
+          <el-col v-if="accessType === 'view'" :span="24">
             <el-form-item prop="password" :label="$t('Base.password')">
-              <el-input v-model="devicePwd[record.client_id]"></el-input>
+              <el-input v-model="devicePwd[record.client_id]" :readonly="accessType === 'view'"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <div slot="footer" class="dialog-align-footer">
+      <div v-if="accessType !== 'view'" slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
         <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
       </div>
@@ -119,6 +134,10 @@ export default {
         thing_id: [{ required: true, message: this.$t('Models.isRequired') }],
       },
       ModelData: [],
+      connectStatusList: [
+        { value: true, label: this.$t('Clients.connected') },
+        { value: false, label: this.$t('Clients.disconnected') },
+      ],
     }
   },
 
@@ -132,6 +151,7 @@ export default {
     tab(val) {
       if (val === 'clients') {
         this.loadData(this.$route.query.id)
+        this.loadModelData()
       }
     },
   },
@@ -142,7 +162,6 @@ export default {
       this.ModelData = data.items
     },
     showDialog(type, item) {
-      this.loadModelData()
       this.accessType = type
       if (type === 'view') {
         Object.assign(this.record, item)
@@ -195,10 +214,18 @@ export default {
     },
     genQueryParams(params) {
       let newParams = {}
-      const { client_id, user_name } = params
+      const { client_id, user_name, ip_addr, conn_status } = params
+      let connStatus = ''
+      if (conn_status === true) {
+        connStatus = 'true'
+      } else if (conn_status === false) {
+        connStatus = 'false'
+      }
       newParams = {
         client_id: client_id || undefined,
         user_name: user_name || undefined,
+        ip_addrf: ip_addr || undefined,
+        conn_status: connStatus || undefined,
       }
       return newParams
     },
@@ -208,6 +235,13 @@ export default {
         .then((res) => {
           this.listLoading = false
           this.tableData = res.items
+          this.tableData.forEach((item) => {
+            this.ModelData.forEach((one) => {
+              if (item.thing_id === one.id) {
+                item.thing_name = one.thing_name
+              }
+            })
+          })
         })
         .catch()
     },
