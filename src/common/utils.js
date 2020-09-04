@@ -2,14 +2,15 @@
 import Clipboard from 'clipboard'
 import sqlFormatter from 'sql-formatter'
 import parser from 'js-sql-parser'
-import Vue from 'vue'
 
 import store from '@/stores'
 import router from '@/routes'
-
-const { lang = 'zh' } = store.state
+import lang from '@/i18n'
 
 import { enDocsLink, zhDocsLink, pluginsZh, pluginsEn } from '@/common/link_urls'
+
+const locale = store.state.lang
+const VueI18n = lang[locale]
 
 /**
  * 获取基础的验证信息
@@ -154,6 +155,9 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       case 'object':
         elType = 'object'
         break
+      case 'file':
+        elType = 'file'
+        break
       case 'array':
         if (items.type === 'object') {
           const { schema } = items
@@ -173,7 +177,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       formItemAttributes: {
         prop: propPrefix ? `${propPrefix}.${k}` : k,
         label: title,
-        description: inputPlaceholder ? null : description.replace(/\n/g, '<br/>'),
+        description: inputPlaceholder && elType !== 'file' ? null : description.replace(/\n/g, '<br/>'),
       },
       bindAttributes: {
         type: inputType,
@@ -190,8 +194,8 @@ export function renderParamsForm(params = {}, propPrefix = '') {
     })
     // rules 的属性
     rules[k] = []
-    const requiredInputText = lang === 'zh' ? '请输入' : 'Field required'
-    const requiredSelectText = lang === 'zh' ? '请选择' : 'Please select'
+    const requiredInputText = locale === 'zh' ? '请输入' : 'Field required'
+    const requiredSelectText = locale === 'zh' ? '请选择' : 'Please select'
 
     if (required) {
       rules[k].push({ required: true, message: elType === 'input' ? requiredInputText : requiredSelectText })
@@ -404,11 +408,11 @@ export function getDateDiff(beginTime, endTime) {
 export const verifyID = (rule, value, callback) => {
   const reg = /^[0-9a-zA-Z_:]{1,64}$/
   if (!value) {
-    callback(new Error(`ID ${Vue.prototype.$t('RuleEngine.pleaseEnter')}`))
+    callback(new Error(`ID ${VueI18n.RuleEngine.pleaseEnter}`))
   } else if (value.length > 64) {
-    callback(new Error(Vue.prototype.$t('RuleEngine.id_len_tip')))
+    callback(new Error(VueI18n.RuleEngine.id_len_tip))
   } else if (!reg.test(value)) {
-    callback(new Error(Vue.prototype.$t('RuleEngine.id_char_tip')))
+    callback(new Error(VueI18n.RuleEngine.id_char_tip))
   } else {
     callback()
   }

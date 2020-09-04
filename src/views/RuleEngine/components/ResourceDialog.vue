@@ -29,7 +29,7 @@
       <el-row v-if="record.type" class="config-item-wrapper" :gutter="20">
         <el-col :span="24">
           <el-form-item prop="id" :label="$t('RuleEngine.resourceID')">
-            <el-input style="width: 330px;" v-model="record.id" class="reset-input-width"></el-input>
+            <el-input v-model="record.id" class="reset-input-width"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">

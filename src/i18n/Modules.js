@@ -167,4 +167,8 @@ export default {
     zh: '请添加监听器！',
     en: 'Please add Listener!',
   },
+  uploadFile: {
+    zh: '上传文件',
+    en: 'Upload File',
+  },
 }
