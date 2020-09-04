@@ -52,6 +52,9 @@
                         <template v-else-if="item.elType === 'array'">
                           <array-editor v-model="record.config[item.key]" :data="item.oneObjOfArray"></array-editor>
                         </template>
+                        <template v-else-if="item.elType === 'file'">
+                          <file-editor></file-editor>
+                        </template>
                         <!-- input -->
                         <template v-else-if="item.elType !== 'select'">
                           <el-input
@@ -122,11 +125,12 @@ import { renderParamsForm, fillI18n } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ArrayEditor from '@/components/ArrayEditor'
 import Listeners from './components/Listeners'
+import FileEditor from '@/components/FileEditor'
 
 export default {
   name: 'ModuleDetail',
 
-  components: { KeyAndValueEditor, ArrayEditor, Listeners },
+  components: { KeyAndValueEditor, ArrayEditor, Listeners, FileEditor },
 
   inheritAttrs: false,
 
