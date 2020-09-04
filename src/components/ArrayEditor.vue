@@ -1,6 +1,5 @@
 <template>
-  <!-- eslint-disable -->
-  <el-table class="mul-object-editor" :data="tableData" :render-header="labelHeads" size="mini">
+  <el-table class="array-editor" :data="tableData" :render-header="labelHeads" size="mini">
     <el-table-column :label="item" v-for="(item, index) in headers" :key="index">
       <template slot-scope="{ row }">
         <!-- input -->
@@ -143,7 +142,7 @@ export default {
 </script>
 
 <style lang="scss">
-.key-and-value-editor {
+.array-editor {
   font-size: 12px !important;
 
   .el-input {
