@@ -4,7 +4,7 @@
       <div class="inner-box">
         <div class="content" :style="contentStyle">
           <span class="content-title">{{ $t('components.addModule') }}</span>
-          <span class="modules-num">{{ canAddCount }}</span>
+          <span v-cloak class="modules-num">{{ canAddCount }}</span>
           <div
             :class="['module-class', item.id === activeNavId ? 'active-nav' : '']"
             v-for="item in classList"
@@ -59,12 +59,12 @@
                       class="select-btn"
                       type="dashed"
                       size="mini"
-                      @click="toModuleDialog(one, 'add')"
+                      @click="toModuleDetail(one, 'add')"
                     >
                       {{ $t('Modules.select') }}
                       <!-- {{ $t('Modules.guide') }} -->
                     </el-button>
-                    <el-button v-else class="start-btn" plain size="mini" @click="toModuleDialog(one, 'edit')">
+                    <el-button v-else class="start-btn" plain size="mini" @click="toModuleDetail(one, 'edit')">
                       {{ $t('Modules.added') }}
                     </el-button>
                     <a href="https://docs.emqx.net" target="_blank" rel="noopener norefferrer" class="know-more">
@@ -101,12 +101,12 @@
                     class="select-btn"
                     type="dashed"
                     size="mini"
-                    @click="toModuleDialog(one, 'add')"
+                    @click="toModuleDetail(one, 'add')"
                   >
                     {{ $t('Modules.select') }}
                     <!-- {{ $t('Modules.guide') }} -->
                   </el-button>
-                  <el-button v-else class="start-btn" plain size="mini" @click="toModuleDialog(one, 'edit')">
+                  <el-button v-else class="start-btn" plain size="mini" @click="toModuleDetail(one, 'edit')">
                     {{ $t('Modules.added') }}
                   </el-button>
                   <a href="https://docs.emqx.net" target="_blank" rel="noopener norefferrer" class="know-more">
@@ -152,6 +152,7 @@ export default {
       searchModuleInfo: [],
       oper: 'add',
       scrollTop: 0,
+      scrolling: false,
     }
   },
 
@@ -206,7 +207,7 @@ export default {
       })
       return data
     },
-    toModuleDialog(val, oper) {
+    toModuleDetail(val, oper) {
       this.oper = oper
       this.selectedModule = {}
       if (oper === 'add') {
@@ -240,14 +241,19 @@ export default {
       return data
     },
     changeNav(id) {
+      if (this.scrolling) {
+        return
+      }
       this.searchModuleInfo = []
       this.searchVal = ''
       this.activeNavId = id
+      const { offsetTop } = this.$el.querySelector(`#${id}`)
       setTimeout(() => {
         if (id === 'auth') {
-          this.backTop()
+          this.backTo(0)
+        } else {
+          this.backTo(offsetTop)
         }
-        this.$el.querySelector(`#${id}`).scrollIntoView({ behavior: 'smooth' })
       }, 5)
     },
     async loadData() {
@@ -279,15 +285,22 @@ export default {
         })
       })
     },
-    backTop() {
+    backTo(targetOffsetTop) {
       const timer = setInterval(() => {
-        const ispeed = Math.floor(-this.scrollTop / 5)
-        document.documentElement.scrollTop = this.scrollTop + ispeed
-        document.body.scrollTop = this.scrollTop + ispeed
-        if (this.scrollTop === 0) {
-          clearInterval(timer)
+        const ispeed = Math.floor((targetOffsetTop - this.scrollTop) / 6)
+        if (Math.abs(this.scrollTop - targetOffsetTop) >= Math.abs(ispeed)) {
+          this.scrollTop += ispeed
+        } else {
+          this.scrollTop = targetOffsetTop
         }
-      }, 16)
+        document.documentElement.scrollTop = this.scrollTop
+        document.body.scrollTop = this.scrollTop
+        this.scrolling = true
+        if (this.scrollTop === targetOffsetTop || ispeed === 0) {
+          clearInterval(timer)
+          this.scrolling = false
+        }
+      }, 20)
     },
     scrollToTop() {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
@@ -301,7 +314,7 @@ export default {
 @import './style/module.scss';
 
 .add-module {
-  transform: none;
+  // transform: none;
   .header-box {
     width: 100%;
     height: 112px;

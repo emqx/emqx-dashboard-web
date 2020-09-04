@@ -36,7 +36,7 @@
                 <div v-for="(item, i) in configList" :key="i">
                   <template v-if="item.key !== 'listener'">
                     <el-col
-                      :span="item.type === 'textarea' || item.type === 'object' || item.type === 'mulobject' ? 24 : 12"
+                      :span="item.type === 'textarea' || item.type === 'object' || item.type === 'array' ? 24 : 12"
                     >
                       <el-form-item v-bind="item.formItemAttributes">
                         <template v-if="item.formItemAttributes.description" slot="label">
@@ -49,11 +49,8 @@
                         <template v-if="item.elType === 'object'">
                           <key-and-value-editor v-model="record.config[item.key]"></key-and-value-editor>
                         </template>
-                        <template v-else-if="item.elType === 'mulobject'">
-                          <mul-object-editor
-                            v-model="record.config[item.key]"
-                            :data="item.mulObjectData"
-                          ></mul-object-editor>
+                        <template v-else-if="item.elType === 'array'">
+                          <array-editor v-model="record.config[item.key]" :data="item.oneObjOfArray"></array-editor>
                         </template>
                         <!-- input -->
                         <template v-else-if="item.elType !== 'select'">
@@ -123,13 +120,13 @@
 import { createModule, loadAllModules, updateModule, destroyModule } from '@/api/modules'
 import { renderParamsForm, fillI18n } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
-import MulObjectEditor from '@/components/MulObjectEditor'
+import ArrayEditor from '@/components/ArrayEditor'
 import Listeners from './components/Listeners'
 
 export default {
   name: 'ModuleDetail',
 
-  components: { KeyAndValueEditor, MulObjectEditor, Listeners },
+  components: { KeyAndValueEditor, ArrayEditor, Listeners },
 
   inheritAttrs: false,
 

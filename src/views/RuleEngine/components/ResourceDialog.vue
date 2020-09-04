@@ -26,16 +26,28 @@
         </el-button>
       </el-form-item>
 
-      <el-form-item style="width: 330px;" prop="description" :label="$t('RuleEngine.resourceName')">
-        <el-input v-model="record.description" :placeholder="$t('RuleEngine.pleaseEnter')"></el-input>
-      </el-form-item>
-
       <el-row v-if="record.type" class="config-item-wrapper" :gutter="20">
+        <el-col :span="24">
+          <el-form-item prop="id" :label="$t('RuleEngine.resourceID')">
+            <el-input style="width: 330px;" v-model="record.id" class="reset-input-width"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item style="width: 330px;" prop="description" :label="$t('RuleEngine.resourceDes')">
+            <el-input
+              type="textarea"
+              v-model="record.description"
+              :placeholder="$t('RuleEngine.pleaseEnter')"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <div class="line"></div>
+        </el-col>
         <div v-if="configLoading" class="params-loading-wrapper">
           <a-skeleton active></a-skeleton>
         </div>
         <template v-else-if="configList.length > 0">
-          <div class="line"></div>
           <el-col
             v-for="(item, i) in configList"
             :key="i"
@@ -100,7 +112,7 @@
 
 <script>
 import { loadResourceTypes, createResource } from '@/api/rules'
-import { renderParamsForm } from '@/common/utils'
+import { renderParamsForm, verifyID } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 
 export default {
@@ -138,11 +150,12 @@ export default {
         config: {},
         description: '',
         type: '',
+        id: `resource:${Math.random().toString().slice(3, 9)}`,
       },
       rules: {
         config: {},
-        description: { required: true, message: this.$t('RuleEngine.pleaseEnter') },
         type: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        id: { required: true, validator: verifyID },
       },
     }
   },
@@ -273,8 +286,8 @@ export default {
 <style lang="scss">
 .resource-dialog {
   .line {
-    width: 95%;
-    margin: 30px auto 28px auto;
+    width: 100%;
+    margin: 10px auto 20px auto;
     background-color: #edeef2;
   }
 
@@ -307,8 +320,8 @@ export default {
   }
 
   .el-form-item {
-    .el-input {
-      width: 100%;
+    .reset-input-width {
+      width: 330px;
     }
 
     .el-select {
@@ -332,7 +345,7 @@ export default {
       padding: 0 32px;
     }
 
-    .el-input,
+    .el-input:not(.reset-input-width),
     .el-select {
       width: 200px !important;
     }

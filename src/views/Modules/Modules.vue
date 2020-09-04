@@ -4,7 +4,7 @@
       <div class="page-header-content-view">
         <div class="content">
           {{ $t('Modules.modules') }}
-          <span class="modules-num">{{ moduleCount }}</span>
+          <span v-cloak class="modules-num">{{ moduleCount }}</span>
           <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/add')">
             {{ $t('Base.add') }}
           </el-button>

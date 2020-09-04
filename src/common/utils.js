@@ -2,6 +2,7 @@
 import Clipboard from 'clipboard'
 import sqlFormatter from 'sql-formatter'
 import parser from 'js-sql-parser'
+import Vue from 'vue'
 
 import store from '@/stores'
 import router from '@/routes'
@@ -117,7 +118,7 @@ export function fillI18n(data = [], keys = [], autoSearch = false) {
 export function renderParamsForm(params = {}, propPrefix = '') {
   let form = []
   const rules = {}
-  let mulObjectData = {}
+  let oneObjOfArray = {}
 
   for (const [k, v] of Object.entries(params)) {
     if (k === '$resource') {
@@ -133,7 +134,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       order = 10,
       format,
       required = false,
-      schema,
+      items,
     } = v
     let inputType = type
     let elType = 'input'
@@ -153,12 +154,14 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       case 'object':
         elType = 'object'
         break
-      case 'mulobject':
-        mulObjectData = renderParamsForm(schema, 'config')
-        if (!defaultValue.length) {
-          defaultValue = []
+      case 'array':
+        if (items.type === 'object') {
+          const { schema } = items
+          oneObjOfArray = renderParamsForm(schema, 'config')
+          defaultValue = !defaultValue.length ? [] : defaultValue
         }
-        elType = 'mulobject'
+        elType = 'array'
+        break
     }
     if (enumValue) {
       elType = 'select'
@@ -183,7 +186,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       elType,
       value: elType === 'object' && !Object.keys(defaultValue).length ? {} : defaultValue,
       order,
-      mulObjectData,
+      oneObjOfArray,
     })
     // rules 的属性
     rules[k] = []
@@ -396,6 +399,19 @@ export function getDateDiff(beginTime, endTime) {
   const seconds = Math.round(leave3 / 1000)
 
   return `${hours}:${minutes}:${seconds}`
+}
+
+export const verifyID = (rule, value, callback) => {
+  const reg = /^[0-9a-zA-Z_:]{1,64}$/
+  if (!value) {
+    callback(new Error(`ID ${Vue.prototype.$t('RuleEngine.pleaseEnter')}`))
+  } else if (value.length > 64) {
+    callback(new Error(Vue.prototype.$t('RuleEngine.id_len_tip')))
+  } else if (!reg.test(value)) {
+    callback(new Error(Vue.prototype.$t('RuleEngine.id_char_tip')))
+  } else {
+    callback()
+  }
 }
 
 export default {}

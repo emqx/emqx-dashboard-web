@@ -491,4 +491,20 @@ export default {
     zh: '代理订阅',
     en: 'Server side subscription',
   },
+  resourceID: {
+    zh: '资源 ID',
+    en: 'Resource ID',
+  },
+  resourceDes: {
+    zh: '描述',
+    en: 'Description',
+  },
+  id_len_tip: {
+    zh: '最长64位',
+    en: 'The longest 64',
+  },
+  id_char_tip: {
+    zh: '仅支持数字、字母、下划线和冒号',
+    en: 'Only Numbers, letters, underscores, and colons are supported',
+  },
 }

@@ -28,19 +28,11 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="id" min-width="80px" label="ID">
+          <el-table-column prop="id" min-width="80px" :label="$t('RuleEngine.resourceID')">
             <template slot-scope="{ row }">
               <span class="btn" @click="showResource(row)">{{ row.id }}</span>
             </template>
           </el-table-column>
-
-          <el-table-column
-            min-width="100px"
-            prop="description"
-            show-overflow-tooltip
-            :label="$t('RuleEngine.resourceName')"
-          ></el-table-column>
-
           <!-- 资源类型 -->
           <el-table-column
             prop="config.title"
@@ -49,6 +41,12 @@
             :filters="filterOptions.resourceTypes"
             :filter-method="resourceTypesColumnFilter"
             filter-placement="bottom"
+          ></el-table-column>
+          <el-table-column
+            min-width="100px"
+            prop="description"
+            show-overflow-tooltip
+            :label="$t('RuleEngine.resourceDes')"
           ></el-table-column>
           <el-table-column width="160px" prop="id">
             <template slot-scope="{ row, $index }">
