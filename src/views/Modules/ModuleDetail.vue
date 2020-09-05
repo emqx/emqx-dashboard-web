@@ -53,7 +53,7 @@
                           <array-editor v-model="record.config[item.key]" :data="item.oneObjOfArray"></array-editor>
                         </template>
                         <template v-else-if="item.elType === 'file'">
-                          <file-editor></file-editor>
+                          <file-editor v-model="record.config[item.key]"></file-editor>
                         </template>
                         <!-- input -->
                         <template v-else-if="item.elType !== 'select'">
@@ -345,6 +345,10 @@ export default {
 
 <style lang="scss">
 .module-detail {
+  .page-header-content {
+    padding: 16px 20px;
+  }
+
   .module-title {
     margin-bottom: 10px;
   }
