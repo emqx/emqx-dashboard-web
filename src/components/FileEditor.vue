@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="22">
         <el-form-item>
-          <el-input size="mini" v-model="filename"></el-input>
+          <el-input size="mini" v-model="filename" readonly :placeholder="$t('Modules.fileTip')"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="2">
