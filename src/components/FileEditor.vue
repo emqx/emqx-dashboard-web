@@ -2,8 +2,8 @@
   <div class="file-editor">
     <el-row>
       <el-col :span="22">
-        <el-form-item>
-          <el-input size="mini" v-model="filename" readonly :placeholder="$t('Modules.fileTip')"></el-input>
+        <el-form-item style="margin-bottom: 0px;">
+          <el-input v-model="value.filename" :placeholder="$t('Modules.fileTip')"></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="2">
@@ -38,18 +38,6 @@ export default {
     },
   },
 
-  data() {
-    return {
-      filename: '',
-    }
-  },
-
-  created() {
-    if (Object.keys(this.value).length) {
-      this.filename = this.value.filename
-    }
-  },
-
   methods: {
     handleChange(file) {
       const reader = new FileReader()
@@ -60,9 +48,7 @@ export default {
           file: content,
           filename: file.name,
         }
-        this.filename = file.name
         this.$emit('update', uploadData)
-        this.$message.success(this.$t('Backup.uploadSuccess'))
       }
       reader.onerror = () => {
         this.$message.error(this.$t('Backup.uploadFailed'))
@@ -79,6 +65,7 @@ export default {
 .file-editor {
   .el-upload {
     width: 100%;
+    text-align: right;
 
     .file-icon {
       color: #34c388;

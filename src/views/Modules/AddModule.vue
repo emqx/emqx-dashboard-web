@@ -174,6 +174,7 @@ export default {
 
   mounted() {
     window.addEventListener('scroll', this.scrollToTop)
+    this.returnPosition()
   },
 
   destroyed() {
@@ -181,6 +182,16 @@ export default {
   },
 
   methods: {
+    returnPosition() {
+      const { id, top } = this.$route.query
+      if (id) {
+        setTimeout(() => {
+          document.documentElement.scrollTop = top
+          document.body.scrollTop = top
+          this.activeNavId = id
+        }, 50)
+      }
+    },
     searchModule() {
       this.searchLoading = true
       if (this.searchVal === '') {
@@ -234,7 +245,7 @@ export default {
           })
           .catch()
       }
-      this.$router.push('/modules/detail')
+      this.$router.push(`/modules/detail?id=${this.activeNavId}&top=${this.scrollTop}`)
     },
     async getAddedModuleInfo(id) {
       const data = await showCreatedModuleInfo(id)
