@@ -42,6 +42,8 @@
 <script>
 import { Menu } from 'ant-design-vue'
 import 'ant-design-vue/lib/menu/style'
+import { getLink } from '@/common/utils'
+import store from '@/stores'
 
 export default {
   name: 'LeftBar',
@@ -60,6 +62,11 @@ export default {
     return {
       menus: [],
       defaultOpenKeys: [],
+      docs: {
+        cloudHelp: getLink('cloudHelp'),
+        docs: '',
+      },
+      fromCloud: false,
     }
   },
 
@@ -90,6 +97,9 @@ export default {
   },
 
   created() {
+    if (store.state.config.baseURL === '/dashboard') {
+      this.fromCloud = true
+    }
     this.menus = [
       {
         title: this.$t('components.monitor'),
@@ -224,13 +234,23 @@ export default {
           },
         ],
       },
+      {
+        title: this.$t('components.help'),
+        key: 'cloudHelp',
+        path: this.docs.cloudHelp,
+        icon: 'icon-bangzhu',
+      },
     ]
     this.initRouter()
   },
 
   methods: {
     handleClick(e) {
-      this.$router.push({ path: e.key })
+      if (e.key.endsWith('deployments/dashboard/monitor.html')) {
+        window.open(e.key)
+      } else {
+        this.$router.push({ path: e.key })
+      }
     },
     titleClick() {},
     initRouter() {

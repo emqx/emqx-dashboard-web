@@ -7,7 +7,7 @@
             {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
           </p>
           <div class="page-header-top-start">
-            <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
+            <a rel="noopener" :href="fromCloud ? docs.cloudRule : docs.tutorial" target="_blank" class="link-item">
               <i class="icon el-icon-position"></i>
               {{ $t('RuleEngine.quickStart') }}
             </a>
@@ -170,6 +170,7 @@
 <script>
 import { loadRules, loadRuleDetails, loadActions, destroyRule, loadRuleEvents, updateRule } from '@/api/rules'
 import { getLink } from '@/common/utils'
+import store from '@/stores'
 
 export default {
   name: 'Rules',
@@ -180,6 +181,7 @@ export default {
     return {
       docs: {
         tutorial: getLink('ruleEngineTutorial'),
+        cloudRule: getLink('cloudRule'),
         docs: '',
       },
       listLoading: false,
@@ -258,10 +260,14 @@ export default {
       actionsFormatter(row, column, cellValue) {
         return cellValue.map(($) => $._name).join(',')
       },
+      fromCloud: false,
     }
   },
 
   async created() {
+    if (store.state.config.baseURL === '/dashboard') {
+      this.fromCloud = true
+    }
     const events = await loadRuleEvents()
     this.filterOptions.for = events.map(($) => ({ text: $.event, value: $.event }))
     this.loadActionsFilter().then(this.loadData)

@@ -87,6 +87,7 @@ export default {
     if (['en', 'zh'].indexOf(lang) !== -1 && this.language !== lang && this.fromCloud) {
       document.querySelector('html').setAttribute('lang', lang)
       localStorage.setItem('language', lang)
+      store.state.lang = lang
       this.$i18n.locale = lang
     }
     this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
@@ -107,7 +108,7 @@ export default {
           this.loginError = ''
           this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember })
           setTimeout(() => {
-            const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query
+            const { to = '/' } = this.$route.query
             this.$router.replace({
               path: to,
             })

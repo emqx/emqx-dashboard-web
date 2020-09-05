@@ -5,7 +5,9 @@
     "schemaTutorial": "https://docs.emqx.io/enterprise/latest/en/rule/schema-registry.html",
     "auth": "https://docs.emqx.io/enterprise/latest/en/advanced/auth.html",
     "mnesia": "https://docs.emqx.io/broker/latest/en/advanced/auth-mnesia.html",
-    "authJWT": "https://docs.emqx.io/broker/latest/en/advanced/auth-jwt.html"
+    "authJWT": "https://docs.emqx.io/broker/latest/en/advanced/auth-jwt.html",
+    "cloudRule": "https://docs.emqx.io/cloud/latest/en/deployments/dashboard/rule_engine/rules.html",
+    "cloudHelp": "https://docs.emqx.io/cloud/latest/en/deployments/dashboard/monitor.html"
   },
   "zh": {
     "ruleEngineTutorial": "https://docs.emqx.io/enterprise/latest/cn/rule/rule-engine.html",
@@ -13,6 +15,8 @@
     "schemaTutorial": "https://docs.emqx.io/enterprise/latest/cn/rule/schema-registry.html",
     "auth": "https://docs.emqx.io/enterprise/latest/cn/advanced/auth.html",
     "mnesia": "https://docs.emqx.io/broker/latest/cn/advanced/auth-mnesia.html",
-    "authJWT": "https://docs.emqx.io/broker/latest/cn/advanced/auth-jwt.html"
+    "authJWT": "https://docs.emqx.io/broker/latest/cn/advanced/auth-jwt.html",
+    "cloudRule": "https://docs.emqx.net/cloud/latest/cn/deployments/dashboard/rule_engine/rules.html",
+    "cloudHelp": "https://docs.emqx.net/cloud/latest/cn/deployments/dashboard/monitor.html"
   }
 }

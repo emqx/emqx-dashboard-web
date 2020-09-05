@@ -108,6 +108,10 @@ export default {
     zh: '备份',
     en: 'Backup',
   },
+  help: {
+    zh: '帮助',
+    en: 'Help',
+  },
   users: {
     zh: '用户',
     en: 'Users',

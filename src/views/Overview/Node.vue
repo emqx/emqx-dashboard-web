@@ -23,7 +23,7 @@
               <node-basic-card :value="record" :show-button="false"></node-basic-card>
             </a-card>
 
-            <a-card class="emq-list-card">
+            <a-card v-if="$hasShow('monitor.listener')" class="emq-list-card">
               <div class="emq-title">
                 {{ $t('Overview.listener') }}
                 <div class="sub-title">
