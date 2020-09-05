@@ -35,8 +35,8 @@ module.exports = {
         target: process.env.HOST_URL || 'http://127.0.0.1:18083/api/v4',
         changeOrigin: true,
         pathRewrite: {
-          '/dashboard': ''
-        }
+          '/dashboard': '',
+        },
       },
     },
   },

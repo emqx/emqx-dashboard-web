@@ -101,14 +101,8 @@
         <Listeners v-model="record.config['listeners']" :listenerData="listener"> </Listeners>
       </el-card>
     </div>
-    <el-col :span="16">
+    <el-col :span="configList.length === 1 ? 9 : 16">
       <div class="button-group__center">
-        <template v-if="oper == 'edit'">
-          <el-button v-if="!moduleData.enabled" size="small" @click="toggleStatus(true)">
-            {{ $t('Modules.run') }}
-          </el-button>
-          <el-button v-else size="small" @click="toggleStatus(false)">{{ $t('Modules.stop') }}</el-button>
-        </template>
         <el-button size="small" @click="exitDetail">{{ $t('Base.cancel') }}</el-button>
         <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate()">
           <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>
@@ -167,6 +161,8 @@ export default {
   created() {
     this.loadData()
     this.initListeners()
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
   },
 
   methods: {
@@ -291,30 +287,6 @@ export default {
         })
         .catch(() => {})
     },
-    async toggleStatus(val) {
-      const data = { ...this.moduleData }
-      data.enabled = val
-      if (!val) {
-        this.$msgbox
-          .confirm(this.$t('Modules.thisActionWillStopTheModule'), {
-            confirmButtonText: this.$t('Base.confirm'),
-            cancelButtonText: this.$t('Base.cancel'),
-            type: 'warning',
-          })
-          .then(async () => {
-            await updateModule(this.moduleData.id, data)
-            this.$message.success(this.$t('Modules.stopSuccess'))
-            this.moduleData.enabled = val
-            this.exitDetail()
-          })
-          .catch(() => {})
-      } else {
-        await updateModule(this.moduleData.id, data)
-        this.$message.success(this.$t('Modules.startSuccess'))
-        this.moduleData.enabled = val
-        this.exitDetail()
-      }
-    },
     exitDetail() {
       this.clearForm()
       setTimeout(() => {
@@ -322,10 +294,10 @@ export default {
           if (this.from === 'modules') {
             this.$router.push('/modules')
           } else {
-            this.$router.push('/modules/add')
+            this.$router.push(`/modules/add?id=${this.$route.query.id}&top=${this.$route.query.top}`)
           }
         } else {
-          this.$router.push('/modules/add')
+          this.$router.push(`/modules/add?id=${this.$route.query.id}&top=${this.$route.query.top}`)
         }
       }, 10)
     },
