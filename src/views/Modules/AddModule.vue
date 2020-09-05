@@ -314,7 +314,8 @@ export default {
 @import './style/module.scss';
 
 .add-module {
-  // transform: none;
+  transform: none;
+
   .header-box {
     width: 100%;
     height: 112px;
@@ -337,10 +338,6 @@ export default {
 
       span {
         flex-shrink: 0;
-      }
-
-      .modules-num {
-        margin: 0 12px;
       }
 
       .module-class {

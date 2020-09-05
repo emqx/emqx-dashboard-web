@@ -156,6 +156,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         elType = 'object'
         break
       case 'file':
+        defaultValue = !Object.keys(defaultValue).length ? {} : defaultValue
         elType = 'file'
         break
       case 'array':
