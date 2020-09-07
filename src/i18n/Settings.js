@@ -419,4 +419,40 @@ export default {
     zh: '待加入',
     en: 'Waiting to join',
   },
+  force_shutdown_policy: {
+    zh: '进程消息队列长度 ｜ 内存字节',
+    en: 'Process message queue length | Memory byte',
+  },
+  mountpoint: {
+    zh: '主题挂载点',
+    en: 'Topic mount point',
+  },
+  publish_limit: {
+    zh: '发布限制',
+    en: 'Publish limit',
+  },
+  server_keepalive: {
+    zh: '服务端指定的 Keepalive 时间',
+    en: 'The Keepalive time specified by the server',
+  },
+  response_information: {
+    zh: '响应信息',
+    en: 'Response information',
+  },
+  quotaconn_messages_routing: {
+    zh: '单个客户端消息转发次数的配额',
+    en: 'Quota for the number of times a single client message is forwarded',
+  },
+  quotaoverall_messages_routing: {
+    zh: 'Zone 下面所有客户端消息转发次数的配额',
+    en: 'Quota for the number of times all client messages are forwarded under Zone',
+  },
+  rate_limitconn_bytes_in: {
+    zh: '客户端字节流入速率限制',
+    en: 'Client byte inflow rate limit',
+  },
+  rate_limitconn_messages_in: {
+    zh: '客户端 Publish 消息流入速率限制',
+    en: 'Client Publish message inflow rate limit',
+  },
 }
