@@ -10,8 +10,6 @@
           :record="mqttRecord"
           :rules="rules"
           :btn-loading="saveLoading"
-          :cancel-disabled="disabled"
-          :cancel="cancel"
           v-bind="allOptions"
           @update="handleUpdate(...arguments, 'mqtt')"
         >
@@ -28,8 +26,6 @@
           :record="externalRecord"
           :rules="rules"
           :btn-loading="saveLoading"
-          :cancel-disabled="disabled"
-          :cancel="cancel"
           v-bind="allOptions"
           @update="handleUpdate(...arguments, 'external')"
         >
@@ -43,8 +39,6 @@
           :record="internalRecord"
           :rules="rules"
           :btn-loading="saveLoading"
-          :cancel-disabled="disabled"
-          :cancel="cancel"
           v-bind="allOptions"
           @update="handleUpdate(...arguments, 'internal')"
         >
@@ -55,7 +49,6 @@
 </template>
 
 <script>
-import { setTimeout, clearTimeout } from 'timers'
 import { loadConfig, updateConfig } from '../../api/settings'
 import ConfigForm from './components/ConfigForm'
 
@@ -99,8 +92,6 @@ export default {
       callback()
     }
     return {
-      timer: 0,
-      disabled: true,
       saveLoading: false,
       mqttRecord: null,
       initMqtt: {},
@@ -304,41 +295,11 @@ export default {
     }
   },
 
-  watch: {
-    // 当配置改变的时候，才可以取消恢复到原来的值
-    mqttRecord: {
-      deep: true,
-      immediate: true,
-      handler: 'handleRecordChange',
-    },
-    externalRecord: {
-      deep: true,
-      immediate: true,
-      handler: 'handleRecordChange',
-    },
-    internalRecord: {
-      deep: true,
-      immediate: true,
-      handler: 'handleRecordChange',
-    },
-  },
-
   created() {
     this.loadData()
   },
 
-  beforeDestroy() {
-    clearTimeout(this.timer)
-  },
-
   methods: {
-    handleRecordChange(val, oldVal) {
-      if (!oldVal || JSON.stringify(oldVal) === '{}') {
-        this.disabled = true
-        return
-      }
-      this.disabled = false
-    },
     async loadData() {
       const { externalRes, internalRes, mqttRes } = await loadConfig()
       if (externalRes && internalRes) {
@@ -363,29 +324,6 @@ export default {
         Object.assign(this.initInternal, this.internalRecord)
       }
       this.saveLoading = false
-    },
-    cancel(needPrompt = true) {
-      const confirmCancel = () => {
-        // 取消后还原 init 值
-        Object.assign(this.mqttRecord, this.initMqtt)
-        Object.assign(this.externalRecord, this.initExternal)
-        Object.assign(this.internalRecord, this.initInternal)
-        this.timer = setTimeout(() => {
-          this.disabled = true
-        }, 500)
-      }
-      if (needPrompt) {
-        this.$confirm(this.$t('Settings.cancelConfirm'), this.$t('Base.warning'), {
-          type: 'warning',
-          cancelButtonText: this.$t('Settings.no'),
-        })
-          .then(() => {
-            confirmCancel()
-          })
-          .catch(() => {})
-      } else {
-        confirmCancel()
-      }
     },
   },
 }
