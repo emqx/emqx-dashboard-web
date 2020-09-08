@@ -2,7 +2,7 @@
   <a-card class="config-settings emq-list-card">
     <div class="tabs-title">{{ $t('Settings.zone') }}</div>
 
-    <el-tabs v-model="settingType">
+    <el-tabs v-model="settingType" :before-leave="handleBeforeLeave">
       <el-tab-pane label="base" name="mqtt">
         <config-form
           v-if="settingType === 'mqtt' && mqttRecord"
@@ -10,6 +10,7 @@
           :record="mqttRecord"
           :rules="rules"
           :btn-loading="saveLoading"
+          v-model="disabled"
           v-bind="allOptions"
           @update="handleUpdate(...arguments, 'mqtt')"
         >
@@ -26,6 +27,7 @@
           :record="externalRecord"
           :rules="rules"
           :btn-loading="saveLoading"
+          v-model="disabled"
           v-bind="allOptions"
           @update="handleUpdate(...arguments, 'external')"
         >
@@ -39,6 +41,7 @@
           :record="internalRecord"
           :rules="rules"
           :btn-loading="saveLoading"
+          v-model="disabled"
           v-bind="allOptions"
           @update="handleUpdate(...arguments, 'internal')"
         >
@@ -128,21 +131,6 @@ export default {
         ],
       },
       rules: {
-        keepalive_backoff: [
-          { required: true, message: this.$t('Settings.pleaseEnter') },
-          {
-            validator: (rule, value, callback) => {
-              validRanger(rule, value, callback, [0.2, 5.0])
-            },
-            trigger: 'blur',
-          },
-          {
-            validator: (rule, value, callback) => {
-              validType(rule, value, callback, { type: 'float' })
-            },
-            trigger: 'blur',
-          },
-        ],
         max_subscriptions: [
           { required: true, message: this.$t('Settings.pleaseEnter') },
           {
@@ -152,15 +140,7 @@ export default {
             trigger: 'blur',
           },
         ],
-        max_awaiting_rel: [
-          { required: true, message: this.$t('Settings.pleaseEnter') },
-          {
-            validator: (rule, value, callback) => {
-              validRanger(rule, value, callback, [0, 500])
-            },
-            trigger: 'blur',
-          },
-        ],
+        max_awaiting_rel: [{ required: true, message: this.$t('Settings.pleaseEnter') }],
         max_inflight: [
           { required: true, message: this.$t('Settings.pleaseEnter') },
           {
@@ -170,38 +150,12 @@ export default {
             trigger: 'blur',
           },
         ],
-        max_mqueue_len: [
-          { required: true, message: this.$t('Settings.pleaseEnter') },
-          {
-            validator: (rule, value, callback) => {
-              validRanger(rule, value, callback, [0, 2048])
-            },
-            trigger: 'blur',
-          },
-        ],
-        max_clientid_len: [
-          { required: true, message: this.$t('Settings.pleaseEnter') },
-          {
-            validator: (rule, value, callback) => {
-              validRanger(rule, value, callback, [23, 65535])
-            },
-            trigger: 'blur',
-          },
-        ],
+        max_mqueue_len: [{ required: true, message: this.$t('Settings.pleaseEnter') }],
         mqtt_max_clientid_len: [
           { required: true, message: this.$t('Settings.pleaseEnter') },
           {
             validator: (rule, value, callback) => {
               validRanger(rule, value, callback, [23, 65535])
-            },
-            trigger: 'blur',
-          },
-        ],
-        max_topic_alias: [
-          { required: true, message: this.$t('Settings.pleaseEnter') },
-          {
-            validator: (rule, value, callback) => {
-              validRanger(rule, value, callback, [0, 65535])
             },
             trigger: 'blur',
           },
@@ -215,52 +169,7 @@ export default {
             trigger: 'blur',
           },
         ],
-        await_rel_timeout: [
-          { required: true, message: this.$t('Settings.pleaseEnter') },
-          {
-            validator: (rule, value, callback) => {
-              validType(rule, value, callback, { type: 'duration', unit: 's, h, m, d' })
-            },
-            trigger: 'blur',
-          },
-        ],
-        retry_interval: [
-          { required: true, message: this.$t('Settings.pleaseEnter') },
-          {
-            validator: (rule, value, callback) => {
-              validType(rule, value, callback, { type: 'duration', unit: 's, h, m, d' })
-            },
-            trigger: 'blur',
-          },
-        ],
-        idle_timeout: [
-          { required: true, message: this.$t('Settings.pleaseEnter') },
-          {
-            validator: (rule, value, callback) => {
-              validType(rule, value, callback, { type: 'duration', unit: 's, h, m, d' })
-            },
-            trigger: 'blur',
-          },
-        ],
         hibernate_after: [
-          { required: true, message: this.$t('Settings.pleaseEnter') },
-          {
-            validator: (rule, value, callback) => {
-              validType(rule, value, callback, { type: 'duration', unit: 's, h, m, d' })
-            },
-            trigger: 'blur',
-          },
-        ],
-        force_gc_policy: [
-          { required: true, message: this.$t('Settings.pleaseEnter') },
-          {
-            validator: (rule, value, callback) => {
-              validType(rule, value, callback, { type: 'bytes', unit: 'KB, MB, GB' })
-            },
-            trigger: 'blur',
-          },
-        ],
-        session_expiry_interval: [
           { required: true, message: this.$t('Settings.pleaseEnter') },
           {
             validator: (rule, value, callback) => {
@@ -287,11 +196,11 @@ export default {
             trigger: 'blur',
           },
         ],
-        max_packet_size: { required: true, message: this.$t('Settings.pleaseEnter') },
         mqtt_max_topic_levels: { required: true, message: this.$t('Settings.pleaseEnter') },
         acl_cache_max_size: { required: true, message: this.$t('Settings.pleaseEnter') },
         flapping_detect_policy: { required: true, message: this.$t('Settings.pleaseEnter') },
       },
+      disabled: false,
     }
   },
 
@@ -300,6 +209,23 @@ export default {
   },
 
   methods: {
+    async handleBeforeLeave(activeName, oldName) {
+      if (activeName !== oldName) {
+        if (!this.disabled) {
+          const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
+            type: 'warning',
+            cancelButtonText: this.$t('Settings.no'),
+          })
+          if (status === 'confirm') {
+            const ref = `${oldName}Form`
+            this.$refs[ref].cancel(false)
+            return true
+          }
+          return false
+        }
+      }
+      return true
+    },
     async loadData() {
       const { externalRes, internalRes, mqttRes } = await loadConfig()
       if (externalRes && internalRes) {
@@ -322,6 +248,7 @@ export default {
         Object.assign(this.initMqtt, this.mqttRecord)
         Object.assign(this.initExternal, this.externalRecord)
         Object.assign(this.initInternal, this.internalRecord)
+        this.loadData()
       }
       this.saveLoading = false
     },
