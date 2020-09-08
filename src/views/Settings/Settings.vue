@@ -44,7 +44,6 @@ export default {
             cancelButtonText: this.$t('Settings.no'),
           })
           if (status === 'confirm') {
-            basicConfig.cancel(false)
             return true
           }
           return false
