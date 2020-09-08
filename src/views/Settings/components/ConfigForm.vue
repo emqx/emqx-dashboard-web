@@ -56,7 +56,7 @@
     </el-col>
 
     <el-col class="button-group__center" :span="24">
-      <el-button plain :disabled="disabled" type="default" size="medium" @click="cancel">
+      <el-button plain :disabled="selfDisabled" type="default" size="medium" @click="cancel">
         {{ $t('Base.cancel') }}
       </el-button>
       <el-button :loading="btnLoading" type="primary" size="medium" @click="save">
@@ -70,7 +70,16 @@
 export default {
   name: 'ConfigForm',
 
+  model: {
+    prop: 'disabled',
+    event: 'updateDisabled',
+  },
+
   props: {
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     record: {
       type: Object,
       requried: true,
@@ -117,7 +126,7 @@ export default {
       showMoreItems: false,
       showKeyList: [],
       recordConfig: {},
-      disabled: false,
+      selfDisabled: false,
     }
   },
 
@@ -156,10 +165,12 @@ export default {
   methods: {
     handleRecordChange(val, oldVal) {
       if (!oldVal || JSON.stringify(oldVal) === '{}') {
-        this.disabled = true
+        this.selfDisabled = true
+        this.$emit('updateDisabled', this.selfDisabled)
         return
       }
-      this.disabled = false
+      this.selfDisabled = false
+      this.$emit('updateDisabled', this.selfDisabled)
     },
     initData() {
       this.showKeyList = this.recordKeys.keyList
@@ -184,7 +195,8 @@ export default {
       const confirmCancel = () => {
         this.initData()
         setTimeout(() => {
-          this.disabled = true
+          this.selfDisabled = true
+          this.$emit('updateDisabled', this.selfDisabled)
         }, 500)
       }
       if (needPrompt) {
@@ -203,9 +215,11 @@ export default {
     async save() {
       const valid = await this.$refs.record.validate()
       if (!valid) {
+        this.showMoreItems = true
         return
       }
-      const { ...record } = this.record
+      this.showMoreItems = false
+      const { ...record } = this.recordConfig
       Object.keys(record).forEach((item) => {
         if (record[item] === '') {
           record[item] = 'null'
