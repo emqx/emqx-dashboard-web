@@ -169,7 +169,8 @@ export default {
       this.showList = this.list
     },
     toReadMore() {
-      window.open('https://docs.emqx.net')
+      const windowUrl = window.open('https://docs.emqx.net')
+      windowUrl.opener = null
     },
   },
 }
