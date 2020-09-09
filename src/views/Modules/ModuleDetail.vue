@@ -38,7 +38,7 @@
                     <el-col
                       :span="item.type === 'textarea' || item.type === 'object' || item.type === 'array' ? 24 : 12"
                     >
-                      <el-form-item v-bind="item.formItemAttributes">
+                      <el-form-item v-if="item.elType !== 'file'" v-bind="item.formItemAttributes">
                         <template v-if="item.formItemAttributes.description" slot="label">
                           {{ item.formItemAttributes.label }}
                           <el-popover width="220" trigger="hover" placement="top">
@@ -51,9 +51,6 @@
                         </template>
                         <template v-else-if="item.elType === 'array'">
                           <array-editor v-model="record.config[item.key]" :data="item.oneObjOfArray"></array-editor>
-                        </template>
-                        <template v-else-if="item.elType === 'file'">
-                          <file-editor v-model="record.config[item.key]"></file-editor>
                         </template>
                         <!-- input -->
                         <template v-else-if="item.elType !== 'select'">
@@ -82,10 +79,23 @@
                             v-model="record.config[item.key]"
                             v-bind="item.bindAttributes"
                             class="reset-width"
+                            @updateConfig="addConfigAccordingType"
                           >
                           </emq-select>
                         </template>
                       </el-form-item>
+                      <template v-else>
+                        <el-form-item
+                          v-if="
+                            record.config['ssl'] === undefined ||
+                            record.config['ssl'] === 'true' ||
+                            record.config['ssl'] === true
+                          "
+                          v-bind="item.formItemAttributes"
+                        >
+                          <file-editor v-model="record.config[item.key]"></file-editor>
+                        </el-form-item>
+                      </template>
                     </el-col>
                   </template>
                 </div>
@@ -94,7 +104,7 @@
           </el-row>
         </el-form>
       </el-card>
-      <el-card v-if="listener" class="listener-wrapper">
+      <el-card v-if="Object.keys(listener).length" class="listener-wrapper">
         <div class="emq-title listener-title">
           {{ $t('Modules.listener') }}
         </div>
@@ -140,6 +150,14 @@ export default {
       },
       allModuleList: [],
       listener: {},
+      mongoCommonConfigs: [],
+      mongoConnectMode: {},
+      mongoCommonRules: {
+        config: {},
+      },
+      mongoCommonRecord: {
+        config: {},
+      },
     }
   },
 
@@ -177,7 +195,7 @@ export default {
           .catch()
       }
     },
-    clearForm() {
+    cleanForm() {
       if (this.$refs.record) {
         setTimeout(() => {
           this.$refs.record.resetFields()
@@ -186,8 +204,14 @@ export default {
       }
     },
     loadConfigList(params) {
+      if (this.moduleData.type === 'mongo_authentication') {
+        this.handleMongoDBModule(params)
+        return
+      }
       const { listener, ...paramsData } = params
-      this.listener = listener
+      if (listener) {
+        this.listener = listener
+      }
       this.configLoading = true
       const configData = renderParamsForm(paramsData, 'config')
       const { form, rules } = configData
@@ -208,7 +232,7 @@ export default {
       if (!valid) {
         return
       }
-      if (this.listener && !this.record.config.listeners.length) {
+      if (Object.keys(this.listener).length && !this.record.config.listeners.length) {
         this.$message.error(this.$t('Modules.emptyListenerTip'))
         return
       }
@@ -288,7 +312,7 @@ export default {
         .catch(() => {})
     },
     exitDetail() {
-      this.clearForm()
+      this.cleanForm()
       setTimeout(() => {
         if (this.oper === 'edit') {
           if (this.from === 'modules') {
@@ -302,7 +326,7 @@ export default {
       }, 10)
     },
     initListeners() {
-      if (this.listener) {
+      if (Object.keys(this.listener).length) {
         if (this.oper === 'add') {
           this.record.config.listeners = []
         } else {
@@ -310,6 +334,48 @@ export default {
           this.record.config.listeners = listeners || []
         }
       }
+    },
+    handleMongoDBModule(params) {
+      const { connect_mode, ...paramsData } = params
+      this.mongoConnectMode = connect_mode
+      this.configLoading = true
+      const configData = renderParamsForm(paramsData, 'config')
+      const { form, rules } = configData
+      this.mongoCommonConfigs = form
+      this.configList = form
+      this.mongoCommonRules.config = rules
+      this.mongoCommonRecord.config = {}
+      form.forEach(({ key, value }) => {
+        this.$set(this.mongoCommonRecord.config, key, value)
+      })
+      this.addConfigAccordingType(this.mongoCommonRecord.config.type)
+      this.configLoading = false
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
+    },
+    addConfigAccordingType(type) {
+      const keyName = `${type}_mode`
+      const params = this.mongoConnectMode[keyName]
+      const [...commonConfig] = this.mongoCommonConfigs
+      const { ...rulesCommonConfig } = this.mongoCommonRules.config
+      const { ...recordCommonConfig } = this.mongoCommonRecord.config
+      if (params) {
+        const configData = renderParamsForm(params, 'config')
+        const { form, rules } = configData
+        const extraConfig = {}
+        form.forEach(({ key, value }) => {
+          this.$set(extraConfig, key, value)
+        })
+        this.configList = commonConfig.concat(form)
+        this.rules.config = Object.assign(rulesCommonConfig, rules)
+        this.record.config = Object.assign(recordCommonConfig, extraConfig)
+      } else {
+        this.configList = commonConfig
+        this.rules.config = rulesCommonConfig
+        this.record.config = recordCommonConfig
+      }
+      this.record.config.type = type
     },
   },
 }

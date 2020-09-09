@@ -57,7 +57,7 @@
                 <el-button v-else class="start-btn" plain size="mini" @click.stop="updataModule(item, true)">{{
                   $t('Modules.run')
                 }}</el-button>
-                <a @click.stop="toReadMore" class="know-more">
+                <a href="javascript:;" @click.stop="toReadMore" class="know-more">
                   {{ $t('Modules.readMore') }}
                 </a>
               </div>
@@ -187,9 +187,5 @@ export default {
   font-size: 14px;
   margin-bottom: 20px;
   background-color: #fbf2f2;
-}
-
-.module-item {
-  cursor: pointer;
 }
 </style>
