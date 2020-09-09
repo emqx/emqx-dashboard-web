@@ -288,7 +288,7 @@ export default {
 
       // 赋值
       Object.keys(params).forEach((item) => {
-        if (this.moduleData.config[item]) {
+        if (this.moduleData.config[item] !== undefined) {
           params[item].default = this.moduleData.config[item]
         }
       })
