@@ -1,5 +1,5 @@
 <template>
-  <el-select :value="rawValue" v-bind="$attrs" class="emq-select" v-on="$listeners">
+  <el-select :value="rawValue" v-bind="$attrs" class="emq-select" v-on="$listeners" @change="valueChange">
     <slot>
       <el-option
         v-for="(item, i) in options"
@@ -90,6 +90,12 @@ export default {
   },
 
   methods: {
+    valueChange(val) {
+      // mongoDB模块
+      if (this.field.list.indexOf('rs') !== -1) {
+        this.$emit('updateConfig', val)
+      }
+    },
     async loadData() {
       const options = await this.getOptions()
       this.parserField = {}

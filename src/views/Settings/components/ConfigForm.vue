@@ -156,6 +156,15 @@ export default {
       immediate: true,
       handler: 'handleRecordChange',
     },
+    showMoreItems(val) {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      if (val) {
+        setTimeout(() => {
+          document.documentElement.scrollTop = scrollTop
+          document.body.scrollTop = scrollTop
+        }, 2)
+      }
+    },
   },
 
   created() {

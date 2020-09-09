@@ -39,7 +39,7 @@
           <el-row v-if="allFeatures[item.id]" :gutter="20">
             <el-col v-for="(one, index) in allFeatures[item.id]" :key="index" :span="12">
               <el-card shadow="hover">
-                <div class="module-item">
+                <div class="module-item" @click="toModuleDetail(one, one.status === 'unadd' ? 'add' : 'edit')">
                   <!-- <div class="item-error-tip">
                   <span>error</span>
                   <el-button class="reconnect-btn" plain size="mini">重连</el-button>
@@ -54,20 +54,14 @@
                     </div>
                   </div>
                   <div class="item-handle">
-                    <el-button
-                      v-if="one.status === 'unadd'"
-                      class="select-btn"
-                      type="dashed"
-                      size="mini"
-                      @click="toModuleDetail(one, 'add')"
-                    >
+                    <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
                       {{ $t('Modules.select') }}
                       <!-- {{ $t('Modules.guide') }} -->
                     </el-button>
-                    <el-button v-else class="start-btn" plain size="mini" @click="toModuleDetail(one, 'edit')">
+                    <el-button v-else class="start-btn" plain size="mini">
                       {{ $t('Modules.added') }}
                     </el-button>
-                    <a href="https://docs.emqx.net" target="_blank" rel="noopener norefferrer" class="know-more">
+                    <a href="javascript:;" @click.stop="toReadMore" class="know-more">
                       {{ $t('Modules.readMore') }}
                     </a>
                   </div>
@@ -81,7 +75,7 @@
         <el-row v-if="searchModuleInfo.length" :gutter="20">
           <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
             <el-card shadow="hover">
-              <div class="module-item">
+              <div class="module-item" @click="toModuleDetail(one, one.status === 'unadd' ? 'add' : 'edit')">
                 <!-- <div class="item-error-tip">
                   <span>error</span>
                   <el-button class="reconnect-btn" plain size="mini">重连</el-button>
@@ -96,20 +90,14 @@
                   </div>
                 </div>
                 <div class="item-handle">
-                  <el-button
-                    v-if="one.status === 'unadd'"
-                    class="select-btn"
-                    type="dashed"
-                    size="mini"
-                    @click="toModuleDetail(one, 'add')"
-                  >
+                  <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
                     {{ $t('Modules.select') }}
                     <!-- {{ $t('Modules.guide') }} -->
                   </el-button>
-                  <el-button v-else class="start-btn" plain size="mini" @click="toModuleDetail(one, 'edit')">
+                  <el-button v-else class="start-btn" plain size="mini">
                     {{ $t('Modules.added') }}
                   </el-button>
-                  <a href="https://docs.emqx.net" target="_blank" rel="noopener norefferrer" class="know-more">
+                  <a href="javascript:;" @click.stop="toReadMore" class="know-more">
                     {{ $t('Modules.readMore') }}
                   </a>
                 </div>
@@ -316,6 +304,9 @@ export default {
     scrollToTop() {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       this.scrollTop = scrollTop
+    },
+    toReadMore() {
+      window.open('https://docs.emqx.net')
     },
   },
 }
