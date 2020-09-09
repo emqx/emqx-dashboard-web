@@ -103,8 +103,6 @@ export default {
 
   methods: {
     async updataModule(item, val) {
-      const data = { ...item }
-      data.enabled = val
       if (!val) {
         this.$msgbox
           .confirm(this.$t('Modules.thisActionWillStopTheModule'), {
@@ -113,13 +111,13 @@ export default {
             type: 'warning',
           })
           .then(async () => {
-            await updateModule(item.id, data)
+            await updateModule(item.id, { enabled: val })
             this.$message.success(this.$t('Modules.stopSuccess'))
             item.enabled = val
           })
           .catch(() => {})
       } else {
-        await updateModule(item.id, data)
+        await updateModule(item.id, { enabled: val })
         this.$message.success(this.$t('Modules.startSuccess'))
         item.enabled = val
       }
