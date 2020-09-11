@@ -38,9 +38,9 @@
           </p>
           <el-row v-if="allFeatures[item.id]" :gutter="20">
             <el-col v-for="(one, index) in allFeatures[item.id]" :key="index" :span="12">
-              <div @mouseenter="showDeleteBtn(index)" @mouseleave="hideDeleteBtn" style="position: relative;">
+              <div class="item-box">
                 <span
-                  v-show="deleteBtnIndex === index && one.id && JSON.stringify(one.params) === '{}'"
+                  v-show="one.id && JSON.stringify(one.params) === '{}'"
                   @click="deleteModule(one)"
                   class="delete-icon"
                 >
@@ -82,9 +82,9 @@
       <template v-else>
         <el-row v-if="searchModuleInfo.length" :gutter="20">
           <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
-            <div @mouseenter="showDeleteBtn(index)" @mouseleave="hideDeleteBtn" style="position: relative;">
+            <div class="item-box">
               <span
-                v-show="deleteBtnIndex === index && one.id && JSON.stringify(one.params) === '{}'"
+                v-show="one.id && JSON.stringify(one.params) === '{}'"
                 @click="deleteModule(one)"
                 class="delete-icon"
               >
@@ -158,7 +158,6 @@ export default {
       scrollTop: 0,
       scrolling: false,
       addedModules: JSON.parse(localStorage.getItem('addedModules')) || {},
-      deleteBtnIndex: undefined,
     }
   },
 
@@ -185,12 +184,6 @@ export default {
   },
 
   methods: {
-    showDeleteBtn(id) {
-      this.deleteBtnIndex = id
-    },
-    hideDeleteBtn() {
-      this.deleteBtnIndex = undefined
-    },
     deleteModule(item) {
       this.$msgbox
         .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {
