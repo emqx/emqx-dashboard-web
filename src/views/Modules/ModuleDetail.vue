@@ -238,7 +238,6 @@ export default {
       }
     },
     async handleCreate() {
-      this.updateValidate()
       const { arrayEditor } = this.$refs
       if (arrayEditor[0]._data.innerValid === false) {
         return
