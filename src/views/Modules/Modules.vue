@@ -29,10 +29,9 @@
     <div class="app-wrapper">
       <el-row v-if="showList.length" :gutter="20" class="emq-list-card plugin-cards-wrapper">
         <el-col v-for="item in showList" :key="item.id" :span="12">
-          <div @mouseenter="showDeleteBtn(item.id)" @mouseleave="hideDeleteBtn" style="position: relative;">
+          <div class="item-box">
             <span
               v-show="
-                deleteBtnId === item.id &&
                 (JSON.stringify(item.config) === '[]' || JSON.stringify(item.config) === '{}')
               "
               @click="deleteModule(item)"
@@ -99,7 +98,6 @@ export default {
       showList: [],
       moduleCount: 0,
       selectedModule: {},
-      deleteBtnId: undefined,
     }
   },
 
@@ -114,12 +112,6 @@ export default {
   },
 
   methods: {
-    showDeleteBtn(id) {
-      this.deleteBtnId = id
-    },
-    hideDeleteBtn() {
-      this.deleteBtnId = undefined
-    },
     deleteModule(item) {
       this.$msgbox
         .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {

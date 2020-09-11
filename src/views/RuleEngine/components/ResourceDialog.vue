@@ -27,18 +27,14 @@
       </el-form-item>
 
       <el-row v-if="record.type" class="config-item-wrapper" :gutter="20">
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item prop="id" :label="$t('RuleEngine.resourceID')">
-            <el-input v-model="record.id" class="reset-input-width"></el-input>
+            <el-input v-model="record.id"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item style="width: 330px;" prop="description" :label="$t('RuleEngine.resourceDes')">
-            <el-input
-              type="textarea"
-              v-model="record.description"
-              :placeholder="$t('RuleEngine.pleaseEnter')"
-            ></el-input>
+        <el-col :span="12">
+          <el-form-item prop="description" :label="$t('RuleEngine.resourceDes')">
+            <el-input v-model="record.description" :placeholder="$t('RuleEngine.pleaseEnter')"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -53,7 +49,7 @@
             :key="i"
             :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
           >
-            <el-form-item v-bind="item.formItemAttributes">
+            <el-form-item v-if="item.elType !== 'file'" v-bind="item.formItemAttributes">
               <template v-if="item.formItemAttributes.description" slot="label">
                 {{ item.formItemAttributes.label }}
                 <el-popover width="220" trigger="hover" placement="top">
@@ -90,8 +86,25 @@
                 </emq-select>
               </template>
             </el-form-item>
+            <template v-else>
+              <el-form-item
+                v-if="
+                  record.config['ssl'] === undefined || record.config['ssl'] === 'true' || record.config['ssl'] === true
+                "
+                v-bind="item.formItemAttributes"
+              >
+                <file-editor v-model="record.config[item.key]"></file-editor>
+              </el-form-item>
+            </template>
           </el-col>
-          <el-col v-if="wholeConfigList.length > 8" :span="24" class="show-more">
+          <el-col
+            v-if="
+              ([false, 'false'].includes(record.config['ssl']) && wholeConfigList.length > 11) ||
+              (![false, 'false'].includes(record.config['ssl']) && wholeConfigList.length > 8)
+            "
+            :span="24"
+            class="show-more"
+          >
             <a href="javascript:;" @click="showWholeList">
               {{ showMoreItem ? $t('Clients.collapse') : $t('Clients.expand') }}
               <i :class="showMoreItem ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
@@ -114,11 +127,12 @@
 import { loadResourceTypes, createResource } from '@/api/rules'
 import { renderParamsForm, verifyID } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
+import FileEditor from '@/components/FileEditor'
 
 export default {
   name: 'ResourceDialog',
 
-  components: { KeyAndValueEditor },
+  components: { KeyAndValueEditor, FileEditor },
 
   inheritAttrs: false,
 
@@ -320,10 +334,6 @@ export default {
   }
 
   .el-form-item {
-    .reset-input-width {
-      width: 330px;
-    }
-
     .el-select {
       &:not(.reset-width) {
         width: 330px;
@@ -345,7 +355,7 @@ export default {
       padding: 0 32px;
     }
 
-    .el-input:not(.reset-input-width),
+    .el-input,
     .el-select {
       width: 200px !important;
     }

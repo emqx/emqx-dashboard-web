@@ -119,6 +119,19 @@
     justify-content: center;
   }
 
+  .item-box {
+    position: relative;
+    .delete-icon {
+      visibility: hidden;
+    }
+
+    &:hover {
+      .delete-icon {
+        visibility: visible;
+      }
+    }
+  }
+
   .delete-icon {
     position: absolute;
     width: 16px;
@@ -127,7 +140,6 @@
     background-size: 100% 100%;
     top: 3px;
     right: 3px;
-    color: #ccc;
     cursor: pointer;
   }
 }
