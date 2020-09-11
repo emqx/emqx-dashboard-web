@@ -162,7 +162,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       case 'array':
         if (items.type === 'object') {
           const { schema } = items
-          oneObjOfArray = renderParamsForm(schema, 'config')
+          oneObjOfArray = renderParamsForm(schema)
           defaultValue = !defaultValue.length ? [] : defaultValue
         }
         elType = 'array'
@@ -197,9 +197,14 @@ export function renderParamsForm(params = {}, propPrefix = '') {
     rules[k] = []
     const requiredInputText = locale === 'zh' ? '请输入' : 'Field required'
     const requiredSelectText = locale === 'zh' ? '请选择' : 'Please select'
+    const requiredArrayText = locale === 'zh' ? '请添加' : 'Please Add'
 
     if (required) {
-      rules[k].push({ required: true, message: elType === 'input' ? requiredInputText : requiredSelectText })
+      if (elType === 'array') {
+        rules[k].push({ required: true, message: requiredArrayText })
+      } else {
+        rules[k].push({ required: true, message: elType === 'input' ? requiredInputText : requiredSelectText })
+      }
     }
     if (enumValue) {
       rules[k].push({ type: 'enum', enum: enumValue })
