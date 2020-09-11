@@ -120,6 +120,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
   let form = []
   const rules = {}
   let oneObjOfArray = {}
+  let extraConfigs = {}
 
   for (const [k, v] of Object.entries(params)) {
     if (k === '$resource') {
@@ -167,8 +168,12 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         }
         elType = 'array'
         break
+      case 'cfgselect':
+        elType = 'cfgselect'
+        field = { list: enumValue }
+        extraConfigs = items
     }
-    if (enumValue) {
+    if (enumValue && elType !== 'cfgselect') {
       elType = 'select'
       field = { list: enumValue }
     }
@@ -182,7 +187,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       },
       bindAttributes: {
         type: inputType,
-        field: elType === 'select' ? field : undefined,
+        field: elType === 'select' || elType === 'cfgselect' ? field : undefined,
         placeholder: inputPlaceholder,
         rows: inputType === 'textarea' ? 5 : 0,
       },
@@ -191,7 +196,8 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       elType,
       value: elType === 'object' && !Object.keys(defaultValue).length ? {} : defaultValue,
       order,
-      oneObjOfArray,
+      oneObjOfArray: elType === 'array' ? oneObjOfArray : {},
+      extraConfigs: elType === 'cfgselect' ? extraConfigs : {},
     })
     // rules 的属性
     rules[k] = []

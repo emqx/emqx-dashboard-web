@@ -38,6 +38,57 @@
           </p>
           <el-row v-if="allFeatures[item.id]" :gutter="20">
             <el-col v-for="(one, index) in allFeatures[item.id]" :key="index" :span="12">
+              <div @mouseenter="showDeleteBtn(index)" @mouseleave="hideDeleteBtn" style="position: relative;">
+                <span
+                  v-show="deleteBtnIndex === index && one.id && JSON.stringify(one.params) === '{}'"
+                  @click="deleteModule(one)"
+                  class="delete-icon"
+                >
+                </span>
+                <el-card shadow="hover">
+                  <div class="module-item" @click="toModuleDetail(one, one.status === 'unadd' ? 'add' : 'edit')">
+                    <!-- <div class="item-error-tip">
+                  <span>error</span>
+                  <el-button class="reconnect-btn" plain size="mini">重连</el-button>
+                </div> -->
+                    <div class="left-box">
+                      <img :src="one.img" alt="" class="item-img" />
+                      <div class="item-content">
+                        <div class="item-title">{{ one.title[lang] }}</div>
+                        <div class="item-des">
+                          {{ one.description[lang] }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="item-handle">
+                      <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
+                        {{ $t('Modules.select') }}
+                        <!-- {{ $t('Modules.guide') }} -->
+                      </el-button>
+                      <el-button v-else class="start-btn" plain size="mini">
+                        {{ $t('Modules.added') }}
+                      </el-button>
+                      <a href="javascript:;" @click.stop="toReadMore" class="know-more">
+                        {{ $t('Modules.readMore') }}
+                      </a>
+                    </div>
+                  </div>
+                </el-card>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+      </template>
+      <template v-else>
+        <el-row v-if="searchModuleInfo.length" :gutter="20">
+          <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
+            <div @mouseenter="showDeleteBtn(index)" @mouseleave="hideDeleteBtn" style="position: relative;">
+              <span
+                v-show="deleteBtnIndex === index && one.id && JSON.stringify(one.params) === '{}'"
+                @click="deleteModule(one)"
+                class="delete-icon"
+              >
+              </span>
               <el-card shadow="hover">
                 <div class="module-item" @click="toModuleDetail(one, one.status === 'unadd' ? 'add' : 'edit')">
                   <!-- <div class="item-error-tip">
@@ -67,42 +118,7 @@
                   </div>
                 </div>
               </el-card>
-            </el-col>
-          </el-row>
-        </div>
-      </template>
-      <template v-else>
-        <el-row v-if="searchModuleInfo.length" :gutter="20">
-          <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
-            <el-card shadow="hover">
-              <div class="module-item" @click="toModuleDetail(one, one.status === 'unadd' ? 'add' : 'edit')">
-                <!-- <div class="item-error-tip">
-                  <span>error</span>
-                  <el-button class="reconnect-btn" plain size="mini">重连</el-button>
-                </div> -->
-                <div class="left-box">
-                  <img :src="one.img" alt="" class="item-img" />
-                  <div class="item-content">
-                    <div class="item-title">{{ one.title[lang] }}</div>
-                    <div class="item-des">
-                      {{ one.description[lang] }}
-                    </div>
-                  </div>
-                </div>
-                <div class="item-handle">
-                  <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
-                    {{ $t('Modules.select') }}
-                    <!-- {{ $t('Modules.guide') }} -->
-                  </el-button>
-                  <el-button v-else class="start-btn" plain size="mini">
-                    {{ $t('Modules.added') }}
-                  </el-button>
-                  <a href="javascript:;" @click.stop="toReadMore" class="know-more">
-                    {{ $t('Modules.readMore') }}
-                  </a>
-                </div>
-              </div>
-            </el-card>
+            </div>
           </el-col>
         </el-row>
         <a-card v-else class="null-modules">
@@ -114,7 +130,7 @@
 </template>
 
 <script>
-import { loadAllModules, showCreatedModuleInfo } from '@/api/modules'
+import { loadAllModules, showCreatedModuleInfo, createModule, destroyModule } from '@/api/modules'
 import { fillI18n, matchSearch } from '@/common/utils'
 import store from '@/stores'
 
@@ -141,15 +157,14 @@ export default {
       oper: 'add',
       scrollTop: 0,
       scrolling: false,
+      addedModules: JSON.parse(localStorage.getItem('addedModules')) || {},
+      deleteBtnIndex: undefined,
     }
   },
 
   computed: {
     lang() {
       return store.state.lang
-    },
-    addedModules() {
-      return JSON.parse(localStorage.getItem('addedModules')) || {}
     },
     contentStyle() {
       return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px' }
@@ -170,6 +185,30 @@ export default {
   },
 
   methods: {
+    showDeleteBtn(id) {
+      this.deleteBtnIndex = id
+    },
+    hideDeleteBtn() {
+      this.deleteBtnIndex = undefined
+    },
+    deleteModule(item) {
+      this.$msgbox
+        .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await destroyModule(item.id)
+          this.$message.success(this.$t('Base.deleteSuccess'))
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          delete addedModules[item.name]
+          delete this.addedModules[item.name]
+          localStorage.setItem('addedModules', JSON.stringify(addedModules))
+          this.loadData()
+        })
+        .catch(() => {})
+    },
     returnPosition() {
       const { id, top } = this.$route.query
       if (id) {
@@ -206,13 +245,29 @@ export default {
       })
       return data
     },
-    toModuleDetail(val, oper) {
+    async toModuleDetail(val, oper) {
       this.oper = oper
       this.selectedModule = {}
       if (oper === 'add') {
         const data = { ...val }
         this.parseI18n([data])
         const { params } = data
+        if (!Object.keys(params).length) {
+          const requestParams = {
+            type: val.name,
+            config: {},
+          }
+          const responseData = await createModule(requestParams)
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          addedModules[responseData.type] = responseData.id
+          this.addedModules = addedModules
+          localStorage.setItem('addedModules', JSON.stringify(addedModules))
+          this.$message.success(this.$t('Modules.moduleAddSuccess'))
+          setTimeout(() => {
+            this.loadData()
+          }, 50)
+          return
+        }
         this.selectedModule = {
           paramsData: params,
           type: val.name,
@@ -222,6 +277,10 @@ export default {
         }
         this.$store.dispatch('UPDATE_MODULE', this.selectedModule)
       } else {
+        if (!Object.keys(val.params).length) {
+          this.$message.info(this.$t('Modules.noNeedAddConfigTip'))
+          return
+        }
         const id = this.addedModules[val.name]
         this.getAddedModuleInfo(id)
           .then((res) => {
@@ -256,6 +315,9 @@ export default {
       }, 5)
     },
     async loadData() {
+      this.allModuleList = []
+      this.allFeatures = []
+      this.canAddCount = 0
       this.allFeatures = await loadAllModules()
       this.getImgs()
       Object.values(this.allFeatures).forEach((item) => {
@@ -265,11 +327,15 @@ export default {
         item.localTitle = item.title[this.lang]
         if (Object.keys(this.addedModules).includes(item.name)) {
           item.status = 'added'
+          item.id = this.addedModules[item.name]
         } else {
           item.status = 'unadd'
           this.canAddCount += 1
         }
       })
+      if (this.searchVal) {
+        this.searchModule()
+      }
     },
     getImgs() {
       this.classList.forEach((item) => {

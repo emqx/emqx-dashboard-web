@@ -171,4 +171,8 @@ export default {
     zh: '请上传文件',
     en: 'Please upload File',
   },
+  noNeedAddConfigTip: {
+    zh: '此模块无需配置相关信息！',
+    en: 'No configuration information is required for this module!',
+  },
 }
