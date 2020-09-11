@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div v-if="oper === 'edit'" class="page-header-top-start btn" @click="deleteModule">
+      <div v-if="oper === 'edit'" class="page-header-top-start delete-btn" @click="deleteModule">
         <el-button type="danger" size="small">
           {{ $t('RuleEngine.delete') }}
         </el-button>
@@ -50,7 +50,13 @@
                           <key-and-value-editor v-model="record.config[item.key]"></key-and-value-editor>
                         </template>
                         <template v-else-if="item.elType === 'array'">
-                          <array-editor v-model="record.config[item.key]" :data="item.oneObjOfArray"></array-editor>
+                          <array-editor
+                            ref="arrayEditor"
+                            v-model="record.config[item.key]"
+                            :data="item.oneObjOfArray"
+                            :isDadRequired="rules.config[item.key].length > 0"
+                            @updateValidate="updateValidate"
+                          ></array-editor>
                         </template>
                         <!-- input -->
                         <template v-else-if="item.elType !== 'select'">
@@ -111,7 +117,7 @@
         <Listeners v-model="record.config['listeners']" :listenerData="listener"> </Listeners>
       </el-card>
     </div>
-    <el-col :span="configList.length === 1 ? 9 : 16">
+    <el-col :span="configList.length === 1 && fullSpanType.indexOf(configList[0].type) === -1 ? 9 : 16">
       <div class="button-group__center">
         <el-button size="small" @click="exitDetail">{{ $t('Base.cancel') }}</el-button>
         <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate()">
@@ -150,6 +156,7 @@ export default {
       },
       allModuleList: [],
       listener: {},
+      fullSpanType: ['array', 'object', 'textarea'],
       mongoCommonConfigs: [],
       mongoConnectMode: {},
       mongoCommonRules: {
@@ -184,6 +191,9 @@ export default {
   },
 
   methods: {
+    updateValidate() {
+      this.$refs.record.validate()
+    },
     loadData() {
       if (this.oper === 'add') {
         this.loadConfigList(this.moduleData.paramsData)
@@ -228,6 +238,11 @@ export default {
       }
     },
     async handleCreate() {
+      this.updateValidate()
+      const { arrayEditor } = this.$refs
+      if (arrayEditor[0]._data.innerValid === false) {
+        return
+      }
       const valid = await this.$refs.record.validate()
       if (!valid) {
         return
@@ -435,6 +450,11 @@ export default {
 
   .listener-wrapper {
     margin-top: 24px;
+  }
+
+  .delete-btn {
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 </style>
