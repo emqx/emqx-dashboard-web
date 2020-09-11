@@ -118,4 +118,16 @@
     align-items: center;
     justify-content: center;
   }
+
+  .delete-icon {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: url('../../assets/img/delete.png') no-repeat;
+    background-size: 100% 100%;
+    top: 3px;
+    right: 3px;
+    color: #ccc;
+    cursor: pointer;
+  }
 }

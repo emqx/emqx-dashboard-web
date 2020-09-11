@@ -28,41 +28,52 @@
 
     <div class="app-wrapper">
       <el-row v-if="showList.length" :gutter="20" class="emq-list-card plugin-cards-wrapper">
-        <el-col v-for="item in list" :key="item.id" :span="12">
-          <el-card shadow="hover">
-            <div class="module-item" @click="toEditModule(item)">
-              <!-- <div class="item-error-tip">
+        <el-col v-for="item in showList" :key="item.id" :span="12">
+          <div @mouseenter="showDeleteBtn(item.id)" @mouseleave="hideDeleteBtn" style="position: relative;">
+            <span
+              v-show="
+                deleteBtnId === item.id &&
+                (JSON.stringify(item.config) === '[]' || JSON.stringify(item.config) === '{}')
+              "
+              @click="deleteModule(item)"
+              class="delete-icon"
+            >
+            </span>
+            <el-card shadow="hover">
+              <div class="module-item" @click="toEditModule(item)">
+                <!-- <div class="item-error-tip">
               <span>error</span>
               <el-button class="reconnect-btn" plain size="mini">{{ $t('Modules.reconnect') }}</el-button>
             </div> -->
-              <div class="left-box">
-                <img :src="item.img" alt="" class="item-img" />
-                <div class="item-content">
-                  <div class="item-title">{{ item.title[lang] }}</div>
-                  <div class="item-des">
-                    {{ item.description[lang] }}
+                <div class="left-box">
+                  <img :src="item.img" alt="" class="item-img" />
+                  <div class="item-content">
+                    <div class="item-title">{{ item.title[lang] }}</div>
+                    <div class="item-des">
+                      {{ item.description[lang] }}
+                    </div>
                   </div>
                 </div>
+                <div class="item-handle">
+                  <el-button
+                    v-if="item.enabled"
+                    class="stop-btn"
+                    plain
+                    size="mini"
+                    type="danger"
+                    @click.stop="updataModule(item, false)"
+                    >{{ $t('Modules.stop') }}</el-button
+                  >
+                  <el-button v-else class="start-btn" plain size="mini" @click.stop="updataModule(item, true)">{{
+                    $t('Modules.run')
+                  }}</el-button>
+                  <a href="javascript:;" @click.stop="toReadMore" class="know-more">
+                    {{ $t('Modules.readMore') }}
+                  </a>
+                </div>
               </div>
-              <div class="item-handle">
-                <el-button
-                  v-if="item.enabled"
-                  class="stop-btn"
-                  plain
-                  size="mini"
-                  type="danger"
-                  @click.stop="updataModule(item, false)"
-                  >{{ $t('Modules.stop') }}</el-button
-                >
-                <el-button v-else class="start-btn" plain size="mini" @click.stop="updataModule(item, true)">{{
-                  $t('Modules.run')
-                }}</el-button>
-                <a href="javascript:;" @click.stop="toReadMore" class="know-more">
-                  {{ $t('Modules.readMore') }}
-                </a>
-              </div>
-            </div>
-          </el-card>
+            </el-card>
+          </div>
         </el-col>
       </el-row>
       <a-card v-else class="null-modules">
@@ -74,7 +85,7 @@
 </template>
 
 <script>
-import { loadCreatedModules, updateModule } from '@/api/modules'
+import { loadCreatedModules, updateModule, destroyModule } from '@/api/modules'
 import { matchSearch } from '@/common/utils'
 
 export default {
@@ -88,6 +99,7 @@ export default {
       showList: [],
       moduleCount: 0,
       selectedModule: {},
+      deleteBtnId: undefined,
     }
   },
 
@@ -102,6 +114,29 @@ export default {
   },
 
   methods: {
+    showDeleteBtn(id) {
+      this.deleteBtnId = id
+    },
+    hideDeleteBtn() {
+      this.deleteBtnId = undefined
+    },
+    deleteModule(item) {
+      this.$msgbox
+        .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await destroyModule(item.id)
+          this.$message.success(this.$t('Base.deleteSuccess'))
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          delete addedModules[item.type]
+          localStorage.setItem('addedModules', JSON.stringify(addedModules))
+          this.loadData()
+        })
+        .catch(() => {})
+    },
     async updataModule(item, val) {
       if (!val) {
         this.$msgbox
@@ -140,6 +175,11 @@ export default {
       }, 500)
     },
     toEditModule(item) {
+      const itemConfig = JSON.stringify(item.config)
+      if (itemConfig === '[]' || itemConfig === '{}') {
+        this.$message.info(this.$t('Modules.noNeedAddConfigTip'))
+        return
+      }
       this.selectedModule = item
       this.selectedModule.from = 'modules'
       this.selectedModule.oper = 'edit'
@@ -147,6 +187,7 @@ export default {
       this.$router.push('/modules/detail')
     },
     async loadData() {
+      this.searchVal = ''
       const addedModules = {}
       this.list = []
       this.list = await loadCreatedModules()

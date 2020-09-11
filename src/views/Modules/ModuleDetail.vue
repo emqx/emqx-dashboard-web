@@ -58,6 +58,16 @@
                             @updateValidate="updateValidate"
                           ></array-editor>
                         </template>
+                        <template v-else-if="item.elType === 'cfgselect'">
+                          <config-select
+                            v-model="record.config[item.key]"
+                            v-bind="item.bindAttributes"
+                            class="reset-width"
+                            :extraConfigs="item.extraConfigs"
+                            @updateConfig="addConfigAccordingType"
+                          >
+                          </config-select>
+                        </template>
                         <!-- input -->
                         <template v-else-if="item.elType !== 'select'">
                           <el-input
@@ -85,7 +95,6 @@
                             v-model="record.config[item.key]"
                             v-bind="item.bindAttributes"
                             class="reset-width"
-                            @updateConfig="addConfigAccordingType"
                           >
                           </emq-select>
                         </template>
@@ -136,11 +145,12 @@ import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ArrayEditor from '@/components/ArrayEditor'
 import Listeners from './components/Listeners'
 import FileEditor from '@/components/FileEditor'
+import ConfigSelect from '@/components/ConfigSelect'
 
 export default {
   name: 'ModuleDetail',
 
-  components: { KeyAndValueEditor, ArrayEditor, Listeners, FileEditor },
+  components: { KeyAndValueEditor, ArrayEditor, Listeners, FileEditor, ConfigSelect },
 
   inheritAttrs: false,
 
@@ -157,12 +167,11 @@ export default {
       allModuleList: [],
       listener: {},
       fullSpanType: ['array', 'object', 'textarea'],
-      mongoCommonConfigs: [],
-      mongoConnectMode: {},
-      mongoCommonRules: {
+      originConfigList: [],
+      originRules: {
         config: {},
       },
-      mongoCommonRecord: {
+      originRecord: {
         config: {},
       },
     }
@@ -214,10 +223,6 @@ export default {
       }
     },
     loadConfigList(params) {
-      if (this.moduleData.type === 'mongo_authentication') {
-        this.handleMongoDBModule(params)
-        return
-      }
       const { listener, ...paramsData } = params
       if (listener) {
         this.listener = listener
@@ -232,6 +237,7 @@ export default {
         this.$set(this.record.config, key, value)
       })
       this.initListeners()
+      this.storeOriginData(configData)
       this.configLoading = false
       if (this.$refs.record) {
         setTimeout(this.$refs.record.clearValidate, 10)
@@ -239,7 +245,7 @@ export default {
     },
     async handleCreate() {
       const { arrayEditor } = this.$refs
-      if (arrayEditor[0]._data.innerValid === false) {
+      if (arrayEditor && arrayEditor[0]._data.innerValid === false) {
         return
       }
       const valid = await this.$refs.record.validate()
@@ -349,41 +355,29 @@ export default {
         }
       }
     },
-    handleMongoDBModule(params) {
-      const { connect_mode, ...paramsData } = params
-      this.mongoConnectMode = connect_mode
-      this.configLoading = true
-      const configData = renderParamsForm(paramsData, 'config')
+    storeOriginData(configData) {
       const { form, rules } = configData
-      this.mongoCommonConfigs = form
-      this.configList = form
-      this.mongoCommonRules.config = rules
-      this.mongoCommonRecord.config = {}
+      this.originConfigList = form
+      this.originRules.config = rules
+      this.originRecord.config = {}
       form.forEach(({ key, value }) => {
-        this.$set(this.mongoCommonRecord.config, key, value)
+        this.$set(this.originRecord.config, key, value)
       })
-      this.addConfigAccordingType(this.mongoCommonRecord.config.type)
-      this.configLoading = false
-      if (this.$refs.record) {
-        setTimeout(this.$refs.record.clearValidate, 10)
-      }
     },
-    addConfigAccordingType(type) {
-      const keyName = `${type}_mode`
-      const params = this.mongoConnectMode[keyName]
-      const [...commonConfig] = this.mongoCommonConfigs
-      const { ...rulesCommonConfig } = this.mongoCommonRules.config
-      const { ...recordCommonConfig } = this.mongoCommonRecord.config
-      if (params) {
-        const configData = renderParamsForm(params, 'config')
+    addConfigAccordingType(extraConfigs, type) {
+      const [...commonConfig] = this.originConfigList
+      const { ...rulesCommonConfig } = this.originRules.config
+      const { ...recordCommonConfig } = this.originRecord.config
+      if (Object.keys(extraConfigs).length) {
+        const configData = renderParamsForm(extraConfigs, 'config')
         const { form, rules } = configData
-        const extraConfig = {}
+        const addConfigs = {}
         form.forEach(({ key, value }) => {
-          this.$set(extraConfig, key, value)
+          this.$set(addConfigs, key, value)
         })
         this.configList = commonConfig.concat(form)
         this.rules.config = Object.assign(rulesCommonConfig, rules)
-        this.record.config = Object.assign(recordCommonConfig, extraConfig)
+        this.record.config = Object.assign(recordCommonConfig, addConfigs)
       } else {
         this.configList = commonConfig
         this.rules.config = rulesCommonConfig
