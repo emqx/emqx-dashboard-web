@@ -11,7 +11,7 @@
         <el-table-column :label="item" v-for="(item, index) in headers" :key="index">
           <template slot-scope="{ row, $index }">
             <el-form-item
-              :prop="'tableData.' + $index + '.' + row[item].formItemAttributes.prop"
+              :prop="`tableData.${$index}.${row[item].formItemAttributes.prop}`"
               :rules="form.rules[row[item].formItemAttributes.prop]"
             >
               <!-- input -->
