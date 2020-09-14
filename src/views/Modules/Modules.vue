@@ -5,8 +5,8 @@
         <div class="content">
           {{ $t('Modules.modules') }}
           <span v-cloak class="modules-num">{{ moduleCount }}</span>
-          <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/add')">
-            {{ $t('Base.add') }}
+          <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/select')">
+            {{ $t('Base.select') }}
           </el-button>
           <el-col :span="6" :offset="1">
             <el-input

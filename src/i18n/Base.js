@@ -148,4 +148,8 @@ export default {
     zh: '停用成功',
     en: 'Disable Success',
   },
+  select: {
+    zh: '选择',
+    en: 'Select',
+  },
 }

@@ -338,10 +338,10 @@ export default {
           if (this.from === 'modules') {
             this.$router.push('/modules')
           } else {
-            this.$router.push(`/modules/add?id=${this.$route.query.id}&top=${this.$route.query.top}`)
+            this.$router.push(`/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`)
           }
         } else {
-          this.$router.push(`/modules/add?id=${this.$route.query.id}&top=${this.$route.query.top}`)
+          this.$router.push(`/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`)
         }
       }, 10)
     },
