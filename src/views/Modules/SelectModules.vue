@@ -1,9 +1,9 @@
 <template>
-  <div class="modules add-module">
+  <div class="modules modules-select">
     <div class="header-box">
       <div class="inner-box">
         <div class="content" :style="contentStyle">
-          <span class="content-title">{{ $t('components.addModule') }}</span>
+          <span class="content-title">{{ $t('components.selectModules') }}</span>
           <span v-cloak class="modules-num">{{ canAddCount }}</span>
           <div
             :class="['module-class', item.id === activeNavId ? 'active-nav' : '']"
@@ -185,6 +185,7 @@ export default {
 
   methods: {
     deleteModule(item) {
+      const targetTop = document.documentElement.scrollTop || document.body.scrollTop
       this.$msgbox
         .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {
           confirmButtonText: this.$t('Base.confirm'),
@@ -199,6 +200,7 @@ export default {
           delete this.addedModules[item.name]
           localStorage.setItem('addedModules', JSON.stringify(addedModules))
           this.loadData()
+          this.keepPosition(targetTop)
         })
         .catch(() => {})
     },
@@ -211,6 +213,12 @@ export default {
           this.activeNavId = id
         }, 50)
       }
+    },
+    keepPosition(top) {
+      setTimeout(() => {
+        document.documentElement.scrollTop = top
+        document.body.scrollTop = top
+      }, 60)
     },
     searchModule() {
       this.searchLoading = true
@@ -239,6 +247,7 @@ export default {
       return data
     },
     async toModuleDetail(val, oper) {
+      const targetTop = document.documentElement.scrollTop || document.body.scrollTop
       this.oper = oper
       this.selectedModule = {}
       if (oper === 'add') {
@@ -256,9 +265,8 @@ export default {
           this.addedModules = addedModules
           localStorage.setItem('addedModules', JSON.stringify(addedModules))
           this.$message.success(this.$t('Modules.moduleAddSuccess'))
-          setTimeout(() => {
-            this.loadData()
-          }, 50)
+          this.loadData()
+          this.keepPosition(targetTop)
           return
         }
         this.selectedModule = {
@@ -375,7 +383,7 @@ export default {
 <style lang="scss" scoped>
 @import './style/module.scss';
 
-.add-module {
+.modules-select {
   transform: none;
 
   .header-box {
