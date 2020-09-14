@@ -22,6 +22,7 @@
               clearable
               :placeholder="$t('Modules.searchTip')"
               @input="searchModule"
+              @clear="loadData"
             >
               <i v-if="!searchLoading" slot="prefix" class="el-icon-search"></i>
               <i v-else slot="prefix" class="el-icon-loading"></i>
@@ -41,12 +42,12 @@
               <div class="item-box">
                 <span
                   v-show="one.id && JSON.stringify(one.params) === '{}'"
-                  @click="deleteModule(one)"
+                  @click="deleteModule(one, allFeatures[item.id])"
                   class="delete-icon"
                 >
                 </span>
                 <el-card shadow="hover">
-                  <div class="module-item" @click="toModuleDetail(one, one.status === 'unadd' ? 'add' : 'edit')">
+                  <div class="module-item" @click="toModuleDetail(one, allFeatures[item.id])">
                     <!-- <div class="item-error-tip">
                   <span>error</span>
                   <el-button class="reconnect-btn" plain size="mini">重连</el-button>
@@ -85,12 +86,12 @@
             <div class="item-box">
               <span
                 v-show="one.id && JSON.stringify(one.params) === '{}'"
-                @click="deleteModule(one)"
+                @click="deleteModule(one, searchModuleInfo)"
                 class="delete-icon"
               >
               </span>
               <el-card shadow="hover">
-                <div class="module-item" @click="toModuleDetail(one, one.status === 'unadd' ? 'add' : 'edit')">
+                <div class="module-item" @click="toModuleDetail(one, searchModuleInfo)">
                   <!-- <div class="item-error-tip">
                   <span>error</span>
                   <el-button class="reconnect-btn" plain size="mini">重连</el-button>
@@ -184,8 +185,8 @@ export default {
   },
 
   methods: {
-    deleteModule(item) {
-      const targetTop = document.documentElement.scrollTop || document.body.scrollTop
+    deleteModule(item, list) {
+      const index = list.indexOf(item)
       this.$msgbox
         .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {
           confirmButtonText: this.$t('Base.confirm'),
@@ -199,8 +200,9 @@ export default {
           delete addedModules[item.name]
           delete this.addedModules[item.name]
           localStorage.setItem('addedModules', JSON.stringify(addedModules))
-          this.loadData()
-          this.keepPosition(targetTop)
+          const { id, ...oneModule } = item
+          oneModule.status = 'unadd'
+          list.splice(index, 1, oneModule)
         })
         .catch(() => {})
     },
@@ -213,12 +215,6 @@ export default {
           this.activeNavId = id
         }, 50)
       }
-    },
-    keepPosition(top) {
-      setTimeout(() => {
-        document.documentElement.scrollTop = top
-        document.body.scrollTop = top
-      }, 60)
     },
     searchModule() {
       this.searchLoading = true
@@ -246,8 +242,9 @@ export default {
       })
       return data
     },
-    async toModuleDetail(val, oper) {
-      const targetTop = document.documentElement.scrollTop || document.body.scrollTop
+    async toModuleDetail(val, list) {
+      const index = list.indexOf(val)
+      const oper = val.status === 'unadd' ? 'add' : 'edit'
       this.oper = oper
       this.selectedModule = {}
       if (oper === 'add') {
@@ -265,8 +262,9 @@ export default {
           this.addedModules = addedModules
           localStorage.setItem('addedModules', JSON.stringify(addedModules))
           this.$message.success(this.$t('Modules.moduleAddSuccess'))
-          this.loadData()
-          this.keepPosition(targetTop)
+          val.status = 'added'
+          val.id = responseData.id
+          list.splice(index, 1, val)
           return
         }
         this.selectedModule = {
@@ -334,9 +332,6 @@ export default {
           this.canAddCount += 1
         }
       })
-      if (this.searchVal) {
-        this.searchModule()
-      }
     },
     getImgs() {
       this.classList.forEach((item) => {
