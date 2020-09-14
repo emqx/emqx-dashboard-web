@@ -352,9 +352,9 @@ let routes = [
         component: () => import('@/views/Modules/Modules'),
       },
       {
-        path: 'add',
-        name: 'module-add',
-        component: () => import('@/views/Modules/AddModule'),
+        path: 'select',
+        name: 'modules-select',
+        component: () => import('@/views/Modules/SelectModules'),
       },
       {
         path: 'detail',
