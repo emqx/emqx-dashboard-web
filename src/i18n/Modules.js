@@ -28,8 +28,8 @@ export default {
     en: 'Description',
   },
   searchTip: {
-    zh: '搜索全部模块...',
-    en: 'Search all modules...',
+    zh: '搜索模块...',
+    en: 'Search modules...',
   },
   reconnect: {
     zh: '重连',
@@ -100,12 +100,16 @@ export default {
     en: 'Authentication',
   },
   protocols: {
-    zh: '协议拓展',
+    zh: '协议接入',
     en: 'Protocols',
   },
   messagePublish: {
     zh: '消息下发',
     en: 'Message Publish',
+  },
+  extension: {
+    zh: '多语言扩展',
+    en: 'extensions',
   },
   monitor: {
     zh: '运维监控',

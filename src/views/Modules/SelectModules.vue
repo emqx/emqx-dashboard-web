@@ -3,17 +3,19 @@
     <div class="header-box">
       <div class="inner-box">
         <div class="content" :style="contentStyle">
-          <span class="content-title">{{ $t('components.selectModules') }}</span>
-          <span v-cloak class="modules-num">{{ canAddCount }}</span>
-          <div
-            :class="['module-class', item.id === activeNavId ? 'active-nav' : '']"
-            v-for="item in classList"
-            :key="item.id"
-            @click="changeNav(item.id)"
-          >
-            {{ item.name }}
+          <div class="content-left">
+            <span class="content-title">{{ $t('components.selectModules') }}</span>
+            <span v-cloak class="modules-num">{{ canAddCount }}</span>
+            <div
+              :class="['module-class', item.id === activeNavId ? 'active-nav' : '']"
+              v-for="item in classList"
+              :key="item.id"
+              @click="changeNav(item.id)"
+            >
+              {{ item.name }}
+            </div>
           </div>
-          <el-col :span="6" :offset="1">
+          <el-col :span="6">
             <el-input
               v-model="searchVal"
               type="text"
@@ -147,6 +149,7 @@ export default {
         { name: this.$t('Modules.authentication'), id: 'auth' },
         { name: this.$t('Modules.protocols'), id: 'protocol' },
         { name: this.$t('Modules.messagePublish'), id: 'message' },
+        { name: this.$t('Modules.extension'), id: 'extension' },
         { name: this.$t('Modules.monitor'), id: 'devops' },
         { name: this.$t('Modules.localModules'), id: 'module' },
       ],
@@ -397,9 +400,14 @@ export default {
 
     .content {
       height: 64px;
-      padding-left: 24px;
+      padding: 0 24px;
       box-sizing: border-box;
       background-color: #fff;
+      justify-content: space-between;
+
+      .content-left {
+        display: flex;
+      }
 
       span {
         flex-shrink: 0;
@@ -459,6 +467,7 @@ export default {
       }
 
       .select-btn {
+        font-size: 13px;
         margin-bottom: 20px;
         color: #999;
         &:hover {

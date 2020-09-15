@@ -3,12 +3,14 @@
     <page-header>
       <div class="page-header-content-view">
         <div class="content">
-          {{ $t('Modules.modules') }}
-          <span v-cloak class="modules-num">{{ moduleCount }}</span>
-          <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/select')">
-            {{ $t('Base.select') }}
-          </el-button>
-          <el-col :span="6" :offset="1">
+          <div class="content-left">
+            {{ $t('Modules.modules') }}
+            <span v-cloak class="modules-num">{{ moduleCount }}</span>
+            <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/select')">
+              {{ $t('Base.select') }}
+            </el-button>
+          </div>
+          <el-col :span="6">
             <el-input
               v-model="searchVal"
               type="text"
@@ -212,12 +214,22 @@ export default {
 <style lang="scss" scoped>
 @import './style/module.scss';
 
-.stop-btn {
-  width: 52px;
-  color: #ff0000;
-  border: 1px solid #ff0000;
-  font-size: 14px;
-  margin-bottom: 20px;
-  background-color: #fbf2f2;
+.modules {
+  .stop-btn {
+    width: 52px;
+    color: #ff0000;
+    border: 1px solid #ff0000;
+    font-size: 14px;
+    margin-bottom: 20px;
+    background-color: #fbf2f2;
+  }
+
+  .content {
+    justify-content: space-between;
+  }
+
+  .modules-num {
+    margin-left: 7px !important;
+  }
 }
 </style>
