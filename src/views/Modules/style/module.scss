@@ -4,8 +4,10 @@
     .content {
       display: flex;
       align-items: center;
+      min-width: 830px;
 
       .modules-num {
+        display: inline-block;
         min-width: 38px;
         padding: 2px 10px;
         text-align: center;

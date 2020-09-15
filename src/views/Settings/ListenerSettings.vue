@@ -1,14 +1,14 @@
 <template>
   <a-card class="listener-settings emq-list-card">
     <div class="emq-title listener-title">{{ $t('Settings.listenerTitle') }}</div>
-    <el-button type="primary" size="small" icon="el-icon-plus" @click="listenerDialogVisible = true" class="create-btn">
+    <el-button type="primary" size="small" icon="el-icon-plus" class="create-btn">
       {{ $t('Base.create') }}
     </el-button>
     <el-table :data="tableData" class="data-list">
       <el-table-column prop="protocol" :label="$t('Settings.listenerProtocol')"></el-table-column>
-      <el-table-column prop="zone" label="Zone"></el-table-column>
+      <el-table-column prop="zone" :label="$t('Settings.zone')"></el-table-column>
       <el-table-column prop="address" :label="$t('Settings.listenerAddr')"></el-table-column>
-      <el-table-column prop="acceptors" label="Acceptors"></el-table-column>
+      <el-table-column prop="acceptors" :label="$t('Settings.acceptors')"></el-table-column>
       <el-table-column prop="maxConnection" :label="$t('Settings.maxConnection')"></el-table-column>
       <el-table-column>
         <template slot-scope="{ row }">

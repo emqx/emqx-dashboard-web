@@ -174,6 +174,7 @@ export default {
       originRecord: {
         config: {},
       },
+      watchEdited: false,
     }
   },
 
@@ -190,6 +191,17 @@ export default {
     lang() {
       return this.$store.state.lang
     },
+    recordConfig() {
+      return this.record.config
+    },
+  },
+
+  watch: {
+    recordConfig: {
+      deep: true,
+      immediate: true,
+      handler: 'handleRecordChange',
+    },
   },
 
   created() {
@@ -200,6 +212,13 @@ export default {
   },
 
   methods: {
+    handleRecordChange(val, oldVal) {
+      if (!oldVal || JSON.stringify(oldVal) === '{}') {
+        this.watchEdited = false
+        return
+      }
+      this.watchEdited = true
+    },
     updateValidate() {
       this.$refs.record.validate()
     },
@@ -278,7 +297,7 @@ export default {
         this.exitDetail()
       } else {
         const isEdited = JSON.stringify(this.originRecord.config) !== JSON.stringify(this.record.config)
-        if (isEdited) {
+        if (isEdited && this.watchEdited) {
           this.$confirm(this.$t('Modules.editTip'), this.$t('Base.warning'), {
             type: 'warning',
             cancelButtonText: this.$t('Base.cancel'),
@@ -287,11 +306,9 @@ export default {
             .then(() => {
               this.confirmEditModule()
             })
-            .catch(() => {
-              this.exitDetail()
-            })
+            .catch(() => {})
         } else {
-          this.confirmEditModule()
+          this.exitDetail()
         }
       }
     },
