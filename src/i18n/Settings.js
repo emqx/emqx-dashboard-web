@@ -455,4 +455,24 @@ export default {
     zh: '客户端 Publish 消息流入速率限制',
     en: 'Client Publish message inflow rate limit',
   },
+  listener: {
+    zh: '监听器',
+    en: 'Listener',
+  },
+  listenerTitle: {
+    zh: '当前监听端口列表',
+    en: 'Listening Ports',
+  },
+  listenerProtocol: {
+    zh: '监听协议',
+    en: 'Protocol',
+  },
+  listenerAddr: {
+    zh: '监听地址',
+    en: 'Lisener Address',
+  },
+  maxConnection: {
+    zh: '连接（当前/最大）',
+    en: 'Connection(current/maximum)',
+  },
 }
