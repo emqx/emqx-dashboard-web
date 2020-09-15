@@ -9,6 +9,10 @@
         <el-tab-pane :label="$t('Settings.cluster')" name="cluster">
           <cluster-settings v-if="activeName === 'cluster'" ref="clusterSettings"></cluster-settings>
         </el-tab-pane>
+
+        <el-tab-pane :label="$t('Settings.listener')" name="listener">
+          <listener-settings v-if="activeName === 'listener'" ref="listenerSettings"></listener-settings>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -17,6 +21,7 @@
 <script>
 import ConfigSettings from './ConfigSettings'
 import ClusterSettings from './ClusterSettings'
+import ListenerSettings from './ListenerSettings'
 
 export default {
   name: 'Settings',
@@ -24,6 +29,7 @@ export default {
   components: {
     ConfigSettings,
     ClusterSettings,
+    ListenerSettings,
   },
 
   data() {
