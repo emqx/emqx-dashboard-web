@@ -175,4 +175,14 @@ export default {
     zh: '此模块无需配置相关信息！',
     en: 'No configuration information is required for this module!',
   },
+  continueCommit: {
+    zh: '继续提交',
+    en: 'Submit',
+  },
+  editTip: {
+    zh: '应用更改将会短暂重启当前模块，可能会造成数据丢失或服务中断，请确保在不影响业务的情况下提交更改。',
+    en: `
+      Applying changes will immediately restart the current module which may cause data loss
+      or service interruption. Please make sure to submit the changes without affecting the business.`,
+  },
 }

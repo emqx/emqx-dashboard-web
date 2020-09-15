@@ -275,18 +275,37 @@ export default {
         addedModules[data.type] = data.id
         localStorage.setItem('addedModules', JSON.stringify(addedModules))
         this.$message.success(this.$t('Modules.moduleAddSuccess'))
+        this.exitDetail()
       } else {
-        const { type, id, enabled, description } = this.moduleData
-        const data = {
-          type,
-          id,
-          enabled,
-          description,
-          config: this.record.config,
+        const isEdited = JSON.stringify(this.originRecord.config) !== JSON.stringify(this.record.config)
+        if (isEdited) {
+          this.$confirm(this.$t('Modules.editTip'), this.$t('Base.warning'), {
+            type: 'warning',
+            cancelButtonText: this.$t('Base.cancel'),
+            confirmButtonText: this.$t('Modules.continueCommit'),
+          })
+            .then(() => {
+              this.confirmEditModule()
+            })
+            .catch(() => {
+              this.exitDetail()
+            })
+        } else {
+          this.confirmEditModule()
         }
-        await updateModule(id, data)
-        this.$message.success(this.$t('Modules.moduleEditSuccess'))
       }
+    },
+    async confirmEditModule() {
+      const { type, id, enabled, description } = this.moduleData
+      const data = {
+        type,
+        id,
+        enabled,
+        description,
+        config: this.record.config,
+      }
+      await updateModule(id, data)
+      this.$message.success(this.$t('Modules.moduleEditSuccess'))
       this.exitDetail()
     },
     parseI18n(val) {
