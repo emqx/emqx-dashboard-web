@@ -475,4 +475,12 @@ export default {
     zh: '连接（当前/最大）',
     en: 'Connection(current/maximum)',
   },
+  zone: {
+    zh: '区域',
+    en: 'Zone',
+  },
+  acceptors: {
+    zh: '接收器',
+    en: 'Acceptors',
+  },
 }
