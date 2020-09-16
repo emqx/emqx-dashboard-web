@@ -146,6 +146,8 @@ import ArrayEditor from '@/components/ArrayEditor'
 import Listeners from './components/Listeners'
 import FileEditor from '@/components/FileEditor'
 import ConfigSelect from '@/components/ConfigSelect'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import _ from 'lodash'
 
 export default {
   name: 'ModuleDetail',
@@ -174,7 +176,6 @@ export default {
       originRecord: {
         config: {},
       },
-      watchEdited: false,
     }
   },
 
@@ -194,13 +195,16 @@ export default {
     recordConfig() {
       return this.record.config
     },
+    listeners() {
+      return this.record.config.listeners
+    },
   },
 
   watch: {
-    recordConfig: {
+    listeners: {
       deep: true,
       immediate: true,
-      handler: 'handleRecordChange',
+      handler: 'handlelistenersChange',
     },
   },
 
@@ -212,12 +216,8 @@ export default {
   },
 
   methods: {
-    handleRecordChange(val, oldVal) {
-      if (!oldVal || JSON.stringify(oldVal) === '{}') {
-        this.watchEdited = false
-        return
-      }
-      this.watchEdited = true
+    handlelistenersChange(val) {
+      this.originRecord.config.listeners = val
     },
     updateValidate() {
       this.$refs.record.validate()
@@ -296,8 +296,8 @@ export default {
         this.$message.success(this.$t('Modules.moduleAddSuccess'))
         this.exitDetail()
       } else {
-        const isEdited = JSON.stringify(this.originRecord.config) !== JSON.stringify(this.record.config)
-        if (isEdited && this.watchEdited) {
+        const isEdited = !_.isEqual(this.record.config, this.originRecord.config)
+        if (isEdited) {
           this.$confirm(this.$t('Modules.editTip'), this.$t('Base.warning'), {
             type: 'warning',
             cancelButtonText: this.$t('Base.cancel'),
@@ -390,6 +390,7 @@ export default {
           this.record.config.listeners = listeners || []
         }
       }
+      this.originRecord.config.listeners = this.record.config.listeners
     },
     storeOriginData(configData) {
       const { form, rules } = configData
