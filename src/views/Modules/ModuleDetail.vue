@@ -421,6 +421,9 @@ export default {
         this.record.config = recordCommonConfig
       }
       this.record.config.type = type
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
     },
   },
 }

@@ -189,6 +189,9 @@ export default {
         Object.assign(this.record.config, this.selectedListener)
       }
       this.record.config.listener_type = type
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
     },
     cleanOldData() {
       this.commonConfigs = []
@@ -227,6 +230,9 @@ export default {
         this.addDataAccordingListenerType(this.selectedListener.listener_type)
       }
       this.configLoading = false
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
     },
     atDialogClose() {
       setTimeout(() => {
