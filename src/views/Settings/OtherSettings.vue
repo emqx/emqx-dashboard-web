@@ -1,32 +1,22 @@
 <template>
-  <a-card class="listener-settings emq-list-card">
+  <a-card class="other-settings emq-list-card">
     <el-tabs v-model="settingType" :before-leave="handleBeforeLeave">
-      <el-tab-pane
-        v-for="(item, index) in listenerList"
-        :key="index"
-        :label="`${item.transport_type}_${item.name}`"
-        :name="`${item.transport_type}_${item.name}`"
-      >
+      <el-tab-pane v-for="(item, index) in otherList" :key="index" :label="item.type" :name="item.type">
         <config-form
-          v-if="settingType === `${item.transport_type}_${item.name}` && item.configs"
-          :ref="`${item.transport_type}_${item.name}`"
+          v-if="settingType === item.type && item.configs"
+          :ref="item.type"
           :record="item.configs"
           :rules="rules"
           :btn-loading="saveLoading"
           v-model="disabled"
           v-bind="allOptions"
-          labelWidth="260px"
-          @update="handleUpdate(...arguments, `${item.transport_type}_${item.name}`)"
+          labelWidth="190px"
+          @update="handleUpdate(...arguments, item.type)"
         >
         </config-form>
         <template v-else>
           <a-skeleton active></a-skeleton>
         </template>
-      </el-tab-pane>
-      <el-tab-pane label="" name="add">
-        <span slot="label" size="mini">
-          <i class="el-icon-plus"></i>
-        </span>
       </el-tab-pane>
     </el-tabs>
   </a-card>
@@ -38,7 +28,7 @@ import ConfigForm from './components/ConfigForm'
 import { allOptions } from '@/common/settingsData'
 
 export default {
-  name: 'ListenerSettings',
+  name: 'OtherSettings',
 
   components: {
     ConfigForm,
@@ -51,10 +41,10 @@ export default {
       initExternal: {},
       internalRecord: null,
       initInternal: {},
-      settingType: 'ssl_external',
+      settingType: 'cluster',
       rules: {},
       disabled: false,
-      listenerList: [],
+      otherList: [],
     }
   },
 
@@ -70,7 +60,7 @@ export default {
 
   methods: {
     async handleBeforeLeave(activeName, oldName) {
-      if (activeName !== oldName && oldName !== 'add') {
+      if (activeName !== oldName) {
         if (!this.disabled) {
           const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
             type: 'warning',
@@ -86,19 +76,8 @@ export default {
       return true
     },
     async loadData() {
-      const sortTabName = (valOne, valTwo) => {
-        const resA = `${valOne.transport_type}_${valOne.name}`
-        const resB = `${valTwo.transport_type}_${valTwo.name}`
-        if (resA < resB) {
-          return -1
-        }
-        if (resA === resB) {
-          return 0
-        }
-        return 1
-      }
-      const { listenersResList } = await loadConfig()
-      this.listenerList = listenersResList.sort(sortTabName)
+      const { otherResList } = await loadConfig()
+      this.otherList = otherResList
     },
     async handleUpdate(data, type) {
       this.saveLoading = true

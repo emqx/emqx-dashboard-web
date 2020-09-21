@@ -2,48 +2,60 @@
   <div class="settings">
     <div class="app-wrapper">
       <el-tabs v-model="activeName" type="card" :before-leave="handleBeforeLeave">
-        <el-tab-pane :label="$t('Settings.basic')" name="basic">
-          <config-settings v-if="activeName === 'basic'" ref="basicConfig"></config-settings>
+        <el-tab-pane :label="$t('Settings.basic')" name="baseSettings">
+          <base-settings v-if="activeName === 'baseSettings'" ref="baseSettings"></base-settings>
         </el-tab-pane>
-
-        <el-tab-pane :label="$t('Settings.cluster')" name="cluster">
-          <cluster-settings v-if="activeName === 'cluster'" ref="clusterSettings"></cluster-settings>
+        <el-tab-pane label="Zone" name="zoneSettings">
+          <zone-settings v-if="activeName === 'zoneSettings'" ref="zoneSettings"></zone-settings>
         </el-tab-pane>
-
-        <!-- <el-tab-pane :label="$t('Settings.listener')" name="listener">
-          <listener-settings v-if="activeName === 'listener'" ref="listenerSettings"></listener-settings>
-        </el-tab-pane> -->
+        <el-tab-pane :label="$t('Settings.cluster')" name="clusterSettings">
+          <cluster-settings v-if="activeName === 'clusterSettings'" ref="clusterSettings"></cluster-settings>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('Settings.listener')" name="listenerSettings">
+          <listener-settings v-if="activeName === 'listenerSettings'" ref="listenerSettings"></listener-settings>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('Settings.alarmMonitor')" name="monitorSettings">
+          <monitor-settings v-if="activeName === 'monitorSettings'" ref="monitorSettings"></monitor-settings>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('Settings.other')" name="otherSettings">
+          <other-settings v-if="activeName === 'otherSettings'" ref="otherSettings"></other-settings>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
 </template>
 
 <script>
-import ConfigSettings from './ConfigSettings'
+import BaseSettings from './BaseSettings'
+import ZoneSettings from './ZoneSettings'
 import ClusterSettings from './ClusterSettings'
-// import ListenerSettings from './ListenerSettings'
+import ListenerSettings from './ListenerSettings'
+import MonitorSettings from './MonitorSettings'
+import OtherSettings from './OtherSettings'
 
 export default {
   name: 'Settings',
 
   components: {
-    ConfigSettings,
+    BaseSettings,
+    ZoneSettings,
     ClusterSettings,
-    // ListenerSettings,
+    ListenerSettings,
+    MonitorSettings,
+    OtherSettings,
   },
 
   data() {
     return {
-      activeName: 'basic',
+      activeName: 'baseSettings',
     }
   },
 
   methods: {
     async handleBeforeLeave(currentName, oldName) {
-      if (currentName !== 'basic' && oldName === 'basic') {
-        // 基础设置是否修改过
-        const { basicConfig } = this.$refs
-        const { disabled } = basicConfig._data
+      if (oldName !== 'clusterSettings' && oldName !== 'listenerSettings' && currentName !== oldName) {
+        // 设置是否修改过
+        const { disabled } = this.$refs[oldName]._data
         if (!disabled) {
           const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
             type: 'warning',

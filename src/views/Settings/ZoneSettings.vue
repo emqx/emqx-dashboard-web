@@ -1,22 +1,16 @@
 <template>
-  <a-card class="listener-settings emq-list-card">
+  <a-card class="zone-settings emq-list-card">
     <el-tabs v-model="settingType" :before-leave="handleBeforeLeave">
-      <el-tab-pane
-        v-for="(item, index) in listenerList"
-        :key="index"
-        :label="`${item.transport_type}_${item.name}`"
-        :name="`${item.transport_type}_${item.name}`"
-      >
+      <el-tab-pane v-for="(item, index) in zoneList" :key="index" :label="item.name" :name="item.name">
         <config-form
-          v-if="settingType === `${item.transport_type}_${item.name}` && item.configs"
-          :ref="`${item.transport_type}_${item.name}`"
+          v-if="settingType === item.name && item.configs"
+          :ref="item.name"
           :record="item.configs"
           :rules="rules"
           :btn-loading="saveLoading"
           v-model="disabled"
           v-bind="allOptions"
-          labelWidth="260px"
-          @update="handleUpdate(...arguments, `${item.transport_type}_${item.name}`)"
+          @update="handleUpdate(...arguments, item.name)"
         >
         </config-form>
         <template v-else>
@@ -35,10 +29,11 @@
 <script>
 import { loadConfig, updateConfig } from '../../api/settings'
 import ConfigForm from './components/ConfigForm'
+import { validRanger } from '@/common/utils'
 import { allOptions } from '@/common/settingsData'
 
 export default {
-  name: 'ListenerSettings',
+  name: 'ZoneSettings',
 
   components: {
     ConfigForm,
@@ -51,10 +46,31 @@ export default {
       initExternal: {},
       internalRecord: null,
       initInternal: {},
-      settingType: 'ssl_external',
-      rules: {},
+      settingType: 'external',
+      rules: {
+        max_subscriptions: [
+          { required: true, message: this.$t('Settings.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validRanger(rule, value, callback, [0, 65536])
+            },
+            trigger: 'blur',
+          },
+        ],
+        max_awaiting_rel: [{ required: true, message: this.$t('Settings.pleaseEnter') }],
+        max_inflight: [
+          { required: true, message: this.$t('Settings.pleaseEnter') },
+          {
+            validator: (rule, value, callback) => {
+              validRanger(rule, value, callback, [0, 256])
+            },
+            trigger: 'blur',
+          },
+        ],
+        max_mqueue_len: [{ required: true, message: this.$t('Settings.pleaseEnter') }],
+      },
       disabled: false,
-      listenerList: [],
+      zoneList: [],
     }
   },
 
@@ -86,19 +102,8 @@ export default {
       return true
     },
     async loadData() {
-      const sortTabName = (valOne, valTwo) => {
-        const resA = `${valOne.transport_type}_${valOne.name}`
-        const resB = `${valTwo.transport_type}_${valTwo.name}`
-        if (resA < resB) {
-          return -1
-        }
-        if (resA === resB) {
-          return 0
-        }
-        return 1
-      }
-      const { listenersResList } = await loadConfig()
-      this.listenerList = listenersResList.sort(sortTabName)
+      const { zoneResList } = await loadConfig()
+      this.zoneList = zoneResList
     },
     async handleUpdate(data, type) {
       this.saveLoading = true

@@ -3,13 +3,36 @@ import http from '@/common/http'
 // 加载配置
 export const loadConfig = async () => {
   const res = await http.get('/configs')
-  const mqttRes = res.find(($) => $.zone === 'mqtt').configs
-  const externalRes = res.find(($) => $.zone === 'external').configs
-  const internalRes = res.find(($) => $.zone === 'internal').configs
+  const mqttRes = res.find(($) => $.type === 'emqx').configs
+  const alarmRes = res.find(($) => $.type === 'alarm')
+  const clusterRes = res.find(($) => $.type === 'cluster')
+
+  const zoneResList = []
+  const listenersResList = []
+  const monitorResList = []
+  const otherResList = []
+
+  monitorResList.push(alarmRes)
+  otherResList.push(clusterRes)
+  const otherTypeList = ['rpc', 'log']
+  res.forEach((item) => {
+    if (item.type === 'listener') {
+      item.configs.type = item.transport_type
+      listenersResList.push(item)
+    } else if (item.type.includes('mon')) {
+      monitorResList.push(item)
+    } else if (otherTypeList.indexOf(item.type) !== -1) {
+      otherResList.push(item)
+    } else if (item.type === 'zone') {
+      zoneResList.push(item)
+    }
+  })
   return {
     mqttRes,
-    externalRes,
-    internalRes,
+    zoneResList,
+    listenersResList,
+    monitorResList,
+    otherResList,
   }
 }
 
