@@ -14,6 +14,9 @@
         <el-tab-pane :label="$t('Settings.listeners')" name="listenerSettings">
           <listener-settings v-if="activeName === 'listenerSettings'" ref="listenerSettings"></listener-settings>
         </el-tab-pane>
+        <el-tab-pane :label="$t('Settings.monitorAlarm')" name="monitorSettings">
+          <monitor-settings v-if="activeName === 'monitorSettings'" ref="monitorSettings"></monitor-settings>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -24,6 +27,7 @@ import BaseSettings from './BaseSettings'
 import ZoneSettings from './ZoneSettings'
 import ClusterSettings from './ClusterSettings'
 import ListenerSettings from './ListenerSettings'
+import MonitorSettings from './MonitorSettings'
 
 export default {
   name: 'Settings',
@@ -33,6 +37,7 @@ export default {
     ZoneSettings,
     ClusterSettings,
     ListenerSettings,
+    MonitorSettings,
   },
 
   data() {
