@@ -317,4 +317,8 @@ export default {
     zh: '名字不能为空！',
     en: 'The name cannot be empty!'
   },
+  listeners: {
+    zh: '监听器',
+    en: 'Listeners',
+  },
 }
