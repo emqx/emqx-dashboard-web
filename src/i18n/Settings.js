@@ -98,47 +98,18 @@ export default {
     zh: 'ACL 被拒绝时的处理动作',
     en: 'The action when acl check reject current operation',
   },
-  enable_ban: {
-    zh: '是否启用白名单检查',
-    en: 'Enable ban check',
-  },
   allow_anonymous: {
     zh: '如果未加载身份验证插件，则默认情况下允许匿名身份验证。建议在生产部署中禁用该选项！',
     en:
       'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
   },
-  enable_stats: {
-    zh: '启用连接状态统计，会降低部分性能',
-    en: 'Enable per connection stats',
-  },
-  use_username_as_clientid: {
-    zh: '是否使用用户名替换客户端 ID',
-    en: 'Whether use username replace clientid',
-  },
   retry_interval: {
     zh: 'QoS 1/2 消息传递的重试间隔',
     en: 'Retry interval for QoS1/2 message delivering',
   },
-  keepalive_backoff: {
-    zh: 'MQTT keepalive 超时回退， keepalive * backoff * 2 时将断开连接',
-    en:
-      'The backoff for MQTT keepalive timeout. The broker will kick a connection out until keepalive * backoff * 2 timeout',
-  },
-  max_subscriptions: {
-    zh: '允许的最大订阅数，0 表示无限制',
-    en: 'Maximum number of subscriptions allowed, 0 means no limit',
-  },
-  ignore_loop_deliver: {
-    zh: '是否忽略消息循环传递，常用于消息桥接',
-    en: 'Whether to ignore loop delivery of messages (for MQTT v3.1.1)',
-  },
   mqtt_ignore_loop_deliver: {
     zh: '是否忽略消息循环传递，常用于消息桥接（对于 MQTT v3.1.1）',
     en: 'Whether to ignore loop delivery of messages (for MQTT v3.1.1)',
-  },
-  idle_timeout: {
-    zh: 'MQTT 连接空闲超时',
-    en: 'Idle timeout of the MQTT connections',
   },
   mqueue_store_qos0: {
     zh: '是否将 QoS0 的消息存储在队列中',
@@ -153,106 +124,33 @@ export default {
     en:
       'The times of state change per minute, specifying the threshold which is used to detect if the connection starts flapping',
   },
-  force_gc_policy: {
-    zh: 'MQTT 连接/消息大小 GC 阈值',
-    en: 'Force MQTT connection/session process GC after this number of messages | bytes passed through',
-  },
-  max_awaiting_rel: {
-    zh: '等待 PUBREL 的 QoS2 消息最大数据包数（client->broker），0 表示没有限制',
-    en: 'Maximum QoS2 packets (Client -> Broker) awaiting PUBREL, 0 means no limit',
-  },
-  max_inflight: {
-    zh: '保存的已传递但未确认的 QoS1/2 消息的飞行窗口的最大值',
-    en: 'Maximum size of the Inflight Window storing QoS1/2 messages delivered but unacked',
-  },
-  max_mqueue_len: {
-    zh: '排队消息的最大长度，0 表示没有限制',
-    en:
-      'Maximum queue length. Enqueued messages when persistent client disconnected, or inflight window is full. 0 means no limit',
-  },
-  await_rel_timeout: {
-    zh: '如果等待 pubrel 超时时间，超时将删除 QoS2 消息（client 发送到 broker）',
-    en: 'The QoS2 messages (Client -> Broker) will be dropped if awaiting PUBREL timeout',
-  },
-  enable_flapping_detect: {
-    zh: '是否开启 flapping detect',
-    en: 'Whether to turn on flapping detect',
-  },
-  mqueue_default_priority: {
-    zh: '对于不匹配优先级表的主题，默认为最高优先级',
-    en: 'Default to highest priority for topics not matching priority table',
-  },
-  mqueue_priorities: {
-    zh: '主题优先级',
-    en: 'Topic priorities',
-  },
-  session_expiry_interval: {
-    zh: '会话到期时长 MQTT V3.1.1',
-    en: 'Default session expiry interval for MQTT V3.1.1 connections',
-  },
-  upgrade_qos: {
-    zh: '根据订阅强制升级 QoS',
-    en: 'Force to upgrade QoS according to subscription',
-  },
-  max_packet_size: {
-    zh: '最大 MQTT 数据包大小',
-    en: 'Maximum MQTT packet size allowed',
-  },
   mqtt_max_packet_size: {
     zh: '最大 MQTT 数据包大小',
     en: 'Maximum MQTT packet size allowed',
-  },
-  max_clientid_len: {
-    zh: 'MQTT 客户端 ID 的长度限制',
-    en: 'Maximum length of MQTT clientid allowed',
   },
   mqtt_max_clientid_len: {
     zh: 'MQTT 客户端 ID 的长度限制',
     en: 'Maximum length of MQTT clientid allowed',
   },
-  max_topic_levels: {
-    zh: '主题层级限制，0 表示没有限制层级',
-    en: 'Maximum topic levels allowed, 0 means no limit',
-  },
   mqtt_max_topic_levels: {
     zh: '主题层级限制，0 表示没有限制层级',
     en: 'Maximum topic levels allowed, 0 means no limit',
-  },
-  max_qos_allowed: {
-    zh: '最大 QoS',
-    en: 'Maximum QoS allowed',
   },
   mqtt_max_qos_allowed: {
     zh: '最大 QoS',
     en: 'Maximum QoS allowed',
   },
-  max_topic_alias: {
-    zh: '最大主题别名数量，0 表示不支持主题别名',
-    en: 'Maximum Topic Alias, 0 means no topic alias supported',
-  },
   mqtt_max_topic_alias: {
     zh: '最大主题别名数量，0 表示不支持主题别名',
     en: 'Maximum Topic Alias, 0 means no topic alias supported',
-  },
-  retain_available: {
-    zh: '是否启用 Retain 消息',
-    en: 'Whether the Server supports MQTT retained messages',
   },
   mqtt_retain_available: {
     zh: '是否启用 Retain 消息',
     en: 'Whether the Server supports MQTT retained messages',
   },
-  wildcard_subscription: {
-    zh: '是否启用通配符订阅',
-    en: 'Whether the Server supports MQTT Wildcard Subscriptions',
-  },
   mqtt_wildcard_subscription: {
     zh: '是否启用通配符订阅',
     en: 'Whether the Server supports MQTT Wildcard Subscriptions',
-  },
-  shared_subscription: {
-    zh: '是否启用共享订阅',
-    en: 'Whether the Server supports MQTT Shared Subscriptions',
   },
   mqtt_shared_subscription: {
     zh: '是否启用共享订阅',
@@ -277,10 +175,6 @@ export default {
   flapping_detect_policy: {
     zh: '指定全局的 flapping detect 策略',
     en: 'Specify the global flapping detect policy',
-  },
-  strict_mode: {
-    zh: '是否在严格模式下解析 MQTT 帧',
-    en: 'Whether to parse the MQTT frame in strict mode',
   },
   mqtt_strict_mode: {
     zh: '是否在严格模式下解析 MQTT 帧',
@@ -383,10 +277,6 @@ export default {
     zh: '主机后缀',
     en: 'Suffix',
   },
-  bypass_auth_plugins: {
-    zh: '允许 zone 的客户端绕过身份验证步骤',
-    en: `Allow the zone's clients to bypass authentication step`,
-  },
   manual: {
     zh: '手动集群',
     en: 'Manual cluster',
@@ -419,68 +309,12 @@ export default {
     zh: '待加入',
     en: 'Waiting to join',
   },
-  force_shutdown_policy: {
-    zh: '进程消息队列长度 ｜ 内存字节',
-    en: 'Process message queue length | Memory byte',
+  zoneName: {
+    zh: 'Zone 名字',
+    en: 'Zone Name',
   },
-  mountpoint: {
-    zh: '主题挂载点',
-    en: 'Topic mount point',
-  },
-  publish_limit: {
-    zh: '发布限制',
-    en: 'Publish limit',
-  },
-  server_keepalive: {
-    zh: '服务端指定的 Keepalive 时间',
-    en: 'The Keepalive time specified by the server',
-  },
-  response_information: {
-    zh: '响应信息',
-    en: 'Response information',
-  },
-  quotaconn_messages_routing: {
-    zh: '单个客户端消息转发次数的配额',
-    en: 'Quota for the number of times a single client message is forwarded',
-  },
-  quotaoverall_messages_routing: {
-    zh: 'Zone 下面所有客户端消息转发次数的配额',
-    en: 'Quota for the number of times all client messages are forwarded under Zone',
-  },
-  rate_limitconn_bytes_in: {
-    zh: '客户端字节流入速率限制',
-    en: 'Client byte inflow rate limit',
-  },
-  rate_limitconn_messages_in: {
-    zh: '客户端 Publish 消息流入速率限制',
-    en: 'Client Publish message inflow rate limit',
-  },
-  listener: {
-    zh: '监听器',
-    en: 'Listener',
-  },
-  listenerTitle: {
-    zh: '当前监听端口列表',
-    en: 'Listening Ports',
-  },
-  listenerProtocol: {
-    zh: '监听协议',
-    en: 'Protocol',
-  },
-  listenerAddr: {
-    zh: '监听地址',
-    en: 'Lisener Address',
-  },
-  maxConnection: {
-    zh: '连接（当前/最大）',
-    en: 'Connection(current/maximum)',
-  },
-  zone: {
-    zh: '区域',
-    en: 'Zone',
-  },
-  acceptors: {
-    zh: '接收器',
-    en: 'Acceptors',
+  zoneNameTip: {
+    zh: '名字不能为空！',
+    en: 'The name cannot be empty!'
   },
 }
