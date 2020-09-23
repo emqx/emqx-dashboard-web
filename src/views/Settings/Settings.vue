@@ -11,6 +11,9 @@
         <el-tab-pane :label="$t('Settings.cluster')" name="clusterSettings">
           <cluster-settings v-if="activeName === 'clusterSettings'" ref="clusterSettings"></cluster-settings>
         </el-tab-pane>
+        <el-tab-pane :label="$t('Settings.listeners')" name="listenerSettings">
+          <listener-settings v-if="activeName === 'listenerSettings'" ref="listenerSettings"></listener-settings>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -20,6 +23,7 @@
 import BaseSettings from './BaseSettings'
 import ZoneSettings from './ZoneSettings'
 import ClusterSettings from './ClusterSettings'
+import ListenerSettings from './ListenerSettings'
 
 export default {
   name: 'Settings',
@@ -28,6 +32,7 @@ export default {
     BaseSettings,
     ZoneSettings,
     ClusterSettings,
+    ListenerSettings,
   },
 
   data() {

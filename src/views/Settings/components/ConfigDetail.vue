@@ -193,7 +193,11 @@ export default {
       }
       return 1
     },
-    async loadConfig() {
+    loadConfig() {
+      if (!this.configData.form) {
+        this.loadListenerConfig()
+        return
+      }
       const { form, rules } = this.configData
       this.configList = form.sort(this.sortKeyName)
       this.showConfigList = form.sort(this.sortKeyName)
@@ -234,6 +238,9 @@ export default {
         this.nullKeyConfigList = this.nullKeyConfigList.sort(this.sortKeyName)
         this.showConfigList = this.hasValKeyConfigList
       }, 50)
+    },
+    loadListenerConfig() {
+      // listener的configData拿到的数据是 { ws: { form: {} , rules: {} }, tcp: { form: {} , rules: {} } }
     },
     toggleRecords() {
       this.showMoreItems = !this.showMoreItems

@@ -1,10 +1,15 @@
 <template>
-  <a-card class="zone-settings emq-list-card">
+  <a-card class="listener-settings emq-list-card">
     <el-tabs v-model="settingType" :before-leave="handleBeforeLeave">
-      <el-tab-pane v-for="(item, index) in zoneList" :key="index" :label="item.name" :name="item.name">
+      <el-tab-pane
+        v-for="(item, index) in listenerList"
+        :key="index"
+        :label="`${item.transport_type}_${item.name}`"
+        :name="`${item.transport_type}_${item.name}`"
+      >
         <config-detail
-          v-if="settingType === item.name && item.configs"
-          :ref="item.name"
+          v-if="settingType === `${item.transport_type}_${item.name}` && item.configs"
+          :ref="`${item.transport_type}_${item.name}`"
           oper="edit"
           :editConfig="item.configs"
           :configData="configData"
@@ -17,14 +22,14 @@
           <a-skeleton active></a-skeleton>
         </template>
       </el-tab-pane>
-      <el-tab-pane label="" name="addZone">
+      <el-tab-pane label="" name="addListener">
         <span slot="label" size="mini">
           <i class="el-icon-plus"></i>
         </span>
         <config-detail
-          v-if="settingType === 'addZone'"
+          v-if="settingType === 'addListener'"
           oper="add"
-          ref="addZone"
+          ref="addListener"
           v-model="disabled"
           :configData="configData"
           :btn-loading="saveLoading"
@@ -41,7 +46,7 @@ import ConfigDetail from './components/ConfigDetail'
 import { renderParamsForm } from '@/common/utils'
 
 export default {
-  name: 'ZoneSettings',
+  name: 'ListenerSettings',
 
   components: {
     ConfigDetail,
@@ -49,10 +54,10 @@ export default {
 
   data() {
     return {
+      listenerList: [],
       saveLoading: false,
-      settingType: 'external',
+      settingType: 'ssl_external',
       disabled: false,
-      zoneList: [],
       configData: {},
     }
   },
@@ -69,11 +74,15 @@ export default {
 
   methods: {
     async loadConfigData() {
-      const { zone } = await loadConfigSpec()
-      Object.keys(zone).forEach((key) => {
-        zone[key].description = zone[key].description[this.lang]
+      const { zone, ...listeners } = await loadConfigSpec()
+      // listeners: { ws: {}, tcp: {}, ... }
+      Object.keys(listeners).forEach((type) => {
+        const diffTypeConfig = listeners[type]
+        Object.keys(diffTypeConfig).forEach((key) => {
+          diffTypeConfig[key].description = diffTypeConfig[key].description[this.lang]
+        })
+        this.configData[type] = renderParamsForm(diffTypeConfig, 'configs')
       })
-      this.configData = renderParamsForm(zone, 'configs')
     },
     async handleBeforeLeave(activeName, oldName) {
       if (activeName !== oldName) {
@@ -93,17 +102,17 @@ export default {
       return true
     },
     async loadData() {
-      const { zoneResList } = await loadConfig()
-      this.zoneList = zoneResList
+      const { listenersResList } = await loadConfig()
+      this.listenerList = listenersResList
       this.loadConfigData()
     },
     async handleUpdate(name, record) {
       this.saveLoading = true
       let res
-      if (this.settingType !== 'addZone') {
-        res = await updateOneConfig('zones', this.settingType, record)
+      if (this.settingType !== 'addListener') {
+        res = await updateOneConfig('listeners', this.settingType, record)
       } else {
-        res = await addOneConfig('zones', { name, configs: record })
+        res = await addOneConfig('listeners', { name, configs: record })
       }
       if (res) {
         this.disabled = true
