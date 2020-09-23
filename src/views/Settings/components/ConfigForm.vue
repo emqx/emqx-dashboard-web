@@ -5,14 +5,14 @@
       class="basic-config-form"
       size="small"
       label-suffix=":"
-      label-width="225px"
+      :label-width="labelWidth"
       label-position="left"
       :model="recordConfig"
       :rules="rules"
     >
       <div v-for="(key, index) in showKeyList" :key="index">
         <el-col :span="12">
-          <el-form-item :label="key" :prop="key">
+          <el-form-item :label="key === '' ? 'listener_on' : key" :prop="key">
             <template v-if="deepRecord[key] === 'true' || deepRecord[key] === 'false'">
               <emq-select v-model="recordConfig[key]" :field="{ options: boolOptions }"> </emq-select>
             </template>
@@ -39,12 +39,16 @@
 
             <template v-else>
               <el-input v-model="recordConfig[key]" class="form-item-input" :placeholder="recordConfig[key]">
+                <span slot="suffix" @click="clearInputConfig(key)">
+                  <i class="el-icon-close"></i>
+                </span>
               </el-input>
             </template>
           </el-form-item>
         </el-col>
         <el-col :span="12" class="form-item-desc">
-          {{ $t(`Settings.${key}`) }}
+          <span v-if="key !== ''">{{ $t(`Settings.${key}`) }}</span>
+          <span v-else>{{ $t(`Settings.listener_on`) }}</span>
         </el-col>
       </div>
     </el-form>
@@ -118,6 +122,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    labelWidth: {
+      type: String,
+      default: '225px',
+    },
   },
 
   data() {
@@ -172,6 +180,9 @@ export default {
   },
 
   methods: {
+    clearInputConfig(key) {
+      this.recordConfig[key] = ''
+    },
     handleRecordChange(val, oldVal) {
       if (!oldVal || JSON.stringify(oldVal) === '{}') {
         this.selfDisabled = true
@@ -270,6 +281,17 @@ export default {
       width: 46%;
       height: 1px;
       background-color: #edeef2;
+    }
+  }
+  .form-item-input {
+    .el-icon-close {
+      visibility: hidden;
+    }
+    &:hover {
+      .el-icon-close {
+        visibility: visible;
+        cursor: pointer;
+      }
     }
   }
 }

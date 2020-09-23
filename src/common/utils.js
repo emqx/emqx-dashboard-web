@@ -154,6 +154,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         field = { list: [true, false] }
         break
       case 'object':
+        defaultValue = !Object.keys(defaultValue).length ? {} : defaultValue
         elType = 'object'
         break
       case 'file':
@@ -177,13 +178,13 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       elType = 'select'
       field = { list: enumValue }
     }
-    const inputPlaceholder = description.length < 24 ? description : ''
+    const inputPlaceholder = description.length < 24 && propPrefix !== 'configs'  ? description : ''
     // 表单类型, 渲染使用的属性
     form.push({
       formItemAttributes: {
         prop: propPrefix ? `${propPrefix}.${k}` : k,
         label: title,
-        description: inputPlaceholder && elType !== 'file' ? null : description.replace(/\n/g, '<br/>'),
+        description: inputPlaceholder && elType !== 'file' && propPrefix !== 'configs' ? null : description.replace(/\n/g, '<br/>'),
       },
       bindAttributes: {
         type: inputType,
@@ -194,7 +195,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       key: k,
       type: inputType,
       elType,
-      value: elType === 'object' && !Object.keys(defaultValue).length ? {} : defaultValue,
+      value: !defaultValue && propPrefix === 'configs' ? '': defaultValue,
       order,
       oneObjOfArray: elType === 'array' ? oneObjOfArray : {},
       extraConfigs: elType === 'cfgselect' ? extraConfigs : {},
@@ -430,4 +431,16 @@ export const verifyID = (rule, value, callback) => {
   }
 }
 
+export const validRanger = (rule, value, callback, range) => {
+  const getValidMsg = (_range, _value) => {
+    const [min, max] = _range.sort((prev, next) => prev - next)
+    const floatValue = parseFloat(_value, 10)
+    return floatValue > max || floatValue < min ? `${VueI18n.Settings.errorRange} ${min} - ${max}` : ''
+  }
+  const validMsg = getValidMsg(range, value)
+  if (validMsg !== '') {
+    callback(new Error(validMsg))
+  }
+  callback()
+}
 export default {}
