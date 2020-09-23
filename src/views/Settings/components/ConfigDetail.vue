@@ -230,7 +230,9 @@ export default {
             this.hasValKeyConfigList.push(item)
           }
         })
-        this.showConfigList = this.hasValKeyConfigList.sort(this.sortKeyName)
+        this.hasValKeyConfigList = this.hasValKeyConfigList.sort(this.sortKeyName)
+        this.nullKeyConfigList = this.nullKeyConfigList.sort(this.sortKeyName)
+        this.showConfigList = this.hasValKeyConfigList
       }, 50)
     },
     toggleRecords() {
@@ -238,11 +240,9 @@ export default {
       const [...hasValKeyConfigList] = this.hasValKeyConfigList
       const [...nullKeyConfigList] = this.nullKeyConfigList
       if (this.showMoreItems) {
-        this.showConfigList = hasValKeyConfigList
-          .sort(this.sortKeyName)
-          .concat(nullKeyConfigList.sort(this.sortKeyName))
+        this.showConfigList = hasValKeyConfigList.concat(nullKeyConfigList)
       } else {
-        this.showConfigList = this.hasValKeyConfigList.sort(this.sortKeyName)
+        this.showConfigList = this.hasValKeyConfigList
       }
     },
     cancel(needPrompt = true) {
