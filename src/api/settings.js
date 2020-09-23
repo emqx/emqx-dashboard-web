@@ -1,6 +1,6 @@
 import http from '@/common/http'
 
-// 加载配置
+// 加载配置数据
 export const loadConfig = async () => {
   const res = await http.get('/configs')
   const mqttRes = res.find(($) => $.type === 'emqx').configs
@@ -52,18 +52,20 @@ export const loadConfigSpec = async () => {
   return res
 }
 
-export const updateZoneConfig = async (type, body = {}) => {
+// type: zones/listeners
+export const updateOneConfig = async (type, name, body = {}) => {
   try {
-    const res = await http.put(`/configs/zones/${type}`, body)
+    const res = await http.put(`/configs/${type}/${name}`, body)
     return res
   } catch (e) {
     return false
   }
 }
 
-export const addZoneConfig = async (body = {}) => {
+// type: zones/listeners
+export const addOneConfig = async (type, body = {}) => {
   try {
-    const res = await http.post('/configs/zones', body)
+    const res = await http.post(`/configs/${type}`, body)
     return res
   } catch (e) {
     return false
