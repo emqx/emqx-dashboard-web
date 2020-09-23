@@ -28,7 +28,7 @@
           v-model="disabled"
           :configData="configData"
           :btn-loading="saveLoading"
-          @update="handleCreate(...arguments)"
+          @update="handleUpdate(...arguments, 'addZone')"
         ></config-detail>
       </el-tab-pane>
     </el-tabs>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { loadConfig, updateZoneConfig, loadConfigSpec, addZoneConfig } from '../../api/settings'
+import { loadConfig, updateOneConfig, loadConfigSpec, addOneConfig } from '../../api/settings'
 import ConfigDetail from './components/ConfigDetail'
 import { renderParamsForm } from '@/common/utils'
 import { allOptions } from '@/common/settingsData'
@@ -105,20 +105,17 @@ export default {
       this.zoneList = zoneResList
       this.loadConfigData()
     },
-    async handleUpdate(data, type) {
+    async handleUpdate(name, record, openName) {
       this.saveLoading = true
-      const res = await updateZoneConfig(type, data)
+      let res
+      if (openName !== 'addZone') {
+        res = await updateOneConfig('zones', this.settingType, record)
+      } else {
+        res = await addOneConfig('zones', { name, configs: record })
+      }
       if (res) {
         this.disabled = true
         this.$message.success(this.$t('Base.applySuccess'))
-        this.loadData()
-      }
-      this.saveLoading = false
-    },
-    async handleCreate(name, record) {
-      this.saveLoading = true
-      const res = await addZoneConfig({ name, configs: record })
-      if (res) {
         this.loadData()
       }
       this.saveLoading = false
