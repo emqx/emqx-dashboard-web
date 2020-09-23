@@ -315,10 +315,98 @@ export default {
   },
   zoneNameTip: {
     zh: '名字不能为空！',
-    en: 'The name cannot be empty!'
+    en: 'The name cannot be empty!',
   },
   listeners: {
     zh: '监听器',
     en: 'Listeners',
   },
+  monitorAlarm: {
+    zh: '监控告警',
+    en: 'Monitor Alarm',
+  },
+  // monitorAlarm desciption start
+  actions: {
+    zh: '动作',
+    en: 'Actions',
+  },
+  size_limit: {
+    zh: '大小限制',
+    en: 'Size Limit',
+  },
+  validity_period: {
+    zh: '有效期',
+    en: 'Validity period',
+  },
+  check_interval: {
+    zh: 'CPU 占用率检查周期',
+    en: 'CPU usage check cycle',
+  },
+  process_high_watermark: {
+    zh: '当前进程数量占进程最大数量的百分比超过该值时将触发告警',
+    en: `
+    When the percentage of the current number of processes to the maximum number
+    of processes exceeds this value, an alarm will be triggered`,
+  },
+  process_low_watermark: {
+    zh: '当前进程数量占进程最大数量的百分比回落到该值以下时将触发告警',
+    en: `
+    An alarm will be triggered when the percentage of the current number of
+    processes in the maximum number of processes falls below this value`,
+  },
+  busy_dist_port: {
+    zh: '指定是否启用集群 RPC 通道拥塞监控',
+    en: 'Specify whether to enable cluster RPC channel congestion monitoring',
+  },
+  busy_port: {
+    zh: '指定是否启用进程间消息通道拥塞监控',
+    en: 'Specify whether to enable inter-process message channel congestion monitoring',
+  },
+  large_heap: {
+    zh: '启用堆栈大小监控并在进程执行垃圾回收后堆栈大小仍大于设定值时触发告警，0 表示禁用此监控',
+    en: `
+    Enable stack size monitoring and trigger an alarm when the stack size is
+    still greater than the set value after the process is garbage collected, 0 means disable this monitoring`,
+  },
+  long_gc: {
+    zh: '启用垃圾回收时间监控并在回收时间超过设定值时触发告警，0 表示禁用此监控',
+    en: `
+    Enable garbage collection time monitoring and trigger an alarm
+    when the collection time exceeds the set value, 0 means disable this monitoring`,
+  },
+  long_schedule: {
+    zh: '启用进程调度时间监控并在调度时间超过设定值时触发告警，0 表示禁用此监控',
+    en: `
+    Enable process scheduling time monitoring and trigger an alarm when the
+    scheduling time exceeds the set value, 0 means disable this monitoring`,
+  },
+  cpu_check_interval: {
+    zh: 'CPU 占用率检查周期',
+    en: 'CPU usage check cycle',
+  },
+  cpu_high_watermark: {
+    zh: 'CPU 占用率超过该值时将触发告警',
+    en: 'An alarm will be triggered when the CPU usage exceeds this value',
+  },
+  cpu_low_watermark: {
+    zh: 'CPU 占用率回落到该值以下时将清除告警',
+    en: 'The alarm will be cleared when the CPU usage falls below this value',
+  },
+  mem_check_interval: {
+    zh: '内存占用率检查周期',
+    en: 'Memory usage check cycle',
+  },
+  procmem_high_watermark: {
+    zh: 'EMQ X 为单个进程分配的内存占系统内存的百分比超过该值时将触发告警',
+    en: `
+    EMQ X will trigger an alarm when the percentage of system
+    memory allocated by EMQ X for a single process exceeds this value`,
+  },
+  sysmem_high_watermark: {
+    zh: 'EMQ X 为所有进程分配的内存占系统内存的百分比超过该值时将触发告警',
+    en: `
+    EMQ X will trigger an alarm when the percentage of system
+    memory allocated by EMQ X for all processes exceeds this value`,
+  },
+  // monitorAlarm desciption end
 }

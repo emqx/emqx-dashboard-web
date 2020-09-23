@@ -178,13 +178,16 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       elType = 'select'
       field = { list: enumValue }
     }
-    const inputPlaceholder = description.length < 24 && propPrefix !== 'configs'  ? description : ''
+    const inputPlaceholder = description.length < 24 && propPrefix !== 'configs' ? description : ''
     // 表单类型, 渲染使用的属性
     form.push({
       formItemAttributes: {
         prop: propPrefix ? `${propPrefix}.${k}` : k,
         label: title,
-        description: inputPlaceholder && elType !== 'file' && propPrefix !== 'configs' ? null : description.replace(/\n/g, '<br/>'),
+        description:
+          inputPlaceholder && elType !== 'file' && propPrefix !== 'configs'
+            ? null
+            : description.replace(/\n/g, '<br/>'),
       },
       bindAttributes: {
         type: inputType,
@@ -195,7 +198,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       key: k,
       type: inputType,
       elType,
-      value: !defaultValue && propPrefix === 'configs' ? '': defaultValue,
+      value: !defaultValue && propPrefix === 'configs' ? '' : defaultValue,
       order,
       oneObjOfArray: elType === 'array' ? oneObjOfArray : {},
       extraConfigs: elType === 'cfgselect' ? extraConfigs : {},
