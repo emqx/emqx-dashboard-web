@@ -12,6 +12,22 @@
         :rules="rules"
       >
         <template v-if="showConfigList.length">
+          <template v-if="configOptions">
+            <el-col :span="12" class="form-item-desc">
+              <el-form-item label="type" prop="type">
+                <emq-select
+                  :disabled="oper === 'edit'"
+                  v-model="record['type']"
+                  :field="{ options: typeOptions }"
+                  @selectChange="addConfigsAccordingType"
+                >
+                </emq-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12" class="form-item-desc">
+              <span>{{ $t('Settings.listenerType') }}</span>
+            </el-col>
+          </template>
           <template v-if="oper === 'add'">
             <el-col :span="12" class="form-item-desc">
               <el-form-item label="name" prop="name">
@@ -19,7 +35,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="12" class="form-item-desc">
-              <span>{{ $t('Settings.zoneName') }}</span>
+              <span v-if="!configOptions">{{ $t('Settings.zoneName') }}</span>
+              <span v-else>{{ $t('Settings.listenerName') }}</span>
             </el-col>
           </template>
 
@@ -104,16 +121,27 @@ export default {
         configs: {},
         name: [{ required: true, message: this.$t('Settings.zoneNameTip') }],
       },
+      originRules: {
+        configs: {},
+        name: [{ required: true, message: this.$t('Settings.zoneNameTip') }],
+      },
       record: {
         configs: {},
         name: '',
+        type: 'tcp',
       },
       originRecord: {
         configs: {},
         name: '',
+        type: 'tcp',
       },
       selfDisabled: false,
       showMoreItems: false,
+      typeOptions: [
+        { label: 'tcp', value: 'tcp' },
+        { label: 'ws', value: 'ws' },
+        { label: 'ssl', value: 'ssl' },
+      ],
     }
   },
 
@@ -137,6 +165,14 @@ export default {
     btnLoading: {
       type: Boolean,
       default: false,
+    },
+    configOptions: {
+      type: Object,
+      default: () => {},
+    },
+    listenerType: {
+      type: String,
+      default: 'tcp',
     },
   },
 
@@ -194,19 +230,7 @@ export default {
       return 1
     },
     loadConfig() {
-      if (!this.configData.form) {
-        this.loadListenerConfig()
-        return
-      }
-      const { form, rules } = this.configData
-      this.configList = form.sort(this.sortKeyName)
-      this.showConfigList = form.sort(this.sortKeyName)
-      this.rules.configs = rules
-      form.forEach(({ key, value }) => {
-        const val = typeof value === 'boolean' ? value.toString() : value
-        this.$set(this.record.configs, key, val)
-        this.$set(this.originRecord.configs, key, val)
-      })
+      this.initData()
       if (this.oper === 'edit') {
         delete this.record.name
         delete this.originRecord.name
@@ -239,8 +263,41 @@ export default {
         this.showConfigList = this.hasValKeyConfigList
       }, 50)
     },
-    loadListenerConfig() {
+    initData() {
+      if (!this.configOptions) {
+        // zone
+        delete this.record.type
+        delete this.originRecord.type
+        this.initConfigs(this.configData)
+      } else {
+        // listener
+        this.record.type = this.listenerType
+        this.originRecord.type = this.listenerType
+        this.addConfigsAccordingType(this.listenerType)
+      }
+    },
+    initConfigs(configs) {
+      const { form, rules } = configs
+      this.configList = form.sort(this.sortKeyName)
+      this.showConfigList = [...this.configList]
+      this.rules.configs = rules
+      form.forEach(({ key, value }) => {
+        const val = typeof value === 'boolean' ? value.toString() : value
+        this.$set(this.record.configs, key, val)
+        this.$set(this.originRecord.configs, key, val)
+      })
+    },
+    addConfigsAccordingType(type) {
       // listener的configData拿到的数据是 { ws: { form: {} , rules: {} }, tcp: { form: {} , rules: {} } }
+      const { form, rules } = this.configData
+      const { ...typeConfigs } = this.configOptions[type]
+      const commonRules = { ...rules }
+      const totalConfigs = {
+        form: typeConfigs.form ? form.concat(typeConfigs.form) : form,
+        rules: typeConfigs.rules ? Object.assign(commonRules, typeConfigs.rules) : rules,
+      }
+      this.initConfigs(totalConfigs)
+      this.record.type = type
     },
     toggleRecords() {
       this.showMoreItems = !this.showMoreItems
@@ -288,13 +345,13 @@ export default {
       }
       this.showMoreItems = false
       const { ...record } = this.recordConfig
-      const { name } = this.record
+      const { name, type } = this.record
       Object.keys(record).forEach((item) => {
         if (record[item] === '') {
           record[item] = 'null'
         }
       })
-      this.$emit('update', name, record)
+      this.$emit('update', name, record, type)
     },
   },
 }

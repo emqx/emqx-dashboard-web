@@ -409,4 +409,38 @@ export default {
     memory allocated by EMQ X for all processes exceeds this value`,
   },
   // monitorAlarm desciption end
+  listenerName: {
+    zh: '监听器名字',
+    en: 'Listener Name',
+  },
+  listenerType: {
+    zh: '监听类型',
+    en: 'Listener Type',
+  },
+  // baseSettings start
+  broker_session_locking_strategy: {
+    zh: `会话锁策略。保证集群中 Client ID 在集群中的创建会话的唯一性。
+    all 表示全集群锁，leader 表示仅主节点锁，quorum 多数节点锁，local 表仅当前节点锁`,
+    en: `Session locking policy. Ensure the uniqueness of the Client ID creation session in the cluster.
+    All represents the total set group lock, the leader represents the master node lock only,
+    the quorum majority node lock only, and the local table only the current node lock
+    `,
+  },
+  broker_shared_dispatch_ack_enabled: {
+    zh: '共享订阅开启内部派发 ACK',
+    en: 'Shared subscriptions enable internal distribution ACK',
+  },
+  broker_shared_subscription_strategy: {
+    zh: '共享订阅派发策略',
+    en: 'Shared subscription distribution policies',
+  },
+  broker_sys_heartbeat: {
+    zh: 'Broker 健康状态发布间隔',
+    en: 'Broker Health status publish interval',
+  },
+  broker_sys_interval: {
+    zh: 'Broker 统计信息发布间隔',
+    en: 'Broker statistics release interval',
+  },
+  // baseSettings end
 }

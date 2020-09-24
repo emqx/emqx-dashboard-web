@@ -13,9 +13,11 @@
           oper="edit"
           :editConfig="item.configs"
           :configData="configData"
+          :configOptions="configOptions"
+          :listenerType="item.transport_type"
           :btn-loading="saveLoading"
           v-model="disabled"
-          @update="handleUpdate(...arguments)"
+          @update="handleUpdate(...arguments, item.name)"
         >
         </config-detail>
         <template v-else>
@@ -32,6 +34,7 @@
           ref="addListener"
           v-model="disabled"
           :configData="configData"
+          :configOptions="configOptions"
           :btn-loading="saveLoading"
           @update="handleUpdate(...arguments)"
         ></config-detail>
@@ -59,6 +62,7 @@ export default {
       settingType: 'ssl_external',
       disabled: false,
       configData: {},
+      configOptions: {},
     }
   },
 
@@ -81,7 +85,13 @@ export default {
         Object.keys(diffTypeConfig).forEach((key) => {
           diffTypeConfig[key].description = diffTypeConfig[key].description[this.lang]
         })
-        this.configData[type] = renderParamsForm(diffTypeConfig, 'configs')
+        if (type === 'tcp') {
+          // common configs
+          this.configData = renderParamsForm(diffTypeConfig, 'configs')
+          this.configOptions[type] = {}
+        } else {
+          this.configOptions[type] = renderParamsForm(diffTypeConfig, 'configs')
+        }
       })
     },
     async handleBeforeLeave(activeName, oldName) {
@@ -106,13 +116,17 @@ export default {
       this.listenerList = listenersResList
       this.loadConfigData()
     },
-    async handleUpdate(name, record) {
+    async handleUpdate(name, record, type, listenerName) {
       this.saveLoading = true
       let res
+      let data
+      const { ...configs } = record
       if (this.settingType !== 'addListener') {
-        res = await updateOneConfig('listeners', this.settingType, record)
+        data = { transport_type: type, configs }
+        res = await updateOneConfig('listeners', listenerName, data)
       } else {
-        res = await addOneConfig('listeners', { name, configs: record })
+        data = { name, transport_type: type, configs }
+        res = await addOneConfig('listeners', data)
       }
       if (res) {
         this.disabled = true
