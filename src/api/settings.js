@@ -17,7 +17,6 @@ export const loadConfig = async () => {
   const otherTypeList = ['rpc', 'log']
   res.forEach((item) => {
     if (item.type === 'listener') {
-      item.configs.type = item.transport_type
       listenersResList.push(item)
     } else if (item.type.includes('mon')) {
       monitorResList.push(item)
