@@ -6,10 +6,9 @@
           v-if="settingType === item.type && item.configs"
           :ref="item.type"
           :record="item.configs"
-          :rules="rules"
+          :rules="item.rules"
           :btn-loading="saveLoading"
           v-model="disabled"
-          v-bind="allOptions"
           labelWidth="195px"
           @update="handleUpdate(...arguments, item.type)"
         >
@@ -25,7 +24,6 @@
 <script>
 import { loadConfig, updateConfig } from '../../api/settings'
 import ConfigForm from './components/ConfigForm'
-import { allOptions } from '@/common/settingsData'
 
 export default {
   name: 'MonitorSettings',
@@ -37,21 +35,10 @@ export default {
   data() {
     return {
       saveLoading: false,
-      externalRecord: null,
-      initExternal: {},
-      internalRecord: null,
-      initInternal: {},
       settingType: 'vm_mon',
-      rules: {},
       disabled: false,
       monitorList: [],
     }
-  },
-
-  computed: {
-    allOptions() {
-      return allOptions
-    },
   },
 
   created() {
@@ -78,6 +65,12 @@ export default {
     async loadData() {
       const { monitorResList } = await loadConfig()
       this.monitorList = monitorResList
+      monitorResList.forEach((item) => {
+        item.rules = {}
+        Object.keys(item.configs).forEach((key) => {
+          item.rules[key] = [{ required: true, message: this.$t('Settings.pleaseEnter') }]
+        })
+      })
     },
     async handleUpdate(data, type) {
       this.saveLoading = true

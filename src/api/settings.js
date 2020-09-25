@@ -4,26 +4,25 @@ import http from '@/common/http'
 export const loadConfig = async () => {
   const res = await http.get('/configs')
   const mqttRes = res.find(($) => $.type === 'emqx').configs
-
-  const zoneResList = []
-  const listenersResList = []
   const monitorResList = []
 
   res.forEach((item) => {
-    if (item.type === 'listener') {
-      listenersResList.push(item)
-    } else if (item.type.includes('mon')) {
+    if (item.type.includes('mon')) {
       monitorResList.push(item)
-    } else if (item.type === 'zone') {
-      zoneResList.push(item)
     }
   })
   return {
     mqttRes,
-    zoneResList,
-    listenersResList,
     monitorResList,
   }
+}
+
+export const loadZoneConfigs = () => {
+  return http.get('/configs/zones')
+}
+
+export const loadlistenerConfigs = () => {
+  return http.get('/configs/listeners')
 }
 
 // 更新配置 base/monitor
@@ -37,9 +36,8 @@ export const updateConfig = async (type, body = {}) => {
 }
 
 // 加载配置格式，有type enum
-export const loadConfigSpec = async () => {
-  const res = await http.get('/configs_spec')
-  return res
+export const loadConfigSpec = () => {
+  return http.get('/configs_spec')
 }
 
 // type: zones/listeners

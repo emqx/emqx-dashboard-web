@@ -433,17 +433,4 @@ export const verifyID = (rule, value, callback) => {
     callback()
   }
 }
-
-export const validRanger = (rule, value, callback, range) => {
-  const getValidMsg = (_range, _value) => {
-    const [min, max] = _range.sort((prev, next) => prev - next)
-    const floatValue = parseFloat(_value, 10)
-    return floatValue > max || floatValue < min ? `${VueI18n.Settings.errorRange} ${min} - ${max}` : ''
-  }
-  const validMsg = getValidMsg(range, value)
-  if (validMsg !== '') {
-    callback(new Error(validMsg))
-  }
-  callback()
-}
 export default {}
