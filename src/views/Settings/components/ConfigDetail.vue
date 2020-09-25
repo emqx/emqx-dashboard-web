@@ -42,31 +42,38 @@
 
           <div v-for="(item, index) in showConfigList" :key="index">
             <el-col :span="12">
-              <el-form-item :label="item.key" :prop="item.key">
-                <template v-if="item.elType !== 'select'">
-                  <el-input
-                    v-if="item.type === 'number'"
-                    v-model.number="record.configs[item.key]"
-                    v-bind="item.bindAttributes"
-                  >
-                  </el-input>
-                  <el-input v-else v-model="record.configs[item.key]" v-bind="item.bindAttributes"> </el-input>
+              <el-form-item :label="item.key" v-bind="item.formItemAttributes">
+                <template v-if="item.key === 'zone'">
+                  <emq-select v-model="record.configs[item.key]" :field="{ options: listenerZoneOptions }">
+                  </emq-select>
                 </template>
+
                 <template v-else>
-                  <emq-select
-                    v-if="item.type === 'number'"
-                    v-model.number="record.configs[item.key]"
-                    v-bind="item.bindAttributes"
-                    class="reset-width"
-                  >
-                  </emq-select>
-                  <emq-select
-                    v-else
-                    v-model="record.configs[item.key]"
-                    v-bind="item.bindAttributes"
-                    class="reset-width"
-                  >
-                  </emq-select>
+                  <template v-if="item.elType !== 'select'">
+                    <el-input
+                      v-if="item.type === 'number'"
+                      v-model.number="record.configs[item.key]"
+                      v-bind="item.bindAttributes"
+                    >
+                    </el-input>
+                    <el-input v-else v-model="record.configs[item.key]" v-bind="item.bindAttributes"> </el-input>
+                  </template>
+                  <template v-else>
+                    <emq-select
+                      v-if="item.type === 'number'"
+                      v-model.number="record.configs[item.key]"
+                      v-bind="item.bindAttributes"
+                      class="reset-width"
+                    >
+                    </emq-select>
+                    <emq-select
+                      v-else
+                      v-model="record.configs[item.key]"
+                      v-bind="item.bindAttributes"
+                      class="reset-width"
+                    >
+                    </emq-select>
+                  </template>
                 </template>
               </el-form-item>
             </el-col>
@@ -121,10 +128,6 @@ export default {
         configs: {},
         name: [{ required: true, message: this.$t('Settings.zoneNameTip') }],
       },
-      originRules: {
-        configs: {},
-        name: [{ required: true, message: this.$t('Settings.zoneNameTip') }],
-      },
       record: {
         configs: {},
         name: '',
@@ -139,8 +142,9 @@ export default {
       showMoreItems: false,
       typeOptions: [
         { label: 'tcp', value: 'tcp' },
-        { label: 'ws', value: 'ws' },
         { label: 'ssl', value: 'ssl' },
+        { label: 'ws', value: 'ws' },
+        { label: 'wss', value: 'wss' },
       ],
     }
   },
@@ -173,6 +177,10 @@ export default {
     listenerType: {
       type: String,
       default: 'tcp',
+    },
+    listenerZoneOptions: {
+      type: Array,
+      default: () => {},
     },
   },
 
@@ -281,6 +289,8 @@ export default {
       this.configList = form.sort(this.sortKeyName)
       this.showConfigList = [...this.configList]
       this.rules.configs = rules
+      this.record.configs = {}
+      this.originRecord.configs = {}
       form.forEach(({ key, value }) => {
         const val = typeof value === 'boolean' ? value.toString() : value
         this.$set(this.record.configs, key, val)
