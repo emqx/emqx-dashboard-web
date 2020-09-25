@@ -180,7 +180,7 @@ export default {
     },
     listenerZoneOptions: {
       type: Array,
-      default: () => {},
+      default: () => [],
     },
   },
 
