@@ -16,6 +16,7 @@
           :configOptions="configOptions"
           :listenerType="item.transport_type"
           :btn-loading="saveLoading"
+          :listenerZoneOptions="listenerZoneOptions"
           v-model="disabled"
           @update="handleUpdate(...arguments, item.name)"
         >
@@ -36,6 +37,7 @@
           :configData="configData"
           :configOptions="configOptions"
           :btn-loading="saveLoading"
+          :listenerZoneOptions="listenerZoneOptions"
           @update="handleUpdate(...arguments)"
         ></config-detail>
       </el-tab-pane>
@@ -63,6 +65,7 @@ export default {
       disabled: false,
       configData: {},
       configOptions: {},
+      listenerZoneOptions: [],
     }
   },
 
@@ -93,6 +96,13 @@ export default {
           this.configOptions[type] = renderParamsForm(diffTypeConfig, 'configs')
         }
       })
+      // wss: ssl+tcp+ws
+      const { ...sslConfigs } = this.configOptions.ssl
+      const { ...wsConfigs } = this.configOptions.ws
+      this.configOptions.wss = {
+        form: sslConfigs.form.concat(wsConfigs.form),
+        rules: Object.assign(sslConfigs.rules, wsConfigs.rules),
+      }
     },
     async handleBeforeLeave(activeName, oldName) {
       if (activeName !== oldName) {
@@ -112,7 +122,14 @@ export default {
       return true
     },
     async loadData() {
-      const { listenersResList } = await loadConfig()
+      const { zoneResList, listenersResList } = await loadConfig()
+      zoneResList.forEach((item) => {
+        const oneZoneOption = {
+          label: item.name,
+          value: item.name,
+        }
+        this.listenerZoneOptions.push(oneZoneOption)
+      })
       this.listenerList = listenersResList
       this.loadConfigData()
     },
