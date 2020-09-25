@@ -1,12 +1,12 @@
 <template>
-  <el-row :gutter="20" class="config-form">
+  <el-row :gutter="12" class="config-form">
     <el-form
       ref="record"
       class="basic-config-form"
       size="small"
       label-suffix=":"
       :label-width="labelWidth"
-      label-position="left"
+      label-position="right"
       :model="recordConfig"
       :rules="rules"
     >
@@ -39,9 +39,6 @@
 
             <template v-else>
               <el-input v-model="recordConfig[key]" class="form-item-input" :placeholder="recordConfig[key]">
-                <span slot="suffix" @click="clearInputConfig(key)">
-                  <i class="el-icon-close"></i>
-                </span>
               </el-input>
             </template>
           </el-form-item>
@@ -63,7 +60,7 @@
       <el-button plain :disabled="selfDisabled" type="default" size="medium" @click="cancel">
         {{ $t('Base.cancel') }}
       </el-button>
-      <el-button :loading="btnLoading" type="primary" size="medium" @click="save">
+      <el-button :disabled="selfDisabled" :loading="btnLoading" type="primary" size="medium" @click="save">
         {{ $t('Base.apply') }}
       </el-button>
     </el-col>
@@ -173,6 +170,9 @@ export default {
         }, 2)
       }
     },
+    disabled(val) {
+      this.selfDisabled = val
+    },
   },
 
   created() {
@@ -180,9 +180,6 @@ export default {
   },
 
   methods: {
-    clearInputConfig(key) {
-      this.recordConfig[key] = ''
-    },
     handleRecordChange(val, oldVal) {
       if (!oldVal || JSON.stringify(oldVal) === '{}') {
         this.selfDisabled = true

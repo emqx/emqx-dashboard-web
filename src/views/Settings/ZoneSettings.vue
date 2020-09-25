@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { loadConfig, updateOneConfig, loadConfigSpec, addOneConfig } from '../../api/settings'
+import { loadZoneConfigs, updateOneConfig, loadConfigSpec, addOneConfig } from '../../api/settings'
 import ConfigDetail from './components/ConfigDetail'
 import { renderParamsForm } from '@/common/utils'
 
@@ -93,7 +93,7 @@ export default {
       return true
     },
     async loadData() {
-      const { zoneResList } = await loadConfig()
+      const zoneResList = await loadZoneConfigs()
       this.zoneList = zoneResList
       this.loadConfigData()
     },
@@ -107,10 +107,18 @@ export default {
       }
       if (res) {
         this.disabled = true
-        this.$message.success(this.$t('Base.applySuccess'))
         this.loadData()
+        this.settingType = name || this.settingType
+        this.updataSuccessTip(name)
       }
       this.saveLoading = false
+    },
+    updataSuccessTip(name) {
+      if (!name) {
+        this.$message.success(this.$t('Base.applySuccess'))
+      } else {
+        this.$message.success(this.$t('Base.createSuccess'))
+      }
     },
   },
 }

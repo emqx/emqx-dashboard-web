@@ -16,6 +16,7 @@
           :configOptions="configOptions"
           :listenerType="item.transport_type"
           :btn-loading="saveLoading"
+          labelWidth="170px"
           :listenerZoneOptions="listenerZoneOptions"
           v-model="disabled"
           @update="handleUpdate(...arguments, item.name)"
@@ -37,6 +38,7 @@
           :configData="configData"
           :configOptions="configOptions"
           :btn-loading="saveLoading"
+          labelWidth="170px"
           :listenerZoneOptions="listenerZoneOptions"
           @update="handleUpdate(...arguments)"
         ></config-detail>
@@ -46,7 +48,7 @@
 </template>
 
 <script>
-import { loadConfig, updateOneConfig, loadConfigSpec, addOneConfig } from '../../api/settings'
+import { loadZoneConfigs, loadlistenerConfigs, updateOneConfig, loadConfigSpec, addOneConfig } from '../../api/settings'
 import ConfigDetail from './components/ConfigDetail'
 import { renderParamsForm } from '@/common/utils'
 
@@ -100,7 +102,7 @@ export default {
       const { ...sslConfigs } = this.configOptions.ssl
       const { ...wsConfigs } = this.configOptions.ws
       this.configOptions.wss = {
-        form: sslConfigs.form.concat(wsConfigs.form),
+        form: wsConfigs.form.concat(sslConfigs.form),
         rules: Object.assign(sslConfigs.rules, wsConfigs.rules),
       }
     },
@@ -122,7 +124,9 @@ export default {
       return true
     },
     async loadData() {
-      const { zoneResList, listenersResList } = await loadConfig()
+      this.listenerZoneOptions = []
+      const listenersResList = await loadlistenerConfigs()
+      const zoneResList = await loadZoneConfigs()
       zoneResList.forEach((item) => {
         const oneZoneOption = {
           label: item.name,
@@ -135,22 +139,41 @@ export default {
     },
     async handleUpdate(name, record, type, listenerName) {
       this.saveLoading = true
-      let res
       let data
       const { ...configs } = record
       if (this.settingType !== 'addListener') {
         data = { transport_type: type, configs }
-        res = await updateOneConfig('listeners', listenerName, data)
+        this.$confirm(this.$t('Settings.confirmUpdateListener'), this.$t('Base.warning'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+          .then(async () => {
+            const res = await updateOneConfig('listeners', listenerName, data)
+            if (res) {
+              this.settingType = `${type}_${listenerName}`
+              this.updataSuccess(name)
+            }
+          })
+          .catch(() => {})
       } else {
         data = { name, transport_type: type, configs }
-        res = await addOneConfig('listeners', data)
-      }
-      if (res) {
-        this.disabled = true
-        this.$message.success(this.$t('Base.applySuccess'))
-        this.loadData()
+        const res = await addOneConfig('listeners', data)
+        if (res) {
+          this.settingType = `${type}_${name}`
+          this.updataSuccess(name)
+        }
       }
       this.saveLoading = false
+    },
+    updataSuccess(name) {
+      this.loadData()
+      this.disabled = true
+      if (!name) {
+        this.$message.success(this.$t('Base.applySuccess'))
+      } else {
+        this.$message.success(this.$t('Base.createSuccess'))
+      }
     },
   },
 }

@@ -1,13 +1,13 @@
 <template>
   <div class="config-detail">
-    <el-row :gutter="20" class="config-form">
+    <el-row :gutter="12" class="config-form">
       <el-form
         ref="record"
         class="basic-config-form"
         size="small"
         label-suffix=":"
-        label-width="225px"
-        label-position="left"
+        :label-width="labelWidth"
+        label-position="right"
         :model="record"
         :rules="rules"
       >
@@ -96,7 +96,7 @@
         <el-button plain :disabled="selfDisabled" type="default" size="medium" @click="cancel">
           {{ $t('Base.cancel') }}
         </el-button>
-        <el-button :loading="btnLoading" type="primary" size="medium" @click="save">
+        <el-button :disabled="selfDisabled" :loading="btnLoading" type="primary" size="medium" @click="save">
           <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>
           <span v-else>{{ $t('Base.apply') }}</span>
         </el-button>
@@ -150,6 +150,10 @@ export default {
   },
 
   props: {
+    labelWidth: {
+      type: String,
+      default: '225px',
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -207,6 +211,9 @@ export default {
           document.body.scrollTop = scrollTop
         }, 2)
       }
+    },
+    disabled(val) {
+      this.selfDisabled = val
     },
   },
 
@@ -266,8 +273,12 @@ export default {
             this.hasValKeyConfigList.push(item)
           }
         })
-        this.hasValKeyConfigList = this.hasValKeyConfigList.sort(this.sortKeyName)
-        this.nullKeyConfigList = this.nullKeyConfigList.sort(this.sortKeyName)
+        this.hasValKeyConfigList = this.configOptions
+          ? this.hasValKeyConfigList
+          : this.hasValKeyConfigList.sort(this.sortKeyName)
+        this.nullKeyConfigList = this.configOptions
+          ? this.nullKeyConfigList
+          : this.nullKeyConfigList.sort(this.sortKeyName)
         this.showConfigList = this.hasValKeyConfigList
       }, 50)
     },
@@ -286,7 +297,7 @@ export default {
     },
     initConfigs(configs) {
       const { form, rules } = configs
-      this.configList = form.sort(this.sortKeyName)
+      this.configList = this.configOptions ? form : form.sort(this.sortKeyName)
       this.showConfigList = [...this.configList]
       this.rules.configs = rules
       this.record.configs = {}
