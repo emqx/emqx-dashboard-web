@@ -443,4 +443,8 @@ export default {
     en: 'Broker statistics release interval',
   },
   // baseSettings end
+  confirmUpdateListener: {
+    zh: '修改配置后，此监听器将会被重启，确认修改？',
+    en: 'After modifying the configuration, this listener will be restarted, confirm the modification?',
+  },
 }
