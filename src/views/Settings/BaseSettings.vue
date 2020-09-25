@@ -10,7 +10,7 @@
       v-model="disabled"
       v-bind="allOptions"
       labelWidth="260px"
-      @update="handleUpdate(...arguments, 'mqtt')"
+      @update="handleUpdate(...arguments, 'emqx')"
     >
     </config-form>
     <template v-else>

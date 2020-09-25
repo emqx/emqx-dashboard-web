@@ -41,7 +41,7 @@ export default {
       initExternal: {},
       internalRecord: null,
       initInternal: {},
-      settingType: 'alarm',
+      settingType: 'vm_mon',
       rules: {},
       disabled: false,
       monitorList: [],
