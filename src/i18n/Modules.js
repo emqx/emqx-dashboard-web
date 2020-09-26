@@ -189,4 +189,16 @@ export default {
       Applying changes will immediately restart the current module which may cause data loss
       or service interruption. Please make sure to submit the changes without affecting the business.`,
   },
+  auth: {
+    zh: '认证',
+    en: 'Auth',
+  },
+  confirmDelete: {
+    zh: '确认删除？',
+    en: 'Confirm Delete?',
+  },
+  listNull: {
+    zh: '列表为空，请调整过滤条件再试',
+    en: 'Empty. Please change the filter and try again',
+  },
 }

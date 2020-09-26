@@ -125,7 +125,7 @@
           </el-col>
         </el-row>
         <a-card v-else class="null-modules">
-          <p>{{ $t('Plugins.listNull') }}</p>
+          <p>{{ $t('Modules.listNull') }}</p>
         </a-card>
       </template>
     </div>
