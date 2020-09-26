@@ -444,7 +444,10 @@ export default {
   },
   // baseSettings end
   confirmUpdateListener: {
-    zh: '修改配置后，此监听器将会被重启，确认修改？',
-    en: 'After modifying the configuration, this listener will be restarted, confirm the modification?',
+    zh: '应用设置将重新启动监听器，该操作将导致当前活跃连接断开，是否继续？',
+    en: `
+    Applying settings will restart the listener.
+    This operation will cause the current active connection to be disconnected.
+    Do you want to continue?`,
   },
 }

@@ -27,4 +27,21 @@ export function updateModule(id, body = {}) {
 export function loadConfig(type) {
   return http.get(`/module_types/${type}`)
 }
+
+// emqx_auth_mnesia
+export function addAuth(type, body = {}) {
+  return http.post(`/auth_${type}`, body)
+}
+
+export function loadAuth(type, params = {}) {
+  return http.get(`/auth_${type}`, { params })
+}
+
+export function updateAuth(type, id, body = {}) {
+  return http.put(`/auth_${type}/${id}`, body)
+}
+
+export function deleteAuth(type, id) {
+  return http.delete(`/auth_${type}/${id}`)
+}
 export default {}

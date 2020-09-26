@@ -314,29 +314,29 @@ let routes = [
     ],
   },
   // 插件
-  // {
-  //   path: '/plugins',
-  //   component: Layout,
-  //   meta: {
-  //     hideKey: 'plugins',
-  //     authRequired: true,
-  //   },
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'plugins',
-  //       component: () => import('@/views/Plugins/Plugins'),
-  //       meta: {
-  //         keepAlive: true,
-  //       },
-  //     },
-  //     {
-  //       path: '/plugins/:pluginName',
-  //       name: 'pluginsName',
-  //       component: () => import('@/views/Plugins/PluginsManage'),
-  //     },
-  //   ],
-  // },
+  {
+    path: '/plugins',
+    component: Layout,
+    meta: {
+      hideKey: 'plugins',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'plugins',
+        component: () => import('@/views/Plugins/Plugins'),
+        meta: {
+          keepAlive: true,
+        },
+      },
+      {
+        path: '/plugins/:pluginName',
+        name: 'pluginsName',
+        component: () => import('@/views/Plugins/PluginsManage'),
+      },
+    ],
+  },
   // 模块
   {
     path: '/modules',
@@ -360,6 +360,11 @@ let routes = [
         path: 'detail',
         name: 'module-detail',
         component: () => import('@/views/Modules/ModuleDetail'),
+      },
+      {
+        path: 'manage',
+        name: 'module-manage',
+        component: () => import('@/views/Modules/ModuleManage'),
       },
     ],
   },

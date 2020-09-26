@@ -82,6 +82,21 @@ export default {
   },
 
   methods: {
+    sortListener(valOne, valTwo) {
+      const resA = valOne.configs.listener.includes(':')
+        ? valOne.configs.listener.split(':')[1]
+        : valOne.configs.listener
+      const resB = valTwo.configs.listener.includes(':')
+        ? valTwo.configs.listener.split(':')[1]
+        : valTwo.configs.listener
+      if (parseInt(resA, 10) < parseInt(resB, 10)) {
+        return -1
+      }
+      if (parseInt(resA, 10) === parseInt(resB, 10)) {
+        return 0
+      }
+      return 1
+    },
     async loadConfigData() {
       const { zone, ...listeners } = await loadConfigSpec()
       // listeners: { ws: {}, tcp: {}, ... }
@@ -134,7 +149,7 @@ export default {
         }
         this.listenerZoneOptions.push(oneZoneOption)
       })
-      this.listenerList = listenersResList
+      this.listenerList = listenersResList.sort(this.sortListener)
       this.loadConfigData()
     },
     async handleUpdate(name, record, type, listenerName) {

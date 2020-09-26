@@ -42,10 +42,6 @@
             </span>
             <el-card shadow="hover">
               <div class="module-item" @click="toEditModule(item)">
-                <!-- <div class="item-error-tip">
-              <span>error</span>
-              <el-button class="reconnect-btn" plain size="mini">{{ $t('Modules.reconnect') }}</el-button>
-            </div> -->
                 <div class="left-box">
                   <img :src="item.img" alt="" class="item-img" />
                   <div class="item-content">
@@ -55,7 +51,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="item-handle">
+                <div :class="['item-handle', canManageModuleTypes.indexOf(item.type) !== -1 ? 'handle-layout' : '']">
                   <el-button
                     v-if="item.enabled"
                     class="stop-btn"
@@ -65,9 +61,19 @@
                     @click.stop="updataModule(item, false)"
                     >{{ $t('Modules.stop') }}</el-button
                   >
-                  <el-button v-else class="start-btn" plain size="mini" @click.stop="updataModule(item, true)">{{
-                    $t('Modules.run')
-                  }}</el-button>
+                  <el-button v-else class="start-btn" plain size="mini" @click.stop="updataModule(item, true)">
+                    {{ $t('Modules.run') }}
+                  </el-button>
+                  <el-button
+                    v-if="canManageModuleTypes.indexOf(item.type) !== -1"
+                    class="manage-btn"
+                    type="dashed"
+                    plain
+                    size="mini"
+                    @click.stop="manageModule(item)"
+                  >
+                    {{ $t('Base.manage') }}
+                  </el-button>
                   <a href="javascript:;" @click.stop="toReadMore" class="know-more">
                     {{ $t('Modules.readMore') }}
                   </a>
@@ -78,7 +84,7 @@
         </el-col>
       </el-row>
       <a-card v-else class="null-modules">
-        <p v-if="list.length">{{ $t('Plugins.listNull') }}</p>
+        <p v-if="list.length">{{ $t('Modules.listNull') }}</p>
         <p v-else>{{ $t('Modules.noData') }}</p>
       </a-card>
     </div>
@@ -100,6 +106,7 @@ export default {
       showList: [],
       moduleCount: 0,
       selectedModule: {},
+      canManageModuleTypes: ['mnesia_authentication'],
     }
   },
 
@@ -114,6 +121,9 @@ export default {
   },
 
   methods: {
+    manageModule(item) {
+      this.$router.push(`/modules/manage?type=${item.type}`)
+    },
     deleteModule(item) {
       this.$msgbox
         .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {
@@ -220,7 +230,6 @@ export default {
     color: #ff0000;
     border: 1px solid #ff0000;
     font-size: 14px;
-    margin-bottom: 20px;
     background-color: #fbf2f2;
   }
 

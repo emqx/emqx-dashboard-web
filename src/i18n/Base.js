@@ -152,4 +152,8 @@ export default {
     zh: '选择',
     en: 'Select',
   },
+  manage: {
+    zh: '管理',
+    en: 'Manage',
+  },
 }
