@@ -63,7 +63,7 @@ export default {
     return {
       listenerList: [],
       saveLoading: false,
-      settingType: 'ssl_external',
+      settingType: 'tcp_external',
       disabled: false,
       configData: {},
       configOptions: {},
@@ -83,12 +83,10 @@ export default {
 
   methods: {
     sortListener(valOne, valTwo) {
-      const resA = valOne.configs.listener.includes(':')
-        ? valOne.configs.listener.split(':')[1]
-        : valOne.configs.listener
-      const resB = valTwo.configs.listener.includes(':')
-        ? valTwo.configs.listener.split(':')[1]
-        : valTwo.configs.listener
+      const listenerOne = valOne.configs.listener
+      const listenerTwo = valTwo.configs.listener
+      const resA = listenerOne.includes(':') ? listenerOne.split(':')[1] : listenerOne
+      const resB = listenerTwo.includes(':') ? listenerTwo.split(':')[1] : listenerTwo
       if (parseInt(resA, 10) < parseInt(resB, 10)) {
         return -1
       }
