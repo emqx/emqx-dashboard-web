@@ -27,11 +27,7 @@
         </div>
         <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
           <el-row class="config-item-wrapper" :gutter="30">
-            <div v-if="configLoading" class="params-loading-wrapper">
-              <a-skeleton active></a-skeleton>
-            </div>
-
-            <template v-else-if="configList.length > 0">
+            <template v-if="configList.length > 0">
               <el-col :span="16">
                 <div v-for="(item, i) in configList" :key="i">
                   <template v-if="item.key !== 'listener'">
@@ -116,6 +112,9 @@
                 </div>
               </el-col>
             </template>
+            <div v-else class="params-loading-wrapper">
+              <a-skeleton active></a-skeleton>
+            </div>
           </el-row>
         </el-form>
       </el-card>

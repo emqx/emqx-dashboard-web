@@ -191,7 +191,7 @@ export default {
   },
   auth: {
     zh: '认证',
-    en: 'Auth',
+    en: 'Authentication',
   },
   confirmDelete: {
     zh: '确认删除？',
@@ -200,5 +200,21 @@ export default {
   listNull: {
     zh: '列表为空，请调整过滤条件再试',
     en: 'Empty. Please change the filter and try again',
+  },
+  allow: {
+    zh: '允许',
+    en: 'Allow',
+  },
+  deny: {
+    zh: '不允许',
+    en: 'Deny',
+  },
+  action: {
+    zh: '主题动作',
+    en: 'Action',
+  },
+  isAllow: {
+    zh: '是否允许',
+    en: 'Allowed',
   },
 }
