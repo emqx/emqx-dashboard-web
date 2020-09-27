@@ -71,7 +71,7 @@
                       <el-button v-else class="start-btn" plain size="mini">
                         {{ $t('Modules.added') }}
                       </el-button>
-                      <a href="javascript:;" @click.stop="toReadMore" class="know-more">
+                      <a href="javascript:;" @click.stop="toReadMore(one.name)" class="know-more">
                         {{ $t('Modules.readMore') }}
                       </a>
                     </div>
@@ -115,7 +115,7 @@
                     <el-button v-else class="start-btn" plain size="mini">
                       {{ $t('Modules.added') }}
                     </el-button>
-                    <a href="javascript:;" @click.stop="toReadMore" class="know-more">
+                    <a href="javascript:;" @click.stop="toReadMore(one.name)" class="know-more">
                       {{ $t('Modules.readMore') }}
                     </a>
                   </div>
@@ -370,8 +370,10 @@ export default {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       this.scrollTop = scrollTop
     },
-    toReadMore() {
-      const windowUrl = window.open('https://docs.emqx.net')
+    toReadMore(type) {
+      const lang = this.lang === 'zh' ? 'cn' : 'en'
+      const url = `https://docs.emqx.net/broker/latest/${lang}/modules/${type}.html`
+      const windowUrl = window.open(url)
       windowUrl.opener = null
     },
   },
