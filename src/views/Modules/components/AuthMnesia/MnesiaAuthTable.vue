@@ -270,6 +270,7 @@ export default {
           }
           if (res) {
             this.loadOneData(type)
+            this.$message.success(this.$t('Base.deleteSuccess'))
           }
         })
         .catch(() => {})

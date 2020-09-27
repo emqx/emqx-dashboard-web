@@ -51,29 +51,20 @@
                     </div>
                   </div>
                 </div>
-                <div :class="['item-handle', canManageModuleTypes.indexOf(item.type) !== -1 ? 'handle-layout' : '']">
-                  <el-button
-                    v-if="item.enabled"
-                    class="stop-btn"
-                    plain
-                    size="mini"
-                    type="danger"
-                    @click.stop="updataModule(item, false)"
-                    >{{ $t('Modules.stop') }}</el-button
-                  >
-                  <el-button v-else class="start-btn" plain size="mini" @click.stop="updataModule(item, true)">
-                    {{ $t('Modules.run') }}
-                  </el-button>
-                  <el-button
-                    v-if="canManageModuleTypes.indexOf(item.type) !== -1"
-                    class="manage-btn"
-                    type="dashed"
-                    plain
-                    size="mini"
-                    @click.stop="manageModule(item)"
-                  >
-                    {{ $t('Base.manage') }}
-                  </el-button>
+                <div class="item-handle">
+                  <div class="handle-icons">
+                    <i
+                      v-if="item.enabled"
+                      @click.stop="updataModule(item, false)"
+                      class="el-icon-switch-button close"
+                    ></i>
+                    <i v-else @click.stop="updataModule(item, true)" class="el-icon-caret-right open"></i>
+                    <i
+                      v-if="canManageModuleTypes.indexOf(item.type) !== -1"
+                      @click.stop="manageModule(item)"
+                      class="el-icon-setting"
+                    ></i>
+                  </div>
                   <a href="javascript:;" @click.stop="toReadMore" class="know-more">
                     {{ $t('Modules.readMore') }}
                   </a>

@@ -44,4 +44,20 @@ export function updateAuth(type, id, body = {}) {
 export function deleteAuth(type, id) {
   return http.delete(`/auth_${type}/${id}`)
 }
+
+export function loadAcl(type, params = {}) {
+  return http.get(`/acl/${type}`, { params })
+}
+
+export function addAcl(body = {}) {
+  return http.post(`/acl`, body)
+}
+
+export function deleteAcl(type, id, topic) {
+  return http.delete(`/acl/${type}/${id}/topic/${encodeURIComponent(topic)}`)
+}
+
+export function delete$allAcl(topic) {
+  return http.delete(`/acl/$all/topic/${encodeURIComponent(topic)}`)
+}
 export default {}
