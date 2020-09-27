@@ -4,7 +4,7 @@
       <el-tab-pane v-for="(item, index) in zoneList" :key="index" label="" :name="item.name">
         <div slot="label" size="mini" class="label-box">
           {{ item.name }}
-          <span :class="item.name === settingType ? 'delete-icon' : 'hide-delete'" @click="deleteZone">
+          <span :class="item.name === settingType ? 'delete-icon' : 'hide-delete'" @click="deleteZone(item.name)">
             <i class="el-icon-minus"></i>
           </span>
         </div>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { loadZoneConfigs, updateOneConfig, loadConfigSpec, addOneConfig } from '../../api/settings'
+import { loadZoneConfigs, updateOneConfig, loadConfigSpec, addOneConfig, deleteOneZone } from '../../api/settings'
 import ConfigDetail from './components/ConfigDetail'
 import { renderParamsForm } from '@/common/utils'
 
@@ -60,6 +60,7 @@ export default {
       disabled: false,
       zoneList: [],
       configData: {},
+      canChangeTab: false,
     }
   },
 
@@ -80,9 +81,10 @@ export default {
         zone[key].description = zone[key].description[this.lang]
       })
       this.configData = renderParamsForm(zone, 'configs')
+      this.canChangeTab = false
     },
     async handleBeforeLeave(activeName, oldName) {
-      if (activeName !== oldName) {
+      if (!this.canChangeTab && activeName !== oldName) {
         if (!this.disabled) {
           const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
             type: 'warning',
@@ -101,6 +103,8 @@ export default {
     async loadData() {
       const zoneResList = await loadZoneConfigs()
       this.zoneList = zoneResList
+      this.settingType = this.zoneList[0].name
+      this.canChangeTab = true
       this.loadConfigData()
     },
     async handleUpdate(name, record) {
@@ -126,7 +130,21 @@ export default {
         this.$message.success(this.$t('Base.createSuccess'))
       }
     },
-    deleteZone() {},
+    async deleteZone(name) {
+      this.$confirm(this.$t('Modules.confirmDelete'), this.$t('Base.warning'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
+        .then(async () => {
+          const res = await deleteOneZone(name)
+          if (res) {
+            this.$message.success(this.$t('Base.deleteSuccess'))
+            this.loadData()
+          }
+        })
+        .catch(() => {})
+    },
   },
 }
 </script>
@@ -136,10 +154,16 @@ export default {
   .label-box {
     display: flex;
     align-items: center;
+    position: relative;
     .delete-icon {
-      display: inline-block;
+      position: absolute;
       cursor: pointer;
-      margin-left: 7px;
+      right: -22px;
+      top: 0px;
+      color: #aaa;
+      &:hover {
+        color: #23bd78;
+      }
     }
     .hide-delete {
       display: none;
