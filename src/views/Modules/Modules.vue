@@ -65,7 +65,7 @@
                       class="el-icon-setting"
                     ></i>
                   </div>
-                  <a href="javascript:;" @click.stop="toReadMore" class="know-more">
+                  <a href="javascript:;" @click.stop="toReadMore(item.type)" class="know-more">
                     {{ $t('Modules.readMore') }}
                   </a>
                 </div>
@@ -204,8 +204,10 @@ export default {
       }
       this.showList = this.list
     },
-    toReadMore() {
-      const windowUrl = window.open('https://docs.emqx.net')
+    toReadMore(type) {
+      const lang = this.lang === 'zh' ? 'cn' : 'en'
+      const url = `https://docs.emqx.net/broker/latest/${lang}/modules/${type}.html`
+      const windowUrl = window.open(url)
       windowUrl.opener = null
     },
   },

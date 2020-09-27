@@ -21,8 +21,16 @@ export const loadZoneConfigs = () => {
   return http.get('/configs/zones')
 }
 
+export const deleteOneZone = (name) => {
+  return http.delete(`/configs/zones/${name}`)
+}
+
 export const loadlistenerConfigs = () => {
   return http.get('/configs/listeners')
+}
+
+export const deleteOneListener = (name, type) => {
+  return http.delete(`/configs/listeners/${name}?transport_type=${type}`)
 }
 
 // 更新配置 base/monitor

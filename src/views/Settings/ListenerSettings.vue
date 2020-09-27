@@ -4,9 +4,18 @@
       <el-tab-pane
         v-for="(item, index) in listenerList"
         :key="index"
-        :label="`${item.transport_type}_${item.name}`"
+        label=""
         :name="`${item.transport_type}_${item.name}`"
       >
+        <div slot="label" size="mini" class="label-box">
+          {{ `${item.transport_type}_${item.name}` }}
+          <span
+            :class="`${item.transport_type}_${item.name}` === settingType ? 'delete-icon' : 'hide-delete'"
+            @click="deleteListener(item)"
+          >
+            <i class="el-icon-minus"></i>
+          </span>
+        </div>
         <config-detail
           v-if="settingType === `${item.transport_type}_${item.name}` && item.configs"
           :ref="`${item.transport_type}_${item.name}`"
@@ -48,7 +57,14 @@
 </template>
 
 <script>
-import { loadZoneConfigs, loadlistenerConfigs, updateOneConfig, loadConfigSpec, addOneConfig } from '../../api/settings'
+import {
+  loadZoneConfigs,
+  loadlistenerConfigs,
+  updateOneConfig,
+  loadConfigSpec,
+  addOneConfig,
+  deleteOneListener,
+} from '../../api/settings'
 import ConfigDetail from './components/ConfigDetail'
 import { renderParamsForm } from '@/common/utils'
 
@@ -68,6 +84,7 @@ export default {
       configData: {},
       configOptions: {},
       listenerZoneOptions: [],
+      canChangeTab: false,
     }
   },
 
@@ -118,9 +135,10 @@ export default {
         form: wsConfigs.form.concat(sslConfigs.form),
         rules: Object.assign(sslConfigs.rules, wsConfigs.rules),
       }
+      this.canChangeTab = false
     },
     async handleBeforeLeave(activeName, oldName) {
-      if (activeName !== oldName) {
+      if (!this.canChangeTab && activeName !== oldName) {
         if (!this.disabled) {
           const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
             type: 'warning',
@@ -148,6 +166,8 @@ export default {
         this.listenerZoneOptions.push(oneZoneOption)
       })
       this.listenerList = listenersResList.sort(this.sortListener)
+      this.settingType = `${this.listenerList[0].transport_type}_${this.listenerList[0].name}`
+      this.canChangeTab = true
       this.loadConfigData()
     },
     async handleUpdate(name, record, type, listenerName) {
@@ -188,6 +208,44 @@ export default {
         this.$message.success(this.$t('Base.createSuccess'))
       }
     },
+    async deleteListener(item) {
+      this.$confirm(this.$t('Modules.confirmDelete'), this.$t('Base.warning'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
+        .then(async () => {
+          const res = await deleteOneListener(item.name, item.transport_type)
+          if (res) {
+            this.$message.success(this.$t('Base.deleteSuccess'))
+            this.loadData()
+          }
+        })
+        .catch(() => {})
+    },
   },
 }
 </script>
+
+<style lang="scss">
+.listener-settings {
+  .label-box {
+    display: flex;
+    align-items: center;
+    position: relative;
+    .delete-icon {
+      position: absolute;
+      cursor: pointer;
+      right: -22px;
+      top: 0px;
+      color: #aaa;
+      &:hover {
+        color: #23bd78;
+      }
+    }
+    .hide-delete {
+      display: none;
+    }
+  }
+}
+</style>
