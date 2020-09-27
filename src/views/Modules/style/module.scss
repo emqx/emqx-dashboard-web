@@ -93,6 +93,20 @@
       align-items: center;
       justify-content: space-around;
 
+      .handle-icons {
+        width: 52px;
+        display: flex;
+        justify-content: space-around; 
+        font-size: 20px;
+        .open {
+          color: #23bd78;
+          font-size: 28px;
+        }
+        .close {
+          color: #ff0000;
+        }
+      }
+
       .start-btn {
         width: 52px;
         color: #23bd78;
@@ -102,23 +116,9 @@
         margin-left: 0px;
       }
 
-      .manage-btn {
-        width: 52px;
-        color: #999;
-        font-size: 14px;
-        margin-left: 0px;
-        &:hover {
-          color: #23bd78;
-        }
-      }
-
       .know-more {
         font-size: 13px;
       }
-    }
-
-    .handle-layout {
-      justify-content: space-between;
     }
   }
 

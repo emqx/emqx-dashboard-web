@@ -467,8 +467,8 @@ export default {
       }
 
       .select-btn {
+        width: 50px;
         font-size: 13px;
-        margin-bottom: 20px;
         color: #999;
         &:hover {
           color: #23bd78;

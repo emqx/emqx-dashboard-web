@@ -1,7 +1,13 @@
 <template>
   <a-card class="zone-settings emq-list-card">
     <el-tabs v-model="settingType" :before-leave="handleBeforeLeave">
-      <el-tab-pane v-for="(item, index) in zoneList" :key="index" :label="item.name" :name="item.name">
+      <el-tab-pane v-for="(item, index) in zoneList" :key="index" label="" :name="item.name">
+        <div slot="label" size="mini" class="label-box">
+          {{ item.name }}
+          <span :class="item.name === settingType ? 'delete-icon' : 'hide-delete'" @click="deleteZone">
+            <i class="el-icon-minus"></i>
+          </span>
+        </div>
         <config-detail
           v-if="settingType === item.name && item.configs"
           :ref="item.name"
@@ -120,6 +126,24 @@ export default {
         this.$message.success(this.$t('Base.createSuccess'))
       }
     },
+    deleteZone() {},
   },
 }
 </script>
+
+<style lang="scss">
+.zone-settings {
+  .label-box {
+    display: flex;
+    align-items: center;
+    .delete-icon {
+      display: inline-block;
+      cursor: pointer;
+      margin-left: 7px;
+    }
+    .hide-delete {
+      display: none;
+    }
+  }
+}
+</style>
