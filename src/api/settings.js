@@ -48,6 +48,10 @@ export const loadConfigSpec = () => {
   return http.get('/configs_spec')
 }
 
+export const loadZoneConfig = () => {
+  return http.get('/configs_spec/zone')
+}
+
 // type: zones/listeners
 export const updateOneConfig = async (type, name, body = {}) => {
   try {

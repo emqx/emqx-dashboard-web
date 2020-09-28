@@ -13,8 +13,8 @@
           :ref="item.name"
           oper="edit"
           :editConfig="item.configs"
-          :configData="configData"
           :btn-loading="saveLoading"
+          from="zone"
           v-model="disabled"
           @update="handleUpdate(...arguments)"
         >
@@ -32,7 +32,7 @@
           oper="add"
           ref="addZone"
           v-model="disabled"
-          :configData="configData"
+          from="zone"
           :btn-loading="saveLoading"
           @update="handleUpdate(...arguments)"
         ></config-detail>
@@ -42,9 +42,8 @@
 </template>
 
 <script>
-import { loadZoneConfigs, updateOneConfig, loadConfigSpec, addOneConfig, deleteOneZone } from '../../api/settings'
+import { loadZoneConfigs, updateOneConfig, addOneConfig, deleteOneZone } from '../../api/settings'
 import ConfigDetail from './components/ConfigDetail'
-import { renderParamsForm } from '@/common/utils'
 
 export default {
   name: 'ZoneSettings',
@@ -59,7 +58,6 @@ export default {
       settingType: 'external',
       disabled: false,
       zoneList: [],
-      configData: {},
       canChangeTab: false,
     }
   },
@@ -75,14 +73,6 @@ export default {
   },
 
   methods: {
-    async loadConfigData() {
-      const { zone } = await loadConfigSpec()
-      Object.keys(zone).forEach((key) => {
-        zone[key].description = zone[key].description[this.lang]
-      })
-      this.configData = renderParamsForm(zone, 'configs')
-      this.canChangeTab = false
-    },
     async handleBeforeLeave(activeName, oldName) {
       if (!this.canChangeTab && activeName !== oldName) {
         if (!this.disabled) {
@@ -100,12 +90,16 @@ export default {
       }
       return true
     },
-    async loadData() {
+    async loadData(oper) {
       const zoneResList = await loadZoneConfigs()
       this.zoneList = zoneResList
-      this.settingType = this.zoneList[0].name
-      this.canChangeTab = true
-      this.loadConfigData()
+      if (oper !== 'edit') {
+        this.settingType = this.zoneList[0].name
+        this.canChangeTab = true
+        setTimeout(() => {
+          this.canChangeTab = false
+        }, 2)
+      }
     },
     async handleUpdate(name, record) {
       this.saveLoading = true
@@ -116,8 +110,9 @@ export default {
         res = await addOneConfig('zones', { name, configs: record })
       }
       if (res) {
+        const oper = !name ? 'edit' : 'add'
         this.disabled = true
-        this.loadData()
+        this.loadData(oper)
         this.settingType = name || this.settingType
         this.updataSuccessTip(name)
       }
@@ -131,7 +126,7 @@ export default {
       }
     },
     async deleteZone(name) {
-      this.$confirm(this.$t('Modules.confirmDelete'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('Settings.isDeleteZone'), this.$t('Base.warning'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
@@ -151,14 +146,22 @@ export default {
 
 <style lang="scss">
 .zone-settings {
+  .el-tabs__item.is-active {
+    .delete-icon {
+      visibility: hidden;
+    }
+    &:hover {
+      .delete-icon {
+        visibility: visible;
+      }
+    }
+  }
   .label-box {
-    display: flex;
-    align-items: center;
     position: relative;
     .delete-icon {
       position: absolute;
       cursor: pointer;
-      right: -22px;
+      right: -20px;
       top: 0px;
       color: #aaa;
       &:hover {
