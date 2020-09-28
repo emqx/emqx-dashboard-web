@@ -466,4 +466,8 @@ export default {
     zh: '确认删除该 Zone？',
     en: 'Are you sure to delete this Zone?',
   },
+  returnList: {
+    zh: '返回列表',
+    en: 'Return',
+  },
 }
