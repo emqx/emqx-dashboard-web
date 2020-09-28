@@ -33,11 +33,11 @@
       <el-row>
         <el-col :span="4">
           <span class="return-button" @click="returnList">
-            <i class="el-icon-arrow-left">返回列表</i>
+            <i class="el-icon-arrow-left">{{ $t('Settings.returnList') }}</i>
           </span>
         </el-col>
         <el-col v-if="oper === 'edit'" :span="4" :offset="16">
-          <span class="delete-button" @click="deleteListener">删除</span>
+          <span class="delete-button" @click="deleteListener">{{ $t('Base.delete') }}</span>
         </el-col>
       </el-row>
 
