@@ -1,72 +1,65 @@
 <template>
   <a-card class="listener-settings emq-list-card">
-    <el-tabs v-model="settingType" :before-leave="handleBeforeLeave">
-      <el-tab-pane
-        v-for="(item, index) in listenerList"
-        :key="index"
-        label=""
-        :name="`${item.transport_type}_${item.name}`"
-      >
-        <div slot="label" size="mini" class="label-box">
-          {{ `${item.transport_type}_${item.name}` }}
-          <span
-            :class="`${item.transport_type}_${item.name}` === settingType ? 'delete-icon' : 'hide-delete'"
-            @click="deleteListener(item)"
-          >
-            <i class="el-icon-minus"></i>
+    <template v-if="!showConfigDetail">
+      <div class="emq-table-header">
+        <el-button class="confirm-btn" type="primary" size="small" icon="el-icon-plus" @click="addListener">
+          {{ $t('Base.add') }}
+        </el-button>
+      </div>
+      <el-table :data="listeners">
+        <el-table-column prop="name" :label="$t('Settings.listenerName')">
+          <template slot-scope="{ row }">
+            <a @click="editListener(row)">{{ row.name }}</a>
+          </template>
+        </el-table-column>
+        <el-table-column prop="transport_type" :label="$t('Modules.listener_type')"></el-table-column>
+        <el-table-column prop="configs.listener" :label="$t('Modules.listen_on')"></el-table-column>
+        <el-table-column prop="configs.acceptors" label="Acceptors"></el-table-column>
+        <el-table-column :label="$t('Settings.isOpened')">
+          <template slot-scope="{ row }">
+            <el-switch
+              v-model="row.enabled"
+              active-color="#13ce66"
+              inactive-color="#d0d3e0"
+              @change="updataStatus(...arguments, row)"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+      </el-table>
+    </template>
+    <!-- add or edit -->
+    <template v-else>
+      <el-row>
+        <el-col :span="4">
+          <span class="return-button" @click="returnList">
+            <i class="el-icon-arrow-left">返回列表</i>
           </span>
-        </div>
-        <config-detail
-          v-if="settingType === `${item.transport_type}_${item.name}` && item.configs"
-          :ref="`${item.transport_type}_${item.name}`"
-          oper="edit"
-          :editConfig="item.configs"
-          :configData="configData"
-          :configOptions="configOptions"
-          :listenerType="item.transport_type"
-          :btn-loading="saveLoading"
-          labelWidth="170px"
-          :listenerZoneOptions="listenerZoneOptions"
-          v-model="disabled"
-          @update="handleUpdate(...arguments, item.name)"
-        >
-        </config-detail>
-        <template v-else>
-          <a-skeleton active></a-skeleton>
-        </template>
-      </el-tab-pane>
-      <el-tab-pane label="" name="addListener">
-        <span slot="label" size="mini">
-          <i class="el-icon-plus"></i>
-        </span>
-        <config-detail
-          v-if="settingType === 'addListener'"
-          oper="add"
-          ref="addListener"
-          v-model="disabled"
-          :configData="configData"
-          :configOptions="configOptions"
-          :btn-loading="saveLoading"
-          labelWidth="170px"
-          :listenerZoneOptions="listenerZoneOptions"
-          @update="handleUpdate(...arguments)"
-        ></config-detail>
-      </el-tab-pane>
-    </el-tabs>
+        </el-col>
+        <el-col v-if="oper === 'edit'" :span="4" :offset="16">
+          <span class="delete-button" @click="deleteListener">删除</span>
+        </el-col>
+      </el-row>
+
+      <config-detail
+        :oper="oper"
+        :editConfig="editConfig"
+        from="listener"
+        :listenerType="transport_type"
+        :btn-loading="saveLoading"
+        labelWidth="170px"
+        :listenerZoneOptions="listenerZoneOptions"
+        v-model="disabled"
+        @update="handleUpdate(...arguments)"
+      >
+      </config-detail>
+    </template>
   </a-card>
 </template>
 
 <script>
-import {
-  loadZoneConfigs,
-  loadlistenerConfigs,
-  updateOneConfig,
-  loadConfigSpec,
-  addOneConfig,
-  deleteOneListener,
-} from '../../api/settings'
+import { loadlistenerConfigs, loadZoneConfigs, updateOneConfig, addOneConfig, deleteOneListener } from '@/api/settings'
 import ConfigDetail from './components/ConfigDetail'
-import { renderParamsForm } from '@/common/utils'
 
 export default {
   name: 'ListenerSettings',
@@ -77,21 +70,16 @@ export default {
 
   data() {
     return {
-      listenerList: [],
-      saveLoading: false,
-      settingType: 'tcp_external',
-      disabled: false,
-      configData: {},
-      configOptions: {},
+      listeners: [],
+      showConfigDetail: false,
+      editConfig: {},
+      transport_type: 'tcp',
+      editListenerName: '',
+      disabled: true,
       listenerZoneOptions: [],
-      canChangeTab: false,
+      saveLoading: false,
+      oper: 'edit',
     }
-  },
-
-  computed: {
-    lang() {
-      return this.$store.state.lang
-    },
   },
 
   created() {
@@ -99,64 +87,9 @@ export default {
   },
 
   methods: {
-    sortListener(valOne, valTwo) {
-      const listenerOne = valOne.configs.listener
-      const listenerTwo = valTwo.configs.listener
-      const resA = listenerOne.includes(':') ? listenerOne.split(':')[1] : listenerOne
-      const resB = listenerTwo.includes(':') ? listenerTwo.split(':')[1] : listenerTwo
-      if (parseInt(resA, 10) < parseInt(resB, 10)) {
-        return -1
-      }
-      if (parseInt(resA, 10) === parseInt(resB, 10)) {
-        return 0
-      }
-      return 1
-    },
-    async loadConfigData() {
-      const { zone, ...listeners } = await loadConfigSpec()
-      // listeners: { ws: {}, tcp: {}, ... }
-      Object.keys(listeners).forEach((type) => {
-        const diffTypeConfig = listeners[type]
-        Object.keys(diffTypeConfig).forEach((key) => {
-          diffTypeConfig[key].description = diffTypeConfig[key].description[this.lang]
-        })
-        if (type === 'tcp') {
-          // common configs
-          this.configData = renderParamsForm(diffTypeConfig, 'configs')
-          this.configOptions[type] = {}
-        } else {
-          this.configOptions[type] = renderParamsForm(diffTypeConfig, 'configs')
-        }
-      })
-      // wss: ssl+tcp+ws
-      const { ...sslConfigs } = this.configOptions.ssl
-      const { ...wsConfigs } = this.configOptions.ws
-      this.configOptions.wss = {
-        form: wsConfigs.form.concat(sslConfigs.form),
-        rules: Object.assign(sslConfigs.rules, wsConfigs.rules),
-      }
-      this.canChangeTab = false
-    },
-    async handleBeforeLeave(activeName, oldName) {
-      if (!this.canChangeTab && activeName !== oldName) {
-        if (!this.disabled) {
-          const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
-            type: 'warning',
-            cancelButtonText: this.$t('Settings.no'),
-          })
-          if (status === 'confirm') {
-            const child = this.$refs[oldName].length ? this.$refs[oldName][0] : this.$refs[oldName]
-            child.cancel(false)
-            return true
-          }
-          return false
-        }
-      }
-      return true
-    },
     async loadData() {
+      this.listeners = await loadlistenerConfigs()
       this.listenerZoneOptions = []
-      const listenersResList = await loadlistenerConfigs()
       const zoneResList = await loadZoneConfigs()
       zoneResList.forEach((item) => {
         const oneZoneOption = {
@@ -165,16 +98,44 @@ export default {
         }
         this.listenerZoneOptions.push(oneZoneOption)
       })
-      this.listenerList = listenersResList.sort(this.sortListener)
-      this.settingType = `${this.listenerList[0].transport_type}_${this.listenerList[0].name}`
-      this.canChangeTab = true
-      this.loadConfigData()
     },
-    async handleUpdate(name, record, type, listenerName) {
+    async returnList() {
+      const sureReturn = () => {
+        this.showConfigDetail = false
+        this.loadData()
+      }
+      if (!this.disabled) {
+        const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
+          type: 'warning',
+          cancelButtonText: this.$t('Settings.no'),
+        })
+        if (status === 'confirm') {
+          sureReturn()
+          return true
+        }
+        return false
+      }
+      sureReturn()
+      return true
+    },
+    addListener() {
+      this.oper = 'add'
+      this.showConfigDetail = true
+      this.transport_type = 'tcp'
+      this.editConfig = {}
+    },
+    editListener(row) {
+      this.oper = 'edit'
+      this.showConfigDetail = true
+      this.editConfig = { ...row.configs }
+      this.transport_type = row.transport_type
+      this.editListenerName = row.name
+    },
+    async handleUpdate(name, record, type) {
       this.saveLoading = true
       let data
       const { ...configs } = record
-      if (this.settingType !== 'addListener') {
+      if (this.oper !== 'add') {
         data = { transport_type: type, configs }
         this.$confirm(this.$t('Settings.confirmUpdateListener'), this.$t('Base.warning'), {
           confirmButtonText: this.$t('Base.confirm'),
@@ -182,10 +143,9 @@ export default {
           type: 'warning',
         })
           .then(async () => {
-            const res = await updateOneConfig('listeners', listenerName, data)
+            const res = await updateOneConfig('listeners', this.editListenerName, data)
             if (res) {
-              this.settingType = `${type}_${listenerName}`
-              this.updataSuccess(name)
+              this.updataSuccess(name, 'edit')
             }
           })
           .catch(() => {})
@@ -193,7 +153,6 @@ export default {
         data = { name, transport_type: type, configs }
         const res = await addOneConfig('listeners', data)
         if (res) {
-          this.settingType = `${type}_${name}`
           this.updataSuccess(name)
         }
       }
@@ -207,18 +166,45 @@ export default {
       } else {
         this.$message.success(this.$t('Base.createSuccess'))
       }
+      this.showConfigDetail = false
     },
-    async deleteListener(item) {
-      this.$confirm(this.$t('Modules.confirmDelete'), this.$t('Base.warning'), {
+    async updataStatus(val, row) {
+      row.enabled = !val
+      const { transport_type, enabled } = row
+      const data = {
+        type: 'listener',
+        transport_type,
+        enabled: !enabled,
+      }
+      if (enabled) {
+        this.$confirm(`${this.$t('Settings.isStopListener') + row.name}?`, this.$t('Base.warning'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+          .then(async () => {
+            this.toggleEnabled(row, data)
+          })
+          .catch(() => {})
+      } else {
+        this.toggleEnabled(row, data)
+      }
+    },
+    async toggleEnabled(row, data) {
+      await updateOneConfig('listeners', row.name, data)
+      this.loadData()
+    },
+    async deleteListener() {
+      this.$confirm(this.$t('Settings.isDeleteListener'), this.$t('Base.warning'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       })
         .then(async () => {
-          const res = await deleteOneListener(item.name, item.transport_type)
+          const res = await deleteOneListener(this.editListenerName, this.transport_type)
           if (res) {
             this.$message.success(this.$t('Base.deleteSuccess'))
-            this.loadData()
+            this.returnList()
           }
         })
         .catch(() => {})
@@ -229,23 +215,22 @@ export default {
 
 <style lang="scss">
 .listener-settings {
-  .label-box {
-    display: flex;
-    align-items: center;
-    position: relative;
-    .delete-icon {
-      position: absolute;
-      cursor: pointer;
-      right: -22px;
-      top: 0px;
-      color: #aaa;
-      &:hover {
-        color: #23bd78;
-      }
+  .return-button {
+    color: #34c388;
+    font-size: 14px;
+    cursor: pointer;
+    i {
+      font-weight: bold;
     }
-    .hide-delete {
-      display: none;
-    }
+  }
+  .delete-button {
+    display: inline-block;
+    color: #ff0000;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .el-col-offset-16 {
+    text-align: right;
   }
 }
 </style>

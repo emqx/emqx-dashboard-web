@@ -376,7 +376,7 @@ export default {
             this.$router.push(`/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`)
           }
         } else {
-          this.$router.push(`/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`)
+          this.$router.push('/modules')
         }
       }, 10)
     },

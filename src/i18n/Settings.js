@@ -450,4 +450,20 @@ export default {
     This operation will cause the current active connection to be disconnected.
     Do you want to continue?`,
   },
+  isOpened: {
+    zh: '是否开启',
+    en: 'Is Started'
+  },
+  isStopListener: {
+    zh: '确定停止监听器：',
+    en: 'Are you sure to stop the listener:',
+  },
+  isDeleteListener: {
+    zh: '确认删除该监听器？',
+    en: 'Are you sure to delete this listener?',
+  },
+  isDeleteZone: {
+    zh: '确认删除该 Zone？',
+    en: 'Are you sure to delete this Zone?',
+  },
 }

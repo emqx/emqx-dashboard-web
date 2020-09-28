@@ -3,7 +3,7 @@
     <el-row :gutter="12" class="config-form">
       <el-form
         ref="record"
-        class="basic-config-form"
+        :class="from === 'listener' ? 'no-form-margin' : 'form-margin'"
         size="small"
         label-suffix=":"
         :label-width="labelWidth"
@@ -12,7 +12,7 @@
         :rules="rules"
       >
         <template v-if="showConfigList.length">
-          <template v-if="configOptions">
+          <template v-if="from === 'listener'">
             <el-col :span="12" class="form-item-desc">
               <el-form-item label="type" prop="type">
                 <emq-select
@@ -35,7 +35,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12" class="form-item-desc">
-              <span v-if="!configOptions">{{ $t('Settings.zoneName') }}</span>
+              <span v-if="from === 'zone'">{{ $t('Settings.zoneName') }}</span>
               <span v-else>{{ $t('Settings.listenerName') }}</span>
             </el-col>
           </template>
@@ -92,7 +92,7 @@
           <i :class="showMoreItems ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
         </a>
       </el-col>
-      <el-col class="button-group__center" :span="24">
+      <el-col class="button-group__center" :span="24" style="margin-bottom: 10px;">
         <el-button plain :disabled="selfDisabled" type="default" size="medium" @click="cancel">
           {{ $t('Base.cancel') }}
         </el-button>
@@ -106,6 +106,8 @@
 </template>
 
 <script>
+import { loadZoneConfig, loadConfigSpec } from '@/api/settings'
+import { renderParamsForm, verifyID } from '@/common/utils'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
 
@@ -126,7 +128,7 @@ export default {
       showConfigList: [],
       rules: {
         configs: {},
-        name: [{ required: true, message: this.$t('Settings.zoneNameTip') }],
+        name: [{ required: true, validator: verifyID }],
       },
       record: {
         configs: {},
@@ -138,7 +140,7 @@ export default {
         name: '',
         type: 'tcp',
       },
-      selfDisabled: false,
+      selfDisabled: true,
       showMoreItems: false,
       typeOptions: [
         { label: 'tcp', value: 'tcp' },
@@ -146,6 +148,8 @@ export default {
         { label: 'ws', value: 'ws' },
         { label: 'wss', value: 'wss' },
       ],
+      configData: {},
+      configOptions: {},
     }
   },
 
@@ -166,17 +170,13 @@ export default {
       type: Object,
       default: () => {},
     },
-    configData: {
-      type: Object,
-      default: () => {},
+    from: {
+      type: String,
+      default: '',
     },
     btnLoading: {
       type: Boolean,
       default: false,
-    },
-    configOptions: {
-      type: Object,
-      default: () => {},
     },
     listenerType: {
       type: String,
@@ -218,12 +218,61 @@ export default {
   },
 
   created() {
-    setTimeout(() => {
-      this.loadConfig()
-    }, 80)
+    this.loadData()
   },
 
   methods: {
+    loadData() {
+      this.loadConfigParams()
+        .then((res) => {
+          if (res) {
+            this.loadConfig()
+          }
+        })
+        .catch()
+    },
+    async loadConfigParams() {
+      // listener
+      if (this.from === 'listener') {
+        const resVal = this.loadConfigOptions()
+          .then((res) => {
+            return res
+          })
+          .catch()
+        return resVal
+      }
+      // zone
+      const data = await loadZoneConfig()
+      Object.keys(data).forEach((key) => {
+        data[key].description = data[key].description[this.lang]
+      })
+      this.configData = renderParamsForm(data, 'configs')
+      return this.configData
+    },
+    async loadConfigOptions() {
+      const { zone, ...listeners } = await loadConfigSpec()
+      // listeners: { ws: {}, tcp: {}, ... }
+      Object.keys(listeners).forEach((type) => {
+        const diffTypeConfig = listeners[type]
+        Object.keys(diffTypeConfig).forEach((key) => {
+          diffTypeConfig[key].description = diffTypeConfig[key].description[this.lang]
+        })
+        if (type === 'tcp') {
+          this.configData = renderParamsForm(diffTypeConfig, 'configs')
+          this.configOptions[type] = {}
+        } else {
+          this.configOptions[type] = renderParamsForm(diffTypeConfig, 'configs')
+        }
+      })
+      // wss: ssl+tcp+ws
+      const { ...sslConfigs } = this.configOptions.ssl
+      const { ...wsConfigs } = this.configOptions.ws
+      this.configOptions.wss = {
+        form: wsConfigs.form.concat(sslConfigs.form),
+        rules: Object.assign(sslConfigs.rules, wsConfigs.rules),
+      }
+      return this.configOptions
+    },
     handleRecordChange(val) {
       if (_.isEqual(val, this.originRecord)) {
         this.selfDisabled = true
@@ -273,17 +322,15 @@ export default {
             this.hasValKeyConfigList.push(item)
           }
         })
-        this.hasValKeyConfigList = this.configOptions
-          ? this.hasValKeyConfigList
-          : this.hasValKeyConfigList.sort(this.sortKeyName)
-        this.nullKeyConfigList = this.configOptions
-          ? this.nullKeyConfigList
-          : this.nullKeyConfigList.sort(this.sortKeyName)
+        this.hasValKeyConfigList =
+          this.from === 'listener' ? this.hasValKeyConfigList : this.hasValKeyConfigList.sort(this.sortKeyName)
+        this.nullKeyConfigList =
+          this.from === 'listener' ? this.nullKeyConfigList : this.nullKeyConfigList.sort(this.sortKeyName)
         this.showConfigList = this.hasValKeyConfigList
       }, 50)
     },
     initData() {
-      if (!this.configOptions) {
+      if (this.from === 'zone') {
         // zone
         delete this.record.type
         delete this.originRecord.type
@@ -297,7 +344,7 @@ export default {
     },
     initConfigs(configs) {
       const { form, rules } = configs
-      this.configList = this.configOptions ? form : form.sort(this.sortKeyName)
+      this.configList = this.from === 'listener' ? form : form.sort(this.sortKeyName)
       this.showConfigList = [...this.configList]
       this.rules.configs = rules
       this.record.configs = {}
@@ -380,6 +427,12 @@ export default {
 
 <style lang="scss">
 .config-detail {
+  .no-form-margin {
+    margin-top: 0;
+  }
+  .form-margin {
+    margin-top: 32px;
+  }
   .show-more {
     text-align: center;
     a {
