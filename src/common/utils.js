@@ -424,7 +424,7 @@ export function getDateDiff(beginTime, endTime) {
 export const verifyID = (rule, value, callback) => {
   const reg = /^[0-9a-zA-Z_:]{1,64}$/
   if (!value) {
-    callback(new Error(`ID ${VueI18n.RuleEngine.pleaseEnter}`))
+    callback(new Error(VueI18n.RuleEngine.pleaseEnter))
   } else if (value.length > 64) {
     callback(new Error(VueI18n.RuleEngine.id_len_tip))
   } else if (!reg.test(value)) {

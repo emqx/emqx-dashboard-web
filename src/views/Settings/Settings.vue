@@ -48,7 +48,7 @@ export default {
 
   methods: {
     async handleBeforeLeave(currentName, oldName) {
-      if (oldName !== 'clusterSettings' && oldName !== 'listenerSettings' && currentName !== oldName) {
+      if (oldName !== 'clusterSettings' && currentName !== oldName) {
         // 设置是否修改过
         const { disabled } = this.$refs[oldName]._data
         if (!disabled) {
@@ -71,8 +71,6 @@ export default {
 <style lang="scss">
 .settings {
   .el-form {
-    margin-top: 32px;
-
     .el-input.is-disabled .el-input__inner {
       color: #676767;
     }
