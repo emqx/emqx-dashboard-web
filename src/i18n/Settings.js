@@ -49,7 +49,7 @@ export default {
   },
   cancelConfirm: {
     zh: '是否取消本次修改？',
-    ja: '今回の変更は破棄しますか',
+    ja: '今回の変更を破棄しますか',
     en: 'You have unsaved changes, confirm cancel?',
   },
   noSaveConfirm: {
@@ -135,7 +135,7 @@ export default {
   },
   mqtt_ignore_loop_deliver: {
     zh: '是否忽略消息循环传递，常用于消息桥接（对于 MQTT v3.1.1）',
-    ja: 'メッセージをループで転送することを無視しますか（MQTT v3.1.1のみ）',
+    ja: 'メッセージがループで転送することを無視しますか（MQTT v3.1.1のみ）',
     en: 'Whether to ignore loop delivery of messages (for MQTT v3.1.1)',
   },
   mqueue_store_qos0: {
@@ -196,7 +196,7 @@ export default {
   },
   hibernate_after: {
     zh: '闲置后进入休眠状态的时间',
-    ja: 'アイドル状態の持続時間',
+    ja: 'アイドル状態になってからスリープまでの時間',
     en: 'Hibernate after a duration of idle state',
   },
   acl_cache_max_size: {
@@ -237,7 +237,7 @@ export default {
   },
   clusterType: {
     zh: '集群方式',
-    ja: 'クラスタータイプ',
+    ja: 'タイプ',
     en: 'Cluster Type',
   },
   currentNode: {
@@ -308,7 +308,7 @@ export default {
   apiserver: {
     zh: 'k8s 服务器列表',
     ja: 'k8s サーバーリスト',
-    en: '',
+    en: 'k8s server list',
   },
   service_name: {
     zh: '服务器名称',
@@ -387,99 +387,120 @@ export default {
   },
   zoneName: {
     zh: 'Zone 名字',
+    ja: '待翻译',
     en: 'Zone Name',
   },
   zoneNameTip: {
     zh: '名字不能为空！',
+    ja: '待翻译',
     en: 'The name cannot be empty!',
   },
   listeners: {
     zh: '监听器',
+    ja: 'リスナー',
     en: 'Listeners',
   },
   monitorAlarm: {
     zh: '监控告警',
+    ja: '待翻译',
     en: 'Monitor Alarm',
   },
   // monitorAlarm desciption start
   actions: {
     zh: '动作',
+    ja: '待翻译',
     en: 'Actions',
   },
   size_limit: {
     zh: '大小限制',
+    ja: '待翻译',
     en: 'Size Limit',
   },
   validity_period: {
     zh: '有效期',
+    ja: '待翻译',
     en: 'Validity period',
   },
   check_interval: {
     zh: 'CPU 占用率检查周期',
+    ja: '待翻译',
     en: 'CPU usage check cycle',
   },
   process_high_watermark: {
     zh: '当前进程数量占进程最大数量的百分比超过该值时将触发告警',
+    ja: '待翻译',
     en: `
     When the percentage of the current number of processes to the maximum number
     of processes exceeds this value, an alarm will be triggered`,
   },
   process_low_watermark: {
     zh: '当前进程数量占进程最大数量的百分比回落到该值以下时将触发告警',
+    ja: '待翻译',
     en: `
     An alarm will be triggered when the percentage of the current number of
     processes in the maximum number of processes falls below this value`,
   },
   busy_dist_port: {
     zh: '指定是否启用集群 RPC 通道拥塞监控',
+    ja: '待翻译',
     en: 'Specify whether to enable cluster RPC channel congestion monitoring',
   },
   busy_port: {
     zh: '指定是否启用进程间消息通道拥塞监控',
+    ja: '待翻译',
     en: 'Specify whether to enable inter-process message channel congestion monitoring',
   },
   large_heap: {
     zh: '启用堆栈大小监控并在进程执行垃圾回收后堆栈大小仍大于设定值时触发告警，0 表示禁用此监控',
+    ja: '待翻译',
     en: `
     Enable stack size monitoring and trigger an alarm when the stack size is
     still greater than the set value after the process is garbage collected, 0 means disable this monitoring`,
   },
   long_gc: {
     zh: '启用垃圾回收时间监控并在回收时间超过设定值时触发告警，0 表示禁用此监控',
+    ja: '待翻译',
     en: `
     Enable garbage collection time monitoring and trigger an alarm
     when the collection time exceeds the set value, 0 means disable this monitoring`,
   },
   long_schedule: {
     zh: '启用进程调度时间监控并在调度时间超过设定值时触发告警，0 表示禁用此监控',
+    ja: '待翻译',
     en: `
     Enable process scheduling time monitoring and trigger an alarm when the
     scheduling time exceeds the set value, 0 means disable this monitoring`,
   },
   cpu_check_interval: {
     zh: 'CPU 占用率检查周期',
+    ja: '待翻译',
     en: 'CPU usage check cycle',
   },
   cpu_high_watermark: {
     zh: 'CPU 占用率超过该值时将触发告警',
+    ja: '待翻译',
     en: 'An alarm will be triggered when the CPU usage exceeds this value',
   },
   cpu_low_watermark: {
     zh: 'CPU 占用率回落到该值以下时将清除告警',
+    ja: '待翻译',
     en: 'The alarm will be cleared when the CPU usage falls below this value',
   },
   mem_check_interval: {
     zh: '内存占用率检查周期',
+    ja: '待翻译',
     en: 'Memory usage check cycle',
   },
   procmem_high_watermark: {
     zh: 'EMQ X 为单个进程分配的内存占系统内存的百分比超过该值时将触发告警',
+    ja: '待翻译',
     en: `
     EMQ X will trigger an alarm when the percentage of system
     memory allocated by EMQ X for a single process exceeds this value`,
   },
   sysmem_high_watermark: {
     zh: 'EMQ X 为所有进程分配的内存占系统内存的百分比超过该值时将触发告警',
+    ja: '待翻译',
     en: `
     EMQ X will trigger an alarm when the percentage of system
     memory allocated by EMQ X for all processes exceeds this value`,
@@ -487,16 +508,19 @@ export default {
   // monitorAlarm desciption end
   listenerName: {
     zh: '监听器名字',
+    ja: '待翻译',
     en: 'Listener Name',
   },
   listenerType: {
     zh: '监听类型',
+    ja: '待翻译',
     en: 'Listener Type',
   },
   // baseSettings start
   broker_session_locking_strategy: {
     zh: `会话锁策略。保证集群中 Client ID 在集群中的创建会话的唯一性。
     all 表示全集群锁，leader 表示仅主节点锁，quorum 多数节点锁，local 表仅当前节点锁`,
+    ja: '待翻译',
     en: `Session locking policy. Ensure the uniqueness of the Client ID creation session in the cluster.
     All represents the total set group lock, the leader represents the master node lock only,
     the quorum majority node lock only, and the local table only the current node lock
@@ -504,23 +528,28 @@ export default {
   },
   broker_shared_dispatch_ack_enabled: {
     zh: '共享订阅开启内部派发 ACK',
+    ja: '待翻译',
     en: 'Shared subscriptions enable internal distribution ACK',
   },
   broker_shared_subscription_strategy: {
     zh: '共享订阅派发策略',
+    ja: '待翻译',
     en: 'Shared subscription distribution policies',
   },
   broker_sys_heartbeat: {
     zh: 'Broker 健康状态发布间隔',
+    ja: '待翻译',
     en: 'Broker Health status publish interval',
   },
   broker_sys_interval: {
     zh: 'Broker 统计信息发布间隔',
+    ja: '待翻译',
     en: 'Broker statistics release interval',
   },
   // baseSettings end
   confirmUpdateListener: {
     zh: '应用设置将重新启动监听器，该操作将导致当前活跃连接断开，是否继续？',
+    ja: '待翻译',
     en: `
     Applying settings will restart the listener.
     This operation will cause the current active connection to be disconnected.
@@ -528,22 +557,27 @@ export default {
   },
   isOpened: {
     zh: '是否开启',
-    en: 'Is Started'
+    ja: '待翻译',
+    en: 'Is Started',
   },
   isStopListener: {
     zh: '确定停止监听器：',
+    ja: '待翻译',
     en: 'Are you sure to stop the listener:',
   },
   isDeleteListener: {
     zh: '确认删除该监听器？',
+    ja: '待翻译',
     en: 'Are you sure to delete this listener?',
   },
   isDeleteZone: {
     zh: '确认删除该 Zone？',
+    ja: '待翻译',
     en: 'Are you sure to delete this Zone?',
   },
   returnList: {
     zh: '返回列表',
-    en: 'Return',
+    ja: '待翻译',
+    en: 'Back',
   },
 }

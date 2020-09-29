@@ -2,12 +2,12 @@ export default {
   __not: [],
   userCreate: {
     zh: 'https://docs.emqx.net/broker/latest/cn/advanced/cli.html#admins-%E5%91%BD%E4%BB%A4',
-    ja: 'https://docs.emqx.io/broker/v4/en/commands.html#admins',
+    ja: 'https://docs.emqx.io/enterprise/latest/en/advanced/cli.html#admins-command',
     en: 'https://docs.emqx.io/broker/latest/en/advanced/cli.html#admins-command',
   },
   loginUserAccount: {
     zh: '使用 Dashboard 用户登录',
-    ja: 'ダッシュボードアカウントでログイン',
+    ja: 'ダッシュボードのアカウントを使用',
     en: 'Login using Dashboard accounts',
   },
   forgetPassword: {
@@ -32,7 +32,7 @@ export default {
   },
   remember: {
     zh: '记住',
-    ja: 'ログイン状態を保存する',
+    ja: 'ログイン状態を保持する',
     en: 'remember',
   },
   resourcesNotFound: {
@@ -47,7 +47,7 @@ export default {
   },
   copied: {
     zh: '复制成功！',
-    ja: 'コピーしました',
+    ja: 'コピーが成功しました',
     en: 'Copied!',
   },
   copy: {
@@ -67,7 +67,7 @@ export default {
   },
   view: {
     zh: '详情',
-    ja: 'プレビュー',
+    ja: '詳細',
     en: 'View',
   },
   detail: {
@@ -187,10 +187,12 @@ export default {
   },
   select: {
     zh: '选择',
+    ja: '選択',
     en: 'Select',
   },
   manage: {
     zh: '管理',
+    ja: '管理',
     en: 'Manage',
   },
 }

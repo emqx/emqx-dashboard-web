@@ -132,7 +132,7 @@ export default {
   },
   thisActionWillStopThePlugIn: {
     zh: '此操作将停止该插件,确认继续?',
-    ja: 'この操作を実行するとプラグインを停止します、このまま処理を続けてもよろしいですか?',
+    ja: 'この操作を実行するとプラグインを停止します。このまま処理を続けてもよろしいですか?',
     en: 'Confirm to stops the plugin?',
   },
   runSuccess: {
@@ -183,7 +183,7 @@ export default {
   },
   searchByName: {
     zh: '按插件名称搜索',
-    ja: 'プラグイン名で検索してください',
+    ja: 'プラグイン名で検索',
     en: 'Search by plugin name',
   },
   manage: {
@@ -245,7 +245,7 @@ export default {
   },
   leaveTokenPage: {
     zh: '离开页面后当前输入的配置与生成的 TOKEN 信息均不再保留，确认离开？',
-    ja: '現在のページを離れると、入力内容及び生成したTOKENが失われます、このまま処理を続けてもよろしいですか？',
+    ja: '現在のページを離れると、入力内容及び生成したTOKENが失われます。このまま処理を続けてもよろしいですか？',
     en:
       'After leaving the page, the currently entered configuration and generated TOKEN information are no longer retained. Continue?',
   },
@@ -256,11 +256,12 @@ export default {
   },
   username: {
     zh: '用户名',
+    ja: 'ユーザー名',
     en: 'Username',
   },
   mnesiaTip: {
     zh: '默认使用 Username，以 auth.mnesia.as 配置为准',
-    ja: 'デフォルトはUsernameを使用して、auth.mnesia.as設定内容に基づきます',
+    ja: 'デフォルトはUsernameを使用して、auth.mnesia.asの設定に従います',
     en: 'Username is used by default, but follow the auth.mnesia.as configuration',
   },
   authMnesiaRequired: {

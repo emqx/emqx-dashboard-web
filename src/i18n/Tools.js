@@ -7,7 +7,7 @@ export default {
   },
   defaultConnection: {
     zh: '默认连接',
-    ja: 'デフォルト',
+    ja: 'デフォルト接続',
     en: 'Default',
   },
   connectionName: {
@@ -47,7 +47,7 @@ export default {
   },
   connected: {
     zh: '已连接',
-    ja: '接続済',
+    ja: '接続に成功しました',
     en: 'Connected',
   },
   inConnection: {
@@ -57,7 +57,7 @@ export default {
   },
   disconnected: {
     zh: '已断开连接',
-    ja: '未接続',
+    ja: '接続を切断しました',
     en: 'Disconnected',
   },
   connect: {
@@ -72,7 +72,7 @@ export default {
   },
   disconnect: {
     zh: '断开连接',
-    ja: '接続切れ',
+    ja: '切断',
     en: 'Disconnect',
   },
   Subscription: {
@@ -122,7 +122,7 @@ export default {
   },
   clientNotConnected: {
     zh: '客户端未连接',
-    ja: 'クライアントが未接続です',
+    ja: 'クライアントが接続されていないです',
     en: 'Client not connected',
   },
   subscriptionFailure: {
