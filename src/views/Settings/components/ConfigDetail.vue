@@ -88,11 +88,13 @@
       </el-form>
       <el-col v-if="nullKeys.length" :span="24" class="show-more">
         <a href="javascript:;" @click="toggleRecords">
-          {{ showMoreItems ? $t('Clients.collapse') : $t('Clients.expand') }}
-          <i :class="showMoreItems ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+          <span>
+            {{ showMoreItems ? $t('Clients.collapse') : $t('Clients.expand') }}
+            <i :class="showMoreItems ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+          </span>
         </a>
       </el-col>
-      <el-col class="button-group__center" :span="24" style="margin-bottom: 10px;">
+      <el-col class="button-group__center" :span="12" style="margin-bottom: 10px; text-align: right;">
         <el-button plain :disabled="selfDisabled" type="default" size="medium" @click="cancel">
           {{ $t('Base.cancel') }}
         </el-button>
@@ -435,6 +437,10 @@ export default {
   }
   .show-more {
     text-align: center;
+    span {
+      display: inline-block;
+      margin-right: 55px;
+    }
     a {
       display: inline-block;
       width: 100%;
@@ -448,7 +454,7 @@ export default {
       left: 0px;
       top: 8px;
       z-index: 9;
-      width: 46%;
+      width: 44%;
       height: 1px;
       background-color: #edeef2;
     }
@@ -458,7 +464,7 @@ export default {
       right: 0px;
       top: 8px;
       z-index: 9;
-      width: 46%;
+      width: 49%;
       height: 1px;
       background-color: #edeef2;
     }

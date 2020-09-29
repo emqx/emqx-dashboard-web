@@ -52,6 +52,13 @@
                       v-bind="item.bindAttributes"
                     >
                     </el-input>
+                    <el-input
+                      v-else-if="item.type === 'password'"
+                      v-model="record.config[item.key]"
+                      v-bind="item.bindAttributes"
+                      show-password
+                    >
+                    </el-input>
                     <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes"> </el-input>
                   </template>
                   <!-- select -->
