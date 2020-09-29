@@ -109,7 +109,7 @@
 
 <script>
 import { loadZoneConfig, loadConfigSpec } from '@/api/settings'
-import { renderParamsForm, verifyID } from '@/common/utils'
+import { renderParamsForm, verifyID, verifyListener } from '@/common/utils'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
 
@@ -349,6 +349,10 @@ export default {
       this.configList = this.from === 'listener' ? form : form.sort(this.sortKeyName)
       this.showConfigList = [...this.configList]
       this.rules.configs = rules
+      if (this.from === 'listener') {
+        const verifyListenerArr = [{ required: true, validator: verifyListener }]
+        this.rules.configs.listener = verifyListenerArr
+      }
       this.record.configs = {}
       this.originRecord.configs = {}
       form.forEach(({ key, value }) => {

@@ -470,4 +470,8 @@ export default {
     zh: '返回列表',
     en: 'Back',
   },
+  portRangeTip: {
+    zh: '端口不能为负数且不能大于 65535',
+    en: 'The port cannot be negative and cannot be greater than 65535',
+  },
 }
