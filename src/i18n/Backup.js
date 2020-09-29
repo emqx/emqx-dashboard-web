@@ -21,7 +21,7 @@ export default {
   },
   manageDashboardBackup: {
     zh: 'Dashboard 数据备份管理',
-    ja: 'Dashboard データバックアップ管理',
+    ja: 'Dashboard データのバックアップ',
     en: 'Manage Dashboard Data Backup',
   },
   confirmDelete: {

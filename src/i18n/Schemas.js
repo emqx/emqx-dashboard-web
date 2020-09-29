@@ -27,12 +27,12 @@ export default {
   },
   name: {
     zh: '名称',
-    ja: '名前',
+    ja: 'スキーマ名',
     en: 'name',
   },
   nameRequired: {
     zh: '请输入名称',
-    ja: '名称を入力してください',
+    ja: 'スキーマ名を入力してください',
     en: 'Name is requried',
   },
   parser_type: {

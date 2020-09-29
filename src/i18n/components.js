@@ -42,6 +42,7 @@ export default {
   },
   usersAcl: {
     zh: '认证鉴权',
+    ja: '待翻译',
     en: 'Users & ACL',
   },
   clients: {
@@ -86,7 +87,7 @@ export default {
   },
   topic_metrics: {
     zh: '主题监控',
-    ja: 'トピック メトリクス',
+    ja: 'トピック分析',
     en: 'Topic metrics',
   },
   alerts: {
@@ -171,7 +172,7 @@ export default {
   },
   applicationManagement: {
     zh: '应用管理',
-    ja: 'アプリケーション管理',
+    ja: 'アプリ管理',
     en: 'Application',
   },
   usersManagement: {
@@ -196,7 +197,7 @@ export default {
   },
   noteAlertClickView: {
     zh: '条告警，点击查看',
-    ja: '件アラームがあります、クリックして詳細を確認します。',
+    ja: '件アラームがあります。クリックして詳細を確認します。',
     en: 'alerts, Click to view',
   },
   noWarning: {
@@ -221,7 +222,7 @@ export default {
   },
   selectModules: {
     zh: '选择模块',
-    ja: '',
+    ja: '待翻译',
     en: 'Modules Select',
   },
 }

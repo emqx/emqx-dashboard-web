@@ -18,7 +18,7 @@ export default {
   applicationIsCalled: {
     zh: '应用为调用 REST API 认证凭证，通过 REST API 可查询、调整 EMQ X 集群信息，对设备进行管理操作',
     ja:
-      'アプリケーションはRESTAPIの呼び出しで認証します、EMQ X クラスターの情報を検索や変更して、設備を管理することができます',
+      'アプリケーションはRESTAPIを介して認証を行った後、EMQ Xクラスタ情報の照会・調整、デバイス上での管理することができます。',
     en:
       'In order to invoke the certificate of REST API, the application can query and adjust EMQ X cluster information through REST API, and manage and operate the equipment',
   },
@@ -79,7 +79,7 @@ export default {
   },
   createApp: {
     zh: '创建应用',
-    ja: 'アプリ新規',
+    ja: '新規アプリ',
     en: 'Create App',
   },
   secret: {
@@ -174,7 +174,7 @@ export default {
   },
   creatingUser: {
     zh: '创建用户',
-    ja: 'ユーザー新規',
+    ja: '新規ユーザー',
     en: 'Create',
   },
   oldPassword: {
@@ -199,7 +199,7 @@ export default {
   },
   dontChangePassword: {
     zh: '不修改密码',
-    ja: 'パスワード変更なし',
+    ja: 'キャンセル',
     en: 'Dot change password',
   },
   changePassword: {
@@ -331,7 +331,7 @@ export default {
   },
   enterAs: {
     zh: '请选择禁用属性',
-    ja: 'プロパティを入力してください',
+    ja: 'プロパティを選択してください',
     en: 'Please select property',
   },
 }

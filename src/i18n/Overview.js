@@ -28,7 +28,7 @@ export default {
   },
   view: {
     zh: '查看',
-    ja: 'プレビュー',
+    ja: '詳細',
     en: 'View',
   },
   viewMore: {
@@ -73,7 +73,7 @@ export default {
   },
   maxFds: {
     zh: '最大文件句柄',
-    ja: '最大ファイルハンドル',
+    ja: 'ファイルオープン上限数',
     en: 'Max Fds',
   },
   process: {
@@ -103,7 +103,7 @@ export default {
   },
   currentNodeInfo: {
     zh: '当前节点信息如下',
-    ja: 'カレントノード情報',
+    ja: 'カレントノードの情報',
     en: 'Current node info',
   },
   basicInfo: {
@@ -138,7 +138,7 @@ export default {
   },
   ListeningPorts: {
     zh: '当前监听端口列表',
-    ja: 'リスナートアドレスとポート',
+    ja: 'カレントリスニング・ポートの一覧',
     en: 'Listening address and ports',
   },
   listenerProtocol: {
@@ -238,7 +238,7 @@ export default {
   },
   currentMessageOutRate: {
     zh: '当前消息发出速度',
-    ja: 'カレントメッセージ流出頻度',
+    ja: 'カレントメッセージ流出の頻度',
     en: 'Current message-out rate',
   },
   messageIn: {
@@ -248,7 +248,7 @@ export default {
   },
   currentMessageInRate: {
     zh: '当前消息流入速度',
-    ja: 'カレントメッセージ流入頻度',
+    ja: 'カレントメッセージ流入の頻度',
     en: 'Current message-in rate',
   },
   subscriptionNumber: {
@@ -283,12 +283,12 @@ export default {
   },
   customer: {
     zh: '签发对象',
-    ja: 'カスタマー',
+    ja: '発行先',
     en: 'Customer',
   },
   numberOfConnectionLines: {
     zh: 'License 使用情况',
-    ja: 'ライセンス使用状況',
+    ja: 'ライセンスの使用状況',
     en: 'License usage',
   },
   issuanceOfEmail: {
@@ -309,13 +309,13 @@ export default {
   beforeTheCertificateExpires: {
     zh: '证书到期前 EMQ 将通过邮件通知签发邮箱，请留意信息接收以免错过续期时间对业务造成影响。',
     ja:
-      'EMQは証明書の有効期限が切れる前に通知メールを発行メールアドレスに送ります、更新時間を逃さないように注意してください。',
+      '証明書の有効期限が切れる前に、お客様が登録されているメールアドレスに通知します。更新時期を逃して業務に影響が出ないように、通知メールの受信にご注意ください。',
     en:
       'EMQ will issue mailbox through email notification before the certificate expires. Please pay attention to receiving information so as not to miss the renewal time, which will affect the business.',
   },
   forTrialEdition: {
     zh: '当前 License 为试用版',
-    ja: 'ライセンスは体験版です',
+    ja: '体験版のライセンスです',
     en: 'The license is trial edition',
   },
   license: {
@@ -382,8 +382,8 @@ export default {
     License，请<a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/enterprise/latest/cn/getting-started/start.html#license"> 替换 </a>正式的 License。
     `,
     ja: `
-    今使用しているライセンスは体験版です、最大10個の接続数制限があります。最大接続数を増えたいの場合以下のURLでビジネス用のライセンスを購入してください
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">ライセンス購入</a> 。<br>すでに購入の手続きが終わったら、以下のリンクをクリックして、ライセンスを更新します
+    現在、体験版のライセンスを使用しており、接続数は10に制限されています。最大接続数を増やしたい場合は、以下のサイトで商用ライセンスを購入してください。<br>
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">ライセンス購入</a> <br>すでに購入が完了している方は、下記のリンクをクリックしてライセンスを更新してください。<br>
     <a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/enterprise/latest/en/getting-started/start.html#license">ライセンス更新</a>
     `,
     en: `

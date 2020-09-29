@@ -22,7 +22,7 @@ export default {
   },
   view: {
     zh: '点击查看',
-    ja: 'プレビュー',
+    ja: '詳細',
     en: 'View',
   },
   hide: {
@@ -237,7 +237,7 @@ export default {
   },
   createRules: {
     zh: '创建规则',
-    ja: 'ルール新規',
+    ja: '新規ルール',
     en: 'Create Rules',
   },
   condition: {
@@ -249,7 +249,7 @@ export default {
     zh:
       '使用 SQL 设定规则，对消息数据筛选、编解码、变型，灵活地将处理后的数据无缝转发至数据库、流处理、API 网关等数据目的地',
     ja:
-      'SQlでルールを設定して、メッセージデータをフィルター・エンコード・デコードと編集が可能です。シームレスに処理後のデータをデーターベース・ストリーム処理・APIゲートウェイに転送できます。',
+      'SQLでルールを設定して、メッセージデータをフィルター・エンコード・デコード・変換が可能です。シームレスに処理後のデータをデーターベース・ストリーム処理・APIゲートウェイに転送できます。',
     en:
       'Use SQL to set rules to filter, encode, decode, and modify message data, and seamlessly forward processed data to data destinations such as databases, stream processing, and API gateways',
   },
@@ -290,7 +290,7 @@ export default {
   },
   inputMetadata: {
     zh: '输入元数据进行 SQL 匹配测试',
-    ja: 'SQLテストのためメタデータを入力します',
+    ja: 'SQLテスト用のカスタムシミュレーションデータ、テスト用のみ',
     en: 'Input metadata for SQL test',
   },
   testOutput: {
@@ -322,7 +322,7 @@ export default {
   },
   responseAction: {
     zh: '响应动作',
-    ja: 'アクション',
+    ja: '応答アクション',
     en: 'Action',
   },
   processingMessagesForHitRules: {
@@ -362,7 +362,7 @@ export default {
   },
   pleaseAddAResponseAction: {
     zh: '请添加响应动作',
-    ja: 'アクションを追加してください',
+    ja: '応答アクションを追加してください',
     en: 'Please add a action',
   },
   createSuccess: {
@@ -437,7 +437,7 @@ export default {
   },
   last5MinutesSpeed: {
     zh: '最近5分钟执行速度',
-    ja: '過去5分間スピード',
+    ja: '過去5分間平均スピード',
     en: 'Last 5 minutes speed',
   },
   actionMetrics: {
@@ -617,22 +617,27 @@ export default {
   },
   resourceID: {
     zh: '资源 ID',
+    ja: '待翻译',
     en: 'Resource ID',
   },
   resourceDes: {
     zh: '描述',
+    ja: '詳細',
     en: 'Description',
   },
   id_len_tip: {
     zh: '最长64位',
+    ja: '待翻译',
     en: 'The longest 64',
   },
   id_char_tip: {
     zh: '仅支持数字、字母、下划线和冒号',
+    ja: '待翻译',
     en: 'Only Numbers, letters, underscores, and colons are supported',
   },
   ruleID: {
     zh: '规则 ID',
+    ja: '待翻译',
     en: 'Rule ID',
   },
 }
