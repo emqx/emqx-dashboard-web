@@ -198,6 +198,7 @@ export default {
         this.listLoading = false
         this.modClosed = false
       } catch (error) {
+        this.$message.warning('Related module are not load')
         this.listLoading = false
         this.modClosed = true
       }

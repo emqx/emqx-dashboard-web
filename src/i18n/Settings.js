@@ -452,7 +452,7 @@ export default {
   },
   isOpened: {
     zh: '是否开启',
-    en: 'Is Started'
+    en: 'Is Started',
   },
   isStopListener: {
     zh: '确定停止监听器：',
@@ -468,6 +468,6 @@ export default {
   },
   returnList: {
     zh: '返回列表',
-    en: 'Return',
+    en: 'Back',
   },
 }
