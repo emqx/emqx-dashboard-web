@@ -439,4 +439,18 @@ export const verifyID = (rule, value, callback) => {
     callback()
   }
 }
+
+export const verifyListener = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error(VueI18n.RuleEngine.pleaseEnter))
+  } else {
+    const port = value.includes(':') ? value.split(':')[1] : value
+    const portIntVal = parseInt(port, 10)
+    if (portIntVal > 65535 || portIntVal <= 0) {
+      callback(new Error(VueI18n.Settings.portRangeTip))
+    } else {
+      callback()
+    }
+  }
+}
 export default {}
