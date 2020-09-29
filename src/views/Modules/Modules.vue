@@ -3,12 +3,14 @@
     <page-header>
       <div class="page-header-content-view">
         <div class="content">
-          {{ $t('Modules.modules') }}
-          <span v-cloak class="modules-num">{{ moduleCount }}</span>
-          <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/add')">
-            {{ $t('Base.add') }}
-          </el-button>
-          <el-col :span="6" :offset="1">
+          <div class="content-left">
+            {{ $t('Modules.modules') }}
+            <span v-cloak class="modules-num">{{ moduleCount }}</span>
+            <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/select')">
+              {{ $t('Base.select') }}
+            </el-button>
+          </div>
+          <el-col :span="6">
             <el-input
               v-model="searchVal"
               type="text"
@@ -28,45 +30,52 @@
 
     <div class="app-wrapper">
       <el-row v-if="showList.length" :gutter="20" class="emq-list-card plugin-cards-wrapper">
-        <el-col v-for="item in list" :key="item.id" :span="12">
-          <el-card shadow="hover">
-            <div class="module-item" @click="toEditModule(item)">
-              <!-- <div class="item-error-tip">
-              <span>error</span>
-              <el-button class="reconnect-btn" plain size="mini">{{ $t('Modules.reconnect') }}</el-button>
-            </div> -->
-              <div class="left-box">
-                <img :src="item.img" alt="" class="item-img" />
-                <div class="item-content">
-                  <div class="item-title">{{ item.title[lang] }}</div>
-                  <div class="item-des">
-                    {{ item.description[lang] }}
+        <el-col v-for="item in showList" :key="item.id" :span="12">
+          <div class="item-box">
+            <span
+              v-show="
+                (JSON.stringify(item.config) === '[]' || JSON.stringify(item.config) === '{}')
+              "
+              @click="deleteModule(item)"
+              class="delete-icon"
+            >
+            </span>
+            <el-card shadow="hover">
+              <div class="module-item" @click="toEditModule(item)">
+                <div class="left-box">
+                  <img :src="item.img" alt="" class="item-img" />
+                  <div class="item-content">
+                    <div class="item-title">{{ item.title[lang] }}</div>
+                    <div class="item-des">
+                      {{ item.description[lang] }}
+                    </div>
                   </div>
                 </div>
+                <div class="item-handle">
+                  <div class="handle-icons">
+                    <i
+                      v-if="item.enabled"
+                      @click.stop="updataModule(item, false)"
+                      class="el-icon-switch-button close"
+                    ></i>
+                    <i v-else @click.stop="updataModule(item, true)" class="el-icon-caret-right open"></i>
+                    <i
+                      v-if="canManageModuleTypes.indexOf(item.type) !== -1"
+                      @click.stop="manageModule(item)"
+                      class="el-icon-setting"
+                    ></i>
+                  </div>
+                  <a href="javascript:;" @click.stop="toReadMore(item.type)" class="know-more">
+                    {{ $t('Modules.readMore') }}
+                  </a>
+                </div>
               </div>
-              <div class="item-handle">
-                <el-button
-                  v-if="item.enabled"
-                  class="stop-btn"
-                  plain
-                  size="mini"
-                  type="danger"
-                  @click.stop="updataModule(item, false)"
-                  >{{ $t('Modules.stop') }}</el-button
-                >
-                <el-button v-else class="start-btn" plain size="mini" @click.stop="updataModule(item, true)">{{
-                  $t('Modules.run')
-                }}</el-button>
-                <a @click.stop="toReadMore" class="know-more">
-                  {{ $t('Modules.readMore') }}
-                </a>
-              </div>
-            </div>
-          </el-card>
+            </el-card>
+          </div>
         </el-col>
       </el-row>
       <a-card v-else class="null-modules">
-        <p v-if="list.length">{{ $t('Plugins.listNull') }}</p>
+        <p v-if="list.length">{{ $t('Modules.listNull') }}</p>
         <p v-else>{{ $t('Modules.noData') }}</p>
       </a-card>
     </div>
@@ -74,7 +83,7 @@
 </template>
 
 <script>
-import { loadCreatedModules, updateModule } from '@/api/modules'
+import { loadCreatedModules, updateModule, destroyModule } from '@/api/modules'
 import { matchSearch } from '@/common/utils'
 
 export default {
@@ -88,6 +97,7 @@ export default {
       showList: [],
       moduleCount: 0,
       selectedModule: {},
+      canManageModuleTypes: ['mnesia_authentication'],
     }
   },
 
@@ -102,9 +112,27 @@ export default {
   },
 
   methods: {
+    manageModule(item) {
+      this.$router.push(`/modules/manage?type=${item.type}`)
+    },
+    deleteModule(item) {
+      this.$msgbox
+        .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await destroyModule(item.id)
+          this.$message.success(this.$t('Base.deleteSuccess'))
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          delete addedModules[item.type]
+          localStorage.setItem('addedModules', JSON.stringify(addedModules))
+          this.loadData()
+        })
+        .catch(() => {})
+    },
     async updataModule(item, val) {
-      const data = { ...item }
-      data.enabled = val
       if (!val) {
         this.$msgbox
           .confirm(this.$t('Modules.thisActionWillStopTheModule'), {
@@ -113,13 +141,13 @@ export default {
             type: 'warning',
           })
           .then(async () => {
-            await updateModule(item.id, data)
+            await updateModule(item.id, { enabled: val })
             this.$message.success(this.$t('Modules.stopSuccess'))
             item.enabled = val
           })
           .catch(() => {})
       } else {
-        await updateModule(item.id, data)
+        await updateModule(item.id, { enabled: val })
         this.$message.success(this.$t('Modules.startSuccess'))
         item.enabled = val
       }
@@ -142,6 +170,11 @@ export default {
       }, 500)
     },
     toEditModule(item) {
+      const itemConfig = JSON.stringify(item.config)
+      if (itemConfig === '[]' || itemConfig === '{}') {
+        this.$message.info(this.$t('Modules.noNeedAddConfigTip'))
+        return
+      }
       this.selectedModule = item
       this.selectedModule.from = 'modules'
       this.selectedModule.oper = 'edit'
@@ -149,6 +182,7 @@ export default {
       this.$router.push('/modules/detail')
     },
     async loadData() {
+      this.searchVal = ''
       const addedModules = {}
       this.list = []
       this.list = await loadCreatedModules()
@@ -170,8 +204,11 @@ export default {
       }
       this.showList = this.list
     },
-    toReadMore() {
-      window.open('https://docs.emqx.net')
+    toReadMore(type) {
+      const lang = this.lang === 'zh' ? 'cn' : 'en'
+      const url = `https://docs.emqx.net/broker/latest/${lang}/modules/${type}.html`
+      const windowUrl = window.open(url)
+      windowUrl.opener = null
     },
   },
 }
@@ -180,16 +217,21 @@ export default {
 <style lang="scss" scoped>
 @import './style/module.scss';
 
-.stop-btn {
-  width: 52px;
-  color: #ff0000;
-  border: 1px solid #ff0000;
-  font-size: 14px;
-  margin-bottom: 20px;
-  background-color: #fbf2f2;
-}
+.modules {
+  .stop-btn {
+    width: 52px;
+    color: #ff0000;
+    border: 1px solid #ff0000;
+    font-size: 14px;
+    background-color: #fbf2f2;
+  }
 
-.module-item {
-  cursor: pointer;
+  .content {
+    justify-content: space-between;
+  }
+
+  .modules-num {
+    margin-left: 7px !important;
+  }
 }
 </style>

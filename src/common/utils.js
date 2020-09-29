@@ -120,6 +120,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
   let form = []
   const rules = {}
   let oneObjOfArray = {}
+  let extraConfigs = {}
 
   for (const [k, v] of Object.entries(params)) {
     if (k === '$resource') {
@@ -153,52 +154,67 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         field = { list: [true, false] }
         break
       case 'object':
+        defaultValue = !Object.keys(defaultValue).length ? {} : defaultValue
         elType = 'object'
         break
       case 'file':
+        defaultValue = !Object.keys(defaultValue).length ? {} : defaultValue
         elType = 'file'
         break
       case 'array':
         if (items.type === 'object') {
           const { schema } = items
-          oneObjOfArray = renderParamsForm(schema, 'config')
+          oneObjOfArray = renderParamsForm(schema)
           defaultValue = !defaultValue.length ? [] : defaultValue
         }
         elType = 'array'
         break
+      case 'cfgselect':
+        elType = 'cfgselect'
+        field = { list: enumValue }
+        extraConfigs = items
     }
-    if (enumValue) {
+    if (enumValue && elType !== 'cfgselect') {
       elType = 'select'
       field = { list: enumValue }
     }
-    const inputPlaceholder = description.length < 24 ? description : ''
+    const inputPlaceholder = description.length < 24 && propPrefix !== 'configs' ? description : ''
     // 表单类型, 渲染使用的属性
     form.push({
       formItemAttributes: {
         prop: propPrefix ? `${propPrefix}.${k}` : k,
         label: title,
-        description: inputPlaceholder && elType !== 'file' ? null : description.replace(/\n/g, '<br/>'),
+        description:
+          inputPlaceholder && elType !== 'file' && propPrefix !== 'configs'
+            ? null
+            : description.replace(/\n/g, '<br/>'),
       },
       bindAttributes: {
         type: inputType,
-        field: elType === 'select' ? field : undefined,
+        field: elType === 'select' || elType === 'cfgselect' ? field : undefined,
         placeholder: inputPlaceholder,
         rows: inputType === 'textarea' ? 5 : 0,
       },
       key: k,
       type: inputType,
       elType,
-      value: elType === 'object' && !Object.keys(defaultValue).length ? {} : defaultValue,
+      value: !defaultValue && propPrefix === 'configs' ? '' : defaultValue,
       order,
-      oneObjOfArray,
+      oneObjOfArray: elType === 'array' ? oneObjOfArray : {},
+      extraConfigs: elType === 'cfgselect' ? extraConfigs : {},
     })
     // rules 的属性
     rules[k] = []
     const requiredInputText = locale === 'zh' ? '请输入' : 'Field required'
     const requiredSelectText = locale === 'zh' ? '请选择' : 'Please select'
+    const requiredArrayText = locale === 'zh' ? '请添加' : 'Please Add'
 
     if (required) {
-      rules[k].push({ required: true, message: elType === 'input' ? requiredInputText : requiredSelectText })
+      if (elType === 'array') {
+        rules[k].push({ required: true, message: requiredArrayText })
+      } else {
+        rules[k].push({ required: true, message: elType === 'input' ? requiredInputText : requiredSelectText })
+      }
     }
     if (enumValue) {
       rules[k].push({ type: 'enum', enum: enumValue })
@@ -408,7 +424,7 @@ export function getDateDiff(beginTime, endTime) {
 export const verifyID = (rule, value, callback) => {
   const reg = /^[0-9a-zA-Z_:]{1,64}$/
   if (!value) {
-    callback(new Error(`ID ${VueI18n.RuleEngine.pleaseEnter}`))
+    callback(new Error(VueI18n.RuleEngine.pleaseEnter))
   } else if (value.length > 64) {
     callback(new Error(VueI18n.RuleEngine.id_len_tip))
   } else if (!reg.test(value)) {
@@ -417,5 +433,4 @@ export const verifyID = (rule, value, callback) => {
     callback()
   }
 }
-
 export default {}

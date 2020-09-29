@@ -122,58 +122,21 @@ export default {
     ja: 'ACLが拒否されたときの動作',
     en: 'The action when acl check reject current operation',
   },
-  enable_ban: {
-    zh: '是否启用白名单检查',
-    ja: 'ホワイトリストチェックを有効にしますか',
-    en: 'Enable ban check',
-  },
   allow_anonymous: {
     zh: '如果未加载身份验证插件，则默认情况下允许匿名身份验证。建议在生产部署中禁用该选项！',
     ja: 'Authプラグインがアンロードの場合、匿名認証が有効になります。実稼動環境でこのオプションを無効化してください',
     en:
       'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
   },
-  enable_stats: {
-    zh: '启用连接状态统计，会降低部分性能',
-    ja: '接続ステータス統計を有効にします（性能に影響があるかもしれません）',
-    en: 'Enable per connection stats',
-  },
-  use_username_as_clientid: {
-    zh: '是否使用用户名替换客户端 ID',
-    ja: 'clientidをユーザー名に差し替えますか',
-    en: 'Whether use username replace clientid',
-  },
   retry_interval: {
     zh: 'QoS 1/2 消息传递的重试间隔',
     ja: 'QoS 1/2 メッセージ転送のリトライ間隔',
     en: 'Retry interval for QoS1/2 message delivering',
   },
-  keepalive_backoff: {
-    zh: 'MQTT keepalive 超时回退， keepalive * backoff * 2 时将断开连接',
-    ja:
-      'MQTT keepalive のタイムアウトが発生した場合のbackoff、【keepalive * backoff * 2】を超えるとき、接続が切断されます',
-    en:
-      'The backoff for MQTT keepalive timeout. The broker will kick a connection out until keepalive * backoff * 2 timeout',
-  },
-  max_subscriptions: {
-    zh: '允许的最大订阅数，0 表示无限制',
-    ja: '最大サブスクリプション数（0の場合無制限です）',
-    en: 'Maximum number of subscriptions allowed, 0 means no limit',
-  },
-  ignore_loop_deliver: {
-    zh: '是否忽略消息循环传递，常用于消息桥接',
-    ja: 'メッセージをループで転送することを無視するかどうかを選択することができます（MQTT v3.1.1のみ）',
-    en: 'Whether to ignore loop delivery of messages (for MQTT v3.1.1)',
-  },
   mqtt_ignore_loop_deliver: {
     zh: '是否忽略消息循环传递，常用于消息桥接（对于 MQTT v3.1.1）',
     ja: 'メッセージをループで転送することを無視しますか（MQTT v3.1.1のみ）',
     en: 'Whether to ignore loop delivery of messages (for MQTT v3.1.1)',
-  },
-  idle_timeout: {
-    zh: 'MQTT 连接空闲超时',
-    ja: 'MQTT接続のアイドルタイムアウト',
-    en: 'Idle timeout of the MQTT connections',
   },
   mqueue_store_qos0: {
     zh: '是否将 QoS0 的消息存储在队列中',
@@ -191,131 +154,40 @@ export default {
     en:
       'The times of state change per minute, specifying the threshold which is used to detect if the connection starts flapping',
   },
-  force_gc_policy: {
-    zh: 'MQTT 连接/消息大小 GC 阈值',
-    ja: 'MQTT 接続/メッセージサイズ GC 閾値',
-    en: 'Force MQTT connection/session process GC after this number of messages | bytes passed through',
-  },
-  max_awaiting_rel: {
-    zh: '等待 PUBREL 的 QoS2 消息最大数据包数（client->broker），0 表示没有限制',
-    ja: 'PUBRELを待機する最大QoS2パケット数（クライアント->ブローカー）、0の場合無制限です',
-    en: 'Maximum QoS2 packets (Client -> Broker) awaiting PUBREL, 0 means no limit',
-  },
-  max_inflight: {
-    zh: '保存的已传递但未确认的 QoS1/2 消息的飞行窗口的最大值',
-    ja: '保存された未確認のQoS1/2メッセージを格納するInflightウィンドウの最大サイズ',
-    en: 'Maximum size of the Inflight Window storing QoS1/2 messages delivered but unacked',
-  },
-  max_mqueue_len: {
-    zh: '排队消息的最大长度，0 表示没有限制',
-    ja: 'キューの最大長さ、0の場合無制限です',
-    en:
-      'Maximum queue length. Enqueued messages when persistent client disconnected, or inflight window is full. 0 means no limit',
-  },
-  await_rel_timeout: {
-    zh: '如果等待 pubrel 超时时间，超时将删除 QoS2 消息（client 发送到 broker）',
-    ja: 'pubrelの待ち時間がタイムアウトの場合、QoS2メッセージ（クライアント->ブローカー）を削除します',
-    en: 'The QoS2 messages (Client -> Broker) will be dropped if awaiting PUBREL timeout',
-  },
-  enable_flapping_detect: {
-    zh: '是否开启 flapping detect',
-    ja: 'flapping detectを有効にしますか',
-    en: 'Whether to turn on flapping detect',
-  },
-  mqueue_default_priority: {
-    zh: '对于不匹配优先级表的主题，默认为最高优先级',
-    ja: '優先度テーブルと一致しないトピック（デフォルトは最高順位です）',
-    en: 'Default to highest priority for topics not matching priority table',
-  },
-  mqueue_priorities: {
-    zh: '主题优先级',
-    ja: 'トピックの優先順位',
-    en: 'Topic priorities',
-  },
-  session_expiry_interval: {
-    zh: '会话到期时长 MQTT V3.1.1',
-    ja: 'セッションの有効期限（MQTT v3.1.1のみ）',
-    en: 'Default session expiry interval for MQTT V3.1.1 connections',
-  },
-  upgrade_qos: {
-    zh: '根据订阅强制升级 QoS',
-    ja: 'サブスクリプションによってQoSを強制的にアップグレードします',
-    en: 'Force to upgrade QoS according to subscription',
-  },
-  max_packet_size: {
-    zh: '最大 MQTT 数据包大小',
-    ja: '許可される最大MQTTパケットサイズ',
-    en: 'Maximum MQTT packet size allowed',
-  },
   mqtt_max_packet_size: {
     zh: '最大 MQTT 数据包大小',
     ja: '許可される最大MQTTパケットサイズ',
     en: 'Maximum MQTT packet size allowed',
-  },
-  max_clientid_len: {
-    zh: 'MQTT 客户端 ID 的长度限制',
-    ja: '許可されるMQTTクライアントIDの最大長さ',
-    en: 'Maximum length of MQTT clientid allowed',
   },
   mqtt_max_clientid_len: {
     zh: 'MQTT 客户端 ID 的长度限制',
     ja: '許可されるMQTTクライアントIDの最大長さ',
     en: 'Maximum length of MQTT clientid allowed',
   },
-  max_topic_levels: {
-    zh: '主题层级限制，0 表示没有限制层级',
-    ja: '許可される最大トピックレベル（0の場合無制限です）',
-    en: 'Maximum topic levels allowed, 0 means no limit',
-  },
   mqtt_max_topic_levels: {
     zh: '主题层级限制，0 表示没有限制层级',
     ja: '許可される最大トピックレベル（0の場合無制限です）',
     en: 'Maximum topic levels allowed, 0 means no limit',
-  },
-  max_qos_allowed: {
-    zh: '最大 QoS',
-    ja: '最大 QoS',
-    en: 'Maximum QoS allowed',
   },
   mqtt_max_qos_allowed: {
     zh: '最大 QoS',
     ja: '最大 QoS',
     en: 'Maximum QoS allowed',
   },
-  max_topic_alias: {
-    zh: '最大主题别名数量，0 表示不支持主题别名',
-    ja: '最大トピックエイリアス（0の場合トピックエイリアスをサポートしない）',
-    en: 'Maximum Topic Alias, 0 means no topic alias supported',
-  },
   mqtt_max_topic_alias: {
     zh: '最大主题别名数量，0 表示不支持主题别名',
     ja: '最大トピックエイリアス（0の場合トピックエイリアスをサポートしない）',
     en: 'Maximum Topic Alias, 0 means no topic alias supported',
-  },
-  retain_available: {
-    zh: '是否启用 Retain 消息',
-    ja: 'MQTT Retainメッセージを有効にしますか',
-    en: 'Whether the Server supports MQTT retained messages',
   },
   mqtt_retain_available: {
     zh: '是否启用 Retain 消息',
     ja: 'MQTT Retainメッセージを有効にしますか',
     en: 'Whether the Server supports MQTT retained messages',
   },
-  wildcard_subscription: {
-    zh: '是否启用通配符订阅',
-    ja: 'MQTTワイルドカード・サブスクリプションを有効にしますか',
-    en: 'Whether the Server supports MQTT Wildcard Subscriptions',
-  },
   mqtt_wildcard_subscription: {
     zh: '是否启用通配符订阅',
     ja: 'MQTTワイルドカード・サブスクリプションを有効にしますか',
     en: 'Whether the Server supports MQTT Wildcard Subscriptions',
-  },
-  shared_subscription: {
-    zh: '是否启用共享订阅',
-    ja: 'MQTTサブスクリプション共有を有効にしますか',
-    en: 'Whether the Server supports MQTT Shared Subscriptions',
   },
   mqtt_shared_subscription: {
     zh: '是否启用共享订阅',
@@ -346,11 +218,6 @@ export default {
     zh: '指定全局的 flapping detect 策略',
     ja: 'グローバルのflapping detect 策略を指定します',
     en: 'Specify the global flapping detect policy',
-  },
-  strict_mode: {
-    zh: '是否在严格模式下解析 MQTT 帧',
-    ja: '厳密（strict）モードでMQTTフレームを解析しますか',
-    en: 'Whether to parse the MQTT frame in strict mode',
   },
   mqtt_strict_mode: {
     zh: '是否在严格模式下解析 MQTT 帧',
@@ -478,11 +345,6 @@ export default {
     ja: 'サフィックス',
     en: 'Suffix',
   },
-  bypass_auth_plugins: {
-    zh: '允许 zone 的客户端绕过身份验证步骤',
-    ja: 'ゾーンのクライアントが認証手順をバイパスできるようにします',
-    en: `Allow the zone's clients to bypass authentication step`,
-  },
   manual: {
     zh: '手动集群',
     ja: 'マニアルクラスター',
@@ -522,5 +384,166 @@ export default {
     zh: '待加入',
     ja: '参加を待っています',
     en: 'Waiting to join',
+  },
+  zoneName: {
+    zh: 'Zone 名字',
+    en: 'Zone Name',
+  },
+  zoneNameTip: {
+    zh: '名字不能为空！',
+    en: 'The name cannot be empty!',
+  },
+  listeners: {
+    zh: '监听器',
+    en: 'Listeners',
+  },
+  monitorAlarm: {
+    zh: '监控告警',
+    en: 'Monitor Alarm',
+  },
+  // monitorAlarm desciption start
+  actions: {
+    zh: '动作',
+    en: 'Actions',
+  },
+  size_limit: {
+    zh: '大小限制',
+    en: 'Size Limit',
+  },
+  validity_period: {
+    zh: '有效期',
+    en: 'Validity period',
+  },
+  check_interval: {
+    zh: 'CPU 占用率检查周期',
+    en: 'CPU usage check cycle',
+  },
+  process_high_watermark: {
+    zh: '当前进程数量占进程最大数量的百分比超过该值时将触发告警',
+    en: `
+    When the percentage of the current number of processes to the maximum number
+    of processes exceeds this value, an alarm will be triggered`,
+  },
+  process_low_watermark: {
+    zh: '当前进程数量占进程最大数量的百分比回落到该值以下时将触发告警',
+    en: `
+    An alarm will be triggered when the percentage of the current number of
+    processes in the maximum number of processes falls below this value`,
+  },
+  busy_dist_port: {
+    zh: '指定是否启用集群 RPC 通道拥塞监控',
+    en: 'Specify whether to enable cluster RPC channel congestion monitoring',
+  },
+  busy_port: {
+    zh: '指定是否启用进程间消息通道拥塞监控',
+    en: 'Specify whether to enable inter-process message channel congestion monitoring',
+  },
+  large_heap: {
+    zh: '启用堆栈大小监控并在进程执行垃圾回收后堆栈大小仍大于设定值时触发告警，0 表示禁用此监控',
+    en: `
+    Enable stack size monitoring and trigger an alarm when the stack size is
+    still greater than the set value after the process is garbage collected, 0 means disable this monitoring`,
+  },
+  long_gc: {
+    zh: '启用垃圾回收时间监控并在回收时间超过设定值时触发告警，0 表示禁用此监控',
+    en: `
+    Enable garbage collection time monitoring and trigger an alarm
+    when the collection time exceeds the set value, 0 means disable this monitoring`,
+  },
+  long_schedule: {
+    zh: '启用进程调度时间监控并在调度时间超过设定值时触发告警，0 表示禁用此监控',
+    en: `
+    Enable process scheduling time monitoring and trigger an alarm when the
+    scheduling time exceeds the set value, 0 means disable this monitoring`,
+  },
+  cpu_check_interval: {
+    zh: 'CPU 占用率检查周期',
+    en: 'CPU usage check cycle',
+  },
+  cpu_high_watermark: {
+    zh: 'CPU 占用率超过该值时将触发告警',
+    en: 'An alarm will be triggered when the CPU usage exceeds this value',
+  },
+  cpu_low_watermark: {
+    zh: 'CPU 占用率回落到该值以下时将清除告警',
+    en: 'The alarm will be cleared when the CPU usage falls below this value',
+  },
+  mem_check_interval: {
+    zh: '内存占用率检查周期',
+    en: 'Memory usage check cycle',
+  },
+  procmem_high_watermark: {
+    zh: 'EMQ X 为单个进程分配的内存占系统内存的百分比超过该值时将触发告警',
+    en: `
+    EMQ X will trigger an alarm when the percentage of system
+    memory allocated by EMQ X for a single process exceeds this value`,
+  },
+  sysmem_high_watermark: {
+    zh: 'EMQ X 为所有进程分配的内存占系统内存的百分比超过该值时将触发告警',
+    en: `
+    EMQ X will trigger an alarm when the percentage of system
+    memory allocated by EMQ X for all processes exceeds this value`,
+  },
+  // monitorAlarm desciption end
+  listenerName: {
+    zh: '监听器名字',
+    en: 'Listener Name',
+  },
+  listenerType: {
+    zh: '监听类型',
+    en: 'Listener Type',
+  },
+  // baseSettings start
+  broker_session_locking_strategy: {
+    zh: `会话锁策略。保证集群中 Client ID 在集群中的创建会话的唯一性。
+    all 表示全集群锁，leader 表示仅主节点锁，quorum 多数节点锁，local 表仅当前节点锁`,
+    en: `Session locking policy. Ensure the uniqueness of the Client ID creation session in the cluster.
+    All represents the total set group lock, the leader represents the master node lock only,
+    the quorum majority node lock only, and the local table only the current node lock
+    `,
+  },
+  broker_shared_dispatch_ack_enabled: {
+    zh: '共享订阅开启内部派发 ACK',
+    en: 'Shared subscriptions enable internal distribution ACK',
+  },
+  broker_shared_subscription_strategy: {
+    zh: '共享订阅派发策略',
+    en: 'Shared subscription distribution policies',
+  },
+  broker_sys_heartbeat: {
+    zh: 'Broker 健康状态发布间隔',
+    en: 'Broker Health status publish interval',
+  },
+  broker_sys_interval: {
+    zh: 'Broker 统计信息发布间隔',
+    en: 'Broker statistics release interval',
+  },
+  // baseSettings end
+  confirmUpdateListener: {
+    zh: '应用设置将重新启动监听器，该操作将导致当前活跃连接断开，是否继续？',
+    en: `
+    Applying settings will restart the listener.
+    This operation will cause the current active connection to be disconnected.
+    Do you want to continue?`,
+  },
+  isOpened: {
+    zh: '是否开启',
+    en: 'Is Started'
+  },
+  isStopListener: {
+    zh: '确定停止监听器：',
+    en: 'Are you sure to stop the listener:',
+  },
+  isDeleteListener: {
+    zh: '确认删除该监听器？',
+    en: 'Are you sure to delete this listener?',
+  },
+  isDeleteZone: {
+    zh: '确认删除该 Zone？',
+    en: 'Are you sure to delete this Zone?',
+  },
+  returnList: {
+    zh: '返回列表',
+    en: 'Return',
   },
 }

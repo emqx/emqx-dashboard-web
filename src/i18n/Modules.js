@@ -35,9 +35,9 @@ export default {
     en: 'Description',
   },
   searchTip: {
-    zh: '搜索全部模块...',
-    ja: 'すべてのモジュールを検索する...',
-    en: 'Search all modules...',
+    zh: '搜索模块...',
+    ja: '',
+    en: 'Search modules...',
   },
   reconnect: {
     zh: '重连',
@@ -125,14 +125,18 @@ export default {
     en: 'Authentication',
   },
   protocols: {
-    zh: '协议拓展',
-    ja: 'プロトコル',
+    zh: '协议接入',
+    ja: '',
     en: 'Protocols',
   },
   messagePublish: {
     zh: '消息下发',
     ja: 'メッセージのパブリッシュ',
     en: 'Message Publish',
+  },
+  extension: {
+    zh: '多语言扩展',
+    en: 'extensions',
   },
   monitor: {
     zh: '运维监控',
@@ -196,8 +200,50 @@ export default {
     zh: '请添加监听器！',
     en: 'Please add Listener!',
   },
-  uploadFile: {
-    zh: '上传文件',
-    en: 'Upload File',
+  fileTip: {
+    zh: '请上传文件',
+    en: 'Please upload File',
+  },
+  noNeedAddConfigTip: {
+    zh: '此模块无需配置相关信息！',
+    en: 'No configuration information is required for this module!',
+  },
+  continueCommit: {
+    zh: '继续提交',
+    en: 'Submit',
+  },
+  editTip: {
+    zh: '应用更改将会短暂重启当前模块，可能会造成数据丢失或服务中断，请确保在不影响业务的情况下提交更改。',
+    en: `
+      Applying changes will immediately restart the current module which may cause data loss
+      or service interruption. Please make sure to submit the changes without affecting the business.`,
+  },
+  auth: {
+    zh: '认证',
+    en: 'Authentication',
+  },
+  confirmDelete: {
+    zh: '确认删除？',
+    en: 'Confirm Delete?',
+  },
+  listNull: {
+    zh: '列表为空，请调整过滤条件再试',
+    en: 'Empty. Please change the filter and try again',
+  },
+  allow: {
+    zh: '允许',
+    en: 'Allow',
+  },
+  deny: {
+    zh: '不允许',
+    en: 'Deny',
+  },
+  action: {
+    zh: '主题动作',
+    en: 'Action',
+  },
+  isAllow: {
+    zh: '是否允许',
+    en: 'Allowed',
   },
 }

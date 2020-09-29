@@ -2,12 +2,20 @@
   <div class="settings">
     <div class="app-wrapper">
       <el-tabs v-model="activeName" type="card" :before-leave="handleBeforeLeave">
-        <el-tab-pane :label="$t('Settings.basic')" name="basic">
-          <config-settings v-if="activeName === 'basic'" ref="basicConfig"></config-settings>
+        <el-tab-pane :label="$t('Settings.basic')" name="baseSettings">
+          <base-settings v-if="activeName === 'baseSettings'" ref="baseSettings"></base-settings>
         </el-tab-pane>
-
-        <el-tab-pane :label="$t('Settings.cluster')" name="cluster">
-          <cluster-settings v-if="activeName === 'cluster'" ref="clusterSettings"></cluster-settings>
+        <el-tab-pane label="Zone" name="zoneSettings">
+          <zone-settings v-if="activeName === 'zoneSettings'" ref="zoneSettings"></zone-settings>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('Settings.cluster')" name="clusterSettings">
+          <cluster-settings v-if="activeName === 'clusterSettings'" ref="clusterSettings"></cluster-settings>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('Settings.listeners')" name="listenerSettings">
+          <listener-settings v-if="activeName === 'listenerSettings'" ref="listenerSettings"></listener-settings>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('Settings.monitorAlarm')" name="monitorSettings">
+          <monitor-settings v-if="activeName === 'monitorSettings'" ref="monitorSettings"></monitor-settings>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -15,36 +23,40 @@
 </template>
 
 <script>
-import ConfigSettings from './ConfigSettings'
+import BaseSettings from './BaseSettings'
+import ZoneSettings from './ZoneSettings'
 import ClusterSettings from './ClusterSettings'
+import ListenerSettings from './ListenerSettings'
+import MonitorSettings from './MonitorSettings'
 
 export default {
   name: 'Settings',
 
   components: {
-    ConfigSettings,
+    BaseSettings,
+    ZoneSettings,
     ClusterSettings,
+    ListenerSettings,
+    MonitorSettings,
   },
 
   data() {
     return {
-      activeName: 'basic',
+      activeName: 'baseSettings',
     }
   },
 
   methods: {
     async handleBeforeLeave(currentName, oldName) {
-      if (currentName !== 'basic' && oldName === 'basic') {
-        // 基础设置是否修改过
-        const { basicConfig } = this.$refs
-        const { disabled } = basicConfig._data
+      if (oldName !== 'clusterSettings' && currentName !== oldName) {
+        // 设置是否修改过
+        const { disabled } = this.$refs[oldName]._data
         if (!disabled) {
           const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
             type: 'warning',
             cancelButtonText: this.$t('Settings.no'),
           })
           if (status === 'confirm') {
-            basicConfig.cancel(false)
             return true
           }
           return false
@@ -59,8 +71,6 @@ export default {
 <style lang="scss">
 .settings {
   .el-form {
-    margin-top: 32px;
-
     .el-input.is-disabled .el-input__inner {
       color: #676767;
     }

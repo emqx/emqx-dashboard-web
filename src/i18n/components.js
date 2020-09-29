@@ -219,9 +219,9 @@ export default {
     ja: 'ログアウト',
     en: 'Logout',
   },
-  addModule: {
-    zh: '添加模块',
-    ja: 'モジュール追加',
-    en: 'Module Add',
+  selectModules: {
+    zh: '选择模块',
+    ja: '',
+    en: 'Modules Select',
   },
 }

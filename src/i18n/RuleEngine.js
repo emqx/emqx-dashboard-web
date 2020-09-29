@@ -631,4 +631,8 @@ export default {
     zh: '仅支持数字、字母、下划线和冒号',
     en: 'Only Numbers, letters, underscores, and colons are supported',
   },
+  ruleID: {
+    zh: '规则 ID',
+    en: 'Rule ID',
+  },
 }
