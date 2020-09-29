@@ -205,13 +205,13 @@
           <emq-select
             v-model="record.params.$resource"
             :field="{ options: availableResources }"
-            :field-name="{ label: 'description', value: 'id' }"
+            :field-name="{ label: 'id', value: 'id' }"
             class="reset-width"
             style="width: 403px;"
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="custom-option">
-              <span class="key">{{ item.description }}</span>
+              <span class="key">{{ item.id }}</span>
               <span class="value">{{ item.config.title }}</span>
             </div>
           </emq-select>
