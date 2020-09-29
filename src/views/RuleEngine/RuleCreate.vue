@@ -42,6 +42,10 @@
                 <stretch-height v-model="sqlEditorHeight"></stretch-height>
               </el-form-item>
 
+              <el-form-item prop="id" :label="$t('RuleEngine.ruleID')">
+                <el-input v-model="record.id" :disabled="isEdit"></el-input>
+              </el-form-item>
+
               <el-form-item prop="description" :label="$t('RuleEngine.remark')">
                 <el-input v-model="record.description"></el-input>
               </el-form-item>
@@ -167,7 +171,7 @@
 <script>
 import { loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule } from '@/api/rules'
 import { loadTopics } from '@/api/server'
-import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck } from '@/common/utils'
+import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck, verifyID } from '@/common/utils'
 import Monaco from '@/components/Monaco'
 import StretchHeight from '@/components/StretchHeight'
 import RuleActions from './components/RuleActions'
@@ -218,9 +222,11 @@ export default {
         actions: [],
         description: '',
         ctx: {},
+        id: `rule:${Math.random().toString().slice(3, 9)}`,
       },
       rules: {
         rawsql: { required: true, message: this.$t('RuleEngine.pleaseEnterTheSQL') },
+        id: { required: true, validator: verifyID },
       },
     }
   },
@@ -350,7 +356,11 @@ export default {
       this.needCheckSql = true
       this.$refs.record.validate(async (valid) => {
         if (!valid) {
-          return
+          if (this.showTest && !this.record.id) {
+            this.$refs.record.clearValidate('id')
+          } else {
+            return
+          }
         }
         if (!this.beforeSqlValid(this.record.rawsql)) {
           return

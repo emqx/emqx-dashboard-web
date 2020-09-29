@@ -1,9 +1,9 @@
 export default {
   __not: [],
   userCreate: {
-    zh: 'https://docs.emqx.io/broker/v4/cn/commands.html#admins',
+    zh: 'https://docs.emqx.net/broker/latest/cn/advanced/cli.html#admins-%E5%91%BD%E4%BB%A4',
     ja: 'https://docs.emqx.io/broker/v4/en/commands.html#admins',
-    en: 'https://docs.emqx.io/broker/v4/en/commands.html#admins',
+    en: 'https://docs.emqx.io/broker/latest/en/advanced/cli.html#admins-command',
   },
   loginUserAccount: {
     zh: '使用 Dashboard 用户登录',
@@ -184,5 +184,13 @@ export default {
     zh: '停用成功',
     ja: '無効になりました',
     en: 'Disable Success',
+  },
+  select: {
+    zh: '选择',
+    en: 'Select',
+  },
+  manage: {
+    zh: '管理',
+    en: 'Manage',
   },
 }

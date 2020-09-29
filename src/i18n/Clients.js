@@ -67,6 +67,14 @@ export default {
     ja: 'クライアント ID',
     en: 'Client ID',
   },
+  clientid: {
+    zh: '客户端 ID',
+    en: 'Client ID',
+  },
+  $all: {
+    zh: '全部用户',
+    en: 'All users',
+  },
   username: {
     zh: '用户名',
     ja: 'ユーザー名',

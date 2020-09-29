@@ -41,6 +41,9 @@
                   <template v-if="item.elType === 'object'">
                     <key-and-value-editor v-model="record.config[item.key]"></key-and-value-editor>
                   </template>
+                  <template v-else-if="item.elType === 'file'">
+                    <file-editor v-model="record.config[item.key]"></file-editor>
+                  </template>
                   <!-- input -->
                   <template v-else-if="item.elType !== 'select'">
                     <el-input
@@ -90,12 +93,14 @@
 <script>
 import { renderParamsForm } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
+import FileEditor from '@/components/FileEditor'
 
 export default {
   name: 'Listeners',
 
   components: {
     KeyAndValueEditor,
+    FileEditor,
   },
 
   model: {
@@ -184,6 +189,9 @@ export default {
         Object.assign(this.record.config, this.selectedListener)
       }
       this.record.config.listener_type = type
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
     },
     cleanOldData() {
       this.commonConfigs = []
@@ -222,6 +230,9 @@ export default {
         this.addDataAccordingListenerType(this.selectedListener.listener_type)
       }
       this.configLoading = false
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
     },
     atDialogClose() {
       setTimeout(() => {

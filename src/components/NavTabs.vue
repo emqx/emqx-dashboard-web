@@ -90,8 +90,8 @@ export default {
       if (name === 'schemas' && oper === 'create') {
         return 'schemaCreate'
       }
-      if (name === 'modules' && oper === 'add') {
-        return 'addModule'
+      if (name === 'modules' && oper === 'select') {
+        return 'selectModules'
       }
       return name
     },
@@ -165,14 +165,12 @@ export default {
       transition: all 0.3s;
       border-radius: 50%;
       display: inline-block;
-      width: 13px;
-      height: 13px;
+      width: 12px;
+      height: 12px;
       text-align: center;
-      line-height: 13px;
       i {
         transform: scale(0.6);
         position: relative;
-        top: 1px;
       }
       &:hover {
         background: #afafaf;

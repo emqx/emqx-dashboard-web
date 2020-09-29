@@ -1,5 +1,5 @@
 <template>
-  <el-select :value="rawValue" v-bind="$attrs" class="emq-select" v-on="$listeners" @change="selectChange">
+  <el-select :value="rawValue" v-bind="$attrs" class="emq-select" v-on="$listeners" @change="valueChange">
     <slot>
       <el-option
         v-for="(item, i) in options"
@@ -18,7 +18,7 @@
 import http from '@/common/http'
 
 export default {
-  name: 'EmqSelect',
+  name: 'ConfigSelect',
 
   components: {},
 
@@ -44,6 +44,10 @@ export default {
     },
     refresh: {
       type: Boolean,
+    },
+    extraConfigs: {
+      type: Object,
+      defaule: () => {},
     },
   },
 
@@ -87,11 +91,14 @@ export default {
 
   created() {
     this.loadData()
+    this.$emit('updateConfig', this.extraConfigs[this.rawValue], this.rawValue)
   },
 
   methods: {
-    selectChange(val) {
-      this.$emit('selectChange', val)
+    valueChange(type) {
+      if (type) {
+        this.$emit('updateConfig', this.extraConfigs[type], type)
+      }
     },
     async loadData() {
       const options = await this.getOptions()

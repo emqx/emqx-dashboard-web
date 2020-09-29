@@ -168,10 +168,7 @@
       <el-form ref="editRecord" class="el-form--public app-info" size="medium" :rules="rules" :model="editRecord">
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item
-              prop="login"
-              :label="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')"
-            >
+            <el-form-item prop="login" :label="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')">
               <el-input v-model="editRecord.login" disabled></el-input>
             </el-form-item>
           </el-col>
