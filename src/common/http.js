@@ -121,7 +121,9 @@ function handleError(error) {
   } else if (status === 404 && pluginPages.includes(currentPage)) {
     Message.error(httpMap['-2'])
   } else if (showMessage) {
-    Message.error(error.message)
+    if (error.message !== 'module_not_loaded') {
+      Message.error(error.message)
+    }
   }
   return Promise.reject(error.message)
 }

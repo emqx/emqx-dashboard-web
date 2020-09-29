@@ -8,14 +8,14 @@
         <el-tab-pane label="Zone" name="zoneSettings">
           <zone-settings v-if="activeName === 'zoneSettings'" ref="zoneSettings"></zone-settings>
         </el-tab-pane>
-        <el-tab-pane :label="$t('Settings.cluster')" name="clusterSettings">
-          <cluster-settings v-if="activeName === 'clusterSettings'" ref="clusterSettings"></cluster-settings>
-        </el-tab-pane>
         <el-tab-pane :label="$t('Settings.listeners')" name="listenerSettings">
           <listener-settings v-if="activeName === 'listenerSettings'" ref="listenerSettings"></listener-settings>
         </el-tab-pane>
         <el-tab-pane :label="$t('Settings.monitorAlarm')" name="monitorSettings">
           <monitor-settings v-if="activeName === 'monitorSettings'" ref="monitorSettings"></monitor-settings>
+        </el-tab-pane>
+        <el-tab-pane :label="$t('Settings.cluster')" name="clusterSettings">
+          <cluster-settings v-if="activeName === 'clusterSettings'" ref="clusterSettings"></cluster-settings>
         </el-tab-pane>
       </el-tabs>
     </div>

@@ -33,6 +33,7 @@
                 size="small"
                 type="password"
                 :placeholder="$t('Base.password')"
+                show-password
                 clearable
               >
               </el-input>
