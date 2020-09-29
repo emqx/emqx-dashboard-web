@@ -56,7 +56,7 @@
       </a>
     </el-col>
 
-    <el-col class="button-group__center" :span="12" style="margin-bottom: 10px; text-align: right;">
+    <el-col class="button-group__center" :span="12">
       <el-button plain :disabled="selfDisabled" type="default" size="medium" @click="cancel">
         {{ $t('Base.cancel') }}
       </el-button>
