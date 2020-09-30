@@ -5,7 +5,7 @@ export function listTopicMetrics() {
 }
 
 export function enableTopicMetrics() {
-  return http.put('/modules/emqx_mod_topic_metrics/load')
+  return http.post('/topic_metrics')
 }
 
 export function addTopicMetrics(body) {
