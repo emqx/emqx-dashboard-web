@@ -206,7 +206,7 @@ export default {
     },
     toReadMore(type) {
       const lang = this.lang === 'zh' ? 'cn' : 'en'
-      const url = `https://docs.emqx.net/broker/latest/${lang}/modules/${type}.html`
+      const url = `https://docs.emqx.net/enterprise/latest/${lang}/modules/${type}.html`
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },
