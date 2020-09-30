@@ -123,6 +123,8 @@ function handleError(error) {
   } else if (showMessage) {
     if (error.message !== 'module_not_loaded') {
       Message.error(error.message)
+    } else {
+      Message.warning('Related module are not load')
     }
   }
   return Promise.reject(error.message)
