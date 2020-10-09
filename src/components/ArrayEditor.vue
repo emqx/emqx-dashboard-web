@@ -4,11 +4,10 @@
       <el-table
         class="array-editor"
         :data="form.tableData"
-        :render-header="labelHeads"
         size="mini"
         :header-cell-class-name="addHeaderCellClassName"
       >
-        <el-table-column :label="item" v-for="(item, index) in headers" :key="index">
+        <el-table-column :label="item" v-for="(item, index) in headers" :key="index" :render-header="labelHeads">
           <template slot-scope="{ row, $index }">
             <el-form-item
               :prop="`tableData.${$index}.${row[item].formItemAttributes.prop}`"
@@ -114,6 +113,7 @@ export default {
         rules: {},
       },
       innerValid: true,
+      descriptionDic: {},
     }
   },
 
@@ -141,6 +141,7 @@ export default {
       Object.entries(form).forEach(([k, v]) => {
         const labelName = v.formItemAttributes.label
         this.headers.push(labelName)
+        this.descriptionDic[labelName] = v.formItemAttributes.description
         this.oneRow[labelName] = v
         const { key, value } = v
         this.oneRow[key] = value
@@ -151,7 +152,24 @@ export default {
       this.assignValue()
     },
     labelHeads(h, { column }) {
-      return h('span', { class: 'table-head', style: { width: '100%' } }, [column.label])
+      return h('span', { style: { color: '#333' } }, [
+        h('span', { class: 'table-head' }, [column.label]),
+        this.descriptionDic[column.label]
+          ? h(
+              'el-popover',
+              {
+                props: {
+                  placement: 'top',
+                  width: '200',
+                  trigger: 'hover',
+                  content: this.descriptionDic[column.label],
+                  popperClass: 'my-popover',
+                },
+              },
+              [h('i', { slot: 'reference', class: 'el-icon-question' }, '')],
+            )
+          : h('span', {}),
+      ])
     },
     atInputChange() {
       this.validateForm()
@@ -203,6 +221,14 @@ export default {
 .array-editor {
   font-size: 12px !important;
 
+  .table-head {
+    width: 100%;
+  }
+
+  .el-icon-question {
+    margin-left: 5px;
+  }
+
   .el-input {
     width: 100% !important;
 
@@ -220,5 +246,10 @@ export default {
     color: #f5222d;
     margin-right: 4px;
   }
+}
+
+.el-popover {
+  padding: 10px;
+  font-size: 12px;
 }
 </style>
