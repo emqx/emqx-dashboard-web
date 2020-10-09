@@ -1,6 +1,6 @@
 <template>
   <div class="settings">
-    <div class="app-wrapper">
+    <div v-if="showSettings" class="app-wrapper">
       <el-tabs v-model="activeName" type="card" :before-leave="handleBeforeLeave">
         <el-tab-pane :label="$t('Settings.basic')" name="baseSettings">
           <base-settings v-if="activeName === 'baseSettings'" ref="baseSettings"></base-settings>
@@ -19,6 +19,13 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <div v-else class="not-settings">
+      <img src="../../assets/img/not_settings.png" alt="" width="375" />
+      <p>{{ $t('Settings.openModuleTip') }}</p>
+      <el-button size="small" class="confirm-btn" type="primary" @click="handleModLoad">
+        {{ $t('Analysis.enable') }}
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -28,6 +35,8 @@ import ZoneSettings from './ZoneSettings'
 import ClusterSettings from './ClusterSettings'
 import ListenerSettings from './ListenerSettings'
 import MonitorSettings from './MonitorSettings'
+import { enableTopicMetrics } from '@/api/analysis'
+import { loadCreatedModules } from '@/api/modules'
 
 export default {
   name: 'Settings',
@@ -43,10 +52,25 @@ export default {
   data() {
     return {
       activeName: 'baseSettings',
+      showSettings: false,
     }
   },
 
+  created() {
+    this.getStatus()
+  },
+
   methods: {
+    async getStatus() {
+      const data = await loadCreatedModules()
+      const res = data.find(($) => $.type === 'hot_confs' && $.enabled === true)
+      this.showSettings = res !== undefined
+    },
+    async handleModLoad() {
+      await enableTopicMetrics({ type: 'hot_confs' })
+      this.$message.success(this.$t('Base.enableSuccess'))
+      this.showSettings = true
+    },
     async handleBeforeLeave(currentName, oldName) {
       if (oldName !== 'clusterSettings' && currentName !== oldName) {
         // 设置是否修改过
@@ -102,6 +126,19 @@ export default {
     margin-top: 20px;
     margin-bottom: 10px;
     text-align: right;
+  }
+
+  .not-settings {
+    text-align: center;
+    margin-top: 150px;
+
+    img {
+      margin-bottom: 50px;
+    }
+
+    .confirm-btn {
+      width: 125px;
+    }
   }
 }
 </style>
