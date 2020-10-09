@@ -7,7 +7,16 @@
         size="mini"
         :header-cell-class-name="addHeaderCellClassName"
       >
-        <el-table-column :label="item" v-for="(item, index) in headers" :key="index" :render-header="labelHeads">
+        <el-table-column :label="item" v-for="(item, index) in headers" :key="index">
+          <template slot="header">
+            <span class="my-header">
+              {{ item }}
+              <el-popover v-if="descriptionDic[item]" width="220" trigger="hover" placement="top">
+                <div class="emq-popover-content" v-html="descriptionDic[item]"></div>
+                <i slot="reference" class="el-icon-question"></i>
+              </el-popover>
+            </span>
+          </template>
           <template slot-scope="{ row, $index }">
             <el-form-item
               :prop="`tableData.${$index}.${row[item].formItemAttributes.prop}`"
@@ -151,26 +160,6 @@ export default {
       Object.assign(this.form.rules, rules)
       this.assignValue()
     },
-    labelHeads(h, { column }) {
-      return h('span', { style: { color: '#333' } }, [
-        h('span', { class: 'table-head' }, [column.label]),
-        this.descriptionDic[column.label]
-          ? h(
-              'el-popover',
-              {
-                props: {
-                  placement: 'top',
-                  width: '200',
-                  trigger: 'hover',
-                  content: this.descriptionDic[column.label],
-                  popperClass: 'my-popover',
-                },
-              },
-              [h('i', { slot: 'reference', class: 'el-icon-question' }, '')],
-            )
-          : h('span', {}),
-      ])
-    },
     atInputChange() {
       this.validateForm()
       const data = []
@@ -203,8 +192,9 @@ export default {
     // eslint-disable-next-line no-unused-vars
     addHeaderCellClassName({ row, column, rowIndex, columnIndex }) {
       const columnRule = this.allColumnRule[column.label]
-      if (columnRule && columnRule.length) {
-        return 'requiredclass'
+      if (columnRule) {
+        const res = columnRule.find(($) => $.required === true)
+        return res ? 'requiredclass' : ''
       }
       return true
     },
@@ -221,12 +211,8 @@ export default {
 .array-editor {
   font-size: 12px !important;
 
-  .table-head {
-    width: 100%;
-  }
-
-  .el-icon-question {
-    margin-left: 5px;
+  .my-header {
+    color: #333;
   }
 
   .el-input {
@@ -246,10 +232,5 @@ export default {
     color: #f5222d;
     margin-right: 4px;
   }
-}
-
-.el-popover {
-  padding: 10px;
-  font-size: 12px;
 }
 </style>
