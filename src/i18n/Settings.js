@@ -474,4 +474,8 @@ export default {
     zh: '端口不能为负数且不能大于 65535',
     en: 'The port cannot be negative and cannot be greater than 65535',
   },
+  openModuleTip: {
+    zh: '开启热配置后可以查看相关配置，并且对其进行操作',
+    en: 'After turning on the hot configuration, you can view the related configuration and operate it',
+  },
 }
