@@ -129,12 +129,6 @@ export default {
         icon: 'icon-shebeiguanli',
       },
       {
-        title: this.$t('components.modules'),
-        key: 'modules',
-        path: '/modules',
-        icon: 'icon-changjingguanli',
-      },
-      {
         title: this.$t('components.rules'),
         key: 'rules',
         icon: 'icon-guizeyinqing',
@@ -173,17 +167,23 @@ export default {
         ],
       },
       {
+        title: this.$t('components.modules'),
+        key: 'modules',
+        path: '/modules',
+        icon: 'icon-changjingguanli',
+      },
+      {
+        title: this.$t('components.plugins'),
+        key: 'plugins',
+        path: '/plugins',
+        icon: 'icon-kongjian',
+      },
+      {
         title: this.$t('components.alerts'),
         key: 'alerts',
         path: '/alerts',
         icon: 'icon-gaojingkongxin',
       },
-      // {
-      //   title: this.$t('components.plugins'),
-      //   key: 'plugins',
-      //   path: '/plugins',
-      //   icon: 'icon-kongjian',
-      // },
       {
         title: this.$t('components.tool'),
         key: 'tools',

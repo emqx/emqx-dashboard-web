@@ -156,4 +156,8 @@ export default {
     zh: '管理',
     en: 'Manage',
   },
+  tips: {
+    zh: '提示',
+    en: 'Tips',
+  },
 }
