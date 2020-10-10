@@ -475,7 +475,10 @@ export default {
     en: 'The port cannot be negative and cannot be greater than 65535',
   },
   openModuleTip: {
-    zh: '开启热配置后可以查看相关配置，并且对其进行操作',
-    en: 'After turning on the hot configuration, you can view the related configuration and operate it',
+    zh: `开启热配置后，EMQ X 将从配置文件中拷贝一份配置副本，所有可在 Dashboard 修改的配置都会持久化到磁盘中。
+    <br>如果修改配置文件将会覆盖热配置，请谨慎使用。`,
+    en: `After enabling hot configuration, EMQ X will copy a configuration from the configuration file,<br>
+    and all configurations that can be modified on the Dashboard will be persisted to the disk.<br>
+    If modifying the configuration file will overwrite the hot configuration, please use it with caution.`,
   },
 }

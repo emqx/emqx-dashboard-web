@@ -314,29 +314,26 @@ let routes = [
     ],
   },
   // 插件
-  // {
-  //   path: '/plugins',
-  //   component: Layout,
-  //   meta: {
-  //     hideKey: 'plugins',
-  //     authRequired: true,
-  //   },
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'plugins',
-  //       component: () => import('@/views/Plugins/Plugins'),
-  //       meta: {
-  //         keepAlive: true,
-  //       },
-  //     },
-  //     {
-  //       path: '/plugins/:pluginName',
-  //       name: 'pluginsName',
-  //       component: () => import('@/views/Plugins/PluginsManage'),
-  //     },
-  //   ],
-  // },
+  {
+    path: '/plugins',
+    component: Layout,
+    meta: {
+      hideKey: 'plugins',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'plugins',
+        component: () => import('@/views/Plugins/Plugins'),
+      },
+      {
+        path: '/plugins/:pluginName',
+        name: 'pluginsName',
+        component: () => import('@/views/Plugins/PluginsManage'),
+      },
+    ],
+  },
   // 模块
   {
     path: '/modules',
