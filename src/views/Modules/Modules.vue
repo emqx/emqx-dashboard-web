@@ -43,7 +43,7 @@
             <el-card shadow="hover">
               <div class="module-item" @click="toEditModule(item)">
                 <div class="left-box">
-                  <img :src="item.img" alt="" class="item-img" />
+                  <img :src="item.img" alt="module-logo" class="item-img" />
                   <div class="item-content">
                     <div class="item-title">{{ item.title[lang] }}</div>
                     <div class="item-des">

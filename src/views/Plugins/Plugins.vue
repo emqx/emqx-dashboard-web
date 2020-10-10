@@ -90,11 +90,11 @@
                 </el-button>
                 <span v-else>--</span>
               </div>
-              <div v-if="hasManagePage(item.name)" class="manage-btn">
+              <!-- <div v-if="hasManagePage(item.name)" class="manage-btn">
                 <el-button type="dashed" :disabled="!item.active" size="small" @click="handleManage(item)">
                   {{ $t('Plugins.manage') }}
                 </el-button>
-              </div>
+              </div> -->
             </div>
           </div>
         </el-col>
@@ -163,6 +163,26 @@
         <p>{{ $t('Plugins.listNull') }}</p>
       </a-card>
     </div>
+
+    <el-dialog title="标题" width="520px" :visible.sync="moduleTipVisible" :close-on-click-modal="false">
+      <div slot="title" class="tip-title">
+        <i class="el-icon-warning"></i>
+        <span>{{ $t('Base.tips') }}</span>
+      </div>
+      <div class="tip-content">
+        <p v-html="$t('Modules.useModulesTip')">
+          {{ $t('Modules.useModulesTip') }}
+        </p>
+      </div>
+      <div class="tip-checkbox">
+        <el-checkbox v-model="noprompt" @change="useModuleTipShowChange">
+          {{ $t('Overview.notPromptAgain') }}
+        </el-checkbox>
+      </div>
+      <div class="tip-button">
+        <el-button type="primary" size="small" @click="moduleTipVisible = false">{{ $t('Overview.konw') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -188,7 +208,7 @@ export default {
       tableData: [],
       listTableData: [],
       nodes: [],
-      primaryList: ['emqx_dashboard', 'emqx_management', 'emqx_conf'],
+      primaryList: ['emqx_dashboard', 'emqx_management', 'emqx_conf', 'emqx_modules'],
       nodeName: '',
       pluginTypes: {
         auth: this.$t('Plugins.authentication'),
@@ -198,6 +218,8 @@ export default {
         feature: this.$t('Plugins.feature'),
       },
       iconMap: {},
+      moduleTipVisible: false,
+      noprompt: false,
     }
   },
 
@@ -214,9 +236,26 @@ export default {
 
   created() {
     this.loadData()
+    setTimeout(() => {
+      this.showUseModulesTip()
+    }, 300)
   },
 
   methods: {
+    showUseModulesTip() {
+      const val = localStorage.getItem('moduleTipVisible')
+      if (val !== 'false') {
+        this.moduleTipVisible = true
+      }
+    },
+    useModuleTipShowChange(val) {
+      if (val) {
+        localStorage.setItem('moduleTipVisible', false)
+        setTimeout(() => {
+          this.moduleTipVisible = false
+        }, 600)
+      }
+    },
     typeText(type) {
       const pluginTypes = {
         auth: this.$t('Plugins.authentication'),
@@ -226,6 +265,19 @@ export default {
         feature: this.$t('Plugins.feature'),
       }
       return pluginTypes[type] || this.$t('Plugins.feature')
+    },
+    loadIcon() {
+      const iconMap = {}
+      this.tableData.forEach((item) => {
+        const { name } = item
+        try {
+          // eslint-disable-next-line
+          iconMap[name] = require(`../../assets/plugin_icon/${name}.png`)
+        } catch (e) {
+          console.log(e)
+        }
+      })
+      return iconMap
     },
     toConfig(item = {}) {
       const { name } = item
@@ -248,6 +300,7 @@ export default {
       this.nodeName = this.nodeName || (this.nodes[0] || {}).node
       this.tableData = await loadPlugins(this.nodeName)
       this.handleFilter()
+      this.iconMap = this.loadIcon()
       this.searchVal = ''
     },
     handleFilter() {
@@ -445,6 +498,35 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .tip-title {
+    font-size: 18px;
+    .el-icon-warning {
+      color: #e6a23c;
+    }
+    span {
+      display: inline-block;
+      margin-left: 10px;
+    }
+  }
+
+  .tip-content {
+    font-size: 16px;
+    p {
+      word-break: break-word;
+    }
+  }
+
+  .tip-checkbox {
+    margin-top: 10px;
+    .el-checkbox {
+      color: #aaa;
+    }
+  }
+
+  .tip-button {
+    text-align: right;
   }
 }
 </style>
