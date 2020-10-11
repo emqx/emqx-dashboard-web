@@ -237,6 +237,9 @@ export default {
           const { clientid, ...data } = this.record
           this.addData(data)
         }
+        setTimeout(() => {
+          this.addLoading = false
+        }, 200)
       })
     },
     async addData(data) {
@@ -244,7 +247,6 @@ export default {
       if (res) {
         this.addSuccess(this.type)
       }
-      this.addLoading = false
     },
     addSuccess(type) {
       this.$message.success(this.$t('Base.createSuccess'))
