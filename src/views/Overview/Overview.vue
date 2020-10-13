@@ -405,9 +405,6 @@ export default {
     liceEvaTipShowChange(val) {
       if (val) {
         localStorage.setItem('licenseTipVisible', false)
-        setTimeout(() => {
-          this.licenseTipVisible = false
-        }, 600)
       }
     },
     chartDataFill(length) {

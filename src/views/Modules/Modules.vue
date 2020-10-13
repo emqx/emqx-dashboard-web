@@ -97,7 +97,7 @@ export default {
       showList: [],
       moduleCount: 0,
       selectedModule: {},
-      canManageModuleTypes: ['mnesia_authentication'],
+      canManageModuleTypes: ['mnesia_authentication', 'jwt_authentication'],
     }
   },
 
