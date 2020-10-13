@@ -23,11 +23,9 @@
           </span>
         </a-breadcrumb-item>
       </template>
-
     </a-breadcrumb>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -54,7 +52,7 @@ export default {
 
   methods: {
     getBreadcrumb() {
-      const { path, query } = this.$route
+      const { path, query, name: routeName } = this.$route
       const pathList = path.split('/')
       const name = pathList[1]
       const oper = query.oper || pathList[2]
@@ -64,17 +62,20 @@ export default {
       this.backPath = undefined
       this.currentTitle = this.$t(`components.${name}`)
 
-      if (['create', 'view', 'detail'].includes(oper)) {
+      if (['create', 'view', 'detail', 'add', 'select', 'manage'].includes(oper)) {
         this.oper = this.$t(`Base.${oper}`)
         this.backPath = `/${name}`
       } else if (oper === 'node') {
         this.currentTitle = this.$t('Overview.nodeData')
       }
+      if (routeName === 'pluginsName' && this.$route.params.pluginName) {
+        this.oper = this.$route.params.pluginName
+        this.backPath = `/${name}`
+      }
     },
   },
 }
 </script>
-
 
 <style lang="scss">
 .breadcrumb {

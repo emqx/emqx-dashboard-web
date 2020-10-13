@@ -1,8 +1,6 @@
 <template>
   <div class="blacklist">
-    <page-header
-      :back-title="$t('General.blacklist')"
-    >
+    <page-header :back-title="$t('General.blacklist')">
       <div class="page-header-content-view">
         <div class="content">
           <p class="description">
@@ -16,39 +14,21 @@
     </page-header>
 
     <div class="app-wrapper">
-      <a-card
-        class="emq-list-card"
-      >
+      <a-card class="emq-list-card">
         <div class="emq-table-header">
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-plus"
-            @click="showDialog"
-          >
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog">
             {{ $t('Base.create') }}
           </el-button>
         </div>
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="who" min-width="120px" :label="$t('General.who')">
-          </el-table-column>
-          <el-table-column prop="as" min-width="120px" :label="$t('General.as')">
-          </el-table-column>
-          <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')">
-          </el-table-column>
-          <el-table-column
-            prop="until" min-width="120px" :formatter="formatterUntil"
-            :label="$t('General.until')"
-          >
+          <el-table-column prop="who" min-width="120px" :label="$t('General.who')"> </el-table-column>
+          <el-table-column prop="as" min-width="120px" :label="$t('General.as')"> </el-table-column>
+          <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')"> </el-table-column>
+          <el-table-column prop="until" min-width="120px" :formatter="formatterUntil" :label="$t('General.until')">
           </el-table-column>
           <el-table-column prop="oper" width="120px" label="">
             <template slot-scope="{ row }">
-              <el-button
-                type="danger"
-                size="mini"
-                @click="deleteConfirm(row)"
-              >{{ $t('General.delete') }}
-              </el-button>
+              <el-button type="danger" size="mini" @click="deleteConfirm(row)">{{ $t('General.delete') }} </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -58,8 +38,11 @@
             hide-on-single-page
             background
             layout="total, sizes, prev, pager, next"
-            :page-sizes="[20, 50, 100, 500]" :page-size.sync="params._limit"
-            :current-page.sync="params._page" :total="count" @size-change="handleSizeChange"
+            :page-sizes="[20, 50, 100, 500]"
+            :page-size.sync="params._limit"
+            :current-page.sync="params._page"
+            :total="count"
+            @size-change="handleSizeChange"
             @current-change="handleCurrentPageChange"
           >
           </el-pagination>
@@ -67,21 +50,12 @@
       </a-card>
     </div>
 
-    <el-dialog
-      width="520px"
-      :title="$t('General.createBlacklist')"
-      :visible.sync="dialogVisible"
-      @close="clearInput"
-    >
+    <el-dialog width="520px" :title="$t('General.createBlacklist')" :visible.sync="dialogVisible" @close="clearInput">
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item prop="as" :label="$t('General.as')">
-              <emq-select
-                v-model="record.as"
-                :field="{ options: asOptions }"
-              >
-              </emq-select>
+              <emq-select v-model="record.as" :field="{ options: asOptions }"> </emq-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -116,7 +90,6 @@
   </div>
 </template>
 
-
 <script>
 import moment from 'moment'
 import { loadBlacklist, createBlacklist, deleteBlacklist } from '@/api/function'
@@ -147,12 +120,8 @@ export default {
         reason: '',
       },
       rules: {
-        as: [
-          { required: true, message: this.$t('General.enterAs') },
-        ],
-        who: [
-          { required: true, message: this.$t('General.enterWho') },
-        ],
+        as: [{ required: true, message: this.$t('General.enterAs') }],
+        who: [{ required: true, message: this.$t('General.enterWho') }],
       },
     }
   },
@@ -168,7 +137,10 @@ export default {
         this.params._page = 1
       }
       const data = await loadBlacklist({ ...this.params, ...params })
-      const { items = [], meta: { count = 0 } } = data
+      const {
+        items = [],
+        meta: { count = 0 },
+      } = data
       this.tableData = items
       this.count = count
     },
@@ -214,18 +186,21 @@ export default {
       })
     },
     deleteConfirm(item) {
-      this.$msgbox.confirm(this.$t('General.determineToDeleteTheBlacklist'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(async () => {
-        const { who, as } = item
-        const res = await deleteBlacklist({ who, as })
-        if (res) {
-          this.$message.success(this.$t('General.successfulDeletion'))
-          this.listBlackList(true)
-        }
-      }).catch(() => {})
+      this.$msgbox
+        .confirm(this.$t('General.determineToDeleteTheBlacklist'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          const { who, as } = item
+          const res = await deleteBlacklist({ who, as })
+          if (res) {
+            this.$message.success(this.$t('General.successfulDeletion'))
+            this.listBlackList(true)
+          }
+        })
+        .catch(() => {})
     },
     formatterUntil({ until }) {
       if (!until || typeof until !== 'number') {
@@ -236,7 +211,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss" scoped>
 .blacklist {

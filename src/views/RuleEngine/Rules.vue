@@ -1,6 +1,5 @@
 <template>
   <div class="rules">
-
     <page-header>
       <div class="page-header-content-view">
         <div class="content">
@@ -18,10 +17,7 @@
     </page-header>
 
     <div class="app-wrapper">
-      <a-card
-        class="emq-list-card"
-        :loading="listLoading"
-      >
+      <a-card class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
           <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">
             {{ $t('Base.create') }}
@@ -36,13 +32,17 @@
                   path: `/rules/${row.id}`,
                   query: { oper: 'view' },
                 }"
-              >{{ row.id }}</router-link>
+                >{{ row.id }}</router-link
+              >
             </template>
           </el-table-column>
-          <el-table-column
-            prop="for"
-            :label="$t('RuleEngine.topic')"
-          ></el-table-column>
+          <el-table-column prop="for" min-width="120" :label="$t('RuleEngine.topic')">
+            <template slot-scope="{ row }">
+              <div v-for="(item, index) in row.for" :key="index">
+                {{ item }}
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
             <template slot-scope="{ row }">
               <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
@@ -53,10 +53,7 @@
             show-overflow-tooltip
             :label="$t('RuleEngine.describe')"
           ></el-table-column>
-          <el-table-column
-            prop="status"
-            :label="$t('RuleEngine.status')"
-          >
+          <el-table-column prop="status" :label="$t('RuleEngine.status')">
             <template slot-scope="{ row }">
               <el-tooltip
                 :content="row.enabled ? $t('RuleEngine.ruleEnabled') : $t('RuleEngine.ruleDisabled')"
@@ -85,18 +82,10 @@
           </el-table-column>
           <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
-              <el-button
-                type="dashed"
-                size="mini"
-                @click="editRule(row)"
-              >
+              <el-button type="dashed" size="mini" @click="editRule(row)">
                 {{ $t('RuleEngine.edit') }}
               </el-button>
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="deleteRule(row)"
-              >
+              <el-button type="dashed danger" size="mini" @click="deleteRule(row)">
                 {{ $t('RuleEngine.delete') }}
               </el-button>
             </template>
@@ -105,24 +94,15 @@
       </a-card>
     </div>
 
-    <a-drawer
-      v-bind="rulesDrawer"
-      placement="right"
-      closable
-      :visible="metricsDrawerVisible"
-      @close="onMetricsClose"
-    >
+    <a-drawer v-bind="rulesDrawer" placement="right" closable :visible="metricsDrawerVisible" @close="onMetricsClose">
       <div class="rule-metrics">
         <div class="metrics-item">
           <div class="metrics-item-title">
             {{ $t('RuleEngine.ruleMetrics') }}
           </div>
           <ul class="metrics-item-body field-info rule-metrics">
-
             <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('RuleEngine.matched') }}:
-              </div>
+              <div class="field-title">{{ $t('RuleEngine.matched') }}:</div>
               <span class="field-value">
                 {{ currentRules.metricsData.matched }}
                 <span class="unit">{{ $t('RuleEngine.times') }}</span>
@@ -130,9 +110,7 @@
             </li>
 
             <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('RuleEngine.currentSpeed') }}:
-              </div>
+              <div class="field-title">{{ $t('RuleEngine.currentSpeed') }}:</div>
 
               <span class="field-value">
                 {{ currentRules.metricsData.speed }}
@@ -141,9 +119,7 @@
             </li>
 
             <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('RuleEngine.maximumSpeed') }}:
-              </div>
+              <div class="field-title">{{ $t('RuleEngine.maximumSpeed') }}:</div>
               <span class="field-value">
                 {{ currentRules.metricsData.speed_max }}
                 <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
@@ -151,9 +127,7 @@
             </li>
 
             <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('RuleEngine.last5MinutesSpeed') }}:
-              </div>
+              <div class="field-title">{{ $t('RuleEngine.last5MinutesSpeed') }}:</div>
               <span class="field-value">
                 {{ currentRules.metricsData.speed_last5m }}
                 <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
@@ -165,9 +139,7 @@
         <div class="metrics-item">
           <div class="metrics-item-title">{{ $t('RuleEngine.actionMetrics') }}</div>
 
-          <template v-if="currentRules.actions.length === 0">
-
-          </template>
+          <template v-if="currentRules.actions.length === 0"> </template>
 
           <div v-for="(item, i) in currentRules.actions" :key="i" class="metrics-item-body">
             <ul class="field-info metrics-item-body action-metrics">
@@ -182,29 +154,21 @@
                 </span>
               </li>
               <li class="field-info-item">
-                <div class="field-title">
-                  {{ $t('RuleEngine.fail') }}:
-                </div>
+                <div class="field-title">{{ $t('RuleEngine.fail') }}:</div>
                 <span class="field-value">
                   {{ item.failed }}
                 </span>
               </li>
             </ul>
           </div>
-
         </div>
-
       </div>
     </a-drawer>
   </div>
 </template>
 
-
 <script>
-import {
-  loadRules, loadRuleDetails, loadActions, destroyRule,
-  loadRuleEvents, updateRule,
-} from '@/api/rules'
+import { loadRules, loadRuleDetails, loadActions, destroyRule, loadRuleEvents, updateRule } from '@/api/rules'
 import { getLink } from '@/common/utils'
 
 export default {
@@ -221,22 +185,45 @@ export default {
       listLoading: false,
       metricsDrawerVisible: false,
       currentRules: {
-        actions: [{
-          id: 'do_nothing_1562653876521962460',
-          metrics: [{ failed: 0, node: 'emqx@127.0.0.1', success: 3 }],
-          name: 'do_nothing',
-          params: {},
-        }],
+        actions: [
+          {
+            id: 'do_nothing_1562653876521962460',
+            metrics: [{ failed: 0, node: 'emqx@127.0.0.1', success: 3 }],
+            name: 'do_nothing',
+            params: {},
+          },
+        ],
         description: '',
         enabled: true,
         for: ['client.connected'],
         id: 'rule:33570eea',
-        metrics: [{
-          matched: 3, node: 'emqx@127.0.0.1', speed: 0, speed_last5m: 0, speed_max: 0.1,
-        }],
+        metrics: [
+          {
+            matched: 3,
+            node: 'emqx@127.0.0.1',
+            speed: 0,
+            speed_last5m: 0,
+            speed_max: 0.1,
+          },
+        ],
         rawsql: 'SELECT * FROM "client.connected"',
         event: {
-          columns: ['clientid', 'username', 'event', 'auth_result', 'clean_start', 'connack', 'connected_at', 'is_bridge', 'keepalive', 'mountpoint', 'peername', 'proto_ver', 'timestamp', 'node'],
+          columns: [
+            'clientid',
+            'username',
+            'event',
+            'auth_result',
+            'clean_start',
+            'connack',
+            'connected_at',
+            'is_bridge',
+            'keepalive',
+            'mountpoint',
+            'peername',
+            'proto_ver',
+            'timestamp',
+            'node',
+          ],
           description: '连接建立',
           event: 'client.connected',
           sql_example: 'SELECT * FROM "client.connected"',
@@ -249,7 +236,10 @@ export default {
           title: '连接建立',
         },
         metricsData: {
-          matched: 3, speed: 0, speed_last5m: 0, speed_max: 0.1,
+          matched: 3,
+          speed: 0,
+          speed_last5m: 0,
+          speed_max: 0.1,
         },
       },
       filterOptions: {
@@ -266,28 +256,31 @@ export default {
       tableData: [],
       actionsMap: {},
       actionsFormatter(row, column, cellValue) {
-        return cellValue.map($ => $._name).join(',')
+        return cellValue.map(($) => $._name).join(',')
       },
     }
   },
 
   async created() {
     const events = await loadRuleEvents()
-    this.filterOptions.for = events.map($ => ({ text: $.event, value: $.event }))
+    this.filterOptions.for = events.map(($) => ({ text: $.event, value: $.event }))
     this.loadActionsFilter().then(this.loadData)
   },
 
   methods: {
     deleteRule(row) {
-      this.$msgbox.confirm(this.$t('RuleEngine.deleteRuleConfirm'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(async () => {
-        await destroyRule(row.id)
-        this.loadData()
-        this.$message.success(this.$t('RuleEngine.successfulDeletion'))
-      }).catch(() => {})
+      this.$msgbox
+        .confirm(this.$t('RuleEngine.deleteRuleConfirm'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await destroyRule(row.id)
+          this.loadData()
+          this.$message.success(this.$t('RuleEngine.successfulDeletion'))
+        })
+        .catch(() => {})
     },
 
     forColumnFilter(value, row) {
@@ -295,7 +288,7 @@ export default {
     },
 
     actionsColumnFilter(value, row) {
-      return (row.actions || []).find($ => $.name === value)
+      return (row.actions || []).find(($) => $.name === value)
     },
 
     async loadData() {
@@ -312,7 +305,7 @@ export default {
       const actions = await loadActions({
         fillI18n: true,
       })
-      this.filterOptions.actions = actions.map($ => ({ text: $.title, value: $.name }))
+      this.filterOptions.actions = actions.map(($) => ({ text: $.title, value: $.name }))
 
       this.actionsMap = {}
       this.filterOptions.actions.forEach((action) => {
@@ -333,14 +326,16 @@ export default {
 
     async updateRule(row) {
       const { id, enabled } = row
-      updateRule(id, { enabled }).then((res) => {
-        if (res) {
-          const msg = enabled ? this.$t('RuleEngine.ruleEnabled') : this.$t('RuleEngine.ruleDisabled')
-          this.$message.success(msg)
-        }
-      }).catch(() => {
-        row.enabled = row.enabled !== true
-      })
+      updateRule(id, { enabled })
+        .then((res) => {
+          if (res) {
+            const msg = enabled ? this.$t('RuleEngine.ruleEnabled') : this.$t('RuleEngine.ruleDisabled')
+            this.$message.success(msg)
+          }
+        })
+        .catch(() => {
+          row.enabled = row.enabled !== true
+        })
     },
     editRule(row) {
       this.$router.push(`/rules/create?rule=${row.id}`)
@@ -348,7 +343,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss" scoped>
 .rule-metrics {

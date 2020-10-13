@@ -2,7 +2,7 @@
   <div class="client-details">
     <page-header>
       <div class="page-header-title-view">
-        <div style="display: flex;align-items: center">
+        <div style="display: flex; align-items: center;">
           <span class="title">
             {{ clientId }}
           </span>
@@ -22,7 +22,6 @@
 
     <div class="app-wrapper">
       <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
-
         <el-tab-pane :label="$t('Clients.basicInfo')" name="detail">
           <a-card v-if="activeName === 'detail'" class="detail-card">
             <el-row :gutter="40">
@@ -50,7 +49,10 @@
                       <span class="field-value">{{ record.proto_name }} {{ mqttVersionMap[record.proto_ver] }}</span>
                     </template>
                     <template v-else>
-                      <span class="field-value">{{ record.proto_name }} v{{ record.proto_ver }}</span>
+                      <span class="field-value"
+                        >{{ record.proto_name }}
+                        <span v-if="record.proto_ver"> v{{ record.proto_ver }}</span>
+                      </span>
                     </template>
                   </li>
                   <li class="field-info-item">
@@ -103,9 +105,7 @@
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">{{ $t('Clients.subscription') }}:</div>
-                    <span>
-                      {{ record.subscriptions_cnt }} / {{ record.max_subscriptions | transToUnlimit }}
-                    </span>
+                    <span> {{ record.subscriptions_cnt }} / {{ record.max_subscriptions | transToUnlimit }} </span>
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">{{ $t('Clients.mqueue') }}:</div>
@@ -113,9 +113,7 @@
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">{{ $t('Clients.inflight') }}:</div>
-                    <span>
-                      {{ record.inflight }} / {{ record.max_inflight }}
-                    </span>
+                    <span> {{ record.inflight }} / {{ record.max_inflight }} </span>
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">{{ $t('Clients.heapSize') }}:</div>
@@ -149,19 +147,19 @@
                 <el-col :span="12">
                   <ul class="field-info more-info">
                     <li class="field-info-item">
-                      <div class="field-title">{{ $t('Clients.recv_cnt_desc') }}: </div>
+                      <div class="field-title">{{ $t('Clients.recv_cnt_desc') }}:</div>
                       <span>{{ record.recv_cnt }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">{{ $t('Clients.recv_msg_desc') }}: </div>
+                      <div class="field-title">{{ $t('Clients.recv_msg_desc') }}:</div>
                       <span>{{ record.recv_msg }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">{{ $t('Clients.recv_oct_desc') }}: </div>
+                      <div class="field-title">{{ $t('Clients.recv_oct_desc') }}:</div>
                       <span>{{ record.recv_oct }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">{{ $t('Clients.recv_pkt_desc') }}: </div>
+                      <div class="field-title">{{ $t('Clients.recv_pkt_desc') }}:</div>
                       <span>{{ record.recv_pkt }}</span>
                     </li>
                   </ul>
@@ -169,19 +167,19 @@
                 <el-col :span="12">
                   <ul class="field-info more-info">
                     <li class="field-info-item">
-                      <div class="field-title">{{ $t('Clients.send_cnt_desc') }}: </div>
+                      <div class="field-title">{{ $t('Clients.send_cnt_desc') }}:</div>
                       <span>{{ record.send_cnt }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">{{ $t('Clients.send_msg_desc') }}: </div>
+                      <div class="field-title">{{ $t('Clients.send_msg_desc') }}:</div>
                       <span>{{ record.send_msg }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">{{ $t('Clients.send_oct_desc') }}: </div>
+                      <div class="field-title">{{ $t('Clients.send_oct_desc') }}:</div>
                       <span>{{ record.send_oct }}</span>
                     </li>
                     <li class="field-info-item">
-                      <div class="field-title">{{ $t('Clients.send_pkt_desc') }}: </div>
+                      <div class="field-title">{{ $t('Clients.send_pkt_desc') }}:</div>
                       <span>{{ record.send_pkt }}</span>
                     </li>
                   </ul>
@@ -218,25 +216,16 @@
             </el-table>
           </a-card>
         </el-tab-pane>
-
       </el-tabs>
     </div>
 
-    <create-subscribe
-      :visible.sync="dialogVisible"
-      :client-id="record.clientid"
-      @created="loadData"
-    >
+    <create-subscribe :visible.sync="dialogVisible" :client-id="record.clientid" @created="loadData">
     </create-subscribe>
-
   </div>
 </template>
 
-
 <script>
-import {
-  loadClientDetail, loadSubscriptions, unSubscription, disconnectClient,
-} from '@/api/clients'
+import { loadClientDetail, loadSubscriptions, unSubscription, disconnectClient } from '@/api/clients'
 import CreateSubscribe from './components/CreateSubscribe'
 
 export default {
@@ -326,18 +315,21 @@ export default {
         warningMsg = this.$t('Clients.willCleanSession')
         successMsg = this.$t('Clients.successfulCleanSession')
       }
-      this.$msgbox.confirm(warningMsg, {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(async () => {
-        await disconnectClient(this.record.clientid)
-        this.$set(this.record, 'connected', false)
-        this.$message.success(successMsg)
-        setTimeout(() => {
-          this.$router.push({ path: '/clients' })
-        }, 500)
-      }).catch(() => { })
+      this.$msgbox
+        .confirm(warningMsg, {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await disconnectClient(this.record.clientid)
+          this.$set(this.record, 'connected', false)
+          this.$message.success(successMsg)
+          setTimeout(() => {
+            this.$router.push({ path: '/clients' })
+          }, 500)
+        })
+        .catch(() => {})
     },
     handlePreAdd() {
       this.dialogVisible = true
@@ -347,34 +339,33 @@ export default {
         return
       }
       this.record = await loadClientDetail(this.clientId)
-      this.subscriptions = await loadSubscriptions(this.clientId)
+      const { node } = this.record
+      this.subscriptions = await loadSubscriptions(node, this.clientId)
     },
     handleTabClick() {
       this.loadData()
     },
     handleUnSubscription(row) {
       const title = this.$t('Clients.unsubscribeTitle')
-      this.$msgbox.confirm(
-        title,
-        {
+      this.$msgbox
+        .confirm(title, {
           confirmButtonText: this.$t('Base.confirm'),
           cancelButtonText: this.$t('Base.cancel'),
           type: 'warning',
-        },
-      ).then(async () => {
-        const { topic, clientid } = row
-        await unSubscription({ topic, clientid })
-        this.loadData()
-      }).catch(() => {})
+        })
+        .then(async () => {
+          const { topic, clientid } = row
+          await unSubscription({ topic, clientid })
+          this.loadData()
+        })
+        .catch(() => {})
     },
   },
 }
 </script>
 
-
 <style lang="scss">
 .client-details {
-
   .connection .field-title {
     min-width: 120px;
   }

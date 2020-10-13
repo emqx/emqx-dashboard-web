@@ -48,8 +48,13 @@ export default new Vuex.Store({
     alertCount: 0,
     config: getConfigState(),
     navTabs: getNavTabs(),
+    selectedModule: JSON.parse(localStorage.getItem('selectedModule')) || {},
   },
   actions: {
+    UPDATE_MODULE({ commit }, selectedModule) {
+      localStorage.setItem('selectedModule', JSON.stringify(selectedModule))
+      commit('UPDATE_MODULE', selectedModule)
+    },
     UPDATE_CONFIG({ commit }, customConfig) {
       commit('UPDATE_CONFIG', customConfig)
     },
@@ -100,6 +105,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    UPDATE_MODULE(state, selectedModule) {
+      state.selectedModule = selectedModule
+    },
     UPDATE_CONFIG(state, customConfig) {
       state.config = customConfig
     },

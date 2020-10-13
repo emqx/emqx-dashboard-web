@@ -1,20 +1,13 @@
 <template>
   <div class="plugins">
     <div class="app-wrapper">
-
       <a-card class="search-wrapper">
         <el-row :gutter="20">
           <el-col :span="8">
             <el-radio-group v-model="status" size="small" border @change="loadData">
-              <el-radio-button label="all">
-                {{ $t('Plugins.all') }}({{ state.count }})
-              </el-radio-button>
-              <el-radio-button label="running">
-                {{ $t('Plugins.running') }}({{ state.running }})
-              </el-radio-button>
-              <el-radio-button label="stop">
-                {{ $t('Plugins.stopped') }}({{ state.stop }})
-              </el-radio-button>
+              <el-radio-button label="all"> {{ $t('Plugins.all') }}({{ state.count }}) </el-radio-button>
+              <el-radio-button label="running"> {{ $t('Plugins.running') }}({{ state.running }}) </el-radio-button>
+              <el-radio-button label="stop"> {{ $t('Plugins.stopped') }}({{ state.stop }}) </el-radio-button>
             </el-radio-group>
           </el-col>
 
@@ -57,6 +50,7 @@
         </el-row>
       </a-card>
 
+      <!-- Cards -->
       <el-row
         v-if="displayType === 'cards' && listTableData.length > 0"
         class="emq-list-card plugin-cards-wrapper"
@@ -64,32 +58,17 @@
       >
         <el-col v-for="(item, i) in listTableData" :key="i" :span="12">
           <div class="plugin-item">
-            <img
-              class="logo"
-              :src="iconMap[item.name]"
-              alt="plugin-logo"
-              width="90"
-              height="90"
-            >
+            <img class="logo" :src="iconMap[item.name]" alt="plugin-logo" width="90" height="90" />
 
             <div class="header">
               <div class="name">
-                <a-badge
-                  :status="item.active ? 'success' : 'error'"
-                  :text="item.name"
-                  dot
-                >
-                </a-badge>
-                <el-tooltip
-                  effect="dark"
-                  :content="$t('Plugins.tutorial')"
-                  :open-delay="500"
-                  placement="top"
-                >
+                <a-badge :status="item.active ? 'success' : 'error'" :text="item.name" dot> </a-badge>
+                <el-tooltip effect="dark" :content="$t('Plugins.tutorial')" :open-delay="500" placement="top">
                   <a
                     v-if="!primaryList.includes(item.name) && getLinks(item.name)"
                     class="tutorial"
-                    href="javascript:;" @click="openTutorialLink(item.name)"
+                    href="javascript:;"
+                    @click="openTutorialLink(item.name)"
                   >
                     <i class="iconfont icon-bangzhu"></i>
                   </a>
@@ -100,47 +79,41 @@
             </div>
 
             <div class="oper">
-              <el-button
-                v-if="!primaryList.includes(item.name)"
-                :type="item.active ? 'danger' : 'dashed'"
-                size="small"
-                @click="togglePlugin(item)"
-              >
-                {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
-              </el-button>
-              <span v-else>--</span>
+              <div class="run-stop-btn">
+                <el-button
+                  v-if="!primaryList.includes(item.name)"
+                  :type="item.active ? 'danger' : 'dashed'"
+                  size="small"
+                  @click="togglePlugin(item)"
+                >
+                  {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
+                </el-button>
+                <span v-else>--</span>
+              </div>
+              <!-- <div v-if="hasManagePage(item.name)" class="manage-btn">
+                <el-button type="dashed" :disabled="!item.active" size="small" @click="handleManage(item)">
+                  {{ $t('Plugins.manage') }}
+                </el-button>
+              </div> -->
             </div>
           </div>
         </el-col>
       </el-row>
 
-      <div
-        v-if="displayType === 'list' && listTableData.length > 0"
-        class="emq-list-card plugin-list-wrapper"
-      >
+      <!-- List -->
+      <div v-if="displayType === 'list' && listTableData.length > 0" class="emq-list-card plugin-list-wrapper">
         <div v-for="(item, i) in listTableData" :key="i" :gutter="20" class="plugin-item">
-
-          <img
-            class="logo"
-            :src="iconMap[item.name]"
-            alt="plugin-logo"
-            width="60"
-            height="60"
-          >
+          <img class="logo" :src="iconMap[item.name]" alt="plugin-logo" width="60" height="60" />
 
           <div class="header">
             <div class="name">
               {{ item.name }}
-              <el-tooltip
-                effect="dark"
-                :content="$t('Plugins.tutorial')"
-                :open-delay="500"
-                placement="top"
-              >
+              <el-tooltip effect="dark" :content="$t('Plugins.tutorial')" :open-delay="500" placement="top">
                 <a
                   v-if="!primaryList.includes(item.name) && getLinks(item.name)"
                   class="tutorial"
-                  href="javascript:;" @click="openTutorialLink(item.name)"
+                  href="javascript:;"
+                  @click="openTutorialLink(item.name)"
                 >
                   <i class="iconfont icon-bangzhu"></i>
                 </a>
@@ -173,6 +146,15 @@
               {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
             </el-button>
             <span v-else>--</span>
+            <!-- <el-button
+              v-if="hasManagePage(item.name)"
+              type="dashed"
+              :disabled="!item.active"
+              size="small"
+              @click="handleManage(item)"
+            >
+              {{ $t('Plugins.manage') }}
+            </el-button> -->
           </div>
         </div>
       </div>
@@ -182,14 +164,30 @@
       </a-card>
     </div>
 
+    <el-dialog title="标题" width="520px" :visible.sync="moduleTipVisible" :close-on-click-modal="false">
+      <div slot="title" class="tip-title">
+        <i class="el-icon-warning"></i>
+        <span>{{ $t('Base.tips') }}</span>
+      </div>
+      <div class="tip-content">
+        <p v-html="$t('Modules.useModulesTip')">
+          {{ $t('Modules.useModulesTip') }}
+        </p>
+      </div>
+      <div class="tip-checkbox">
+        <el-checkbox v-model="noprompt" @change="useModuleTipShowChange">
+          {{ $t('Overview.notPromptAgain') }}
+        </el-checkbox>
+      </div>
+      <div class="tip-button">
+        <el-button type="primary" size="small" @click="moduleTipVisible = false">{{ $t('Overview.konw') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
-
 <script>
-import {
-  loadPlugins, startPlugin, stopPlugin,
-} from '@/api/plugins'
+import { loadPlugins, startPlugin, stopPlugin } from '@/api/plugins'
 import { loadNodes } from '@/api/common'
 import { getPluginsLink, matchSearch } from '@/common/utils'
 
@@ -210,7 +208,7 @@ export default {
       tableData: [],
       listTableData: [],
       nodes: [],
-      primaryList: ['emqx_dashboard', 'emqx_management', 'emqx_conf'],
+      primaryList: ['emqx_dashboard', 'emqx_management', 'emqx_conf', 'emqx_modules'],
       nodeName: '',
       pluginTypes: {
         auth: this.$t('Plugins.authentication'),
@@ -220,6 +218,8 @@ export default {
         feature: this.$t('Plugins.feature'),
       },
       iconMap: {},
+      moduleTipVisible: false,
+      noprompt: false,
     }
   },
 
@@ -228,17 +228,31 @@ export default {
       const tableData = this.tableData || []
       return {
         count: tableData.length,
-        running: tableData.filter($ => !!$.active).length,
-        stop: tableData.filter($ => !$.active).length,
+        running: tableData.filter(($) => !!$.active).length,
+        stop: tableData.filter(($) => !$.active).length,
       }
     },
   },
 
   created() {
     this.loadData()
+    setTimeout(() => {
+      this.showUseModulesTip()
+    }, 300)
   },
 
   methods: {
+    showUseModulesTip() {
+      const val = localStorage.getItem('moduleTipVisible')
+      if (val !== 'false') {
+        this.moduleTipVisible = true
+      }
+    },
+    useModuleTipShowChange(val) {
+      if (val) {
+        localStorage.setItem('moduleTipVisible', false)
+      }
+    },
     typeText(type) {
       const pluginTypes = {
         auth: this.$t('Plugins.authentication'),
@@ -290,7 +304,7 @@ export default {
       let list = this.tableData
       if (this.status !== 'all') {
         const active = this.status === 'running'
-        list = list.filter($ => $.active === active)
+        list = list.filter(($) => $.active === active)
       }
       this.listTableData = list
     },
@@ -305,15 +319,18 @@ export default {
         this.$message.success(this.$t('Plugins.runSuccess'))
         return
       }
-      this.$msgbox.confirm(this.$t('Plugins.thisActionWillStopThePlugIn'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(async () => {
-        await stopPlugin(row.name)
-        this.$message.success(this.$t('Plugins.stopSuccess'))
-        row.active = false
-      }).catch(() => {})
+      this.$msgbox
+        .confirm(this.$t('Plugins.thisActionWillStopThePlugIn'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await stopPlugin(row.name)
+          this.$message.success(this.$t('Plugins.stopSuccess'))
+          row.active = false
+        })
+        .catch(() => {})
     },
     getLinks(name) {
       return getPluginsLink(name)
@@ -322,6 +339,15 @@ export default {
       const url = this.getLinks(name)
       const windowUrl = window.open(url)
       windowUrl.opener = null
+    },
+    hasManagePage(name) {
+      const pluginsDict = {
+        emqx_auth_clientid: true,
+        emqx_auth_username: true,
+        emqx_auth_jwt: true,
+        emqx_auth_mnesia: true,
+      }
+      return pluginsDict[name]
     },
     searchPlugin() {
       this.searchLoading = true
@@ -340,10 +366,14 @@ export default {
         }
       }, 500)
     },
+    handleManage(row) {
+      this.$router.push({
+        path: `/plugins/${row.name}`,
+      })
+    },
   },
 }
 </script>
-
 
 <style lang="scss">
 .plugins {
@@ -370,7 +400,7 @@ export default {
       top: 1px;
     }
     .description {
-      color: rgba(0, 0, 0, .65);
+      color: rgba(0, 0, 0, 0.65);
       font-size: 14px;
       line-height: 22px;
       max-width: 300px;
@@ -397,6 +427,18 @@ export default {
         }
       }
     }
+    .oper {
+      position: relative;
+      .el-button {
+        min-width: 64px;
+        float: right;
+      }
+      .manage-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+    }
   }
 
   .plugin-list-wrapper {
@@ -415,8 +457,9 @@ export default {
         margin-left: 40px;
         flex: 1;
 
-        .type, .version {
-          color: rgba(0, 0, 0, .55);
+        .type,
+        .version {
+          color: rgba(0, 0, 0, 0.55);
           margin-top: 4px;
           margin-bottom: 0;
           line-height: 22px;
@@ -427,7 +470,7 @@ export default {
         flex: 1;
       }
       .oper {
-        flex: .6;
+        flex: 50px;
       }
     }
   }
@@ -438,7 +481,8 @@ export default {
       font-size: 13px;
     }
     .search-input {
-      .el-icon-search, .el-icon-loading {
+      .el-icon-search,
+      .el-icon-loading {
         position: relative;
         left: 4px;
         top: 7px;
@@ -452,10 +496,34 @@ export default {
     align-items: center;
     justify-content: center;
   }
-}
-html:lang(en) {
-  .plugins .oper .el-button{
-    width: 64px;
+
+  .tip-title {
+    font-size: 18px;
+    .el-icon-warning {
+      color: #e6a23c;
+    }
+    span {
+      display: inline-block;
+      margin-left: 10px;
+    }
+  }
+
+  .tip-content {
+    font-size: 16px;
+    p {
+      word-break: break-word;
+    }
+  }
+
+  .tip-checkbox {
+    margin-top: 10px;
+    .el-checkbox {
+      color: #aaa;
+    }
+  }
+
+  .tip-button {
+    text-align: right;
   }
 }
 </style>

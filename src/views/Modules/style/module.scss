@@ -1,0 +1,176 @@
+.modules {
+  .page-header-content-view,
+  .header-box {
+    .content {
+      display: flex;
+      align-items: center;
+      min-width: 830px;
+
+      .modules-num {
+        display: inline-block;
+        min-width: 38px;
+        padding: 2px 10px;
+        text-align: center;
+        color: #fff;
+        font-size: 13px;
+        border-radius: 15px;
+        background-color: #2f333e;
+        margin: 0 12px;
+      }
+    }
+  }
+
+  .el-card {
+    margin-bottom: 20px;
+  }
+
+  .module-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+
+    .item-error-tip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 5px 20px;
+      background-color: #fff8e5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      border-left: 5px solid #ffb900;
+
+      .reconnect-btn {
+        width: 40px;
+        height: 18px;
+        line-height: 8px;
+        color: #f56e28;
+        border: 1px solid #f56e28;
+        background-color: #fff8e5;
+      }
+    }
+
+    .left-box {
+      display: flex;
+    }
+
+    .item-img {
+      width: 85px;
+      height: 85px;
+      flex-shrink: 0;
+    }
+
+    .item-content {
+      display: flex;
+      flex-direction: column;
+      margin-left: 20px;
+      margin-right: 10px;
+      align-self: flex-start;
+
+      .item-title {
+        color: #101010;
+        font-size: 16px;
+        font-weight: bold;
+        word-break: break-word;
+      }
+
+      .item-des {
+        max-width: 240px;
+        color: #000000a6;
+        font-size: 12px;
+      }
+    }
+
+    .item-handle {
+      height: 85px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+
+      .handle-icons {
+        width: 52px;
+        height: 28px;
+        display: flex;
+        justify-content: space-around;
+        font-size: 20px;
+        padding-right: 2px;
+        .open {
+          width: 20px;
+          color: #23bd78;
+          font-size: 28px;
+          position: relative;
+        }
+        .el-icon-caret-right:before {
+          position: absolute;
+          left: -5px;
+        }
+        .close {
+          color: #ff0000;
+          line-height: 28px;
+        }
+        .el-icon-setting {
+          line-height: 28px;
+        }
+      }
+
+      .start-btn {
+        width: 52px;
+        color: #23bd78;
+        border: 1px solid #23bd78;
+        font-size: 14px;
+        background-color: #f6fcf8;
+        margin-left: 0px;
+      }
+
+      .know-more {
+        font-size: 13px;
+      }
+    }
+  }
+
+  .search-input {
+    .el-icon-search,
+    .el-icon-loading {
+      position: relative;
+      left: 4px;
+      top: 7px;
+    }
+  }
+
+  .null-modules {
+    min-height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .item-box {
+    position: relative;
+    .delete-icon {
+      visibility: hidden;
+    }
+
+    &:hover {
+      .delete-icon {
+        visibility: visible;
+      }
+    }
+  }
+
+  .delete-icon {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: url('../../assets/img/delete.png') no-repeat;
+    background-size: 100% 100%;
+    top: 3px;
+    right: 3px;
+    cursor: pointer;
+  }
+}

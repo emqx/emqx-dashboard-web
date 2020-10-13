@@ -198,8 +198,10 @@ export default {
     en: 'Condition',
   },
   definingRuleConditionsAndDataProcessing: {
-    zh: '使用 SQL 设定规则，对消息数据筛选、编解码、变型，灵活地将处理后的数据无缝转发至数据库、流处理、API 网关等数据目的地',
-    en: 'Use SQL to set rules to filter, encode, decode, and modify message data, and seamlessly forward processed data to data destinations such as databases, stream processing, and API gateways',
+    zh:
+      '使用 SQL 设定规则，对消息数据筛选、编解码、变型，灵活地将处理后的数据无缝转发至数据库、流处理、API 网关等数据目的地',
+    en:
+      'Use SQL to set rules to filter, encode, decode, and modify message data, and seamlessly forward processed data to data destinations such as databases, stream processing, and API gateways',
   },
   triggerEvent: {
     zh: '触发事件',
@@ -247,7 +249,8 @@ export default {
   },
   jsonDecodeUpgrade: {
     zh: '当前版本取消对 payload 的自动 JSON 解码，选择 payload 中的字段请使用 json_decode 解码，如 SQL 示例。',
-    en: 'The current version cancels the automatic JSON decoding of the payload. Select the field in the payload and use json_decode to decode it, as in the SQL example.',
+    en:
+      'The current version cancels the automatic JSON decoding of the payload. Select the field in the payload and use json_decode to decode it, as in the SQL example.',
   },
   exampleSql: {
     zh: '规则 SQL 示例',
@@ -398,7 +401,8 @@ export default {
     zh: 'MQTT message id',
   },
   payload_doc: {
-    en: 'The payload, if in JSON format, will be automatically decoded, and the object information will be obtained by using payload.x in SQL',
+    en:
+      'The payload, if in JSON format, will be automatically decoded, and the object information will be obtained by using payload.x in SQL',
     zh: '消息内容, 如果是 JSON 格式将自动解码, 在 SQL 中使用 payload.x 获取对象信息',
   },
   peername_doc: {
@@ -414,8 +418,10 @@ export default {
     zh: '当前毫秒级时间戳',
   },
   topic_doc: {
-    en: 'Currently MQTT topic can be filtered by wildcards in SQL.  When multiple topics are included in subscribe and unsubscribe, only the first one will be obtained here. To obtain all topics, please use topic_filters',
-    zh: '当前 MQTT 主题, SQL 中可以使用通配符进行筛选.\nSubscribe 与 Unsubscribe 请求中包含多个主题时, 这里只会获取到第一个, 如需获取全部请使用 topic_filters',
+    en:
+      'Currently MQTT topic can be filtered by wildcards in SQL.  When multiple topics are included in subscribe and unsubscribe, only the first one will be obtained here. To obtain all topics, please use topic_filters',
+    zh:
+      '当前 MQTT 主题, SQL 中可以使用通配符进行筛选.\nSubscribe 与 Unsubscribe 请求中包含多个主题时, 这里只会获取到第一个, 如需获取全部请使用 topic_filters',
   },
   node_doc: {
     en: 'Node name of the trigger event',
@@ -464,5 +470,45 @@ export default {
   fallbackActionTip: {
     en: 'Action to be performed when the action execution error',
     zh: '动作执行错误时将执行的操作',
+  },
+  data_persist: {
+    zh: '数据持久化',
+    en: 'Data persist',
+  },
+  offline_msgs: {
+    zh: '离线消息',
+    en: 'Offline messages',
+  },
+  data_forward: {
+    zh: '数据转发',
+    en: 'Data forward',
+  },
+  debug: {
+    zh: '调试',
+    en: 'Debug',
+  },
+  server_side_subscription: {
+    zh: '代理订阅',
+    en: 'Server side subscription',
+  },
+  resourceID: {
+    zh: '资源 ID',
+    en: 'Resource ID',
+  },
+  resourceDes: {
+    zh: '描述',
+    en: 'Description',
+  },
+  id_len_tip: {
+    zh: '最长64位',
+    en: 'The longest 64',
+  },
+  id_char_tip: {
+    zh: '仅支持数字、字母、下划线和冒号',
+    en: 'Only Numbers, letters, underscores, and colons are supported',
+  },
+  ruleID: {
+    zh: '规则 ID',
+    en: 'Rule ID',
   },
 }

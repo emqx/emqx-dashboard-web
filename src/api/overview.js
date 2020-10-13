@@ -71,13 +71,13 @@ export function loadLicenseInfo() {
 }
 
 export function loadMetricsLog(node, type) {
-  if (!node && type) {
+  if (!node && type && type !== 'basic') {
     return http.get(`/monitor/metrics/${type}`)
   }
   if (node && !type) {
     return http.get(`/nodes/${node}/monitor/metrics`)
   }
-  if (node && type) {
+  if (node && type && type !== 'basic') {
     return http.get(`/nodes/${node}/monitor/metrics/${type}`)
   }
   return http.get('/monitor/metrics')

@@ -19,12 +19,7 @@
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
           {{ $t('RuleEngine.runningMetrics') }}
-          <i
-            class="btn btn-default"
-            :class="reloading ? 'el-icon-loading' : 'el-icon-refresh'"
-            @click="loadData"
-          >
-          </i>
+          <i class="btn btn-default" :class="reloading ? 'el-icon-loading' : 'el-icon-refresh'" @click="loadData"> </i>
         </div>
 
         <el-row :gutter="40" class="metrics-wrapper">
@@ -50,7 +45,8 @@
             </div>
             <div class="card-desc">
               {{ $t('RuleEngine.maximumSpeed') }}: {{ record.metricsData.speed_max }} {{ $t('RuleEngine.times') }}/{{
-                $t('RuleEngine.second') }}
+                $t('RuleEngine.second')
+              }}
             </div>
           </el-col>
 
@@ -73,7 +69,6 @@
         </el-row>
       </a-card>
 
-
       <!-- 基本信息 -->
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
@@ -83,7 +78,11 @@
         <ul class="field-info">
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.topic') }}:</div>
-            <span v-if="configItem.event" class="field-value">{{ configItem.event.title }} ({{ record.for[0] }})</span>
+            <span v-if="configItem.events" class="field-value">
+              <span v-for="(event, index) in configItem.events" :key="index">
+                {{ event.title }} ({{ event.event }})
+              </span>
+            </span>
           </li>
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.remark') }}:</div>
@@ -115,16 +114,11 @@
           </span>
         </div>
 
-        <rule-actions
-          v-model="record.actions"
-          disabled
-        ></rule-actions>
+        <rule-actions v-model="record.actions" disabled></rule-actions>
       </a-card>
     </div>
-
   </div>
 </template>
-
 
 <script>
 import { loadRuleDetails, destroyRule } from '@/api/rules'
@@ -200,26 +194,28 @@ export default {
       this.loading = false
     },
     deleteRule() {
-      this.$msgbox.confirm(this.$t('RuleEngine.deleteRuleConfirm'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(async () => {
-        await destroyRule(this.record.id)
-        this.$message.success(this.$t('RuleEngine.successfulDeletion'))
-        setTimeout(() => {
-          this.$router.push({ path: '/rules' })
-        }, 500)
-      }).catch(() => {})
+      this.$msgbox
+        .confirm(this.$t('RuleEngine.deleteRuleConfirm'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await destroyRule(this.record.id)
+          this.$message.success(this.$t('RuleEngine.successfulDeletion'))
+          setTimeout(() => {
+            this.$router.push({ path: '/rules' })
+          }, 500)
+        })
+        .catch(() => {})
     },
   },
 }
 </script>
 
-
 <style lang="scss">
 .rule-view {
-  @import "./style.scss";
+  @import './style.scss';
 
   .field-title {
     width: 100px;

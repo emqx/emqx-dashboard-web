@@ -1,10 +1,8 @@
 <template>
   <div class="left-bar" :style="{ width: leftBarCollapse ? '80px' : '200px' }">
     <div class="logo">
-      <img class="logo-img" src="../assets/emqx_logo.png" alt="logo">
-      <div class="title">
-        Dashboard
-      </div>
+      <img class="logo-img" src="../assets/emqx_logo.png" alt="logo" />
+      <div class="title">Dashboard</div>
     </div>
 
     <a-menu
@@ -19,11 +17,7 @@
     >
       <template v-for="item in menus">
         <template v-if="$hasShow(item.key)">
-          <a-sub-menu
-            v-if="item.children && item.children.length > 0"
-            :key="item.key"
-            @titleClick="titleClick(item)"
-          >
+          <a-sub-menu v-if="item.children && item.children.length > 0" :key="item.key" @titleClick="titleClick(item)">
             <span slot="title">
               <icon-font :type="item.icon"></icon-font>
               <span>{{ item.title }}</span>
@@ -44,7 +38,6 @@
     </a-menu>
   </div>
 </template>
-
 
 <script>
 import { Menu } from 'ant-design-vue'
@@ -101,7 +94,14 @@ export default {
       {
         title: this.$t('components.monitor'),
         path: '/monitor',
+        key: 'monitor',
         icon: 'icon-yibiaopan',
+      },
+      {
+        title: this.$t('components.usersAcl'),
+        path: '/users_and_acl',
+        key: 'usersAcl',
+        icon: 'icon-kongjian',
       },
       {
         title: this.$t('components.clients'),
@@ -112,6 +112,11 @@ export default {
         title: this.$t('components.topics'),
         path: '/topics',
         icon: 'icon-zuzhiqunzu',
+      },
+      {
+        title: this.$t('components.subscriptions'),
+        path: '/subscriptions',
+        icon: 'icon-shebeiguanli',
       },
       {
         title: this.$t('components.rules'),
@@ -139,16 +144,35 @@ export default {
         ],
       },
       {
-        title: this.$t('components.alerts'),
-        key: 'alerts',
-        path: '/alerts',
-        icon: 'icon-gaojingkongxin',
+        title: this.$t('components.analysis'),
+        key: 'analysis',
+        icon: 'icon-shujukanban',
+        children: [
+          {
+            title: this.$t('components.topic_metrics'),
+            key: 'analysis.topic_metrics',
+            path: '/topic_metrics',
+            parentKey: 'analysis',
+          },
+        ],
+      },
+      {
+        title: this.$t('components.modules'),
+        key: 'modules',
+        path: '/modules',
+        icon: 'icon-changjingguanli',
       },
       {
         title: this.$t('components.plugins'),
         key: 'plugins',
         path: '/plugins',
         icon: 'icon-kongjian',
+      },
+      {
+        title: this.$t('components.alerts'),
+        key: 'alerts',
+        path: '/alerts',
+        icon: 'icon-gaojingkongxin',
       },
       {
         title: this.$t('components.tool'),
@@ -208,8 +232,7 @@ export default {
     handleClick(e) {
       this.$router.push({ path: e.key })
     },
-    titleClick() {
-    },
+    titleClick() {},
     initRouter() {
       if (this.leftBarCollapse) {
         return
@@ -219,7 +242,7 @@ export default {
         if (!item.key || !item.children) {
           return
         }
-        if (item.children.find($ => path.includes($.path) || path === $.path)) {
+        if (item.children.find(($) => path.includes($.path) || path === $.path)) {
           if (!this.defaultOpenKeys.includes(item.key)) {
             this.defaultOpenKeys.push(item.key)
           }
@@ -230,14 +253,13 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 @import '../assets/style/variables';
 
 .left-bar {
   min-height: calc(100vh - 80px);
   background-color: $color-theme;
-  transition: all .3s;
+  transition: all 0.3s;
 
   .menu-wrapper {
     margin-top: 80px;
@@ -260,7 +282,8 @@ export default {
     background: #00000075;
   }
 
-  .ant-menu-item .anticon, .ant-menu-submenu-title .anticon {
+  .ant-menu-item .anticon,
+  .ant-menu-submenu-title .anticon {
     margin-right: 12px;
     font-size: 18px;
   }
@@ -277,7 +300,7 @@ export default {
     top: 0;
     left: 0;
     z-index: 100;
-    transition: all .3s;
+    transition: all 0.3s;
     display: flex;
     align-items: center;
     padding: 0 20px;

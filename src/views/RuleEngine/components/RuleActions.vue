@@ -6,10 +6,7 @@
           <div class="title">{{ $t('RuleEngine.actionType') }}</div>
           <div class="desc">{{ (item._config || {}).title }} ({{ item.name }})</div>
         </div>
-        <div
-          v-if="!disabled"
-          class="action-item-btn"
-        >
+        <div v-if="!disabled" class="action-item-btn">
           <span class="btn" @click="editAction(item, i)">
             {{ $t('RuleEngine.edit') }}
           </span>
@@ -23,12 +20,7 @@
               :open-delay="500"
               :content="$t('RuleEngine.fallbackActionCreate')"
             >
-              <el-button
-                slot="reference"
-                type="text"
-                icon="el-icon-plus"
-                @click="handleAddFallbacks(item)"
-              >
+              <el-button slot="reference" type="text" icon="el-icon-plus" @click="handleAddFallbacks(item)">
                 {{ $t('RuleEngine.fallbackAction') }}
               </el-button>
             </el-popover>
@@ -91,10 +83,7 @@
               <div class="title">{{ $t('RuleEngine.actionType') }}</div>
               <div class="desc">{{ (fallback._config || {}).title }} ({{ fallback.name }})</div>
             </div>
-            <div
-              v-if="!disabled"
-              class="action-item-btn"
-            >
+            <div v-if="!disabled" class="action-item-btn">
               <span class="btn" @click="editFallback(item, fallback, i)">
                 {{ $t('RuleEngine.edit') }}
               </span>
@@ -137,7 +126,11 @@
                 </span>
               </div>
             </div>
-            <div v-for="(fallbackValue, fallbackValueIndex) in fallback._value" :key="fallbackValueIndex" class="action-item-field">
+            <div
+              v-for="(fallbackValue, fallbackValueIndex) in fallback._value"
+              :key="fallbackValueIndex"
+              class="action-item-field"
+            >
               <div class="title">{{ fallbackValue.label }}</div>
               <div class="value">{{ fallbackValue.value }}</div>
             </div>
@@ -147,7 +140,11 @@
             <div class="main-title">
               {{ $t('RuleEngine.actionMetricsTips') }}
             </div>
-            <div v-for="(fallbackMetric, fallbackmetricIndex) in fallback.metrics" :key="fallbackmetricIndex" class="item">
+            <div
+              v-for="(fallbackMetric, fallbackmetricIndex) in fallback.metrics"
+              :key="fallbackmetricIndex"
+              class="item"
+            >
               <span class="title">
                 {{ $t('RuleEngine.node') }}
               </span>
@@ -162,38 +159,41 @@
           </div>
         </div>
       </template>
-
     </div>
 
-    <el-button
-      v-if="!disabled"
-      size="small"
-      icon="el-icon-plus"
-      @click="addAction"
-    >
+    <el-button v-if="!disabled" size="small" icon="el-icon-plus" @click="addAction">
       {{ $t('RuleEngine.addAction') }}
     </el-button>
 
-    <el-dialog
-      :visible.sync="actionDialogVisible"
-      :title="actionDialogTitle"
-      width="520px"
-    >
+    <el-dialog :visible.sync="actionDialogVisible" :title="actionDialogTitle" width="520px">
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
         <el-form-item prop="name" :label="$t('RuleEngine.actionType')">
-          <emq-select
-            v-model="record.name"
-            :field="{ options: availableActions }"
-            :field-name="{ label: 'title', value: 'name'}"
-            @change="actionTypeChange"
-          >
-          </emq-select>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <el-select class="reset-width" v-model="actionCategory" @change="actionCategoryChange">
+                <el-option
+                  v-for="(value, index) in actionCategoryOptions"
+                  :key="index"
+                  :label="$t(`RuleEngine.${value}`)"
+                  :value="value"
+                ></el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="16">
+              <emq-select
+                class="reset-width"
+                v-model="record.name"
+                :field="{ options: availableActions[actionCategory] }"
+                :field-name="{ label: 'title', value: 'name' }"
+                style="width: 240px;"
+                @change="actionTypeChange"
+              >
+              </emq-select>
+            </el-col>
+          </el-row>
         </el-form-item>
 
-        <div
-          v-if="(selectedAction.title.length - selectedAction.description.length) > 18"
-          class="action-description"
-        >
+        <div v-if="selectedAction.title.length - selectedAction.description.length > 18" class="action-description">
           {{ selectedAction.description }}
         </div>
 
@@ -205,13 +205,13 @@
           <emq-select
             v-model="record.params.$resource"
             :field="{ options: availableResources }"
-            :field-name="{ label: 'description', value: 'id'}"
+            :field-name="{ label: 'id', value: 'id' }"
             class="reset-width"
-            style="width: 330px"
+            style="width: 403px;"
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="custom-option">
-              <span class="key">{{ item.description }}</span>
+              <span class="key">{{ item.id }}</span>
               <span class="value">{{ item.config.title }}</span>
             </div>
           </emq-select>
@@ -223,10 +223,7 @@
 
         <div v-if="selectedAction.params.$resource" class="line"></div>
 
-        <el-row
-          v-if="paramsLoading || paramsList.length > 0"
-          class="params-item-wrapper" :gutter="50"
-        >
+        <el-row v-if="paramsLoading || paramsList.length > 0" class="params-item-wrapper" :gutter="50">
           <div v-if="paramsLoading" class="params-loading-wrapper">
             <a-skeleton active></a-skeleton>
           </div>
@@ -234,44 +231,30 @@
             <el-col
               v-for="(item, i) in paramsList"
               :key="i"
-              :span="item.type === 'textarea' ? 24 : 12"
+              :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
             >
               <el-form-item :class="item.key === 'sql' ? 'code-editor__item' : ''" v-bind="item.formItemAttributes">
                 <template v-if="item.formItemAttributes.description" slot="label">
                   {{ item.formItemAttributes.label }}
                   <el-popover trigger="hover" width="220" placement="top">
-                    <div
-                      class="emq-popover-content"
-                      v-html="item.formItemAttributes.description"
-                    >
-                    </div>
+                    <div class="emq-popover-content" v-html="item.formItemAttributes.description"></div>
                     <i slot="reference" class="el-icon-question"></i>
                   </el-popover>
                 </template>
-                <template v-if="item.elType !== 'select'">
+                <template v-if="item.elType === 'object'">
+                  <key-and-value-editor v-model="record.params[item.key]"></key-and-value-editor>
+                </template>
+                <template v-else-if="item.elType !== 'select'">
                   <el-input
                     v-if="item.type === 'number'"
                     v-model.number="record.params[item.key]"
                     v-bind="item.bindAttributes"
                   >
                   </el-input>
-                  <div
-                    v-else-if="item.key === 'sql'"
-                    class="monaco-container monaco-action__sql"
-                  >
-                    <monaco
-                      id="action-sql"
-                      v-model="record.params.sql"
-                      lang="sql"
-                    >
-                    </monaco>
+                  <div v-else-if="item.key === 'sql'" class="monaco-container monaco-action__sql">
+                    <monaco id="action-sql" v-model="record.params.sql" lang="sql"> </monaco>
                   </div>
-                  <el-input
-                    v-else
-                    v-model="record.params[item.key]"
-                    v-bind="item.bindAttributes"
-                  >
-                  </el-input>
+                  <el-input v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </el-input>
                 </template>
                 <template v-else>
                   <emq-select
@@ -280,12 +263,7 @@
                     v-bind="item.bindAttributes"
                   >
                   </emq-select>
-                  <emq-select
-                    v-else
-                    v-model="record.params[item.key]"
-                    v-bind="item.bindAttributes"
-                  >
-                  </emq-select>
+                  <emq-select v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </emq-select>
                 </template>
               </el-form-item>
             </el-col>
@@ -303,18 +281,18 @@
       </div>
     </el-dialog>
 
-    <resource-dialog ref="resource" @created="confirmResource" @cache="confirmResource(false)">
-    </resource-dialog>
+    <resource-dialog ref="resource" @created="confirmResource" @cache="confirmResource(null)"> </resource-dialog>
   </div>
 </template>
 
-
 <script>
+/* eslint-disable vue/no-side-effects-in-computed-properties */
 import { loadActionsList, loadResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
 import ResourceDialog from '@/views/RuleEngine/components/ResourceDialog.vue'
 import Monaco from '@/components/Monaco'
 import { setTimeout } from 'timers'
+import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 
 export default {
   name: 'RuleActions',
@@ -322,6 +300,7 @@ export default {
   components: {
     ResourceDialog,
     Monaco,
+    KeyAndValueEditor,
   },
 
   props: {
@@ -352,6 +331,8 @@ export default {
       currentEditIndex: 0,
       currentOper: '',
       currentAction: {},
+      actionCategory: '',
+      actionCategoryOptions: [],
       record: {
         name: '',
         params: {
@@ -360,6 +341,7 @@ export default {
         fallbacks: [],
       },
       rules: {
+        name: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
         params: {
           $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
         },
@@ -387,20 +369,34 @@ export default {
       },
     },
     availableActions() {
-      const data = this.actions.filter($ => ['$any', this.event].includes($.for))
+      const data = this.actions
+        .filter(($) => ['$any', this.event].includes($.for))
+        .sort((prev, next) => prev.title.localeCompare(next.title))
+      const unique = (arr) => [...new Set(arr)]
+      this.actionCategoryOptions = unique(data.map((item) => item.category))
+      const actionCategoryDict = {}
+      this.actionCategoryOptions.forEach((item) => {
+        const res = []
+        data.forEach((cate) => {
+          if (cate.category === item) {
+            res.push(cate)
+            actionCategoryDict[item] = res
+          }
+        })
+      })
       if (!this.record.name && data[0]) {
-        // eslint-disable-next-line
         this.record.name = data[0].name
         this.actionTypeChange(this.record.name)
+        this.actionCategory = this.actionCategoryOptions[0]
       }
-      return data
+      return actionCategoryDict
     },
     availableResources() {
       const { types } = this.selectedAction
       if (!types) {
         return []
       }
-      return this.resources.filter($ => types.includes($.type))
+      return this.resources.filter(($) => types.includes($.type))
     },
   },
 
@@ -492,16 +488,34 @@ export default {
       const { types = [] } = this.selectedAction
       this.$refs.resource.setup({ types, action: 'create' })
       this.actionDialogVisible = false
+      sessionStorage.setItem(
+        'currentAction',
+        JSON.stringify({
+          record: this.record,
+          paramsList: this.paramsList,
+          actionCategory: this.actionCategory,
+          actionCategoryOptions: this.actionCategoryOptions,
+          types,
+        }),
+      )
     },
 
     confirmResource(id) {
       this.actionDialogVisible = true
-      if (!id) {
-        return
+      const currentAction = sessionStorage.getItem('currentAction')
+      if (currentAction) {
+        const { record, paramsList, types, actionCategoryOptions, actionCategory } = JSON.parse(currentAction)
+        this.record = record
+        this.paramsList = paramsList
+        this.selectedAction.types = types
+        this.actionCategory = actionCategory
+        this.actionCategoryOptions = actionCategoryOptions
+        sessionStorage.removeItem('currentAction')
       }
-      this.loadResourceData().then(() => {
+      if (id) {
         this.record.params.$resource = id
-      })
+      }
+      this.loadResourceData()
     },
 
     async loadResourceData() {
@@ -536,13 +550,19 @@ export default {
     },
 
     actionTypeChange(actionName, oper = 'add') {
-      this.selectedAction = this.actionsMap[actionName]
+      this.selectedAction = JSON.parse(JSON.stringify(this.actionsMap[actionName]))
       this.paramsList = []
       this.paramsLoading = true
       setTimeout(this.loadParamsList(oper), 200)
       this.loadResourceData()
     },
-
+    actionCategoryChange(cateName) {
+      const changeActions = this.availableActions[cateName]
+      if (changeActions[0]) {
+        this.record.name = changeActions[0].name
+        this.actionTypeChange(this.record.name)
+      }
+    },
     addAction() {
       this.actionDialogTitle = this.$t('RuleEngine.addActions')
       this.actionTypeChange(this.record.name, 'add')
@@ -574,7 +594,11 @@ export default {
         row.forEach((item) => {
           // eslint-disable-next-line
           item._config = this.actionsMap[item.name]
-          const { params, _config: { params: paramsTemplate }, fallbacks } = item
+          const {
+            params,
+            _config: { params: paramsTemplate },
+            fallbacks,
+          } = item
           // eslint-disable-next-line
           item._value = Object.entries(params).map(([k, v]) => ({
             label: (paramsTemplate[k] || {}).title,
@@ -625,7 +649,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .rule-actions {
   .show-btn {
@@ -646,7 +669,7 @@ export default {
       .el-button {
         font-size: 12px;
       }
-      .el-button [class*="el-icon-"] + span {
+      .el-button [class*='el-icon-'] + span {
         margin-left: 0px;
       }
     }
@@ -684,7 +707,7 @@ export default {
     margin-bottom: 20px;
     background-color: #f2f2f2;
     border: 1px dashed #f2f2f2;
-    transition: border .3s;
+    transition: border 0.3s;
     position: relative;
   }
   .action-item.error-action {
@@ -712,7 +735,6 @@ export default {
         color: #444;
         margin-right: 20px;
       }
-
     }
   }
 
@@ -745,7 +767,6 @@ export default {
       margin-left: 8px;
       color: #444;
     }
-
   }
 
   .el-form {
@@ -793,7 +814,8 @@ export default {
       padding: 0 32px;
     }
 
-    .el-input, .el-select {
+    .el-input,
+    .el-select {
       width: 200px !important;
     }
 

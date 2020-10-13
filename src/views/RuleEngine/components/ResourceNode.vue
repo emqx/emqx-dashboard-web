@@ -16,7 +16,6 @@
   </ul>
 </template>
 
-
 <script>
 import { reconnectResource } from '@/api/rules'
 
@@ -41,17 +40,18 @@ export default {
   methods: {
     resourceReconnect(item) {
       this.$set(item, 'loading', true)
-      reconnectResource(this.value.id).then(() => {
-        this.$set(item, 'loading', false)
-        this.$emit('change', this.value, true)
-      }).catch(() => {
-        this.$set(item, 'loading', false)
-      })
+      reconnectResource(this.value.id)
+        .then(() => {
+          this.$set(item, 'loading', false)
+          this.$emit('change', this.value, true)
+        })
+        .catch(() => {
+          this.$set(item, 'loading', false)
+        })
     },
   },
 }
 </script>
-
 
 <style lang="scss">
 .resources-node {

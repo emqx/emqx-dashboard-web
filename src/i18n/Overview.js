@@ -1,12 +1,5 @@
-export default
-{
-  __not: [
-    '默认是80',
-    '默认是60',
-    '默认80',
-    '默认60',
-    '莱森斯信息',
-  ],
+export default {
+  __not: ['默认是80', '默认是60', '默认80', '默认60', '莱森斯信息'],
   shareSubscription: {
     zh: '共享订阅',
     en: 'Share Subscription',
@@ -249,7 +242,8 @@ export default
   },
   beforeTheCertificateExpires: {
     zh: '证书到期前 EMQ 将通过邮件通知签发邮箱，请留意信息接收以免错过续期时间对业务造成影响。',
-    en: 'EMQ will issue mailbox through email notification before the certificate expires. Please pay attention to receiving information so as not to miss the renewal time, which will affect the business.',
+    en:
+      'EMQ will issue mailbox through email notification before the certificate expires. Please pay attention to receiving information so as not to miss the renewal time, which will affect the business.',
   },
   forTrialEdition: {
     zh: '当前 License 为试用版',
@@ -282,5 +276,37 @@ export default
   rate: {
     zh: '速率',
     en: 'Rate',
+  },
+  notPromptAgain: {
+    zh: '不再提示',
+    en: "don't prompt again",
+  },
+  licenseExpiryTip: {
+    zh: `
+    您的试用 License 已过期，请
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">更新 License </a>
+    或联系销售人员更新 License。
+    `,
+    en: `
+    Your license has expired. Please
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">update license</a>
+    or contact our customer services for an updated license.
+    `,
+  },
+  licenseEvaluationTip: {
+    zh: `
+    当前正在使用评估 License，限制为10个连接。请
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">升级 License</a> 。<br>如已购买
+    License，请<a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/enterprise/latest/cn/getting-started/start.html#license"> 替换 </a>正式的 License。
+    `,
+    en: `
+    You are now using the 10-connection evaluation license.<br>Please
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">upgrade license</a>.
+    If you already applied offcial license,<br>please <a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/enterprise/latest/en/getting-started/start.html#license">replace</a> with your official license.
+    `,
+  },
+  konw: {
+    zh: '知道了',
+    en: 'I knew',
   },
 }

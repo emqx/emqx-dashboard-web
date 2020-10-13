@@ -1,7 +1,5 @@
 export default {
-  __not: [
-    '确认继续',
-  ],
+  __not: ['确认继续'],
   addASubscription: {
     zh: '添加订阅',
     en: 'Add',
@@ -54,6 +52,14 @@ export default {
     zh: '客户端 ID',
     en: 'Client ID',
   },
+  clientid: {
+    zh: '客户端 ID',
+    en: 'Client ID',
+  },
+  $all: {
+    zh: '全部用户',
+    en: 'All users',
+  },
   username: {
     zh: '用户名',
     en: 'Username',
@@ -76,7 +82,7 @@ export default {
   },
   createdAt: {
     zh: '会话创建时间',
-    en: 'CreatedAt',
+    en: 'Created At',
   },
   accessNode: {
     zh: '接入节点',
@@ -273,5 +279,13 @@ export default {
   max_awaiting_rel: {
     zh: '最大未确认的 PUBREC 数据包计数',
     en: 'Maximum Unconfirmed PUBREC Packets Count',
+  },
+  collapse: {
+    zh: '折叠',
+    en: 'Collapse',
+  },
+  expand: {
+    zh: '展开',
+    en: 'Expand',
   },
 }

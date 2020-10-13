@@ -4,23 +4,32 @@
     "httpTimeout": 15000,
     "publicPath": "/",
     "hide": {
-      "routes": [],
+      "routes": [
+        "usersAcl"
+      ],
       "children": []
     }
   },
   "cloud": {
-    "baseURL": "api/v4",
-    "publicPath": "./",
+    "baseURL": "/dashboard",
+    "publicPath": "/",
     "hide": {
       "routes": [
+        "monitor",
+        "analysis",
+        "alerts",
         "plugins",
+        "modules",
         "setting",
-        "general"
+        "general",
+        "schemas"
       ],
       "children": [
+        "nav-header",
         "navbar.user",
-        "monitor.clients",
-        "monitor.license"
+        "monitor.connections",
+        "monitor.license",
+        "rules.schema"
       ]
     }
   }

@@ -22,10 +22,15 @@ export function loadRules(params) {
 export async function loadRuleDetails(id) {
   const rule = await http.get(`/rules/${id}`)
   await loadRuleEvents()
-  rule.event = eventsMap[rule.for[0]]
+  rule.events = rule.for.map((item) => {
+    if (!eventsMap[item]) {
+      return eventsMap['$events/message_publish']
+    }
+    return eventsMap[item]
+  })
   rule.metricsData = {}
   rule.metrics.forEach((item) => {
-    ['matched', 'speed', 'speed_last5m', 'speed_max'].forEach((key) => {
+    ;['matched', 'speed', 'speed_last5m', 'speed_max'].forEach((key) => {
       rule.metricsData[key] = rule.metricsData[key] || 0
       rule.metricsData[key] += item[key] || 0
     })

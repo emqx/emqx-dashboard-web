@@ -1,11 +1,7 @@
 <template>
   <div class="resources">
-
     <div class="app-wrapper">
-      <a-card
-        class="emq-list-card"
-        :loading="listLoading"
-      >
+      <a-card class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
           <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">
             {{ $t('Base.create') }}
@@ -32,17 +28,11 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="id" min-width="80px" label="ID">
+          <el-table-column prop="id" min-width="80px" :label="$t('RuleEngine.resourceID')">
             <template slot-scope="{ row }">
               <span class="btn" @click="showResource(row)">{{ row.id }}</span>
             </template>
           </el-table-column>
-
-          <el-table-column
-            min-width="100px" prop="description" show-overflow-tooltip
-            :label="$t('RuleEngine.resourceName')"
-          ></el-table-column>
-
           <!-- 资源类型 -->
           <el-table-column
             prop="config.title"
@@ -52,32 +42,32 @@
             :filter-method="resourceTypesColumnFilter"
             filter-placement="bottom"
           ></el-table-column>
+          <el-table-column
+            min-width="100px"
+            prop="description"
+            show-overflow-tooltip
+            :label="$t('RuleEngine.resourceDes')"
+          ></el-table-column>
           <el-table-column width="160px" prop="id">
             <template slot-scope="{ row, $index }">
               <el-button type="dashed" size="mini" @click="viewResourcesStatus(row, $index)">
                 {{ $t('RuleEngine.status') }}
               </el-button>
-              <!--<el-button v-if="!row.status.is_alive" type="dashed" size="mini" @click="reconnect(row)">{{ $t('RuleEngine.reconnect') }}</el-button>-->
               <el-button type="dashed danger" size="mini" @click="deleteResource(row)">
                 {{ $t('RuleEngine.delete') }}
               </el-button>
             </template>
           </el-table-column>
-
         </el-table>
       </a-card>
     </div>
 
     <resource-dialog :visible.sync="dialogVisible" @created="loadData"></resource-dialog>
-
   </div>
 </template>
 
-
 <script>
-import {
-  loadResource, loadResourceTypes, destroyResource, loadResourceDetails,
-} from '@/api/rules'
+import { loadResource, loadResourceTypes, destroyResource, loadResourceDetails } from '@/api/rules'
 import ResourceNode from './components/ResourceNode'
 import ResourceDialog from './components/ResourceDialog.vue'
 
@@ -130,19 +120,22 @@ export default {
       }
     },
     deleteResource(row) {
-      this.$msgbox.confirm(this.$t('RuleEngine.deleteResource'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      }).then(async () => {
-        await destroyResource(row.id)
-        this.loadData()
-        this.$message.success(this.$t('RuleEngine.successfulDeletion'))
-      }).catch(() => {})
+      this.$msgbox
+        .confirm(this.$t('RuleEngine.deleteResource'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await destroyResource(row.id)
+          this.loadData()
+          this.$message.success(this.$t('RuleEngine.successfulDeletion'))
+        })
+        .catch(() => {})
     },
     async initData() {
       const resourceTypes = await loadResourceTypes()
-      this.filterOptions.resourceTypes = resourceTypes.map($ => ({ text: $.title, value: $.name }))
+      this.filterOptions.resourceTypes = resourceTypes.map(($) => ({ text: $.title, value: $.name }))
     },
     async loadData() {
       try {
@@ -175,7 +168,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="scss">
 .resources {

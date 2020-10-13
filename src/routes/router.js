@@ -44,6 +44,22 @@ let routes = [
       },
     ],
   },
+  // 认证鉴权
+  {
+    path: '/users_and_acl',
+    component: Layout,
+    meta: {
+      hideKey: 'usersAcl',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'users_and_acl',
+        component: () => import('@/views/Plugins/PluginsManage'),
+      },
+    ],
+  },
   // 连接
   {
     path: '/clients',
@@ -78,6 +94,22 @@ let routes = [
         path: '',
         name: 'topics',
         component: () => import('@/views/Topics/Topics'),
+      },
+    ],
+  },
+  // 订阅
+  {
+    path: '/subscriptions',
+    component: Layout,
+    meta: {
+      hideKey: 'subscriptions',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'subscriptions',
+        component: () => import('@/views/Subscriptions/Subscriptions'),
       },
     ],
   },
@@ -209,11 +241,13 @@ let routes = [
       hideKey: 'general',
       authRequired: true,
     },
-    children: [{
-      path: '',
-      name: 'backup',
-      component: () => import('@/views/General/Backup'),
-    }, ],
+    children: [
+      {
+        path: '',
+        name: 'backup',
+        component: () => import('@/views/General/Backup'),
+      },
+    ],
   },
   // 应用
   {
@@ -263,6 +297,22 @@ let routes = [
       },
     ],
   },
+  // 数据分析
+  {
+    path: '/topic_metrics',
+    component: Layout,
+    meta: {
+      hideKey: 'topic_metrics',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'topic_metrics',
+        component: () => import('@/views/Analysis/TopicMetrics'),
+      },
+    ],
+  },
   // 插件
   {
     path: '/plugins',
@@ -276,9 +326,42 @@ let routes = [
         path: '',
         name: 'plugins',
         component: () => import('@/views/Plugins/Plugins'),
-        meta: {
-          keepAlive: true,
-        },
+      },
+      {
+        path: '/plugins/:pluginName',
+        name: 'pluginsName',
+        component: () => import('@/views/Plugins/PluginsManage'),
+      },
+    ],
+  },
+  // 模块
+  {
+    path: '/modules',
+    component: Layout,
+    meta: {
+      hideKey: 'modules',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'modules',
+        component: () => import('@/views/Modules/Modules'),
+      },
+      {
+        path: 'select',
+        name: 'modules-select',
+        component: () => import('@/views/Modules/SelectModules'),
+      },
+      {
+        path: 'detail',
+        name: 'module-detail',
+        component: () => import('@/views/Modules/ModuleDetail'),
+      },
+      {
+        path: 'manage',
+        name: 'module-manage',
+        component: () => import('@/views/Modules/ModuleManage'),
       },
     ],
   },
@@ -298,7 +381,7 @@ let routes = [
 
 if (hide.routes && hide.routes.length) {
   hide.routes.forEach((hideRoute) => {
-    routes = routes.filter(route => route.meta.hideKey !== hideRoute)
+    routes = routes.filter((route) => route.meta.hideKey !== hideRoute)
   })
 }
 

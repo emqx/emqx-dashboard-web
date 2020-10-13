@@ -21,7 +21,6 @@ export function createMonacoComplete(hints, range, { word }) {
   return customHints
 }
 
-
 function getValueName(hint) {
   let { name, default: defaultValue, valueType } = hint
   if (valueType) {
@@ -37,11 +36,14 @@ export function createMonacoHover(key, hints) {
       word = hint.name.split('/')[1].replace('"', '')
     }
     if (key === word) {
-      contents.push({
-        value: getValueName(hint)
-      }, {
-        value: hint.documentation,
-      })
+      contents.push(
+        {
+          value: getValueName(hint),
+        },
+        {
+          value: hint.documentation,
+        },
+      )
     }
   })
   return contents

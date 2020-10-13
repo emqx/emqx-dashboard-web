@@ -1,5 +1,4 @@
-export default
-{
+export default {
   __not: [],
   key: {
     zh: '键',
@@ -11,7 +10,7 @@ export default
   },
   value: {
     zh: '值',
-    en: 'value',
+    en: 'Value',
   },
   add: {
     zh: '添加',
@@ -33,6 +32,10 @@ export default
     zh: '连接',
     en: 'Connections',
   },
+  usersAcl: {
+    zh: '认证鉴权',
+    en: 'Users & ACL',
+  },
   clients: {
     zh: '客户端',
     en: 'Clients',
@@ -40,6 +43,10 @@ export default
   topics: {
     zh: '主题',
     en: 'Topics',
+  },
+  subscriptions: {
+    zh: '订阅',
+    en: 'Subscriptions',
   },
   schemas: {
     zh: '编解码',
@@ -57,6 +64,14 @@ export default
     zh: '资源',
     en: 'Resources',
   },
+  analysis: {
+    zh: '统计分析',
+    en: 'Analysis',
+  },
+  topic_metrics: {
+    zh: '主题监控',
+    en: 'Topic metrics',
+  },
   alerts: {
     zh: '告警',
     en: 'Alarm',
@@ -64,6 +79,10 @@ export default
   plugins: {
     zh: '插件',
     en: 'Plugin',
+  },
+  modules: {
+    zh: '模块',
+    en: 'Modules',
   },
   tool: {
     zh: '工具',
@@ -156,5 +175,9 @@ export default
   signOut: {
     zh: '退出',
     en: 'Logout',
+  },
+  selectModules: {
+    zh: '选择模块',
+    en: 'Modules Select',
   },
 }

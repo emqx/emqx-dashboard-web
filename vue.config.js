@@ -31,6 +31,13 @@ module.exports = {
         target: process.env.HOST_URL || 'http://127.0.0.1:18083',
         changeOrigin: true,
       },
+      '/dashboard': {
+        target: process.env.HOST_URL || 'http://127.0.0.1:18083/api/v4',
+        changeOrigin: true,
+        pathRewrite: {
+          '/dashboard': '',
+        },
+      },
     },
   },
   css: {
@@ -52,6 +59,7 @@ module.exports = {
       new MonacoWebpackPlugin({
         output: 'static/',
         languages: ['json', 'sql', 'plaintext', 'avro', 'protobuf'],
+        features: ['!gotoSymbol'],
       }),
     ],
   },

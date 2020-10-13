@@ -1,12 +1,8 @@
 <template>
   <div class="overview app-wrapper">
     <el-row class="content-wrapper" :gutter="20">
-
       <el-col :span="6">
-        <a-card
-          class="app-card" :bordered="true" :loading="pageLoading" hoverable
-          @click="clickToShowChart('sent')"
-        >
+        <a-card class="app-card" :bordered="true" :loading="pageLoading" hoverable @click="clickToShowChart('sent')">
           <div class="app-card-title">
             {{ $t('Overview.messageOut') }}
           </div>
@@ -32,7 +28,10 @@
 
       <el-col :span="6">
         <a-card
-          class="app-card" :bordered="true" :loading="pageLoading" hoverable
+          class="app-card"
+          :bordered="true"
+          :loading="pageLoading"
+          hoverable
           @click="clickToShowChart('received')"
         >
           <div class="app-card-title">
@@ -60,7 +59,10 @@
 
       <el-col :span="6">
         <a-card
-          class="app-card" :bordered="true" :loading="pageLoading" hoverable
+          class="app-card"
+          :bordered="true"
+          :loading="pageLoading"
+          hoverable
           @click="clickToShowChart('subscriptions')"
         >
           <div class="app-card-title">
@@ -86,7 +88,10 @@
 
       <el-col v-if="$hasShow('monitor.connections')" :span="6">
         <a-card
-          class="app-card" :bordered="true" hoverable :loading="pageLoading"
+          class="app-card"
+          :bordered="true"
+          hoverable
+          :loading="pageLoading"
           @click="clickToShowChart('connection')"
         >
           <div class="app-card-title">
@@ -112,7 +117,6 @@
           </div>
         </a-card>
       </el-col>
-
     </el-row>
 
     <a-card class="node-wrapper" :loading="pageLoading">
@@ -122,8 +126,12 @@
         </div>
         <div class="type-filter">
           <emq-select
-            v-if="dataType === 'basic'" v-model="nodeName" size="mini" style="margin-right: 20px"
-            :field="{ options: nodes }" :field-name="{ label: 'name', value: 'node' }"
+            v-if="dataType === 'basic'"
+            v-model="nodeName"
+            size="mini"
+            style="margin-right: 20px;"
+            :field="{ options: nodes }"
+            :field-name="{ label: 'name', value: 'node' }"
             @change="dataTypeChange"
           ></emq-select>
           <el-radio-group v-model="dataType" size="mini" @change="dataTypeChange">
@@ -141,11 +149,7 @@
       </div>
 
       <template v-else>
-        <div
-          v-for="item in dataTypeFilter"
-          :key="item.value"
-          class="basic"
-        >
+        <div v-for="item in dataTypeFilter" :key="item.value" class="basic">
           <template v-if="dataType === item.value">
             <metric-line
               :ref="item.value"
@@ -156,7 +160,6 @@
           </template>
         </div>
       </template>
-
     </a-card>
 
     <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="pageLoading">
@@ -165,7 +168,7 @@
       </div>
 
       <ul class="license-field">
-        <li class="item">
+        <li v-if="license.customer_type !== evaluation" class="item">
           <span class="key">{{ $t('Overview.customer') }}:</span>
           <span class="value">{{ license.customer }}</span>
         </li>
@@ -182,46 +185,80 @@
             ></el-progress>
           </div>
         </li>
+        <template v-if="license.customer_type !== evaluation">
+          <li class="item">
+            <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
+            <span class="value">{{ license.email }}</span>
+          </li>
 
-        <li class="item">
-          <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
-          <span class="value">{{ license.email }}</span>
-        </li>
+          <li class="item">
+            <span class="key">{{ $t('Overview.issuedAt') }}:</span>
+            <span class="value broker">{{ license.issued_at }}</span>
+          </li>
 
-        <li class="item">
-          <span class="key">{{ $t('Overview.issuedAt') }}:</span>
-          <span class="value broker">{{ license.issued_at }}</span>
-        </li>
-
-        <li class="item">
-          <span class="key">{{ $t('Overview.expireAt') }}:</span>
-          <span class="value broker">{{ license.expiry_at }}</span>
-        </li>
+          <li class="item">
+            <span class="key">{{ $t('Overview.expireAt') }}:</span>
+            <span class="value broker">{{ license.expiry_at }}</span>
+          </li>
+        </template>
       </ul>
 
       <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
-        <div class="description">
+        <div
+          v-if="license.customer_type === evaluation"
+          class="description"
+          v-html="$t('Overview.licenseEvaluationTip')"
+        >
+          {{ $t('Overview.licenseEvaluationTip') }}
+        </div>
+        <div v-else-if="license.expiry === true" class="description" v-html="$t('Overview.licenseExpiryTip')">
+          {{ $t('Overview.licenseExpiryTip') }}
+        </div>
+        <div v-else class="description">
           {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>
-        <div v-if="license.type === 'trial'" class="oper">
-          <el-tooltip
-            effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false"
-          >
+        <div
+          v-if="license.type === 'trial' && license.customer_type !== evaluation && license.expiry === false"
+          class="oper"
+        >
+          <el-tooltip effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false">
             <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
           </el-tooltip>
         </div>
       </div>
     </a-card>
 
+    <el-dialog
+      title="标题"
+      :width="`${licenseTipWidth}px`"
+      :visible.sync="licenseTipVisible"
+      :close-on-click-modal="false"
+    >
+      <div slot="title" class="tip-title">
+        <i class="el-icon-warning"></i>
+        <span>{{ $t('Base.warning') }}</span>
+      </div>
+      <div class="tip-content">
+        <p v-if="!isLicenseExpiry" v-html="$t('Overview.licenseEvaluationTip')">
+          {{ $t('Overview.licenseEvaluationTip') }}
+        </p>
+        <p v-else v-html="$t('Overview.licenseExpiryTip')">
+          {{ $t('Overview.licenseExpiryTip') }}
+        </p>
+      </div>
+      <div v-if="!isLicenseExpiry" class="tip-checkbox">
+        <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">{{ $t('Overview.notPromptAgain') }}</el-checkbox>
+      </div>
+      <div class="tip-button">
+        <el-button type="primary" size="small" @click="licenseTipVisible = false">{{ $t('Overview.konw') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
-
 <script>
 import Moment from 'moment'
-import {
-  loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo, loadMetricsLog,
-} from '@/api/overview'
+import { loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo, loadMetricsLog } from '@/api/overview'
 import MetricLine from '@/views/Overview/components/MetricLine'
 import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
@@ -239,6 +276,7 @@ export default {
 
   data() {
     return {
+      evaluation: 10,
       pageLoading: true,
       tableLoading: false,
       nodeName: '',
@@ -270,6 +308,10 @@ export default {
         subscriptions: this.$t('Overview.Subscription'),
       },
       nodes: [],
+      licenseTipVisible: false,
+      isLicenseExpiry: false,
+      noprompt: false,
+      licenseTipWidth: 460,
       license: {
         customer: '',
         email: '',
@@ -280,6 +322,8 @@ export default {
         vendor: '',
         version: '',
         type: 'trial',
+        expiry: false,
+        customer_type: 0,
       },
       metricTitles: [],
       metricLog: {
@@ -328,7 +372,7 @@ export default {
       return Object.entries(this.dataTypeMap).map(([value, text]) => ({ text, value }))
     },
     currentNode() {
-      const node = this.nodes.find($ => $.node === this.nodeName)
+      const node = this.nodes.find(($) => $.node === this.nodeName)
       if (node) {
         const { stats, ...withoutStats } = node
         return {
@@ -358,11 +402,13 @@ export default {
   },
 
   methods: {
+    liceEvaTipShowChange(val) {
+      if (val) {
+        localStorage.setItem('licenseTipVisible', false)
+      }
+    },
     chartDataFill(length) {
-      return Array.from(
-        { length },
-        () => ({ xData: [], yData: [] }),
-      )
+      return Array.from({ length }, () => ({ xData: [], yData: [] }))
     },
     dataTypeChange() {
       clearInterval(this.timerMetrics)
@@ -413,8 +459,7 @@ export default {
         this.tableLoading = false
       }
     },
-    upgradeLicense() {
-    },
+    upgradeLicense() {},
     formatConnection() {
       const { connection } = this.currentMetrics
       const { max_connections } = this.license
@@ -422,13 +467,27 @@ export default {
     },
     _formatNumber(num) {
       if (num > 10000) {
-        const value = (num / 1000)
+        const value = num / 1000
         return `${parseInt(value * 100, 10) / 100}K`
       }
       return num
     },
     async loadLicenseData() {
       this.license = await loadLicenseInfo()
+      setTimeout(() => {
+        // evaluation 许可证
+        if (this.license.customer_type === this.evaluation && localStorage.getItem('licenseTipVisible') !== 'false') {
+          this.licenseTipVisible = true
+          this.isLicenseExpiry = false
+          this.licenseTipWidth = 520
+        }
+        // 证书过期
+        if (this.license.expiry === true) {
+          this.licenseTipVisible = true
+          this.isLicenseExpiry = true
+          this.licenseTipWidth = 600
+        }
+      }, 1000)
     },
     async loadData() {
       const state = await loadCurrentMetrics()
@@ -443,7 +502,7 @@ export default {
       return Moment().format('HH:mm:ss')
     },
     setCurrentMetricsLogsRealtime(state = {}) {
-      ['received', 'sent', 'subscription'].forEach((key) => {
+      ;['received', 'sent', 'subscription'].forEach((key) => {
         this.currentMetricsLogs[key] = this.currentMetricsLogs[key] || { x: [], y: [] }
         const currentValue = state[key] || 0
         this.currentMetricsLogs[key].x.push(this.getNow())
@@ -474,9 +533,8 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
-@import "../../assets/style/variables";
+@import '../../assets/style/variables';
 
 .overview {
   .status-count {
@@ -540,7 +598,7 @@ export default {
         color: rgba(0, 0, 0, 0.65);
 
         .item-value {
-          color: rgba(0, 0, 0, .85);
+          color: rgba(0, 0, 0, 0.85);
           margin-left: 12px;
         }
       }
@@ -569,7 +627,7 @@ export default {
 
       .description {
         font-size: 12px;
-        color: #B2B2B2;
+        color: #b2b2b2;
         line-height: 1.4;
         width: 440px;
       }
@@ -583,7 +641,6 @@ export default {
         }
       }
     }
-
   }
 
   .license-field {
@@ -646,6 +703,35 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .tip-title {
+    font-size: 18px;
+    .el-icon-warning {
+      color: #e6a23c;
+    }
+    span {
+      display: inline-block;
+      margin-left: 10px;
+    }
+  }
+
+  .tip-content {
+    font-size: 16px;
+    p {
+      word-break: break-word;
+    }
+  }
+
+  .tip-checkbox {
+    margin-top: 10px;
+    .el-checkbox {
+      color: #aaa;
+    }
+  }
+
+  .tip-button {
+    text-align: right;
   }
 }
 </style>

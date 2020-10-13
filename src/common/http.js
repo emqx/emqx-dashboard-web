@@ -70,21 +70,26 @@ Object.assign(axios.defaults, {
   auth: {},
 })
 
-axios.interceptors.request.use((config) => {
-  const user = getBasicAuthInfo()
-  config.params = config.params || {}
-  const { params: { _t: tokenRequired = true } } = config
-  if (!user.username && tokenRequired) {
-    toLogin()
-    throw new Error(httpMap['-1'])
-  }
-  config.auth.username = user.username
-  config.auth.password = user.password
+axios.interceptors.request.use(
+  (config) => {
+    const user = getBasicAuthInfo()
+    config.params = config.params || {}
+    const {
+      params: { _t: tokenRequired = true },
+    } = config
+    if (!user.username && tokenRequired) {
+      toLogin()
+      throw new Error(httpMap['-1'])
+    }
+    config.auth.username = user.username
+    config.auth.password = user.password
 
-  store.dispatch('LOADING', true)
-  NProgress.start()
-  return config
-}, error => Promise.reject(error))
+    store.dispatch('LOADING', true)
+    NProgress.start()
+    return config
+  },
+  (error) => Promise.reject(error),
+)
 
 function handleError(error) {
   clearTimeout(timer)
@@ -95,7 +100,16 @@ function handleError(error) {
     return Promise.reject(error.message)
   }
 
-  const { selfError, response: { status, data: { message }, config: { params: { _m: showMessage = true } } } } = error
+  const {
+    selfError,
+    response: {
+      status,
+      data: { message },
+      config: {
+        params: { _m: showMessage = true },
+      },
+    },
+  } = error
   if (selfError) {
     error.message = selfError
   } else if (message) {
@@ -107,7 +121,11 @@ function handleError(error) {
   } else if (status === 404 && pluginPages.includes(currentPage)) {
     Message.error(httpMap['-2'])
   } else if (showMessage) {
-    Message.error(error.message)
+    if (error.message !== 'module_not_loaded') {
+      Message.error(error.message)
+    } else {
+      Message.warning('Related module are not load')
+    }
   }
   return Promise.reject(error.message)
 }

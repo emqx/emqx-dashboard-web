@@ -10,13 +10,7 @@
     @open="loadData"
     @close="clearForm"
   >
-    <el-form
-      ref="record"
-      :model="record"
-      :rules="rules"
-      label-position="top"
-      size="small"
-    >
+    <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
       <el-form-item prop="type" :label="$t('RuleEngine.resourceTypes')">
         <emq-select
           v-model="record.type"
@@ -27,32 +21,35 @@
           @change="resourceTypeChange"
         >
         </emq-select>
-        <el-button
-          :disabled="!record.type"
-          type="primary"
-          style="margin-left: 20px"
-          @click="handleCreate(true)"
-        >
+        <el-button :disabled="!record.type" type="primary" style="margin-left: 20px;" @click="handleCreate(true)">
           {{ $t('RuleEngine.testConnection') }}
         </el-button>
       </el-form-item>
 
-      <el-form-item style="width: 330px" prop="description" :label="$t('RuleEngine.resourceName')">
-        <el-input v-model="record.description" :placeholder="$t('RuleEngine.pleaseEnter')"></el-input>
-      </el-form-item>
-
       <el-row v-if="record.type" class="config-item-wrapper" :gutter="20">
+        <el-col :span="12">
+          <el-form-item prop="id" :label="$t('RuleEngine.resourceID')">
+            <el-input v-model="record.id"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item prop="description" :label="$t('RuleEngine.resourceDes')">
+            <el-input v-model="record.description" :placeholder="$t('RuleEngine.pleaseEnter')"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <div class="line"></div>
+        </el-col>
         <div v-if="configLoading" class="params-loading-wrapper">
           <a-skeleton active></a-skeleton>
         </div>
         <template v-else-if="configList.length > 0">
-          <div class="line"></div>
           <el-col
             v-for="(item, i) in configList"
             :key="i"
             :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
           >
-            <el-form-item v-bind="item.formItemAttributes">
+            <el-form-item v-if="item.elType !== 'file'" v-bind="item.formItemAttributes">
               <template v-if="item.formItemAttributes.description" slot="label">
                 {{ item.formItemAttributes.label }}
                 <el-popover width="220" trigger="hover" placement="top">
@@ -72,12 +69,7 @@
                 >
                 </el-input>
 
-                <el-input
-                  v-else
-                  v-model="record.config[item.key]"
-                  v-bind="item.bindAttributes"
-                >
-                </el-input>
+                <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes"> </el-input>
               </template>
 
               <!-- select -->
@@ -90,39 +82,57 @@
                 >
                 </emq-select>
 
-                <emq-select
-                  v-else
-                  v-model="record.config[item.key]"
-                  v-bind="item.bindAttributes"
-                  class="reset-width"
-                >
+                <emq-select v-else v-model="record.config[item.key]" v-bind="item.bindAttributes" class="reset-width">
                 </emq-select>
               </template>
             </el-form-item>
+            <template v-else>
+              <el-form-item
+                v-if="
+                  record.config['ssl'] === undefined || record.config['ssl'] === 'true' || record.config['ssl'] === true
+                "
+                v-bind="item.formItemAttributes"
+              >
+                <file-editor v-model="record.config[item.key]"></file-editor>
+              </el-form-item>
+            </template>
+          </el-col>
+          <el-col
+            v-if="
+              ([false, 'false'].includes(record.config['ssl']) && wholeConfigList.length > 11) ||
+              (![false, 'false'].includes(record.config['ssl']) && wholeConfigList.length > 8)
+            "
+            :span="24"
+            class="show-more"
+          >
+            <a href="javascript:;" @click="showWholeList">
+              {{ showMoreItem ? $t('Clients.collapse') : $t('Clients.expand') }}
+              <i :class="showMoreItem ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+            </a>
           </el-col>
         </template>
       </el-row>
-
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
       <el-button size="small" @click="handleCache">{{ $t('Base.cancel') }}</el-button>
-      <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">{{ $t('Base.confirm') }}</el-button>
+      <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">{{
+        $t('Base.confirm')
+      }}</el-button>
     </div>
-
   </el-dialog>
 </template>
 
-
 <script>
 import { loadResourceTypes, createResource } from '@/api/rules'
-import { renderParamsForm } from '@/common/utils'
+import { renderParamsForm, verifyID } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
+import FileEditor from '@/components/FileEditor'
 
 export default {
   name: 'ResourceDialog',
 
-  components: { KeyAndValueEditor },
+  components: { KeyAndValueEditor, FileEditor },
 
   inheritAttrs: false,
 
@@ -137,10 +147,12 @@ export default {
 
   data() {
     return {
+      showMoreItem: false,
       configLoading: false,
       selfVisible: false,
       resourceTypes: [],
       configList: [],
+      wholeConfigList: [],
       types: [],
       selectedResource: {
         name: '',
@@ -152,18 +164,21 @@ export default {
         config: {},
         description: '',
         type: '',
+        id: `resource:${Math.random().toString().slice(3, 9)}`,
       },
       rules: {
         config: {},
-        description: { required: true, message: this.$t('RuleEngine.pleaseEnter') },
         type: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        id: { required: true, validator: verifyID },
       },
     }
   },
 
   computed: {
     availableTypes() {
-      return this.types.length > 0 ? this.resourceTypes.filter($ => this.types.includes($.name)) : this.resourceTypes
+      const types =
+        this.types.length > 0 ? this.resourceTypes.filter(($) => this.types.includes($.name)) : this.resourceTypes
+      return types.sort((prev, next) => prev.title.localeCompare(next.title))
     },
     disabledSelect() {
       return this.types.length === 1
@@ -188,19 +203,30 @@ export default {
   },
 
   methods: {
+    showWholeList() {
+      if (this.showMoreItem === false) {
+        this.showMoreItem = true
+        this.configList = this.wholeConfigList
+      } else {
+        this.showMoreItem = false
+        this.configList = this.wholeConfigList.slice(0, 8)
+      }
+    },
     clearForm() {
       if (this.$refs.record) {
         setTimeout(() => {
           this.$refs.record.resetFields()
+          this.wholeConfigList = []
           this.configList = []
         }, 10)
       }
     },
     resourceTypeChange(name) {
       this.record.name = name
-      this.selectedResource = this.resourceTypes.find($ => $.name === name)
+      this.selectedResource = this.resourceTypes.find(($) => $.name === name)
 
       this.configLoading = true
+      this.wholeConfigList = []
       this.configList = []
 
       setTimeout(this.loadConfigList, 200)
@@ -211,7 +237,13 @@ export default {
       this.rules.config = rules
 
       this.record.config = {}
-      this.configList = form
+      this.wholeConfigList = form
+      this.showMoreItem = false
+      if (form.length > 8) {
+        this.configList = form.slice(0, 8)
+      } else {
+        this.configList = form
+      }
       form.forEach(({ key, value }) => {
         this.$set(this.record.config, key, value)
       })
@@ -265,20 +297,43 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .resource-dialog {
   .line {
-    width: 95%;
-    margin: 30px auto 28px auto;
-    background-color: #EDEEF2;
+    width: 100%;
+    margin: 10px auto 20px auto;
+    background-color: #edeef2;
+  }
+
+  .show-more {
+    text-align: center;
+    a {
+      position: relative;
+      text-decoration: none;
+    }
+    a::before {
+      content: '';
+      position: absolute;
+      left: -215px;
+      top: 8px;
+      z-index: 9;
+      width: 200px;
+      height: 1px;
+      background-color: #edeef2;
+    }
+    a::after {
+      content: '';
+      position: absolute;
+      right: -215px;
+      top: 8px;
+      z-index: 9;
+      width: 200px;
+      height: 1px;
+      background-color: #edeef2;
+    }
   }
 
   .el-form-item {
-    .el-input {
-      width: 100%;
-    }
-
     .el-select {
       &:not(.reset-width) {
         width: 330px;
@@ -300,7 +355,8 @@ export default {
       padding: 0 32px;
     }
 
-    .el-input, .el-select {
+    .el-input,
+    .el-select {
       width: 200px !important;
     }
   }

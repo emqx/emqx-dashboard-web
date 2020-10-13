@@ -1,6 +1,5 @@
 <template>
   <div class="rule-create">
-
     <page-header>
       <div class="page-header-title-view">
         <div class="title">{{ $t('RuleEngine.createRules') }}</div>
@@ -28,12 +27,8 @@
               size="small"
               label-suffix=":"
             >
-
               <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
-                <div
-                  class="monaco-container monaco-sql"
-                  :style="{ height: `${sqlEditorHeight}px` }"
-                >
+                <div class="monaco-container monaco-sql" :style="{ height: `${sqlEditorHeight}px` }">
                   <monaco
                     id="rule-sql"
                     v-model="record.rawsql"
@@ -45,6 +40,10 @@
                   ></monaco>
                 </div>
                 <stretch-height v-model="sqlEditorHeight"></stretch-height>
+              </el-form-item>
+
+              <el-form-item prop="id" :label="$t('RuleEngine.ruleID')">
+                <el-input v-model="record.id" :disabled="isEdit"></el-input>
               </el-form-item>
 
               <el-form-item prop="description" :label="$t('RuleEngine.remark')">
@@ -64,19 +63,12 @@
                   <el-form-item
                     v-for="k in Object.keys(selectEvent.test_columns)"
                     :key="k"
-                    :class="{ 'code-sql': k === 'payload', 'payload': k === 'payload' }"
+                    :class="{ 'code-sql': k === 'payload', payload: k === 'payload' }"
                     v-bind="{ label: k, prop: `ctx.${k}` }"
                   >
-                    <el-input
-                      v-if="k !== 'payload'"
-                      v-model="record.ctx[k]"
-                    >
-                    </el-input>
+                    <el-input v-if="k !== 'payload'" v-model="record.ctx[k]"> </el-input>
                     <template v-else>
-                      <div
-                        class="monaco-container monaco-payload"
-                        :style="{ height: `${payloadEditorHeight}px` }"
-                      >
+                      <div class="monaco-container monaco-payload" :style="{ height: `${payloadEditorHeight}px` }">
                         <monaco
                           id="payload"
                           v-model="record.ctx.payload"
@@ -91,8 +83,7 @@
                           <el-radio label="plaintext">Plaintext</el-radio>
                         </el-radio-group>
                       </div>
-                      <stretch-height v-model="payloadEditorHeight" class="payload">
-                      </stretch-height>
+                      <stretch-height v-model="payloadEditorHeight" class="payload"> </stretch-height>
                     </template>
                   </el-form-item>
 
@@ -104,14 +95,15 @@
                   </el-form-item>
 
                   <el-form-item class="code-editor__item" :label="$t('RuleEngine.testOutput')">
-                    <code-editor
-                      v-model="testOutPut"
-                      class="test-output"
-                      lang="application/json"
-                      :lint="false"
-                      :disabled="true"
-                      :line-numbers="false"
-                    ></code-editor>
+                    <div class="monaco-container monaco-test-output" style="height: 200px;">
+                      <monaco
+                        id="testOutput"
+                        v-model="testOutPut"
+                        class="test-output"
+                        lang="json"
+                        :disabled="true"
+                      ></monaco>
+                    </div>
                   </el-form-item>
                 </div>
               </el-collapse-transition>
@@ -120,7 +112,7 @@
 
           <el-col :span="9" class="tips-form">
             <div class="tips-item">
-              <div style="color: #606266">
+              <div style="color: #606266;">
                 {{ $t('RuleEngine.currentEventAvailableField') }}
                 <transition name="el-fade-in-linear">
                   <span v-if="clipboardStatus" class="copy-success">{{ clipboardStatus }}</span>
@@ -140,14 +132,13 @@
             </div>
 
             <div class="tips-item">
-              <div style="color: #606266">{{ $t('RuleEngine.exampleSql') }}</div>
+              <div style="color: #606266;">{{ $t('RuleEngine.exampleSql') }}</div>
               <div class="tips-wrapper code">
                 <code>{{ selectEvent.sql_example }}</code>
               </div>
             </div>
           </el-col>
         </el-row>
-
       </a-card>
 
       <a-card class="emq-list-card">
@@ -161,8 +152,7 @@
         </div>
 
         <div class="rule-action-wrapper">
-          <rule-actions ref="ruleAction" v-model="record.actions">
-          </rule-actions>
+          <rule-actions ref="ruleAction" v-model="record.actions"> </rule-actions>
         </div>
       </a-card>
 
@@ -174,20 +164,14 @@
           {{ isEdit ? $t('Base.confirm') : $t('Base.create') }}
         </el-button>
       </div>
-
     </div>
-
   </div>
 </template>
 
-
 <script>
-import {
-  loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule,
-} from '@/api/rules'
+import { loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule } from '@/api/rules'
 import { loadTopics } from '@/api/server'
-import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck } from '@/common/utils'
-import CodeEditor from '@/components/CodeEditor'
+import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck, verifyID } from '@/common/utils'
 import Monaco from '@/components/Monaco'
 import StretchHeight from '@/components/StretchHeight'
 import RuleActions from './components/RuleActions'
@@ -198,7 +182,6 @@ export default {
 
   components: {
     RuleActions,
-    CodeEditor,
     Monaco,
     StretchHeight,
   },
@@ -217,18 +200,7 @@ export default {
       events: [],
       testOutPut: '',
       selectEvent: {
-        columns: [
-          'clientid',
-          'username',
-          'event',
-          'id',
-          'payload',
-          'peername',
-          'qos',
-          'timestamp',
-          'topic',
-          'node',
-        ],
+        columns: ['clientid', 'username', 'event', 'id', 'payload', 'peername', 'qos', 'timestamp', 'topic', 'node'],
         description: '$events/message_publish',
         event: '$events/message_publish',
         sql_example: 'SELECT * FROM "t/#"',
@@ -250,9 +222,11 @@ export default {
         actions: [],
         description: '',
         ctx: {},
+        id: `rule:${Math.random().toString().slice(3, 9)}`,
       },
       rules: {
         rawsql: { required: true, message: this.$t('RuleEngine.pleaseEnterTheSQL') },
+        id: { required: true, validator: verifyID },
       },
     }
   },
@@ -291,7 +265,7 @@ export default {
 
   methods: {
     initData(eventName) {
-      this.selectEvent = this.events.find($ => $.event === eventName)
+      this.selectEvent = this.events.find(($) => $.event === eventName)
       const { sql_example } = this.selectEvent
       this.record.rawsql = sqlExampleFormatter(sql_example)
       this.initTestFormItem()
@@ -313,14 +287,16 @@ export default {
     },
     sqlParse(sql, oldEvent) {
       this.$confirm(this.$t('RuleEngine.parse_confirm'), this.$t('Base.warning'), {
-        confirmButtonClass: 'confirm-btn',
-        cancelButtonClass: 'cache-btn el-button--text',
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
-      }).then(() => {
-        this.record.rawsql = sqlExampleFormatter(ruleNewSqlParser(sql, oldEvent))
-      }).catch(() => {
-        this.needCheckSql = false
       })
+        .then(() => {
+          this.record.rawsql = sqlExampleFormatter(ruleNewSqlParser(sql, oldEvent))
+        })
+        .catch(() => {
+          this.needCheckSql = false
+        })
     },
     triggerEventChange(sql) {
       const events = [
@@ -349,7 +325,7 @@ export default {
       if (value === this.selectEvent.event) {
         return
       }
-      this.selectEvent = this.events.find($ => $.event === value) || { columns: {}, test_columns: {} }
+      this.selectEvent = this.events.find(($) => $.event === value) || { columns: {}, test_columns: {} }
       this.sqlPrimaryKey = this.events.columns
       this.initTestFormItem()
     },
@@ -380,7 +356,11 @@ export default {
       this.needCheckSql = true
       this.$refs.record.validate(async (valid) => {
         if (!valid) {
-          return
+          if (this.showTest && !this.record.id) {
+            this.$refs.record.clearValidate('id')
+          } else {
+            return
+          }
         }
         if (!this.beforeSqlValid(this.record.rawsql)) {
           return
@@ -396,19 +376,21 @@ export default {
           }
         }
 
-        SQLTest(data).then((res) => {
-          this.testOutPut = JSON.stringify(res, null, 2)
-        }).catch((error) => {
-          if (error === 'SQL Not Match') {
-            this.testOutPut = this.$t('RuleEngine.resultIsEmpty')
-          } else {
-            this.testOutPut = `${this.$t('RuleEngine.checkForErrors')}:\n\n${error}`
-          }
-        })
+        SQLTest(data)
+          .then((res) => {
+            this.testOutPut = JSON.stringify(res, null, 2)
+          })
+          .catch((error) => {
+            if (error === 'SQL Not Match') {
+              this.testOutPut = this.$t('RuleEngine.resultIsEmpty')
+            } else {
+              this.testOutPut = `${this.$t('RuleEngine.checkForErrors')}:\n\n${error}`
+            }
+          })
       })
     },
     copyAvailableFieldsSuccess() {
-      this.clipboardStatus = this.$t('Base.copy')
+      this.clipboardStatus = this.$t('Base.copied')
       setTimeout(() => {
         this.clipboardStatus = ''
       }, 2000)
@@ -454,7 +436,6 @@ export default {
 }
 </script>
 
-
 <style lang="scss">
 .rule-create {
   @import './style.scss';
@@ -470,7 +451,7 @@ export default {
     line-height: 2.3;
 
     &:hover {
-      color: #34C388;
+      color: #34c388;
     }
   }
 
@@ -486,10 +467,14 @@ export default {
   }
 
   .required-title {
-    &:after {
+    position: relative;
+    &::before {
       content: '*';
       color: #f5222d;
-      margin-right: 4px;
+      font-size: 12px;
+      position: absolute;
+      left: -10px;
+      top: 3px;
     }
   }
 
@@ -501,7 +486,7 @@ export default {
       }
 
       .copy-success {
-        color: #34C388;
+        color: #34c388;
         float: right;
       }
     }
@@ -530,17 +515,11 @@ export default {
     width: 100%;
     padding: 2px 12px;
     background: #f6f7fb;
-    border: 1px solid #D9D9D9;
+    border: 1px solid #d9d9d9;
     border-top: none;
     text-align: right;
     .el-radio__label {
       font-size: 13px;
-    }
-  }
-
-  .test-output {
-    .CodeMirror-scroll {
-      min-height: 170px;
     }
   }
 }

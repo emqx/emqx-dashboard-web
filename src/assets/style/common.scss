@@ -1,10 +1,11 @@
-@import "variables.scss";
-@import "element-variables";
+@import 'variables.scss';
+@import 'element-variables';
 
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
-@import "~element-ui/packages/theme-chalk/src/index";
+@import '~element-ui/packages/theme-chalk/src/index';
 
-html *, body * {
+html *,
+body * {
   box-sizing: border-box;
 }
 
@@ -12,16 +13,18 @@ html *, body * {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: normal;
-  src: local('Roboto Light'), local('Roboto-Light'), url(../fonts/Roboto-Light.woff) format('woff'), url(../fonts/Roboto-Light.ttf) format('truetype');
+  src: local('Roboto Light'), local('Roboto-Light'), url(../fonts/Roboto-Light.woff) format('woff'),
+    url(../fonts/Roboto-Light.ttf) format('truetype');
 }
 
 body {
   background-color: #f0f2f5;
   padding: 0;
   margin: 0;
-  color: rgba(0, 0, 0, .65);
+  color: rgba(0, 0, 0, 0.65);
   font-size: 14px;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB, Microsoft YaHei,
+    Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 
 #app {
@@ -31,11 +34,11 @@ body {
 
 #nprogress {
   .bar {
-    background: #34C388;
+    background: #34c388;
   }
 
   .peg {
-    box-shadow: 0 0 10px #34C388, 0 0 5px #34C388;
+    box-shadow: 0 0 10px #34c388, 0 0 5px #34c388;
   }
 }
 
@@ -46,7 +49,7 @@ body {
 .line {
   height: 1px;
   min-width: 50px;
-  background-color: #34C388;
+  background-color: #34c388;
   margin: 0 auto;
 }
 
@@ -115,16 +118,15 @@ body {
   user-select: none;
 
   &:not(.btn-default) {
-    color: #34C388;
+    color: #34c388;
   }
 
   &.raw {
     &:hover {
-      color: #34C388;
+      color: #34c388;
     }
   }
 }
-
 
 .emq-title {
   font-size: 16px;
@@ -136,7 +138,7 @@ body {
     font-size: 14px;
   }
 
-  &[size="small"] {
+  &[size='small'] {
     font-size: 14px;
   }
 
@@ -144,14 +146,14 @@ body {
     font-weight: normal;
     display: block;
     font-size: 12px;
-    color: #8F9297;
+    color: #8f9297;
     margin-top: 12px;
   }
 
   &.required-title {
     &:before {
       content: '*';
-      color: #F5222D;
+      color: #f5222d;
       margin-right: 4px;
     }
   }
@@ -202,17 +204,17 @@ body {
 }
 
 .ant-badge-status-success {
-  background-color: #34C388;
+  background-color: #34c388;
 }
 
 .ant-badge {
-  &[type="success"] {
+  &[type='success'] {
     .ant-badge-status-text {
-      color: #34C388;
+      color: #34c388;
     }
   }
 
-  &[type="error"] {
+  &[type='error'] {
     .ant-badge-status-text {
       color: #f5222d;
     }
@@ -232,24 +234,8 @@ body {
 
 // Monaco editor
 .monaco-container {
-  border: 1px solid #D9D9D9;
+  border: 1px solid #d9d9d9;
 }
-// code-editor
-.code-editor {
-  border: 1px solid #D9D9D9;
-  border-radius: 4px;
-
-  .CodeMirror {
-    border-radius: 4px;
-    color: #646775;
-    height: auto !important;
-  }
-  .CodeMirror-gutters {
-    background-color: #F6F7FB;
-    border-right: 1px solid #D9D9D9;
-  }
-}
-
 /* 修复 Safari 浏览器的光标问题 */
 input {
   line-height: normal !important;

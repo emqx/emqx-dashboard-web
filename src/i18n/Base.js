@@ -1,9 +1,8 @@
-export default
-{
+export default {
   __not: [],
   userCreate: {
-    zh: 'https://docs.emqx.io/broker/v4/cn/commands.html#admins',
-    en: 'https://docs.emqx.io/broker/v4/en/commands.html#admins',
+    zh: 'https://docs.emqx.net/broker/latest/cn/advanced/cli.html#admins-%E5%91%BD%E4%BB%A4',
+    en: 'https://docs.emqx.io/broker/latest/en/advanced/cli.html#admins-command',
   },
   loginUserAccount: {
     zh: '使用 Dashboard 用户登录',
@@ -37,9 +36,17 @@ export default
     zh: '登录中...',
     en: 'logging in...',
   },
-  copy: {
+  copied: {
     zh: '复制成功！',
     en: 'Copied!',
+  },
+  copy: {
+    zh: '复制',
+    en: 'Copy',
+  },
+  generate: {
+    zh: '生成',
+    en: 'Generate',
   },
   warning: {
     zh: '警告',
@@ -112,5 +119,45 @@ export default
   collapse: {
     zh: '收起',
     en: 'Collapse',
+  },
+  next: {
+    zh: '下一页',
+    en: 'Next',
+  },
+  prev: {
+    zh: '上一页',
+    en: 'Previous',
+  },
+  editSuccess: {
+    zh: '编辑成功',
+    en: 'Edit Success',
+  },
+  day: {
+    zh: '天',
+    en: 'day | days',
+  },
+  year: {
+    zh: '年',
+    en: 'year | years',
+  },
+  enableSuccess: {
+    zh: '启用成功',
+    en: 'Enable Success',
+  },
+  disabledSuccess: {
+    zh: '停用成功',
+    en: 'Disable Success',
+  },
+  select: {
+    zh: '选择',
+    en: 'Select',
+  },
+  manage: {
+    zh: '管理',
+    en: 'Manage',
+  },
+  tips: {
+    zh: '提示',
+    en: 'Tips',
   },
 }

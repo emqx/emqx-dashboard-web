@@ -1,5 +1,4 @@
-export default
-{
+export default {
   __not: [],
   alarm: {
     zh: '告警',
@@ -29,9 +28,25 @@ export default
     zh: '触发节点',
     en: 'Trigger Node',
   },
-  alarmType: {
-    zh: '告警类型',
-    en: 'Alarm Type',
+  alarmMsg: {
+    zh: '告警消息',
+    en: 'Alarm Message',
+  },
+  alarmName: {
+    zh: '告警名称',
+    en: 'Alarm Name',
+  },
+  activateAt: {
+    zh: '开始时间',
+    en: 'Activate At',
+  },
+  deactivateAt: {
+    zh: '结束时间',
+    en: 'Deactivate At',
+  },
+  duration: {
+    zh: '持续时间',
+    en: 'Duration',
   },
   alarmLevel: {
     zh: '告警级别',

@@ -1,13 +1,12 @@
 <template>
-  <el-container class="layout" style="min-height: 100vh">
+  <el-container class="layout" style="min-height: 100vh;">
     <!-- 左侧 -->
     <el-aside width="auto">
       <left-bar></left-bar>
     </el-aside>
 
-    <el-main style="margin: 0;padding: 0;" :style="elMainStyle">
-
-      <el-header style="height: 80px;padding: 0">
+    <el-main style="margin: 0; padding: 0;" :style="elMainStyle">
+      <el-header v-if="$hasShow('nav-header')" style="height: 80px; padding: 0;">
         <nav-header></nav-header>
         <nav-tabs></nav-tabs>
       </el-header>
@@ -25,7 +24,6 @@
     </el-main>
   </el-container>
 </template>
-
 
 <script>
 import LeftBar from '@/components/LeftBar'
@@ -59,14 +57,13 @@ export default {
 }
 </script>
 
-
 <style lang="scss" scoped>
-@import "../assets/style/variables.scss";
-@import "../assets/style/transition.scss";
+@import '../assets/style/variables.scss';
+@import '../assets/style/transition.scss';
 
 .el-aside {
   background-color: $color-theme;
-  transition: all .3s;
+  transition: all 0.3s;
   position: fixed;
   top: 0;
   left: 0;
@@ -75,6 +72,6 @@ export default {
 }
 
 .el-main {
-  transition: margin-left .3s;
+  transition: margin-left 0.3s;
 }
 </style>

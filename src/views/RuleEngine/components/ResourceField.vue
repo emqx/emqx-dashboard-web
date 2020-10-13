@@ -11,7 +11,6 @@
   </el-row>
 </template>
 
-
 <script>
 export default {
   name: 'ResourceField',
@@ -43,7 +42,6 @@ export default {
   methods: {},
 }
 </script>
-
 
 <style lang="scss" scoped>
 .field-title {
