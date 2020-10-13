@@ -135,7 +135,7 @@
     </div>
     <el-col :span="configList.length === 1 && fullSpanType.indexOf(configList[0].type) === -1 ? 9 : 16">
       <div class="button-group__center">
-        <el-button size="small" @click="exitDetail">{{ $t('Base.cancel') }}</el-button>
+        <el-button size="small" @click="exitDetail(true)">{{ $t('Base.cancel') }}</el-button>
         <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate()">
           <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>
           <span v-else>{{ $t('Base.confirm') }}</span>
@@ -374,17 +374,13 @@ export default {
         })
         .catch(() => {})
     },
-    exitDetail() {
+    exitDetail(isCancel = false) {
       this.cleanForm()
       setTimeout(() => {
-        if (this.oper === 'edit') {
-          if (this.from === 'modules') {
-            this.$router.push('/modules')
-          } else {
-            this.$router.push(`/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`)
-          }
-        } else {
+        if (this.from === 'modules' || !isCancel) {
           this.$router.push('/modules')
+        } else {
+          this.$router.push(`/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`)
         }
       }, 10)
     },
