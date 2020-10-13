@@ -146,7 +146,7 @@
               {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
             </el-button>
             <span v-else>--</span>
-            <el-button
+            <!-- <el-button
               v-if="hasManagePage(item.name)"
               type="dashed"
               :disabled="!item.active"
@@ -154,7 +154,7 @@
               @click="handleManage(item)"
             >
               {{ $t('Plugins.manage') }}
-            </el-button>
+            </el-button> -->
           </div>
         </div>
       </div>
