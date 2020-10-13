@@ -95,15 +95,27 @@
 
       .handle-icons {
         width: 52px;
+        height: 28px;
         display: flex;
         justify-content: space-around;
         font-size: 20px;
+        padding-right: 2px;
         .open {
+          width: 20px;
           color: #23bd78;
           font-size: 28px;
+          position: relative;
+        }
+        .el-icon-caret-right:before {
+          position: absolute;
+          left: -5px;
         }
         .close {
           color: #ff0000;
+          line-height: 28px;
+        }
+        .el-icon-setting {
+          line-height: 28px;
         }
       }
 

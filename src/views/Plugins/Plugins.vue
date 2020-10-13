@@ -251,9 +251,6 @@ export default {
     useModuleTipShowChange(val) {
       if (val) {
         localStorage.setItem('moduleTipVisible', false)
-        setTimeout(() => {
-          this.moduleTipVisible = false
-        }, 600)
       }
     },
     typeText(type) {
