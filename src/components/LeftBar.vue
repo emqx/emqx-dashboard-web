@@ -100,11 +100,11 @@ export default {
         path: '/products',
         icon: 'icon-guanlianshebei',
       },
-      // {
-      //   title: this.$t('components.topics'),
-      //   path: '/topics',
-      //   icon: 'icon-zuzhiqunzu',
-      // },
+      {
+        title: this.$t('components.topics'),
+        path: '/topics',
+        icon: 'icon-zuzhiqunzu',
+      },
       // {
       //   title: this.$t('components.subscriptions'),
       //   path: '/subscriptions',

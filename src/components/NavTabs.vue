@@ -143,7 +143,7 @@ export default {
   right: 0;
   left: 200px;
   height: 30px;
-  line-height: 30px;
+  line-height: 27px;
   background: #fcfcfc;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.1);
   z-index: 100;
@@ -166,14 +166,12 @@ export default {
       transition: all 0.3s;
       border-radius: 50%;
       display: inline-block;
-      width: 13px;
-      height: 13px;
+      width: 12px;
+      height: 12px;
       text-align: center;
-      line-height: 13px;
       i {
         transform: scale(0.6);
         position: relative;
-        top: 1px;
       }
       &:hover {
         background: #afafaf;

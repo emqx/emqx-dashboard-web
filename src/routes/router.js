@@ -97,21 +97,21 @@ let routes = [
     ],
   },
   // 订阅
-  {
-    path: '/subscriptions',
-    component: Layout,
-    meta: {
-      hideKey: 'subscriptions',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'subscriptions',
-        component: () => import('@/views/Subscriptions/Subscriptions'),
-      },
-    ],
-  },
+  // {
+  //   path: '/subscriptions',
+  //   component: Layout,
+  //   meta: {
+  //     hideKey: 'subscriptions',
+  //     authRequired: true,
+  //   },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'subscriptions',
+  //       component: () => import('@/views/Subscriptions/Subscriptions'),
+  //     },
+  //   ],
+  // },
   // Schemas
   {
     path: '/schemas',
@@ -297,61 +297,61 @@ let routes = [
     ],
   },
   // 数据分析
-  {
-    path: '/topic_metrics',
-    component: Layout,
-    meta: {
-      hideKey: 'topic_metrics',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'topic_metrics',
-        component: () => import('@/views/Analysis/TopicMetrics'),
-      },
-    ],
-  },
+  // {
+  //   path: '/topic_metrics',
+  //   component: Layout,
+  //   meta: {
+  //     hideKey: 'topic_metrics',
+  //     authRequired: true,
+  //   },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'topic_metrics',
+  //       component: () => import('@/views/Analysis/TopicMetrics'),
+  //     },
+  //   ],
+  // },
   // 插件
-  {
-    path: '/plugins',
-    component: Layout,
-    meta: {
-      hideKey: 'plugins',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'plugins',
-        component: () => import('@/views/Plugins/Plugins'),
-        meta: {
-          keepAlive: true,
-        },
-      },
-      {
-        path: '/plugins/:pluginName',
-        name: 'pluginsName',
-        component: () => import('@/views/Plugins/PluginsManage'),
-      },
-    ],
-  },
+  // {
+  //   path: '/plugins',
+  //   component: Layout,
+  //   meta: {
+  //     hideKey: 'plugins',
+  //     authRequired: true,
+  //   },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'plugins',
+  //       component: () => import('@/views/Plugins/Plugins'),
+  //       meta: {
+  //         keepAlive: true,
+  //       },
+  //     },
+  //     {
+  //       path: '/plugins/:pluginName',
+  //       name: 'pluginsName',
+  //       component: () => import('@/views/Plugins/PluginsManage'),
+  //     },
+  //   ],
+  // },
   // 模块
-  {
-    path: '/modules',
-    component: Layout,
-    meta: {
-      hideKey: 'modules',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'modules',
-        component: () => import('@/views/Modules/Modules'),
-      },
-    ],
-  },
+  // {
+  //   path: '/modules',
+  //   component: Layout,
+  //   meta: {
+  //     hideKey: 'modules',
+  //     authRequired: true,
+  //   },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'modules',
+  //       component: () => import('@/views/Modules/Modules'),
+  //     },
+  //   ],
+  // },
   {
     path: '*',
     component: Layout,

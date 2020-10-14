@@ -42,7 +42,14 @@
         <el-table :data="tableData" class="data-list">
           <el-table-column prop="client_id" min-width="120px" :label="$t('Clients.clientId')">
             <template slot-scope="{ row }">
-              <span class="btn" @click="showDialog('view', row)">{{ row.client_id }}</span>
+              <router-link
+                :to="{
+                  path: '/products/view/clients',
+                  query: { clientid: row.client_id, id: $route.query.id },
+                }"
+              >
+                {{ row.client_id }}
+              </router-link>
             </template>
           </el-table-column>
           <el-table-column prop="user_name" :label="$t('Clients.username')"> </el-table-column>
@@ -89,11 +96,6 @@
           <el-col :span="24">
             <el-form-item prop="user_name" :label="$t('Clients.username')">
               <el-input v-model="record.user_name" :readonly="accessType === 'view'"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col v-if="accessType === 'view'" :span="24">
-            <el-form-item prop="password" :label="$t('Base.password')">
-              <el-input v-model="devicePwd[record.client_id]" :readonly="accessType === 'view'"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -156,22 +158,24 @@ export default {
     },
   },
 
+  created() {
+    if (this.$route.query.tab === 'clients') {
+      this.loadData(this.$route.query.id)
+      this.loadModelData()
+    }
+  },
+
   methods: {
     async loadModelData() {
       const data = await loadModel(this.$route.query.id)
       this.ModelData = data.items
     },
-    showDialog(type, item) {
+    showDialog(type) {
       this.accessType = type
-      if (type === 'view') {
-        Object.assign(this.record, item)
-        this.accessType = 'view'
-      } else {
-        this.record = {
-          client_id: Math.random().toString(16).slice(3),
-          user_name: '',
-          thing_id: undefined,
-        }
+      this.record = {
+        client_id: Math.random().toString(16).slice(3),
+        user_name: '',
+        thing_id: undefined,
       }
       this.dialogVisible = true
     },
@@ -190,9 +194,7 @@ export default {
         }
         const record = { ...this.record }
         record.product_id = parseInt(this.$route.query.id, 10)
-        createDevice(record).then((res) => {
-          this.devicePwd[record.client_id] = res.items[0].password
-          localStorage.setItem('devicePwd', JSON.stringify(this.devicePwd))
+        createDevice(record).then(() => {
           this.$message.success(this.$t('Base.createSuccess'))
           this.dialogVisible = false
           this.accessType = ''
