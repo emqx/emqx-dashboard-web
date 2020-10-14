@@ -340,7 +340,9 @@ export default {
       }
       this.record = await loadClientDetail(this.clientId)
       const { node } = this.record
-      this.subscriptions = await loadSubscriptions(node, this.clientId)
+      if (node) {
+        this.subscriptions = await loadSubscriptions(node, this.clientId)
+      }
     },
     handleTabClick() {
       this.loadData()
