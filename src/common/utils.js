@@ -5,8 +5,10 @@ import parser from 'js-sql-parser'
 
 import store from '@/stores'
 import router from '@/routes'
+import lang from '@/i18n'
 
-const { lang = 'zh' } = store.state
+const locale = store.state.lang
+const VueI18n = lang[locale]
 
 import { enDocsLink, zhDocsLink, pluginsZh, pluginsEn } from '@/common/link_urls'
 
@@ -179,8 +181,8 @@ export function renderParamsForm(params = {}, propPrefix = '') {
     })
     // rules 的属性
     rules[k] = []
-    const requiredInputText = lang === 'zh' ? '请输入' : 'Field required'
-    const requiredSelectText = lang === 'zh' ? '请选择' : 'Please select'
+    const requiredInputText = locale === 'zh' ? '请输入' : 'Field required'
+    const requiredSelectText = locale === 'zh' ? '请选择' : 'Please select'
 
     if (required) {
       rules[k].push({ required: true, message: elType === 'input' ? requiredInputText : requiredSelectText })
@@ -374,6 +376,19 @@ export function ruleNewSqlParser(sql, e) {
   }
   ast.value.from.value[0].value.value.value = `"${newEvent}"`
   return parser.stringify(ast)
+}
+
+export const verifyID = (rule, value, callback) => {
+  const reg = /^[0-9a-zA-Z_:]{1,64}$/
+  if (!value) {
+    callback(new Error(VueI18n.Clients.pleaseEnter))
+  } else if (value.length > 64) {
+    callback(new Error(VueI18n.Clients.id_len_tip))
+  } else if (!reg.test(value)) {
+    callback(new Error(VueI18n.Clients.id_char_tip))
+  } else {
+    callback()
+  }
 }
 
 export default {}

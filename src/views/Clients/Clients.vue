@@ -18,7 +18,7 @@
                 <el-input v-model="fuzzyParams.ip_addr" size="small" :placeholder="$t('Clients.ipAddress')"></el-input>
               </el-col>
               <el-col :span="6">
-                <el-select v-model="fuzzyParams.conn_status" size="small">
+                <el-select v-model="fuzzyParams.conn_status" size="small" :placeholder="$t('Clients.connectedStatus')">
                   <el-option
                     v-for="(item, index) in connectStatusList"
                     :key="index"
@@ -52,6 +52,23 @@
               </router-link>
             </template>
           </el-table-column>
+          <el-table-column prop="password" :label="$t('Base.password')" min-width="120px">
+            <template slot-scope="{ row, $index }">
+              <div class="password-box">
+                <span v-if="$index === activeIndex">{{ row.password }}</span>
+                <span v-else>****************</span>
+                <i
+                  :class="['el-icon-view', activeIndex === $index ? 'active-view' : '']"
+                  @click="showPassword($index)"
+                ></i>
+                <i
+                  class="el-icon-document-copy"
+                  v-clipboard:cpoy="row.password"
+                  v-clipboard:success="copySuccessed"
+                ></i>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="user_name" :label="$t('Clients.username')"> </el-table-column>
           <el-table-column prop="ip_addr" min-width="140px" :label="$t('Clients.ipAddress')">
             <template slot-scope="{ row }"> {{ row.ip_addr }}</template>
@@ -82,7 +99,14 @@
         <el-row>
           <el-col :span="24">
             <el-form-item prop="client_id" :label="$t('Clients.clientId')">
-              <el-input v-model="record.client_id" :readonly="accessType === 'view'"></el-input>
+              <el-input v-model="record.client_id" :readonly="accessType === 'view'">
+                <i
+                  slot="suffix"
+                  :title="$t('Tools.randomGeneration')"
+                  class="el-icon-refresh el-input_icon"
+                  @click="refreshClientId"
+                ></i>
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -111,6 +135,7 @@
 <script>
 import { createDevice, loadDevice, queryDevice } from '@/api/devices'
 import { loadModel } from '@/api/models'
+import { verifyID } from '@/common/utils'
 
 export default {
   name: 'Clients',
@@ -132,7 +157,7 @@ export default {
       accessType: '',
       record: {},
       rules: {
-        client_id: [{ required: true, message: this.$t('Models.isRequired') }],
+        client_id: [{ required: true, validator: verifyID }],
         thing_id: [{ required: true, message: this.$t('Models.isRequired') }],
       },
       ModelData: [],
@@ -140,6 +165,7 @@ export default {
         { value: true, label: this.$t('Clients.connected') },
         { value: false, label: this.$t('Clients.disconnected') },
       ],
+      activeIndex: null,
     }
   },
 
@@ -152,20 +178,29 @@ export default {
   watch: {
     tab(val) {
       if (val === 'clients') {
-        this.loadData(this.$route.query.id)
         this.loadModelData()
+        this.loadData(this.$route.query.id)
       }
     },
   },
 
   created() {
     if (this.$route.query.tab === 'clients') {
-      this.loadData(this.$route.query.id)
       this.loadModelData()
+      this.loadData(this.$route.query.id)
     }
   },
 
   methods: {
+    showPassword($index) {
+      this.activeIndex = this.activeIndex === $index ? null : $index
+    },
+    copySuccessed() {
+      this.$message.success(this.$t('Base.copied'))
+    },
+    refreshClientId() {
+      this.record.client_id = `client:${Math.random().toString(16).substr(2, 8)}`
+    },
     async loadModelData() {
       const data = await loadModel(this.$route.query.id)
       this.ModelData = data.items
@@ -173,7 +208,7 @@ export default {
     showDialog(type) {
       this.accessType = type
       this.record = {
-        client_id: Math.random().toString(16).slice(3),
+        client_id: `client:${Math.random().toString(16).substr(2, 8)}`,
         user_name: '',
         thing_id: undefined,
       }
@@ -286,6 +321,31 @@ export default {
           border-radius: 0 4px 4px 0;
         }
       }
+    }
+  }
+  .el-input_icon {
+    font-size: 14px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  .password-box {
+    span {
+      display: inline-block;
+      width: 110px;
+      vertical-align: middle;
+    }
+    .active-view {
+      color: #34c388;
+    }
+    .el-icon-view,
+    .el-icon-document-copy {
+      cursor: pointer;
+      &:hover {
+        color: #34c388;
+      }
+    }
+    .el-icon-document-copy {
+      margin-left: 8px;
     }
   }
 }

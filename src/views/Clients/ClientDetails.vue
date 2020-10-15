@@ -12,9 +12,6 @@
 
       <div class="page-header-top-start btn">
         <el-button v-if="record.connected" type="danger" size="small" @click="handleDisconnect">
-          {{ $t('Clients.kickOut') }}
-        </el-button>
-        <el-button v-else type="danger" size="small" @click="handleDisconnect">
           {{ $t('Clients.cleanSession') }}
         </el-button>
       </div>
@@ -326,7 +323,7 @@ export default {
           this.$set(this.record, 'connected', false)
           this.$message.success(successMsg)
           setTimeout(() => {
-            this.$router.push({ path: '/clients' })
+            this.$router.push({ path: `/products/view?id=${this.$route.query.id}&tab=clients` })
           }, 500)
         })
         .catch(() => {})

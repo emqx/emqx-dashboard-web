@@ -98,8 +98,8 @@ export default {
   watch: {
     tab(val) {
       if (val === 'models') {
-        this.loadData(this.$route.query.id)
         this.loadServiceData(this.$route.query.id)
+        this.loadData(this.$route.query.id)
       }
     },
   },

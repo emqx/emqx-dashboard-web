@@ -88,10 +88,6 @@ export default {
     zh: '协议版本',
     en: 'Protocol Version',
   },
-  clearSession: {
-    zh: '清除会话',
-    en: 'Clear Session',
-  },
   SSL: {
     zh: '连接加密',
     en: 'SSL',
@@ -311,5 +307,13 @@ export default {
   modelId: {
     zh: '模型 ID',
     en: 'Model ID',
+  },
+  id_len_tip: {
+    zh: '最长64位',
+    en: 'The longest 64',
+  },
+  id_char_tip: {
+    zh: '仅支持数字、字母、下划线和英文冒号',
+    en: 'Only Numbers, letters, underscores, and colons are supported',
   },
 }
