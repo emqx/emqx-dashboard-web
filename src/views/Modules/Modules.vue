@@ -206,7 +206,8 @@ export default {
     },
     toReadMore(type) {
       const lang = this.lang === 'zh' ? 'cn' : 'en'
-      const url = `https://docs.emqx.net/enterprise/latest/${lang}/modules/${type}.html`
+      const suffix = this.lang === 'zh' ? 'net' : 'io'
+      const url = `https://docs.emqx.${suffix}/enterprise/latest/${lang}/modules/${type}.html`
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },
