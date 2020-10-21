@@ -109,11 +109,11 @@ export default {
   },
   extension: {
     zh: '多语言扩展',
-    en: 'extensions',
+    en: 'Extensions',
   },
   monitor: {
     zh: '运维监控',
-    en: 'Monitoring',
+    en: 'DevOps',
   },
   localModules: {
     zh: '内部模块',
