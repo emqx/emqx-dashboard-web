@@ -216,6 +216,12 @@ export default {
       if (this.$refs.record) {
         setTimeout(() => {
           this.$refs.record.resetFields()
+          this.record = {
+            config: {},
+            description: '',
+            type: '',
+            id: `resource:${Math.random().toString().slice(3, 9)}`,
+          }
           this.wholeConfigList = []
           this.configList = []
         }, 10)
