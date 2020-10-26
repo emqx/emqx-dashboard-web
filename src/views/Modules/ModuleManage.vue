@@ -10,7 +10,7 @@
 
 <script>
 import AuthMnesia from './components/AuthMnesia/AuthMnesia'
-import jwtAuthentication from './components/jwtAuthentication/jwtAuthentication'
+import JwtAuthentication from './components/JwtAuthentication/JwtAuthentication'
 import AuthSasl from './components/AuthSasl/AuthSasl'
 
 export default {
@@ -18,7 +18,7 @@ export default {
 
   components: {
     AuthMnesia,
-    jwtAuthentication,
+    JwtAuthentication,
     AuthSasl,
   },
 
