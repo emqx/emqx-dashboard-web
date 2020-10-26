@@ -51,7 +51,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="item-handle">
+                <div class="item-handle" @click.stop="">
                   <div class="handle-icons">
                     <i
                       v-if="item.enabled"
@@ -97,7 +97,7 @@ export default {
       showList: [],
       moduleCount: 0,
       selectedModule: {},
-      canManageModuleTypes: ['mnesia_authentication', 'jwt_authentication'],
+      canManageModuleTypes: ['mnesia_authentication', 'jwt_authentication', 'auth_sasl'],
     }
   },
 
@@ -232,6 +232,13 @@ export default {
 
   .modules-num {
     margin-left: 7px !important;
+  }
+
+  .item-handle {
+    cursor: default;
+    i {
+      cursor: pointer;
+    }
   }
 }
 </style>
