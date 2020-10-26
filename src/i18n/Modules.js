@@ -222,4 +222,44 @@ export default {
     en: `EMQ X provides a wealth of Modules to replace Plugin,
     it is recommended that you go to use <a href="/#/modules">Modules</a>.`,
   },
+  searchClient: {
+    zh: '请输入 Endpoint',
+    en: 'Please input Endpoint',
+  },
+  enhancedAuth: {
+    zh: '增强认证',
+    en: 'Enhanced Auth',
+  },
+  mechanism: {
+    zh: '认证机制',
+    en: 'Authentication mechanism',
+  },
+  addAuth: {
+    zh: '创建认证信息',
+    en: 'Add Auth',
+  },
+  editAuth: {
+    zh: '编辑认证信息',
+    en: 'Edit Auth',
+  },
+  viewAuth: {
+    zh: '查看认证信息',
+    en: 'View Auth',
+  },
+  iterationCount: {
+    zh: '迭代次数',
+    en: 'Iteration Count',
+  },
+  iterationCountTip: {
+    zh: '必须为正整数',
+    en: 'Must be a positive integer',
+  },
+  serverKey: {
+    zh: '服务密钥',
+    en: 'Server key',
+  },
+  storedKey: {
+    zh: '存储密钥',
+    en: 'Stored key',
+  },
 }
