@@ -60,4 +60,34 @@ export function deleteAcl(type, id, topic) {
 export function delete$allAcl(topic) {
   return http.delete(`/acl/$all/topic/${encodeURIComponent(topic)}`)
 }
+
+// auth_sasl
+export async function getSaslList(mechanism) {
+  const res = await http.get(`/sasl?mechanism=${mechanism}`)
+  const keyName = Object.keys(res)[0]
+  const list = []
+  res[keyName].forEach((item) => {
+    const oneItem = {
+      username: item,
+    }
+    list.push(oneItem)
+  })
+  return list
+}
+
+export function addSasl(body) {
+  return http.post('/sasl', body)
+}
+
+export function editSasl(body) {
+  return http.put('/sasl', body)
+}
+
+export function deleteSasl(mechanism, username) {
+  return http.delete(`/sasl?mechanism=${mechanism}&username=${username}`)
+}
+
+export function showSasl(mechanism, username) {
+  return http.get(`/sasl?mechanism=${mechanism}&username=${username}`)
+}
 export default {}
