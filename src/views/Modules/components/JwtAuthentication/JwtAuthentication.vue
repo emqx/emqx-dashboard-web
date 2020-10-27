@@ -1,5 +1,5 @@
 <template>
-  <div class="generate-jwt">
+  <div class="jwt-authentication">
     <a-card class="emq-list-card">
       <el-row :gutter="20">
         <el-col :span="14">
@@ -95,7 +95,7 @@ import Monaco from '@/components/Monaco'
 import { getLink } from '@/common/utils'
 
 export default {
-  name: 'GenerateJwt',
+  name: 'JwtAuthentication',
 
   components: {
     Monaco,
@@ -220,7 +220,7 @@ export default {
 </script>
 
 <style lang="scss">
-.generate-jwt {
+.jwt-authentication {
   .monaco-container {
     height: 200px;
   }
