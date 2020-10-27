@@ -4,6 +4,7 @@
       <auth-mnesia v-if="type === 'mnesia_authentication'"></auth-mnesia>
       <jwt-authentication v-else-if="type === 'jwt_authentication'"></jwt-authentication>
       <auth-sasl v-else-if="type === 'auth_sasl'"></auth-sasl>
+      <lw-clients v-else-if="type === 'lwm2m_protocol'"></lw-clients>
     </div>
   </div>
 </template>
@@ -12,6 +13,7 @@
 import AuthMnesia from './components/AuthMnesia/AuthMnesia'
 import JwtAuthentication from './components/JwtAuthentication/JwtAuthentication'
 import AuthSasl from './components/AuthSasl/AuthSasl'
+import LwClients from './components/Lwm2mProtocol/LwClients'
 
 export default {
   name: 'ModuleManage',
@@ -20,6 +22,7 @@ export default {
     AuthMnesia,
     JwtAuthentication,
     AuthSasl,
+    LwClients,
   },
 
   data() {
