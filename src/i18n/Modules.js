@@ -262,4 +262,8 @@ export default {
     zh: '存储密钥',
     en: 'Stored key',
   },
+  dataType: {
+    zh: '数据类型',
+    en: 'Data Type',
+  },
 }

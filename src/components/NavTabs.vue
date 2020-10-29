@@ -142,7 +142,7 @@ export default {
   right: 0;
   left: 200px;
   height: 30px;
-  line-height: 30px;
+  line-height: 28px;
   background: #fcfcfc;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.1);
   z-index: 100;
