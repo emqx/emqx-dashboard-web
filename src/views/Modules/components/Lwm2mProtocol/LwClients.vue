@@ -1,9 +1,11 @@
 <template>
   <div class="lw-clients">
-    <lw-client-details v-if="$route.query.endpoint"></lw-client-details>
+    <lw-client-details v-if="$route.query.imei"></lw-client-details>
     <a-card v-else class="emq-list-card">
       <div class="lw-clients-header">
-        <div>{{ $t('Clients.currentConnection') }}<span class="current-clients">1</span></div>
+        <div>
+          {{ $t('Clients.currentConnection') }}<span class="current-clients">{{ connectedCount }}</span>
+        </div>
         <el-col :span="8">
           <el-input
             v-model="searchVal"
@@ -20,15 +22,16 @@
         </el-col>
       </div>
       <el-table :data="showTableData">
-        <el-table-column prop="endpoint" label="Client Endpoint">
+        <el-table-column prop="imei" label="imei">
           <template slot-scope="{ row }">
-            <a @click="showClientDetails(row)">{{ row.endpoint }}</a>
+            <a @click="showClientDetails(row)">{{ row.imei }}</a>
           </template>
         </el-table-column>
-        <el-table-column prop="keepalive" label="keepalive"> </el-table-column>
-        <el-table-column prop="date" label="date"> </el-table-column>
-        <el-table-column prop="update" label="update"> </el-table-column>
-        <el-table-column prop="oper" width="120px">
+        <el-table-column prop="ip_address" label="ip_address"> </el-table-column>
+        <el-table-column prop="port" label="port"> </el-table-column>
+        <el-table-column prop="lifetime" label="lifetime"> </el-table-column>
+        <el-table-column prop="version" label="version"> </el-table-column>
+        <el-table-column width="120px">
           <template slot-scope="{ row }">
             <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
               {{ $t('Clients.kickOut') }}
@@ -43,6 +46,7 @@
 <script>
 import LwClientDetails from './LwClientDetails'
 import { matchSearch } from '@/common/utils'
+import { getLwClients } from '@/api/modules'
 
 export default {
   name: 'LwClients',
@@ -55,29 +59,30 @@ export default {
     return {
       searchVal: '',
       searchLoading: false,
-      showTableData: [
-        {
-          endpoint: 'client:d8aeba31',
-          keepalive: '60',
-        },
-      ],
-      tableData: [
-        {
-          endpoint: 'client:d8aeba31',
-          keepalive: '60',
-        },
-      ],
+      showTableData: [],
+      tableData: [],
+      connectedCount: 0,
     }
   },
 
+  created() {
+    this.loadList()
+  },
+
   methods: {
+    async loadList() {
+      const data = await getLwClients()
+      this.tableData = data
+      this.showTableData = data
+      this.connectedCount = data.length
+    },
     showClientDetails(row) {
-      const { endpoint } = row
+      const { imei } = row
       this.$router.push({
         path: '/modules/manage',
         query: {
           type: 'lwm2m_protocol',
-          endpoint,
+          imei,
         },
       })
     },
@@ -90,7 +95,7 @@ export default {
         return
       }
       setTimeout(async () => {
-        const res = await matchSearch(this.tableData, 'endpoint', this.searchVal)
+        const res = await matchSearch(this.tableData, 'imei', this.searchVal)
         if (res) {
           this.showTableData = res
           this.searchLoading = false

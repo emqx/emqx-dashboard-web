@@ -90,4 +90,18 @@ export function deleteSasl(mechanism, username) {
 export function showSasl(mechanism, username) {
   return http.get(`/sasl?mechanism=${mechanism}&username=${username}`)
 }
+
+// lwm2m_protocol
+export function getLwClients() {
+  return http.get('/lwm2m_channels')
+}
+
+export function getLwResources(imei, path) {
+  return http.get(`/lookup_cmd/${imei}?msgType=discover&path=${path}`)
+}
+
+export function doBatchRead(imei, path) {
+  return http.get(`/lookup_cmd/${imei}?msgType=read&path=${path}`)
+}
+
 export default {}
