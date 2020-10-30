@@ -32,7 +32,7 @@
               </el-col>
               <el-col :span="6">
                 <el-button size="mini" type="dashed" @click="batchRead(item)">Read</el-button>
-                <el-button size="mini" type="dashed">Write</el-button>
+                <el-button size="mini" type="dashed" @click="batchWrite(item)">Write</el-button>
               </el-col>
             </el-row>
             <template v-if="objectResources[item].length">
@@ -57,7 +57,7 @@
                     <el-button v-if="one.operations.includes('R')" size="mini" type="dashed">
                       Read
                     </el-button>
-                    <el-button v-if="one.operations.includes('W')" size="mini" type="dashed">
+                    <el-button v-if="one.operations.includes('W')" size="mini" type="dashed" @click="singleWrite(one)">
                       Write
                     </el-button>
                     <el-button v-if="one.operations.includes('E')" size="mini" type="dashed">
@@ -83,6 +83,51 @@
         </el-collapse-item>
       </el-collapse>
     </a-card>
+
+    <el-dialog
+      title=""
+      :width="configList.length > 1 ? '520px' : '400px'"
+      :visible.sync="writeDialogVisible"
+      class="create-subscribe"
+      @close="handleClose"
+    >
+      <el-form ref="record" class="el-form--public" :model="record" :rules="rules" size="small" label-position="top">
+        <el-row :gutter="20">
+          <div v-for="(item, index) in configList" :key="index">
+            <el-col :span="configList.length > 1 ? 12 : 24">
+              <el-form-item :prop="item.path" :label="item.name">
+                <emq-select
+                  v-if="item.dataType === 'Boolean'"
+                  v-model="record[item.path]"
+                  :field="{ list: ['true', 'false'] }"
+                >
+                </emq-select>
+                <el-input v-else-if="item.dataType === 'String'" v-model="record[item.path]"></el-input>
+                <template v-else-if="item.dataType === 'Time'">
+                  <el-date-picker v-model="record[item.path]" type="datetime"> </el-date-picker>
+                </template>
+                <el-input-number
+                  v-else-if="item.dataType === 'Integer'"
+                  v-model.number="record[item.path]"
+                  controls-position="right"
+                  :precision="0"
+                ></el-input-number>
+                <el-input-number
+                  v-else-if="item.dataType === 'Float'"
+                  v-model.number="record[item.path]"
+                  controls-position="right"
+                ></el-input-number>
+              </el-form-item>
+            </el-col>
+          </div>
+        </el-row>
+      </el-form>
+
+      <div slot="footer" class="dialog-align-footer">
+        <el-button plain size="small" @click="handleClose">{{ $t('Base.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="handleWrite">{{ $t('Base.confirm') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -99,6 +144,10 @@ export default {
       objectList: {},
       objectResources: {},
       currentImei: this.$route.query.imei,
+      configList: [],
+      record: {},
+      rules: {},
+      writeDialogVisible: false,
     }
   },
 
@@ -117,7 +166,7 @@ export default {
       })
     },
 
-    initObjectResourseValues(list, path) {
+    initObjectResourseValues(list) {
       list.forEach((item) => {
         if (item.operations.includes('R')) {
           item.values = []
@@ -126,23 +175,49 @@ export default {
     },
 
     async handleObjectChange(path) {
-      const { content } = await getLwResources(this.currentImei, path)
-      if (content) {
-        this.initObjectResourseValues(content, path)
+      if (path) {
+        const { content } = await getLwResources(this.currentImei, path)
+        if (content) {
+          this.initObjectResourseValues(content)
+          this.objectResources[path] = content
+        }
       }
-      this.objectResources[path] = content ? content : []
     },
 
     async batchRead(path) {
-      this.initObjectResourseValues(this.objectResources[path], path)
+      this.initObjectResourseValues(this.objectResources[path])
       const { content } = await doBatchRead(this.currentImei, path)
-      content.forEach((item) => {
-        this.objectResources[path].forEach((one) => {
-          if (item.path.includes(`${one.path}/`) || item.path === one.path) {
-            one.values.push(item.value)
-          }
+      if (content) {
+        content.forEach((item) => {
+          this.objectResources[path].forEach((one) => {
+            if (item.path.includes(`${one.path}/`) || item.path === one.path) {
+              one.values.push(item.value)
+            }
+          })
         })
+      }
+    },
+
+    batchWrite(path) {
+      this.writeDialogVisible = true
+      this.objectResources[path].forEach((item) => {
+        if (item.operations.includes('W')) {
+          this.configList.push(item)
+        }
       })
+    },
+
+    singleWrite(one) {
+      this.writeDialogVisible = true
+      this.configList.push(one)
+    },
+
+    handleWrite() {},
+
+    handleClose() {
+      this.writeDialogVisible = false
+      this.configList = []
+      this.$refs.record.resetFields()
     },
 
     backListPage() {
@@ -266,6 +341,14 @@ export default {
   .el-collapse-item__wrap {
     padding-bottom: 20px;
     background-color: #f8f9fc;
+  }
+
+  .el-date-editor.el-input,
+  .el-date-editor.el-input__inner {
+    width: 100%;
+  }
+  .el-input-number--small {
+    width: 100%;
   }
 }
 </style>
