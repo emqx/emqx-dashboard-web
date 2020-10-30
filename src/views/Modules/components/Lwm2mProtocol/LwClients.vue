@@ -27,10 +27,10 @@
             <a @click="showClientDetails(row)">{{ row.imei }}</a>
           </template>
         </el-table-column>
-        <el-table-column prop="ip_address" label="ip_address"> </el-table-column>
-        <el-table-column prop="port" label="port"> </el-table-column>
+        <el-table-column prop="ip_address" :label="$t('Clients.ipAddress')"> </el-table-column>
+        <el-table-column prop="port" :label="$t('Clients.port')"> </el-table-column>
         <el-table-column prop="lifetime" label="lifetime"> </el-table-column>
-        <el-table-column prop="version" label="version"> </el-table-column>
+        <el-table-column prop="version" :label="$t('Schemas.version')"> </el-table-column>
         <el-table-column width="120px">
           <template slot-scope="{ row }">
             <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
