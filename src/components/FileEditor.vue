@@ -39,20 +39,13 @@ export default {
   },
 
   methods: {
-    encode(str) {
-      return btoa(
-        encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function toSolidBytes(match, p1) {
-          return String.fromCharCode(`0x${p1}`)
-        }),
-      )
-    },
     handleChange(file) {
       const reader = new FileReader()
       reader.readAsText(file.raw)
       reader.onload = async (event) => {
         const content = event.currentTarget.result
         const uploadData = {
-          file: this.encode(content),
+          file: content,
           filename: file.name,
         }
         this.$emit('update', uploadData)
