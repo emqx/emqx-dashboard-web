@@ -96,12 +96,12 @@ export function getLwClients() {
   return http.get('/lwm2m_channels')
 }
 
-export function getLwResources(imei, path) {
-  return http.get(`/lookup_cmd/${imei}?msgType=discover&path=${path}`)
+export function getOrderResponse(imei, msgType, path) {
+  return http.get(`/lookup_cmd/${imei}?msgType=${msgType}&path=${path}`)
 }
 
-export function doBatchRead(imei, path) {
-  return http.get(`/lookup_cmd/${imei}?msgType=read&path=${path}`)
+export function publishOrder(body) {
+  return http.post('/mqtt/publish', body)
 }
 
 export default {}
