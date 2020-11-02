@@ -22,14 +22,14 @@
         </el-col>
       </div>
       <el-table :data="showTableData">
-        <el-table-column prop="imei" label="imei">
+        <el-table-column prop="imei" label="IMEI">
           <template slot-scope="{ row }">
             <a @click="showClientDetails(row)">{{ row.imei }}</a>
           </template>
         </el-table-column>
         <el-table-column prop="ip_address" :label="$t('Clients.ipAddress')"> </el-table-column>
         <el-table-column prop="port" :label="$t('Clients.port')"> </el-table-column>
-        <el-table-column prop="lifetime" label="lifetime"> </el-table-column>
+        <el-table-column prop="lifetime" label="LifeTime"> </el-table-column>
         <el-table-column prop="version" :label="$t('Schemas.version')"> </el-table-column>
         <el-table-column width="120px">
           <template slot-scope="{ row }">
@@ -47,6 +47,7 @@
 import LwClientDetails from './LwClientDetails'
 import { matchSearch } from '@/common/utils'
 import { getLwClients } from '@/api/modules'
+import { disconnectClient } from '@/api/clients'
 
 export default {
   name: 'LwClients',
@@ -86,7 +87,24 @@ export default {
         },
       })
     },
-    handleDisconnect() {},
+    async handleDisconnect(row) {
+      const warningMsg = this.$t('Clients.willDisconnectTheConnection')
+      const successMsg = this.$t('Clients.successfulDisconnection')
+      this.$msgbox
+        .confirm(warningMsg, {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await disconnectClient(row.imei)
+          this.$message.success(successMsg)
+          setTimeout(() => {
+            this.loadList()
+          }, 500)
+        })
+        .catch(() => {})
+    },
     searchClient() {
       this.searchLoading = true
       if (this.searchVal === '') {
