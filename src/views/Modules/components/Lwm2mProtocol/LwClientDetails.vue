@@ -21,21 +21,34 @@
               <span class="light-gray">{{ item }}</span>
             </el-col>
           </div>
-          <div class="collapse-content">
-            <el-row v-if="objectResources[item].length" class="row-titles">
-              <el-col :span="8">
-                <span class="main-black row-title">name</span>
-              </el-col>
-              <el-col :span="2"><span class="main-black row-title">path</span></el-col>
-              <el-col :span="2">
-                <span class="main-black row-title">{{ $t('Modules.dataType') }}</span>
-              </el-col>
-              <el-col :span="6">
-                <el-button size="mini" type="dashed" @click="batchRead(item)">Read</el-button>
-                <el-button size="mini" type="dashed" @click="batchWrite(item)">Write</el-button>
-              </el-col>
-            </el-row>
-            <template v-if="objectResources[item].length">
+          <div v-loading="listLoading" class="collapse-content">
+            <template v-if="Array.isArray(objectResources[item])">
+              <el-row class="row-titles">
+                <el-col :span="8">
+                  <span class="main-black row-title">{{ $t('Schemas.name') }}</span>
+                </el-col>
+                <el-col :span="2"><span class="main-black row-title">Path</span></el-col>
+                <el-col v-if="resourcesOperations[item]" :span="2">
+                  <span class="main-black row-title">{{ $t('Modules.dataType') }}</span>
+                </el-col>
+                <el-col :span="6">
+                  <el-button
+                    v-if="resourcesOperations[item] && resourcesOperations[item].includes('R')"
+                    size="mini"
+                    type="primary"
+                    @click="batchRead(item)"
+                    :loading="btnLoading && clickedButton === `read${item}`"
+                    >Read</el-button
+                  >
+                  <el-button
+                    v-if="resourcesOperations[item] && resourcesOperations[item].includes('W')"
+                    size="mini"
+                    type="primary"
+                    @click="batchWrite(item)"
+                    >Write</el-button
+                  >
+                </el-col>
+              </el-row>
               <div v-for="(one, index) in objectResources[item]" :key="index" class="content-item">
                 <el-row :class="index < objectResources[item].length - 1 ? 'content-item-row' : ''">
                   <el-col :span="8">
@@ -48,24 +61,62 @@
                     <span class="light-gray data-type">{{ one.dataType }}</span>
                   </el-col>
                   <el-col :span="6">
-                    <el-button v-if="one.operations.includes('R')" size="mini" type="dashed" class="observe-button">
+                    <el-button
+                      v-if="one.operations.includes('R')"
+                      size="mini"
+                      :type="one.timeId ? 'primary' : 'dashed'"
+                      class="observe-button"
+                      @click="doObserve(one)"
+                      :loading="btnLoading && clickedButton === `observe${item}`"
+                      :disabled="one.timeId !== null && one.timeId !== undefined"
+                    >
                       Observe<i class="el-icon-caret-right"></i>
                     </el-button>
-                    <el-button v-if="one.operations.includes('R')" size="mini" type="dashed" class="stop-button">
+                    <el-button
+                      v-if="one.operations.includes('R')"
+                      size="mini"
+                      type="dashed"
+                      class="stop-button"
+                      @click="cancelObserve(one)"
+                      :disabled="!one.timeId"
+                      :loading="btnLoading && clickedButton === `cancel-observe${item}`"
+                    >
                       <span class="stop-icon"></span>
                     </el-button>
-                    <el-button v-if="one.operations.includes('R')" size="mini" type="dashed">
+                    <el-button
+                      v-if="one.operations.includes('R')"
+                      :loading="btnLoading && clickedButton === `read${one.path}`"
+                      size="mini"
+                      type="dashed"
+                      @click="singleRead(one)"
+                    >
                       Read
                     </el-button>
                     <el-button v-if="one.operations.includes('W')" size="mini" type="dashed" @click="singleWrite(one)">
                       Write
                     </el-button>
-                    <el-button v-if="one.operations.includes('E')" size="mini" type="dashed">
+                    <el-button
+                      v-if="one.operations.includes('E')"
+                      size="mini"
+                      type="dashed"
+                      :loading="btnLoading && clickedButton === `execute${item}`"
+                      @click="doExecute(one)"
+                    >
                       Exec
                     </el-button>
                   </el-col>
                   <el-col :span="6">
-                    <span v-for="(value, index) in one.values" :key="index" class="row-value-item main-green">
+                    <span
+                      v-for="(value, index) in one.values"
+                      :key="index"
+                      :class="[
+                        'row-value-item',
+                        one.values[0] === 'Timed out' ||
+                        (typeof one.values[0] === 'string' && one.values[0].includes('Error: '))
+                          ? 'error-red'
+                          : 'main-green',
+                      ]"
+                    >
                       {{ value }}
                     </span>
                   </el-col>
@@ -75,7 +126,7 @@
             <template v-else>
               <el-col :span="2" :offset="8">
                 <span class="light-gray">
-                  {{ $t('Modules.noData') }}
+                  {{ objectResources[item] ? objectResources[item] : $t('Modules.noData') }}
                 </span>
               </el-col>
             </template>
@@ -132,7 +183,7 @@
 </template>
 
 <script>
-import { getLwClients, getLwResources, doBatchRead } from '@/api/modules'
+import { getLwClients, getOrderResponse, publishOrder } from '@/api/modules'
 
 export default {
   name: 'LwClientDetails',
@@ -148,14 +199,59 @@ export default {
       record: {},
       rules: {},
       writeDialogVisible: false,
+      readTimeId: null,
+      resourcesOperations: {},
+      btnLoading: false,
+      clickedButton: '',
+      listLoading: false,
     }
+  },
+
+  watch: {
+    activeName: {
+      handler(newName, oldName) {
+        if (!newName && oldName && Array.isArray(this.objectResources[oldName])) {
+          this.objectResources[oldName].forEach((one) => {
+            this.clearTimer(one.timeId)
+          })
+        }
+      },
+      deep: true,
+    },
   },
 
   created() {
     this.loadObjectList()
   },
 
+  beforeDestroy() {
+    if (this.activeName) {
+      this.objectResources[this.activeName].forEach((one) => {
+        this.clearTimer(one.timeId)
+      })
+    }
+    this.clearTimer(this.readTimeId)
+  },
+
   methods: {
+    async publishOneOrder(msgType, path) {
+      const data = {
+        topic: `lwm2m/${this.currentImei}/dn`,
+        payload: {
+          reqID: '2',
+          msgType,
+          data: { path },
+        },
+      }
+      await publishOrder(data)
+    },
+
+    clearTimer(timeId) {
+      if (timeId) {
+        clearInterval(timeId)
+      }
+    },
+
     async loadObjectList() {
       const data = await getLwClients()
       const res = data.filter(($) => $.imei === this.currentImei)
@@ -176,26 +272,149 @@ export default {
 
     async handleObjectChange(path) {
       if (path) {
-        const { content } = await getLwResources(this.currentImei, path)
-        if (content) {
+        this.listLoading = true
+        this.publishOneOrder('discover', path)
+        this.resourcesOperations[path] = ''
+        const { content, codeMsg } = await getOrderResponse(this.currentImei, 'discover', path)
+        if (Array.isArray(content)) {
           this.initObjectResourseValues(content)
           this.objectResources[path] = content
+
+          content.forEach((one) => {
+            this.clearTimer(one.timeId)
+            if (one.operations.includes('W')) {
+              this.resourcesOperations[path] = this.resourcesOperations[path].concat('W')
+            } else if (one.operations.includes('R')) {
+              this.resourcesOperations[path] = this.resourcesOperations[path].concat('R')
+            }
+          })
+        } else if (typeof content === 'object' && !Array.isArray(content)) {
+          this.objectResources[path] = []
+          Object.keys(content).forEach((key) => {
+            const oneResource = {
+              name: key,
+              path: content[key],
+              operations: '',
+            }
+            this.objectResources[path].push(oneResource)
+          })
+        } else if (codeMsg) {
+          this.objectResources[path] = codeMsg
         }
+        this.listLoading = false
       }
     },
 
-    async batchRead(path) {
-      this.initObjectResourseValues(this.objectResources[path])
-      const { content } = await doBatchRead(this.currentImei, path)
-      if (content) {
-        content.forEach((item) => {
-          this.objectResources[path].forEach((one) => {
-            if (item.path.includes(`${one.path}/`) || item.path === one.path) {
-              one.values.push(item.value)
-            }
+    pubOrderByButton(way, path, timeId) {
+      this.btnLoading = true
+      this.clickedButton = `${way}${path}`
+      this.publishOneOrder(way, path)
+      this.clearTimer(timeId)
+    },
+
+    intervalGetReadResult(oneFunction, path, object) {
+      const showErrorFunction = (errMsg) => {
+        this.clearTimer(this.readTimeId)
+        if (Array.isArray(object)) {
+          object.forEach((one) => {
+            one.values = [`${errMsg}`]
           })
-        })
+        } else {
+          object.values = [`${errMsg}`]
+        }
       }
+      let count = 0
+      this.readTimeId = setInterval(async () => {
+        try {
+          count += 1
+          const { content } = await getOrderResponse(this.currentImei, 'read', path)
+          if (content) {
+            oneFunction(content)
+            this.clearTimer(this.readTimeId)
+          } else if (count >= 10) {
+            showErrorFunction('Timed out', object)
+          }
+        } catch (err) {
+          showErrorFunction(`Error: ${err.toString()}`, object)
+        }
+        this.btnLoading = false
+      }, 1000)
+    },
+
+    batchRead(path) {
+      this.pubOrderByButton('read', path, this.readTimeId)
+      this.initObjectResourseValues(this.objectResources[path])
+      this.intervalGetReadResult(
+        (content) => {
+          content.forEach((item) => {
+            this.objectResources[path].forEach((one) => {
+              if (item.path.includes(`${one.path}/`) || item.path === one.path) {
+                one.values.push(item.value)
+              }
+            })
+          })
+        },
+        path,
+        this.objectResources[path],
+      )
+    },
+
+    singleRead(one) {
+      this.pubOrderByButton('read', one.path, this.readTimeId)
+      this.intervalGetReadResult(
+        (content) => {
+          const valueArr = []
+          content.forEach((item) => {
+            valueArr.push(item.value)
+          })
+          one.values = valueArr
+        },
+        one.path,
+        one,
+      )
+    },
+
+    async getObserveResult(way, one) {
+      try {
+        const { content } = await getOrderResponse(this.currentImei, way, one.path)
+        if (content) {
+          const valueArr = []
+          content.forEach((item) => {
+            valueArr.push(item.value)
+          })
+          one.values = valueArr
+        }
+      } catch (err) {
+        this.clearTimer(one.timeId)
+        one.values = [`Error: ${err.toString()}`]
+      }
+    },
+
+    doObserve(one) {
+      this.pubOrderByButton('observe', one.path, one.timeId)
+      this.getObserveResult('observe', one)
+      one.timeId = setInterval(() => {
+        this.getObserveResult('observe', one)
+      }, 5000)
+    },
+
+    cancelObserve(one) {
+      this.pubOrderByButton('cancel-observe', one.path, one.timeId)
+      this.getObserveResult('cancel-observe', one)
+      one.timeId = null
+    },
+
+    doExecute(one) {
+      this.$confirm(`Are you sure to ${one.name}?`, this.$t('Base.warning'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
+        .then(async () => {
+          this.pubOrderByButton('execute', one.path)
+          await getOrderResponse(this.currentImei, 'execute', one.path)
+        })
+        .catch(() => {})
     },
 
     batchWrite(path) {
@@ -234,6 +453,10 @@ export default {
 
 <style lang="scss">
 .lw-client-details {
+  .error-red {
+    color: #f5222d;
+  }
+
   .main-green {
     color: #34c388;
   }
@@ -280,13 +503,12 @@ export default {
       min-height: 42px !important;
     }
 
+    .data-type {
+      display: inline-block;
+    }
+
     .content-item-row {
       min-height: 36px !important;
-
-      .data-type {
-        display: inline-block;
-        min-width: 80px;
-      }
 
       .row-value-item {
         display: inline-block;

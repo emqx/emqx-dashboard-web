@@ -41,7 +41,10 @@
             >
             </span>
             <el-card shadow="hover">
-              <div class="module-item" @click="toEditModule(item)">
+              <div
+                :class="['module-item', canManageModuleTypes.indexOf(item.type) === -1 ? 'no-pointer' : '']"
+                @click="manageModule(item)"
+              >
                 <div class="left-box">
                   <img :src="item.img" alt="module-logo" class="item-img" />
                   <div class="item-content">
@@ -60,9 +63,9 @@
                     ></i>
                     <i v-else @click.stop="updataModule(item, true)" class="el-icon-caret-right open"></i>
                     <i
-                      v-if="canManageModuleTypes.indexOf(item.type) !== -1"
-                      @click.stop="manageModule(item)"
-                      class="el-icon-setting"
+                      v-if="JSON.stringify(item.config) !== '[]' && JSON.stringify(item.config) !== '{}'"
+                      @click.stop="toEditModule(item)"
+                      class="el-icon-edit-outline"
                     ></i>
                   </div>
                   <a href="javascript:;" @click.stop="toReadMore(item.type)" class="know-more">
@@ -113,6 +116,9 @@ export default {
 
   methods: {
     manageModule(item) {
+      if (this.canManageModuleTypes.indexOf(item.type) === -1) {
+        return
+      }
       this.$router.push(`/modules/manage?type=${item.type}`)
     },
     deleteModule(item) {
@@ -170,11 +176,6 @@ export default {
       }, 500)
     },
     toEditModule(item) {
-      const itemConfig = JSON.stringify(item.config)
-      if (itemConfig === '[]' || itemConfig === '{}') {
-        this.$message.info(this.$t('Modules.noNeedAddConfigTip'))
-        return
-      }
       this.selectedModule = item
       this.selectedModule.from = 'modules'
       this.selectedModule.oper = 'edit'
@@ -239,6 +240,10 @@ export default {
     i {
       cursor: pointer;
     }
+  }
+
+  .no-pointer {
+    cursor: default;
   }
 }
 </style>
