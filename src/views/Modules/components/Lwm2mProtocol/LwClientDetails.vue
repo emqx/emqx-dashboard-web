@@ -147,7 +147,7 @@
       <el-form ref="record" class="el-form--public" :model="record" :rules="rules" size="small" label-position="top">
         <el-row :gutter="20">
           <div v-for="(item, index) in configList" :key="index">
-            <el-col :span="configList.length > 1 || item.dataType === 'Opaque' ? 12 : 24">
+            <el-col :span="configList.length > 1 && item.dataType !== 'Opaque' ? 12 : 24">
               <el-form-item :prop="item.path" label="">
                 <div slot="label">
                   <span v-if="item.name.length > 30" :title="item.name">{{ item.name.slice(0, 30) + '...' }}</span>
