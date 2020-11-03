@@ -62,7 +62,7 @@
                   <el-col :span="2">
                     <span class="light-gray data-type">{{ one.dataType }}</span>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="7">
                     <el-button
                       v-if="one.operations.includes('R')"
                       size="mini"
@@ -107,7 +107,7 @@
                       Exec
                     </el-button>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="5">
                     <span
                       v-for="(value, index) in one.values"
                       :key="index"
@@ -147,8 +147,12 @@
       <el-form ref="record" class="el-form--public" :model="record" :rules="rules" size="small" label-position="top">
         <el-row :gutter="20">
           <div v-for="(item, index) in configList" :key="index">
-            <el-col :span="configList.length > 1 ? 12 : 24">
-              <el-form-item :prop="item.path" :label="item.name">
+            <el-col :span="configList.length > 1 || item.dataType === 'Opaque' ? 12 : 24">
+              <el-form-item :prop="item.path" label="">
+                <div slot="label">
+                  <span v-if="item.name.length > 30" :title="item.name">{{ item.name.slice(0, 30) + '...' }}</span>
+                  <span v-else>{{ item.name }}</span>
+                </div>
                 <emq-select
                   v-if="item.dataType === 'Boolean'"
                   v-model="record[item.path]"
@@ -170,6 +174,15 @@
                   v-model.number="record[item.path]"
                   controls-position="right"
                 ></el-input-number>
+                <template v-if="item.dataType === 'Opaque'">
+                  <el-col :span="16">
+                    <el-input v-model="record[item.path]"></el-input>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-radio v-model="record.encoding[item.path]" label="hex">Hex</el-radio>
+                    <el-radio v-model="record.encoding[item.path]" label="plain">Plain</el-radio>
+                  </el-col>
+                </template>
               </el-form-item>
             </el-col>
           </div>
@@ -198,7 +211,10 @@ export default {
       objectResources: {},
       currentImei: this.$route.query.imei,
       configList: [],
-      record: {},
+      record: {
+        dataType: {},
+        encoding: {},
+      },
       rules: {},
       writeDialogVisible: false,
       readTimeId: null,
@@ -236,16 +252,16 @@ export default {
   },
 
   methods: {
-    async publishOneOrder(msgType, path) {
-      const data = {
+    async publishOneOrder(msgType, data) {
+      const body = {
         topic: `lwm2m/${this.currentImei}/dn`,
         payload: {
           reqID: '2',
           msgType,
-          data: { path },
+          data,
         },
       }
-      await publishOrder(data)
+      await publishOrder(body)
     },
 
     clearTimer(timeId) {
@@ -284,7 +300,7 @@ export default {
     async handleObjectChange(path) {
       if (path) {
         this.listLoading = true
-        this.publishOneOrder('discover', path)
+        this.publishOneOrder('discover', { path })
         this.resourcesOperations[path] = ''
         const { content, codeMsg } = await getOrderResponse(this.currentImei, 'discover', path)
         if (Array.isArray(content)) {
@@ -315,10 +331,11 @@ export default {
       }
     },
 
+    // read observe cancle-observe execute
     pubOrderByButton(way, path, timeId) {
       this.btnLoading = true
       this.clickedButton = `${way}${path}`
-      this.publishOneOrder(way, path)
+      this.publishOneOrder(way, { path })
       this.clearTimer(timeId)
     },
 
@@ -422,7 +439,12 @@ export default {
       })
         .then(async () => {
           this.pubOrderByButton('execute', one.path)
-          await getOrderResponse(this.currentImei, 'execute', one.path)
+          const { code, codeMsg } = await getOrderResponse(this.currentImei, 'execute', one.path)
+          if (code && parseFloat(code) < 3) {
+            this.$message.success(this.$t('Base.operateSuccess'))
+          } else if (codeMsg) {
+            this.$message.error(codeMsg)
+          }
         })
         .catch(() => {})
     },
@@ -432,21 +454,76 @@ export default {
       this.objectResources[path].forEach((item) => {
         if (item.operations.includes('W')) {
           this.configList.push(item)
+          const { path: resourcePath, dataType } = item
+          this.record.dataType[resourcePath] = dataType
+        }
+        if (item.dataType === 'Opaque') {
+          this.record.encoding[item.path] = 'plain'
         }
       })
+      this.record.basePath = path
     },
 
     singleWrite(one) {
       this.writeDialogVisible = true
       this.configList.push(one)
+      this.record.dataType[one.path] = one.dataType
+      if (one.dataType === 'Opaque') {
+        this.record.encoding[one.path] = 'plain'
+      }
     },
 
-    handleWrite() {},
+    async handleWrite() {
+      const content = []
+      const { basePath, dataType, encoding, ...record } = this.record
+      Object.keys(record).forEach((key) => {
+        if (dataType[key] === 'Boolean') {
+          record[key] = record[key] === 'true'
+        } else if (dataType[key] === 'Time') {
+          const dataTime = new Date(record[key]).getTime()
+          record[key] = Math.floor(dataTime / 1000)
+        }
+        const oneResource = {
+          path: key,
+          type: dataType[key],
+          value: record[key],
+        }
+        if (dataType[key] === 'Opaque') {
+          oneResource[encoding] = encoding[key]
+        }
+        content.push(oneResource)
+      })
+      const data = basePath ? { basePath, content } : content[0]
+      const path = basePath || data.path
+      this.publishOneOrder('write', data)
+      const { code, codeMsg } = await getOrderResponse(this.currentImei, 'write', path)
+
+      if (code && parseFloat(code) < 3) {
+        this.$message.success(this.$t('Base.editSuccess'))
+        const pathSplitArr = content[0].path.split('/')
+        const onePath = `/${pathSplitArr[1]}/${pathSplitArr[2]}`
+        const rootPath = basePath || onePath
+        this.objectResources[rootPath].forEach((one) => {
+          content.forEach((item) => {
+            if (one.path === item.path) {
+              one.values = [item.value]
+            }
+          })
+        })
+      } else if (codeMsg) {
+        this.$message.error(codeMsg)
+      }
+      this.handleClose()
+    },
 
     handleClose() {
       this.writeDialogVisible = false
       this.configList = []
       this.$refs.record.resetFields()
+      this.record = {
+        dataType: {},
+        encoding: {},
+      }
     },
 
     backListPage() {
@@ -463,6 +540,10 @@ export default {
 
 <style lang="scss">
 .lw-client-details {
+  .el-col-16 {
+    padding-left: 0;
+  }
+
   .error-red {
     color: #f5222d;
   }

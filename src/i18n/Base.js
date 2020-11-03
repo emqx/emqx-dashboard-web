@@ -160,4 +160,8 @@ export default {
     zh: '提示',
     en: 'Tips',
   },
+  operateSuccess: {
+    zh: '操作成功',
+    en: 'Successful operation',
+  },
 }
