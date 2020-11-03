@@ -412,7 +412,6 @@ export function ruleNewSqlParser(sql, e) {
       newEvent = '#'
     }
     ast.value.from.value[0].value.value.value = `"${newEvent}"`
-    console.log('parser.stringify(ast)', parser.stringify(ast))
     return parser.stringify(ast)
   } catch (err) {
     Message.error(err.toString())
