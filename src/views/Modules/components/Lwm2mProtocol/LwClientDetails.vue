@@ -38,15 +38,17 @@
                     type="primary"
                     @click="batchRead(item)"
                     :loading="btnLoading && clickedButton === `read${item}`"
-                    >Read</el-button
                   >
+                    Read
+                  </el-button>
                   <el-button
                     v-if="resourcesOperations[item] && resourcesOperations[item].includes('W')"
                     size="mini"
                     type="primary"
                     @click="batchWrite(item)"
-                    >Write</el-button
                   >
+                    Write
+                  </el-button>
                 </el-col>
               </el-row>
               <div v-for="(one, index) in objectResources[item]" :key="index" class="content-item">
@@ -225,7 +227,7 @@ export default {
   },
 
   beforeDestroy() {
-    if (this.activeName) {
+    if (this.activeName && Array.isArray(this.objectResources[this.activeName])) {
       this.objectResources[this.activeName].forEach((one) => {
         this.clearTimer(one.timeId)
       })
@@ -256,7 +258,16 @@ export default {
       const data = await getLwClients()
       const res = data.filter(($) => $.imei === this.currentImei)
       this.objectList = res[0].objectList
-      this.objectNames = Object.keys(this.objectList)
+
+      const sortByPath = (valOne, valTwo) => {
+        const intOne = parseInt(valOne.replace('/', ''), 10)
+        const intTwo = parseInt(valTwo.replace('/', ''), 10)
+        if (intOne > intTwo) {
+          return 1
+        }
+        return -1
+      }
+      this.objectNames = Object.keys(this.objectList).sort(sortByPath)
       this.objectNames.forEach((key) => {
         this.$set(this.objectResources, key, [])
       })
@@ -281,7 +292,6 @@ export default {
           this.objectResources[path] = content
 
           content.forEach((one) => {
-            this.clearTimer(one.timeId)
             if (one.operations.includes('W')) {
               this.resourcesOperations[path] = this.resourcesOperations[path].concat('W')
             } else if (one.operations.includes('R')) {
@@ -312,7 +322,7 @@ export default {
       this.clearTimer(timeId)
     },
 
-    intervalGetReadResult(oneFunction, path, object) {
+    intervalGetReadResult(assignValueFunction, path, object) {
       const showErrorFunction = (errMsg) => {
         this.clearTimer(this.readTimeId)
         if (Array.isArray(object)) {
@@ -329,7 +339,7 @@ export default {
           count += 1
           const { content } = await getOrderResponse(this.currentImei, 'read', path)
           if (content) {
-            oneFunction(content)
+            assignValueFunction(content)
             this.clearTimer(this.readTimeId)
           } else if (count >= 10) {
             showErrorFunction('Timed out', object)
