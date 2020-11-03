@@ -2,6 +2,7 @@
 import Clipboard from 'clipboard'
 import sqlFormatter from 'sql-formatter'
 import parser from 'js-sql-parser'
+import { Message } from 'element-ui'
 
 import store from '@/stores'
 import router from '@/routes'
@@ -404,13 +405,18 @@ export function ruleNewSqlParser(sql, e) {
   }
   let newEvent = oldEventDict[e]
   const $sql = sql.replace(/\"/g, '')
-  const ast = parser.parse($sql)
-  if (newEvent === '') {
-    ast.value.where = null
-    newEvent = '#'
+  try {
+    const ast = parser.parse($sql)
+    if (newEvent === '') {
+      ast.value.where = null
+      newEvent = '#'
+    }
+    ast.value.from.value[0].value.value.value = `"${newEvent}"`
+    console.log('parser.stringify(ast)', parser.stringify(ast))
+    return parser.stringify(ast)
+  } catch (err) {
+    Message.error(err.toString())
   }
-  ast.value.from.value[0].value.value.value = `"${newEvent}"`
-  return parser.stringify(ast)
 }
 
 export function getDateDiff(beginTime, endTime) {
