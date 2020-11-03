@@ -63,7 +63,7 @@
                     ></i>
                     <i v-else @click.stop="updataModule(item, true)" class="el-icon-caret-right open"></i>
                     <i
-                      v-if="JSON.stringify(item.config) !== '[]' && JSON.stringify(item.config) !== '{}'"
+                      v-if="Array.isArray(item.config) && item.config.length"
                       @click.stop="toEditModule(item)"
                       class="el-icon-edit-outline"
                     ></i>
