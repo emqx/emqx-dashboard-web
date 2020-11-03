@@ -85,7 +85,10 @@ axios.interceptors.request.use(
     config.auth.password = user.password
 
     store.dispatch('LOADING', true)
-    NProgress.start()
+    // lwm2m observe
+    if (!config.url.includes('?msgType=observe&path=')) {
+      NProgress.start()
+    }
     return config
   },
   (error) => Promise.reject(error),
