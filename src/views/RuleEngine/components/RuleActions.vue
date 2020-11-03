@@ -551,6 +551,7 @@ export default {
 
     actionTypeChange(actionName, oper = 'add') {
       this.selectedAction = JSON.parse(JSON.stringify(this.actionsMap[actionName]))
+      this.actionCategory = this.selectedAction.category
       this.paramsList = []
       this.paramsLoading = true
       setTimeout(this.loadParamsList(oper), 200)
