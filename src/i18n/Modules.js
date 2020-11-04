@@ -266,4 +266,8 @@ export default {
     zh: '数据类型',
     en: 'Data Type',
   },
+  lwClientOffline: {
+    zh: '当前客户端已下线',
+    en: 'The current client is offline',
+  },
 }
