@@ -2,12 +2,17 @@
   <div class="lw-client-details">
     <a-card class="emq-list-card">
       <div class="detail-header">
-        <a href="javascript:;" @click="backListPage">
-          <i class="el-icon-arrow-left">
-            {{ $t('components.clients') }}
-          </i>
-        </a>
-        <span class="endpoint">{{ $route.query.imei }}</span>
+        <div class="imei">
+          <a href="javascript:;" @click="backListPage">
+            <i class="el-icon-arrow-left">
+              {{ $t('components.clients') }}
+            </i>
+          </a>
+          <span class="endpoint">{{ $route.query.imei }}</span>
+        </div>
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="createDialogVisible = true">
+          {{ $t('Base.create') }}
+        </el-button>
       </div>
     </a-card>
     <a-card class="emq-list-card">
@@ -50,6 +55,11 @@
                     Write
                   </el-button>
                 </el-col>
+                <el-col :span="2" :offset="resourcesOperations[item] ? 4 : 12">
+                  <el-button type="dashed danger" size="mini" @click="handleDelete(item)" style="float: right;">
+                    Delete
+                  </el-button>
+                </el-col>
               </el-row>
               <div v-for="(one, index) in objectResources[item]" :key="index" class="content-item">
                 <el-row :class="index < objectResources[item].length - 1 ? 'content-item-row' : ''">
@@ -69,7 +79,6 @@
                       :type="one.timeId ? 'primary' : 'dashed'"
                       class="observe-button"
                       @click="doObserve(one)"
-                      :loading="btnLoading && clickedButton === `observe${item}`"
                       :disabled="one.timeId !== null && one.timeId !== undefined"
                     >
                       Observe<i class="el-icon-caret-right"></i>
@@ -81,7 +90,6 @@
                       class="stop-button"
                       @click="cancelObserve(one)"
                       :disabled="!one.timeId"
-                      :loading="btnLoading && clickedButton === `cancel-observe${item}`"
                     >
                       <span class="stop-icon"></span>
                     </el-button>
@@ -97,13 +105,7 @@
                     <el-button v-if="one.operations.includes('W')" size="mini" type="dashed" @click="singleWrite(one)">
                       Write
                     </el-button>
-                    <el-button
-                      v-if="one.operations.includes('E')"
-                      size="mini"
-                      type="dashed"
-                      :loading="btnLoading && clickedButton === `execute${item}`"
-                      @click="doExecute(one)"
-                    >
+                    <el-button v-if="one.operations.includes('E')" size="mini" type="dashed" @click="doExecute(one)">
                       Exec
                     </el-button>
                   </el-col>
@@ -141,7 +143,6 @@
       title=""
       :width="configList.length > 1 ? '520px' : '400px'"
       :visible.sync="writeDialogVisible"
-      class="create-subscribe"
       @close="handleClose"
     >
       <el-form ref="record" class="el-form--public" :model="record" :rules="rules" size="small" label-position="top">
@@ -191,7 +192,25 @@
 
       <div slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="handleClose">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="handleWrite">{{ $t('Base.confirm') }}</el-button>
+        <el-button type="primary" size="small" :disabled="Object.keys(record).length < 3" @click="handleWrite">
+          {{ $t('Base.confirm') }}
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      :title="$t('Base.create')"
+      width="400px"
+      :visible.sync="createDialogVisible"
+      class="create-object"
+      @close="handleCancelCreate"
+    >
+      <emq-select v-model="createBasePath" :field="{ list: basePathOptions }" size="small"></emq-select>
+      <div slot="footer" class="dialog-align-footer">
+        <el-button plain size="small" @click="handleCancelCreate">{{ $t('Base.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="handleCreate" :disabled="!createBasePath">
+          {{ $t('Base.confirm') }}
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -222,6 +241,9 @@ export default {
       btnLoading: false,
       clickedButton: '',
       listLoading: false,
+      createDialogVisible: false,
+      createBasePath: '',
+      basePathOptions: [],
     }
   },
 
@@ -273,6 +295,11 @@ export default {
     async loadObjectList() {
       const data = await getLwClients()
       const res = data.filter(($) => $.imei === this.currentImei)
+      if (res.length < 1) {
+        this.$message.warning(this.$t('Modules.lwClientOffline'))
+        this.backListPage()
+        return
+      }
       this.objectList = res[0].objectList
 
       const sortByPath = (valOne, valTwo) => {
@@ -285,6 +312,7 @@ export default {
       }
       this.objectNames = Object.keys(this.objectList).sort(sortByPath)
       this.objectNames.forEach((key) => {
+        this.basePathOptions.push(`/${key.split('/')[1]}`)
         this.$set(this.objectResources, key, [])
       })
     },
@@ -297,35 +325,41 @@ export default {
       })
     },
 
-    async handleObjectChange(path) {
+    handleObjectChange(path) {
       if (path) {
         this.listLoading = true
         this.publishOneOrder('discover', { path })
-        this.resourcesOperations[path] = ''
-        const { content, codeMsg } = await getOrderResponse(this.currentImei, 'discover', path)
-        if (Array.isArray(content)) {
-          this.initObjectResourseValues(content)
-          this.objectResources[path] = content
+        try {
+          setTimeout(async () => {
+            this.resourcesOperations[path] = ''
+            const { content, codeMsg } = await getOrderResponse(this.currentImei, 'discover', path)
+            if (Array.isArray(content)) {
+              this.initObjectResourseValues(content)
+              this.objectResources[path] = content
 
-          content.forEach((one) => {
-            if (one.operations.includes('W')) {
-              this.resourcesOperations[path] = this.resourcesOperations[path].concat('W')
-            } else if (one.operations.includes('R')) {
-              this.resourcesOperations[path] = this.resourcesOperations[path].concat('R')
+              content.forEach((one) => {
+                if (one.operations.includes('W')) {
+                  this.resourcesOperations[path] = this.resourcesOperations[path].concat('W')
+                } else if (one.operations.includes('R')) {
+                  this.resourcesOperations[path] = this.resourcesOperations[path].concat('R')
+                }
+              })
+            } else if (typeof content === 'object' && !Array.isArray(content)) {
+              this.objectResources[path] = []
+              Object.keys(content).forEach((key) => {
+                const oneResource = {
+                  name: key,
+                  path: content[key],
+                  operations: '',
+                }
+                this.objectResources[path].push(oneResource)
+              })
+            } else if (codeMsg) {
+              this.objectResources[path] = codeMsg
             }
-          })
-        } else if (typeof content === 'object' && !Array.isArray(content)) {
-          this.objectResources[path] = []
-          Object.keys(content).forEach((key) => {
-            const oneResource = {
-              name: key,
-              path: content[key],
-              operations: '',
-            }
-            this.objectResources[path].push(oneResource)
-          })
-        } else if (codeMsg) {
-          this.objectResources[path] = codeMsg
+          }, 10)
+        } catch (err) {
+          this.$message.error(err.toString())
         }
         this.listLoading = false
       }
@@ -365,6 +399,7 @@ export default {
           showErrorFunction(`Error: ${err.toString()}`, object)
         }
         this.btnLoading = false
+        this.clickedButton = ''
       }, 1000)
     },
 
@@ -419,7 +454,9 @@ export default {
 
     doObserve(one) {
       this.pubOrderByButton('observe', one.path, one.timeId)
-      this.getObserveResult('observe', one)
+      setTimeout(() => {
+        this.getObserveResult('observe', one)
+      }, 10)
       one.timeId = setInterval(() => {
         this.getObserveResult('observe', one)
       }, 5000)
@@ -427,7 +464,9 @@ export default {
 
     cancelObserve(one) {
       this.pubOrderByButton('cancel-observe', one.path, one.timeId)
-      this.getObserveResult('cancel-observe', one)
+      setTimeout(() => {
+        this.getObserveResult('cancel-observe', one)
+      }, 10)
       one.timeId = null
     },
 
@@ -534,6 +573,43 @@ export default {
         },
       })
     },
+
+    async handleCreate() {
+      this.publishOneOrder('create', { basePath: this.createBasePath, content: [] })
+      const { code, codeMsg } = await getOrderResponse(this.currentImei, 'create', this.createBasePath)
+      if (code && parseFloat(code) < 3) {
+        this.$message.success(this.$t('Base.createSuccess'))
+        this.loadObjectList()
+      } else if (codeMsg) {
+        this.$message.error(codeMsg)
+      }
+      this.handleCancelCreate()
+    },
+
+    handleCancelCreate() {
+      this.createDialogVisible = false
+      this.createBasePath = ''
+    },
+
+    handleDelete(path) {
+      this.$confirm(this.$t('Modules.confirmDelete'), this.$t('Base.warning'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
+        .then(async () => {
+          this.pubOrderByButton('delete', path)
+          const { code, codeMsg } = await getOrderResponse(this.currentImei, 'delete', path)
+          if (code && parseFloat(code) < 3) {
+            this.$message.success(this.$t('Base.deleteSuccess'))
+            this.activeName = ''
+            this.loadObjectList()
+          } else if (codeMsg) {
+            this.$message.error(codeMsg)
+          }
+        })
+        .catch(() => {})
+    },
   },
 }
 </script>
@@ -570,6 +646,12 @@ export default {
       margin-bottom: 24px;
 
       .detail-header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 15px;
+
         .el-icon-arrow-left {
           font-weight: 600;
         }
@@ -662,6 +744,12 @@ export default {
   }
   .el-input-number--small {
     width: 100%;
+  }
+
+  .create-object {
+    .el-select {
+      width: 100%;
+    }
   }
 }
 </style>
