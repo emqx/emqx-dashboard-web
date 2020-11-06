@@ -98,4 +98,38 @@ export async function loadNodeDetail(node) {
   return { ...broker, ...stats, ...nodeData }
 }
 
+export async function loadAllMetrics() {
+  const data = {
+    client: {
+      authSuccess: 0,
+      authFailed: 0,
+      connectSuccess: 0,
+    },
+    message: {
+      received: 0,
+      sent: 0,
+      dropped: 0,
+    },
+    messageDrop: {
+      expired: 0,
+      noSubscribers: 0,
+    },
+  }
+  const res = await http.get('/metrics')
+  res.forEach((item) => {
+    const { metrics } = item
+    data.client.connectSuccess += metrics['client.connected']
+    data.client.authSuccess += metrics['client.auth.success']
+    data.client.authFailed += metrics['client.auth.failure']
+
+    data.message.received += metrics['messages.received']
+    data.message.sent += metrics['messages.sent']
+    data.message.dropped += metrics['messages.dropped']
+
+    data.messageDrop.expired += metrics['messages.dropped.expired']
+    data.messageDrop.noSubscribers += metrics['messages.dropped.no_subscribers']
+  })
+  return data
+}
+
 export default {}
