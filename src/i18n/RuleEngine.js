@@ -511,4 +511,20 @@ export default {
     zh: '规则 ID',
     en: 'Rule ID',
   },
+  fillTemplate: {
+    zh: '填充模板',
+    en: 'Fill Template',
+  },
+  strTemplate: {
+    zh: '字符模板',
+    en: 'Template',
+  },
+  templateOutput: {
+    zh: '模板输出',
+    en: 'Result',
+  },
+  sqlTestFirst: {
+    zh: '请先正确完成 SQL 测试',
+    en: 'Please complete the SQL test correctly first',
+  },
 }
