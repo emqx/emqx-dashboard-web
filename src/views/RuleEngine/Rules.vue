@@ -25,6 +25,7 @@
         </div>
 
         <el-table v-bind="rulesTable" :data="tableData" class="data-list">
+          <el-table-column type="index" width="50" label=" "> </el-table-column>
           <el-table-column prop="id" label="ID">
             <template slot-scope="{ row }">
               <router-link

@@ -270,4 +270,8 @@ export default {
     zh: '当前客户端已下线',
     en: 'The current client is offline',
   },
+  requestTimeout: {
+    zh: '请求超时',
+    en: 'Request timed out',
+  },
 }
