@@ -74,6 +74,14 @@ export default {
     setSeriesConfig() {
       this.seriesConfig = []
       for (let i = 0; i < this.yTitle.length; i += 1) {
+        let areaColor = ''
+        if (i < 6) {
+          areaColor = this.chartColors[i]
+        } else if (i % 6 === 0) {
+          areaColor = this.chartColors[6]
+        } else {
+          areaColor = this.chartColors[i % 6]
+        }
         this.seriesConfig.push({
           name: this.yTitle[i],
           type: 'line',
@@ -89,13 +97,14 @@ export default {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: `${this.chartColors[i]}30`,
+                color: areaColor,
               },
               {
                 offset: 1,
-                color: `${this.chartColors[i]}00`,
+                color: '#fff',
               },
             ]),
+            opacity: 0.2,
           },
         })
       }

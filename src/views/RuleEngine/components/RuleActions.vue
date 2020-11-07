@@ -210,7 +210,7 @@
             style="width: 403px;"
             @visible-change="checkResource"
           >
-            <div slot="option" slot-scope="{ item }" class="custom-option">
+            <div slot="option" slot-scope="{ item }" class="custom-option" :title="item.description">
               <span class="key">{{ item.id }}</span>
               <span class="value">{{ item.config.title }}</span>
             </div>
