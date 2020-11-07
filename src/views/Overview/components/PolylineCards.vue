@@ -61,10 +61,10 @@ export default {
     chartColorList() {
       const getLineColors = (index) => {
         const totalColors = ['#22BB7A', '#4065E0', '#EEC90D', '#07E3E4', '#6ECAFA', '#AF79FF']
-        const [...tempColors] = totalColors
-        const firstColor = totalColors[index]
-        tempColors[0] = firstColor
-        return tempColors
+        // Swap the first and index positions
+        const changedColorArr = [...totalColors.splice(0, 1, totalColors[index])]
+        totalColors.splice(index, 1, changedColorArr[0])
+        return totalColors
       }
       return {
         dropped: getLineColors(0),
