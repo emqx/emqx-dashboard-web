@@ -118,12 +118,15 @@ function handleError(error) {
   } else if (message) {
     error.message = message
   }
-  const { name: currentPage } = router.history.current
+  const { name: currentPage, fullPath } = router.history.current
   if (status === 401) {
     toLogin()
   } else if (status === 404 && pluginPages.includes(currentPage)) {
     Message.error(httpMap['-2'])
   } else if (showMessage) {
+    if (fullPath.includes('imei') && error.message.includes('500')) {
+      return
+    }
     if (error.message !== 'module_not_loaded') {
       Message.error(error.message)
     } else {

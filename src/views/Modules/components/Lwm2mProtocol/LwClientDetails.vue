@@ -192,7 +192,7 @@
 
       <div slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="handleClose">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" :disabled="Object.keys(record).length < 3" @click="handleWrite">
+        <el-button type="primary" size="small" @click="handleWrite">
           {{ $t('Base.confirm') }}
         </el-button>
       </div>
@@ -244,6 +244,7 @@ export default {
       createDialogVisible: false,
       createBasePath: '',
       basePathOptions: [],
+      resultTimeId: null,
     }
   },
 
@@ -252,7 +253,7 @@ export default {
       handler(newName, oldName) {
         if (!newName && oldName && Array.isArray(this.objectResources[oldName])) {
           this.objectResources[oldName].forEach((one) => {
-            this.clearTimer(one.timeId)
+            one.timeId = this.clearTimer(one.timeId)
           })
         }
       },
@@ -267,10 +268,11 @@ export default {
   beforeDestroy() {
     if (this.activeName && Array.isArray(this.objectResources[this.activeName])) {
       this.objectResources[this.activeName].forEach((one) => {
-        this.clearTimer(one.timeId)
+        one.timeId = this.clearTimer(one.timeId)
       })
     }
-    this.clearTimer(this.readTimeId)
+    this.readTimeId = this.clearTimer(this.readTimeId)
+    this.resultTimeId = this.clearTimer(this.resultTimeId)
   },
 
   methods: {
@@ -290,6 +292,7 @@ export default {
       if (timeId) {
         clearInterval(timeId)
       }
+      return null
     },
 
     async loadObjectList() {
@@ -329,10 +332,10 @@ export default {
       if (path) {
         this.listLoading = true
         this.publishOneOrder('discover', { path })
-        try {
-          setTimeout(async () => {
+        const getResponseFunction = async () => {
+          try {
             this.resourcesOperations[path] = ''
-            const { content, codeMsg } = await getOrderResponse(this.currentImei, 'discover', path)
+            const { code, content, codeMsg } = await getOrderResponse(this.currentImei, 'discover', path)
             if (Array.isArray(content)) {
               this.initObjectResourseValues(content)
               this.objectResources[path] = content
@@ -357,11 +360,13 @@ export default {
             } else if (codeMsg) {
               this.objectResources[path] = codeMsg
             }
-          }, 10)
-        } catch (err) {
-          this.$message.error(err.toString())
+            // return true: gotResult
+            return this.hasGotResponseCallBack(code, codeMsg)
+          } catch (err) {
+            return false
+          }
         }
-        this.listLoading = false
+        this.getOrderResult(getResponseFunction)
       }
     },
 
@@ -370,12 +375,12 @@ export default {
       this.btnLoading = true
       this.clickedButton = `${way}${path}`
       this.publishOneOrder(way, { path })
-      this.clearTimer(timeId)
+      return this.clearTimer(timeId)
     },
 
     intervalGetReadResult(assignValueFunction, path, object) {
       const showErrorFunction = (errMsg) => {
-        this.clearTimer(this.readTimeId)
+        this.readTimeId = this.clearTimer(this.readTimeId)
         if (Array.isArray(object)) {
           object.forEach((one) => {
             one.values = [`${errMsg}`]
@@ -391,7 +396,7 @@ export default {
           const { content } = await getOrderResponse(this.currentImei, 'read', path)
           if (content) {
             assignValueFunction(content)
-            this.clearTimer(this.readTimeId)
+            this.readTimeId = this.clearTimer(this.readTimeId)
           } else if (count >= 10) {
             showErrorFunction('Timed out', object)
           }
@@ -404,7 +409,7 @@ export default {
     },
 
     batchRead(path) {
-      this.pubOrderByButton('read', path, this.readTimeId)
+      this.readTimeId = this.pubOrderByButton('read', path, this.readTimeId)
       this.initObjectResourseValues(this.objectResources[path])
       this.intervalGetReadResult(
         (content) => {
@@ -422,7 +427,7 @@ export default {
     },
 
     singleRead(one) {
-      this.pubOrderByButton('read', one.path, this.readTimeId)
+      this.readTimeId = this.pubOrderByButton('read', one.path, this.readTimeId)
       this.intervalGetReadResult(
         (content) => {
           const valueArr = []
@@ -447,13 +452,13 @@ export default {
           one.values = valueArr
         }
       } catch (err) {
-        this.clearTimer(one.timeId)
+        one.timeId = this.clearTimer(one.timeId)
         one.values = [`Error: ${err.toString()}`]
       }
     },
 
     doObserve(one) {
-      this.pubOrderByButton('observe', one.path, one.timeId)
+      one.timeId = this.pubOrderByButton('observe', one.path, one.timeId)
       setTimeout(() => {
         this.getObserveResult('observe', one)
       }, 10)
@@ -476,14 +481,22 @@ export default {
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       })
-        .then(async () => {
+        .then(() => {
           this.pubOrderByButton('execute', one.path)
-          const { code, codeMsg } = await getOrderResponse(this.currentImei, 'execute', one.path)
-          if (code && parseFloat(code) < 3) {
-            this.$message.success(this.$t('Base.operateSuccess'))
-          } else if (codeMsg) {
-            this.$message.error(codeMsg)
+          const getResponseFunction = async () => {
+            try {
+              const { code, codeMsg } = await getOrderResponse(this.currentImei, 'execute', one.path)
+              if (code && parseFloat(code) < 3) {
+                this.$message.success(this.$t('Base.operateSuccess'))
+              } else if (codeMsg) {
+                this.$message.error(codeMsg)
+              }
+              return this.hasGotResponseCallBack(code, codeMsg)
+            } catch (err) {
+              return false
+            }
           }
+          this.getOrderResult(getResponseFunction)
         })
         .catch(() => {})
     },
@@ -512,7 +525,7 @@ export default {
       }
     },
 
-    async handleWrite() {
+    handleWrite() {
       const content = []
       const { basePath, dataType, encoding, ...record } = this.record
       Object.keys(record).forEach((key) => {
@@ -534,27 +547,42 @@ export default {
       })
       const data = basePath ? { basePath, content } : content[0]
       const path = basePath || data.path
-      this.publishOneOrder('write', data)
-      const { code, codeMsg } = await getOrderResponse(this.currentImei, 'write', path)
-
-      if (code && parseFloat(code) < 3) {
-        this.$message.success(this.$t('Base.editSuccess'))
-        const pathSplitArr = content[0].path.split('/')
-        const onePath = `/${pathSplitArr[1]}/${pathSplitArr[2]}`
-        const rootPath = basePath || onePath
-        this.objectResources[rootPath].forEach((one) => {
-          content.forEach((item) => {
-            const { path: itemPath } = item
-            const writePath = basePath ? `${basePath}/${itemPath}` : path
-            if (one.path === writePath) {
-              one.values = [item.value]
-            }
-          })
-        })
-      } else if (codeMsg) {
-        this.$message.error(codeMsg)
+      const doWrite = !this.verifyWriteContent(content)
+      const getResponseFunction = async () => {
+        const res = await this.getWriteResult(path, content, basePath)
+        return res
       }
-      this.handleClose()
+      if (doWrite) {
+        this.publishOneOrder('write', data)
+        this.getOrderResult(getResponseFunction)
+        this.handleClose()
+      }
+    },
+
+    async getWriteResult(path, content, basePath) {
+      try {
+        const { code, codeMsg } = await getOrderResponse(this.currentImei, 'write', path)
+        if (code && parseFloat(code) < 3) {
+          this.$message.success(this.$t('Base.editSuccess'))
+          const pathSplitArr = content[0].path.split('/')
+          const onePath = `/${pathSplitArr[1]}/${pathSplitArr[2]}`
+          const rootPath = basePath || onePath
+          this.objectResources[rootPath].forEach((one) => {
+            content.forEach((item) => {
+              const { path: itemPath } = item
+              const writePath = basePath ? `${basePath}/${itemPath}` : path
+              if (one.path === writePath) {
+                one.values = [item.value]
+              }
+            })
+          })
+        } else if (codeMsg) {
+          this.$message.error(codeMsg)
+        }
+        return this.hasGotResponseCallBack(code, codeMsg)
+      } catch (err) {
+        return false
+      }
     },
 
     handleClose() {
@@ -576,15 +604,23 @@ export default {
       })
     },
 
-    async handleCreate() {
+    handleCreate() {
       this.publishOneOrder('create', { path: this.createBasePath, content: [] })
-      const { code, codeMsg } = await getOrderResponse(this.currentImei, 'create', this.createBasePath)
-      if (code && parseFloat(code) < 3) {
-        this.$message.success(this.$t('Base.createSuccess'))
-        this.loadObjectList()
-      } else if (codeMsg) {
-        this.$message.error(codeMsg)
+      const getResponseFunction = async () => {
+        try {
+          const { code, codeMsg } = await getOrderResponse(this.currentImei, 'create', this.createBasePath)
+          if (code && parseFloat(code) < 3) {
+            this.$message.success(this.$t('Base.createSuccess'))
+            this.loadObjectList()
+          } else if (codeMsg) {
+            this.$message.error(codeMsg)
+          }
+          return this.hasGotResponseCallBack(code, codeMsg)
+        } catch (err) {
+          return false
+        }
       }
+      this.getOrderResult(getResponseFunction)
       this.handleCancelCreate()
     },
 
@@ -599,18 +635,72 @@ export default {
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
       })
-        .then(async () => {
+        .then(() => {
           this.pubOrderByButton('delete', path)
-          const { code, codeMsg } = await getOrderResponse(this.currentImei, 'delete', path)
-          if (code && parseFloat(code) < 3) {
-            this.$message.success(this.$t('Base.deleteSuccess'))
-            this.activeName = ''
-            this.loadObjectList()
-          } else if (codeMsg) {
-            this.$message.error(codeMsg)
+          const getResponseFunction = async () => {
+            try {
+              const { code, codeMsg } = await getOrderResponse(this.currentImei, 'delete', path)
+              if (code && parseFloat(code) < 3) {
+                this.$message.success(this.$t('Base.deleteSuccess'))
+                this.activeName = ''
+                this.loadObjectList()
+              } else if (codeMsg) {
+                this.$message.error(codeMsg)
+              }
+              return this.hasGotResponseCallBack(code, codeMsg)
+            } catch (err) {
+              return false
+            }
           }
+          this.getOrderResult(getResponseFunction)
         })
         .catch(() => {})
+    },
+
+    intervalGetOrderResult(getResponseFunction) {
+      const timedOutCallBack = (count) => {
+        if (count >= 10) {
+          this.$message.error(this.$t('Modules.requestTimeout'))
+          this.resultTimeId = this.clearTimer(this.resultTimeId)
+          this.listLoading = false
+        }
+      }
+      let count = 0
+      this.resultTimeId = setInterval(async () => {
+        count += 1
+        const res = await getResponseFunction()
+        if (res) {
+          this.resultTimeId = this.clearTimer(this.resultTimeId)
+          this.listLoading = false
+        }
+        timedOutCallBack(count)
+      }, 1000)
+    },
+    async getOrderResult(getResponseFunction) {
+      const res = await getResponseFunction()
+      if (!res) {
+        this.intervalGetOrderResult(getResponseFunction)
+      } else {
+        this.listLoading = false
+      }
+    },
+
+    hasGotResponseCallBack(code, codeMsg) {
+      if (code || codeMsg) {
+        return true
+      }
+      return false
+    },
+
+    verifyWriteContent(content) {
+      const realContent = []
+      content.forEach((item) => {
+        const { value } = item
+        if (value === false || value) {
+          realContent.push(item)
+        }
+      })
+      return !realContent.length
     },
   },
 }

@@ -107,7 +107,7 @@
                   </el-form-item>
 
                   <!-- template test -->
-                  <el-form-item class="code-editor__item" :label="$t('RuleEngine.strTemplate')">
+                  <!-- <el-form-item class="code-editor__item" :label="$t('RuleEngine.strTemplate')">
                     <div class="monaco-container" :style="{ height: `${templateEditorHeight}px` }">
                       <monaco id="template" v-model="templateStr" warp lang="sql"></monaco>
                     </div>
@@ -123,7 +123,7 @@
                     <div class="monaco-container" style="height: 100px;">
                       <monaco id="templateOutput" v-model="templateOutput" lang="sql" :disabled="true"></monaco>
                     </div>
-                  </el-form-item>
+                  </el-form-item> -->
                 </div>
               </el-collapse-transition>
             </el-form>
