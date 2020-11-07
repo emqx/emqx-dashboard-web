@@ -523,7 +523,7 @@ export default {
           record[key] = Math.floor(dataTime / 1000)
         }
         const oneResource = {
-          path: key,
+          path: basePath ? key.replace(`${basePath}/`, '') : key,
           type: dataType[key],
           value: record[key],
         }
@@ -544,7 +544,9 @@ export default {
         const rootPath = basePath || onePath
         this.objectResources[rootPath].forEach((one) => {
           content.forEach((item) => {
-            if (one.path === item.path) {
+            const { path: itemPath } = item
+            const writePath = basePath ? `${basePath}/${itemPath}` : path
+            if (one.path === writePath) {
               one.values = [item.value]
             }
           })
@@ -575,7 +577,7 @@ export default {
     },
 
     async handleCreate() {
-      this.publishOneOrder('create', { basePath: this.createBasePath, content: [] })
+      this.publishOneOrder('create', { path: this.createBasePath, content: [] })
       const { code, codeMsg } = await getOrderResponse(this.currentImei, 'create', this.createBasePath)
       if (code && parseFloat(code) < 3) {
         this.$message.success(this.$t('Base.createSuccess'))
