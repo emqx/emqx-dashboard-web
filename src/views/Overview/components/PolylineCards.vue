@@ -1,18 +1,40 @@
 <template>
   <div class="polyline-cards">
+    <el-collapse-transition v-if="bigChartItem.text">
+      <div class="big-chart">
+        <a-card class="big-card">
+          <div class="card-title">{{ bigChartItem.text }}</div>
+          <span class="shrink-icon" @click="bigChartItem = {}"></span>
+          <polyline-chart
+            ref="bigChart"
+            chart-id="big-polyline"
+            :y-title="metricTitles"
+            :chart-data="metricLog[bigChartItem.value]"
+            :chartColors="chartColorList[bigChartItem.value]"
+            height="420px"
+            gridRight="2%"
+            gridLeft="1%"
+            legendBottom="10px"
+          ></polyline-chart>
+        </a-card>
+      </div>
+    </el-collapse-transition>
     <el-row :gutter="20">
       <div v-for="item in dataTypeFilter" :key="item.value">
-        <el-col :span="8">
-          <a-card class="polyline-card" hoverable>
-            <div class="card-title">{{ item.text }}</div>
-            <polyline-chart
-              :chart-id="`${item.value}-polyline`"
-              :y-title="metricTitles"
-              :chart-data="metricLog[item.value]"
-              :chartColors="chartColorList[item.value]"
-            ></polyline-chart>
-          </a-card>
-        </el-col>
+        <template v-if="item !== bigChartItem">
+          <el-col :span="8">
+            <a-card class="polyline-card">
+              <div class="card-title">{{ item.text }}</div>
+              <span class="enlarge-icon" @click="bigChartItem = item"></span>
+              <polyline-chart
+                :chart-id="`${item.value}-polyline`"
+                :y-title="metricTitles"
+                :chart-data="metricLog[item.value]"
+                :chartColors="chartColorList[item.value]"
+              ></polyline-chart>
+            </a-card>
+          </el-col>
+        </template>
       </div>
     </el-row>
   </div>
@@ -51,6 +73,7 @@ export default {
       },
       dataTypeList: ['dropped', 'connection', 'route', 'subscriptions', 'sent', 'received'],
       timerMetrics: null,
+      bigChartItem: {},
     }
   },
 
@@ -141,11 +164,12 @@ export default {
 @import '../../../assets/style/variables';
 
 .polyline-cards {
+  .big-card,
   .polyline-card {
     @include trans-up-mixin(-1px);
     border-radius: 8px;
-    height: 255px;
     margin-top: 20px;
+    position: relative;
 
     .ant-card-body {
       padding: 12px;
@@ -156,6 +180,56 @@ export default {
       color: #333;
       font-weight: bold;
       margin: 2px 0 10px 6px;
+    }
+  }
+
+  .shrink-icon,
+  .enlarge-icon {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-size: 100% 100%;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  .enlarge-icon {
+    background: url('../../../assets/img/enlarge.png') no-repeat;
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .shrink-icon {
+    background: url('../../../assets/img/shrink.png') no-repeat;
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .big-card {
+    height: 480px;
+
+    .shrink-icon {
+      visibility: hidden;
+    }
+
+    &:hover {
+      .shrink-icon {
+        visibility: visible;
+      }
+    }
+  }
+
+  .polyline-card {
+    height: 255px;
+
+    .enlarge-icon {
+      visibility: hidden;
+    }
+
+    &:hover {
+      .enlarge-icon {
+        visibility: visible;
+      }
     }
   }
 }

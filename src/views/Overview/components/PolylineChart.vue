@@ -50,6 +50,18 @@ export default {
       type: String,
       default: '190px',
     },
+    gridRight: {
+      type: String,
+      default: '5%',
+    },
+    gridLeft: {
+      type: String,
+      default: '2%',
+    },
+    legendBottom: {
+      type: String,
+      default: '-5px',
+    },
   },
 
   data() {
@@ -114,7 +126,7 @@ export default {
       this.chart = echarts.init(document.getElementById(this.chartId))
       const option = {
         legend: {
-          bottom: '0px',
+          bottom: this.legendBottom,
           data: this.yTitle,
           icon: 'circle',
           itemWidth: 6,
@@ -125,8 +137,8 @@ export default {
           confine: true,
         },
         grid: {
-          left: '2%',
-          right: '5%',
+          left: this.gridLeft,
+          right: this.gridRight,
           top: '3%',
           bottom: '12%',
           containLabel: true,
