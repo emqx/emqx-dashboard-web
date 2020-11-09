@@ -28,7 +28,7 @@
           </div>
           <a-skeleton v-if="listLoading" active></a-skeleton>
           <div v-else class="collapse-content">
-            <template v-if="Array.isArray(objectResources[item])">
+            <template v-if="Array.isArray(objectResources[item]) && objectResources[item].length">
               <el-row class="row-titles">
                 <el-col :span="8">
                   <span class="main-black row-title">{{ $t('Schemas.name') }}</span>
@@ -56,8 +56,8 @@
                     Write
                   </el-button>
                 </el-col>
-                <el-col v-if="objectResources[item].length" :span="2" :offset="resourcesOperations[item] ? 4 : 12">
-                  <el-button type="dashed danger" size="mini" @click="handleDelete(item)" style="float: right;">
+                <el-col :span="2" :offset="resourcesOperations[item] ? 4 : 12">
+                  <el-button type="danger" size="mini" @click="handleDelete(item)" style="float: right;">
                     Delete
                   </el-button>
                 </el-col>
@@ -74,35 +74,34 @@
                     <span class="light-gray data-type">{{ one.dataType }}</span>
                   </el-col>
                   <el-col :span="7">
-                    <el-button
-                      v-if="one.operations.includes('R')"
-                      size="mini"
-                      :type="one.timeId ? 'primary' : 'dashed'"
-                      class="observe-button"
-                      @click="doObserve(one)"
-                      :disabled="one.timeId !== null && one.timeId !== undefined"
-                    >
-                      Observe<i class="el-icon-caret-right"></i>
-                    </el-button>
-                    <el-button
-                      v-if="one.operations.includes('R')"
-                      size="mini"
-                      type="dashed"
-                      class="stop-button"
-                      @click="cancelObserve(one)"
-                      :disabled="!one.timeId"
-                    >
-                      <span class="stop-icon"></span>
-                    </el-button>
-                    <el-button
-                      v-if="one.operations.includes('R')"
-                      :loading="btnLoading && clickedButton === `read${one.path}`"
-                      size="mini"
-                      type="dashed"
-                      @click="singleRead(one)"
-                    >
-                      Read
-                    </el-button>
+                    <template v-if="one.operations.includes('R')">
+                      <el-button
+                        size="mini"
+                        :type="one.timeId ? 'primary' : 'dashed'"
+                        class="observe-button"
+                        @click="doObserve(one)"
+                        :disabled="one.timeId !== null && one.timeId !== undefined"
+                      >
+                        Observe<i class="el-icon-refresh"></i>
+                      </el-button>
+                      <el-button
+                        size="mini"
+                        type="dashed"
+                        class="stop-button"
+                        @click="cancelObserve(one)"
+                        :disabled="!one.timeId"
+                        icon="el-icon-switch-button"
+                      >
+                      </el-button>
+                      <el-button
+                        :loading="btnLoading && clickedButton === `read${one.path}`"
+                        size="mini"
+                        type="dashed"
+                        @click="singleRead(one)"
+                      >
+                        Read
+                      </el-button>
+                    </template>
                     <el-button v-if="one.operations.includes('W')" size="mini" type="dashed" @click="singleWrite(one)">
                       Write
                     </el-button>
@@ -131,7 +130,11 @@
             <template v-else>
               <el-col :span="2" :offset="8">
                 <span class="light-gray">
-                  {{ objectResources[item] ? objectResources[item] : $t('Modules.noData') }}
+                  {{
+                    objectResources[item] && !Array.isArray(objectResources[item])
+                      ? objectResources[item]
+                      : $t('Modules.noData')
+                  }}
                 </span>
               </el-col>
             </template>
@@ -801,17 +804,6 @@ export default {
         width: 8px;
         height: 8px;
         background-color: rgba(0, 0, 0, 0.65);
-      }
-    }
-    .observe-button {
-      position: relative;
-      padding-right: 18px;
-
-      .el-icon-caret-right {
-        font-size: 16px;
-        position: absolute;
-        right: 1px;
-        bottom: 2px;
       }
     }
   }
