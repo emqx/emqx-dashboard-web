@@ -12,7 +12,7 @@
             :chart-data="metricLog[bigChartItem.value]"
             :chartColors="chartColorList[bigChartItem.value]"
             height="420px"
-            gridRight="2%"
+            gridRight="1.5%"
             gridLeft="1%"
             legendBottom="10px"
           ></polyline-chart>
@@ -195,14 +195,14 @@ export default {
 
   .enlarge-icon {
     background: url('../../../assets/img/enlarge.png') no-repeat;
-    right: 15px;
-    bottom: 15px;
+    right: 10px;
+    bottom: 10px;
   }
 
   .shrink-icon {
     background: url('../../../assets/img/shrink.png') no-repeat;
-    right: 20px;
-    bottom: 20px;
+    right: 15px;
+    bottom: 15px;
   }
 
   .big-card {
