@@ -10,9 +10,9 @@
           </a>
           <span class="endpoint">{{ $route.query.imei }}</span>
         </div>
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="createDialogVisible = true">
+        <!-- <el-button type="primary" size="small" icon="el-icon-plus" @click="createDialogVisible = true">
           {{ $t('Base.create') }}
-        </el-button>
+        </el-button> -->
       </div>
     </a-card>
     <a-card class="emq-list-card">
@@ -26,7 +26,8 @@
               <span class="light-gray">{{ item }}</span>
             </el-col>
           </div>
-          <div v-loading="listLoading" class="collapse-content">
+          <a-skeleton v-if="listLoading" active></a-skeleton>
+          <div v-else class="collapse-content">
             <template v-if="Array.isArray(objectResources[item])">
               <el-row class="row-titles">
                 <el-col :span="8">
@@ -55,7 +56,7 @@
                     Write
                   </el-button>
                 </el-col>
-                <el-col :span="2" :offset="resourcesOperations[item] ? 4 : 12">
+                <el-col v-if="objectResources[item].length" :span="2" :offset="resourcesOperations[item] ? 4 : 12">
                   <el-button type="dashed danger" size="mini" @click="handleDelete(item)" style="float: right;">
                     Delete
                   </el-button>
@@ -256,6 +257,8 @@ export default {
             one.timeId = this.clearTimer(one.timeId)
           })
         }
+        this.readTimeId = this.clearTimer(this.readTimeId)
+        this.resultTimeId = this.clearTimer(this.resultTimeId)
       },
       deep: true,
     },
@@ -668,12 +671,16 @@ export default {
       let count = 0
       this.resultTimeId = setInterval(async () => {
         count += 1
-        const res = await getResponseFunction()
-        if (res) {
-          this.resultTimeId = this.clearTimer(this.resultTimeId)
-          this.listLoading = false
+        try {
+          const res = await getResponseFunction()
+          if (res) {
+            this.resultTimeId = this.clearTimer(this.resultTimeId)
+            this.listLoading = false
+          }
+          timedOutCallBack(count)
+        } catch (err) {
+          timedOutCallBack(count)
         }
-        timedOutCallBack(count)
       }, 1000)
     },
     async getOrderResult(getResponseFunction) {

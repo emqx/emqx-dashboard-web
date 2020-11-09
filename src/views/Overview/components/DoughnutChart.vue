@@ -69,9 +69,6 @@ export default {
         tooltip: {
           trigger: 'item',
           formatter: '{a} <br/>{b}: {c} ({d}%)',
-          textStyle: {
-            fontSize: 12,
-          },
         },
         legend: {
           orient: 'horizontal',
@@ -97,8 +94,7 @@ export default {
             },
             emphasis: {
               label: {
-                show: true,
-                fontSize: '12',
+                show: false,
               },
             },
             labelLine: {
