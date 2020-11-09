@@ -223,8 +223,8 @@ export default {
     it is recommended that you go to use <a href="/#/modules">Modules</a>.`,
   },
   searchClient: {
-    zh: '请输入 Endpoint',
-    en: 'Please input Endpoint',
+    zh: '请输入 IMEI',
+    en: 'Please input IMEI',
   },
   enhancedAuth: {
     zh: '增强认证',
