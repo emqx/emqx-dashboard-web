@@ -136,7 +136,13 @@
     <el-col :span="configList.length === 1 && fullSpanType.indexOf(configList[0].type) === -1 ? 9 : 16">
       <div class="button-group__center">
         <el-button size="small" @click="exitDetail(true)">{{ $t('Base.cancel') }}</el-button>
-        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate()">
+        <el-button
+          :loading="buttonLoading"
+          class="dialog-primary-btn"
+          type="primary"
+          size="small"
+          @click="handleCreate()"
+        >
           <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>
           <span v-else>{{ $t('Base.confirm') }}</span>
         </el-button>
@@ -183,6 +189,7 @@ export default {
       originRecord: {
         config: {},
       },
+      buttonLoading: false,
     }
   },
 
@@ -295,6 +302,7 @@ export default {
       })
 
       if (this.oper === 'add') {
+        this.buttonLoading = true
         this.record.type = this.moduleData.type
         const data = await createModule(this.record)
         const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
@@ -302,6 +310,7 @@ export default {
         localStorage.setItem('addedModules', JSON.stringify(addedModules))
         this.$message.success(this.$t('Modules.moduleAddSuccess'))
         this.exitDetail()
+        this.buttonLoading = false
       } else {
         const isEdited = !_.isEqual(this.record.config, this.originRecord.config)
         if (isEdited) {
