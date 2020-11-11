@@ -2,7 +2,7 @@
   <el-row :gutter="40" class="resource-field">
     <ul class="field-info">
       <el-col v-for="(item, i) in config" :key="i" :span="12">
-        <li class="field-info-item" :title="item.description">
+        <li class="field-info-item" :title="item.value.file ? item.value.file : item.description">
           <div class="field-title">{{ item.title }}:</div>
           <span class="field-value">{{ item.value | itemValue }}</span>
         </li>
@@ -20,7 +20,9 @@ export default {
   filters: {
     itemValue(val) {
       if (typeof val === 'object') {
-        return JSON.stringify(val)
+        const { file } = val
+        const data = !file ? JSON.stringify(val) : `${file.slice(0, 31)} ...`
+        return data
       }
       return val
     },
