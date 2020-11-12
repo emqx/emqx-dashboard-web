@@ -139,10 +139,11 @@ function handleError(error) {
 axios.interceptors.response.use((response) => {
   let res = response.data
   if (response.config.url.includes('/data/file')) {
-    const { file, filename } = response.data
+    const { file, filename, data } = response.data
     res.data = {
       file,
       filename,
+      data,
     }
   }
   let error = ''
