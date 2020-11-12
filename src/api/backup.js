@@ -20,10 +20,8 @@ export function uploadBackupFile(data) {
   return http.post('/data/file', data)
 }
 
-export function importBackup(filename) {
-  return http.post('/data/import', {
-    filename,
-  })
+export function importBackup(body) {
+  return http.post('/data/import', body)
 }
 
 export default {}

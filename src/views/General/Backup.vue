@@ -32,6 +32,7 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
+          <el-table-column prop="node" :label="$t('RuleEngine.node')"></el-table-column>
           <el-table-column prop="filename" :label="$t('Backup.filename')"></el-table-column>
           <el-table-column prop="size" :label="$t('Backup.size')">
             <template slot-scope="{ row }">
@@ -116,7 +117,8 @@ export default {
       }
     },
     async handleRestore(row) {
-      const res = await importBackup(row.filename)
+      const { filename, node } = row
+      const res = await importBackup({ filename, node })
       if (res) {
         this.$message.success(this.$t('Backup.restoreSuccess'))
       }
@@ -152,8 +154,9 @@ export default {
           filename: file.name,
         }
         const res = await uploadBackupFile(uploadData)
+        const { node } = res.data
         if (res) {
-          this.handleRestore({ filename: file.name })
+          this.handleRestore({ filename: file.name, node })
           this.loadData()
           this.$refs.upload.clearFiles()
         }
