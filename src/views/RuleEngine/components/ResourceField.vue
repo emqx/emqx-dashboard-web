@@ -8,7 +8,17 @@
           :title="item.value.file ? item.value.file : item.description"
         >
           <div class="field-title">{{ item.title }}:</div>
-          <span class="field-value">{{ item.value | itemValue }}</span>
+          <span class="field-value">
+            <span v-if="item.key === 'password' && item.value && showPwdIndex !== i" class="field-password">
+              ***********
+            </span>
+            <span v-else>{{ item.value | itemValue }}</span>
+            <span
+              v-if="item.key === 'password' && item.value"
+              :class="['el-icon-view', showPwdIndex === i ? 'active' : '']"
+              @click="togglePassword(i)"
+            ></span>
+          </span>
         </li>
       </el-col>
     </ul>
@@ -40,17 +50,45 @@ export default {
   },
 
   data() {
-    return {}
+    return {
+      showPwdIndex: -1,
+    }
   },
 
   created() {},
 
-  methods: {},
+  methods: {
+    togglePassword(i) {
+      this.showPwdIndex = this.showPwdIndex === i ? -1 : i
+    },
+  },
 }
 </script>
 
-<style lang="scss" scoped>
-.field-title {
-  width: 140px !important;
+<style lang="scss">
+.resource-field {
+  .field-title {
+    width: 140px !important;
+  }
+
+  .field-value {
+    .field-password {
+      vertical-align: middle;
+      line-height: 17px;
+    }
+
+    .el-icon-view {
+      margin-left: 5px;
+      cursor: pointer;
+      color: #a2a2a2;
+      &:hover {
+        color: #34c388;
+      }
+    }
+
+    .active {
+      color: #34c388;
+    }
+  }
 }
 </style>
