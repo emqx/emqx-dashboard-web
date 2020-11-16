@@ -9,10 +9,9 @@
         >
           <div class="field-title">{{ item.title }}:</div>
           <span class="field-value">
-            <span v-if="item.key === 'password' && item.value && showPwdIndex !== i" class="field-password">
-              ***********
+            <span :class="{ 'field-password': showPwdIndex !== i && item.key === 'password' }">
+              {{ item.value | itemValue({ i, key: item.key, showPwdIndex }) }}
             </span>
-            <span v-else>{{ item.value | itemValue }}</span>
             <span
               v-if="item.key === 'password' && item.value"
               :class="['el-icon-view', showPwdIndex === i ? 'active' : '']"
@@ -32,11 +31,15 @@ export default {
   components: {},
 
   filters: {
-    itemValue(val) {
+    itemValue(val, params) {
+      const { i, key, showPwdIndex } = params
       if (typeof val === 'object') {
         const { file } = val
         const data = !file ? JSON.stringify(val) : `${file.slice(0, 31)} ...`
         return data
+      }
+      if (val && key === 'password' && showPwdIndex !== i) {
+        return '**********'
       }
       return val
     },
