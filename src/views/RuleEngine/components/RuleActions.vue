@@ -205,13 +205,13 @@
           <emq-select
             v-model="record.params.$resource"
             :field="{ options: availableResources }"
-            :field-name="{ label: 'description', value: 'id' }"
+            :field-name="{ label: 'id', value: 'id' }"
             class="reset-width"
             style="width: 403px;"
             @visible-change="checkResource"
           >
-            <div slot="option" slot-scope="{ item }" class="custom-option">
-              <span class="key">{{ item.description }}</span>
+            <div slot="option" slot-scope="{ item }" class="custom-option" :title="item.description">
+              <span class="key">{{ item.id }}</span>
               <span class="value">{{ item.config.title }}</span>
             </div>
           </emq-select>
@@ -249,6 +249,13 @@
                     v-if="item.type === 'number'"
                     v-model.number="record.params[item.key]"
                     v-bind="item.bindAttributes"
+                  >
+                  </el-input>
+                  <el-input
+                    v-else-if="item.type === 'password'"
+                    v-model="record.params[item.key]"
+                    v-bind="item.bindAttributes"
+                    show-password
                   >
                   </el-input>
                   <div v-else-if="item.key === 'sql'" class="monaco-container monaco-action__sql">
@@ -551,6 +558,7 @@ export default {
 
     actionTypeChange(actionName, oper = 'add') {
       this.selectedAction = JSON.parse(JSON.stringify(this.actionsMap[actionName]))
+      this.actionCategory = this.selectedAction.category
       this.paramsList = []
       this.paramsLoading = true
       setTimeout(this.loadParamsList(oper), 200)

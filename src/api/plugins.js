@@ -97,12 +97,12 @@ export function addAuthMnesia(body) {
 
 // Delete Auth mnesia
 export function deleteAuthMnesia(login) {
-  return http.delete(`/auth_user/${login}`)
+  return http.delete(`/auth_user/${encodeURIComponent(login)}`)
 }
 
 // Auth mnesia Detail
 export function loadAuthMnesia(login) {
-  return http.get(`/auth_user/${login}`)
+  return http.get(`/auth_user/${encodeURIComponent(login)}`)
 }
 
 // Update Auth mnesia

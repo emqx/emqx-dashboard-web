@@ -5,11 +5,12 @@
         <el-form :model="record" ref="record" :rules="rules">
           <el-col :span="6">
             <el-form-item>
-              <emq-select v-model="type" :field="{ options: typeOptions }" size="small"> </emq-select>
+              <emq-select v-model="type" :field="{ options: typeOptions }" size="small" @selectChange="typeChange">
+              </emq-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item :prop="type === 'clientid' ? 'clientid' : 'name'">
+            <el-form-item :prop="type === 'clientid' ? 'clientid' : 'username'">
               <el-input
                 v-if="type === 'clientid'"
                 v-model="record.clientid"
@@ -33,6 +34,7 @@
                 size="small"
                 type="password"
                 :placeholder="$t('Base.password')"
+                show-password
                 clearable
               >
               </el-input>
@@ -186,6 +188,9 @@ export default {
   },
 
   methods: {
+    typeChange() {
+      this.$refs.record.resetFields()
+    },
     loadOneData(type) {
       if (type === 'clientid') {
         this.loadClinetIdData()
@@ -219,8 +224,8 @@ export default {
       this.usernameCount = count
       this.nameListLoading = false
     },
-    async save() {
-      this.$refs.record.validate(async (valid) => {
+    save() {
+      this.$refs.record.validate((valid) => {
         if (!valid) {
           return
         }
@@ -232,6 +237,9 @@ export default {
           const { clientid, ...data } = this.record
           this.addData(data)
         }
+        setTimeout(() => {
+          this.addLoading = false
+        }, 200)
       })
     },
     async addData(data) {
@@ -242,7 +250,6 @@ export default {
     },
     addSuccess(type) {
       this.$message.success(this.$t('Base.createSuccess'))
-      this.addLoading = false
       this.loadOneData(type)
       this.$refs.record.resetFields()
     },

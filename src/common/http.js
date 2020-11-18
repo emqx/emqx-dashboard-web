@@ -85,7 +85,10 @@ axios.interceptors.request.use(
     config.auth.password = user.password
 
     store.dispatch('LOADING', true)
-    NProgress.start()
+    // lwm2m observe
+    if (!config.url.includes('?msgType=observe&path=')) {
+      NProgress.start()
+    }
     return config
   },
   (error) => Promise.reject(error),
@@ -115,13 +118,20 @@ function handleError(error) {
   } else if (message) {
     error.message = message
   }
-  const { name: currentPage } = router.history.current
+  const { name: currentPage, fullPath } = router.history.current
   if (status === 401) {
     toLogin()
   } else if (status === 404 && pluginPages.includes(currentPage)) {
     Message.error(httpMap['-2'])
   } else if (showMessage) {
-    Message.error(error.message)
+    if (fullPath.includes('imei') && error.message.includes('500')) {
+      return
+    }
+    if (error.message !== 'module_not_loaded') {
+      Message.error(error.message)
+    } else {
+      Message.warning('Related module are not load')
+    }
   }
   return Promise.reject(error.message)
 }
@@ -129,10 +139,11 @@ function handleError(error) {
 axios.interceptors.response.use((response) => {
   let res = response.data
   if (response.config.url.includes('/data/file')) {
-    const { file, filename } = response.data
+    const { file, filename, data } = response.data
     res.data = {
       file,
       filename,
+      data,
     }
   }
   let error = ''

@@ -4,11 +4,19 @@
       <el-table
         class="array-editor"
         :data="form.tableData"
-        :render-header="labelHeads"
         size="mini"
         :header-cell-class-name="addHeaderCellClassName"
       >
         <el-table-column :label="item" v-for="(item, index) in headers" :key="index">
+          <template slot="header">
+            <span class="my-header">
+              {{ item }}
+              <el-popover v-if="descriptionDic[item]" width="220" trigger="hover" placement="top">
+                <div class="emq-popover-content" v-html="descriptionDic[item]"></div>
+                <i slot="reference" class="el-icon-question"></i>
+              </el-popover>
+            </span>
+          </template>
           <template slot-scope="{ row, $index }">
             <el-form-item
               :prop="`tableData.${$index}.${row[item].formItemAttributes.prop}`"
@@ -114,6 +122,7 @@ export default {
         rules: {},
       },
       innerValid: true,
+      descriptionDic: {},
     }
   },
 
@@ -141,6 +150,7 @@ export default {
       Object.entries(form).forEach(([k, v]) => {
         const labelName = v.formItemAttributes.label
         this.headers.push(labelName)
+        this.descriptionDic[labelName] = v.formItemAttributes.description
         this.oneRow[labelName] = v
         const { key, value } = v
         this.oneRow[key] = value
@@ -149,9 +159,6 @@ export default {
       })
       Object.assign(this.form.rules, rules)
       this.assignValue()
-    },
-    labelHeads(h, { column }) {
-      return h('span', { class: 'table-head', style: { width: '100%' } }, [column.label])
     },
     atInputChange() {
       this.validateForm()
@@ -185,8 +192,9 @@ export default {
     // eslint-disable-next-line no-unused-vars
     addHeaderCellClassName({ row, column, rowIndex, columnIndex }) {
       const columnRule = this.allColumnRule[column.label]
-      if (columnRule && columnRule.length) {
-        return 'requiredclass'
+      if (columnRule) {
+        const res = columnRule.find(($) => $.required === true)
+        return res ? 'requiredclass' : ''
       }
       return true
     },
@@ -202,6 +210,10 @@ export default {
 <style lang="scss">
 .array-editor {
   font-size: 12px !important;
+
+  .my-header {
+    color: #333;
+  }
 
   .el-input {
     width: 100% !important;

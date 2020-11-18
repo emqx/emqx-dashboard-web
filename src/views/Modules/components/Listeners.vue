@@ -52,6 +52,13 @@
                       v-bind="item.bindAttributes"
                     >
                     </el-input>
+                    <el-input
+                      v-else-if="item.type === 'password'"
+                      v-model="record.config[item.key]"
+                      v-bind="item.bindAttributes"
+                      show-password
+                    >
+                    </el-input>
                     <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes"> </el-input>
                   </template>
                   <!-- select -->
@@ -91,7 +98,7 @@
 </template>
 
 <script>
-import { renderParamsForm } from '@/common/utils'
+import { renderParamsForm, verifyListener } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import FileEditor from '@/components/FileEditor'
 
@@ -185,6 +192,8 @@ export default {
       })
       this.record.config = Object.assign(commonRecordConfig, optionRecordConfig)
       this.rules.config = Object.assign(commonRulesConfig, rules)
+      const verifyListenerArr = [{ required: true, validator: verifyListener }]
+      this.rules.config.listen_on = verifyListenerArr
       if (this.currentOper === 'edit') {
         Object.assign(this.record.config, this.selectedListener)
       }

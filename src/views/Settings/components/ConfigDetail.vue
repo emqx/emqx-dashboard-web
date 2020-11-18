@@ -56,6 +56,13 @@
                       v-bind="item.bindAttributes"
                     >
                     </el-input>
+                    <el-input
+                      v-else-if="item.type === 'password'"
+                      v-model="record.configs[item.key]"
+                      v-bind="item.bindAttributes"
+                      show-password
+                    >
+                    </el-input>
                     <el-input v-else v-model="record.configs[item.key]" v-bind="item.bindAttributes"> </el-input>
                   </template>
                   <template v-else>
@@ -88,11 +95,13 @@
       </el-form>
       <el-col v-if="nullKeys.length" :span="24" class="show-more">
         <a href="javascript:;" @click="toggleRecords">
-          {{ showMoreItems ? $t('Clients.collapse') : $t('Clients.expand') }}
-          <i :class="showMoreItems ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+          <span>
+            {{ showMoreItems ? $t('Clients.collapse') : $t('Clients.expand') }}
+            <i :class="showMoreItems ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+          </span>
         </a>
       </el-col>
-      <el-col class="button-group__center" :span="24" style="margin-bottom: 10px;">
+      <el-col class="button-group__center" :span="12">
         <el-button plain :disabled="selfDisabled" type="default" size="medium" @click="cancel">
           {{ $t('Base.cancel') }}
         </el-button>
@@ -107,7 +116,7 @@
 
 <script>
 import { loadZoneConfig, loadConfigSpec } from '@/api/settings'
-import { renderParamsForm, verifyID } from '@/common/utils'
+import { renderParamsForm, verifyID, verifyListener } from '@/common/utils'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
 
@@ -347,6 +356,10 @@ export default {
       this.configList = this.from === 'listener' ? form : form.sort(this.sortKeyName)
       this.showConfigList = [...this.configList]
       this.rules.configs = rules
+      if (this.from === 'listener') {
+        const verifyListenerArr = [{ required: true, validator: verifyListener }]
+        this.rules.configs.listener = verifyListenerArr
+      }
       this.record.configs = {}
       this.originRecord.configs = {}
       form.forEach(({ key, value }) => {
@@ -435,6 +448,10 @@ export default {
   }
   .show-more {
     text-align: center;
+    span {
+      display: inline-block;
+      margin-right: 55px;
+    }
     a {
       display: inline-block;
       width: 100%;
@@ -448,7 +465,7 @@ export default {
       left: 0px;
       top: 8px;
       z-index: 9;
-      width: 46%;
+      width: 44%;
       height: 1px;
       background-color: #edeef2;
     }
@@ -458,7 +475,7 @@ export default {
       right: 0px;
       top: 8px;
       z-index: 9;
-      width: 46%;
+      width: 49%;
       height: 1px;
       background-color: #edeef2;
     }

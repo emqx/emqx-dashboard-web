@@ -73,6 +73,14 @@
                           >
                           </el-input>
 
+                          <el-input
+                            v-else-if="item.type === 'password'"
+                            v-model="record.config[item.key]"
+                            v-bind="item.bindAttributes"
+                            show-password
+                          >
+                          </el-input>
+
                           <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes"> </el-input>
                         </template>
 
@@ -127,8 +135,14 @@
     </div>
     <el-col :span="configList.length === 1 && fullSpanType.indexOf(configList[0].type) === -1 ? 9 : 16">
       <div class="button-group__center">
-        <el-button size="small" @click="exitDetail">{{ $t('Base.cancel') }}</el-button>
-        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate()">
+        <el-button size="small" @click="exitDetail(true)">{{ $t('Base.cancel') }}</el-button>
+        <el-button
+          :loading="buttonLoading"
+          class="dialog-primary-btn"
+          type="primary"
+          size="small"
+          @click="handleCreate()"
+        >
           <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>
           <span v-else>{{ $t('Base.confirm') }}</span>
         </el-button>
@@ -175,6 +189,7 @@ export default {
       originRecord: {
         config: {},
       },
+      buttonLoading: false,
     }
   },
 
@@ -287,6 +302,7 @@ export default {
       })
 
       if (this.oper === 'add') {
+        this.buttonLoading = true
         this.record.type = this.moduleData.type
         const data = await createModule(this.record)
         const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
@@ -294,6 +310,7 @@ export default {
         localStorage.setItem('addedModules', JSON.stringify(addedModules))
         this.$message.success(this.$t('Modules.moduleAddSuccess'))
         this.exitDetail()
+        this.buttonLoading = false
       } else {
         const isEdited = !_.isEqual(this.record.config, this.originRecord.config)
         if (isEdited) {
@@ -366,17 +383,13 @@ export default {
         })
         .catch(() => {})
     },
-    exitDetail() {
+    exitDetail(isCancel = false) {
       this.cleanForm()
       setTimeout(() => {
-        if (this.oper === 'edit') {
-          if (this.from === 'modules') {
-            this.$router.push('/modules')
-          } else {
-            this.$router.push(`/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`)
-          }
-        } else {
+        if (this.from === 'modules' || !isCancel) {
           this.$router.push('/modules')
+        } else {
+          this.$router.push(`/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`)
         }
       }, 10)
     },

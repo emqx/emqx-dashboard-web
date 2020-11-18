@@ -142,7 +142,7 @@ export default {
   monitor: {
     zh: '运维监控',
     ja: 'モニター',
-    en: 'Monitoring',
+    en: 'DevOps',
   },
   localModules: {
     zh: '内部模块',
@@ -270,5 +270,75 @@ export default {
     zh: '是否允许',
     ja: '許可',
     en: 'Allowed',
+  },
+  useModulesTip: {
+    zh: 'EMQ X 提供了丰富的模块用于替换插件，建议您前往使用 <a href="/#/modules">模块</a>。',
+    en: `EMQ X provides a wealth of Modules to replace Plugin,
+    it is recommended that you go to use <a href="/#/modules">Modules</a>.`,
+    ja: '待翻译',
+  },
+  searchClient: {
+    zh: '请输入 IMEI',
+    en: 'Please input IMEI',
+    ja: '待翻译',
+  },
+  enhancedAuth: {
+    zh: '增强认证',
+    en: 'Enhanced Auth',
+    ja: '待翻译',
+  },
+  mechanism: {
+    zh: '认证机制',
+    en: 'Authentication mechanism',
+    ja: '待翻译',
+  },
+  addAuth: {
+    zh: '创建认证信息',
+    en: 'Add Auth',
+  },
+  editAuth: {
+    zh: '编辑认证信息',
+    en: 'Edit Auth',
+    ja: '待翻译',
+  },
+  viewAuth: {
+    zh: '查看认证信息',
+    en: 'View Auth',
+    ja: '待翻译',
+  },
+  iterationCount: {
+    zh: '迭代次数',
+    en: 'Iteration Count',
+    ja: '待翻译',
+  },
+  iterationCountTip: {
+    zh: '必须为正整数',
+    en: 'Must be a positive integer',
+    ja: '待翻译',
+  },
+  serverKey: {
+    zh: '服务密钥',
+    en: 'Server key',
+    ja: '待翻译',
+  },
+  storedKey: {
+    zh: '存储密钥',
+    en: 'Stored key',
+    ja: '待翻译',
+  },
+  dataType: {
+    zh: '数据类型',
+    en: 'Data Type',
+    ja: '待翻译',
+  },
+  lwClientOffline: {
+    zh: '当前客户端已下线',
+    en: 'The current client is offline',
+    ja: '待翻译',
+  },
+  requestTimeout: {
+    zh: '请求超时',
+    en: 'Request timed out',
+    ja: '待翻译',
   },
 }
