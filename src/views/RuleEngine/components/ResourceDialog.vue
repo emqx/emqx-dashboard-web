@@ -21,7 +21,13 @@
           @change="resourceTypeChange"
         >
         </emq-select>
-        <el-button :disabled="!record.type" type="primary" style="margin-left: 20px;" @click="handleCreate(true)">
+        <el-button
+          :loading="loadingButton === 'testButton'"
+          :disabled="!record.type"
+          type="primary"
+          style="margin-left: 20px;"
+          @click="handleCreate(true)"
+        >
           {{ $t('RuleEngine.testConnection') }}
         </el-button>
       </el-form-item>
@@ -66,6 +72,14 @@
                   v-if="item.type === 'number'"
                   v-model.number="record.config[item.key]"
                   v-bind="item.bindAttributes"
+                >
+                </el-input>
+
+                <el-input
+                  v-else-if="item.type === 'password'"
+                  v-model="record.config[item.key]"
+                  v-bind="item.bindAttributes"
+                  show-password
                 >
                 </el-input>
 
@@ -116,9 +130,15 @@
 
     <div slot="footer" class="dialog-align-footer">
       <el-button size="small" @click="handleCache">{{ $t('Base.cancel') }}</el-button>
-      <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">{{
-        $t('Base.confirm')
-      }}</el-button>
+      <el-button
+        :loading="loadingButton === 'createButton'"
+        class="dialog-primary-btn"
+        type="primary"
+        size="small"
+        @click="handleCreate(false)"
+      >
+        {{ $t('Base.confirm') }}
+      </el-button>
     </div>
   </el-dialog>
 </template>
@@ -147,6 +167,7 @@ export default {
 
   data() {
     return {
+      loadingButton: undefined,
       showMoreItem: false,
       configLoading: false,
       selfVisible: false,
@@ -216,6 +237,12 @@ export default {
       if (this.$refs.record) {
         setTimeout(() => {
           this.$refs.record.resetFields()
+          this.record = {
+            config: {},
+            description: '',
+            type: '',
+            id: `resource:${Math.random().toString().slice(3, 9)}`,
+          }
           this.wholeConfigList = []
           this.configList = []
         }, 10)
@@ -251,6 +278,7 @@ export default {
       setTimeout(this.$refs.record.clearValidate, 10)
     },
     async handleCreate(test = false) {
+      this.loadingButton = test ? 'testButton' : 'createButton'
       const valid = await this.$refs.record.validate()
       if (!valid) {
         return
@@ -266,14 +294,21 @@ export default {
           this.record.config[label] = false
         }
       })
-      const resource = await createResource(this.record, test)
-      if (test) {
-        this.$message.success(this.$t('RuleEngine.resourceAvailable'))
-        return
+      try {
+        const resource = await createResource(this.record, test)
+        this.loadingButton = resource ? undefined : this.loadingButton
+        if (test) {
+          this.$message.success(this.$t('RuleEngine.resourceAvailable'))
+          return
+        }
+        this.$emit('created', resource.id)
+        this.dialogVisible = false
+        this.selfVisible = false
+      } catch (err) {
+        setTimeout(() => {
+          this.loadingButton = undefined
+        }, 100)
       }
-      this.$emit('created', resource.id)
-      this.dialogVisible = false
-      this.selfVisible = false
     },
     handleCache() {
       this.dialogVisible = false

@@ -25,7 +25,7 @@
           </el-col>
         </el-form>
         <div class="col-oper">
-          <el-button type="primary" icon="el-icon-plus" size="small" @click="save">
+          <el-button :loading="addLoading" type="primary" icon="el-icon-plus" size="small" @click="save">
             {{ $t('Base.add') }}
           </el-button>
         </div>
@@ -135,12 +135,14 @@ export default {
         this.addLoading = true
         const { ...data } = this.record
         const res = await addAcl(data)
-        if (res[0].result === 'ok') {
+        if (res.result === 'ok') {
           this.$message.success(this.$t('Base.createSuccess'))
           this.loadData()
           this.$refs.record.resetFields()
         }
-        this.addLoading = false
+        setTimeout(() => {
+          this.addLoading = false
+        }, 200)
       })
     },
     handleSizeChange() {

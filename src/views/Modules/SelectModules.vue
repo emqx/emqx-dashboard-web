@@ -50,12 +50,8 @@
                 </span>
                 <el-card shadow="hover">
                   <div class="module-item" @click="toModuleDetail(one, allFeatures[item.id])">
-                    <!-- <div class="item-error-tip">
-                  <span>error</span>
-                  <el-button class="reconnect-btn" plain size="mini">重连</el-button>
-                </div> -->
                     <div class="left-box">
-                      <img :src="one.img" alt="" class="item-img" />
+                      <img :src="one.img" alt="module-logo" class="item-img" />
                       <div class="item-content">
                         <div class="item-title">{{ one.title[lang] }}</div>
                         <div class="item-des">
@@ -66,7 +62,6 @@
                     <div class="item-handle">
                       <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
                         {{ $t('Modules.select') }}
-                        <!-- {{ $t('Modules.guide') }} -->
                       </el-button>
                       <el-button v-else class="start-btn" plain size="mini">
                         {{ $t('Modules.added') }}
@@ -94,12 +89,8 @@
               </span>
               <el-card shadow="hover">
                 <div class="module-item" @click="toModuleDetail(one, searchModuleInfo)">
-                  <!-- <div class="item-error-tip">
-                  <span>error</span>
-                  <el-button class="reconnect-btn" plain size="mini">重连</el-button>
-                </div> -->
                   <div class="left-box">
-                    <img :src="one.img" alt="" class="item-img" />
+                    <img :src="one.img" alt="module-logo" class="item-img" />
                     <div class="item-content">
                       <div class="item-title">{{ one.title[lang] }}</div>
                       <div class="item-des">
@@ -110,7 +101,6 @@
                   <div class="item-handle">
                     <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
                       {{ $t('Modules.select') }}
-                      <!-- {{ $t('Modules.guide') }} -->
                     </el-button>
                     <el-button v-else class="start-btn" plain size="mini">
                       {{ $t('Modules.added') }}
@@ -372,7 +362,7 @@ export default {
     },
     toReadMore(type) {
       const lang = this.lang === 'zh' ? 'cn' : 'en'
-      const url = `https://docs.emqx.net/broker/latest/${lang}/modules/${type}.html`
+      const url = `https://docs.emqx.net/enterprise/latest/${lang}/modules/${type}.html`
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },
