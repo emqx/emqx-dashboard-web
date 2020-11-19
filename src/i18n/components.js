@@ -42,7 +42,7 @@ export default {
   },
   usersAcl: {
     zh: '认证鉴权',
-    ja: '待翻译',
+    ja: 'ユーザー認証',
     en: 'Users & ACL',
   },
   clients: {
@@ -222,7 +222,7 @@ export default {
   },
   selectModules: {
     zh: '选择模块',
-    ja: '待翻译',
+    ja: 'モジュール選択',
     en: 'Modules Select',
   },
 }

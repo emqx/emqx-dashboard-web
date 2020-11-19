@@ -617,7 +617,7 @@ export default {
   },
   resourceID: {
     zh: '资源 ID',
-    ja: '待翻译',
+    ja: 'リソースID',
     en: 'Resource ID',
   },
   resourceDes: {
@@ -627,37 +627,37 @@ export default {
   },
   id_len_tip: {
     zh: '最长64位',
-    ja: '待翻译',
+    ja: '最大64ビットまで',
     en: 'The longest 64',
   },
   id_char_tip: {
     zh: '仅支持数字、字母、下划线和冒号',
-    ja: '待翻译',
+    ja: '入力可能文字：半角英数字・「_（アンダースコア）」・「:（コロン）」のみ',
     en: 'Only Numbers, letters, underscores, and colons are supported',
   },
   ruleID: {
     zh: '规则 ID',
-    ja: '待翻译',
+    ja: 'ルールID',
     en: 'Rule ID',
   },
   fillTemplate: {
     zh: '填充模板',
-    en: 'Fill Template',
     ja: '待翻译',
+    en: 'Fill Template',
   },
   strTemplate: {
     zh: '字符模板',
-    en: 'Template',
     ja: '待翻译',
+    en: 'Template',
   },
   templateOutput: {
     zh: '模板输出',
-    en: 'Result',
     ja: '待翻译',
+    en: 'Result',
   },
   sqlTestFirst: {
     zh: '请先正确完成 SQL 测试',
-    en: 'Please complete the SQL test correctly first',
     ja: '待翻译',
+    en: 'Please complete the SQL test correctly first',
   },
 }

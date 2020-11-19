@@ -37,17 +37,17 @@ export default {
   },
   alarmMsg: {
     zh: '告警消息',
-    ja: '待翻译',
+    ja: 'アラームメッセージ',
     en: 'Alarm Message',
   },
   alarmName: {
     zh: '告警名称',
-    ja: '待翻译',
+    ja: 'アラーム名',
     en: 'Alarm Name',
   },
   activateAt: {
     zh: '开始时间',
-    ja: '待翻译',
+    ja: '開始時間',
     en: 'Activate At',
   },
   deactivateAt: {
@@ -57,7 +57,7 @@ export default {
   },
   duration: {
     zh: '持续时间',
-    ja: '待翻译',
+    ja: '持続時間',
     en: 'Duration',
   },
   alarmLevel: {

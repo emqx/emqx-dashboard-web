@@ -36,7 +36,7 @@ export default {
   },
   searchTip: {
     zh: '搜索模块...',
-    ja: '待翻译',
+    ja: 'モジュールを検索',
     en: 'Search modules...',
   },
   reconnect: {
@@ -126,7 +126,7 @@ export default {
   },
   protocols: {
     zh: '协议接入',
-    ja: '待翻译',
+    ja: 'プロトコル',
     en: 'Protocols',
   },
   messagePublish: {
@@ -136,7 +136,7 @@ export default {
   },
   extension: {
     zh: '多语言扩展',
-    ja: '待翻译',
+    ja: '多言語対応拡張',
     en: 'extensions',
   },
   monitor: {
@@ -161,12 +161,12 @@ export default {
   },
   addListener: {
     zh: '添加监听器',
-    ja: '待翻译',
+    ja: '新規リスナー',
     en: 'Add Listener',
   },
   editListener: {
     zh: '编辑监听器',
-    ja: '待翻译',
+    ja: 'リスナー編集',
     en: 'Edit Listener',
   },
   edit: {
@@ -186,52 +186,53 @@ export default {
   },
   listener_type: {
     zh: '监听类型',
-    ja: '待翻译',
+    ja: 'リスナータイプ',
     en: 'Listener Type',
   },
   acceptors: {
     zh: '接收器个数',
-    ja: '待翻译',
+    ja: 'アクセプター',
     en: 'Acceptors',
   },
   active_n: {
     zh: 'Active',
-    ja: '待翻译',
+    ja: 'アクティブ',
     en: 'Active',
   },
   max_conn_rate: {
     zh: '每秒最大连接数',
-    ja: '待翻译',
+    ja: '秒間の最大接続数',
     en: 'Max CPS',
   },
   max_connections: {
     zh: '最大连接数',
-    ja: '待翻译',
+    ja: '最大接続数',
     en: 'Max Connections',
   },
   emptyListenerTip: {
     zh: '请添加监听器！',
-    ja: '待翻译',
+    ja: 'リスナーを追加してください!',
     en: 'Please add Listener!',
   },
   fileTip: {
     zh: '请上传文件',
-    ja: '待翻译',
+    ja: 'ファイルをアップロードしてください',
     en: 'Please upload File',
   },
   noNeedAddConfigTip: {
     zh: '此模块无需配置相关信息！',
-    ja: '待翻译',
+    ja: 'このモジュールには構成情報は必要ありません!',
     en: 'No configuration information is required for this module!',
   },
   continueCommit: {
     zh: '继续提交',
-    ja: '待翻译',
+    ja: '確認',
     en: 'Submit',
   },
   editTip: {
     zh: '应用更改将会短暂重启当前模块，可能会造成数据丢失或服务中断，请确保在不影响业务的情况下提交更改。',
-    ja: '待翻译',
+    ja:
+      '変更を適用すると、現在のモジュールがすぐに再起動され、データの損失やサービスの中断が発生する可能性があります。業務に影響を与えないように、必ず変更内容を確認してください。',
     en: `
       Applying changes will immediately restart the current module which may cause data loss
       or service interruption. Please make sure to submit the changes without affecting the business.`,
@@ -273,72 +274,73 @@ export default {
   },
   useModulesTip: {
     zh: 'EMQ X 提供了丰富的模块用于替换插件，建议您前往使用 <a href="/#/modules">模块</a>。',
+    ja: '待翻译',
     en: `EMQ X provides a wealth of Modules to replace Plugin,
     it is recommended that you go to use <a href="/#/modules">Modules</a>.`,
-    ja: '待翻译',
   },
   searchClient: {
     zh: '请输入 IMEI',
-    en: 'Please input IMEI',
     ja: '待翻译',
+    en: 'Please input IMEI',
   },
   enhancedAuth: {
     zh: '增强认证',
-    en: 'Enhanced Auth',
     ja: '待翻译',
+    en: 'Enhanced Auth',
   },
   mechanism: {
     zh: '认证机制',
-    en: 'Authentication mechanism',
     ja: '待翻译',
+    en: 'Authentication mechanism',
   },
   addAuth: {
     zh: '创建认证信息',
+    ja: '待翻译',
     en: 'Add Auth',
   },
   editAuth: {
     zh: '编辑认证信息',
-    en: 'Edit Auth',
     ja: '待翻译',
+    en: 'Edit Auth',
   },
   viewAuth: {
     zh: '查看认证信息',
-    en: 'View Auth',
     ja: '待翻译',
+    en: 'View Auth',
   },
   iterationCount: {
     zh: '迭代次数',
-    en: 'Iteration Count',
     ja: '待翻译',
+    en: 'Iteration Count',
   },
   iterationCountTip: {
     zh: '必须为正整数',
-    en: 'Must be a positive integer',
     ja: '待翻译',
+    en: 'Must be a positive integer',
   },
   serverKey: {
     zh: '服务密钥',
-    en: 'Server key',
     ja: '待翻译',
+    en: 'Server key',
   },
   storedKey: {
     zh: '存储密钥',
-    en: 'Stored key',
     ja: '待翻译',
+    en: 'Stored key',
   },
   dataType: {
     zh: '数据类型',
-    en: 'Data Type',
     ja: '待翻译',
+    en: 'Data Type',
   },
   lwClientOffline: {
     zh: '当前客户端已下线',
-    en: 'The current client is offline',
     ja: '待翻译',
+    en: 'The current client is offline',
   },
   requestTimeout: {
     zh: '请求超时',
-    en: 'Request timed out',
     ja: '待翻译',
+    en: 'Request timed out',
   },
 }
