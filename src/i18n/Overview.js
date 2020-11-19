@@ -399,27 +399,27 @@ export default {
   },
   expired: {
     zh: '过期',
-    en: 'Expired',
     ja: '待翻译',
+    en: 'Expired',
   },
   noSubscribers: {
     zh: '无订阅者',
-    en: 'No Subscribers',
     ja: '待翻译',
+    en: 'No Subscribers',
   },
   receivedMsg: {
     zh: '消息接收',
-    en: 'Received',
     ja: '待翻译',
+    en: 'Received',
   },
   sentMsg: {
     zh: '消息发送',
-    en: 'Sent',
     ja: '待翻译',
+    en: 'Sent',
   },
   droppedMsg: {
     zh: '消息丢弃',
-    en: 'Dropped',
     ja: '待翻译',
+    en: 'Dropped',
   },
 }

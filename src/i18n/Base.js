@@ -197,12 +197,12 @@ export default {
   },
   tips: {
     zh: '提示',
-    en: 'Tips',
     ja: '待翻译',
+    en: 'Tips',
   },
   operateSuccess: {
     zh: '操作成功',
-    en: 'Successful operation',
     ja: '待翻译',
+    en: 'Successful operation',
   },
 }

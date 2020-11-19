@@ -387,12 +387,12 @@ export default {
   },
   zoneName: {
     zh: 'Zone 名字',
-    ja: '待翻译',
+    ja: 'ゾーン名',
     en: 'Zone Name',
   },
   zoneNameTip: {
     zh: '名字不能为空！',
-    ja: '待翻译',
+    ja: 'ゾーン名を入力してください',
     en: 'The name cannot be empty!',
   },
   listeners: {
@@ -402,105 +402,109 @@ export default {
   },
   monitorAlarm: {
     zh: '监控告警',
-    ja: '待翻译',
+    ja: 'モニターアラーム',
     en: 'Monitor Alarm',
   },
   // monitorAlarm desciption start
   actions: {
     zh: '动作',
-    ja: '待翻译',
+    ja: 'アクション',
     en: 'Actions',
   },
   size_limit: {
     zh: '大小限制',
-    ja: '待翻译',
+    ja: 'サイズ制限',
     en: 'Size Limit',
   },
   validity_period: {
     zh: '有效期',
-    ja: '待翻译',
+    ja: '有効期間',
     en: 'Validity period',
   },
   check_interval: {
     zh: 'CPU 占用率检查周期',
-    ja: '待翻译',
+    ja: 'CPU使用率検査周期',
     en: 'CPU usage check cycle',
   },
   process_high_watermark: {
     zh: '当前进程数量占进程最大数量的百分比超过该值时将触发告警',
-    ja: '待翻译',
+    ja: '最大プロセス数に占める現在のプロセス数の割合がこの値を超えると、アラームがトリガーされます',
     en: `
     When the percentage of the current number of processes to the maximum number
     of processes exceeds this value, an alarm will be triggered`,
   },
   process_low_watermark: {
     zh: '当前进程数量占进程最大数量的百分比回落到该值以下时将触发告警',
-    ja: '待翻译',
+    ja: '最大プロセス数に占める現在のプロセス数の割合がこの値を下回ると、アラームがトリガーされます',
     en: `
     An alarm will be triggered when the percentage of the current number of
     processes in the maximum number of processes falls below this value`,
   },
   busy_dist_port: {
     zh: '指定是否启用集群 RPC 通道拥塞监控',
-    ja: '待翻译',
+    ja: 'クラスタRPCチャネルの輻輳監視を有効にするかどうかを指定します',
     en: 'Specify whether to enable cluster RPC channel congestion monitoring',
   },
   busy_port: {
     zh: '指定是否启用进程间消息通道拥塞监控',
-    ja: '待翻译',
+    ja: 'プロセス間のメッセージチャネル輻輳監視を有効にするかどうかを指定します',
     en: 'Specify whether to enable inter-process message channel congestion monitoring',
   },
   large_heap: {
     zh: '启用堆栈大小监控并在进程执行垃圾回收后堆栈大小仍大于设定值时触发告警，0 表示禁用此监控',
-    ja: '待翻译',
+    ja:
+      'スタック・サイズの監視を有効にし、プロセスがガベージ・コレクションされた後にスタック・サイズが設定値よりも大きい場合にアラームがトリガーされます。(0の場合は監視を無効になります）',
     en: `
     Enable stack size monitoring and trigger an alarm when the stack size is
     still greater than the set value after the process is garbage collected, 0 means disable this monitoring`,
   },
   long_gc: {
     zh: '启用垃圾回收时间监控并在回收时间超过设定值时触发告警，0 表示禁用此监控',
-    ja: '待翻译',
+    ja:
+      'ガベージコレクション時間の監視を有効にし、コレクション時間が設定値を超えたときに、アラームがトリガーされます。(0の場合は監視を無効になります）',
     en: `
     Enable garbage collection time monitoring and trigger an alarm
     when the collection time exceeds the set value, 0 means disable this monitoring`,
   },
   long_schedule: {
     zh: '启用进程调度时间监控并在调度时间超过设定值时触发告警，0 表示禁用此监控',
-    ja: '待翻译',
+    ja:
+      'プロセススケジューリング時間の監視を有効にし、スケジューリング時間が設定値を超えたときに、アラームがトリガーされます。(0の場合は監視を無効になります）',
     en: `
     Enable process scheduling time monitoring and trigger an alarm when the
     scheduling time exceeds the set value, 0 means disable this monitoring`,
   },
   cpu_check_interval: {
     zh: 'CPU 占用率检查周期',
-    ja: '待翻译',
+    ja: 'CPU使用率検査周期',
     en: 'CPU usage check cycle',
   },
   cpu_high_watermark: {
     zh: 'CPU 占用率超过该值时将触发告警',
-    ja: '待翻译',
+    ja: 'CPU使用率がこの値を超えると、アラームがトリガーされます',
     en: 'An alarm will be triggered when the CPU usage exceeds this value',
   },
   cpu_low_watermark: {
     zh: 'CPU 占用率回落到该值以下时将清除告警',
-    ja: '待翻译',
+    ja: 'CPU使用率がこの値を下回ると、アラームが解除されます。',
     en: 'The alarm will be cleared when the CPU usage falls below this value',
   },
   mem_check_interval: {
     zh: '内存占用率检查周期',
-    ja: '待翻译',
+    ja: 'メモリ使用量検査周期',
     en: 'Memory usage check cycle',
   },
   procmem_high_watermark: {
     zh: 'EMQ X 为单个进程分配的内存占系统内存的百分比超过该值时将触发告警',
-    ja: '待翻译',
+    ja:
+      '1つのプロセスに EMQ X によって割り当てられたシステムメモリの割合がこの値を超えると、アラームがトリガーされます。',
     en: `
     EMQ X will trigger an alarm when the percentage of system
     memory allocated by EMQ X for a single process exceeds this value`,
   },
   sysmem_high_watermark: {
     zh: 'EMQ X 为所有进程分配的内存占系统内存的百分比超过该值时将触发告警',
-    ja: '待翻译',
+    ja: '全プロセスに割り当てたシステムメモリの割合がこの値を超えると、アラームがトリガーされます。',
     en: `
     EMQ X will trigger an alarm when the percentage of system
     memory allocated by EMQ X for all processes exceeds this value`,
@@ -508,19 +512,22 @@ export default {
   // monitorAlarm desciption end
   listenerName: {
     zh: '监听器名字',
-    ja: '待翻译',
+    ja: 'リスナー名',
     en: 'Listener Name',
   },
   listenerType: {
     zh: '监听类型',
-    ja: '待翻译',
+    ja: 'リスナータイプ',
     en: 'Listener Type',
   },
   // baseSettings start
   broker_session_locking_strategy: {
     zh: `会话锁策略。保证集群中 Client ID 在集群中的创建会话的唯一性。
     all 表示全集群锁，leader 表示仅主节点锁，quorum 多数节点锁，local 表仅当前节点锁`,
-    ja: '待翻译',
+    ja: `
+    セッションロックポリシー。クラスタ内のクライアントIDを作成したセッションの一意性を確保します。
+    【all】:フルクラスターロック  【leader】:マスターノードロック  【quorum】:大多数のノードロック  【local】:現在のノードロック
+    `,
     en: `Session locking policy. Ensure the uniqueness of the Client ID creation session in the cluster.
     All represents the total set group lock, the leader represents the master node lock only,
     the quorum majority node lock only, and the local table only the current node lock
@@ -528,28 +535,28 @@ export default {
   },
   broker_shared_dispatch_ack_enabled: {
     zh: '共享订阅开启内部派发 ACK',
-    ja: '待翻译',
+    ja: 'サブスクリプション共有により内部配信が可能になるACK',
     en: 'Shared subscriptions enable internal distribution ACK',
   },
   broker_shared_subscription_strategy: {
     zh: '共享订阅派发策略',
-    ja: '待翻译',
+    ja: 'サブスクリプション共有の配信ポリシー',
     en: 'Shared subscription distribution policies',
   },
   broker_sys_heartbeat: {
     zh: 'Broker 健康状态发布间隔',
-    ja: '待翻译',
+    ja: 'ブローカー稼働状況の公開間隔',
     en: 'Broker Health status publish interval',
   },
   broker_sys_interval: {
     zh: 'Broker 统计信息发布间隔',
-    ja: '待翻译',
+    ja: 'ブローカー統計情報の公開間隔',
     en: 'Broker statistics release interval',
   },
   // baseSettings end
   confirmUpdateListener: {
     zh: '应用设置将重新启动监听器，该操作将导致当前活跃连接断开，是否继续？',
-    ja: '待翻译',
+    ja: '設定を適用するとリスナーが再起動されます。そして、接続を切断になります。このまま処理を続けてもよろしいですか?',
     en: `
     Applying settings will restart the listener.
     This operation will cause the current active connection to be disconnected.
@@ -557,40 +564,40 @@ export default {
   },
   isOpened: {
     zh: '是否开启',
-    ja: '待翻译',
+    ja: '起動済',
     en: 'Is Started',
   },
   isStopListener: {
     zh: '确定停止监听器：',
-    ja: '待翻译',
+    ja: 'このリスナーを停止してもよろしいですか:',
     en: 'Are you sure to stop the listener:',
   },
   isDeleteListener: {
     zh: '确认删除该监听器？',
-    ja: '待翻译',
+    ja: 'このリスナーを削除してもよろしいですか？',
     en: 'Are you sure to delete this listener?',
   },
   isDeleteZone: {
     zh: '确认删除该 Zone？',
-    ja: '待翻译',
+    ja: 'このゾーンを削除してもよろしいですか？',
     en: 'Are you sure to delete this Zone?',
   },
   returnList: {
     zh: '返回列表',
-    ja: '待翻译',
+    ja: '戻る',
     en: 'Back',
   },
   portRangeTip: {
     zh: '端口不能为负数且不能大于 65535',
-    en: 'The port cannot be negative and cannot be greater than 65535',
     ja: '待翻译',
+    en: 'The port cannot be negative and cannot be greater than 65535',
   },
   openModuleTip: {
     zh: `开启热配置后，EMQ X 将从配置文件中拷贝一份配置副本，所有可在 Dashboard 修改的配置都会持久化到磁盘中。
     <br>如果修改配置文件将会覆盖热配置，请谨慎使用。`,
+    ja: '待翻译',
     en: `After enabling hot configuration, EMQ X will copy a configuration from the configuration file,<br>
     and all configurations that can be modified on the Dashboard will be persisted to the disk.<br>
     If modifying the configuration file will overwrite the hot configuration, please use it with caution.`,
-    ja: '待翻译',
   },
 }

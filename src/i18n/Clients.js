@@ -364,17 +364,17 @@ export default {
   },
   authSuccess: {
     zh: '认证成功',
-    en: 'Auth Success',
     ja: '待翻译',
+    en: 'Auth Success',
   },
   authFailed: {
     zh: '认证失败',
-    en: 'Auth Failed',
     ja: '待翻译',
+    en: 'Auth Failed',
   },
   connectSuccess: {
     zh: '连接成功',
-    en: 'Connected',
     ja: '待翻译',
+    en: 'Connected',
   },
 }
