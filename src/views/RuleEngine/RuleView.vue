@@ -19,7 +19,8 @@
       <a-card class="emq-list-card" :loading="loading">
         <div class="emq-title">
           {{ $t('RuleEngine.runningMetrics') }}
-          <i class="btn btn-default" :class="reloading ? 'el-icon-loading' : 'el-icon-refresh'" @click="loadData"> </i>
+          <i class="btn btn-default" :class="reloading ? 'el-icon-loading' : 'el-icon-refresh'" @click="refreshData">
+          </i>
         </div>
 
         <el-row :gutter="40" class="metrics-wrapper">
@@ -114,7 +115,7 @@
           </span>
         </div>
 
-        <rule-actions v-model="record.actions" disabled></rule-actions>
+        <rule-actions ref="ruleActions" v-model="record.actions" disabled></rule-actions>
       </a-card>
     </div>
   </div>
@@ -189,6 +190,10 @@ export default {
   },
 
   methods: {
+    refreshData() {
+      this.loadData()
+      this.$refs.ruleActions.loadActions()
+    },
     async loadData() {
       this.record = await loadRuleDetails(this.ruleId)
       this.loading = false
