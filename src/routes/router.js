@@ -56,7 +56,7 @@ let routes = [
       {
         path: '',
         name: 'users_and_acl',
-        component: () => import('@/views/Plugins/PluginsManage'),
+        component: () => import('@/views/Modules/components/AuthMnesia/AuthMnesia'),
       },
     ],
   },

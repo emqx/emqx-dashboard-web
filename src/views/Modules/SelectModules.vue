@@ -1,6 +1,6 @@
 <template>
   <div class="modules modules-select">
-    <div class="header-box">
+    <div :class="['header-box', $runEnv === 'cloud' ? 'header-box-top' : '']">
       <div class="inner-box">
         <div class="content" :style="contentStyle">
           <div class="content-left">
@@ -35,7 +35,12 @@
     </div>
     <div class="content-box app-wrapper">
       <template v-if="!searchVal">
-        <div v-for="item in classList" :key="item.id" :id="item.id" class="link-content">
+        <div
+          v-for="item in classList"
+          :key="item.id"
+          :id="item.id"
+          :class="$runEnv === 'cloud' ? 'link-content-cloud' : 'link-content'"
+        >
           <p :class="['class-title', item.id === activeNavId ? 'active-title' : '']">
             {{ item.name }}
           </p>
@@ -430,6 +435,10 @@ export default {
     }
   }
 
+  .header-box-top {
+    top: 0;
+  }
+
   .content-title {
     font-weight: bold;
   }
@@ -476,6 +485,10 @@ export default {
   .link-content {
     padding-top: 200px;
     margin-top: -200px;
+  }
+  .link-content-cloud {
+    padding-top: 120px;
+    margin-top: -120px;
   }
 }
 </style>
