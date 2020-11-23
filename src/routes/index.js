@@ -11,7 +11,7 @@ const router = new Router({
   mode: 'hash',
   base: process.env.BASE_URL,
   scrollBehavior(to, from, savedPosition) {
-    if (to.meta.keepAlive && savedPosition) {
+    if (to.path === '/modules/detail' || (to.meta.keepAlive && savedPosition)) {
       return savedPosition
     }
     return { x: 0, y: 0 }

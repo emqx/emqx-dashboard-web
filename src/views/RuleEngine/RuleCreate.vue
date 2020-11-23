@@ -42,6 +42,10 @@
                 <stretch-height v-model="sqlEditorHeight"></stretch-height>
               </el-form-item>
 
+              <el-form-item prop="id" :label="$t('RuleEngine.ruleID')">
+                <el-input v-model="record.id" :disabled="isEdit"></el-input>
+              </el-form-item>
+
               <el-form-item prop="description" :label="$t('RuleEngine.remark')">
                 <el-input v-model="record.description"></el-input>
               </el-form-item>
@@ -101,6 +105,25 @@
                       ></monaco>
                     </div>
                   </el-form-item>
+
+                  <!-- template test -->
+                  <!-- <el-form-item class="code-editor__item" :label="$t('RuleEngine.strTemplate')">
+                    <div class="monaco-container" :style="{ height: `${templateEditorHeight}px` }">
+                      <monaco id="template" v-model="templateStr" warp lang="sql"></monaco>
+                    </div>
+                    <stretch-height v-model="templateEditorHeight"></stretch-height>
+                  </el-form-item>
+                  <el-form-item>
+                    <span slot="label">&nbsp;</span>
+                    <el-button type="primary" @click="fillTemplate">
+                      {{ $t('RuleEngine.fillTemplate') }}
+                    </el-button>
+                  </el-form-item>
+                  <el-form-item class="code-editor__item" :label="$t('RuleEngine.templateOutput')">
+                    <div class="monaco-container" style="height: 100px;">
+                      <monaco id="templateOutput" v-model="templateOutput" lang="sql" :disabled="true"></monaco>
+                    </div>
+                  </el-form-item> -->
                 </div>
               </el-collapse-transition>
             </el-form>
@@ -167,7 +190,7 @@
 <script>
 import { loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule } from '@/api/rules'
 import { loadTopics } from '@/api/server'
-import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck } from '@/common/utils'
+import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck, verifyID } from '@/common/utils'
 import Monaco from '@/components/Monaco'
 import StretchHeight from '@/components/StretchHeight'
 import RuleActions from './components/RuleActions'
@@ -191,6 +214,7 @@ export default {
       needCheckSql: true,
       sqlEditorHeight: 320,
       payloadEditorHeight: 200,
+      templateEditorHeight: 100,
       payloadType: 'json',
       topics: [],
       events: [],
@@ -218,10 +242,15 @@ export default {
         actions: [],
         description: '',
         ctx: {},
+        id: `rule:${Math.random().toString().slice(3, 9)}`,
       },
       rules: {
         rawsql: { required: true, message: this.$t('RuleEngine.pleaseEnterTheSQL') },
+        id: { required: true, validator: verifyID },
       },
+      templateStr: '',
+      templateOutput: '',
+      sqlTestSuccess: false,
     }
   },
 
@@ -350,7 +379,11 @@ export default {
       this.needCheckSql = true
       this.$refs.record.validate(async (valid) => {
         if (!valid) {
-          return
+          if (this.showTest && !this.record.id) {
+            this.$refs.record.clearValidate('id')
+          } else {
+            return
+          }
         }
         if (!this.beforeSqlValid(this.record.rawsql)) {
           return
@@ -369,8 +402,10 @@ export default {
         SQLTest(data)
           .then((res) => {
             this.testOutPut = JSON.stringify(res, null, 2)
+            this.sqlTestSuccess = true
           })
           .catch((error) => {
+            this.sqlTestSuccess = false
             if (error === 'SQL Not Match') {
               this.testOutPut = this.$t('RuleEngine.resultIsEmpty')
             } else {
@@ -421,6 +456,11 @@ export default {
       setTimeout(() => {
         this.$refs.ruleAction.loadActions()
       }, 500)
+    },
+    fillTemplate() {
+      if (!this.sqlTestSuccess) {
+        this.$message.warning(this.$t('RuleEngine.sqlTestFirst'))
+      }
     },
   },
 }

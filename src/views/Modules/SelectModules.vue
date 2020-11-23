@@ -1,19 +1,21 @@
 <template>
-  <div class="modules add-module">
+  <div class="modules modules-select">
     <div class="header-box">
       <div class="inner-box">
         <div class="content" :style="contentStyle">
-          <span class="content-title">{{ $t('components.addModule') }}</span>
-          <span v-cloak class="modules-num">{{ canAddCount }}</span>
-          <div
-            :class="['module-class', item.id === activeNavId ? 'active-nav' : '']"
-            v-for="item in classList"
-            :key="item.id"
-            @click="changeNav(item.id)"
-          >
-            {{ item.name }}
+          <div class="content-left">
+            <span class="content-title">{{ $t('components.selectModules') }}</span>
+            <span v-cloak class="modules-num">{{ canAddCount }}</span>
+            <div
+              :class="['module-class', item.id === activeNavId ? 'active-nav' : '']"
+              v-for="item in classList"
+              :key="item.id"
+              @click="changeNav(item.id)"
+            >
+              {{ item.name }}
+            </div>
           </div>
-          <el-col :span="6" :offset="1">
+          <el-col :span="6">
             <el-input
               v-model="searchVal"
               type="text"
@@ -22,6 +24,7 @@
               clearable
               :placeholder="$t('Modules.searchTip')"
               @input="searchModule"
+              @clear="loadData"
             >
               <i v-if="!searchLoading" slot="prefix" class="el-icon-search"></i>
               <i v-else slot="prefix" class="el-icon-loading"></i>
@@ -38,14 +41,56 @@
           </p>
           <el-row v-if="allFeatures[item.id]" :gutter="20">
             <el-col v-for="(one, index) in allFeatures[item.id]" :key="index" :span="12">
+              <div class="item-box">
+                <span
+                  v-show="one.id && JSON.stringify(one.params) === '{}'"
+                  @click="deleteModule(one, allFeatures[item.id])"
+                  class="delete-icon"
+                >
+                </span>
+                <el-card shadow="hover">
+                  <div class="module-item" @click="toModuleDetail(one, allFeatures[item.id])">
+                    <div class="left-box">
+                      <img :src="one.img" alt="module-logo" class="item-img" />
+                      <div class="item-content">
+                        <div class="item-title">{{ one.title[lang] }}</div>
+                        <div class="item-des">
+                          {{ one.description[lang] }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="item-handle">
+                      <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
+                        {{ $t('Modules.select') }}
+                      </el-button>
+                      <el-button v-else class="start-btn" plain size="mini">
+                        {{ $t('Modules.added') }}
+                      </el-button>
+                      <a href="javascript:;" @click.stop="toReadMore(one.name)" class="know-more">
+                        {{ $t('Modules.readMore') }}
+                      </a>
+                    </div>
+                  </div>
+                </el-card>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+      </template>
+      <template v-else>
+        <el-row v-if="searchModuleInfo.length" :gutter="20">
+          <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
+            <div class="item-box">
+              <span
+                v-show="one.id && JSON.stringify(one.params) === '{}'"
+                @click="deleteModule(one, searchModuleInfo)"
+                class="delete-icon"
+              >
+              </span>
               <el-card shadow="hover">
-                <div class="module-item">
-                  <!-- <div class="item-error-tip">
-                  <span>error</span>
-                  <el-button class="reconnect-btn" plain size="mini">重连</el-button>
-                </div> -->
+                <div class="module-item" @click="toModuleDetail(one, searchModuleInfo)">
                   <div class="left-box">
-                    <img :src="one.img" alt="" class="item-img" />
+                    <img :src="one.img" alt="module-logo" class="item-img" />
                     <div class="item-content">
                       <div class="item-title">{{ one.title[lang] }}</div>
                       <div class="item-des">
@@ -54,71 +99,23 @@
                     </div>
                   </div>
                   <div class="item-handle">
-                    <el-button
-                      v-if="one.status === 'unadd'"
-                      class="select-btn"
-                      type="dashed"
-                      size="mini"
-                      @click="toModuleDetail(one, 'add')"
-                    >
+                    <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
                       {{ $t('Modules.select') }}
-                      <!-- {{ $t('Modules.guide') }} -->
                     </el-button>
-                    <el-button v-else class="start-btn" plain size="mini" @click="toModuleDetail(one, 'edit')">
+                    <el-button v-else class="start-btn" plain size="mini">
                       {{ $t('Modules.added') }}
                     </el-button>
-                    <a href="https://docs.emqx.net" target="_blank" rel="noopener norefferrer" class="know-more">
+                    <a href="javascript:;" @click.stop="toReadMore(one.name)" class="know-more">
                       {{ $t('Modules.readMore') }}
                     </a>
                   </div>
                 </div>
               </el-card>
-            </el-col>
-          </el-row>
-        </div>
-      </template>
-      <template v-else>
-        <el-row v-if="searchModuleInfo.length" :gutter="20">
-          <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
-            <el-card shadow="hover">
-              <div class="module-item">
-                <!-- <div class="item-error-tip">
-                  <span>error</span>
-                  <el-button class="reconnect-btn" plain size="mini">重连</el-button>
-                </div> -->
-                <div class="left-box">
-                  <img :src="one.img" alt="" class="item-img" />
-                  <div class="item-content">
-                    <div class="item-title">{{ one.title[lang] }}</div>
-                    <div class="item-des">
-                      {{ one.description[lang] }}
-                    </div>
-                  </div>
-                </div>
-                <div class="item-handle">
-                  <el-button
-                    v-if="one.status === 'unadd'"
-                    class="select-btn"
-                    type="dashed"
-                    size="mini"
-                    @click="toModuleDetail(one, 'add')"
-                  >
-                    {{ $t('Modules.select') }}
-                    <!-- {{ $t('Modules.guide') }} -->
-                  </el-button>
-                  <el-button v-else class="start-btn" plain size="mini" @click="toModuleDetail(one, 'edit')">
-                    {{ $t('Modules.added') }}
-                  </el-button>
-                  <a href="https://docs.emqx.net" target="_blank" rel="noopener norefferrer" class="know-more">
-                    {{ $t('Modules.readMore') }}
-                  </a>
-                </div>
-              </div>
-            </el-card>
+            </div>
           </el-col>
         </el-row>
         <a-card v-else class="null-modules">
-          <p>{{ $t('Plugins.listNull') }}</p>
+          <p>{{ $t('Modules.listNull') }}</p>
         </a-card>
       </template>
     </div>
@@ -126,7 +123,7 @@
 </template>
 
 <script>
-import { loadAllModules, showCreatedModuleInfo } from '@/api/modules'
+import { loadAllModules, showCreatedModuleInfo, createModule, destroyModule } from '@/api/modules'
 import { fillI18n, matchSearch } from '@/common/utils'
 import store from '@/stores'
 
@@ -142,6 +139,7 @@ export default {
         { name: this.$t('Modules.authentication'), id: 'auth' },
         { name: this.$t('Modules.protocols'), id: 'protocol' },
         { name: this.$t('Modules.messagePublish'), id: 'message' },
+        { name: this.$t('Modules.extension'), id: 'extension' },
         { name: this.$t('Modules.monitor'), id: 'devops' },
         { name: this.$t('Modules.localModules'), id: 'module' },
       ],
@@ -153,15 +151,13 @@ export default {
       oper: 'add',
       scrollTop: 0,
       scrolling: false,
+      addedModules: JSON.parse(localStorage.getItem('addedModules')) || {},
     }
   },
 
   computed: {
     lang() {
       return store.state.lang
-    },
-    addedModules() {
-      return JSON.parse(localStorage.getItem('addedModules')) || {}
     },
     contentStyle() {
       return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px' }
@@ -174,6 +170,7 @@ export default {
 
   mounted() {
     window.addEventListener('scroll', this.scrollToTop)
+    this.returnPosition()
   },
 
   destroyed() {
@@ -181,6 +178,37 @@ export default {
   },
 
   methods: {
+    deleteModule(item, list) {
+      const index = list.indexOf(item)
+      this.$msgbox
+        .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          await destroyModule(item.id)
+          this.$message.success(this.$t('Base.deleteSuccess'))
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          delete addedModules[item.name]
+          delete this.addedModules[item.name]
+          localStorage.setItem('addedModules', JSON.stringify(addedModules))
+          const { id, ...oneModule } = item
+          oneModule.status = 'unadd'
+          list.splice(index, 1, oneModule)
+        })
+        .catch(() => {})
+    },
+    returnPosition() {
+      const { id, top } = this.$route.query
+      if (id) {
+        setTimeout(() => {
+          document.documentElement.scrollTop = top
+          document.body.scrollTop = top
+          this.activeNavId = id
+        }, 50)
+      }
+    },
     searchModule() {
       this.searchLoading = true
       if (this.searchVal === '') {
@@ -207,13 +235,31 @@ export default {
       })
       return data
     },
-    toModuleDetail(val, oper) {
+    async toModuleDetail(val, list) {
+      const index = list.indexOf(val)
+      const oper = val.status === 'unadd' ? 'add' : 'edit'
       this.oper = oper
       this.selectedModule = {}
       if (oper === 'add') {
         const data = { ...val }
         this.parseI18n([data])
         const { params } = data
+        if (!Object.keys(params).length) {
+          const requestParams = {
+            type: val.name,
+            config: {},
+          }
+          const responseData = await createModule(requestParams)
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          addedModules[responseData.type] = responseData.id
+          this.addedModules = addedModules
+          localStorage.setItem('addedModules', JSON.stringify(addedModules))
+          this.$message.success(this.$t('Modules.moduleAddSuccess'))
+          val.status = 'added'
+          val.id = responseData.id
+          list.splice(index, 1, val)
+          return
+        }
         this.selectedModule = {
           paramsData: params,
           type: val.name,
@@ -223,6 +269,10 @@ export default {
         }
         this.$store.dispatch('UPDATE_MODULE', this.selectedModule)
       } else {
+        if (!Object.keys(val.params).length) {
+          this.$message.info(this.$t('Modules.noNeedAddConfigTip'))
+          return
+        }
         const id = this.addedModules[val.name]
         this.getAddedModuleInfo(id)
           .then((res) => {
@@ -234,7 +284,7 @@ export default {
           })
           .catch()
       }
-      this.$router.push('/modules/detail')
+      this.$router.push(`/modules/detail?id=${this.activeNavId}&top=${this.scrollTop}`)
     },
     async getAddedModuleInfo(id) {
       const data = await showCreatedModuleInfo(id)
@@ -257,6 +307,9 @@ export default {
       }, 5)
     },
     async loadData() {
+      this.allModuleList = []
+      this.allFeatures = []
+      this.canAddCount = 0
       this.allFeatures = await loadAllModules()
       this.getImgs()
       Object.values(this.allFeatures).forEach((item) => {
@@ -266,6 +319,7 @@ export default {
         item.localTitle = item.title[this.lang]
         if (Object.keys(this.addedModules).includes(item.name)) {
           item.status = 'added'
+          item.id = this.addedModules[item.name]
         } else {
           item.status = 'unadd'
           this.canAddCount += 1
@@ -306,6 +360,12 @@ export default {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       this.scrollTop = scrollTop
     },
+    toReadMore(type) {
+      const lang = this.lang === 'zh' ? 'cn' : 'en'
+      const url = `https://docs.emqx.net/enterprise/latest/${lang}/modules/${type}.html`
+      const windowUrl = window.open(url)
+      windowUrl.opener = null
+    },
   },
 }
 </script>
@@ -313,8 +373,9 @@ export default {
 <style lang="scss" scoped>
 @import './style/module.scss';
 
-.add-module {
-  // transform: none;
+.modules-select {
+  transform: none;
+
   .header-box {
     width: 100%;
     height: 112px;
@@ -331,16 +392,17 @@ export default {
 
     .content {
       height: 64px;
-      padding-left: 24px;
+      padding: 0 24px;
       box-sizing: border-box;
       background-color: #fff;
+      justify-content: space-between;
+
+      .content-left {
+        display: flex;
+      }
 
       span {
         flex-shrink: 0;
-      }
-
-      .modules-num {
-        margin: 0 12px;
       }
 
       .module-class {
@@ -397,7 +459,8 @@ export default {
       }
 
       .select-btn {
-        margin-bottom: 20px;
+        width: 50px;
+        font-size: 13px;
         color: #999;
         &:hover {
           color: #23bd78;

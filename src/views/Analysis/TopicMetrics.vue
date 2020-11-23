@@ -212,7 +212,7 @@ export default {
       this.addVisible = true
     },
     async handleModLoad() {
-      await enableTopicMetrics()
+      await enableTopicMetrics({ type: 'topic_metrics' })
       this.$message.success(this.$t('Base.enableSuccess'))
       this.loadData()
       this.modClosed = false

@@ -21,24 +21,26 @@
           @change="resourceTypeChange"
         >
         </emq-select>
-        <el-button :disabled="!record.type" type="primary" style="margin-left: 20px;" @click="handleCreate(true)">
+        <el-button
+          :loading="loadingButton === 'testButton'"
+          :disabled="!record.type"
+          type="primary"
+          style="margin-left: 20px;"
+          @click="handleCreate(true)"
+        >
           {{ $t('RuleEngine.testConnection') }}
         </el-button>
       </el-form-item>
 
       <el-row v-if="record.type" class="config-item-wrapper" :gutter="20">
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item prop="id" :label="$t('RuleEngine.resourceID')">
-            <el-input v-model="record.id" class="reset-input-width"></el-input>
+            <el-input v-model="record.id"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item style="width: 330px;" prop="description" :label="$t('RuleEngine.resourceDes')">
-            <el-input
-              type="textarea"
-              v-model="record.description"
-              :placeholder="$t('RuleEngine.pleaseEnter')"
-            ></el-input>
+        <el-col :span="12">
+          <el-form-item prop="description" :label="$t('RuleEngine.resourceDes')">
+            <el-input v-model="record.description" :placeholder="$t('RuleEngine.pleaseEnter')"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -53,7 +55,7 @@
             :key="i"
             :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
           >
-            <el-form-item v-bind="item.formItemAttributes">
+            <el-form-item v-if="item.elType !== 'file'" v-bind="item.formItemAttributes">
               <template v-if="item.formItemAttributes.description" slot="label">
                 {{ item.formItemAttributes.label }}
                 <el-popover width="220" trigger="hover" placement="top">
@@ -70,6 +72,14 @@
                   v-if="item.type === 'number'"
                   v-model.number="record.config[item.key]"
                   v-bind="item.bindAttributes"
+                >
+                </el-input>
+
+                <el-input
+                  v-else-if="item.type === 'password'"
+                  v-model="record.config[item.key]"
+                  v-bind="item.bindAttributes"
+                  show-password
                 >
                 </el-input>
 
@@ -90,8 +100,25 @@
                 </emq-select>
               </template>
             </el-form-item>
+            <template v-else>
+              <el-form-item
+                v-if="
+                  record.config['ssl'] === undefined || record.config['ssl'] === 'true' || record.config['ssl'] === true
+                "
+                v-bind="item.formItemAttributes"
+              >
+                <file-editor v-model="record.config[item.key]"></file-editor>
+              </el-form-item>
+            </template>
           </el-col>
-          <el-col v-if="wholeConfigList.length > 8" :span="24" class="show-more">
+          <el-col
+            v-if="
+              ([false, 'false'].includes(record.config['ssl']) && wholeConfigList.length > 11) ||
+              (![false, 'false'].includes(record.config['ssl']) && wholeConfigList.length > 8)
+            "
+            :span="24"
+            class="show-more"
+          >
             <a href="javascript:;" @click="showWholeList">
               {{ showMoreItem ? $t('Clients.collapse') : $t('Clients.expand') }}
               <i :class="showMoreItem ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
@@ -103,9 +130,15 @@
 
     <div slot="footer" class="dialog-align-footer">
       <el-button size="small" @click="handleCache">{{ $t('Base.cancel') }}</el-button>
-      <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate(false)">{{
-        $t('Base.confirm')
-      }}</el-button>
+      <el-button
+        :loading="loadingButton === 'createButton'"
+        class="dialog-primary-btn"
+        type="primary"
+        size="small"
+        @click="handleCreate(false)"
+      >
+        {{ $t('Base.confirm') }}
+      </el-button>
     </div>
   </el-dialog>
 </template>
@@ -114,11 +147,12 @@
 import { loadResourceTypes, createResource } from '@/api/rules'
 import { renderParamsForm, verifyID } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
+import FileEditor from '@/components/FileEditor'
 
 export default {
   name: 'ResourceDialog',
 
-  components: { KeyAndValueEditor },
+  components: { KeyAndValueEditor, FileEditor },
 
   inheritAttrs: false,
 
@@ -133,6 +167,7 @@ export default {
 
   data() {
     return {
+      loadingButton: undefined,
       showMoreItem: false,
       configLoading: false,
       selfVisible: false,
@@ -202,6 +237,12 @@ export default {
       if (this.$refs.record) {
         setTimeout(() => {
           this.$refs.record.resetFields()
+          this.record = {
+            config: {},
+            description: '',
+            type: '',
+            id: `resource:${Math.random().toString().slice(3, 9)}`,
+          }
           this.wholeConfigList = []
           this.configList = []
         }, 10)
@@ -237,6 +278,7 @@ export default {
       setTimeout(this.$refs.record.clearValidate, 10)
     },
     async handleCreate(test = false) {
+      this.loadingButton = test ? 'testButton' : 'createButton'
       const valid = await this.$refs.record.validate()
       if (!valid) {
         return
@@ -252,14 +294,21 @@ export default {
           this.record.config[label] = false
         }
       })
-      const resource = await createResource(this.record, test)
-      if (test) {
-        this.$message.success(this.$t('RuleEngine.resourceAvailable'))
-        return
+      try {
+        const resource = await createResource(this.record, test)
+        this.loadingButton = resource ? undefined : this.loadingButton
+        if (test) {
+          this.$message.success(this.$t('RuleEngine.resourceAvailable'))
+          return
+        }
+        this.$emit('created', resource.id)
+        this.dialogVisible = false
+        this.selfVisible = false
+      } catch (err) {
+        setTimeout(() => {
+          this.loadingButton = undefined
+        }, 100)
       }
-      this.$emit('created', resource.id)
-      this.dialogVisible = false
-      this.selfVisible = false
     },
     handleCache() {
       this.dialogVisible = false
@@ -320,10 +369,6 @@ export default {
   }
 
   .el-form-item {
-    .reset-input-width {
-      width: 330px;
-    }
-
     .el-select {
       &:not(.reset-width) {
         width: 330px;
@@ -345,7 +390,7 @@ export default {
       padding: 0 32px;
     }
 
-    .el-input:not(.reset-input-width),
+    .el-input,
     .el-select {
       width: 200px !important;
     }

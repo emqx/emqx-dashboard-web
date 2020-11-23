@@ -4,8 +4,8 @@ export function listTopicMetrics() {
   return http.get('/topic-metrics')
 }
 
-export function enableTopicMetrics() {
-  return http.put('/modules/emqx_mod_topic_metrics/load')
+export function enableTopicMetrics(body) {
+  return http.post('/maybe_start_modules', body)
 }
 
 export function addTopicMetrics(body) {

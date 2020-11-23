@@ -41,12 +41,22 @@
                   <template v-if="item.elType === 'object'">
                     <key-and-value-editor v-model="record.config[item.key]"></key-and-value-editor>
                   </template>
+                  <template v-else-if="item.elType === 'file'">
+                    <file-editor v-model="record.config[item.key]"></file-editor>
+                  </template>
                   <!-- input -->
                   <template v-else-if="item.elType !== 'select'">
                     <el-input
                       v-if="item.type === 'number'"
                       v-model.number="record.config[item.key]"
                       v-bind="item.bindAttributes"
+                    >
+                    </el-input>
+                    <el-input
+                      v-else-if="item.type === 'password'"
+                      v-model="record.config[item.key]"
+                      v-bind="item.bindAttributes"
+                      show-password
                     >
                     </el-input>
                     <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes"> </el-input>
@@ -88,14 +98,16 @@
 </template>
 
 <script>
-import { renderParamsForm } from '@/common/utils'
+import { renderParamsForm, verifyListener } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
+import FileEditor from '@/components/FileEditor'
 
 export default {
   name: 'Listeners',
 
   components: {
     KeyAndValueEditor,
+    FileEditor,
   },
 
   model: {
@@ -180,10 +192,15 @@ export default {
       })
       this.record.config = Object.assign(commonRecordConfig, optionRecordConfig)
       this.rules.config = Object.assign(commonRulesConfig, rules)
+      const verifyListenerArr = [{ required: true, validator: verifyListener }]
+      this.rules.config.listen_on = verifyListenerArr
       if (this.currentOper === 'edit') {
         Object.assign(this.record.config, this.selectedListener)
       }
       this.record.config.listener_type = type
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
     },
     cleanOldData() {
       this.commonConfigs = []
@@ -222,6 +239,9 @@ export default {
         this.addDataAccordingListenerType(this.selectedListener.listener_type)
       }
       this.configLoading = false
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
     },
     atDialogClose() {
       setTimeout(() => {

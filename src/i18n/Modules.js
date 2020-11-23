@@ -28,8 +28,8 @@ export default {
     en: 'Description',
   },
   searchTip: {
-    zh: '搜索全部模块...',
-    en: 'Search all modules...',
+    zh: '搜索模块...',
+    en: 'Search modules...',
   },
   reconnect: {
     zh: '重连',
@@ -100,16 +100,20 @@ export default {
     en: 'Authentication',
   },
   protocols: {
-    zh: '协议拓展',
+    zh: '协议接入',
     en: 'Protocols',
   },
   messagePublish: {
     zh: '消息下发',
     en: 'Message Publish',
   },
+  extension: {
+    zh: '多语言扩展',
+    en: 'Extensions',
+  },
   monitor: {
     zh: '运维监控',
-    en: 'Monitoring',
+    en: 'DevOps',
   },
   localModules: {
     zh: '内部模块',
@@ -167,8 +171,107 @@ export default {
     zh: '请添加监听器！',
     en: 'Please add Listener!',
   },
-  uploadFile: {
-    zh: '上传文件',
-    en: 'Upload File',
+  fileTip: {
+    zh: '请上传文件',
+    en: 'Please upload File',
+  },
+  noNeedAddConfigTip: {
+    zh: '此模块无需配置相关信息！',
+    en: 'No configuration information is required for this module!',
+  },
+  continueCommit: {
+    zh: '继续提交',
+    en: 'Submit',
+  },
+  editTip: {
+    zh: '应用更改将会短暂重启当前模块，可能会造成数据丢失或服务中断，请确保在不影响业务的情况下提交更改。',
+    en: `
+      Applying changes will immediately restart the current module which may cause data loss
+      or service interruption. Please make sure to submit the changes without affecting the business.`,
+  },
+  auth: {
+    zh: '认证',
+    en: 'Authentication',
+  },
+  confirmDelete: {
+    zh: '确认删除？',
+    en: 'Confirm Delete?',
+  },
+  listNull: {
+    zh: '列表为空，请调整过滤条件再试',
+    en: 'Empty. Please change the filter and try again',
+  },
+  allow: {
+    zh: '允许',
+    en: 'Allow',
+  },
+  deny: {
+    zh: '不允许',
+    en: 'Deny',
+  },
+  action: {
+    zh: '主题动作',
+    en: 'Action',
+  },
+  isAllow: {
+    zh: '是否允许',
+    en: 'Allowed',
+  },
+  useModulesTip: {
+    zh: 'EMQ X 提供了丰富的模块用于替换插件，建议您前往使用 <a href="/#/modules">模块</a>。',
+    en: `EMQ X provides a wealth of Modules to replace Plugin,
+    it is recommended that you go to use <a href="/#/modules">Modules</a>.`,
+  },
+  searchClient: {
+    zh: '请输入 IMEI',
+    en: 'Please input IMEI',
+  },
+  enhancedAuth: {
+    zh: '增强认证',
+    en: 'Enhanced Auth',
+  },
+  mechanism: {
+    zh: '认证机制',
+    en: 'Authentication mechanism',
+  },
+  addAuth: {
+    zh: '创建认证信息',
+    en: 'Add Auth',
+  },
+  editAuth: {
+    zh: '编辑认证信息',
+    en: 'Edit Auth',
+  },
+  viewAuth: {
+    zh: '查看认证信息',
+    en: 'View Auth',
+  },
+  iterationCount: {
+    zh: '迭代次数',
+    en: 'Iteration Count',
+  },
+  iterationCountTip: {
+    zh: '必须为正整数',
+    en: 'Must be a positive integer',
+  },
+  serverKey: {
+    zh: '服务密钥',
+    en: 'Server key',
+  },
+  storedKey: {
+    zh: '存储密钥',
+    en: 'Stored key',
+  },
+  dataType: {
+    zh: '数据类型',
+    en: 'Data Type',
+  },
+  lwClientOffline: {
+    zh: '当前客户端已下线',
+    en: 'The current client is offline',
+  },
+  requestTimeout: {
+    zh: '请求超时',
+    en: 'Request timed out',
   },
 }

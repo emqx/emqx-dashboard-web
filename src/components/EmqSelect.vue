@@ -1,5 +1,5 @@
 <template>
-  <el-select :value="rawValue" v-bind="$attrs" class="emq-select" v-on="$listeners">
+  <el-select :value="rawValue" v-bind="$attrs" class="emq-select" v-on="$listeners" @change="selectChange">
     <slot>
       <el-option
         v-for="(item, i) in options"
@@ -90,6 +90,9 @@ export default {
   },
 
   methods: {
+    selectChange(val) {
+      this.$emit('selectChange', val)
+    },
     async loadData() {
       const options = await this.getOptions()
       this.parserField = {}

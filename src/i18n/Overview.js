@@ -309,4 +309,24 @@ export default {
     zh: '知道了',
     en: 'I knew',
   },
+  expired: {
+    zh: '过期',
+    en: 'Expired',
+  },
+  noSubscribers: {
+    zh: '无订阅者',
+    en: 'No Subscribers',
+  },
+  receivedMsg: {
+    zh: '消息接收',
+    en: 'Received',
+  },
+  sentMsg: {
+    zh: '消息发送',
+    en: 'Sent',
+  },
+  droppedMsg: {
+    zh: '消息丢弃',
+    en: 'Dropped',
+  },
 }

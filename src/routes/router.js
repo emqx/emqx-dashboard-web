@@ -326,9 +326,6 @@ let routes = [
         path: '',
         name: 'plugins',
         component: () => import('@/views/Plugins/Plugins'),
-        meta: {
-          keepAlive: true,
-        },
       },
       {
         path: '/plugins/:pluginName',
@@ -352,14 +349,19 @@ let routes = [
         component: () => import('@/views/Modules/Modules'),
       },
       {
-        path: 'add',
-        name: 'module-add',
-        component: () => import('@/views/Modules/AddModule'),
+        path: 'select',
+        name: 'modules-select',
+        component: () => import('@/views/Modules/SelectModules'),
       },
       {
         path: 'detail',
         name: 'module-detail',
         component: () => import('@/views/Modules/ModuleDetail'),
+      },
+      {
+        path: 'manage',
+        name: 'module-manage',
+        component: () => import('@/views/Modules/ModuleManage'),
       },
     ],
   },
