@@ -598,7 +598,7 @@ export default {
     getOption() {
       const { protocol, hostname } = window.location
       return {
-        host: hostname,
+        host: this.$runEnv === 'cloud' ? '127.0.0.1' : hostname,
         protocols: protocol === 'http:' ? 'ws' : 'wss',
         port: protocol === 'http:' ? 8083 : 8084,
         clientId: `mqttjs_${Math.random().toString(16).substr(2, 8)}`,

@@ -26,4 +26,5 @@ export default (Vue) => {
   Vue.component(PageHeader.name, PageHeader)
 
   Vue.prototype.$hasShow = hasShow
+  Vue.prototype.$runEnv = process.env.VUE_APP_BUILD_ENV
 }

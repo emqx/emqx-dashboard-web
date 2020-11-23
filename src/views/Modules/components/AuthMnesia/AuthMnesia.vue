@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-mnesia">
+  <div :class="['auth-mnesia', $runEnv === 'cloud' ? 'app-wrapper' : '']">
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane :label="$t('Modules.auth')" name="auth">
         <mnesia-auth-table v-if="activeName === 'auth'" ref="auth"></mnesia-auth-table>

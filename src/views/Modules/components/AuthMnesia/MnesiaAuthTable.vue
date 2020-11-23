@@ -3,7 +3,7 @@
     <div class="emq-table-header">
       <el-row class="add-form" :gutter="20">
         <el-form :model="record" ref="record" :rules="rules">
-          <el-col :span="6">
+          <el-col v-if="$runEnv !== 'cloud'" :span="6">
             <el-form-item>
               <emq-select v-model="type" :field="{ options: typeOptions }" size="small" @selectChange="typeChange">
               </emq-select>
@@ -49,7 +49,7 @@
       </el-row>
     </div>
     <el-row :gutter="20">
-      <el-col :span="12">
+      <el-col v-if="$runEnv !== 'cloud'" :span="12">
         <el-table :data="clientidTableData" class="data-list" v-loading="idListLoading">
           <el-table-column prop="clientid" :label="$t('Clients.clientId')"> </el-table-column>
           <el-table-column prop="oper" width="120px">
@@ -78,7 +78,7 @@
           </el-pagination>
         </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="$runEnv !== 'cloud' ? 12 : 24">
         <el-table :data="usernameTableData" class="data-list" v-loading="nameListLoading">
           <el-table-column prop="username" :label="$t('Clients.username')"> </el-table-column>
           <el-table-column prop="oper" width="120px">
@@ -147,7 +147,7 @@ export default {
 
   data() {
     return {
-      type: 'clientid',
+      type: 'username',
       record: {
         username: '',
         clientid: '',
