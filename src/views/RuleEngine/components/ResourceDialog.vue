@@ -278,11 +278,11 @@ export default {
       setTimeout(this.$refs.record.clearValidate, 10)
     },
     async handleCreate(test = false) {
-      this.loadingButton = test ? 'testButton' : 'createButton'
       const valid = await this.$refs.record.validate()
       if (!valid) {
         return
       }
+      this.loadingButton = test ? 'testButton' : 'createButton'
       const { config } = this.record
       // String to Boolean
       Object.keys(config).forEach((label) => {
