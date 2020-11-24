@@ -259,7 +259,12 @@
                   >
                   </el-input>
                   <div v-else-if="item.key === 'sql'" class="monaco-container monaco-action__sql">
-                    <monaco id="action-sql" v-model="record.params.sql" lang="sql"> </monaco>
+                    <monaco
+                      :id="`action-sql${Math.random().toString(16).slice(3)}`"
+                      v-model="record.params.sql"
+                      lang="sql"
+                    >
+                    </monaco>
                   </div>
                   <el-input v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </el-input>
                 </template>
