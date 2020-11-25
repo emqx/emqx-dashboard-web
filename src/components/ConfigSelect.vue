@@ -91,13 +91,13 @@ export default {
 
   created() {
     this.loadData()
-    this.$emit('updateConfig', this.extraConfigs[this.rawValue], this.rawValue)
+    this.$emit('updateConfig', this.extraConfigs[this.rawValue], this.rawValue, this.extraConfigs)
   },
 
   methods: {
     valueChange(type) {
       if (type) {
-        this.$emit('updateConfig', this.extraConfigs[type], type)
+        this.$emit('updateConfig', this.extraConfigs[type], type, this.extraConfigs)
       }
     },
     async loadData() {
