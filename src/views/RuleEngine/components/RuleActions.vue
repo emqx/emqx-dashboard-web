@@ -393,8 +393,6 @@ export default {
       },
       actions: [], // 全部 actions
       resources: [], // 全部资源
-      editItem: {},
-      toResource: false,
     }
   },
 
@@ -531,7 +529,6 @@ export default {
     },
 
     toCreateResource() {
-      this.toResource = true
       const { types = [] } = this.selectedAction
       this.$refs.resource.setup({ types, action: 'create' })
       this.actionDialogVisible = false
@@ -540,6 +537,8 @@ export default {
         JSON.stringify({
           record: this.record,
           paramsList: this.paramsList,
+          originRecord: this.originRecord,
+          originParamsList: this.originParamsList,
           actionCategory: this.actionCategory,
           actionCategoryOptions: this.actionCategoryOptions,
           types,
@@ -549,17 +548,20 @@ export default {
 
     confirmResource(id) {
       this.actionDialogVisible = true
-      this.currentOper = 'edit'
-      const { _config } = this.editItem
-      if (_config) {
-        const { params } = _config
-        const configData = renderParamsForm(params, 'params')
-        this.storeOriginData(configData, 'edit')
-      }
       const currentAction = sessionStorage.getItem('currentAction')
       if (currentAction) {
-        const { record, paramsList, types, actionCategoryOptions, actionCategory } = JSON.parse(currentAction)
+        const {
+          record,
+          paramsList,
+          types,
+          actionCategoryOptions,
+          actionCategory,
+          originParamsList,
+          originRecord,
+        } = JSON.parse(currentAction)
         this.record = record
+        this.originRecord = originRecord
+        this.originParamsList = originParamsList
         this.paramsList = paramsList
         this.selectedAction.types = types
         this.actionCategory = actionCategory
@@ -568,7 +570,6 @@ export default {
       }
       if (id) {
         this.record.params.$resource = id
-        this.editItem.params.$resource = id
       }
       this.loadResourceData()
     },
@@ -632,7 +633,10 @@ export default {
       }
     },
 
-    addConfigAccordingType(extraConfigs, type) {
+    addConfigAccordingType(extraConfigs, type, allExtraConfigs) {
+      const otherType = type === 'true' ? 'false' : 'true'
+      const otherExtraConfigs = allExtraConfigs[otherType]
+      this.deleteHideItems(otherExtraConfigs, type)
       const { $resource } = this.record.params
       const [...commonParamsList] = this.originParamsList
       const { ...rulesCommonConfig } = this.originRules.params
@@ -656,7 +660,6 @@ export default {
         this.record.params = recordCommonConfig
       }
       this.paramsList.sort((prev, next) => prev.order - next.order)
-      this.handleEditInit(type)
       this.record.params.enable_batch = type
 
       if (this.$refs.record) {
@@ -664,21 +667,16 @@ export default {
       }
     },
 
-    handleEditInit(type) {
-      if (Object.keys(this.editItem).length) {
-        this.record = { ...this.editItem }
-        if (type === 'false') {
-          const { $resource, sql } = this.record.params
-          this.record.params = { $resource, sql }
-        }
+    deleteHideItems(extraConfigs, value) {
+      const keys = Object.keys(extraConfigs)
+      if (value === 'false') {
+        keys.forEach((key) => {
+          delete this.originRecord.params[key]
+        })
       }
     },
 
     actionTypeChange(actionName, oper = 'add') {
-      if (actionName !== this.editItem.name && !this.toResource) {
-        this.editItem = {}
-      }
-      this.toResource = false
       this.selectedAction = JSON.parse(JSON.stringify(this.actionsMap[actionName]))
       this.actionCategory = this.selectedAction.category
       this.paramsList = []
@@ -699,11 +697,11 @@ export default {
       this.actionDialogVisible = true
     },
     editAction(item, index) {
-      this.editItem = { ...item }
       this.actionDialogTitle = this.$t('RuleEngine.editActions')
       this.currentEditIndex = index
       this.actionTypeChange(item.name, 'edit')
       this.record = { ...item }
+      this.originRecord = { ...item }
       this.actionDialogVisible = true
     },
     removeAction(index) {
@@ -758,7 +756,7 @@ export default {
       this.currentAction = action
       this.isFallbacks = true
       this.record = { ...fallback }
-      this.editItem = { ...fallback }
+      this.originRecord = { ...fallback }
       this.actionTypeChange(fallback.name, 'edit')
       this.actionDialogVisible = true
     },
