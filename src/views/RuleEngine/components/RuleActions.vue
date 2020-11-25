@@ -244,6 +244,16 @@
                 <template v-if="item.elType === 'object'">
                   <key-and-value-editor v-model="record.params[item.key]"></key-and-value-editor>
                 </template>
+                <template v-else-if="item.elType === 'cfgselect'">
+                  <config-select
+                    v-model="record.params[item.key]"
+                    v-bind="item.bindAttributes"
+                    class="reset-width"
+                    :extraConfigs="item.extraConfigs"
+                    @updateConfig="addConfigAccordingType"
+                  >
+                  </config-select>
+                </template>
                 <template v-else-if="item.elType !== 'select'">
                   <el-input
                     v-if="item.type === 'number'"
@@ -259,7 +269,12 @@
                   >
                   </el-input>
                   <div v-else-if="item.key === 'sql'" class="monaco-container monaco-action__sql">
-                    <monaco :id="`${record.name}-sql`" v-model="record.params.sql" lang="sql"> </monaco>
+                    <monaco
+                      :id="`${record.name}-sql${Math.random().toString(16).slice(3)}`"
+                      v-model="record.params.sql"
+                      lang="sql"
+                    >
+                    </monaco>
                   </div>
                   <el-input v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </el-input>
                 </template>
@@ -300,6 +315,7 @@ import ResourceDialog from '@/views/RuleEngine/components/ResourceDialog.vue'
 import Monaco from '@/components/Monaco'
 import { setTimeout } from 'timers'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
+import ConfigSelect from '@/components/ConfigSelect'
 
 export default {
   name: 'RuleActions',
@@ -308,6 +324,7 @@ export default {
     ResourceDialog,
     Monaco,
     KeyAndValueEditor,
+    ConfigSelect,
   },
 
   props: {
@@ -329,7 +346,6 @@ export default {
     return {
       actionDialogTitle: this.$t('RuleEngine.addActions'),
       actionDialogVisible: false,
-      resourceDialogVisible: false,
       isFallbacks: false,
       setRefresh: false,
       actionsMap: {},
@@ -340,6 +356,20 @@ export default {
       currentAction: {},
       actionCategory: '',
       actionCategoryOptions: [],
+      originParamsList: [],
+      originRules: {
+        name: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        params: {
+          $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        },
+      },
+      originRecord: {
+        name: '',
+        params: {
+          $resource: '',
+        },
+        fallbacks: [],
+      },
       record: {
         name: '',
         params: {
@@ -363,6 +393,8 @@ export default {
       },
       actions: [], // 全部 actions
       resources: [], // 全部资源
+      editItem: {},
+      toResource: false,
     }
   },
 
@@ -423,6 +455,13 @@ export default {
   methods: {
     initData() {
       this.record = {
+        name: '',
+        params: {
+          $resource: '',
+        },
+        fallbacks: [],
+      }
+      this.originRecord = {
         name: '',
         params: {
           $resource: '',
@@ -492,6 +531,7 @@ export default {
     },
 
     toCreateResource() {
+      this.toResource = true
       const { types = [] } = this.selectedAction
       this.$refs.resource.setup({ types, action: 'create' })
       this.actionDialogVisible = false
@@ -509,6 +549,13 @@ export default {
 
     confirmResource(id) {
       this.actionDialogVisible = true
+      this.currentOper = 'edit'
+      const { _config } = this.editItem
+      if (_config) {
+        const { params } = _config
+        const configData = renderParamsForm(params, 'params')
+        this.storeOriginData(configData, 'edit')
+      }
       const currentAction = sessionStorage.getItem('currentAction')
       if (currentAction) {
         const { record, paramsList, types, actionCategoryOptions, actionCategory } = JSON.parse(currentAction)
@@ -521,6 +568,7 @@ export default {
       }
       if (id) {
         this.record.params.$resource = id
+        this.editItem.params.$resource = id
       }
       this.loadResourceData()
     },
@@ -532,7 +580,9 @@ export default {
     loadParamsList(oper) {
       this.currentOper = oper
       const { params } = this.selectedAction
-      const { form, rules } = renderParamsForm(params, 'params')
+      const configData = renderParamsForm(params, 'params')
+      const { form, rules } = configData
+      this.storeOriginData(configData, oper)
       if (oper === 'add') {
         this.record.params = {}
         form.forEach(({ key, value }) => {
@@ -556,7 +606,79 @@ export default {
       this.paramsLoading = false
     },
 
+    assignRecordParams(form) {
+      const recordParams = {}
+      form.forEach(({ key, value }) => {
+        const _key = key
+        let _value = value
+        if (_key === 'sql' && _value === undefined) {
+          _value = ''
+        }
+        this.$set(recordParams, _key, _value)
+      })
+      return recordParams
+    },
+
+    storeOriginData(configData, oper) {
+      const { form, rules } = configData
+      this.originParamsList = form
+      this.originRules.params = {
+        $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        ...rules,
+      }
+      if (oper === 'add') {
+        const { ...recordParams } = this.assignRecordParams(form)
+        this.originRecord.params = recordParams
+      }
+    },
+
+    addConfigAccordingType(extraConfigs, type) {
+      const { $resource } = this.record.params
+      const [...commonParamsList] = this.originParamsList
+      const { ...rulesCommonConfig } = this.originRules.params
+      const { ...recordCommonConfig } = this.originRecord.params
+      Object.assign(recordCommonConfig, { $resource })
+
+      if (Object.keys(extraConfigs).length) {
+        const configData = renderParamsForm(extraConfigs, 'params')
+        const { form, rules } = configData
+        this.paramsList = commonParamsList.concat(form)
+        this.rules.params = Object.assign(rulesCommonConfig, rules)
+        let addRecordParams = {}
+        if (this.currentOper === 'add') {
+          const { ...recordParams } = this.assignRecordParams(form)
+          addRecordParams = recordParams
+        }
+        this.record.params = Object.assign(recordCommonConfig, addRecordParams)
+      } else {
+        this.paramsList = commonParamsList
+        this.rules.params = rulesCommonConfig
+        this.record.params = recordCommonConfig
+      }
+      this.paramsList.sort((prev, next) => prev.order - next.order)
+      this.handleEditInit(type)
+      this.record.params.enable_batch = type
+
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
+    },
+
+    handleEditInit(type) {
+      if (Object.keys(this.editItem).length) {
+        this.record = { ...this.editItem }
+        if (type === 'false') {
+          const { $resource, sql } = this.record.params
+          this.record.params = { $resource, sql }
+        }
+      }
+    },
+
     actionTypeChange(actionName, oper = 'add') {
+      if (actionName !== this.editItem.name && !this.toResource) {
+        this.editItem = {}
+      }
+      this.toResource = false
       this.selectedAction = JSON.parse(JSON.stringify(this.actionsMap[actionName]))
       this.actionCategory = this.selectedAction.category
       this.paramsList = []
@@ -577,6 +699,7 @@ export default {
       this.actionDialogVisible = true
     },
     editAction(item, index) {
+      this.editItem = { ...item }
       this.actionDialogTitle = this.$t('RuleEngine.editActions')
       this.currentEditIndex = index
       this.actionTypeChange(item.name, 'edit')
@@ -635,6 +758,7 @@ export default {
       this.currentAction = action
       this.isFallbacks = true
       this.record = { ...fallback }
+      this.editItem = { ...fallback }
       this.actionTypeChange(fallback.name, 'edit')
       this.actionDialogVisible = true
     },
