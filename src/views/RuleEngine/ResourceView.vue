@@ -50,7 +50,7 @@
             <span class="field-value">{{ record.typeInfo.title }} ({{ record.type }})</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">{{ $t('RuleEngine.remark') }}:</div>
+            <div class="field-title">{{ $t('RuleEngine.resourceDes') }}:</div>
             <span class="field-value">{{ record.description }}</span>
           </li>
 
