@@ -636,7 +636,7 @@ export default {
     addConfigAccordingType(extraConfigs, type, allExtraConfigs) {
       const otherType = type === 'true' ? 'false' : 'true'
       const otherExtraConfigs = allExtraConfigs[otherType]
-      this.deleteHideItems(otherExtraConfigs, type)
+      this.deleteHideItems(otherExtraConfigs)
       const { $resource } = this.record.params
       const [...commonParamsList] = this.originParamsList
       const { ...rulesCommonConfig } = this.originRules.params
@@ -667,13 +667,11 @@ export default {
       }
     },
 
-    deleteHideItems(extraConfigs, value) {
+    deleteHideItems(extraConfigs) {
       const keys = Object.keys(extraConfigs)
-      if (value === 'false') {
-        keys.forEach((key) => {
-          delete this.originRecord.params[key]
-        })
-      }
+      keys.forEach((key) => {
+        delete this.originRecord.params[key]
+      })
     },
 
     actionTypeChange(actionName, oper = 'add') {
