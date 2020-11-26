@@ -86,7 +86,7 @@
             </span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">{{ $t('RuleEngine.remark') }}:</div>
+            <div class="field-title">{{ $t('RuleEngine.resourceDes') }}:</div>
             <span class="field-value">{{ configItem.description }}</span>
           </li>
           <li class="field-info-item">
