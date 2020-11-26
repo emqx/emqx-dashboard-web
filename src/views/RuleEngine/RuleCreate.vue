@@ -46,7 +46,7 @@
                 <el-input v-model="record.id" :disabled="isEdit"></el-input>
               </el-form-item>
 
-              <el-form-item prop="description" :label="$t('RuleEngine.remark')">
+              <el-form-item prop="description" :label="$t('RuleEngine.resourceDes')">
                 <el-input v-model="record.description"></el-input>
               </el-form-item>
 
