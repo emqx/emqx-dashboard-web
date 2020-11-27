@@ -308,6 +308,8 @@
 </template>
 
 <script>
+// eslint-disable-next-line import/no-extraneous-dependencies
+import _ from 'lodash'
 /* eslint-disable vue/no-side-effects-in-computed-properties */
 import { loadActionsList, loadResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
@@ -481,6 +483,7 @@ export default {
     },
 
     async handleCreate() {
+      this.initRecordEnableBatch()
       const valid = await this.$refs.record.validate()
       if (!valid) {
         return
@@ -547,6 +550,11 @@ export default {
     },
 
     confirmResource(id) {
+      setTimeout(() => {
+        if (this.$refs.record) {
+          this.$refs.record.clearValidate()
+        }
+      }, 10)
       this.actionDialogVisible = true
       const currentAction = sessionStorage.getItem('currentAction')
       if (currentAction) {
@@ -648,11 +656,8 @@ export default {
         const { form, rules } = configData
         this.paramsList = commonParamsList.concat(form)
         this.rules.params = Object.assign(rulesCommonConfig, rules)
-        let addRecordParams = {}
-        if (this.currentOper === 'add') {
-          const { ...recordParams } = this.assignRecordParams(form)
-          addRecordParams = recordParams
-        }
+        const { ...recordParams } = this.assignRecordParams(form)
+        const addRecordParams = recordParams
         this.record.params = Object.assign(recordCommonConfig, addRecordParams)
       } else {
         this.paramsList = commonParamsList
@@ -694,13 +699,32 @@ export default {
       this.actionTypeChange(this.record.name, 'add')
       this.actionDialogVisible = true
     },
-    editAction(item, index) {
+    editAction(one, index) {
+      const item = _.cloneDeep(one)
       this.actionDialogTitle = this.$t('RuleEngine.editActions')
       this.currentEditIndex = index
       this.actionTypeChange(item.name, 'edit')
+      this.initEnableBatch(item)
       this.record = { ...item }
       this.originRecord = { ...item }
       this.actionDialogVisible = true
+    },
+    initEnableBatch(item) {
+      const { _config, params } = { ...item }
+      const { enable_batch } = params
+      if (enable_batch === undefined) {
+        return
+      }
+      const { items } = _config.params.enable_batch
+      const type = enable_batch.toString()
+      const allExtraConfigs = items
+      const extraConfigs = allExtraConfigs[type]
+      this.addConfigAccordingType(extraConfigs, type, allExtraConfigs)
+    },
+    initRecordEnableBatch() {
+      if (this.record.params.enable_batch !== undefined) {
+        this.record.params.enable_batch = this.record.params.enable_batch.toString()
+      }
     },
     removeAction(index) {
       this.rawValue.splice(index, 1)
@@ -748,14 +772,16 @@ export default {
       this.actionDialogVisible = true
       this.currentAction = action
     },
-    editFallback(action, fallback, index) {
+    editFallback(action, fallbackVal, index) {
+      const fallback = _.cloneDeep(fallbackVal)
       this.actionDialogTitle = this.$t('RuleEngine.editActions')
       this.currentEditIndex = index
       this.currentAction = action
       this.isFallbacks = true
+      this.actionTypeChange(fallback.name, 'edit')
+      this.initEnableBatch(fallback)
       this.record = { ...fallback }
       this.originRecord = { ...fallback }
-      this.actionTypeChange(fallback.name, 'edit')
       this.actionDialogVisible = true
     },
     removeFallback(action) {
