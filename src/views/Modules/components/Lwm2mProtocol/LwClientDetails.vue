@@ -226,6 +226,13 @@ import { getLwClients, getOrderResponse, publishOrder } from '@/api/modules'
 export default {
   name: 'LwClientDetails',
 
+  props: {
+    nodeName: {
+      required: true,
+      type: String,
+    },
+  },
+
   data() {
     return {
       activeName: '',
@@ -302,7 +309,7 @@ export default {
     },
 
     async loadObjectList() {
-      const data = await getLwClients()
+      const data = await getLwClients(this.nodeName)
       const res = data.filter(($) => $.imei === this.currentImei)
       if (res.length < 1) {
         this.$message.warning(this.$t('Modules.lwClientOffline'))
@@ -341,7 +348,7 @@ export default {
         const getResponseFunction = async () => {
           try {
             this.resourcesOperations[path] = ''
-            const { code, content, codeMsg } = await getOrderResponse(this.currentImei, 'discover', path)
+            const { code, content, codeMsg } = await getOrderResponse(this.nodeName, this.currentImei, 'discover', path)
             if (Array.isArray(content)) {
               this.initObjectResourseValues(content)
               this.objectResources[path] = content
@@ -399,7 +406,7 @@ export default {
       this.readTimeId = setInterval(async () => {
         try {
           count += 1
-          const { content } = await getOrderResponse(this.currentImei, 'read', path)
+          const { content } = await getOrderResponse(this.nodeName, this.currentImei, 'read', path)
           if (content) {
             assignValueFunction(content)
             this.readTimeId = this.clearTimer(this.readTimeId)
@@ -449,7 +456,7 @@ export default {
 
     async getObserveResult(way, one) {
       try {
-        const { content } = await getOrderResponse(this.currentImei, way, one.path)
+        const { content } = await getOrderResponse(this.nodeName, this.currentImei, way, one.path)
         if (content) {
           const valueArr = []
           content.forEach((item) => {
@@ -491,7 +498,7 @@ export default {
           this.pubOrderByButton('execute', one.path)
           const getResponseFunction = async () => {
             try {
-              const { code, codeMsg } = await getOrderResponse(this.currentImei, 'execute', one.path)
+              const { code, codeMsg } = await getOrderResponse(this.nodeName, this.currentImei, 'execute', one.path)
               if (code && parseFloat(code) < 3) {
                 this.$message.success(this.$t('Base.operateSuccess'))
               } else if (codeMsg) {
@@ -567,7 +574,7 @@ export default {
 
     async getWriteResult(path, content, basePath) {
       try {
-        const { code, codeMsg } = await getOrderResponse(this.currentImei, 'write', path)
+        const { code, codeMsg } = await getOrderResponse(this.nodeName, this.currentImei, 'write', path)
         if (code && parseFloat(code) < 3) {
           this.$message.success(this.$t('Base.editSuccess'))
           const pathSplitArr = content[0].path.split('/')
@@ -614,7 +621,12 @@ export default {
       this.publishOneOrder('create', { path: this.createBasePath, content: [] })
       const getResponseFunction = async () => {
         try {
-          const { code, codeMsg } = await getOrderResponse(this.currentImei, 'create', this.createBasePath)
+          const { code, codeMsg } = await getOrderResponse(
+            this.nodeName,
+            this.currentImei,
+            'create',
+            this.createBasePath,
+          )
           if (code && parseFloat(code) < 3) {
             this.$message.success(this.$t('Base.createSuccess'))
             this.loadObjectList()
@@ -645,7 +657,7 @@ export default {
           this.pubOrderByButton('delete', path)
           const getResponseFunction = async () => {
             try {
-              const { code, codeMsg } = await getOrderResponse(this.currentImei, 'delete', path)
+              const { code, codeMsg } = await getOrderResponse(this.nodeName, this.currentImei, 'delete', path)
               if (code && parseFloat(code) < 3) {
                 this.$message.success(this.$t('Base.deleteSuccess'))
                 this.activeName = ''

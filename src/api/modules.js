@@ -96,8 +96,8 @@ export function getLwClients(nodeName) {
   return http.get(`/nodes/${nodeName}/lwm2m_channels`)
 }
 
-export function getOrderResponse(imei, msgType, path) {
-  return http.get(`/lookup_cmd/${imei}?msgType=${msgType}&path=${path}`)
+export function getOrderResponse(nodeName, imei, msgType, path) {
+  return http.get(`/nodes/${nodeName}/lookup_cmd/${imei}?msgType=${msgType}&path=${path}`)
 }
 
 export function publishOrder(body) {
