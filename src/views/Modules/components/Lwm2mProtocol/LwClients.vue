@@ -1,61 +1,59 @@
 <template>
   <div class="lw-clients clients">
-    <lw-client-details v-if="$route.query.imei"></lw-client-details>
-    <template v-else>
-      <page-header>
-        <div class="page-header-content-view">
-          <div class="content">
-            <div>
-              {{ $t('Clients.currentConnection') }}:<span class="current-clients">{{ connectedCount }}</span>
-            </div>
-            <emq-select
-              v-model="nodeName"
-              class="node-select"
-              size="small"
-              :field="{ options: currentNodes }"
-              :field-name="{ label: 'name', value: 'node' }"
-              @change="handleNodeChange"
-            ></emq-select>
+    <page-header>
+      <div class="page-header-content-view">
+        <div class="content">
+          <div>
+            {{ $t('Clients.currentConnection') }}:<span class="current-clients">{{ connectedCount }}</span>
           </div>
+          <emq-select
+            v-model="nodeName"
+            class="node-select"
+            size="small"
+            :field="{ options: currentNodes }"
+            :field-name="{ label: 'name', value: 'node' }"
+            @change="handleNodeChange"
+          ></emq-select>
         </div>
-      </page-header>
-      <a-card class="emq-list-card">
-        <div class="lw-clients-header">
-          <el-col :span="8" :offset="16">
-            <el-input
-              v-model="searchVal"
-              type="text"
-              class="search-input"
-              size="small"
-              clearable
-              :placeholder="$t('Modules.searchClient')"
-              @input="searchClient"
-            >
-              <i v-if="!searchLoading" slot="prefix" class="el-icon-search"></i>
-              <i v-else slot="prefix" class="el-icon-loading"></i>
-            </el-input>
-          </el-col>
-        </div>
-        <el-table :data="showTableData">
-          <el-table-column prop="imei" label="IMEI">
-            <template slot-scope="{ row }">
-              <a @click="showClientDetails(row)">{{ row.imei }}</a>
-            </template>
-          </el-table-column>
-          <el-table-column prop="ip_address" :label="$t('Clients.ipAddress')"> </el-table-column>
-          <el-table-column prop="port" :label="$t('Clients.port')"> </el-table-column>
-          <el-table-column prop="lifetime" label="LifeTime"> </el-table-column>
-          <el-table-column prop="version" :label="$t('Schemas.version')"> </el-table-column>
-          <el-table-column width="120px">
-            <template slot-scope="{ row }">
-              <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
-                {{ $t('Clients.kickOut') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </a-card>
-    </template>
+      </div>
+    </page-header>
+    <lw-client-details v-if="$route.query.imei" :nodeName="nodeName"></lw-client-details>
+    <a-card v-else class="emq-list-card">
+      <div class="lw-clients-header">
+        <el-col :span="8" :offset="16">
+          <el-input
+            v-model="searchVal"
+            type="text"
+            class="search-input"
+            size="small"
+            clearable
+            :placeholder="$t('Modules.searchClient')"
+            @input="searchClient"
+          >
+            <i v-if="!searchLoading" slot="prefix" class="el-icon-search"></i>
+            <i v-else slot="prefix" class="el-icon-loading"></i>
+          </el-input>
+        </el-col>
+      </div>
+      <el-table :data="showTableData">
+        <el-table-column prop="imei" label="IMEI">
+          <template slot-scope="{ row }">
+            <a @click="showClientDetails(row)">{{ row.imei }}</a>
+          </template>
+        </el-table-column>
+        <el-table-column prop="ip_address" :label="$t('Clients.ipAddress')"> </el-table-column>
+        <el-table-column prop="port" :label="$t('Clients.port')"> </el-table-column>
+        <el-table-column prop="lifetime" label="LifeTime"> </el-table-column>
+        <el-table-column prop="version" :label="$t('Schemas.version')"> </el-table-column>
+        <el-table-column width="120px">
+          <template slot-scope="{ row }">
+            <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
+              {{ $t('Clients.kickOut') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </a-card>
   </div>
 </template>
 
