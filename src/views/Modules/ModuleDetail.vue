@@ -231,7 +231,7 @@ export default {
 
   methods: {
     handlelistenersChange(val) {
-      this.originRecord.config.listeners = val
+      this.originRecord.config.listeners = _.cloneDeep(val)
     },
     updateValidate() {
       this.$refs.record.validate()
@@ -402,7 +402,7 @@ export default {
           this.record.config.listeners = listeners || []
         }
       }
-      this.originRecord.config.listeners = this.record.config.listeners
+      this.originRecord.config.listeners = _.cloneDeep(this.record.config.listeners)
     },
     storeOriginData(configData) {
       const { form, rules } = configData
