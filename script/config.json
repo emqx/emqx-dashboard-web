@@ -27,7 +27,6 @@
       "children": [
         "nav-header",
         "navbar.user",
-        "monitor.license",
         "monitor.listener",
         "rules.schema"
       ]

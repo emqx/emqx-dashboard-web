@@ -129,19 +129,32 @@
 
     <polyline-cards></polyline-cards>
 
-    <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="pageLoading">
+    <a-card class="license-card" :loading="pageLoading">
       <div class="emq-title">
-        {{ $t('Overview.license') }}
+        {{ $runEnv === 'cloud' ? $t('Overview.deployment') : $t('Overview.license') }}
       </div>
 
       <ul class="license-field">
-        <li v-if="license.customer_type !== evaluation" class="item">
+        <template v-if="$runEnv === 'cloud'">
+          <li class="item">
+            <span class="key">{{ $t('Overview.connectAddress') }}:</span>
+            <span class="value">{{ license.address }}</span>
+          </li>
+          <li class="item">
+            <span class="key">{{ $t('Overview.connectPort') }}:</span>
+            <span class="value">{{ license.port }}</span>
+          </li>
+        </template>
+
+        <li v-if="$runEnv !== 'cloud' && license.customer_type !== evaluation" class="item">
           <span class="key">{{ $t('Overview.customer') }}:</span>
           <span class="value">{{ license.customer }}</span>
         </li>
 
         <li class="item">
-          <span class="key">{{ $t('Overview.numberOfConnectionLines') }}:</span>
+          <span class="key">
+            {{ $runEnv === 'cloud' ? $t('Overview.connectCount') : $t('Overview.numberOfConnectionLines') }}
+          </span>
           <div class="content">
             <el-progress
               class="license-progress"
@@ -152,7 +165,7 @@
             ></el-progress>
           </div>
         </li>
-        <template v-if="license.customer_type !== evaluation">
+        <template v-if="$runEnv !== 'cloud' && license.customer_type !== evaluation">
           <li class="item">
             <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
             <span class="value">{{ license.email }}</span>
@@ -170,7 +183,7 @@
         </template>
       </ul>
 
-      <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
+      <div v-if="$runEnv !== 'cloud' && $hasShow('monitor.connections')" class="license-card-footer">
         <div
           v-if="license.customer_type === evaluation"
           class="description"
