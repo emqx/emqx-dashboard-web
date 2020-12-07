@@ -153,7 +153,7 @@
 
         <li class="item">
           <span class="key">
-            {{ $runEnv === 'cloud' ? $t('Overview.connectCount') : $t('Overview.numberOfConnectionLines') }}
+            {{ $runEnv === 'cloud' ? $t('Overview.connectCount') : $t('Overview.numberOfConnectionLines') }}:
           </span>
           <div class="content">
             <el-progress
