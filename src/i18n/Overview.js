@@ -329,4 +329,20 @@ export default {
     zh: '消息丢弃',
     en: 'Dropped',
   },
+  deployment: {
+    zh: '部署信息',
+    en: 'Deployment information',
+  },
+  connectAddress: {
+    zh: '连接地址',
+    en: 'Address',
+  },
+  connectPort: {
+    zh: '端口',
+    en: 'Port',
+  },
+  connectCount: {
+    zh: '连接数',
+    en: 'Number of connections',
+  },
 }
