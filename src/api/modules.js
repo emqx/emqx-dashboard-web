@@ -92,12 +92,12 @@ export function showSasl(mechanism, username) {
 }
 
 // lwm2m_protocol
-export function getLwClients() {
-  return http.get('/lwm2m_channels')
+export function getLwClients(nodeName) {
+  return http.get(`/nodes/${nodeName}/lwm2m_channels`)
 }
 
-export function getOrderResponse(imei, msgType, path) {
-  return http.get(`/lookup_cmd/${imei}?msgType=${msgType}&path=${path}`)
+export function getOrderResponse(nodeName, imei, msgType, path) {
+  return http.get(`/nodes/${nodeName}/lookup_cmd/${imei}?msgType=${msgType}&path=${path}`)
 }
 
 export function publishOrder(body) {
