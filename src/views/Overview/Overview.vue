@@ -142,7 +142,7 @@
           </li>
           <li class="item">
             <span class="key">{{ $t('Overview.connectPort') }}:</span>
-            <span class="value">{{ license.port }}</span>
+            <span class="value">{{ license.ports }}</span>
           </li>
         </template>
 

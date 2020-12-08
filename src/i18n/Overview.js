@@ -335,14 +335,14 @@ export default {
   },
   connectAddress: {
     zh: '连接地址',
-    en: 'Address',
+    en: 'Connect Address',
   },
   connectPort: {
-    zh: '端口',
-    en: 'Port',
+    zh: '连接端口',
+    en: 'Connect Ports',
   },
   connectCount: {
-    zh: '连接数',
-    en: 'Number of connections',
+    zh: '最大连接数',
+    en: 'Connection Limit',
   },
 }
