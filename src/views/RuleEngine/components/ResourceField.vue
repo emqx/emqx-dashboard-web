@@ -2,11 +2,7 @@
   <el-row :gutter="40" class="resource-field">
     <ul class="field-info">
       <el-col v-for="(item, i) in config" :key="i" :span="12">
-        <li
-          v-if="item.value.file !== ''"
-          class="field-info-item"
-          :title="item.value.file ? item.value.file : item.description"
-        >
+        <li v-if="item.value.filename !== ''" class="field-info-item" :title="item.description">
           <div class="field-title">{{ item.title }}:</div>
           <span class="field-value">
             <span :class="{ 'field-password': showPwdIndex !== i && item.key === 'password' }">
@@ -34,8 +30,8 @@ export default {
     itemValue(val, params) {
       const { i, key, showPwdIndex } = params
       if (typeof val === 'object') {
-        const { file } = val
-        const data = !file ? JSON.stringify(val) : `${file.slice(0, 31)} ...`
+        const { filename } = val
+        const data = !filename ? JSON.stringify(val) : filename
         return data
       }
       if (val && key === 'password' && showPwdIndex !== i) {
