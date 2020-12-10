@@ -66,27 +66,31 @@ export default {
 
 <style lang="scss">
 .resource-field {
-  .field-title {
-    width: 140px !important;
-  }
+  .field-info-item {
+    display: flex;
 
-  .field-value {
-    .field-password {
-      vertical-align: middle;
-      line-height: 17px;
+    .field-title {
+      width: unset;
     }
 
-    .el-icon-view {
-      margin-left: 5px;
-      cursor: pointer;
-      color: #a2a2a2;
-      &:hover {
+    .field-value {
+      .field-password {
+        vertical-align: middle;
+        line-height: 17px;
+      }
+
+      .el-icon-view {
+        margin-left: 5px;
+        cursor: pointer;
+        color: #a2a2a2;
+        &:hover {
+          color: #34c388;
+        }
+      }
+
+      .active {
         color: #34c388;
       }
-    }
-
-    .active {
-      color: #34c388;
     }
   }
 }
