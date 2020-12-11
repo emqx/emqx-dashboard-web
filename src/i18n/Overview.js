@@ -297,12 +297,12 @@ export default {
     zh: `
     当前正在使用评估 License，限制为10个连接。请
     <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">升级 License</a> 。<br>如已购买
-    License，请<a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/enterprise/latest/cn/getting-started/start.html#license"> 替换 </a>正式的 License。
+    License，请<a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.cn/cn/enterprise/latest/getting-started/start.html#license"> 替换 </a>正式的 License。
     `,
     en: `
     You are now using the 10-connection evaluation license.<br>Please
     <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">upgrade license</a>.
-    If you already applied offcial license,<br>please <a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/enterprise/latest/en/getting-started/start.html#license">replace</a> with your official license.
+    If you already applied offcial license,<br>please <a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/en/enterprise/latest/getting-started/start.html#license">replace</a> with your official license.
     `,
   },
   konw: {
