@@ -361,8 +361,8 @@ export default {
       this.scrollTop = scrollTop
     },
     toReadMore(type) {
-      const lang = this.lang === 'zh' ? 'cn' : 'en'
-      const url = `https://docs.emqx.net/enterprise/latest/${lang}/modules/${type}.html`
+      const langUrl = this.lang === 'zh' ? 'cn/cn/' : 'io/en/'
+      const url = `https://docs.emqx.${langUrl}broker/latest/modules/${type}.html`
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },

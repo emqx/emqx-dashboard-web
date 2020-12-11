@@ -1,18 +1,18 @@
 {
   "en": {
-    "ruleEngineTutorial": "https://docs.emqx.io/enterprise/latest/en/rule/rule-engine.html",
-    "restAPI": "https://docs.emqx.io/enterprise/latest/en/advanced/http-api.html",
-    "schemaTutorial": "https://docs.emqx.io/enterprise/latest/en/rule/schema-registry.html",
-    "auth": "https://docs.emqx.io/enterprise/latest/en/advanced/auth.html",
-    "mnesia": "https://docs.emqx.io/broker/latest/en/advanced/auth-mnesia.html",
-    "authJWT": "https://docs.emqx.io/broker/latest/en/advanced/auth-jwt.html"
+    "ruleEngineTutorial": "https://docs.emqx.io/en/enterprise/latest/rule/rule-engine.html",
+    "restAPI": "https://docs.emqx.io/en/enterprise/latest/advanced/http-api.html",
+    "schemaTutorial": "https://docs.emqx.io/en/enterprise/latest/rule/schema-registry.html",
+    "auth": "https://docs.emqx.io/en/enterprise/latest/advanced/auth.html",
+    "mnesia": "https://docs.emqx.io/en/broker/latest/advanced/auth-mnesia.html",
+    "authJWT": "https://docs.emqx.io/en/broker/latest/advanced/auth-jwt.html"
   },
   "zh": {
-    "ruleEngineTutorial": "https://docs.emqx.io/enterprise/latest/cn/rule/rule-engine.html",
-    "restAPI": "https://docs.emqx.io/enterprise/latest/cn/advanced/http-api.html",
-    "schemaTutorial": "https://docs.emqx.io/enterprise/latest/cn/rule/schema-registry.html",
-    "auth": "https://docs.emqx.io/enterprise/latest/cn/advanced/auth.html",
-    "mnesia": "https://docs.emqx.io/broker/latest/cn/advanced/auth-mnesia.html",
-    "authJWT": "https://docs.emqx.io/broker/latest/cn/advanced/auth-jwt.html"
+    "ruleEngineTutorial": "https://docs.emqx.cn/cn/enterprise/latest/rule/rule-engine.html",
+    "restAPI": "https://docs.emqx.cn/cn/enterprise/latest/advanced/http-api.html",
+    "schemaTutorial": "https://docs.emqx.cn/cn/enterprise/latest/rule/schema-registry.html",
+    "auth": "https://docs.emqx.cn/cn/enterprise/latest/advanced/auth.html",
+    "mnesia": "https://docs.emqx.cn/cn/broker/latest/advanced/auth-mnesia.html",
+    "authJWT": "https://docs.emqx.cn/cn/broker/latest/advanced/auth-jwt.html"
   }
 }
