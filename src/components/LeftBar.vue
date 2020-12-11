@@ -246,7 +246,7 @@ export default {
 
   methods: {
     handleClick(e) {
-      if (e.key.endsWith('deployments/dashboard/monitor.html')) {
+      if (e.key.endsWith('deployments/dashboard/introduction.html')) {
         window.open(e.key)
       } else {
         this.$router.push({ path: e.key })

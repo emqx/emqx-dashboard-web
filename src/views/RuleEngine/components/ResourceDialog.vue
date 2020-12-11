@@ -277,6 +277,19 @@ export default {
       this.configLoading = false
       setTimeout(this.$refs.record.clearValidate, 10)
     },
+    cleanFileContent(config) {
+      if (config.ssl === false || config.ssl === 'false') {
+        Object.keys(config).forEach((key) => {
+          const oneValue = config[key]
+          if (typeof oneValue === 'object' && Object.keys(oneValue).includes('file')) {
+            config[key] = {
+              file: '',
+              fielname: '',
+            }
+          }
+        })
+      }
+    },
     async handleCreate(test = false) {
       const valid = await this.$refs.record.validate()
       if (!valid) {
@@ -294,6 +307,7 @@ export default {
           this.record.config[label] = false
         }
       })
+      this.cleanFileContent(config)
       try {
         const resource = await createResource(this.record, test)
         this.loadingButton = resource ? undefined : this.loadingButton
