@@ -22,7 +22,8 @@
         "modules",
         "setting",
         "general",
-        "schemas"
+        "schemas",
+        "tools"
       ],
       "children": [
         "nav-header",
