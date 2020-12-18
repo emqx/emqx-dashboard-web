@@ -295,7 +295,7 @@ export default {
           if (typeof oneValue === 'object' && Object.keys(oneValue).includes('file')) {
             config[key] = {
               file: '',
-              fielname: '',
+              filename: '',
             }
           }
         })
