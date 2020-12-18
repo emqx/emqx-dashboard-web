@@ -34,7 +34,10 @@
                     <el-col
                       :span="item.type === 'textarea' || item.type === 'object' || item.type === 'array' ? 24 : 12"
                     >
-                      <el-form-item v-if="item.elType !== 'file'" v-bind="item.formItemAttributes">
+                      <el-form-item
+                        v-if="item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)"
+                        v-bind="item.formItemAttributes"
+                      >
                         <template v-if="item.formItemAttributes.description" slot="label">
                           {{ item.formItemAttributes.label }}
                           <el-popover width="220" trigger="hover" placement="top">
@@ -106,13 +109,20 @@
                       <template v-else>
                         <el-form-item
                           v-if="
-                            record.config['ssl'] === undefined ||
-                            record.config['ssl'] === 'true' ||
-                            record.config['ssl'] === true
+                            ['true', true].includes(record.config['https_enabled']) ||
+                            ['true', true].includes(record.config['ssl']) ||
+                            (record.config['ssl'] === undefined && record.config['https_enabled'] === undefined)
                           "
                           v-bind="item.formItemAttributes"
                         >
-                          <file-editor v-model="record.config[item.key]"></file-editor>
+                          <file-editor v-if="item.elType === 'file'" v-model="record.config[item.key]"></file-editor>
+                          <emq-select
+                            v-else
+                            v-model="record.config[item.key]"
+                            v-bind="item.bindAttributes"
+                            class="reset-width"
+                          >
+                          </emq-select>
                         </el-form-item>
                       </template>
                     </el-col>
@@ -276,6 +286,21 @@ export default {
         setTimeout(this.$refs.record.clearValidate, 10)
       }
     },
+    cleanFileContent(config) {
+      const falseValues = [false, 'false']
+      if (falseValues.includes(config.ssl) || falseValues.includes(config.https_enabled)) {
+        config.verify = false
+        Object.keys(config).forEach((key) => {
+          const oneValue = config[key]
+          if (typeof oneValue === 'object' && Object.keys(oneValue).includes('file')) {
+            config[key] = {
+              file: '',
+              filename: '',
+            }
+          }
+        })
+      }
+    },
     async handleCreate() {
       const { arrayEditor } = this.$refs
       if (arrayEditor && arrayEditor[0]._data.innerValid === false) {
@@ -301,6 +326,7 @@ export default {
         }
       })
 
+      this.cleanFileContent(config)
       if (this.oper === 'add') {
         this.buttonLoading = true
         this.record.type = this.moduleData.type
