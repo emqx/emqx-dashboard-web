@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="40" class="resource-field">
     <ul class="field-info">
-      <el-col v-for="(item, i) in config" :key="i" :span="12">
+      <el-col v-for="(item, i) in configList" :key="i" :span="12">
         <li v-if="item.value.filename !== ''" class="field-info-item" :title="item.description">
           <div class="field-title">{{ item.title }}:</div>
           <span class="field-value">
@@ -54,7 +54,18 @@ export default {
     }
   },
 
-  created() {},
+  computed: {
+    configList() {
+      // Show or hide certain items based on the value of ssl/https_enabled
+      const dependentList = this.config.filter((item) => item.key === 'ssl' || item.key === 'https_enabled')
+      if (!dependentList[0].value) {
+        // hide
+        return this.config.filter((item) => item.key !== 'verify' && item.key !== 'tls_version')
+      }
+      // show
+      return this.config
+    },
+  },
 
   methods: {
     togglePassword(i) {
