@@ -244,6 +244,16 @@
                 <template v-if="item.elType === 'object'">
                   <key-and-value-editor v-model="record.params[item.key]"></key-and-value-editor>
                 </template>
+                <template v-else-if="item.elType === 'cfgselect'">
+                  <config-select
+                    v-model="record.params[item.key]"
+                    v-bind="item.bindAttributes"
+                    class="reset-width"
+                    :extraConfigs="item.extraConfigs"
+                    @updateConfig="addConfigAccordingType"
+                  >
+                  </config-select>
+                </template>
                 <template v-else-if="item.elType !== 'select'">
                   <el-input
                     v-if="item.type === 'number'"
@@ -259,7 +269,12 @@
                   >
                   </el-input>
                   <div v-else-if="item.key === 'sql'" class="monaco-container monaco-action__sql">
-                    <monaco id="action-sql" v-model="record.params.sql" lang="sql"> </monaco>
+                    <monaco
+                      :id="`${record.name}-sql${Math.random().toString(16).slice(3)}`"
+                      v-model="record.params.sql"
+                      lang="sql"
+                    >
+                    </monaco>
                   </div>
                   <el-input v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </el-input>
                 </template>
@@ -293,6 +308,8 @@
 </template>
 
 <script>
+// eslint-disable-next-line import/no-extraneous-dependencies
+import _ from 'lodash'
 /* eslint-disable vue/no-side-effects-in-computed-properties */
 import { loadActionsList, loadResource } from '@/api/rules'
 import { renderParamsForm } from '@/common/utils'
@@ -300,6 +317,7 @@ import ResourceDialog from '@/views/RuleEngine/components/ResourceDialog.vue'
 import Monaco from '@/components/Monaco'
 import { setTimeout } from 'timers'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
+import ConfigSelect from '@/components/ConfigSelect'
 
 export default {
   name: 'RuleActions',
@@ -308,6 +326,7 @@ export default {
     ResourceDialog,
     Monaco,
     KeyAndValueEditor,
+    ConfigSelect,
   },
 
   props: {
@@ -329,7 +348,6 @@ export default {
     return {
       actionDialogTitle: this.$t('RuleEngine.addActions'),
       actionDialogVisible: false,
-      resourceDialogVisible: false,
       isFallbacks: false,
       setRefresh: false,
       actionsMap: {},
@@ -340,6 +358,20 @@ export default {
       currentAction: {},
       actionCategory: '',
       actionCategoryOptions: [],
+      originParamsList: [],
+      originRules: {
+        name: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        params: {
+          $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        },
+      },
+      originRecord: {
+        name: '',
+        params: {
+          $resource: '',
+        },
+        fallbacks: [],
+      },
       record: {
         name: '',
         params: {
@@ -429,6 +461,13 @@ export default {
         },
         fallbacks: [],
       }
+      this.originRecord = {
+        name: '',
+        params: {
+          $resource: '',
+        },
+        fallbacks: [],
+      }
       this.currentAction = {}
     },
 
@@ -444,6 +483,7 @@ export default {
     },
 
     async handleCreate() {
+      this.initRecordEnableBatch()
       const valid = await this.$refs.record.validate()
       if (!valid) {
         return
@@ -500,6 +540,8 @@ export default {
         JSON.stringify({
           record: this.record,
           paramsList: this.paramsList,
+          originRecord: this.originRecord,
+          originParamsList: this.originParamsList,
           actionCategory: this.actionCategory,
           actionCategoryOptions: this.actionCategoryOptions,
           types,
@@ -508,11 +550,26 @@ export default {
     },
 
     confirmResource(id) {
+      setTimeout(() => {
+        if (this.$refs.record) {
+          this.$refs.record.clearValidate()
+        }
+      }, 10)
       this.actionDialogVisible = true
       const currentAction = sessionStorage.getItem('currentAction')
       if (currentAction) {
-        const { record, paramsList, types, actionCategoryOptions, actionCategory } = JSON.parse(currentAction)
+        const {
+          record,
+          paramsList,
+          types,
+          actionCategoryOptions,
+          actionCategory,
+          originParamsList,
+          originRecord,
+        } = JSON.parse(currentAction)
         this.record = record
+        this.originRecord = originRecord
+        this.originParamsList = originParamsList
         this.paramsList = paramsList
         this.selectedAction.types = types
         this.actionCategory = actionCategory
@@ -532,7 +589,9 @@ export default {
     loadParamsList(oper) {
       this.currentOper = oper
       const { params } = this.selectedAction
-      const { form, rules } = renderParamsForm(params, 'params')
+      const configData = renderParamsForm(params, 'params')
+      const { form, rules } = configData
+      this.storeOriginData(configData, oper)
       if (oper === 'add') {
         this.record.params = {}
         form.forEach(({ key, value }) => {
@@ -556,6 +615,70 @@ export default {
       this.paramsLoading = false
     },
 
+    assignRecordParams(form) {
+      const recordParams = {}
+      form.forEach(({ key, value }) => {
+        const _key = key
+        let _value = value
+        if (_key === 'sql' && _value === undefined) {
+          _value = ''
+        }
+        this.$set(recordParams, _key, _value)
+      })
+      return recordParams
+    },
+
+    storeOriginData(configData, oper) {
+      const { form, rules } = configData
+      this.originParamsList = form
+      this.originRules.params = {
+        $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        ...rules,
+      }
+      if (oper === 'add') {
+        const { ...recordParams } = this.assignRecordParams(form)
+        this.originRecord.params = recordParams
+      }
+    },
+
+    addConfigAccordingType(extraConfigs, type, allExtraConfigs) {
+      const otherType = type === 'true' ? 'false' : 'true'
+      const otherExtraConfigs = allExtraConfigs[otherType]
+      this.deleteHideItems(otherExtraConfigs)
+      const { $resource } = this.record.params
+      const [...commonParamsList] = this.originParamsList
+      const { ...rulesCommonConfig } = this.originRules.params
+      const { ...recordCommonConfig } = this.originRecord.params
+      Object.assign(recordCommonConfig, { $resource })
+
+      if (Object.keys(extraConfigs).length) {
+        const configData = renderParamsForm(extraConfigs, 'params')
+        const { form, rules } = configData
+        this.paramsList = commonParamsList.concat(form)
+        this.rules.params = Object.assign(rulesCommonConfig, rules)
+        const { ...recordParams } = this.assignRecordParams(form)
+        const addRecordParams = recordParams
+        this.record.params = Object.assign(recordCommonConfig, addRecordParams)
+      } else {
+        this.paramsList = commonParamsList
+        this.rules.params = rulesCommonConfig
+        this.record.params = recordCommonConfig
+      }
+      this.paramsList.sort((prev, next) => prev.order - next.order)
+      this.record.params.enable_batch = type
+
+      if (this.$refs.record) {
+        setTimeout(this.$refs.record.clearValidate, 10)
+      }
+    },
+
+    deleteHideItems(extraConfigs) {
+      const keys = Object.keys(extraConfigs)
+      keys.forEach((key) => {
+        delete this.originRecord.params[key]
+      })
+    },
+
     actionTypeChange(actionName, oper = 'add') {
       this.selectedAction = JSON.parse(JSON.stringify(this.actionsMap[actionName]))
       this.actionCategory = this.selectedAction.category
@@ -576,12 +699,32 @@ export default {
       this.actionTypeChange(this.record.name, 'add')
       this.actionDialogVisible = true
     },
-    editAction(item, index) {
+    editAction(one, index) {
+      const item = _.cloneDeep(one)
       this.actionDialogTitle = this.$t('RuleEngine.editActions')
       this.currentEditIndex = index
       this.actionTypeChange(item.name, 'edit')
+      this.initEnableBatch(item)
       this.record = { ...item }
+      this.originRecord = { ...item }
       this.actionDialogVisible = true
+    },
+    initEnableBatch(item) {
+      const { _config, params } = { ...item }
+      const { enable_batch } = params
+      if (enable_batch === undefined) {
+        return
+      }
+      const { items } = _config.params.enable_batch
+      const type = enable_batch.toString()
+      const allExtraConfigs = items
+      const extraConfigs = allExtraConfigs[type]
+      this.addConfigAccordingType(extraConfigs, type, allExtraConfigs)
+    },
+    initRecordEnableBatch() {
+      if (this.record.params.enable_batch !== undefined) {
+        this.record.params.enable_batch = this.record.params.enable_batch.toString()
+      }
     },
     removeAction(index) {
       this.rawValue.splice(index, 1)
@@ -629,13 +772,16 @@ export default {
       this.actionDialogVisible = true
       this.currentAction = action
     },
-    editFallback(action, fallback, index) {
+    editFallback(action, fallbackVal, index) {
+      const fallback = _.cloneDeep(fallbackVal)
       this.actionDialogTitle = this.$t('RuleEngine.editActions')
       this.currentEditIndex = index
       this.currentAction = action
       this.isFallbacks = true
-      this.record = { ...fallback }
       this.actionTypeChange(fallback.name, 'edit')
+      this.initEnableBatch(fallback)
+      this.record = { ...fallback }
+      this.originRecord = { ...fallback }
       this.actionDialogVisible = true
     },
     removeFallback(action) {

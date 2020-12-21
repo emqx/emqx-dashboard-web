@@ -589,13 +589,15 @@ export default {
   },
   portRangeTip: {
     zh: '端口不能为负数且不能大于 65535',
-    ja: '待翻译',
+    ja: '有効な値の範囲は1から65535です',
     en: 'The port cannot be negative and cannot be greater than 65535',
   },
   openModuleTip: {
     zh: `开启热配置后，EMQ X 将从配置文件中拷贝一份配置副本，所有可在 Dashboard 修改的配置都会持久化到磁盘中。
     <br>如果修改配置文件将会覆盖热配置，请谨慎使用。`,
-    ja: '待翻译',
+    ja: `ホットスタンバイ構成をオンにすると、EMQ X は設定ファイルのコピーを作成し、<br>
+    Dashboard で変更可能なすべての設定をディスクに永続化します。<br>
+    設定ファイルを変更すると、ホットスタンバイ構成が上書きされるために、注意してください。`,
     en: `After enabling hot configuration, EMQ X will copy a configuration from the configuration file,<br>
     and all configurations that can be modified on the Dashboard will be persisted to the disk.<br>
     If modifying the configuration file will overwrite the hot configuration, please use it with caution.`,

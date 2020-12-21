@@ -640,24 +640,4 @@ export default {
     ja: 'ルールID',
     en: 'Rule ID',
   },
-  fillTemplate: {
-    zh: '填充模板',
-    ja: '待翻译',
-    en: 'Fill Template',
-  },
-  strTemplate: {
-    zh: '字符模板',
-    ja: '待翻译',
-    en: 'Template',
-  },
-  templateOutput: {
-    zh: '模板输出',
-    ja: '待翻译',
-    en: 'Result',
-  },
-  sqlTestFirst: {
-    zh: '请先正确完成 SQL 测试',
-    ja: '待翻译',
-    en: 'Please complete the SQL test correctly first',
-  },
 }

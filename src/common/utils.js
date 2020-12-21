@@ -224,7 +224,8 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       }
     }
     if (enumValue) {
-      rules[k].push({ type: 'enum', enum: enumValue })
+      const options = enumValue.map(($) => $.toString())
+      rules[k].push({ type: 'enum', enum: options })
     }
   }
   form = form.sort((prev, next) => prev.order - next.order)

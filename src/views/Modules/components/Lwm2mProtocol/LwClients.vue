@@ -1,12 +1,26 @@
 <template>
-  <div class="lw-clients">
-    <lw-client-details v-if="$route.query.imei"></lw-client-details>
+  <div class="lw-clients clients">
+    <page-header>
+      <div class="page-header-content-view">
+        <div class="content">
+          <div>
+            {{ $t('Clients.currentConnection') }}:<span class="current-clients">{{ connectedCount }}</span>
+          </div>
+          <emq-select
+            v-model="nodeName"
+            class="node-select"
+            size="small"
+            :field="{ options: currentNodes }"
+            :field-name="{ label: 'name', value: 'node' }"
+            @change="handleNodeChange"
+          ></emq-select>
+        </div>
+      </div>
+    </page-header>
+    <lw-client-details v-if="$route.query.imei" :nodeName="nodeName"></lw-client-details>
     <a-card v-else class="emq-list-card">
       <div class="lw-clients-header">
-        <div>
-          {{ $t('Clients.currentConnection') }}<span class="current-clients">{{ connectedCount }}</span>
-        </div>
-        <el-col :span="8">
+        <el-col :span="8" :offset="16">
           <el-input
             v-model="searchVal"
             type="text"
@@ -46,6 +60,7 @@
 <script>
 import LwClientDetails from './LwClientDetails'
 import { matchSearch } from '@/common/utils'
+import { loadNodes } from '@/api/common'
 import { getLwClients } from '@/api/modules'
 import { disconnectClient } from '@/api/clients'
 
@@ -63,16 +78,24 @@ export default {
       showTableData: [],
       tableData: [],
       connectedCount: 0,
+      nodeName: '',
+      currentNodes: [],
     }
   },
 
   created() {
-    this.loadList()
+    this.loadData()
   },
 
   methods: {
-    async loadList() {
-      const data = await getLwClients()
+    async loadData() {
+      this.currentNodes = await loadNodes()
+      this.nodeName = this.nodeName || (this.currentNodes[0] || {}).node
+      this.listLoading = false
+      this.loadClientList()
+    },
+    async loadClientList() {
+      const data = await getLwClients(this.nodeName)
       this.tableData = data
       this.showTableData = data
       this.connectedCount = data.length
@@ -100,7 +123,7 @@ export default {
           await disconnectClient(row.imei)
           this.$message.success(successMsg)
           setTimeout(() => {
-            this.loadList()
+            this.loadClientList()
           }, 500)
         })
         .catch(() => {})
@@ -122,25 +145,34 @@ export default {
         }
       }, 500)
     },
+    handleNodeChange() {
+      this.loadClientList()
+    },
   },
 }
 </script>
 
 <style lang="scss">
 .lw-clients {
+  .page-header {
+    margin: 0 0 20px 0;
+    .current-clients {
+      display: inline-block;
+      color: #34c388;
+      margin-left: 10px;
+    }
+    .content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
   .lw-clients-header {
     margin-bottom: 24px;
     height: 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    .current-clients {
-      display: inline-block;
-      color: #34c388;
-      margin-left: 10px;
-    }
-
     .search-input {
       .el-icon-search,
       .el-icon-loading {

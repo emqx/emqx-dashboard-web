@@ -1,12 +1,8 @@
 <template>
   <el-row :gutter="40" class="resource-field">
     <ul class="field-info">
-      <el-col v-for="(item, i) in config" :key="i" :span="12">
-        <li
-          v-if="item.value.file !== ''"
-          class="field-info-item"
-          :title="item.value.file ? item.value.file : item.description"
-        >
+      <el-col v-for="(item, i) in configList" :key="i" :span="12">
+        <li v-if="item.value.filename !== ''" class="field-info-item" :title="item.description">
           <div class="field-title">{{ item.title }}:</div>
           <span class="field-value">
             <span :class="{ 'field-password': showPwdIndex !== i && item.key === 'password' }">
@@ -34,8 +30,8 @@ export default {
     itemValue(val, params) {
       const { i, key, showPwdIndex } = params
       if (typeof val === 'object') {
-        const { file } = val
-        const data = !file ? JSON.stringify(val) : `${file.slice(0, 31)} ...`
+        const { filename } = val
+        const data = !filename ? JSON.stringify(val) : filename
         return data
       }
       if (val && key === 'password' && showPwdIndex !== i) {
@@ -58,7 +54,18 @@ export default {
     }
   },
 
-  created() {},
+  computed: {
+    configList() {
+      // Show or hide certain items based on the value of ssl/https_enabled
+      const dependentList = this.config.filter((item) => item.key === 'ssl' || item.key === 'https_enabled')
+      if (!dependentList[0].value) {
+        // hide
+        return this.config.filter((item) => item.key !== 'verify' && item.key !== 'tls_version')
+      }
+      // show
+      return this.config
+    },
+  },
 
   methods: {
     togglePassword(i) {
@@ -70,27 +77,31 @@ export default {
 
 <style lang="scss">
 .resource-field {
-  .field-title {
-    width: 140px !important;
-  }
+  .field-info-item {
+    display: flex;
 
-  .field-value {
-    .field-password {
-      vertical-align: middle;
-      line-height: 17px;
+    .field-title {
+      width: unset;
     }
 
-    .el-icon-view {
-      margin-left: 5px;
-      cursor: pointer;
-      color: #a2a2a2;
-      &:hover {
+    .field-value {
+      .field-password {
+        vertical-align: middle;
+        line-height: 17px;
+      }
+
+      .el-icon-view {
+        margin-left: 5px;
+        cursor: pointer;
+        color: #a2a2a2;
+        &:hover {
+          color: #34c388;
+        }
+      }
+
+      .active {
         color: #34c388;
       }
-    }
-
-    .active {
-      color: #34c388;
     }
   }
 }

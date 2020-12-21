@@ -379,7 +379,7 @@ export default {
     zh: `
     当前正在使用评估 License，限制为10个连接。请
     <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/cn/licenses#trial">升级 License</a> 。<br>如已购买
-    License，请<a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/enterprise/latest/cn/getting-started/start.html#license"> 替换 </a>正式的 License。
+    License，请<a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.cn/cn/enterprise/latest/getting-started/start.html#license"> 替换 </a>正式的 License。
     `,
     ja: `
     現在、体験版のライセンスを使用しており、接続数は10に制限されています。最大接続数を増やしたい場合は、以下のサイトで商用ライセンスを購入してください。<br>
@@ -389,7 +389,7 @@ export default {
     en: `
     You are now using the 10-connection evaluation license.<br>Please
     <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.io/licenses#trial">upgrade license</a>.
-    If you already applied offcial license,<br>please <a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/enterprise/latest/en/getting-started/start.html#license">replace</a> with your official license.
+    If you already applied offcial license,<br>please <a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/en/enterprise/latest/getting-started/start.html#license">replace</a> with your official license.
     `,
   },
   konw: {
@@ -399,27 +399,27 @@ export default {
   },
   expired: {
     zh: '过期',
-    ja: '待翻译',
+    ja: '期限切れ',
     en: 'Expired',
   },
   noSubscribers: {
     zh: '无订阅者',
-    ja: '待翻译',
+    ja: 'サブスクライバーなし',
     en: 'No Subscribers',
   },
   receivedMsg: {
     zh: '消息接收',
-    ja: '待翻译',
+    ja: '受信済み',
     en: 'Received',
   },
   sentMsg: {
     zh: '消息发送',
-    ja: '待翻译',
+    ja: '送信',
     en: 'Sent',
   },
   droppedMsg: {
     zh: '消息丢弃',
-    ja: '待翻译',
+    ja: 'ドロップ',
     en: 'Dropped',
   },
 }
