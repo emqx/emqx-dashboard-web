@@ -48,6 +48,17 @@
             show-overflow-tooltip
             :label="$t('RuleEngine.resourceDes')"
           ></el-table-column>
+          <el-table-column prop="isAvailable">
+            <template slot-scope="{ row }">
+              <a-badge
+                style="font-size: 12px;"
+                :status="row.isAvailable ? 'success' : 'error'"
+                :text="row.isAvailable ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')"
+                dot
+              >
+              </a-badge>
+            </template>
+          </el-table-column>
           <el-table-column width="160px" prop="id">
             <template slot-scope="{ row, $index }">
               <el-button type="dashed" size="mini" @click="viewResourcesStatus(row, $index)">
@@ -142,6 +153,8 @@ export default {
         this.listLoading = true
         const tableData = await loadResource()
         this.tableData = tableData.map(($) => {
+          $.isAvailable = $.status
+          delete $.status
           $._config = []
           $.typeInfo = {}
           $.status = []
