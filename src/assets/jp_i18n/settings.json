@@ -1,0 +1,390 @@
+{
+  "zone": {
+    "force_gc_policy": {
+      "description": {
+        "ja": "この数の メッセージ/バイト が通過した後、強制的にMQTT接続/セッションプロセスGCを実行します"
+      }
+    },
+    "mountpoint": {
+      "description": {
+        "ja": "トピックマウントポイント"
+      }
+    },
+    "acl_nomatch": {
+      "description": {
+        "ja": "ACLルールが一致しない場合は許可/拒否します"
+      }
+    },
+    "quota_conn_messages_routing": {
+      "description": {
+        "ja": "単一のクライアントメッセージが転送される回数の割り当て"
+      }
+    },
+    "upgrade_qos": {
+      "description": {
+        "ja": "サブスクリプションに従ってQoSを強制的にアップグレードします"
+      }
+    },
+    "acl_deny_action": {
+      "description": {
+        "ja": "ACLが拒否された場合の処理​​アクション"
+      }
+    },
+    "max_subscriptions": {
+      "description": {
+        "ja": "許可されるサブスクリプションの最大数。0は制限なしを意味します"
+      }
+    },
+    "enable_flapping_detect": {
+      "description": {
+        "ja": "flapping detectをオンにするかどうかを指定します"
+      }
+    },
+    "max_clientid_len": {
+      "description": {
+        "ja": "MQTTクライアントIDの最大長さ"
+      }
+    },
+    "await_rel_timeout": {
+      "description": {
+        "ja": "pubrelがタイムアウト後にQoS2メッセージが削除されます（クライアント->ブローカー）"
+      }
+    },
+    "server_keepalive": {
+      "description": {
+        "ja": "サーバーによって指定されたKeepalive時間"
+      }
+    },
+    "bypass_auth_plugins": {
+      "description": {
+        "ja": "zoneのクライアントが認証ステップをバイパスできるようにします"
+      }
+    },
+    "max_topic_alias": {
+      "description": {
+        "ja": "最大トピックエイリアス、0はトピックエイリアスがサポートされていないことを意味します"
+      }
+    },
+    "mqueue_priorities": {
+      "description": {
+        "ja": "トピックの優先順位"
+      }
+    },
+    "max_qos_allowed": {
+      "description": {
+        "ja": "最大 QoS"
+      }
+    },
+    "keepalive_backoff": {
+      "description": {
+        "ja": "MQTT keepalive タイムアウトのバックオフ。ブローカーは、キープアライブ*バックオフ* 2タイムアウトまで接続を切断します。"
+      }
+    },
+    "quota_overall_messages_routing": {
+      "description": {
+        "ja": "ゾーンのすべてのクライアントメッセージの転送回数の割り当て"
+      }
+    },
+    "allow_anonymous": {
+      "description": {
+        "ja": "認証プラグインがロードされていない場合、デフォルトで匿名認証が許可されます。実稼働環境では、このオプションを無効にすることをお勧めします"
+      }
+    },
+    "max_mqueue_len": {
+      "description": {
+        "ja": "キューに入っているメッセージの最大長さ。0は制限なしを意味します"
+      }
+    },
+    "max_awaiting_rel": {
+      "description": {
+        "ja": "PUBRELを待機している最大QoS2パケット（クライアント->ブローカー）、0は制限なしを意味します"
+      }
+    },
+    "retry_interval": {
+      "description": {
+        "ja": "QoS 1/2 メッセージ配信のリトライ間隔"
+      }
+    },
+    "use_username_as_clientid": {
+      "description": {
+        "ja": "ユーザー名を使用してクライアントIDを置き換えるかどうかを指定します"
+      }
+    },
+    "enable_ban": {
+      "description": {
+        "ja": "ホワイトリストチェックを有効にするかどうかを指定します"
+      }
+    },
+    "mqueue_store_qos0": {
+      "description": {
+        "ja": "QoS0メッセージをキューに保存するかどうかを指定します"
+      }
+    },
+    "idle_timeout": {
+      "description": {
+        "ja": "MQTT接続のアイドルタイムアウト"
+      }
+    },
+    "response_information": {
+      "description": {
+        "ja": "応答メッセージ"
+      }
+    },
+    "retain_available": {
+      "description": {
+        "ja": "サーバーがMQTT保持メッセージをサポートするかどうかを指定します"
+      }
+    },
+    "ignore_loop_deliver": {
+      "description": {
+        "ja": "メッセージのループ配信を無視するかどうかを指定します（MQTT v3.1.1）"
+      }
+    },
+    "force_shutdown_policy": {
+      "description": {
+        "ja": "プロセスメッセージキューの長さ|メモリバイト"
+      }
+    },
+    "max_inflight": {
+      "description": {
+        "ja": "配信されたが確認されていないInflightWindowストレージQoS1/2メッセージの最大サイズ"
+      }
+    },
+    "session_expiry_interval": {
+      "description": {
+        "ja": "セッションの有効期限（MQTT v3.1.1）"
+      }
+    },
+    "enable_stats": {
+      "description": {
+        "ja": "接続ステータス統計を有効にすると、パフォーマンスが低下します"
+      }
+    },
+    "wildcard_subscription": {
+      "description": {
+        "ja": "ワイルドカードサブスクリプションを有効にするかどうかを指定します"
+      }
+    },
+    "enable_acl": {
+      "description": {
+        "ja": "ACLチェックを有効にするかどうかを指定します"
+      }
+    },
+    "shared_subscription": {
+      "description": {
+        "ja": "共有サブスクリプションを有効にするかどうかを指定します"
+      }
+    },
+    "mqueue_default_priority": {
+      "description": {
+        "ja": "優先度テーブルと一致しないトピックの場合、デフォルトが最高の優先度です"
+      }
+    },
+    "strict_mode": {
+      "description": {
+        "ja": "厳密モードでMQTTフレームを解析するかどうかを指定します"
+      }
+    },
+    "rate_limit_conn_bytes_in": {
+      "description": {
+        "ja": "クライアントバイトの流入率の上限"
+      }
+    },
+    "max_topic_levels": {
+      "description": {
+        "ja": "許可される最大トピックレベル、0は制限なしを意味します"
+      }
+    },
+    "rate_limit_conn_messages_in": {
+      "description": {
+        "ja": "クライアント パブリッシュ メッセージの流入率の上限"
+      }
+    },
+    "max_packet_size": {
+      "description": {
+        "ja": "MQTTデータパケットの最大サイズ"
+      }
+    },
+    "publish_limit": {
+      "description": {
+        "ja": "パブリッシュ制限"
+      }
+    }
+  },
+  "ws": {
+    "verify_protocol_header": {
+      "description": {
+        "ja": "MQTTプロトコルヘッダーを検証するかどうかを指定します"
+      }
+    },
+    "mqtt_piggyback": {
+      "description": {
+        "ja": "WebSocketメッセージに複数のMQTTパケットを含めることが許可されているかどうかを指定します"
+      }
+    },
+    "mqtt_path": {
+      "description": {
+        "ja": "mqttパス"
+      }
+    },
+    "max_frame_size": {
+      "description": {
+        "ja": "Websocketフレームサイズ"
+      }
+    },
+    "idle_timeout": {
+      "description": {
+        "ja": "MQTT接続のアイドルタイムアウト"
+      }
+    }
+  },
+  "tcp": {
+    "zone": {
+      "description": {
+        "ja": "ゾーン"
+      }
+    },
+    "sndbuf": {
+      "description": {
+        "ja": "ソケットの送信バッファー（osカーネル）"
+      }
+    },
+    "send_timeout_close": {
+      "description": {
+        "ja": "送信タイムアウトの場合、TCP接続を閉じます"
+      }
+    },
+    "send_timeout": {
+      "description": {
+        "ja": "TCPメッセージ送信タイムアウト時間"
+      }
+    },
+    "reuseaddr": {
+      "description": {
+        "ja": "リスナーのSO_REUSEADDRフラグ"
+      }
+    },
+    "recbuf": {
+      "description": {
+        "ja": "ソケットの受信バッファー（osカーネル）"
+      }
+    },
+    "proxy_protocol_timeout": {
+      "description": {
+        "ja": "プロキシプロトコルのタイムアウト時間。この時間以降にプロキシプロトコルメッセージが受信されない場合、TCP接続を閉じます。"
+      }
+    },
+    "proxy_protocol": {
+      "description": {
+        "ja": "EMQ XクラスターがHAProxyまたはNginxにデプロイされている場合、Proxy Protocol V1/2を有効にします"
+      }
+    },
+    "peer_cert_as_username": {
+      "description": {
+        "ja": "X.509証明書ベースの認証のオプションを有効にします。EMQXは証明書の共通名をMQTTユーザー名として使用します。"
+      }
+    },
+    "nodelay": {
+      "description": {
+        "ja": "MQTT接続のTCP_NODELAYフラグ。オプションが有効になっている場合、少量のデータがすぐに送信できます。TCPバックログは、保留中のキューの最大長を定義します。"
+      }
+    },
+    "max_connections": {
+      "description": {
+        "ja": "リスナーの最大接続数"
+      }
+    },
+    "max_conn_rate": {
+      "description": {
+        "ja": "1秒あたりに許可された接続数"
+      }
+    },
+    "listener": {
+      "description": {
+        "ja": "リスナー"
+      }
+    },
+    "backlog": {
+      "description": {
+        "ja": "TCP接続キューの最大長さ"
+      }
+    },
+    "active_n": {
+      "description": {
+        "ja": "ソケットの{active、N}オプションを設定します"
+      }
+    },
+    "acceptors": {
+      "description": {
+        "ja": "レシーバーの数、accept操作を実行するプロセスの数、TCP/SSL/DTLSソケットにのみ有効"
+      }
+    }
+  },
+  "ssl": {
+    "verify": {
+      "description": {
+        "ja": "双方向SSLを有効にするかどうかを指定します"
+      }
+    },
+    "tls_versions": {
+      "description": {
+        "ja": "TLSバージョン"
+      }
+    },
+    "secure_renegotiate": {
+      "description": {
+        "ja": "RFC5746に準拠していない再ネゴシエーションの試行を拒否するかどうかを指定します"
+      }
+    },
+    "reuse_sessions": {
+      "description": {
+        "ja": "SSLセッションの再利用を有効にするかどうかを指定します"
+      }
+    },
+    "psk_ciphers": {
+      "description": {
+        "ja": "暗号スイート"
+      }
+    },
+    "keyfile": {
+      "description": {
+        "ja": "キーファイル"
+      }
+    },
+    "honor_cipher_order": {
+      "description": {
+        "ja": "オンに設定されている場合、サーバー設定を使用してパスワードを選択します。オフ（デフォルト）に設定すると、クライアント設定が使用されます"
+      }
+    },
+    "handshake_timeout": {
+      "description": {
+        "ja": "ハンドシェイクタイムアウト時間"
+      }
+    },
+    "fail_if_no_peer_cert": {
+      "description": {
+        "ja": "証明書なしでクライアント接続を禁止します"
+      }
+    },
+    "dhfile": {
+      "description": {
+        "ja": "dhfile"
+      }
+    },
+    "ciphers": {
+      "description": {
+        "ja": "暗号スイート"
+      }
+    },
+    "certfile": {
+      "description": {
+        "ja": "証明書ファイル"
+      }
+    },
+    "cacertfile": {
+      "description": {
+        "ja": "CA証明書ファイル"
+      }
+    }
+  }
+}

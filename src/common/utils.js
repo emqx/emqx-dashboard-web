@@ -9,6 +9,7 @@ import router from '@/routes'
 import lang from '@/i18n'
 
 import { enDocsLink, zhDocsLink, pluginsZh, pluginsEn } from '@/common/link_urls'
+import jpData from '@/common/jp_i18n_data'
 
 const locale = store.state.lang
 const VueI18n = lang[locale]
@@ -458,5 +459,14 @@ export const verifyListener = (rule, value, callback) => {
       callback()
     }
   }
+}
+
+/**
+ * 根据传入的类型获取对应的 日文翻译数据
+ * @param type
+ * @return data
+ */
+export function getJpData(type) {
+  return jpData[type]
 }
 export default {}

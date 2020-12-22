@@ -1,4 +1,7 @@
 import http from '@/common/http'
+import { getJpData } from '@/common/utils'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import _ from 'lodash'
 
 // 加载配置数据
 export const loadConfig = async () => {
@@ -44,12 +47,18 @@ export const updateConfig = async (type, body = {}) => {
 }
 
 // 加载配置格式，有type enum
-export const loadConfigSpec = () => {
-  return http.get('/configs_spec')
+export const loadConfigSpec = async () => {
+  const data = await http.get('/configs_spec')
+  const jpData = getJpData('settings')
+  _.merge(data, jpData)
+  return data
 }
 
-export const loadZoneConfig = () => {
-  return http.get('/configs_spec/zone')
+export const loadZoneConfig = async () => {
+  const data = await http.get('/configs_spec/zone')
+  const jpData = getJpData('zone')
+  _.merge(data, jpData)
+  return data
 }
 
 // type: zones/listeners
