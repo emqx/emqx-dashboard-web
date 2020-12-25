@@ -1,5 +1,7 @@
 import http from '@/common/http'
-import { fillI18n } from '@/common/utils'
+import { fillI18n, getJpData } from '@/common/utils'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import _ from 'lodash'
 
 let ruleEvents = []
 const eventsMap = {}
@@ -87,6 +89,14 @@ export async function loadActionsList(params = {}) {
 
 export async function loadResourceTypes() {
   let types = await http.get('/resource_types')
+  const jpData = getJpData('resourceTypes')
+  types.forEach((item) => {
+    jpData.forEach((one) => {
+      if (one.name === item.name) {
+        _.merge(item, one)
+      }
+    })
+  })
   types = fillI18n(types, ['title', 'description']).map((item) => {
     item.params = fillI18n(item.params, true)
     return item

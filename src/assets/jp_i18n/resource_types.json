@@ -1,0 +1,1787 @@
+[
+  {
+    "name": "backend_cassa",
+    "title": {
+      "ja": "Cassandra"
+    },
+    "description": {
+      "ja": "Cassandra データベース"
+    },
+    "params": {
+      "username": {
+        "title": {
+          "ja": "Cassandra ユーザー名"
+        },
+        "description": {
+          "ja": "Cassandra ユーザー名"
+        }
+      },
+      "ssl": {
+        "title": {
+          "ja": "SSLを有効にします"
+        },
+        "description": {
+          "ja": "sslを有効にするかどうかを指定します"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ"
+        },
+        "description": {
+          "ja": "Cassandra接続プールサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "Cassandra パスワード"
+        },
+        "description": {
+          "ja": "Cassandra パスワード"
+        }
+      },
+      "nodes": {
+        "title": {
+          "ja": "Cassandra サーバー"
+        },
+        "description": {
+          "ja": "Cassandra サーバーアドレス"
+        }
+      },
+      "keyspace": {
+        "title": {
+          "ja": "Cassandra キースペース"
+        },
+        "description": {
+          "ja": "Cassandra　キースペース名"
+        }
+      },
+      "keyfile": {
+        "title": {
+          "ja": "SSL キー"
+        },
+        "description": {
+          "ja": "SSLキーファイル"
+        }
+      },
+      "certfile": {
+        "title": {
+          "ja": "SSL証明書"
+        },
+        "description": {
+          "ja": "SSL証明書ファイル"
+        }
+      },
+      "cafile": {
+        "title": {
+          "ja": "SSL CA"
+        },
+        "description": {
+          "ja": "Cassandra SSL CA証明書"
+        }
+      },
+      "auto_reconnect": {
+        "title": {
+          "ja": "再接続を有効にします"
+        },
+        "description": {
+          "ja": "Cassandra接続が失われたときに再試行します"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_clickouse",
+    "title": {
+      "ja": "ClickHouse"
+    },
+    "description": {
+      "ja": "ClickHouse"
+    },
+    "params": {
+      "user": {
+        "title": {
+          "ja": "ClickHouse ユーザー名"
+        },
+        "description": {
+          "ja": "ClickHouse ユーザー名"
+        }
+      },
+      "server": {
+        "title": {
+          "ja": "ClickHouse サーバー"
+        },
+        "description": {
+          "ja": "ClickHouse サーバー"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ"
+        },
+        "description": {
+          "ja": "ClickHouse接続プールのサイズ"
+        }
+      },
+      "key": {
+        "title": {
+          "ja": "ClickHouse キー"
+        },
+        "description": {
+          "ja": "ClickHouse パスワード"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_dynamo",
+    "title": {
+      "ja": "DynamoDB"
+    },
+    "description": {
+      "ja": "DynamoDB リソース"
+    },
+    "params": {
+      "url": {
+        "title": {
+          "ja": "DynamoDB サーバー"
+        },
+        "description": {
+          "ja": "DynamoDB サーバーURL"
+        }
+      },
+      "region": {
+        "title": {
+          "ja": "DynamoDB リージョン"
+        },
+        "description": {
+          "ja": "AWS dynamo リージョン"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "DynamoDB接続プールのサイズ"
+        }
+      },
+      "aws_secret_access_key": {
+        "title": {
+          "ja": "AWSシークレットアクセスキー"
+        },
+        "description": {
+          "ja": "DynamoDBに接続するためのAWSシークレットアクセスキー"
+        }
+      },
+      "aws_access_key_id": {
+        "title": {
+          "ja": "AWSアクセスキーID"
+        },
+        "description": {
+          "ja": "DynamoDBに接続するためのアクセスキーID"
+        }
+      },
+      "auto_reconnect": {
+        "title": {
+          "ja": "自動再接続間隔"
+        },
+        "description": {
+          "ja": "DynamoDB Clientの自動再接続間隔"
+        }
+      }
+    }
+  },
+  {
+    "name": "bridge_rpc",
+    "title": {
+      "ja": "EMQX ブリッジ"
+    },
+    "description": {
+      "ja": "EMQ X RPCブリッジ"
+    },
+    "params": {
+      "reconnect_interval": {
+        "title": {
+          "ja": "再接続間隔"
+        },
+        "description": {
+          "ja": "ブリッジの再接続間隔"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "MQTT/RPC 接続プールのサイズ"
+        }
+      },
+      "mountpoint": {
+        "title": {
+          "ja": "ブリッジマウントポイント"
+        },
+        "description": {
+          "ja": "ブリッジトピックのマウントポイント<br/>例：ローカルノードが `topic1`にメッセージを送信するとリモートブリッジノードのトピックが`bridge/aws/${node}/topic1`になりました。"
+        }
+      },
+      "disk_cache": {
+        "title": {
+          "ja": "ディスクキャッシュ"
+        },
+        "description": {
+          "ja": "ブリッジが切断されたときにメッセージをローカルディスクにキャッシュできるかどうかを決定するフラグ"
+        }
+      },
+      "batch_size": {
+        "title": {
+          "ja": "バッチサイズ"
+        },
+        "description": {
+          "ja": "バッチサイズ"
+        }
+      },
+      "address": {
+        "title": {
+          "ja": "EMQ X ノード名"
+        },
+        "description": {
+          "ja": "EMQ X リモートノード名"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_influxdb_http",
+    "title": {
+      "ja": "InfluxDB HTTP サービス "
+    },
+    "description": {
+      "ja": "HTTPプロトコルを使用してInfluxDBにデータポイントを書き込みます"
+    },
+    "params": {
+      "username": {
+        "title": {
+          "ja": "InfluxDB ユーザー名"
+        },
+        "description": {
+          "ja": "InfluxDBに接続するためのユーザー名"
+        }
+      },
+      "tls_version": {
+        "title": {
+          "ja": "TLS プロトコルバージョン"
+        },
+        "description": {
+          "ja": "TLS プロトコルバージョン"
+        }
+      },
+      "precision": {
+        "title": {
+          "ja": "タイムスタンプの精度"
+        },
+        "description": {
+          "ja": "タイムスタンプの精度"
+        }
+      },
+      "port": {
+        "title": {
+          "ja": "InfluxDB ポート"
+        },
+        "description": {
+          "ja": "接続するポート"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "InfluxDB書き込みプロセスプールサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "InfluxDB パスワード"
+        },
+        "description": {
+          "ja": "InfluxDBに接続するためのパスワード"
+        }
+      },
+      "keyfile": {
+        "title": {
+          "ja": "キーファイル"
+        },
+        "description": {
+          "ja": "キーファイル"
+        }
+      },
+      "https_enabled": {
+        "title": {
+          "ja": "HTTPSを有効にします"
+        },
+        "description": {
+          "ja": "HTTPSを有効にするかどうかを指定します"
+        }
+      },
+      "host": {
+        "title": {
+          "ja": "InfluxDB ホスト"
+        },
+        "description": {
+          "ja": "InfluxDB HTTP/HTTPSサーバーアドレス "
+        }
+      },
+      "database": {
+        "title": {
+          "ja": "InfluxDB データベース名"
+        },
+        "description": {
+          "ja": "InfluxDB データベース名"
+        }
+      },
+      "certfile": {
+        "title": {
+          "ja": "証明書ファイル"
+        },
+        "description": {
+          "ja": "証明書ファイル"
+        }
+      },
+      "cacertfile": {
+        "title": {
+          "ja": "CA証明書ファイル"
+        },
+        "description": {
+          "ja": "CA証明書ファイル"
+        }
+      },
+      "batch_size": {
+        "title": {
+          "ja": "バッチサイズ  "
+        },
+        "description": {
+          "ja": "バッチで収集されたデータポイントの数"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_influxdb_udp",
+    "title": {
+      "ja": "InfluxDB UDP サービス"
+    },
+    "description": {
+      "ja": "UDPプロトコルを使用してデータポイントをInfluxDBに書き込みます"
+    },
+    "params": {
+      "port": {
+        "title": {
+          "ja": "InfluxDB ポート"
+        },
+        "description": {
+          "ja": "接続するポート"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "InfluxDB書き込みプロセスプールサイズ"
+        }
+      },
+      "host": {
+        "title": {
+          "ja": "InfluxDB ホスト"
+        },
+        "description": {
+          "ja": "InfluxDB UDP アドレス"
+        }
+      },
+      "batch_size": {
+        "title": {
+          "ja": "バッチサイズ  "
+        },
+        "description": {
+          "ja": "バッチで収集されたデータポイントの数"
+        }
+      }
+    }
+  },
+  {
+    "name": "bridge_kafka",
+    "title": {
+      "ja": "Kafka"
+    },
+    "description": {
+      "ja": "Kafka"
+    },
+    "params": {
+      "username": {
+        "title": {
+          "ja": "Kafka ユーザー名"
+        },
+        "description": {
+          "ja": "Kafka ユーザー名"
+        }
+      },
+      "sync_timeout": {
+        "title": {
+          "ja": "同期呼び出しタイムアウト"
+        },
+        "description": {
+          "ja": "同期呼び出しタイムアウト"
+        }
+      },
+      "servers": {
+        "title": {
+          "ja": "Kafka サーバー"
+        },
+        "description": {
+          "ja": "Kafka サーバーアドレス、複数のノードはコンマで区切られます"
+        }
+      },
+      "send_buffer": {
+        "title": {
+          "ja": "メッセージを送信するためのバッファサイズ"
+        },
+        "description": {
+          "ja": "メッセージを送信するためのソケットのバッファーサイズ"
+        }
+      },
+      "query_api_versions": {
+        "title": {
+          "ja": "クエリAPIのバージョン番号"
+        },
+        "description": {
+          "ja": "クエリAPIのバージョン番号"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "Kafka パスワード"
+        },
+        "description": {
+          "ja": "Kafka パスワード"
+        }
+      },
+      "min_metadata_refresh_interval": {
+        "title": {
+          "ja": "メタデータのリフレッシュ间隔"
+        },
+        "description": {
+          "ja": "最小メタデータのリフレッシュ间隔"
+        }
+      },
+      "max_batch_bytes": {
+        "title": {
+          "ja": "最大バッチバイト"
+        },
+        "description": {
+          "ja": "最大バッチバイト"
+        }
+      },
+      "compression": {
+        "title": {
+          "ja": "圧縮"
+        },
+        "description": {
+          "ja": "圧縮"
+        }
+      }
+    }
+  },
+  {
+    "name": "bridge_mqtt",
+    "title": {
+      "ja": "MQTT ブリッジ"
+    },
+    "description": {
+      "ja": "MQTT メッセージブリッジ"
+    },
+    "params": {
+      "username": {
+        "title": {
+          "ja": "ユーザー名"
+        },
+        "description": {
+          "ja": "リモートブローカーに接続するためのパスワード"
+        }
+      },
+      "ssl": {
+        "title": {
+          "ja": "ブリッジSSL"
+        },
+        "description": {
+          "ja": "ブリッジSSL接続を有効にするかどうか指定します"
+        }
+      },
+      "retry_interval": {
+        "title": {
+          "ja": "リトライ間隔"
+        },
+        "description": {
+          "ja": "メッセージリトライ間隔"
+        }
+      },
+      "reconnect_interval": {
+        "title": {
+          "ja": "再接続間隔"
+        },
+        "description": {
+          "ja": "ブリッジ再接続間隔:<br/>"
+        }
+      },
+      "proto_ver": {
+        "title": {
+          "ja": "プロトコルバージョン"
+        },
+        "description": {
+          "ja": "MQTTT プロトコルバージョン"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ"
+        },
+        "description": {
+          "ja": "MQTT 接続プールのサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "パスワード"
+        },
+        "description": {
+          "ja": "リモートブローカーに接続するためのパスワード"
+        }
+      },
+      "mountpoint": {
+        "title": {
+          "ja": "ブリッジマウントポイント"
+        },
+        "description": {
+          "ja": "ブリッジトピックのマウントポイント<br/>例：ローカルノードが `topic1`にメッセージを送信するとリモートブリッジノードのトピックが`bridge/aws/${node}/topic1`になりました。"
+        }
+      },
+      "keyfile": {
+        "title": {
+          "ja": "SSL キーファイル"
+        },
+        "description": {
+          "ja": "クライアントキーファイルのファイルパス"
+        }
+      },
+      "keepalive": {
+        "title": {
+          "ja": "キープアライブ"
+        },
+        "description": {
+          "ja": "キープアライブ"
+        }
+      },
+      "disk_cache": {
+        "title": {
+          "ja": "ディスクキャッシュ"
+        },
+        "description": {
+          "ja": "ブリッジが切断されたときにメッセージをローカルディスクにキャッシュできるかどうかを決定するフラグ"
+        }
+      },
+      "clientid": {
+        "title": {
+          "ja": "クライアントId"
+        },
+        "description": {
+          "ja": "リモートブローカーに接続するためのクライアントId"
+        }
+      },
+      "ciphers": {
+        "title": {
+          "ja": "SSL 暗号"
+        },
+        "description": {
+          "ja": "SSL 暗号"
+        }
+      },
+      "certfile": {
+        "title": {
+          "ja": "SSL 証明書ファイル"
+        },
+        "description": {
+          "ja": "クライアント証明書ファイルのファイルパス"
+        }
+      },
+      "cacertfile": {
+        "title": {
+          "ja": "CA証明書"
+        },
+        "description": {
+          "ja": "CA証明書ファイルパス"
+        }
+      },
+      "bridge_mode": {
+        "title": {
+          "ja": "ブリッジモード"
+        },
+        "description": {
+          "ja": "MQTT接続がブリッジモードでするかどうか指定します"
+        }
+      },
+      "append": {
+        "title": {
+          "ja": "GUID追加"
+        },
+        "description": {
+          "ja": "MQTT ClientIdにGUIDを追加するかどうかを指定します"
+        }
+      },
+      "address": {
+        "title": {
+          "ja": "リモートブローカーアドレス"
+        },
+        "description": {
+          "ja": "リモートMQTTブローカーアドレス"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_mongo_rs",
+    "title": {
+      "ja": "MongoDB Replica Set モード"
+    },
+    "description": {
+      "ja": "MongoDB Relica Set モード"
+    },
+    "params": {
+      "w_mode": {
+        "title": {
+          "ja": "書き込みモード"
+        },
+        "description": {
+          "ja": "書き込みモード"
+        }
+      },
+      "ssl": {
+        "title": {
+          "ja": "SSLを有効にします"
+        },
+        "description": {
+          "ja": "MongoDBに接続するためのSSLを有効にするかどうかを指定します"
+        }
+      },
+      "servers": {
+        "title": {
+          "ja": "MongoDB サーバー"
+        },
+        "description": {
+          "ja": "MongoDB サーバーアドレス、複数のノードはコンマで区切られます"
+        }
+      },
+      "rs_set_name": {
+        "title": {
+          "ja": "セット名"
+        },
+        "description": {
+          "ja": "レプリカセットタイプのセット名"
+        }
+      },
+      "r_mode": {
+        "title": {
+          "ja": "読み取りモード"
+        },
+        "description": {
+          "ja": "読み取りモード"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "MongoDB接続プールサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "パスワード"
+        },
+        "description": {
+          "ja": "MongoDB パスワード"
+        }
+      },
+      "login": {
+        "title": {
+          "ja": "ユーザー名"
+        },
+        "description": {
+          "ja": "MongoDB ユーザー名"
+        }
+      },
+      "keyfile": {
+        "title": {
+          "ja": "SSL キー"
+        },
+        "description": {
+          "ja": "SSLキーファイル"
+        }
+      },
+      "database": {
+        "title": {
+          "ja": "データベース名"
+        },
+        "description": {
+          "ja": "データベース名"
+        }
+      },
+      "connectTimoutMS": {
+        "title": {
+          "ja": "接続タイムアウト（ミリ秒）"
+        },
+        "description": {
+          "ja": "サーバー接続タイムアウト"
+        }
+      },
+      "certfile": {
+        "title": {
+          "ja": "SSL証明書"
+        },
+        "description": {
+          "ja": "SSL証明書ファイル"
+        }
+      },
+      "cacertfile": {
+        "title": {
+          "ja": "SSL CA"
+        },
+        "description": {
+          "ja": "MongoDB SSL CA証明書"
+        }
+      },
+      "auth_source": {
+        "title": {
+          "ja": "Auth Source"
+        },
+        "description": {
+          "ja": "ユーザーAuth Source"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_mongo_sharded",
+    "title": {
+      "ja": "MongoDB シャードモード"
+    },
+    "description": {
+      "ja": "MongoDB シャードモード"
+    },
+    "params": {
+      "w_mode": {
+        "title": {
+          "ja": "書き込みモード"
+        },
+        "description": {
+          "ja": "書き込みモード"
+        }
+      },
+      "ssl": {
+        "title": {
+          "ja": "SSLを有効にします"
+        },
+        "description": {
+          "ja": "MongoDBに接続するためのSSLを有効にするかどうかを指定します"
+        }
+      },
+      "servers": {
+        "title": {
+          "ja": "MongoDB サーバー"
+        },
+        "description": {
+          "ja": "MongoDB サーバーアドレス、複数のノードはコンマで区切られます"
+        }
+      },
+      "r_mode": {
+        "title": {
+          "ja": "読み取りモード"
+        },
+        "description": {
+          "ja": "読み取りモード"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "MongoDB接続プールサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "パスワード"
+        },
+        "description": {
+          "ja": "MongoDBパスワード"
+        }
+      },
+      "login": {
+        "title": {
+          "ja": "ユーザー名"
+        },
+        "description": {
+          "ja": "MongoDB ユーザー名"
+        }
+      },
+      "keyfile": {
+        "title": {
+          "ja": "SSL キー"
+        },
+        "description": {
+          "ja": "SSLキーファイル"
+        }
+      },
+      "database": {
+        "title": {
+          "ja": "データベース名"
+        },
+        "description": {
+          "ja": "データベース名"
+        }
+      },
+      "connectTimoutMS": {
+        "title": {
+          "ja": "接続タイムアウト（ミリ秒）"
+        },
+        "description": {
+          "ja": "サーバー接続タイムアウト"
+        }
+      },
+      "certfile": {
+        "title": {
+          "ja": "SSL証明書"
+        },
+        "description": {
+          "ja": "SSL証明書ファイル"
+        }
+      },
+      "cacertfile": {
+        "title": {
+          "ja": "SSL CA"
+        },
+        "description": {
+          "ja": "MongoDB SSL CA証明書"
+        }
+      },
+      "auth_source": {
+        "title": {
+          "ja": "Auth Source"
+        },
+        "description": {
+          "ja": "ユーザーAuth Source"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_mongo_single",
+    "title": {
+      "ja": "MongoDB シングルモード "
+    },
+    "description": {
+      "ja": "MongoDB シングルモード "
+    },
+    "params": {
+      "w_mode": {
+        "title": {
+          "ja": "書き込みモード"
+        },
+        "description": {
+          "ja": "書き込みモード"
+        }
+      },
+      "ssl": {
+        "title": {
+          "ja": "SSLを有効にします"
+        },
+        "description": {
+          "ja": "MongoDBに接続するためのSSLを有効にするかどうかを指定します"
+        }
+      },
+      "servers": {
+        "title": {
+          "ja": "MongoDB サーバー"
+        },
+        "description": {
+          "ja": "MongoDB サーバーアドレス、複数のノードはコンマで区切られます"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "MongoDB接続プールサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "パスワード"
+        },
+        "description": {
+          "ja": "MongoDBパスワード"
+        }
+      },
+      "login": {
+        "title": {
+          "ja": "ユーザー名"
+        },
+        "description": {
+          "ja": "MongoDB ユーザー名"
+        }
+      },
+      "keyfile": {
+        "title": {
+          "ja": "SSL キー"
+        },
+        "description": {
+          "ja": "SSLキーファイル"
+        }
+      },
+      "database": {
+        "title": {
+          "ja": "データベース名"
+        },
+        "description": {
+          "ja": "データベース名"
+        }
+      },
+      "connectTimoutMS": {
+        "title": {
+          "ja": "接続タイムアウト（ミリ秒）"
+        },
+        "description": {
+          "ja": "サーバー接続タイムアウト"
+        }
+      },
+      "certfile": {
+        "title": {
+          "ja": "SSL証明書"
+        },
+        "description": {
+          "ja": "SSL証明書ファイル"
+        }
+      },
+      "cacertfile": {
+        "title": {
+          "ja": "SSL CA"
+        },
+        "description": {
+          "ja": "MongoDB SSL CA証明書"
+        }
+      },
+      "auth_source": {
+        "title": {
+          "ja": "Auth Source"
+        },
+        "description": {
+          "ja": "ユーザーAuth Source"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_mysql",
+    "title": {
+      "ja": "MySQL"
+    },
+    "description": {
+      "ja": "MySQL データベース"
+    },
+    "params": {
+      "user": {
+        "title": {
+          "ja": "MySQL ユーザー名"
+        },
+        "description": {
+          "ja": "MySQL ユーザー名"
+        }
+      },
+      "ssl": {
+        "title": {
+          "ja": "SSLを有効にします"
+        },
+        "description": {
+          "ja": "sslを有効にするかどうかを指定します"
+        }
+      },
+      "server": {
+        "title": {
+          "ja": "MySQL サーバー"
+        },
+        "description": {
+          "ja": "MySQL サーバーアドレス"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "MySQL 接続プールサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "MySQL パスワード"
+        },
+        "description": {
+          "ja": "MYSQL パスワード"
+        }
+      },
+      "keyfile": {
+        "title": {
+          "ja": "SSL キー"
+        },
+        "description": {
+          "ja": "SSLキーファイル"
+        }
+      },
+      "database": {
+        "title": {
+          "ja": "MySQL データベース名"
+        },
+        "description": {
+          "ja": "MySQL データベース名"
+        }
+      },
+      "certfile": {
+        "title": {
+          "ja": "SSL 証明書"
+        },
+        "description": {
+          "ja": "SSL証明書ファイル"
+        }
+      },
+      "cacertfile": {
+        "title": {
+          "ja": "SSL CA"
+        },
+        "description": {
+          "ja": "MYSQL ssl CA証明書"
+        }
+      },
+      "batch_time": {
+        "title": {
+          "ja": "バッチ書き込み間隔（ミリ秒）"
+        },
+        "description": {
+          "ja": "MySQL バッチ書き込み間隔（ミリ秒）"
+        }
+      },
+      "batch_size": {
+        "title": {
+          "ja": "バッチサイズ  "
+        },
+        "description": {
+          "ja": "MySQL バッチ書き込みサイズ"
+        }
+      },
+      "auto_reconnect": {
+        "title": {
+          "ja": "再接続を有効にします"
+        },
+        "description": {
+          "ja": "MySQL接続が失われたときに再試行します"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_opentsdb",
+    "title": {
+      "ja": "OpenTSDB"
+    },
+    "description": {
+      "ja": "OpenTSDB"
+    },
+    "params": {
+      "server": {
+        "title": {
+          "ja": "OpenTSDB サーバー"
+        },
+        "description": {
+          "ja": "OpenTSDB サーバー"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "OpenTSDB接続プールのサイズ"
+        }
+      }
+    }
+  },
+  {
+    "name": "parser_http",
+    "title": {
+      "ja": "HTTPのパーサー"
+    },
+    "description": {
+      "ja": "HTTPのパーサー"
+    },
+    "params": {
+      "parser_url": {
+        "title": {
+          "ja": "リクエストURL"
+        },
+        "description": {
+          "ja": "パーサーサーバーのURL"
+        }
+      },
+      "method": {
+        "title": {
+          "ja": "リクエストメソッド"
+        },
+        "description": {
+          "ja": "リクエストメソッド"
+        }
+      },
+      "headers": {
+        "title": {
+          "ja": "リクエストヘッダー"
+        },
+        "description": {
+          "ja": "リクエストヘッダー"
+        }
+      },
+      "connect_timeout": {
+        "title": {
+          "ja": "接続タイムアウト"
+        },
+        "description": {
+          "ja": "接続タイムアウト（秒）"
+        }
+      }
+    }
+  },
+  {
+    "name": "parser_tcp",
+    "title": {
+      "ja": "TCPのパーサー"
+    },
+    "description": {
+      "ja": "TCPのパーサー"
+    },
+    "params": {
+      "server": {
+        "title": {
+          "ja": "TCPのパーサーサーバー"
+        },
+        "description": {
+          "ja": "パーサーサーバーのアドレス"
+        }
+      },
+      "connect_timeout": {
+        "title": {
+          "ja": "接続タイムアウト"
+        },
+        "description": {
+          "ja": "接続タイムアウト（秒）"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_pgsql",
+    "title": {
+      "ja": "PostgreSQL"
+    },
+    "description": {
+      "ja": "PostgreSQL"
+    },
+    "params": {
+      "username": {
+        "title": {
+          "ja": "PostgreSQL ユーザー名"
+        },
+        "description": {
+          "ja": "PostgreSQLユーザー名"
+        }
+      },
+      "ssl": {
+        "title": {
+          "ja": "SSLを有効にします"
+        },
+        "description": {
+          "ja": "sslを有効にするかどうかを指定します"
+        }
+      },
+      "server": {
+        "title": {
+          "ja": "PostgreSQL サーバー"
+        },
+        "description": {
+          "ja": "PostgreSQL サーバーアドレス"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "PostgreSQL接続プールサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "PostgreSQL パスワード"
+        },
+        "description": {
+          "ja": "PostgreSQL パスワード"
+        }
+      },
+      "keyfile": {
+        "title": {
+          "ja": "SSL キー"
+        },
+        "description": {
+          "ja": "SSLキーファイル"
+        }
+      },
+      "database": {
+        "title": {
+          "ja": "PostgreSQL データベース名"
+        },
+        "description": {
+          "ja": "PostgreSQL データベース名"
+        }
+      },
+      "certfile": {
+        "title": {
+          "ja": "SSL証明書"
+        },
+        "description": {
+          "ja": "SSL証明書ファイル"
+        }
+      },
+      "cacertfile": {
+        "title": {
+          "ja": "SSL CA"
+        },
+        "description": {
+          "ja": "PostgreSQL SSL証明書"
+        }
+      },
+      "auto_reconnect": {
+        "title": {
+          "ja": "再接続を有効にします"
+        },
+        "description": {
+          "ja": "PostgreSQL接続が失われたときに再試行します"
+        }
+      }
+    }
+  },
+  {
+    "name": "bridge_pulsar",
+    "title": {
+      "ja": "Pulsar"
+    },
+    "description": {
+      "ja": "Pulsar"
+    },
+    "params": {
+      "sync_timeout": {
+        "title": {
+          "ja": "同期呼び出しタイムアウト"
+        },
+        "description": {
+          "ja": "同期呼び出しタイムアウト"
+        }
+      },
+      "servers": {
+        "title": {
+          "ja": "Pulsar サーバー"
+        },
+        "description": {
+          "ja": "Pulsar サーバーアドレス、複数のノードはコンマで区切られます"
+        }
+      },
+      "send_buffer": {
+        "title": {
+          "ja": "メッセージを送信するためのバッファサイズ"
+        },
+        "description": {
+          "ja": "メッセージを送信するためのソケットのバッファーサイズ"
+        }
+      },
+      "compression": {
+        "title": {
+          "ja": "圧縮"
+        },
+        "description": {
+          "ja": "圧縮"
+        }
+      },
+      "batch_size": {
+        "title": {
+          "ja": "最大バッチサイズ"
+        },
+        "description": {
+          "ja": "最大バッチサイズ"
+        }
+      }
+    }
+  },
+  {
+    "name": "bridge_rabbit",
+    "title": {
+      "ja": "RabbitMQ"
+    },
+    "description": {
+      "ja": "RabbitMQ リソース"
+    },
+    "params": {
+      "virtual_host": {
+        "title": {
+          "ja": "仮想ホスト"
+        },
+        "description": {
+          "ja": "RabbitMQ 仮想ホスト"
+        }
+      },
+      "username": {
+        "title": {
+          "ja": "ユーザー名"
+        },
+        "description": {
+          "ja": "RabbitMQ ユーザー名"
+        }
+      },
+      "timeout": {
+        "title": {
+          "ja": "接続タイムアウト"
+        },
+        "description": {
+          "ja": "RabbitMQ 接続タイムアウト"
+        }
+      },
+      "server": {
+        "title": {
+          "ja": "RabbitMQ サーバー"
+        },
+        "description": {
+          "ja": "RabbitMQ サーバー"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "RabbitMQ接続プールのサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "パスワード"
+        },
+        "description": {
+          "ja": "RabbitMQ パスワード"
+        }
+      },
+      "heartbeat": {
+        "title": {
+          "ja": "ハートビート"
+        },
+        "description": {
+          "ja": "RabbitMQ ハートビート"
+        }
+      },
+      "auto_reconnect": {
+        "title": {
+          "ja": "自動再接続間隔"
+        },
+        "description": {
+          "ja": "RabbitMQの自動再接続間隔"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_redis_cluster",
+    "title": {
+      "ja": "Redisクラスターモード"
+    },
+    "description": {
+      "ja": "Redisクラスターモード"
+    },
+    "params": {
+      "servers": {
+        "title": "Redis Cluster Servers",
+        "description": {
+          "ja": "Redisクラスターサーバーアドレス、複数のノードはコンマで区切られます"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "Redis接続プールのサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "Redis パスワード"
+        },
+        "description": {
+          "ja": "Redis パスワード"
+        }
+      },
+      "database": {
+        "title": {
+          "ja": "Redis データベース"
+        },
+        "description": {
+          "ja": "Redis データベース"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_redis_sentinel",
+    "title": {
+      "ja": "Redis Sentinelモード"
+    },
+    "description": {
+      "ja": "Redis Sentinelモード"
+    },
+    "params": {
+      "servers": {
+        "title": {
+          "ja": "Redis Sentinelサーバーリスト"
+        },
+        "description": {
+          "ja": "Redis Sentinelサーバーアドレス、複数のノードはコンマで区切られます"
+        }
+      },
+      "sentinel": {
+        "title": {
+          "ja": "Redis Sentinel名"
+        },
+        "description": {
+          "ja": "Redis Sentinel名"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "Redis接続プールのサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "Redis パスワード"
+        },
+        "description": {
+          "ja": "Redis パスワード"
+        }
+      },
+      "database": {
+        "title": {
+          "ja": "Redis データベース名"
+        },
+        "description": {
+          "ja": "Redis データベース名"
+        }
+      },
+      "auto_reconnect": {
+        "title": {
+          "ja": "再接続を有効にします"
+        },
+        "description": {
+          "ja": "Redis接続が失われたときに再試行します"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_redis_single",
+    "title": {
+      "ja": "Redis Singleモード"
+    },
+    "description": {
+      "ja": "Redis Singleモード"
+    },
+    "params": {
+      "server": {
+        "title": {
+          "ja": "Redis サーバー"
+        },
+        "description": {
+          "ja": "Redis サーバー"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "Redis接続プールのサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "Redis パスワード"
+        },
+        "description": {
+          "ja": "Redis パスワード"
+        }
+      },
+      "database": {
+        "title": {
+          "ja": "Redis データベース"
+        },
+        "description": {
+          "ja": "Redis データベース"
+        }
+      },
+      "auto_reconnect": {
+        "title": {
+          "ja": "再接続を有効にします"
+        },
+        "description": {
+          "ja": "Redis接続が失われたときに再試行します"
+        }
+      }
+    }
+  },
+  {
+    "name": "bridge_rocket",
+    "title": {
+      "ja": "RocketMQ"
+    },
+    "description": {
+      "ja": "RocketMQ"
+    },
+    "params": {
+      "sync_timeout": {
+        "title": {
+          "ja": "同期呼び出しタイムアウト"
+        },
+        "description": {
+          "ja": "同期呼び出しタイムアウト"
+        }
+      },
+      "servers": {
+        "title": {
+          "ja": "RocketMQ サーバー"
+        },
+        "description": {
+          "ja": "RocketMQ サーバーアドレス、複数のノードはコンマで区切られます"
+        }
+      },
+      "send_buffer": {
+        "title": {
+          "ja": "メッセージを送信するためのバッファサイズ"
+        },
+        "description": {
+          "ja": "メッセージを送信するためのソケットのバッファーサイズ"
+        }
+      },
+      "refresh_interval": {
+        "title": {
+          "ja": "トピックルートのリフレッシュ间隔"
+        },
+        "description": {
+          "ja": "トピックルートのリフレッシュ间隔"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_tdengine",
+    "title": {
+      "ja": "TDengine"
+    },
+    "description": {
+      "ja": "TDengine"
+    },
+    "params": {
+      "username": {
+        "title": {
+          "ja": "TDengine ユーザー名"
+        },
+        "description": {
+          "ja": "TDengineユーザー名"
+        }
+      },
+      "port": {
+        "title": {
+          "ja": "TDengine ポート"
+        },
+        "description": {
+          "ja": "接続するポート"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "TDengine接続プールのサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "TDengine パスワード"
+        },
+        "description": {
+          "ja": "TDengine パスワード"
+        }
+      },
+      "host": {
+        "title": {
+          "ja": "TDengine ホスト"
+        },
+        "description": {
+          "ja": "TDengine HTTP / HTTPSサーバーアドレス"
+        }
+      }
+    }
+  },
+  {
+    "name": "backend_timescale",
+    "title": {
+      "ja": "TimescaleDB"
+    },
+    "description": {
+      "ja": "TimescaleDB"
+    },
+    "params": {
+      "username": {
+        "title": {
+          "ja": "Timescale ユーザー名"
+        },
+        "description": {
+          "ja": "User Name for Timescale"
+        }
+      },
+      "ssl": {
+        "title": {
+          "ja": "SSLを有効にします"
+        },
+        "description": {
+          "ja": "sslを有効にするかどうかを指定します"
+        }
+      },
+      "server": {
+        "title": {
+          "ja": "Timescale サーバー"
+        },
+        "description": {
+          "ja": "Timescale サーバー"
+        }
+      },
+      "pool_size": {
+        "title": {
+          "ja": "接続プールのサイズ "
+        },
+        "description": {
+          "ja": "Timescale接続プールのサイズ"
+        }
+      },
+      "password": {
+        "title": {
+          "ja": "Timescale パスワード"
+        },
+        "description": {
+          "ja": "Timescale パスワード"
+        }
+      },
+      "keyfile": {
+        "title": {
+          "ja": "SSL キー"
+        },
+        "description": {
+          "ja": "SSLキーファイル"
+        }
+      },
+      "database": {
+        "title": {
+          "ja": "Timescale データベース名"
+        },
+        "description": {
+          "ja": "Timescale データベース名"
+        }
+      },
+      "certfile": {
+        "title": {
+          "ja": "SSL証明書"
+        },
+        "description": {
+          "ja": "SSL証明書ファイル"
+        }
+      },
+      "cacertfile": {
+        "title": {
+          "ja": "SSL CA"
+        },
+        "description": {
+          "ja": "PostgreSQL SSL CA証明書 "
+        }
+      },
+      "auto_reconnect": {
+        "title": {
+          "ja": "再接続を有効にします"
+        },
+        "description": {
+          "ja": "Timescale接続が失われたときに再試行します"
+        }
+      }
+    }
+  },
+  {
+    "name": "web_hook",
+    "title": {
+      "ja": "WebHook"
+    },
+    "description": {
+      "ja": "WebHook"
+    },
+    "params": {
+      "url": {
+        "title": {
+          "ja": "リクエストURL"
+        },
+        "description": {
+          "ja": "リクエストURL"
+        }
+      },
+      "method": {
+        "title": {
+          "ja": "リクエストメソッド"
+        },
+        "description": {
+          "ja": "リクエストメソッド"
+        }
+      },
+      "headers": {
+        "title": {
+          "ja": "リクエストヘッダー"
+        },
+        "description": {
+          "ja": "リクエストヘッダー"
+        }
+      }
+    }
+  }
+]

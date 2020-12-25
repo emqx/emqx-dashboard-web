@@ -53,9 +53,9 @@
                     <div class="left-box">
                       <img :src="one.img" alt="module-logo" class="item-img" />
                       <div class="item-content">
-                        <div class="item-title">{{ one.title[lang] }}</div>
+                        <div class="item-title">{{ one.title[lang] ? one.title[lang] : one.title['en'] }}</div>
                         <div class="item-des">
-                          {{ one.description[lang] }}
+                          {{ one.description[lang] ? one.description[lang] : one.description['en'] }}
                         </div>
                       </div>
                     </div>
@@ -92,9 +92,9 @@
                   <div class="left-box">
                     <img :src="one.img" alt="module-logo" class="item-img" />
                     <div class="item-content">
-                      <div class="item-title">{{ one.title[lang] }}</div>
+                      <div class="item-title">{{ one.title[lang] ? one.title[lang] : one.title['en'] }}</div>
                       <div class="item-des">
-                        {{ one.description[lang] }}
+                        {{ one.description[lang] ? one.description[lang] : one.description['en'] }}
                       </div>
                     </div>
                   </div>
@@ -316,7 +316,7 @@ export default {
         this.allModuleList = this.allModuleList.concat(item)
       })
       this.allModuleList.forEach((item) => {
-        item.localTitle = item.title[this.lang]
+        item.localTitle = item.title[this.lang] ? item.title[this.lang] : item.title.en
         if (Object.keys(this.addedModules).includes(item.name)) {
           item.status = 'added'
           item.id = this.addedModules[item.name]

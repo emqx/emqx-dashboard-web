@@ -48,9 +48,9 @@
                 <div class="left-box">
                   <img :src="item.img" alt="module-logo" class="item-img" />
                   <div class="item-content">
-                    <div class="item-title">{{ item.title[lang] }}</div>
+                    <div class="item-title">{{ item.title[lang] ? item.title[lang] : item.title['en'] }}</div>
                     <div class="item-des">
-                      {{ item.description[lang] }}
+                      {{ item.description[lang] ? item.description[lang] : item.description['en'] }}
                     </div>
                   </div>
                 </div>
@@ -190,7 +190,7 @@ export default {
       this.moduleCount = this.list.length
       if (this.moduleCount) {
         this.list.forEach((item) => {
-          item.localTitle = item.title[this.lang]
+          item.localTitle = item.title[this.lang] ? item.title[this.lang] : item.title.en
           try {
             // eslint-disable-next-line
             item.img = require(`../../assets/module_icon/${item.type}.png`)

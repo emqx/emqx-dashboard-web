@@ -3,13 +3,13 @@
     <page-header>
       <div class="page-header-title-view">
         <div class="title">
-          {{ moduleData.title[lang] }}
+          {{ moduleData.title[lang] ? moduleData.title[lang] : moduleData.title['en'] }}
         </div>
       </div>
       <div class="page-header-content-view">
         <div class="content">
           <p class="description">
-            {{ moduleData.description[lang] }}
+            {{ moduleData.description[lang] ? moduleData.description[lang] : moduleData.description['en'] }}
           </p>
         </div>
       </div>
