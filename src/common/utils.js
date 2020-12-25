@@ -66,8 +66,9 @@ function fillObjectI18n(data = {}) {
     if (typeof value !== 'object') {
       return
     }
-    if ('en' in value && 'zh' in value) {
-      data[key] = value[lang]
+    if (('en' in value && 'zh' in value) || 'ja' in value) {
+      const valueOfLang = value[lang]
+      data[key] = valueOfLang ? valueOfLang : value['en']
     } else {
       fillObjectI18n(value)
     }
@@ -96,7 +97,8 @@ export function fillI18n(data = [], keys = [], autoSearch = false) {
         if (!item[key]) {
           return
         }
-        item[key] = item[key][lang]
+        const valueOfLang = item[key][lang]
+        item[key] = valueOfLang ? valueOfLang : item[key]['en']
       })
     })
   } else {
@@ -107,7 +109,8 @@ export function fillI18n(data = [], keys = [], autoSearch = false) {
       if (!data[key]) {
         return
       }
-      data[key] = data[key][lang]
+      const valueOfLang = data[key][lang]
+      data[key] = valueOfLang ? valueOfLang : data[key]['en']
     })
   }
   return data
