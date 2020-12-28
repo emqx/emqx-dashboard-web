@@ -11,7 +11,7 @@
     "emqx_auth_pgsql": "https://docs.emqx.io/en/broker/latest/advanced/auth-postgresql.html",
     "emqx_auth_redis": "https://docs.emqx.io/en/broker/latest/advanced/auth-redis.html",
     "emqx_dashboard": "https://docs.emqx.io/en/broker/latest/getting-started/dashboard.html",
-    "emqx_extension_hook": "https://docs.emqx.io/en/broker/latest/advanced/multiple-language-support.html",
+    "emqx_extension_hook": "https://docs.emqx.io/en/broker/latest/advanced/lang-lua.html",
     "emqx_rule_engine": "https://docs.emqx.io/en/broker/latest/rule/rule-engine.html"
   },
   "zh": {
@@ -26,7 +26,7 @@
     "emqx_auth_pgsql": "https://docs.emqx.cn/cn/broker/latest/advanced/auth-postgresql.html",
     "emqx_auth_redis": "https://docs.emqx.cn/cn/broker/latest/advanced/auth-redis.html",
     "emqx_dashboard": "https://docs.emqx.cn/cn/broker/latest/getting-started/dashboard.html",
-    "emqx_extension_hook": "https://docs.emqx.cn/cn/broker/latest/advanced/multiple-language-support.html",
+    "emqx_extension_hook": "https://docs.emqx.cn/cn/broker/latest/advanced/lang-lua.html",
     "emqx_rule_engine": "https://docs.emqx.cn/cn/broker/latest/rule/rule-engine.html"
   }
 }
