@@ -60,7 +60,7 @@
               v-bind="item.formItemAttributes"
             >
               <template v-if="item.formItemAttributes.description" slot="label">
-                {{ item.formItemAttributes.label }}
+                <span class="label-text">{{ item.formItemAttributes.label }}</span>
                 <el-popover width="220" trigger="hover" placement="top">
                   <div class="emq-popover-content" v-html="item.formItemAttributes.description"></div>
                   <i slot="reference" class="el-icon-question"></i>
@@ -420,6 +420,19 @@ export default {
     .el-form-item__label {
       padding-bottom: 0;
       font-size: 12px;
+      display: flex;
+
+      .label-text {
+        display: inline-block;
+        max-width: 190px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .el-icon-question {
+        margin-left: 5px;
+      }
     }
   }
 

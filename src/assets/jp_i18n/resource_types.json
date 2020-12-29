@@ -1073,22 +1073,6 @@
           "ja": "MYSQL ssl CA証明書"
         }
       },
-      "batch_time": {
-        "title": {
-          "ja": "バッチ書き込み間隔（ミリ秒）"
-        },
-        "description": {
-          "ja": "MySQL バッチ書き込み間隔（ミリ秒）"
-        }
-      },
-      "batch_size": {
-        "title": {
-          "ja": "バッチサイズ  "
-        },
-        "description": {
-          "ja": "MySQL バッチ書き込みサイズ"
-        }
-      },
       "auto_reconnect": {
         "title": {
           "ja": "再接続を有効にします"
