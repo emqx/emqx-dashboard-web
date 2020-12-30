@@ -38,11 +38,11 @@ export function loadAuth(type, params = {}) {
 }
 
 export function updateAuth(type, id, body = {}) {
-  return http.put(`/auth_${type}/${id}`, body)
+  return http.put(`/auth_${type}/${encodeURIComponent(id)}`, body)
 }
 
 export function deleteAuth(type, id) {
-  return http.delete(`/auth_${type}/${id}`)
+  return http.delete(`/auth_${type}/${encodeURIComponent(id)}`)
 }
 
 export function loadAcl(type, params = {}) {
@@ -54,7 +54,7 @@ export function addAcl(body = {}) {
 }
 
 export function deleteAcl(type, id, topic) {
-  return http.delete(`/acl/${type}/${id}/topic/${encodeURIComponent(topic)}`)
+  return http.delete(`/acl/${type}/${encodeURIComponent(id)}/topic/${encodeURIComponent(topic)}`)
 }
 
 export function delete$allAcl(topic) {
@@ -84,11 +84,11 @@ export function editSasl(body) {
 }
 
 export function deleteSasl(mechanism, username) {
-  return http.delete(`/sasl?mechanism=${mechanism}&username=${username}`)
+  return http.delete(`/sasl?mechanism=${mechanism}&username=${encodeURIComponent(username)}`)
 }
 
 export function showSasl(mechanism, username) {
-  return http.get(`/sasl?mechanism=${mechanism}&username=${username}`)
+  return http.get(`/sasl?mechanism=${mechanism}&username=${encodeURIComponent(username)}`)
 }
 
 // lwm2m_protocol
