@@ -2,9 +2,11 @@ import http from '@/common/http'
 import { fillI18n, getJpData } from '@/common/utils'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
+import store from '@/stores'
 
 let ruleEvents = []
 const eventsMap = {}
+const { lang } = store.state
 
 export async function loadRuleEvents() {
   if (ruleEvents.length === 0) {
@@ -51,6 +53,16 @@ export async function loadRuleDetails(id) {
 
 export async function loadActions(options = { fillI18n: false }) {
   const actions = await http.get('/actions')
+  if (lang === 'ja') {
+    const jpData = getJpData('actions')
+    actions.forEach((item) => {
+      jpData.forEach((one) => {
+        if (one.name === item.name) {
+          _.merge(item, one)
+        }
+      })
+    })
+  }
   if (!options.fillI18n) {
     return actions
   }
@@ -79,6 +91,16 @@ export function SQLTest(rule = {}) {
 
 export async function loadActionsList(params = {}) {
   const actions = await http.get('/actions', { params })
+  if (lang === 'ja') {
+    const jpData = getJpData('actions')
+    actions.forEach((item) => {
+      jpData.forEach((one) => {
+        if (one.name === item.name) {
+          _.merge(item, one)
+        }
+      })
+    })
+  }
   return actions.map((action) => {
     // eslint-disable-next-line
     action = fillI18n(action, ['title', 'description'])
@@ -89,14 +111,16 @@ export async function loadActionsList(params = {}) {
 
 export async function loadResourceTypes() {
   let types = await http.get('/resource_types')
-  const jpData = getJpData('resourceTypes')
-  types.forEach((item) => {
-    jpData.forEach((one) => {
-      if (one.name === item.name) {
-        _.merge(item, one)
-      }
+  if (lang === 'ja') {
+    const jpData = getJpData('resourceTypes')
+    types.forEach((item) => {
+      jpData.forEach((one) => {
+        if (one.name === item.name) {
+          _.merge(item, one)
+        }
+      })
     })
-  })
+  }
   types = fillI18n(types, ['title', 'description']).map((item) => {
     item.params = fillI18n(item.params, true)
     return item

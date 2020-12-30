@@ -1,0 +1,986 @@
+[
+  {
+    "name": "lookup_sub_to_mongo",
+    "title": {
+      "ja": "MongoDBからサブスクリプションリストを取得します "
+    },
+    "description": {
+      "ja": "MongoDBからサブスクリプションリストを取得します "
+    },
+    "params": {
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_timescale",
+    "title": {
+      "ja": "データをTimescaleDBに保存します"
+    },
+    "description": {
+      "ja": "データをTimescaleDBに保存します"
+    },
+    "params": {
+      "sql": {
+        "title": {
+          "ja": "SQLテンプレート"
+        },
+        "description": {
+          "ja": "TimescaleDBにデータを挿入/更新するためのプレースホルダーを含むSQLテンプレートです"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_rabbit",
+    "title": {
+      "ja": "データをRabbitMQにブリッジします"
+    },
+    "description": {
+      "ja": "データをRabbitMQにブリッジします"
+    },
+    "params": {
+      "routing_key": {
+        "title": {
+          "ja": "RabbitMQのルーティングキー "
+        },
+        "description": {
+          "ja": "RabbitMQのルーティングキー "
+        }
+      },
+      "payload_tmpl": {
+        "title": {
+          "ja": "ペイロードテンプレート"
+        },
+        "description": {
+          "ja": "メッセージコンテンツテンプレートは変数をサポートします。 空のテンプレート（デフォルト）を使用する場合、メッセージの内容はすべてJSON形式のフィールドです "
+        }
+      },
+      "exchange_type": {
+        "title": {
+          "ja": "RabbitMQExchangeタイプ"
+        },
+        "description": {
+          "ja": "RabbitMQExchangeタイプ"
+        }
+      },
+      "exchange": {
+        "title": {
+          "ja": "RabbitMQ Exchange"
+        },
+        "description": {
+          "ja": "RabbitMQ Exchange"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_rocket",
+    "title": {
+      "ja": "リソースをアクションにバインドします"
+    },
+    "description": {
+      "ja": "リソースをアクションにバインドします"
+    },
+    "params": {
+      "type": {
+        "title": {
+          "ja": "プロデュースタイプ"
+        },
+        "description": {
+          "ja": "プロデュースタイプ"
+        }
+      },
+      "topic": {
+        "title": {
+          "ja": "RocketMQテーマ"
+        },
+        "description": {
+          "ja": "RocketMQテーマ"
+        }
+      },
+      "payload_tmpl": {
+        "title": {
+          "ja": "ペイロードテンプレート"
+        },
+        "description": {
+          "ja": "メッセージコンテンツテンプレートは変数をサポートします。 空のテンプレート（デフォルト）を使用する場合、メッセージの内容はすべてJSON形式のフィールドです"
+        }
+      },
+      "batch_size": {
+        "title": {
+          "ja": "最大バッチサイズ"
+        },
+        "description": {
+          "ja": "最大バッチサイズ"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "offline_msg_to_redis",
+    "title": {
+      "ja": "オフラインメッセージをRedisに保存します"
+    },
+    "description": {
+      "ja": "オフラインメッセージをRedisに保存します"
+    },
+    "params": {
+      "ttl": {
+        "title": {
+          "ja": "Redisキーの有効期限"
+        },
+        "description": {
+          "ja": "Redisキーの有効期限の単位（秒）"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_pulsar",
+    "title": {
+      "ja": "データをPulsarにブリッジします"
+    },
+    "description": {
+      "ja": "データをPulsarにブリッジします"
+    },
+    "params": {
+      "type": {
+        "title": {
+          "ja": "プロデュースタイプ"
+        },
+        "description": {
+          "ja": "プロデュースタイプ"
+        }
+      },
+      "topic": {
+        "title": {
+          "ja": "Pulsarトピック"
+        },
+        "description": {
+          "ja": "Pulsarトピック"
+        }
+      },
+      "strategy": {
+        "title": {
+          "ja": "プロデュース戦略"
+        },
+        "description": {
+          "ja": "プロデュース戦略"
+        }
+      },
+      "payload_tmpl": {
+        "title": {
+          "ja": "ペイロードテンプレート"
+        },
+        "description": {
+          "ja": "メッセージコンテンツテンプレートは変数をサポートします。 空のテンプレート（デフォルト）を使用する場合、メッセージの内容はすべてJSON形式のフィールドです"
+        }
+      },
+      "key": {
+        "title": {
+          "ja": "戦略キー"
+        },
+        "description": {
+          "ja": "戦略キー、戦略がfirst_key_dispatchの場合にのみ有効になります"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "lookup_sub_to_cassa",
+    "title": {
+      "ja": "Cassandraからサブスクリプションリストを取得します"
+    },
+    "description": {
+      "ja": "Cassandraからサブスクリプションリストを取得します"
+    },
+    "params": {
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "offline_msg_to_mongo",
+    "title": {
+      "ja": "オフラインメッセージをMongoDBに保存します"
+    },
+    "description": {
+      "ja": "オフラインメッセージをMongoDBに保存します"
+    },
+    "params": {
+      "time_range": {
+        "title": {
+          "ja": "時間範囲"
+        },
+        "description": {
+          "ja": "最近の時間範囲でオフラインメッセージを取得します"
+        }
+      },
+      "max_returned_count": {
+        "title": {
+          "ja": "最大返却数"
+        },
+        "description": {
+          "ja": "オフラインメッセージの最大数を取得します"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_mysql",
+    "title": {
+      "ja": "MySQLにデータを保存します"
+    },
+    "description": {
+      "ja": "MySQLにデータを保存します"
+    },
+    "params": {
+      "sql": {
+        "title": {
+          "ja": "SQLテンプレート"
+        },
+        "description": {
+          "ja": "MySQLにデータを挿入/更新するためのプレースホルダーを含むSQLテンプレートです"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_pgsql",
+    "title": {
+      "ja": "PostgreSQLにデータを保存します"
+    },
+    "description": {
+      "ja": "PostgreSQLにデータを保存します"
+    },
+    "params": {
+      "sql": {
+        "title": {
+          "ja": "SQLテンプレート"
+        },
+        "description": {
+          "ja": "PostgreSQLにデータを挿入/更新するためのプレースホルダーを含むSQLテンプレートです"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "do_nothing",
+    "title": {
+      "ja": "空のアクション（デバッグ）"
+    },
+    "description": {
+      "ja": "このアクションは何も実行せず、失敗しません（デバッグ用）"
+    },
+    "params": {}
+  },
+  {
+    "name": "lookup_sub_to_redis",
+    "title": {
+      "ja": "Redisからサブスクリプションリストを取得します "
+    },
+    "description": {
+      "ja": "Redisからサブスクリプションリストを取得します"
+    },
+    "params": {
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_opentsdb",
+    "title": {
+      "ja": "OpenTSDBにデータを保存します"
+    },
+    "description": {
+      "ja": "データをOpenTSDBに保存します"
+    },
+    "params": {
+      "sync_timeout": {
+        "title": {
+          "ja": "同期呼び出しタイムアウト時間"
+        },
+        "description": {
+          "ja": "データがストレージ領域に書き込まれるのを待機する最大時間（単位：ミリ秒）"
+        }
+      },
+      "sync": {
+        "title": {
+          "ja": "同期呼び出し"
+        },
+        "description": {
+          "ja": "結果を返す前に、データがストレージ領域にフラッシュされるのを待つかどうかを指定します"
+        }
+      },
+      "summary": {
+        "title": {
+          "ja": "概要"
+        },
+        "description": {
+          "ja": "概要情報を返すかどうかを指定します"
+        }
+      },
+      "max_batch_size": {
+        "title": {
+          "ja": "最大バッチサイズ"
+        },
+        "description": {
+          "ja": "最大バッチサイズ"
+        }
+      },
+      "details": {
+        "title": {
+          "ja": "詳細"
+        },
+        "description": {
+          "ja": "詳細を返すかどうかを指定します"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "offline_msg_to_cassa",
+    "title": {
+      "ja": "オフラインメッセージをMongoDBに保存します"
+    },
+    "description": {
+      "ja": "オフラインメッセージをMongoDBに保存します"
+    },
+    "params": {
+      "time_range": {
+        "title": {
+          "ja": "時間範囲"
+        },
+        "description": {
+          "ja": "最近の時間範囲でオフラインメッセージを取得します "
+        }
+      },
+      "max_returned_count": {
+        "title": {
+          "ja": "最大返却数"
+        },
+        "description": {
+          "ja": "オフラインメッセージの最大数を取得します"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "lookup_sub_to_mysql",
+    "title": {
+      "ja": "MySQLからサブスクリプションリストを取得します "
+    },
+    "description": {
+      "ja": "MySQLからサブスクリプションリストを取得します "
+    },
+    "params": {
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "lookup_sub_to_pgsql",
+    "title": {
+      "ja": "PostgreSQLからサブスクリプションリストを取得します"
+    },
+    "description": {
+      "ja": "PostgreSQLからサブスクリプションリストを取得します"
+    },
+    "params": {
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "republish",
+    "title": {
+      "ja": "リパブリッシュ"
+    },
+    "description": {
+      "ja": "メッセージを別のトピックにリパブリッシュします"
+    },
+    "params": {
+      "target_topic": {
+        "title": {
+          "ja": "ターゲットトピック"
+        },
+        "description": {
+          "ja": "メッセージがリパブリッシュされるトピック"
+        }
+      },
+      "target_qos": {
+        "title": {
+          "ja": "ターゲットQoS"
+        },
+        "description": {
+          "ja": "メッセージをリパブリッシュするときに使用されるQoSレベル。元のメッセージでQoSを使用するには-1に設定します。"
+        }
+      },
+      "payload_tmpl": {
+        "title": {
+          "ja": "ペイロードテンプレート"
+        },
+        "description": {
+          "ja": "メッセージコンテンツテンプレート、変数をサポートします"
+        }
+      }
+    }
+  },
+  {
+    "name": "inspect",
+    "title": {
+      "ja": "検査（デバッグ）"
+    },
+    "description": {
+      "ja": "アクションパラメータを確認します（デバッグ用）"
+    },
+    "params": {}
+  },
+  {
+    "name": "data_to_redis",
+    "title": {
+      "ja": "Redisにデータを保存します"
+    },
+    "description": {
+      "ja": "Redisにデータを保存します"
+    },
+    "params": {
+      "cmd": {
+        "title": {
+          "ja": "Redis コメント"
+        },
+        "description": {
+          "ja": "データを更新したり挿入したりするためのプレースホルダを含むことができる Redis コマンド"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_mqtt_broker",
+    "title": {
+      "ja": "データをMQTT Brokerにブリッジします"
+    },
+    "description": {
+      "ja": "データをMQTT Brokerにブリッジします"
+    },
+    "params": {
+      "payload_tmpl": {
+        "title": {
+          "ja": "ペイロードテンプレート"
+        },
+        "description": {
+          "ja": "メッセージコンテンツテンプレートは変数をサポートします。 空のテンプレート（デフォルト）を使用する場合、メッセージの内容はすべてJSON形式のフィールドです"
+        }
+      },
+      "forward_topic": {
+        "title": {
+          "ja": "フォワードトピック"
+        },
+        "description": {
+          "ja": "メッセージを転送するときに使用されるトピック。 提供されていない場合、デフォルトでブリッジメッセージのトピックになります。"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_dynamo",
+    "title": {
+      "ja": "DynamoDBにデータを保存します"
+    },
+    "description": {
+      "ja": "DynamoDBにデータを保存します"
+    },
+    "params": {
+      "table": {
+        "title": {
+          "ja": "DynamoDB テーブル"
+        },
+        "description": {
+          "ja": "DynamoDB テーブル"
+        }
+      },
+      "range_key": {
+        "title": {
+          "ja": "Range キー"
+        },
+        "description": {
+          "ja": "DynamoDB Range キー"
+        }
+      },
+      "hash_key": {
+        "title": {
+          "ja": "Hash キー"
+        },
+        "description": {
+          "ja": "DynamoDB Hash キー"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_mongo",
+    "title": {
+      "ja": "MongoDBにデータを保存します"
+    },
+    "description": {
+      "ja": "MongoDBにデータを保存します"
+    },
+    "params": {
+      "payload_tmpl": {
+        "title": {
+          "ja": "ペイロードテンプレート"
+        },
+        "description": {
+          "ja": "メッセージコンテンツテンプレートは変数をサポートします。 空のテンプレート（デフォルト）を使用する場合、メッセージの内容はすべてJSON形式のフィールドです"
+        }
+      },
+      "collection": {
+        "title": {
+          "ja": "コレクション"
+        },
+        "description": {
+          "ja": "データの保存に使用されるコレクション名"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "offline_msg_to_mysql",
+    "title": {
+      "ja": "オフラインメッセージをMySQLに保存します"
+    },
+    "description": {
+      "ja": "オフラインメッセージをMySQLに保存します"
+    },
+    "params": {
+      "time_range": {
+        "title": {
+          "ja": "時間範囲"
+        },
+        "description": {
+          "ja": "最近の時間範囲でオフラインメッセージを取得します "
+        }
+      },
+      "max_returned_count": {
+        "title": {
+          "ja": "最大返却数"
+        },
+        "description": {
+          "ja": "オフラインメッセージの最大数を取得します"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "offline_msg_to_pgsql",
+    "title": {
+      "ja": "オフラインメッセージをPostgreSQLに保存します"
+    },
+    "description": {
+      "ja": "オフラインメッセージをPostgreSQLに保存します"
+    },
+    "params": {
+      "time_range": {
+        "title": {
+          "ja": "時間範囲"
+        },
+        "description": {
+          "ja": "最近の時間範囲でオフラインメッセージを取得します "
+        }
+      },
+      "max_returned_count": {
+        "title": {
+          "ja": "最大返却数"
+        },
+        "description": {
+          "ja": "オフラインメッセージの最大数を取得します"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_tdengine",
+    "title": {
+      "ja": "TDengineにデータを保存します"
+    },
+    "description": {
+      "ja": "TDengineにデータを保存します"
+    },
+    "params": {
+      "sql": {
+        "title": {
+          "ja": "SQLテンプレート"
+        },
+        "description": {
+          "ja": "TDengineにデータを挿入/更新するためのプレースホルダーを含むSQLテンプレートです"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_clickhouse",
+    "title": {
+      "ja": "ClickHouseにデータを保存します"
+    },
+    "description": {
+      "ja": "ClickHouseにデータを保存します"
+    },
+    "params": {
+      "sql": {
+        "title": {
+          "ja": "SQLテンプレート"
+        },
+        "description": {
+          "ja": "ClickHouseにデータを挿入/更新するためのプレースホルダーを含むSQLテンプレートです"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_influxdb",
+    "title": {
+      "ja": "InfluxDBにデータを保存します"
+    },
+    "description": {
+      "ja": "InfluxDBにデータを保存します"
+    },
+    "params": {
+      "timestamp": {
+        "title": {
+          "ja": "タイムスタンプ"
+        },
+        "description": {
+          "ja": "タイムスタンプ"
+        }
+      },
+      "tags": {
+        "title": {
+          "ja": "タグ"
+        },
+        "description": {
+          "ja": "カンマで区切られたタグ"
+        }
+      },
+      "measurement": {
+        "title": {
+          "ja": "測定"
+        },
+        "description": {
+          "ja": "測定"
+        }
+      },
+      "fields": {
+        "title": {
+          "ja": "フィルド"
+        },
+        "description": {
+          "ja": "カンマで区切られたフィルド"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_webserver",
+    "title": {
+      "ja": "Webサービスにデータを送信します"
+    },
+    "description": {
+      "ja": "Webサービスにデータを送信します"
+    },
+    "params": {
+      "payload_tmpl": {
+        "title": {
+          "ja": "ペイロードテンプレート"
+        },
+        "description": {
+          "ja": "メッセージコンテンツテンプレートは変数をサポートします。 空のテンプレート（デフォルト）を使用する場合、メッセージの内容はすべてJSON形式のフィールドです"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_kafka",
+    "title": {
+      "ja": "データをKafkaにブリッジします"
+    },
+    "description": {
+      "ja": "データをKafkaにブリッジします"
+    },
+    "params": {
+      "type": {
+        "title": {
+          "ja": "プロデュースタイプ"
+        },
+        "description": {
+          "ja": "プロデュースタイプ"
+        }
+      },
+      "topic": {
+        "title": {
+          "ja": "Kafka トピック"
+        },
+        "description": {
+          "ja": "Kafka トピック"
+        }
+      },
+      "strategy": {
+        "title": {
+          "ja": "プロデュース戦略"
+        },
+        "description": {
+          "ja": "プロデュース戦略"
+        }
+      },
+      "payload_tmpl": {
+        "title": {
+          "ja": "ペイロードテンプレート"
+        },
+        "description": {
+          "ja": "メッセージコンテンツテンプレートは変数をサポートします。 空のテンプレート（デフォルト）を使用する場合、メッセージの内容はすべてJSON形式のフィールドです"
+        }
+      },
+      "key": {
+        "title": {
+          "ja": "戦略キー"
+        },
+        "description": {
+          "ja": "戦略キー、戦略がfirst_key_dispatchの場合にのみ有効になります"
+        }
+      },
+      "disk_cache": {
+        "title": {
+          "ja": "ディスクキャッシュ"
+        },
+        "description": {
+          "ja": "ブリッジが切断されたときに、メッセージをローカルディスクキューにキャッシュするかどうかを制御するために使用されます"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  },
+  {
+    "name": "data_to_cassa",
+    "title": {
+      "ja": "Cassandraにデータを保存します"
+    },
+    "description": {
+      "ja": "Cassandraにデータを保存します"
+    },
+    "params": {
+      "sql": {
+        "title": {
+          "ja": "SQLテンプレート"
+        },
+        "description": {
+          "ja": "Cassandraにデータを挿入/更新するためのプレースホルダーを含むSQLテンプレートです"
+        }
+      },
+      "$resource": {
+        "title": {
+          "ja": "リソースID"
+        },
+        "description": {
+          "ja": "リソースをアクションにバインドします"
+        }
+      }
+    }
+  }
+]
