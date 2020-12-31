@@ -527,4 +527,9 @@ export default {
     zh: '请先正确完成 SQL 测试',
     en: 'Please complete the SQL test correctly first',
   },
+  resourceSelectTip: {
+    zh: '下拉选项优先显示资源描述信息，没有描述信息则显示资源 ID，选中后显示的值为其 ID',
+    en: `The drag-and-drop option gives priority to the resource description information,
+    if there is no description information, the resource ID is displayed, but the relative ID displayed after selection`,
+  },
 }

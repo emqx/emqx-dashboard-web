@@ -297,22 +297,6 @@ let routes = [
       },
     ],
   },
-  // 数据分析
-  {
-    path: '/topic_metrics',
-    component: Layout,
-    meta: {
-      hideKey: 'topic_metrics',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'topic_metrics',
-        component: () => import('@/views/Analysis/TopicMetrics'),
-      },
-    ],
-  },
   // 插件
   {
     path: '/plugins',
