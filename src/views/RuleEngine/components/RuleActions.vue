@@ -197,11 +197,14 @@
           {{ selectedAction.description }}
         </div>
 
-        <el-form-item
-          v-if="selectedAction.params.$resource"
-          prop="params.$resource"
-          :label="$t('RuleEngine.useOfResources')"
-        >
+        <el-form-item v-if="selectedAction.params.$resource" prop="params.$resource" label="">
+          <span slot="label">
+            {{ $t('RuleEngine.useOfResources') }}
+            <el-popover trigger="hover" width="220" placement="top">
+              <div class="emq-popover-content" v-html="$t('RuleEngine.resourceSelectTip')"></div>
+              <i slot="reference" class="el-icon-question"></i>
+            </el-popover>
+          </span>
           <emq-select
             v-model="record.params.$resource"
             :field="{ options: availableResources }"
@@ -211,7 +214,7 @@
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="custom-option" :title="item.description">
-              <span class="key">{{ item.id }}</span>
+              <span class="key">{{ item.description || item.id }}</span>
               <span class="value">{{ item.config.title }}</span>
             </div>
           </emq-select>
@@ -989,5 +992,18 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.custom-option {
+  display: flex;
+  justify-content: space-between;
+
+  .key {
+    display: inline-block;
+    max-width: 350px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 </style>

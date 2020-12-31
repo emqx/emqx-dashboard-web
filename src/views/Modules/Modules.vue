@@ -100,7 +100,13 @@ export default {
       showList: [],
       moduleCount: 0,
       selectedModule: {},
-      canManageModuleTypes: ['mnesia_authentication', 'jwt_authentication', 'auth_sasl', 'lwm2m_protocol'],
+      canManageModuleTypes: [
+        'mnesia_authentication',
+        'jwt_authentication',
+        'auth_sasl',
+        'lwm2m_protocol',
+        'topic_metrics',
+      ],
     }
   },
 
