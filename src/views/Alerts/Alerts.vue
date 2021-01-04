@@ -39,9 +39,16 @@
               {{ dateFormat(row.deactivate_at) }}
             </template>
           </el-table-column>
-          <el-table-column v-else :label="$t('Alerts.duration')">
+          <el-table-column v-else>
+            <span slot="header">
+              {{ $t('Alerts.duration') }}
+              <el-popover trigger="hover" placement="top">
+                {{ $t('Alerts.durationTips') }}
+                <i slot="reference" class="el-icon-question"></i>
+              </el-popover>
+            </span>
             <template slot-scope="{ row }">
-              {{ getDuration(row.activate_at) }}
+              {{ getDuration(row.duration) }}
             </template>
           </el-table-column>
         </el-table>
@@ -75,8 +82,8 @@ export default {
   },
 
   methods: {
-    getDuration(activateAt) {
-      return getDateDiff(activateAt / 1000, Date.now())
+    getDuration(duration) {
+      return getDateDiff(duration / 1000)
     },
     dateFormat(date) {
       if (typeof date !== 'number' && date === 'infinity') {
