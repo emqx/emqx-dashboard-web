@@ -100,4 +100,8 @@ export default {
     zh: '次',
     en: 'second',
   },
+  durationTips: {
+    zh: '日：时：分：秒',
+    en: 'Days: Hours: Minutes: Seconds',
+  },
 }
