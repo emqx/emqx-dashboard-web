@@ -3,7 +3,7 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="createResource">
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="handleDialogVisible('add')">
             {{ $t('Base.create') }}
           </el-button>
         </div>
@@ -59,8 +59,11 @@
               </a-badge>
             </template>
           </el-table-column>
-          <el-table-column width="160px" prop="id">
+          <el-table-column width="200px" prop="id">
             <template slot-scope="{ row, $index }">
+              <el-button type="dashed" size="mini" @click="handleDialogVisible('edit', row)">
+                {{ $t('RuleEngine.edit') }}
+              </el-button>
               <el-button type="dashed" size="mini" @click="viewResourcesStatus(row, $index)">
                 {{ $t('RuleEngine.status') }}
               </el-button>
@@ -73,7 +76,12 @@
       </a-card>
     </div>
 
-    <resource-dialog :visible.sync="dialogVisible" @created="loadData"></resource-dialog>
+    <resource-dialog
+      :editItem="resourceToEdit"
+      :oper="oper"
+      :visible.sync="dialogVisible"
+      @created="loadData"
+    ></resource-dialog>
   </div>
 </template>
 
@@ -97,6 +105,8 @@ export default {
       filterOptions: {
         resourceTypes: [],
       },
+      oper: 'add',
+      resourceToEdit: {},
     }
   },
 
@@ -166,8 +176,12 @@ export default {
         this.listLoading = false
       }
     },
-    createResource() {
+    handleDialogVisible(oper, row) {
       this.dialogVisible = true
+      this.oper = oper
+      if (oper === 'edit') {
+        this.resourceToEdit = { ...row }
+      }
     },
     showResource(row) {
       this.$router.push({

@@ -105,6 +105,8 @@ export async function loadResource(params = {}) {
   }
   const resources = await http.get('/resources', { params })
   return resources.map((item) => {
+    const { config } = item
+    item.configVal = config
     item.config = resourceTypes[item.type] || {}
     return item
   })
@@ -144,6 +146,10 @@ export function createResource(resource = {}, test = false) {
       test: test ? 'true' : undefined,
     },
   })
+}
+
+export function editResource(resource = {}) {
+  return http.put(`/resources/${resource.id}`, resource)
 }
 
 export function createRule(rule = {}) {
