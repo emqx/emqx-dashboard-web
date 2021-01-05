@@ -65,6 +65,14 @@ export default {
     zh: '创建资源',
     en: 'Create',
   },
+  editResources: {
+    zh: '编辑资源',
+    en: 'Edit',
+  },
+  editResourceTips: {
+    zh: '确定修改该资源相关配置信息？',
+    en: 'Are you sure to modify the configuration information of this resource?',
+  },
   resourceTypes: {
     zh: '资源类型',
     en: 'Types',
