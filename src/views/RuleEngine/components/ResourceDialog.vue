@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="$t('RuleEngine.createResources')"
+    :title="oper === 'edit' ? $t('RuleEngine.editResources') : $t('RuleEngine.createResources')"
     class="resource-dialog"
     width="520px"
     v-bind="$attrs"
@@ -35,7 +35,7 @@
       <el-row v-if="record.type" class="config-item-wrapper" :gutter="20">
         <el-col :span="12">
           <el-form-item prop="id" :label="$t('RuleEngine.resourceID')">
-            <el-input v-model="record.id"></el-input>
+            <el-input v-model="record.id" :disabled="oper === 'edit'"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -133,6 +133,7 @@
           </el-col>
         </template>
       </el-row>
+      <a-skeleton v-else-if="oper === 'edit' && (!record.type || resourceTypes.length < 1)" active></a-skeleton>
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
@@ -151,10 +152,12 @@
 </template>
 
 <script>
-import { loadResourceTypes, createResource } from '@/api/rules'
+import { loadResourceTypes, createResource, editResource } from '@/api/rules'
 import { renderParamsForm, verifyID } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import FileEditor from '@/components/FileEditor'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import _ from 'lodash'
 
 export default {
   name: 'ResourceDialog',
@@ -169,6 +172,14 @@ export default {
     visible: {
       type: Boolean,
       default: false,
+    },
+    oper: {
+      type: String,
+      default: 'add',
+    },
+    editItem: {
+      type: Object,
+      default: () => {},
     },
   },
 
@@ -209,7 +220,7 @@ export default {
       return types.sort((prev, next) => prev.title.localeCompare(next.title))
     },
     disabledSelect() {
-      return this.types.length === 1
+      return this.types.length === 1 || this.oper === 'edit'
     },
     dialogVisible: {
       get() {
@@ -256,6 +267,7 @@ export default {
         this.configList = this.wholeConfigList.slice(0, 8)
       }
     },
+
     clearForm() {
       if (this.$refs.record) {
         setTimeout(() => {
@@ -271,6 +283,7 @@ export default {
         }, 10)
       }
     },
+
     resourceTypeChange(name) {
       this.record.name = name
       this.selectedResource = this.resourceTypes.find(($) => $.name === name)
@@ -281,6 +294,7 @@ export default {
 
       setTimeout(this.loadConfigList, 200)
     },
+
     loadConfigList() {
       const { params } = this.selectedResource
       const { form, rules } = renderParamsForm(params, 'config')
@@ -289,17 +303,19 @@ export default {
       this.record.config = {}
       this.wholeConfigList = form
       this.showMoreItem = false
-      if (form.length > 8) {
-        this.configList = form.slice(0, 8)
+      this.configList = form.length > 8 ? form.slice(0, 8) : form
+
+      if (this.oper === 'edit') {
+        this.assignValuesToRecord()
       } else {
-        this.configList = form
+        form.forEach(({ key, value }) => {
+          this.$set(this.record.config, key, value)
+        })
       }
-      form.forEach(({ key, value }) => {
-        this.$set(this.record.config, key, value)
-      })
       this.configLoading = false
       setTimeout(this.$refs.record.clearValidate, 10)
     },
+
     cleanFileContent(config) {
       const falseValues = [false, 'false']
       if (falseValues.includes(config.ssl) || falseValues.includes(config.https_enabled)) {
@@ -315,6 +331,59 @@ export default {
         })
       }
     },
+
+    assignValuesToRecord() {
+      const record = _.cloneDeep(this.editItem)
+      const { configVal, description, type, id } = record
+      Object.assign(this.record, { type, id, description })
+      Object.keys(configVal).forEach((key) => {
+        const value = configVal[key]
+        this.$set(this.record.config, key, value)
+      })
+    },
+
+    async handleEdit(record) {
+      const { configVal } = this.editItem
+      const { config, description } = record
+      const notChangeInfos = _.isEqual(configVal, config) && description === this.editItem.description
+      if (notChangeInfos) {
+        this.dialogVisible = false
+        this.selfVisible = false
+        return
+      }
+      const RequestEditResource = async () => {
+        try {
+          const resource = await editResource(record)
+          this.handleCreateSuccess(false, resource.id)
+        } catch (err) {
+          setTimeout(() => {
+            this.loadingButton = undefined
+          }, 100)
+        }
+      }
+      this.$confirm(this.$t('RuleEngine.editResourceTips'), this.$t('Base.warning'), {
+        type: 'warning',
+        cancelButtonText: this.$t('Base.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+      })
+        .then(async () => {
+          this.loadingButton = 'createButton'
+          RequestEditResource()
+        })
+        .catch(() => {})
+    },
+
+    handleCreateSuccess(test, id) {
+      this.loadingButton = id ? undefined : this.loadingButton
+      if (test) {
+        this.$message.success(this.$t('RuleEngine.resourceAvailable'))
+        return
+      }
+      this.$emit('created', id)
+      this.dialogVisible = false
+      this.selfVisible = false
+    },
+
     async handleCreate(test = false) {
       const valid = await this.$refs.record.validate()
       if (!valid) {
@@ -334,30 +403,37 @@ export default {
       })
       this.cleanFileContent(config)
       try {
-        const resource = await createResource(this.record, test)
-        this.loadingButton = resource ? undefined : this.loadingButton
-        if (test) {
-          this.$message.success(this.$t('RuleEngine.resourceAvailable'))
+        // edit
+        if (this.oper === 'edit' && !test) {
+          this.loadingButton = undefined
+          this.handleEdit(this.record)
           return
         }
-        this.$emit('created', resource.id)
-        this.dialogVisible = false
-        this.selfVisible = false
+        // add or test
+        const resource = await createResource(this.record, test)
+        this.handleCreateSuccess(test, resource.id)
       } catch (err) {
         setTimeout(() => {
           this.loadingButton = undefined
         }, 100)
       }
     },
+
     handleCache() {
       this.dialogVisible = false
       this.selfVisible = false
       this.$emit('cache', true)
     },
+
     async loadData() {
       this.types = []
       this.resourceTypes = await loadResourceTypes()
+      if (this.oper === 'edit') {
+        const { type } = this.editItem
+        this.resourceTypeChange(type)
+      }
     },
+
     setup(options = {}) {
       this.selfVisible = true
       const { types = [] } = options
