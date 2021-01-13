@@ -27,6 +27,7 @@ const model = [
   'Subs',
   'Analysis',
   'Modules',
+  'LogTrace',
 ]
 model.forEach((key) => {
   // eslint-disable-next-line
