@@ -249,6 +249,22 @@ let routes = [
       },
     ],
   },
+  // 在线 Trace
+  {
+    path: '/trace',
+    component: Layout,
+    meta: {
+      hideKey: 'general',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'trace',
+        component: () => import('@/views/General/LogTrace'),
+      },
+    ],
+  },
   // 应用
   {
     path: '/application',

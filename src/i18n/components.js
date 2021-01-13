@@ -180,4 +180,8 @@ export default {
     zh: '选择模块',
     en: 'Modules Select',
   },
+  trace: {
+    zh: '在线 Trace',
+    en: 'Online Trace',
+  },
 }
