@@ -507,6 +507,7 @@ export default {
           this.currentAction.fallbacks = []
         }
         this.currentAction.fallbacks.push(action)
+        this.rawValue.splice(this.currentEditIndex, 1, this.currentAction)
       } else {
         action = { ...this.record }
         if (this.currentOper === 'edit') {
@@ -548,6 +549,8 @@ export default {
           actionCategory: this.actionCategory,
           actionCategoryOptions: this.actionCategoryOptions,
           types,
+          isFallbacks: this.isFallbacks,
+          action: this.currentAction,
         }),
       )
     },
@@ -569,6 +572,8 @@ export default {
           actionCategory,
           originParamsList,
           originRecord,
+          isFallbacks,
+          action,
         } = JSON.parse(currentAction)
         this.record = record
         this.originRecord = originRecord
@@ -577,12 +582,15 @@ export default {
         this.selectedAction.types = types
         this.actionCategory = actionCategory
         this.actionCategoryOptions = actionCategoryOptions
+        this.isFallbacks = isFallbacks
+        this.currentAction = action
         sessionStorage.removeItem('currentAction')
       }
       if (id) {
         this.record.params.$resource = id
       }
       this.loadResourceData()
+      this.currentOper = this.actionDialogTitle === this.$t('RuleEngine.editActions') ? 'edit' : 'add'
     },
 
     async loadResourceData() {
