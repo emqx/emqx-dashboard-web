@@ -224,7 +224,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       }
     }
     if (enumValue) {
-      const options = enumValue.map(($) => $.toString())
+      const options = enumValue.map(($) => (typeof $ === 'boolean' ? $.toString() : $))
       rules[k].push({ type: 'enum', enum: options })
     }
   }

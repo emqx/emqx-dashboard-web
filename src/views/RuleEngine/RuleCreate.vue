@@ -105,25 +105,6 @@
                       ></monaco>
                     </div>
                   </el-form-item>
-
-                  <!-- template test -->
-                  <!-- <el-form-item class="code-editor__item" :label="$t('RuleEngine.strTemplate')">
-                    <div class="monaco-container" :style="{ height: `${templateEditorHeight}px` }">
-                      <monaco id="template" v-model="templateStr" warp lang="sql"></monaco>
-                    </div>
-                    <stretch-height v-model="templateEditorHeight"></stretch-height>
-                  </el-form-item>
-                  <el-form-item>
-                    <span slot="label">&nbsp;</span>
-                    <el-button type="primary" @click="fillTemplate">
-                      {{ $t('RuleEngine.fillTemplate') }}
-                    </el-button>
-                  </el-form-item>
-                  <el-form-item class="code-editor__item" :label="$t('RuleEngine.templateOutput')">
-                    <div class="monaco-container" style="height: 100px;">
-                      <monaco id="templateOutput" v-model="templateOutput" lang="sql" :disabled="true"></monaco>
-                    </div>
-                  </el-form-item> -->
                 </div>
               </el-collapse-transition>
             </el-form>
@@ -214,7 +195,6 @@ export default {
       needCheckSql: true,
       sqlEditorHeight: 320,
       payloadEditorHeight: 200,
-      templateEditorHeight: 100,
       payloadType: 'json',
       topics: [],
       events: [],
@@ -248,9 +228,6 @@ export default {
         rawsql: { required: true, message: this.$t('RuleEngine.pleaseEnterTheSQL') },
         id: { required: true, validator: verifyID },
       },
-      templateStr: '',
-      templateOutput: '',
-      sqlTestSuccess: false,
     }
   },
 
@@ -402,10 +379,8 @@ export default {
         SQLTest(data)
           .then((res) => {
             this.testOutPut = JSON.stringify(res, null, 2)
-            this.sqlTestSuccess = true
           })
           .catch((error) => {
-            this.sqlTestSuccess = false
             if (error === 'SQL Not Match') {
               this.testOutPut = this.$t('RuleEngine.resultIsEmpty')
             } else {
@@ -429,10 +404,12 @@ export default {
         this.$message.error(this.$t('RuleEngine.pleaseAddAResponseAction'))
         return
       }
+      const { rawsql, actions, description, id } = this.record
       const data = {
-        rawsql: this.record.rawsql,
-        actions: this.record.actions,
-        description: this.record.description,
+        rawsql,
+        actions,
+        description,
+        id,
       }
       if (this.isEdit && this.currentRule) {
         updateRule(this.currentRule, data).then(() => {
@@ -456,11 +433,6 @@ export default {
       setTimeout(() => {
         this.$refs.ruleAction.loadActions()
       }, 500)
-    },
-    fillTemplate() {
-      if (!this.sqlTestSuccess) {
-        this.$message.warning(this.$t('RuleEngine.sqlTestFirst'))
-      }
     },
   },
 }
