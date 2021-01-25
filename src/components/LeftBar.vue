@@ -209,12 +209,12 @@ export default {
             path: '/backup',
             parentKey: 'general',
           },
-          {
-            title: this.$t('components.trace'),
-            key: 'general.trace',
-            path: '/trace',
-            parentKey: 'general',
-          },
+          // {
+          //   title: this.$t('components.trace'),
+          //   key: 'general.trace',
+          //   path: '/trace',
+          //   parentKey: 'general',
+          // },
         ],
       },
     ]
