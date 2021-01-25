@@ -61,11 +61,11 @@
           </el-table-column>
           <el-table-column width="200px" prop="id">
             <template slot-scope="{ row, $index }">
-              <el-button type="dashed" size="mini" @click="handleDialogVisible('edit', row)">
-                {{ $t('RuleEngine.edit') }}
-              </el-button>
               <el-button type="dashed" size="mini" @click="viewResourcesStatus(row, $index)">
                 {{ $t('RuleEngine.status') }}
+              </el-button>
+              <el-button type="dashed" size="mini" @click="handleDialogVisible('edit', row)">
+                {{ $t('RuleEngine.edit') }}
               </el-button>
               <el-button type="dashed danger" size="mini" @click="deleteResource(row)">
                 {{ $t('RuleEngine.delete') }}

@@ -354,7 +354,7 @@ export default {
       const RequestEditResource = async () => {
         try {
           const resource = await editResource(record)
-          this.handleCreateSuccess(false, resource.id)
+          this.handleOperateSuccess(false, resource.id)
         } catch (err) {
           setTimeout(() => {
             this.loadingButton = undefined
@@ -373,12 +373,17 @@ export default {
         .catch(() => {})
     },
 
-    handleCreateSuccess(test, id) {
-      this.loadingButton = id ? undefined : this.loadingButton
+    handleOperateSuccess(test, id) {
+      // test request not return id
+      setTimeout(() => {
+        this.loadingButton = undefined
+      }, 100)
       if (test) {
         this.$message.success(this.$t('RuleEngine.resourceAvailable'))
         return
       }
+      const successMsg = this.oper === 'add' ? this.$t('Base.createSuccess') : this.$t('Base.editSuccess')
+      this.$message.success(successMsg)
       this.$emit('created', id)
       this.dialogVisible = false
       this.selfVisible = false
@@ -411,7 +416,7 @@ export default {
         }
         // add or test
         const resource = await createResource(this.record, test)
-        this.handleCreateSuccess(test, resource.id)
+        this.handleOperateSuccess(test, resource.id)
       } catch (err) {
         setTimeout(() => {
           this.loadingButton = undefined
