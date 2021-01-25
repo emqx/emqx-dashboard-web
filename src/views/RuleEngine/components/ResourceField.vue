@@ -82,6 +82,7 @@ export default {
 
     .field-title {
       width: unset;
+      flex-shrink: 0;
     }
 
     .field-value {
