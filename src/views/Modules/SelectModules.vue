@@ -61,7 +61,7 @@
                     </div>
                     <div class="item-handle">
                       <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
-                        {{ $t('Modules.select') }}
+                        {{ $t('Base.select') }}
                       </el-button>
                       <el-button v-else class="start-btn" plain size="mini">
                         {{ $t('Modules.added') }}
@@ -100,7 +100,7 @@
                   </div>
                   <div class="item-handle">
                     <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
-                      {{ $t('Modules.select') }}
+                      {{ $t('Base.select') }}
                     </el-button>
                     <el-button v-else class="start-btn" plain size="mini">
                       {{ $t('Modules.added') }}

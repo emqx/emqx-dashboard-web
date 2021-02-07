@@ -8,7 +8,7 @@
         </div>
         <div class="listener-item-btn">
           <span class="btn" @click="editListener(index)">
-            {{ $t('Modules.edit') }}
+            {{ $t('Base.edit') }}
           </span>
           <span class="btn" @click="removeListener(index)">
             {{ $t('Modules.remove') }}

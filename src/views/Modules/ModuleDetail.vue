@@ -16,7 +16,7 @@
 
       <div v-if="oper === 'edit'" class="page-header-top-start delete-btn" @click="deleteModule">
         <el-button type="danger" size="small">
-          {{ $t('RuleEngine.delete') }}
+          {{ $t('Base.delete') }}
         </el-button>
       </div>
     </page-header>

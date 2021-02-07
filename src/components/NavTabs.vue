@@ -2,7 +2,7 @@
   <div class="nav-tabs" :style="{ left: !$store.state.leftBarCollapse ? '201px' : '80px' }">
     <el-scrollbar ref="scrollContainer" :vertical="false" class="scroll-container">
       <el-button plain size="mini" :class="{ active: isIndex }" @click="$router.push('/')">
-        {{ $t('Base.homePage') }}
+        {{ $t('components.monitor') }}
       </el-button>
       <el-button
         v-for="(tab, index) in tabs"
