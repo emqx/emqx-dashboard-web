@@ -54,10 +54,10 @@
           <el-table-column>
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
-                {{ $t('General.edit') }}
+                {{ $t('Base.edit') }}
               </el-button>
               <el-button type="dashed danger" size="mini" @click="deleteConfirm(row)">
-                {{ $t('General.delete') }}
+                {{ $t('Base.delete') }}
               </el-button>
             </template>
           </el-table-column>
@@ -212,7 +212,7 @@ export default {
     },
     updateApplication(item) {
       updateApp(item.app_id, item).then(() => {
-        this.$message.success(this.$t('General.editorialSuccess'))
+        this.$message.success(this.$t('Base.editSuccess'))
       })
     },
     save() {
@@ -232,7 +232,7 @@ export default {
         if (vue.accessType === 'edit') {
           const { app_id } = vue.record
           updateApp(app_id, record).then(() => {
-            vue.$message.success(this.$t('General.editorialSuccess'))
+            vue.$message.success(this.$t('Base.editSuccess'))
             vue.dialogVisible = false
             vue.accessType = ''
             vue.loadData()
@@ -257,7 +257,7 @@ export default {
         })
         .then(async () => {
           destroyAPP(item.app_id).then(() => {
-            vue.$message.success(this.$t('General.successfulDeletion'))
+            vue.$message.success(this.$t('Base.deleteSuccess'))
             vue.loadData()
           })
         })

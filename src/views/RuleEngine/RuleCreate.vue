@@ -413,14 +413,14 @@ export default {
       }
       if (this.isEdit && this.currentRule) {
         updateRule(this.currentRule, data).then(() => {
-          this.$message.success(this.$t('RuleEngine.editSuccess'))
+          this.$message.success(this.$t('Base.editSuccess'))
           setTimeout(() => {
             this.$router.push({ path: '/rules' })
           }, 600)
         })
       } else {
         createRule(data).then(() => {
-          this.$message.success(this.$t('RuleEngine.createSuccess'))
+          this.$message.success(this.$t('Base.createSuccess'))
           setTimeout(() => {
             this.$router.push({ path: '/rules' })
           }, 600)

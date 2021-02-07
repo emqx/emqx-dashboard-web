@@ -1,10 +1,4 @@
 export default {
-  __not: [
-    '此操作将停用并删除该资源,确认继续',
-    '规则要处理的主题，支持',
-    '主题通配符',
-    '规则引擎使用说起来语句配置二面消息流与设备事件的处理规则，内置多种灵活的数据处理方案',
-  ],
   foldDetails: {
     zh: '折叠详情',
     en: 'Fold Details',
@@ -93,10 +87,6 @@ export default {
     zh: '请输入',
     en: 'Please enter',
   },
-  pleaseChoose: {
-    zh: '请选择',
-    en: 'Please select',
-  },
   resourceAvailable: {
     zh: '资源可用',
     en: 'available',
@@ -104,14 +94,6 @@ export default {
   actionType: {
     zh: '动作类型',
     en: 'Action Type',
-  },
-  edit: {
-    zh: '编辑',
-    en: 'Edit',
-  },
-  delete: {
-    zh: '删除',
-    en: 'Delete',
   },
   remove: {
     zh: '移除',
@@ -164,10 +146,6 @@ export default {
   reconnect: {
     zh: '重连',
     en: 'Reconnect',
-  },
-  successfulDeletion: {
-    zh: '删除成功',
-    en: 'Successful deletion',
   },
   details: {
     zh: '详情',
@@ -299,14 +277,6 @@ export default {
   pleaseAddAResponseAction: {
     zh: '请添加响应动作',
     en: 'Please add a action',
-  },
-  createSuccess: {
-    zh: '创建成功',
-    en: 'Create Success',
-  },
-  editSuccess: {
-    zh: '编辑成功',
-    en: 'Edit Success',
   },
   resultIsEmpty: {
     zh: '输出为空',

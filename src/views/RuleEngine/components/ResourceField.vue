@@ -86,6 +86,7 @@ export default {
     }
 
     .field-value {
+      word-break: break-all;
       .field-password {
         vertical-align: middle;
         line-height: 17px;

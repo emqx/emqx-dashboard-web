@@ -68,11 +68,11 @@
         </el-table-column>
         <el-table-column width="60px">
           <span slot="header" class="btn" @click="addColumn">
-            {{ $t('components.add') }}
+            {{ $t('Base.add') }}
           </span>
           <template slot-scope="{ row }">
             <span class="btn" @click="deleteItem(row)">
-              {{ $t('components.delete') }}
+              {{ $t('Base.delete') }}
             </span>
           </template>
         </el-table-column>

@@ -34,14 +34,6 @@ export default {
     zh: '请输入',
     en: 'Please enter',
   },
-  pleaseSelect: {
-    zh: '请选择',
-    en: 'Please select',
-  },
-  cancelConfirm: {
-    zh: '是否取消本次修改？',
-    en: 'You have unsaved changes, confirm cancel?',
-  },
   noSaveConfirm: {
     zh: '当前配置未保存，是否离开并放弃？',
     en: 'You have unsaved changes, give up and proceed?',

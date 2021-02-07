@@ -1,5 +1,4 @@
 export default {
-  __not: [],
   key: {
     zh: '键',
     en: 'Key',
@@ -11,14 +10,6 @@ export default {
   value: {
     zh: '值',
     en: 'Value',
-  },
-  add: {
-    zh: '添加',
-    en: 'Add',
-  },
-  delete: {
-    zh: '删除',
-    en: 'Delete',
   },
   left: {
     zh: '左侧',

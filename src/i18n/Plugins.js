@@ -1,5 +1,4 @@
 export default {
-  __not: [],
   listNull: {
     zh: '列表为空，请调整过滤条件再试',
     en: 'Empty. Please change the filter and try again',
@@ -147,10 +146,6 @@ export default {
   searchByName: {
     zh: '按插件名称搜索',
     en: 'Search by plugin name',
-  },
-  manage: {
-    zh: '管理',
-    en: 'Manage',
   },
   authClientidRequired: {
     zh: '请填写 Client ID 和密码',
