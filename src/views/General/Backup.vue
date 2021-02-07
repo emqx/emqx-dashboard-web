@@ -45,7 +45,7 @@
               <el-button type="dashed" size="mini" @click="handleDownload(row)">{{ $t('Backup.download') }} </el-button>
               <el-button type="dashed" size="mini" @click="handleRestore(row)">{{ $t('Backup.restore') }} </el-button>
               <el-button type="dashed danger" size="mini" @click="deleteConfirm(row)"
-                >{{ $t('General.delete') }}
+                >{{ $t('Base.delete') }}
               </el-button>
             </template>
           </el-table-column>
@@ -133,7 +133,7 @@ export default {
         })
         .then(async () => {
           deleteBackup(row.filename).then(() => {
-            vue.$message.success(this.$t('General.successfulDeletion'))
+            vue.$message.success(this.$t('Base.deleteSuccess'))
             vue.loadData()
           })
         })

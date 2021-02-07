@@ -1,5 +1,4 @@
 export default {
-  __not: ['确认继续'],
   addASubscription: {
     zh: '添加订阅',
     en: 'Add',
@@ -7,10 +6,6 @@ export default {
   pleaseEnter: {
     zh: '请输入',
     en: 'Please enter',
-  },
-  add: {
-    zh: '添加',
-    en: 'Add',
   },
   connect: {
     zh: '连接',

@@ -84,10 +84,10 @@
           <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="editRule(row)">
-                {{ $t('RuleEngine.edit') }}
+                {{ $t('Base.edit') }}
               </el-button>
               <el-button type="dashed danger" size="mini" @click="deleteRule(row)">
-                {{ $t('RuleEngine.delete') }}
+                {{ $t('Base.delete') }}
               </el-button>
             </template>
           </el-table-column>
@@ -279,7 +279,7 @@ export default {
         .then(async () => {
           await destroyRule(row.id)
           this.loadData()
-          this.$message.success(this.$t('RuleEngine.successfulDeletion'))
+          this.$message.success(this.$t('Base.deleteSuccess'))
         })
         .catch(() => {})
     },

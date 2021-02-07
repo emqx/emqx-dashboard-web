@@ -28,7 +28,7 @@
           </el-table-column>
           <el-table-column prop="oper" width="120px" label="">
             <template slot-scope="{ row }">
-              <el-button type="danger" size="mini" @click="deleteConfirm(row)">{{ $t('General.delete') }} </el-button>
+              <el-button type="danger" size="mini" @click="deleteConfirm(row)">{{ $t('Base.delete') }} </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -196,7 +196,7 @@ export default {
           const { who, as } = item
           const res = await deleteBlacklist({ who, as })
           if (res) {
-            this.$message.success(this.$t('General.successfulDeletion'))
+            this.$message.success(this.$t('Base.deleteSuccess'))
             this.listBlackList(true)
           }
         })

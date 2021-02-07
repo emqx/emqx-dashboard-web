@@ -1,5 +1,4 @@
 export default {
-  __not: ['默认是80', '默认是60', '默认80', '默认60', '莱森斯信息'],
   shareSubscription: {
     zh: '共享订阅',
     en: 'Share Subscription',

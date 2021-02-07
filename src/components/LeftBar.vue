@@ -123,15 +123,15 @@ export default {
         icon: 'icon-guizeyinqing',
         children: [
           {
-            title: this.$t('components.rule'),
-            key: 'rules.ruleEngine',
-            path: '/rules',
-            parentKey: 'rules',
-          },
-          {
             title: this.$t('components.resources'),
             key: 'rules.resources',
             path: '/resources',
+            parentKey: 'rules',
+          },
+          {
+            title: this.$t('components.rule'),
+            key: 'rules.ruleEngine',
+            path: '/rules',
             parentKey: 'rules',
           },
           {

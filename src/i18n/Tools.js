@@ -1,5 +1,4 @@
 export default {
-  __not: [],
   maxSix: {
     zh: '最大支持 6 个连接',
     en: 'Maximum support for 6 connection',

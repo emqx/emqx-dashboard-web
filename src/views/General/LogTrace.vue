@@ -34,7 +34,7 @@
                 size="mini"
                 @click="deleteConfirm(row)"
               >
-                {{ $t('General.delete') }}
+                {{ $t('Base.delete') }}
               </el-button>
             </template>
           </el-table-column>
