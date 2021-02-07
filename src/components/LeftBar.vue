@@ -158,7 +158,7 @@ export default {
         title: this.$t('components.alerts'),
         key: 'alerts',
         path: '/alerts',
-        icon: 'icon-gaojingkongxin',
+        icon: 'icon-gaojing',
       },
       {
         title: this.$t('components.tool'),
