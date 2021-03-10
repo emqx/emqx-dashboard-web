@@ -196,7 +196,7 @@ export default {
         protoName: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M', 'Stomp'].map(($) => ({ text: $, value: $ })),
       },
       nodeName: '',
-      currentNodes: [],
+      currentNodes: [{ name: this.$t('RuleEngine.allNodes'), node: 'all' }],
       resetIcon: 'el-icon-refresh',
       fuzzyParams: {
         comparator: '_gte',
@@ -284,7 +284,8 @@ export default {
       this.loadNodeClients(false, params)
     },
     async loadData() {
-      this.currentNodes = await loadNodes()
+      const data = await loadNodes()
+      this.currentNodes = this.currentNodes.concat(data)
       this.nodeName = this.nodeName || (this.currentNodes[0] || {}).node
       this.listLoading = false
       this.loadNodeClients()
