@@ -7,7 +7,8 @@ export function listClients(params = {}) {
 
 // 获取单个节点下的连接
 export function listNodeClients(nodeName, params = {}) {
-  return http.get(`/nodes/${nodeName}/clients`, { params })
+  const reqUrl = nodeName === 'all' ? '/clients' : `/nodes/${nodeName}/clients`
+  return http.get(reqUrl, { params })
 }
 
 // 搜索连接

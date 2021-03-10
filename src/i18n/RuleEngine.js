@@ -524,4 +524,8 @@ export default {
     en: `The drag-and-drop option gives priority to the resource description information,
     if there is no description information, the resource ID is displayed, but the relative ID displayed after selection`,
   },
+  allNodes: {
+    zh: '全部节点',
+    en: 'All Nodes',
+  },
 }

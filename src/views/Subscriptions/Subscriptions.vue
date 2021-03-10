@@ -121,7 +121,7 @@ export default {
       },
       count: 0,
       nodeName: '',
-      currentNodes: [],
+      currentNodes: [{ name: this.$t('RuleEngine.allNodes'), node: 'all' }],
       resetIcon: 'el-icon-refresh',
       fuzzyParams: {
         match: '_match_topic',
@@ -185,7 +185,8 @@ export default {
       this.loadNodeSubscriptions(false, params)
     },
     async loadData() {
-      this.currentNodes = await loadNodes()
+      const data = await loadNodes()
+      this.currentNodes = this.currentNodes.concat(data)
       this.nodeName = this.nodeName || (this.currentNodes[0] || {}).node
       this.listLoading = false
       this.loadNodeSubscriptions()
