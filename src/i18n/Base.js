@@ -151,4 +151,8 @@ export default {
     zh: '操作成功',
     en: 'Successful operation',
   },
+  detail: {
+    zh: '详情',
+    en: 'Details',
+  },
 }
