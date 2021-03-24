@@ -10,7 +10,7 @@
           </el-radio-group>
         </div>
 
-        <el-table v-bind="alertTable" :data="tableData" class="data-list">
+        <el-table v-bind="alertTable" :data="tableData" class="data-list" :key="alertType">
           <el-table-column prop="name" :label="$t('Alerts.alarmName')"></el-table-column>
           <el-table-column prop="message" :label="$t('Alerts.alarmMsg')" min-width="140px">
             <template slot-scope="{ row }">
@@ -48,7 +48,7 @@
               </el-popover>
             </span>
             <template slot-scope="{ row }">
-              {{ getDuration(row.duration) }}
+              <span v-show="row.duration">{{ getDuration(row.duration) }}</span>
             </template>
           </el-table-column>
         </el-table>
