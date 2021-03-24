@@ -436,7 +436,7 @@ export function getDateDiff(duration) {
 
   return [days, hours, minutes, seconds]
     .map((n) => {
-      return n > 10 ? n : `0${n}`
+      return n >= 10 ? n : `0${n}`
     })
     .join(':')
 }
