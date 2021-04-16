@@ -58,9 +58,9 @@ export default {
     configList() {
       // Show or hide certain items based on the value of ssl/https_enabled
       const dependentList = this.config.filter((item) => item.key === 'ssl' || item.key === 'https_enabled')
-      if (!dependentList[0].value) {
+      if (dependentList.length > 0 && !dependentList[0].value) {
         // hide
-        return this.config.filter((item) => item.key !== 'verify' && item.key !== 'tls_version')
+        return this.config.filter((item) => !['verify', 'tls_version'].includes(item.key))
       }
       // show
       return this.config
