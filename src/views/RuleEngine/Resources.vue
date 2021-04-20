@@ -1,7 +1,7 @@
 <template>
   <div class="resources">
     <div class="app-wrapper">
-      <a-card class="emq-list-card" :loading="listLoading">
+      <el-card shadow="never" class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
           <el-button type="primary" size="small" icon="el-icon-plus" @click="handleDialogVisible('add')">
             {{ $t('Base.create') }}
@@ -12,7 +12,7 @@
           <el-table-column class-name="expand-column" prop="id" type="expand" width="1px">
             <template slot-scope="{ row }">
               <!-- 列表展示每个节点上资源的状态 -->
-              <a-card class="resource-node-wrapper" :loading="row.loading">
+              <el-card shadow="never" class="resource-node-wrapper" :loading="row.loading">
                 <el-row :gutter="40">
                   <el-col :span="12">
                     <div class="emq-title h3">
@@ -24,7 +24,7 @@
                     <resource-node :value="row" @change="handleExpandChange"></resource-node>
                   </el-col>
                 </el-row>
-              </a-card>
+              </el-card>
             </template>
           </el-table-column>
 
@@ -51,7 +51,7 @@
           <el-table-column prop="isAvailable">
             <template slot-scope="{ row }">
               <a-badge
-                style="font-size: 12px;"
+                style="font-size: 12px"
                 :status="row.isAvailable ? 'success' : 'error'"
                 :text="row.isAvailable ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')"
                 dot
@@ -73,7 +73,7 @@
             </template>
           </el-table-column>
         </el-table>
-      </a-card>
+      </el-card>
     </div>
 
     <resource-dialog

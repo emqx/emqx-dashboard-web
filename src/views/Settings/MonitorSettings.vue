@@ -1,5 +1,5 @@
 <template>
-  <a-card class="monitor-settings emq-list-card">
+  <el-card shadow="never" class="monitor-settings emq-list-card">
     <el-tabs v-model="settingType" :before-leave="handleBeforeLeave">
       <el-tab-pane v-for="(item, index) in monitorList" :key="index" :label="item.type" :name="item.type">
         <config-form
@@ -18,7 +18,7 @@
         </template>
       </el-tab-pane>
     </el-tabs>
-  </a-card>
+  </el-card>
 </template>
 
 <script>

@@ -1,6 +1,6 @@
 <template>
   <div class="auth-sasl">
-    <a-card class="emq-list-card">
+    <el-card shadow="never" class="emq-list-card">
       <div class="list-header">
         <div class="title">{{ $t('Modules.enhancedAuth') }}</div>
         <el-button type="primary" size="small" @click="showDialog('add')">
@@ -28,7 +28,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </a-card>
+    </el-card>
 
     <el-dialog :title="this.dialogTitle" width="520px" :visible.sync="dialogVisible" @close="handleClose">
       <el-row :gutter="20">
@@ -72,7 +72,7 @@
           <template v-if="oper === 'view'">
             <el-col :span="24">
               <el-form-item class="key-items" prop="stored_key" :label="$t('Modules.storedKey')">
-                <el-input v-model="record.stored_key" :readonly="oper === 'view'" style="width: 92%;"></el-input>
+                <el-input v-model="record.stored_key" :readonly="oper === 'view'" style="width: 92%"></el-input>
                 <div class="handle-icons">
                   <i
                     v-clipboard:cpoy="record.stored_key"
@@ -84,7 +84,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item class="key-items" prop="server_key" :label="$t('Modules.serverKey')">
-                <el-input v-model="record.server_key" :readonly="oper === 'view'" style="width: 92%;"></el-input>
+                <el-input v-model="record.server_key" :readonly="oper === 'view'" style="width: 92%"></el-input>
                 <div class="handle-icons">
                   <i
                     v-clipboard:cpoy="record.server_key"

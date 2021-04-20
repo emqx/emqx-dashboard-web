@@ -1,7 +1,7 @@
 <template>
   <div class="topics">
     <div class="app-wrapper">
-      <a-card class="emq-list-card" :loading="listLoading">
+      <el-card shadow="never" class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
           <div class="search-wrapper">
             <el-input v-model="searchValue" size="small" :placeholder="$t('Topics.topic')"></el-input>
@@ -33,7 +33,7 @@
           >
           </el-pagination>
         </div>
-      </a-card>
+      </el-card>
     </div>
   </div>
 </template>

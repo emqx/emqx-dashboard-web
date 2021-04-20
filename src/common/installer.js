@@ -1,6 +1,6 @@
-import { Drawer, Card, Badge, Skeleton, Breadcrumb, Icon } from 'ant-design-vue'
-import 'ant-design-vue/lib/drawer/style'
-import 'ant-design-vue/lib/card/style'
+import { Badge, Skeleton, Breadcrumb, Icon } from 'ant-design-vue'
+// import 'ant-design-vue/lib/drawer/style'
+// import 'ant-design-vue/lib/card/style'
 import 'ant-design-vue/lib/badge/style'
 import 'ant-design-vue/lib/skeleton/style'
 import 'ant-design-vue/lib/breadcrumb/style'
@@ -14,8 +14,8 @@ export default (Vue) => {
     scriptUrl: '/static/iconfont/iconfont.js',
   })
 
-  Vue.component(Drawer.name, Drawer)
-  Vue.component(Card.name, Card)
+  // Vue.component(Drawer.name, Drawer)
+  // Vue.component(Card.name, Card)
   Vue.component(Badge.name, Badge)
   Vue.component(Skeleton.name, Skeleton)
   Vue.component(Breadcrumb.name, Breadcrumb)

@@ -1,5 +1,5 @@
 <template>
-  <a-card class="mnesia-auth-table emq-list-card">
+  <el-card shadow="never" class="mnesia-auth-table emq-list-card">
     <div class="emq-table-header">
       <el-row class="add-form" :gutter="20">
         <el-form :model="record" ref="record" :rules="rules">
@@ -136,7 +136,7 @@
         </el-button>
       </div>
     </el-dialog>
-  </a-card>
+  </el-card>
 </template>
 
 <script>

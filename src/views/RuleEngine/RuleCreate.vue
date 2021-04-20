@@ -15,7 +15,7 @@
     </page-header>
 
     <div class="emq-list-body rule-wrapper app-wrapper">
-      <a-card class="emq-list-card">
+      <el-card shadow="never" class="emq-list-card">
         <el-row :gutter="20">
           <el-col :span="15">
             <el-form
@@ -114,9 +114,9 @@
             <div class="tips-item" v-html="$t('RuleEngine.sql_tips')"></div>
           </el-col>
         </el-row>
-      </a-card>
+      </el-card>
 
-      <a-card class="emq-list-card">
+      <el-card shadow="never" class="emq-list-card">
         <div class="emq-title">
           <div class="title required-title">
             {{ $t('RuleEngine.responseAction') }}
@@ -129,9 +129,8 @@
         <div class="rule-action-wrapper">
           <rule-actions ref="ruleAction" v-model="record.actions"> </rule-actions>
         </div>
-      </a-card>
+      </el-card>
     </div>
-
     <div
       class="button-group__center rule-create-operation"
       :style="{ width: $store.state.leftBarCollapse ? ' calc(100% - 80px)' : ' calc(100% - 200px)' }"

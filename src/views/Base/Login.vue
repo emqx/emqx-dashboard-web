@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <a-card v-if="isNeedAuth" class="login-card emq-list-card">
+    <el-card shadow="never" v-if="isNeedAuth" class="login-card emq-list-card">
       <div class="split-wrapper">
         <div class="logo-wrapper"></div>
 
@@ -39,7 +39,7 @@
           </el-form>
         </div>
       </div>
-    </a-card>
+    </el-card>
   </div>
 </template>
 

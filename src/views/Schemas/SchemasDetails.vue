@@ -14,7 +14,7 @@
     </page-header>
 
     <div class="emq-list-body schemas-wrapper app-wrapper">
-      <a-card class="emq-list-card">
+      <el-card shadow="never" class="emq-list-card">
         <el-row :gutter="20">
           <el-form
             ref="record"
@@ -177,7 +177,7 @@
             {{ $t('Base.cancel') }}
           </el-button>
         </div>
-      </a-card>
+      </el-card>
     </div>
   </div>
 </template>

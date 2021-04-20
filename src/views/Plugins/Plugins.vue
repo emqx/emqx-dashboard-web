@@ -1,7 +1,7 @@
 <template>
   <div class="plugins">
     <div class="app-wrapper">
-      <a-card class="search-wrapper">
+      <el-card shadow="never" class="search-wrapper">
         <el-row :gutter="20">
           <el-col :span="8">
             <el-radio-group v-model="status" size="small" border @change="loadData">
@@ -48,7 +48,7 @@
             </el-input>
           </el-col>
         </el-row>
-      </a-card>
+      </el-card>
 
       <!-- Cards -->
       <el-row
@@ -159,9 +159,9 @@
         </div>
       </div>
 
-      <a-card v-if="listTableData.length === 0" class="null-plugins">
+      <el-card shadow="never" v-if="listTableData.length === 0" class="null-plugins">
         <p>{{ $t('Plugins.listNull') }}</p>
-      </a-card>
+      </el-card>
     </div>
 
     <el-dialog title="标题" width="520px" :visible.sync="moduleTipVisible" :close-on-click-modal="false">

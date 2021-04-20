@@ -1,7 +1,7 @@
 <template>
   <div class="auth-mnesia-table">
     <div class="app-wrapper">
-      <a-card class="emq-list-card" :loading="listLoading">
+      <el-card shadow="never" class="emq-list-card" :loading="listLoading">
         <div class="auth">
           <h3>{{ $t('Plugins.auth') }}</h3>
           <div class="emq-table-header">
@@ -161,7 +161,7 @@
             </el-pagination>
           </div>
         </div>
-      </a-card>
+      </el-card>
     </div>
 
     <el-dialog :visible.sync="editVisible" width="400px" :title="$t('Base.edit')" @keyup.enter.native="handleAuthEdit">

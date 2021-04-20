@@ -9,7 +9,7 @@
     </page-header>
 
     <div class="app-wrapper">
-      <a-card class="emq-list-card" :loading="listLoading">
+      <el-card shadow="never" class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
           <el-button
             v-if="!modClosed"
@@ -105,7 +105,7 @@
             </template>
           </el-table-column>
         </el-table>
-      </a-card>
+      </el-card>
     </div>
 
     <el-dialog

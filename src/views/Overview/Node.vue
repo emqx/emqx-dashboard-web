@@ -18,12 +18,12 @@
       <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
         <el-tab-pane :label="$t('Overview.basicInfo')" name="basic">
           <div class="card-wrapper">
-            <a-card class="emq-list-card">
+            <el-card shadow="never" class="emq-list-card">
               <div class="emq-title">{{ $t('Overview.basic') }}</div>
               <node-basic-card :value="record" :show-button="false"></node-basic-card>
-            </a-card>
+            </el-card>
 
-            <a-card class="emq-list-card">
+            <el-card shadow="never" class="emq-list-card">
               <div class="emq-title">
                 {{ $t('Overview.listener') }}
                 <div class="sub-title">
@@ -47,13 +47,13 @@
                   <template slot-scope="{ row }"> {{ row.current_conns }} / {{ row.max_conns }} </template>
                 </el-table-column>
               </el-table>
-            </a-card>
+            </el-card>
           </div>
         </el-tab-pane>
 
         <el-tab-pane :label="$t('Overview.metric')" name="metrics">
           <div class="card-wrapper">
-            <a-card class="emq-list-card">
+            <el-card shadow="never" class="emq-list-card">
               <div class="emq-title">
                 {{ $t('Overview.dataList') }}
                 <div class="sub-title">
@@ -114,7 +114,7 @@
                   </el-table>
                 </el-col>
               </el-row>
-            </a-card>
+            </el-card>
           </div>
         </el-tab-pane>
       </el-tabs>

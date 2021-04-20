@@ -1,6 +1,6 @@
 <template>
   <div class="jwt-authentication">
-    <a-card class="emq-list-card">
+    <el-card shadow="never" class="emq-list-card">
       <el-row :gutter="20">
         <el-col :span="14">
           <el-form ref="record" :model="record" :rules="rules">
@@ -35,7 +35,7 @@
                 <a :href="jwtDoc" target="_blank" rel="noopener">{{ $t('Plugins.jwtDoc') }}</a>
               </p>
               <el-form-item prop="payload">
-                <div class="monaco-container" style="height: 200px;">
+                <div class="monaco-container" style="height: 200px">
                   <monaco id="jwt-payload" v-model="record.payload" lang="json"> </monaco>
                 </div>
               </el-form-item>
@@ -43,7 +43,7 @@
                 {{ $t('Plugins.dataDesc') }}
               </p>
               <el-form-item prop="data">
-                <div class="monaco-container" style="height: 200px;">
+                <div class="monaco-container" style="height: 200px">
                   <monaco id="jwt-data" v-model="record.data" lang="plaintext"> </monaco>
                 </div>
               </el-form-item>
@@ -85,7 +85,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </a-card>
+    </el-card>
   </div>
 </template>
 

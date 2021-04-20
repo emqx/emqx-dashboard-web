@@ -14,7 +14,7 @@
     </page-header>
 
     <div class="app-wrapper">
-      <a-card class="emq-list-card">
+      <el-card shadow="never" class="emq-list-card">
         <div class="emq-table-header">
           <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog">
             {{ $t('Base.create') }}
@@ -47,7 +47,7 @@
           >
           </el-pagination>
         </div>
-      </a-card>
+      </el-card>
     </div>
 
     <el-dialog width="520px" :title="$t('General.createBlacklist')" :visible.sync="dialogVisible" @close="clearInput">

@@ -1,6 +1,6 @@
 <template>
   <div class="lw-client-details">
-    <a-card class="emq-list-card">
+    <el-card shadow="never" class="emq-list-card">
       <div class="detail-header">
         <div class="imei">
           <a href="javascript:;" @click="backListPage">
@@ -14,8 +14,8 @@
           {{ $t('Base.create') }}
         </el-button> -->
       </div>
-    </a-card>
-    <a-card class="emq-list-card">
+    </el-card>
+    <el-card shadow="never" class="emq-list-card">
       <el-collapse v-model="activeName" accordion @change="handleObjectChange">
         <el-collapse-item v-for="(item, index) in objectNames" :key="index" title="" :name="item">
           <div class="collapse-title" slot="title">
@@ -57,7 +57,7 @@
                   </el-button>
                 </el-col>
                 <el-col :span="2" :offset="resourcesOperations[item] ? 4 : 12">
-                  <el-button type="danger" size="mini" @click="handleDelete(item)" style="float: right;">
+                  <el-button type="danger" size="mini" @click="handleDelete(item)" style="float: right">
                     Delete
                   </el-button>
                 </el-col>
@@ -141,7 +141,7 @@
           </div>
         </el-collapse-item>
       </el-collapse>
-    </a-card>
+    </el-card>
 
     <el-dialog
       title=""

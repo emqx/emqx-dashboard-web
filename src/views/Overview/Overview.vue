@@ -2,7 +2,7 @@
   <div class="overview app-wrapper">
     <el-row class="content-wrapper" :gutter="20">
       <el-col :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading">
+        <el-card shadow="never" class="app-card" :bordered="true" :loading="pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.messageOut') }}
           </div>
@@ -23,11 +23,11 @@
               {{ $t('Overview.currentMessageOutRate') }}
             </div>
           </div>
-        </a-card>
+        </el-card>
       </el-col>
 
       <el-col :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading">
+        <el-card shadow="never" class="app-card" :bordered="true" :loading="pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.messageIn') }}
           </div>
@@ -48,11 +48,11 @@
               {{ $t('Overview.currentMessageInRate') }}
             </div>
           </div>
-        </a-card>
+        </el-card>
       </el-col>
 
       <el-col :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading">
+        <el-card shadow="never" class="app-card" :bordered="true" :loading="pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.subscriptionNumber') }}
           </div>
@@ -71,11 +71,11 @@
               {{ $t('Overview.topicNumber') }}
             </div>
           </div>
-        </a-card>
+        </el-card>
       </el-col>
 
       <el-col v-if="$hasShow('monitor.connections')" :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading">
+        <el-card shadow="never" class="app-card" :bordered="true" :loading="pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.connectionNumber') }}
           </div>
@@ -97,11 +97,11 @@
               {{ $t('Overview.connectionsTips') }}
             </div>
           </div>
-        </a-card>
+        </el-card>
       </el-col>
     </el-row>
 
-    <a-card class="node-wrapper" :loading="pageLoading">
+    <el-card shadow="never" class="node-wrapper" :loading="pageLoading">
       <div class="emq-title">
         <div class="title">
           {{ $t('Overview.nodeData') }}
@@ -110,7 +110,7 @@
           <emq-select
             v-model="nodeName"
             size="mini"
-            style="margin-right: 20px;"
+            style="margin-right: 20px"
             :field="{ options: nodes }"
             :field-name="{ label: 'name', value: 'node' }"
             @change="dataTypeChange"
@@ -123,13 +123,13 @@
           <node-basic-card :value="currentNode"></node-basic-card>
         </el-row>
       </div>
-    </a-card>
+    </el-card>
 
     <percentage-cards ref="percentageCards"></percentage-cards>
 
     <polyline-cards></polyline-cards>
 
-    <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="pageLoading">
+    <el-card shadow="never" v-if="$hasShow('monitor.license')" class="license-card" :loading="pageLoading">
       <div class="emq-title">
         {{ $t('Overview.license') }}
       </div>
@@ -193,7 +193,7 @@
           </el-tooltip>
         </div>
       </div>
-    </a-card>
+    </el-card>
 
     <el-dialog
       title="标题"

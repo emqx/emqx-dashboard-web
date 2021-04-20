@@ -9,7 +9,7 @@
     </page-header>
 
     <div class="app-wrapper">
-      <a-card class="emq-list-card">
+      <el-card shadow="never" class="emq-list-card">
         <div class="emq-table-header">
           <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
             {{ $t('Base.create') }}
@@ -32,7 +32,7 @@
             </template>
           </el-table-column>
         </el-table>
-      </a-card>
+      </el-card>
     </div>
 
     <el-dialog

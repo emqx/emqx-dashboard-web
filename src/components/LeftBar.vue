@@ -1,9 +1,5 @@
 <template>
   <div class="left-bar" :style="{ width: leftBarCollapse ? '80px' : '200px' }">
-    <div class="logo" :style="{ paddingLeft: leftBarCollapse ? '6px' : '20px' }">
-      <img class="logo-img" src="../assets/emq_logo.svg" alt="logo" />
-    </div>
-
     <a-menu
       class="menu-wrapper"
       :default-selected-keys="defaultSelectedKeys"
@@ -250,12 +246,13 @@ export default {
 @import '../assets/style/variables';
 
 .left-bar {
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 60px);
   background-color: $color-theme;
   transition: all 0.3s;
+  // margin-top: 60px;
 
   .menu-wrapper {
-    margin-top: 54px;
+    // margin-top: 54px;
   }
   .ant-menu {
     border-right-color: transparent;
@@ -279,35 +276,6 @@ export default {
   .ant-menu-submenu-title .anticon {
     margin-right: 12px;
     font-size: 18px;
-  }
-
-  .logo {
-    text-align: center;
-    width: 200px;
-    height: 60px;
-    line-height: 60px;
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    background: #2f333e;
-
-    .logo-img {
-      width: 72px;
-      height: auto;
-      position: relative;
-      left: -3px;
-    }
-
-    .line {
-      margin-top: 12px;
-      width: 120px;
-    }
   }
 
   .el-scrollbar {

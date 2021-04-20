@@ -16,7 +16,7 @@
 
     <div class="emq-list-body rule-wrapper app-wrapper">
       <!-- 基本信息 -->
-      <a-card class="emq-list-card" :loading="loading">
+      <el-card shadow="never" class="emq-list-card" :loading="loading">
         <div class="emq-title">
           {{ $t('RuleEngine.basicInfo') }}
         </div>
@@ -26,7 +26,7 @@
             <div class="field-title">{{ $t('RuleEngine.state') }}:</div>
             <span class="field-value">
               <a-badge
-                style="font-size: 12px;"
+                style="font-size: 12px"
                 :status="isAlive ? 'success' : 'error'"
                 :text="isAlive ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')"
                 dot
@@ -36,7 +36,7 @@
                 v-if="!isAlive"
                 :loading="reloading"
                 size="mini"
-                style="margin-left: 12px;"
+                style="margin-left: 12px"
                 type="primary"
                 @click="reconnectResource"
               >
@@ -74,14 +74,14 @@
             </el-collapse-transition>
           </li>
         </ul>
-      </a-card>
+      </el-card>
 
-      <a-card class="emq-list-card" :loading="loading">
+      <el-card shadow="never" class="emq-list-card" :loading="loading">
         <div class="emq-title">
           {{ $t('RuleEngine.configuration') }}
         </div>
         <resource-field :config="record._config"></resource-field>
-      </a-card>
+      </el-card>
     </div>
   </div>
 </template>

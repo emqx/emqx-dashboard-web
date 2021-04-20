@@ -1,6 +1,6 @@
 <template>
   <div class="mnesia-acl-table">
-    <a-card>
+    <el-card shadow="never">
       <el-tabs v-model="activeName">
         <el-tab-pane :label="$t('Clients.clientid')" name="clientid">
           <acl-table-page v-if="activeName === 'clientid'" type="clientid"></acl-table-page>
@@ -12,7 +12,7 @@
           <acl-table-page v-if="activeName === '$all'" type="$all"></acl-table-page>
         </el-tab-pane>
       </el-tabs>
-    </a-card>
+    </el-card>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <a-card class="zone-settings emq-list-card">
+  <el-card shadow="never" class="zone-settings emq-list-card">
     <el-tabs v-model="settingType" :before-leave="handleBeforeLeave">
       <el-tab-pane v-for="(item, index) in zoneList" :key="index" label="" :name="item.name">
         <div slot="label" size="mini" class="label-box">
@@ -38,7 +38,7 @@
         ></config-detail>
       </el-tab-pane>
     </el-tabs>
-  </a-card>
+  </el-card>
 </template>
 
 <script>

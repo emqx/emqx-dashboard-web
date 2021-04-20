@@ -1,5 +1,5 @@
 <template>
-  <a-card class="base-settings emq-list-card">
+  <el-card shadow="never" class="base-settings emq-list-card">
     <config-form
       v-if="mqttRecord"
       class="base-form"
@@ -16,7 +16,7 @@
     <template v-else>
       <a-skeleton active></a-skeleton>
     </template>
-  </a-card>
+  </el-card>
 </template>
 
 <script>

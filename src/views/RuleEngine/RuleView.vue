@@ -16,7 +16,7 @@
 
     <div class="emq-list-body rule-wrapper app-wrapper">
       <!-- 运行统计 -->
-      <a-card class="emq-list-card" :loading="loading">
+      <el-card shadow="never" class="emq-list-card" :loading="loading">
         <div class="emq-title">
           {{ $t('RuleEngine.runningMetrics') }}
           <i class="btn btn-default" :class="reloading ? 'el-icon-loading' : 'el-icon-refresh'" @click="refreshData">
@@ -68,10 +68,10 @@
             <rule-metrics-table :metrics="record.metrics"></rule-metrics-table>
           </el-col>
         </el-row>
-      </a-card>
+      </el-card>
 
       <!-- 基本信息 -->
-      <a-card class="emq-list-card" :loading="loading">
+      <el-card shadow="never" class="emq-list-card" :loading="loading">
         <div class="emq-title">
           {{ $t('RuleEngine.basicInfo') }}
         </div>
@@ -104,10 +104,10 @@
             </div>
           </li>
         </ul>
-      </a-card>
+      </el-card>
 
       <!-- 响应动作 -->
-      <a-card class="emq-list-card" :loading="loading">
+      <el-card shadow="never" class="emq-list-card" :loading="loading">
         <div class="emq-title">
           {{ $t('RuleEngine.responseAction') }}
           <span class="sub-title">
@@ -116,7 +116,7 @@
         </div>
 
         <rule-actions ref="ruleActions" v-model="record.actions" disabled></rule-actions>
-      </a-card>
+      </el-card>
     </div>
   </div>
 </template>

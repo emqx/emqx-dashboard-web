@@ -30,6 +30,14 @@ let routes = [
     component: Layout,
     redirect: '/monitor',
     meta: {
+      hideKey: '/',
+      authRequired: true,
+    },
+  },
+  {
+    path: '/monitor',
+    component: Layout,
+    meta: {
       hideKey: 'monitor',
       authRequired: true,
     },

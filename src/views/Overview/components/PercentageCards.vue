@@ -3,14 +3,14 @@
     <el-row :gutter="20">
       <div v-for="(item, index) in doughnutChartList" :key="index">
         <el-col :span="8">
-          <a-card class="doughnut-card">
+          <el-card shadow="never" class="doughnut-card">
             <doughnut-chart
               :chartId="item.chartId"
               :cardTitle="item.cardTitle"
               :legendData="item.legendData"
               :seriesData="item.seriesData"
             ></doughnut-chart>
-          </a-card>
+          </el-card>
         </el-col>
       </div>
     </el-row>

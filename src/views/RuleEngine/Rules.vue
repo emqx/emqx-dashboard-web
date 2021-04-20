@@ -17,7 +17,7 @@
     </page-header>
 
     <div class="app-wrapper">
-      <a-card class="emq-list-card" :loading="listLoading">
+      <el-card shadow="never" class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
           <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">
             {{ $t('Base.create') }}
@@ -92,10 +92,10 @@
             </template>
           </el-table-column>
         </el-table>
-      </a-card>
+      </el-card>
     </div>
 
-    <a-drawer v-bind="rulesDrawer" placement="right" closable :visible="metricsDrawerVisible" @close="onMetricsClose">
+    <el-drawer v-bind="rulesDrawer" direction="rtl" :visible.sync="metricsDrawerVisible">
       <div class="rule-metrics">
         <div class="metrics-item">
           <div class="metrics-item-title">
@@ -164,7 +164,7 @@
           </div>
         </div>
       </div>
-    </a-drawer>
+    </el-drawer>
   </div>
 </template>
 
@@ -321,9 +321,9 @@ export default {
       this.metricsDrawerVisible = true
     },
 
-    onMetricsClose() {
-      this.metricsDrawerVisible = false
-    },
+    // onMetricsClose() {
+    //   this.metricsDrawerVisible = false
+    // },
 
     async updateRule(row) {
       const { id, enabled } = row
@@ -347,6 +347,7 @@ export default {
 
 <style lang="scss" scoped>
 .rule-metrics {
+  padding: 10px 20px;
   .metrics-item {
     margin-bottom: 50px;
 

@@ -1,7 +1,7 @@
 <template>
   <div class="alerts">
     <div class="app-wrapper">
-      <a-card class="emq-list-card">
+      <el-card class="emq-list-card" shadow="never">
         <div class="emq-table-header">
           <div></div>
           <el-radio-group v-model="alertType" border size="mini" @change="loadData">
@@ -52,7 +52,7 @@
             </template>
           </el-table-column>
         </el-table>
-      </a-card>
+      </el-card>
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <a-card class="listener-settings emq-list-card">
+  <el-card shadow="never" class="listener-settings emq-list-card">
     <template v-if="!showConfigDetail">
       <div class="emq-table-header">
         <el-button class="confirm-btn" type="primary" size="small" icon="el-icon-plus" @click="addListener">
@@ -54,7 +54,7 @@
       >
       </config-detail>
     </template>
-  </a-card>
+  </el-card>
 </template>
 
 <script>

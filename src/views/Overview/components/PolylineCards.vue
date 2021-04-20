@@ -2,7 +2,7 @@
   <div class="polyline-cards">
     <el-collapse-transition v-if="bigChartItem.text">
       <div class="big-chart">
-        <a-card class="big-card">
+        <el-card shadow="never" class="big-card">
           <div class="card-title">{{ bigChartItem.text }}</div>
           <span class="shrink-icon" @click="bigChartItem = {}"></span>
           <polyline-chart
@@ -16,14 +16,14 @@
             gridLeft="1%"
             legendBottom="10px"
           ></polyline-chart>
-        </a-card>
+        </el-card>
       </div>
     </el-collapse-transition>
     <el-row :gutter="20">
       <div v-for="item in dataTypeFilter" :key="item.value">
         <template v-if="item !== bigChartItem">
           <el-col :span="8">
-            <a-card class="polyline-card">
+            <el-card shadow="never" class="polyline-card">
               <div class="card-title">{{ item.text }}</div>
               <span class="enlarge-icon" @click="bigChartItem = item"></span>
               <polyline-chart
@@ -32,7 +32,7 @@
                 :chart-data="metricLog[item.value]"
                 :chartColors="chartColorList[item.value]"
               ></polyline-chart>
-            </a-card>
+            </el-card>
           </el-col>
         </template>
       </div>

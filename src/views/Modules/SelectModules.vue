@@ -106,9 +106,9 @@
             </div>
           </el-col>
         </el-row>
-        <a-card v-else class="null-modules">
+        <el-card shadow="never" v-else class="null-modules">
           <p>{{ $t('Modules.listNull') }}</p>
-        </a-card>
+        </el-card>
       </template>
     </div>
   </div>

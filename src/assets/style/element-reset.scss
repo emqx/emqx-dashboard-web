@@ -2,6 +2,15 @@
 @import 'variables.scss';
 @import 'element-variables';
 
+.el-drawer {
+  overflow-y: auto;
+
+  &__header {
+    font-size: 16px;
+    color: black;
+    font-weight: 600;
+  }
+}
 /* Button */
 .el-button {
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);

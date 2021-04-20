@@ -2,7 +2,7 @@
   <div class="client-details">
     <page-header>
       <div class="page-header-title-view">
-        <div style="display: flex; align-items: center;">
+        <div style="display: flex; align-items: center">
           <span class="title">
             {{ clientId }}
           </span>
@@ -23,7 +23,7 @@
     <div class="app-wrapper">
       <el-tabs v-model="activeName" type="card" @tab-click="handleTabClick">
         <el-tab-pane :label="$t('Clients.basicInfo')" name="detail">
-          <a-card v-if="activeName === 'detail'" class="detail-card">
+          <el-card shadow="never" v-if="activeName === 'detail'" class="detail-card">
             <el-row :gutter="40">
               <el-col :span="12">
                 <div class="emq-title">
@@ -186,11 +186,11 @@
                 </el-col>
               </el-row>
             </el-collapse-transition>
-          </a-card>
+          </el-card>
         </el-tab-pane>
 
         <el-tab-pane :label="$t('Clients.subscriptions')" name="subscriptions">
-          <a-card v-if="activeName === 'subscriptions'">
+          <el-card shadow="never" v-if="activeName === 'subscriptions'">
             <div class="emq-title">
               {{ $t('Clients.currentSubscription') }}
               <div class="subscriptions-header">
@@ -214,7 +214,7 @@
                 </template>
               </el-table-column>
             </el-table>
-          </a-card>
+          </el-card>
         </el-tab-pane>
       </el-tabs>
     </div>

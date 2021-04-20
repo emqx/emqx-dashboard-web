@@ -1,13 +1,7 @@
 <template>
   <div class="breadcrumb">
     <a-breadcrumb>
-      <a-breadcrumb-item>
-        <router-link to="/" tag="span" class="btn btn-default raw">
-          {{ $t('components.monitor') }}
-        </router-link>
-      </a-breadcrumb-item>
-
-      <template v-if="!isIndex">
+      <template>
         <a-breadcrumb-item>
           <router-link v-if="backPath" :to="backPath" tag="span" class="btn btn-default raw">
             {{ currentTitle }}
@@ -57,7 +51,7 @@ export default {
       const name = pathList[1]
       const oper = query.oper || pathList[2]
 
-      this.isIndex = path === '/monitor'
+      // this.isIndex = path === '/monitor'
       this.oper = ''
       this.backPath = undefined
       this.currentTitle = this.$t(`components.${name}`)
