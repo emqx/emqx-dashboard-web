@@ -50,13 +50,8 @@
           ></el-table-column>
           <el-table-column prop="isAvailable">
             <template slot-scope="{ row }">
-              <a-badge
-                style="font-size: 12px"
-                :status="row.isAvailable ? 'success' : 'error'"
-                :text="row.isAvailable ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')"
-                dot
-              >
-              </a-badge>
+              <el-badge :type="row.isAvailable ? 'success' : 'danger'" is-dot> </el-badge
+              ><span>{{ row.isAvailable ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable') }}</span>
             </template>
           </el-table-column>
           <el-table-column width="200px" prop="id">
@@ -200,12 +195,6 @@ export default {
 .resources {
   .emq-title {
     margin-bottom: 20px;
-  }
-
-  .resource-node-wrapper {
-    .ant-card-body {
-      padding: 0 0 0 20px;
-    }
   }
 
   .expand-column .cell {

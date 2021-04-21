@@ -98,10 +98,6 @@ export default {
     @include trans-up-mixin(-1px);
     border-radius: 8px;
     height: 255px;
-
-    .ant-card-body {
-      padding: 12px;
-    }
   }
 }
 </style>

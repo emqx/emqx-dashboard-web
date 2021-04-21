@@ -13,9 +13,6 @@
       @update="handleUpdate(...arguments, 'emqx')"
     >
     </config-form>
-    <template v-else>
-      <a-skeleton active></a-skeleton>
-    </template>
   </el-card>
 </template>
 

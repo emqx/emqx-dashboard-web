@@ -25,13 +25,8 @@
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.state') }}:</div>
             <span class="field-value">
-              <a-badge
-                style="font-size: 12px"
-                :status="isAlive ? 'success' : 'error'"
-                :text="isAlive ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')"
-                dot
-              >
-              </a-badge>
+              <el-badge :status="isAlive ? 'success' : 'danger'" is-dot> </el-badge
+              ><span>{{ isAlive ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable') }}</span>
               <el-button
                 v-if="!isAlive"
                 :loading="reloading"
@@ -182,10 +177,6 @@ export default {
 
   .field-title {
     width: 110px;
-  }
-
-  .ant-badge-status-text {
-    font-size: 12px;
   }
 }
 </style>

@@ -42,12 +42,8 @@
           <el-col :span="12">
             <el-form-item :label="$t('Overview.nodeState')">
               <span class="form-item-value">
-                <a-badge
-                  is-dot
-                  :status="record.node_status === 'Running' ? 'success' : 'error'"
-                  :text="record.node_status === 'Running' ? $t('Overview.running') : $t('Overview.stopped')"
-                >
-                </a-badge>
+                <el-badge is-dot :status="record.node_status === 'Running' ? 'success' : 'danger'"> </el-badge
+                ><span>{{ record.node_status === 'Running' ? $t('Overview.running') : $t('Overview.stopped') }}</span>
               </span>
             </el-form-item>
           </el-col>
@@ -238,16 +234,6 @@ export default {
     .form-btn {
       margin-top: 20px;
       width: 120px;
-    }
-    .ant-badge {
-      margin-top: -3px;
-      .ant-badge-status-text {
-        font-size: 14px;
-      }
-      .ant-badge-status-dot {
-        width: 8px;
-        height: 8px;
-      }
     }
     .el-icon-question {
       margin-left: 6px;

@@ -1,53 +1,21 @@
 <template>
   <div class="left-bar" :style="{ width: leftBarCollapse ? '80px' : '200px' }">
-    <a-menu
-      class="menu-wrapper"
-      :default-selected-keys="defaultSelectedKeys"
-      :selected-keys="defaultSelectedKeys"
-      :open-keys.sync="defaultOpenKeys"
-      mode="inline"
-      theme="dark"
-      :inline-collapsed="leftBarCollapse"
-      @click="handleClick"
-    >
-      <template v-for="item in menus">
-        <template v-if="$hasShow(item.key)">
-          <a-sub-menu v-if="item.children && item.children.length > 0" :key="item.key" @titleClick="titleClick(item)">
-            <span slot="title">
-              <icon-font :type="item.icon"></icon-font>
-              <span>{{ item.title }}</span>
-            </span>
-            <template v-for="item2 in item.children">
-              <a-menu-item v-if="$hasShow(item2.key)" :key="item2.path">
-                {{ item2.title }}
-              </a-menu-item>
-            </template>
-          </a-sub-menu>
-
-          <a-menu-item v-else-if="!item.children && $hasShow(item.key)" :key="item.path">
-            <icon-font :type="item.icon"></icon-font>
-            <span>{{ item.title }}</span>
-          </a-menu-item>
+    <el-menu :default-active="defaultSelectedKeys" :collapse="leftBarCollapse" class="menu-bgColor" router>
+      <template v-for="menu in menus">
+        <template v-if="$hasShow(menu.key)">
+          <el-menu-item :key="menu.path" :index="menu.path" :style="{ paddingLeft: leftBarCollapse ? '30px' : '20px' }">
+            <i :class="['iconfont', menu.icon]"></i>
+            <span>{{ menu.title }}</span>
+          </el-menu-item>
         </template>
       </template>
-    </a-menu>
+    </el-menu>
   </div>
 </template>
 
 <script>
-import { Menu } from 'ant-design-vue'
-import 'ant-design-vue/lib/menu/style'
-
 export default {
   name: 'LeftBar',
-
-  components: {
-    [Menu.name]: Menu,
-    [Menu.Item.name]: Menu.Item,
-    [Menu.ItemGroup.name]: Menu.ItemGroup,
-    [Menu.SubMenu.name]: Menu.SubMenu,
-    [Menu.Divider.name]: Menu.Divider,
-  },
 
   props: {},
 
@@ -64,7 +32,7 @@ export default {
     },
     defaultSelectedKeys() {
       const { path } = this.$route
-      return [`/${path.split('/')[1]}`]
+      return `/${path.split('/')[1]}`
     },
     logoStyle() {
       return { left: !this.$store.state.leftBarCollapse ? 0 : '-200px' }
@@ -117,26 +85,26 @@ export default {
         title: this.$t('components.rules'),
         key: 'rules',
         icon: 'icon-guizeyinqing',
-        children: [
-          {
-            title: this.$t('components.rule'),
-            key: 'rules.ruleEngine',
-            path: '/rules',
-            parentKey: 'rules',
-          },
-          {
-            title: this.$t('components.resources'),
-            key: 'rules.resources',
-            path: '/resources',
-            parentKey: 'rules',
-          },
-          {
-            title: this.$t('components.schemas'),
-            key: 'rules.schema',
-            path: '/schemas',
-            parentKey: 'rules',
-          },
-        ],
+        // children: [
+        //   {
+        //     title: this.$t('components.rule'),
+        //     key: 'rules.ruleEngine',
+        //     path: '/rules',
+        //     parentKey: 'rules',
+        //   },
+        //   {
+        //     title: this.$t('components.resources'),
+        //     key: 'rules.resources',
+        //     path: '/resources',
+        //     parentKey: 'rules',
+        //   },
+        //   {
+        //     title: this.$t('components.schemas'),
+        //     key: 'rules.schema',
+        //     path: '/schemas',
+        //     parentKey: 'rules',
+        //   },
+        // ],
       },
       {
         title: this.$t('components.modules'),
@@ -154,14 +122,14 @@ export default {
         title: this.$t('components.tool'),
         key: 'tools',
         icon: 'icon-gongju',
-        children: [
-          {
-            title: 'WebSocket',
-            key: 'tool.WebSocket',
-            path: '/websocket',
-            parentKey: 'tools',
-          },
-        ],
+        // children: [
+        //   {
+        //     title: 'WebSocket',
+        //     key: 'tool.WebSocket',
+        //     path: '/websocket',
+        //     parentKey: 'tools',
+        //   },
+        // ],
       },
       {
         title: this.$t('components.setting'),
@@ -173,45 +141,44 @@ export default {
         title: this.$t('components.general'),
         key: 'general',
         icon: 'icon-fenzuguanli',
-        children: [
-          {
-            title: this.$t('components.plugins'),
-            key: 'plugins',
-            path: '/plugins',
-            icon: 'icon-kongjian',
-          },
-          {
-            title: this.$t('components.application'),
-            key: 'general.application',
-            path: '/application',
-            parentKey: 'general',
-          },
-          {
-            title: this.$t('components.users'),
-            key: 'general.user',
-            path: '/users',
-            parentKey: 'general',
-          },
-          {
-            title: this.$t('components.blacklist'),
-            key: 'general.blacklist',
-            path: '/blacklist',
-            parentKey: 'general',
-          },
-          {
-            title: this.$t('components.backup'),
-            key: 'general.backup',
-            path: '/backup',
-            parentKey: 'general',
-          },
-
-          // {
-          //   title: this.$t('components.trace'),
-          //   key: 'general.trace',
-          //   path: '/trace',
-          //   parentKey: 'general',
-          // },
-        ],
+        // children: [
+        //   {
+        //     title: this.$t('components.application'),
+        //     key: 'general.application',
+        //     path: '/application',
+        //     parentKey: 'general',
+        //   },
+        //   {
+        //     title: this.$t('components.users'),
+        //     key: 'general.user',
+        //     path: '/users',
+        //     parentKey: 'general',
+        //   },
+        //   {
+        //     title: this.$t('components.blacklist'),
+        //     key: 'general.blacklist',
+        //     path: '/blacklist',
+        //     parentKey: 'general',
+        //   },
+        //   {
+        //     title: this.$t('components.backup'),
+        //     key: 'general.backup',
+        //     path: '/backup',
+        //     parentKey: 'general',
+        //   },
+        //   {
+        //   title: this.$t('components.plugins'),
+        //   key: 'plugins',
+        //   path: '/plugins',
+        //   icon: 'icon-kongjian',
+        // },
+        //   // {
+        //   //   title: this.$t('components.trace'),
+        //   //   key: 'general.trace',
+        //   //   path: '/trace',
+        //   //   parentKey: 'general',
+        //   // },
+        // ],
       },
     ]
     this.initRouter()
@@ -251,38 +218,32 @@ export default {
   transition: all 0.3s;
   // margin-top: 60px;
 
-  .menu-wrapper {
-    // margin-top: 54px;
-  }
-  .ant-menu {
-    border-right-color: transparent;
-
-    &.ant-menu-inline {
-      border-right-color: #fff;
-      border-right: 0;
-    }
-  }
-
-  .ant-menu-sub,
-  .ant-menu-dark {
+  .menu-bgColor {
     background-color: $color-theme;
+    border-right: 1px solid $color-theme;
   }
-
-  .ant-menu-inline.ant-menu-sub {
-    background: #00000075;
-  }
-
-  .ant-menu-item .anticon,
-  .ant-menu-submenu-title .anticon {
-    margin-right: 12px;
-    font-size: 18px;
-  }
-
   .el-scrollbar {
     height: 100vh;
   }
-}
-.ant-menu-dark .ant-menu-sub {
-  background-color: #000000ce;
+
+  .el-menu--collapse {
+    width: 80px;
+  }
+
+  .el-menu-item {
+    color: #ddd;
+    & span {
+      padding-left: 20px;
+    }
+    &:hover,
+    &:focus,
+    &.is-active {
+      background-color: #00000075;
+    }
+  }
+
+  // .menu-text {
+  //   padding-left: 10px;
+  // }
 }
 </style>

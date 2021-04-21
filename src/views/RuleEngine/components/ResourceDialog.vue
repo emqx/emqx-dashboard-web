@@ -25,7 +25,7 @@
           :loading="loadingButton === 'testButton'"
           :disabled="!record.type"
           type="primary"
-          style="margin-left: 20px;"
+          style="margin-left: 20px"
           @click="handleCreate(true)"
         >
           {{ $t('RuleEngine.testConnection') }}
@@ -46,10 +46,7 @@
         <el-col :span="24">
           <div class="line"></div>
         </el-col>
-        <div v-if="configLoading" class="params-loading-wrapper">
-          <a-skeleton active></a-skeleton>
-        </div>
-        <template v-else-if="configList.length > 0">
+        <template v-if="configList.length > 0">
           <el-col
             v-for="(item, i) in configList"
             :key="i"
@@ -133,7 +130,6 @@
           </el-col>
         </template>
       </el-row>
-      <a-skeleton v-else-if="oper === 'edit' && (!record.type || resourceTypes.length < 1)" active></a-skeleton>
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
@@ -505,10 +501,6 @@ export default {
 
   .config-item-wrapper {
     min-height: 100px;
-
-    .params-loading-wrapper {
-      padding: 0 32px;
-    }
 
     .el-input,
     .el-select {

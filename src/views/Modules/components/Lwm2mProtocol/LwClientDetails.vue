@@ -26,8 +26,7 @@
               <span class="light-gray">{{ item }}</span>
             </el-col>
           </div>
-          <a-skeleton v-if="listLoading" active></a-skeleton>
-          <div v-else class="collapse-content">
+          <div class="collapse-content">
             <template v-if="Array.isArray(objectResources[item]) && objectResources[item].length">
               <el-row class="row-titles">
                 <el-col :span="8">

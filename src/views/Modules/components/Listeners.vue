@@ -24,10 +24,7 @@
     <el-dialog @open="loadConfigList" :visible.sync="listenerDialogVisible" :title="listenerDialogTitle" width="520px">
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
         <el-row class="config-item-wrapper" :gutter="20">
-          <div v-if="configLoading" class="params-loading-wrapper">
-            <a-skeleton active></a-skeleton>
-          </div>
-          <template v-else-if="showConfigList.length > 0">
+          <template v-if="showConfigList.length > 0">
             <div v-for="(item, i) in showConfigList" :key="i">
               <el-col :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12">
                 <el-form-item v-bind="item.formItemAttributes">

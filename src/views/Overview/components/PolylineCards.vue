@@ -171,10 +171,6 @@ export default {
     margin-top: 20px;
     position: relative;
 
-    .ant-card-body {
-      padding: 12px;
-    }
-
     .card-title {
       font-size: 16px;
       color: #333;

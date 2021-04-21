@@ -19,9 +19,6 @@
           @update="handleUpdate(...arguments)"
         >
         </config-detail>
-        <template v-else>
-          <a-skeleton active></a-skeleton>
-        </template>
       </el-tab-pane>
       <el-tab-pane label="" name="addZone">
         <span slot="label" size="mini">

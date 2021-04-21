@@ -16,14 +16,14 @@
       <!-- TODO: 补充使用情况 -->
       <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
         <div class="alert-info func-item">
-          <a-badge :count="alertCount">
+          <el-badge :value="alertCount" :hidden="!alertCount">
             <router-link
               to="/alerts/list"
               tag="i"
               class="iconfont icon-Notificationlisttongzhiliebiao"
               @click="clearAlert"
             ></router-link>
-          </a-badge>
+          </el-badge>
         </div>
       </el-tooltip>
 
@@ -198,7 +198,8 @@ export default {
 }
 
 .el-badge {
-  line-height: 20px;
+  line-height: 30px;
+  height: 34px;
 }
 
 .el-dropdown-menu {

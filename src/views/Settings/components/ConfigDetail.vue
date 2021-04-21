@@ -89,9 +89,6 @@
             </el-col>
           </div>
         </template>
-        <template v-else>
-          <a-skeleton active></a-skeleton>
-        </template>
       </el-form>
       <el-col v-if="nullKeys.length" :span="24" class="show-more">
         <a href="javascript:;" @click="toggleRecords">

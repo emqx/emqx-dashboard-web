@@ -13,9 +13,6 @@
           @update="handleUpdate(...arguments, item.type)"
         >
         </config-form>
-        <template v-else>
-          <a-skeleton active></a-skeleton>
-        </template>
       </el-tab-pane>
     </el-tabs>
   </el-card>

@@ -158,10 +158,6 @@ export default {
   min-height: 100vh;
   box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
 
-  .ant-card-body {
-    padding: 0;
-  }
-
   .emq-title {
     margin-bottom: 32px;
   }

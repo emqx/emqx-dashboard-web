@@ -454,18 +454,9 @@ export default {
     @include trans-up-mixin(-1px);
     border-radius: 8px;
 
-    .ant-card-head {
-      border-bottom: none;
-      padding: 0 16px;
-    }
-
     .app-card-title {
       font-size: 14px;
       color: rgba(0, 0, 0, 0.4);
-    }
-
-    .ant-card-body {
-      padding: 16px 16px 0 16px;
     }
 
     .content {

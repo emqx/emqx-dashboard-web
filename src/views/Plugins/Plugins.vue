@@ -14,10 +14,10 @@
           <el-col :span="4">
             <el-radio-group v-model="displayType" size="small" border>
               <el-radio-button label="cards">
-                <icon-font type="icon-qiapianmoshi_kuai"></icon-font>
+                <i class="iconfont icon-qiapianmoshi_kuai"></i>
               </el-radio-button>
               <el-radio-button label="list">
-                <icon-font type="icon-liebiaomoshi_kuai"></icon-font>
+                <i class="iconfont icon-qiapianmoshi_kuai"></i>
               </el-radio-button>
             </el-radio-group>
           </el-col>
@@ -62,7 +62,8 @@
 
             <div class="header">
               <div class="name">
-                <a-badge :status="item.active ? 'success' : 'error'" :text="item.name" dot> </a-badge>
+                <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
+                <span>{{ item.name }}</span>
                 <el-tooltip effect="dark" :content="$t('Plugins.tutorial')" :open-delay="500" placement="top">
                   <a
                     v-if="!primaryList.includes(item.name) && getLinks(item.name)"
@@ -128,12 +129,8 @@
           </div>
 
           <div class="state">
-            <a-badge
-              :status="item.active ? 'success' : 'error'"
-              :text="item.active ? $t('Plugins.running') : $t('Plugins.stopped')"
-              dot
-            >
-            </a-badge>
+            <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
+            <span>{{ item.active ? $t('Plugins.running') : $t('Plugins.stopped') }}</span>
           </div>
 
           <div class="oper">
@@ -411,10 +408,6 @@ export default {
     .plugin-item {
       height: 140px;
       margin-bottom: 20px;
-      .ant-badge-status-text {
-        color: #101010;
-        font-size: 16px;
-      }
       .header {
         flex: 1;
         padding-left: 20px;

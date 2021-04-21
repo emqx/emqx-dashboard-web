@@ -6,7 +6,7 @@
           <span class="title">
             {{ clientId }}
           </span>
-          <a-badge :status="connStatus" :text="connStatusText"></a-badge>
+          <el-badge :type="connStatus">{{ connStatusText }}</el-badge>
         </div>
       </div>
 
@@ -290,7 +290,7 @@ export default {
       return this.$route.query.clientid
     },
     connStatus() {
-      return !this.record.connected ? 'error' : 'success'
+      return !this.record.connected ? 'danger' : 'success'
     },
     connStatusText() {
       return !this.record.connected ? this.$t('Clients.disconnected') : this.$t('Clients.onLine')

@@ -578,10 +578,6 @@ export default {
 
   .config-item-wrapper {
     min-height: 100px;
-
-    .params-loading-wrapper {
-      padding: 0 32px;
-    }
   }
 
   .button-group__center {

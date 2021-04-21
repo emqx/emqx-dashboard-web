@@ -124,12 +124,8 @@
           </el-table-column>
           <el-table-column prop="connected" min-width="100px" :label="$t('Clients.connectedStatus')">
             <template slot-scope="{ row }">
-              <a-badge
-                is-dot
-                :status="row.connected ? 'success' : 'error'"
-                :text="row.connected ? $t('Clients.connected') : $t('Clients.disconnected')"
-              >
-              </a-badge>
+              <el-badge is-dot :type="row.connected ? 'success' : 'danger'"> </el-badge>
+              <span>{{ row.connected ? $t('Clients.connected') : $t('Clients.disconnected') }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="connected_at" min-width="140px" :label="$t('Clients.connectionAt')"></el-table-column>

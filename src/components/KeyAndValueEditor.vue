@@ -5,7 +5,7 @@
       <template slot-scope="{ row }">
         <el-input
           v-model="row.key"
-          style="width: 120px !important;"
+          style="width: 120px !important"
           class="key-input"
           size="mini"
           :placeholder="$t('components.objectKey')"

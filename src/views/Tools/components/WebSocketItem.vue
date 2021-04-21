@@ -71,9 +71,7 @@
             </el-col>
 
             <el-col :span="24" class="footer-area">
-              <el-checkbox v-model="connection.clean" :disabled="client.connected">
-                Clean Session
-              </el-checkbox>
+              <el-checkbox v-model="connection.clean" :disabled="client.connected"> Clean Session </el-checkbox>
 
               <el-checkbox v-model="connection.ssl" :disabled="client.connected" @change="protocolsChange">
                 SSL
@@ -85,7 +83,7 @@
                 type="primary"
                 size="small"
                 class="conn-btn"
-                style="margin-right: 20px;"
+                style="margin-right: 20px"
                 :disabled="client.connected || connecting"
                 @click="createConnection"
               >
@@ -143,7 +141,7 @@
         </el-col>
 
         <el-col :span="12">
-          <el-table :data="subscriptions" max-height="400px" style="margin-top: 10px;">
+          <el-table :data="subscriptions" max-height="400px" style="margin-top: 10px">
             <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="180px"></el-table-column>
             <el-table-column prop="qos" label="QoS" width="80px"></el-table-column>
             <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
@@ -191,8 +189,8 @@
             <el-col :span="6">
               <el-form-item>
                 <span slot="label">&nbsp;</span>
-                <el-checkbox v-model="messageRecord.retain" style="margin-right: 20px;">Retain</el-checkbox>
-                <el-button type="primary" size="small" class="conn-btn" style="float: right;" @click="_doPublish">
+                <el-checkbox v-model="messageRecord.retain" style="margin-right: 20px">Retain</el-checkbox>
+                <el-button type="primary" size="small" class="conn-btn" style="float: right" @click="_doPublish">
                   {{ $t('Tools.publish') }}
                 </el-button>
               </el-form-item>
@@ -207,7 +205,7 @@
             {{ $t('Tools.received') }}
             <i class="icon el-icon-refresh" :title="$t('Tools.clear')" @click="messageIn = []"></i>
           </div>
-          <el-table class="list-table" :data="messageIn" max-height="400px" style="margin-top: 10px;">
+          <el-table class="list-table" :data="messageIn" max-height="400px" style="margin-top: 10px">
             <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="120px"></el-table-column>
             <el-table-column prop="qos" label="QoS" width="80px">
               <template slot-scope="{ row }"> {{ row.qos }} {{ row.retain ? ' Retain' : '' }} </template>
@@ -226,7 +224,7 @@
             {{ $t('Tools.published') }}
             <i class="icon el-icon-refresh" :title="$t('Tools.clear')" @click="messageOut = []"></i>
           </div>
-          <el-table class="list-table" :data="messageOut" max-height="400px" style="margin-top: 10px;">
+          <el-table class="list-table" :data="messageOut" max-height="400px" style="margin-top: 10px">
             <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="120px"></el-table-column>
             <el-table-column prop="qos" label="QoS" width="80px">
               <template slot-scope="{ row }"> {{ row.qos }} {{ row.retain ? ' Retain' : '' }} </template>
@@ -695,76 +693,8 @@ export default {
     max-height: 720px;
   }
 
-  .sub-item.ant-card {
-    margin: 0 20px 12px 20px;
-
-    .qos,
-    .create-at {
-      font-size: 12px;
-      color: #888;
-      margin-right: 12px;
-    }
-
-    .topic {
-      font-size: 16px;
-      color: #000;
-      margin: 4px auto;
-    }
-
-    .ant-card-body {
-      padding: 12px;
-      position: relative;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 18px;
-      cursor: pointer;
-      color: #d8d8d8;
-    }
-  }
-
   .message-item-wrapper {
     max-height: 2048px;
-  }
-
-  .message-item.ant-card {
-    margin: 20px auto;
-    position: relative;
-
-    &:not(.message-out) {
-      border-left: 4px solid #d8d8d8;
-    }
-
-    &.message-out {
-      border-right: 4px solid #d8d8d8;
-    }
-
-    .ant-card-body {
-      padding: 6px;
-      position: relative;
-      color: #000;
-    }
-
-    .message-item-header {
-      font-size: 12px;
-      color: #888;
-
-      & > span {
-        margin-right: 12px;
-      }
-
-      .create-at {
-        float: right;
-      }
-    }
-
-    .message-item-content {
-      margin-top: 6px;
-      padding: 6px;
-    }
   }
 
   .footer-area {
