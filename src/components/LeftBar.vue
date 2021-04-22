@@ -120,9 +120,10 @@ export default {
         icon: 'icon-gaojing',
       },
       {
-        title: this.$t('components.tool'),
+        title: this.$t('components.tools'),
         key: 'tools',
         icon: 'icon-gongju',
+        path: '/tools',
         // children: [
         //   {
         //     title: 'WebSocket',

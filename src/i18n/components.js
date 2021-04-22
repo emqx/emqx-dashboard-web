@@ -83,6 +83,10 @@ export default {
     zh: '工具',
     en: 'Tool',
   },
+  tools: {
+    zh: '工具',
+    en: 'Tools',
+  },
   websocket: {
     zh: 'Websocket',
     en: 'Websocket',

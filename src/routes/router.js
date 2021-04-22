@@ -161,12 +161,18 @@ let routes = [
       // 资源
       {
         path: 'resources',
-        component: () => import('@/views/RuleEngine/Resources'),
+        name: 'resources',
         meta: {
           hideKey: 'rules',
           authRequired: true,
         },
+        component: { template: `<router-view></router-view>` },
         children: [
+          {
+            path: '',
+            name: 'resources',
+            component: () => import('@/views/RuleEngine/Resources'),
+          },
           {
             path: ':id',
             name: 'resources-view',
@@ -212,8 +218,9 @@ let routes = [
   },
   // 工具
   {
-    path: '/websocket',
+    path: '/tools',
     component: Layout,
+    redirect: '/tools/websocket',
     meta: {
       hideKey: 'tools',
       authRequired: true,
@@ -221,7 +228,7 @@ let routes = [
     },
     children: [
       {
-        path: '',
+        path: 'websocket',
         name: 'websocket',
         component: () => import('@/views/Tools/WebSocket'),
         meta: {

@@ -180,7 +180,7 @@ export default {
     },
     showResource(row) {
       this.$router.push({
-        path: `/resources/${row.id}`,
+        path: `/ruleengine/resources/${row.id}`,
         query: { oper: 'view' },
       })
     },
