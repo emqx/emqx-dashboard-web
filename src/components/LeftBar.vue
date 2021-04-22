@@ -85,6 +85,7 @@ export default {
         title: this.$t('components.rules'),
         key: 'rules',
         icon: 'icon-guizeyinqing',
+        path: '/ruleengine',
         // children: [
         //   {
         //     title: this.$t('components.rule'),
@@ -141,6 +142,7 @@ export default {
         title: this.$t('components.general'),
         key: 'general',
         icon: 'icon-fenzuguanli',
+        path: '/general',
         // children: [
         //   {
         //     title: this.$t('components.application'),

@@ -9,13 +9,35 @@
         <left-bar></left-bar>
       </el-aside>
       <el-container class="layout" style="min-height: 100vh">
-        <el-main style="margin: 0; padding: 0" :style="elMainStyle">
-          <el-header v-if="$hasShow('nav-header')" style="height: 80px; padding: 0">
+        <el-main style="margin: 0; padding: 0" :style="{ marginLeft: elMainStyle }">
+          <el-header v-if="$hasShow('nav-header')" class="content-header" :style="{ left: elMainStyle }">
             <nav-header></nav-header>
             <!-- <nav-tabs></nav-tabs> -->
+            <template v-if="hasSubMenu">
+              <el-menu
+                :default-active="defaultSubMenu"
+                mode="horizontal"
+                router
+                style="padding: 0 10px"
+                class="top-submenu"
+              >
+                <template v-for="route in topLvRoute.children">
+                  <el-menu-item :key="topLvRoute.path + '/' + route.path" :index="topLvRoute.path + '/' + route.path">{{
+                    $t(`components.${route.path}`)
+                  }}</el-menu-item>
+                </template>
+              </el-menu>
+            </template>
           </el-header>
 
-          <div :style="{ minHeight: '360px', minWidth: '600px', overflowX: 'hidden' }">
+          <div
+            :style="{
+              minHeight: '360px',
+              minWidth: '600px',
+              overflowX: 'hidden',
+              marginTop: hasSubMenu ? '100px' : '50px',
+            }"
+          >
             <!-- <transition name="fade-transform" mode="out-in"> -->
             <keep-alive>
               <router-view v-if="$route.meta.keepAlive"></router-view>
@@ -34,7 +56,8 @@
 <script>
 import LeftBar from '@/components/LeftBar'
 import NavHeader from '@/components/NavHeader'
-// import NavTabs from '@/components/NavTabs.vue'
+// import NavTabs from '@/components/NavTabs2.vue'
+import routes from '@/routes/router'
 
 export default {
   name: 'Layout',
@@ -48,7 +71,6 @@ export default {
   data() {
     return {
       collapsed: false,
-      theme: 'light',
     }
   },
 
@@ -60,7 +82,28 @@ export default {
       return this.$store.state.leftBarCollapse ? '80px' : '200px'
     },
     elMainStyle() {
-      return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px' }
+      //return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px' }
+      return !this.leftBarCollapse ? '200px' : '80px'
+    },
+    topLvRoute() {
+      const { path } = this.$route
+      const topLvRoute = routes.find((v) => {
+        return v.path !== '/' && path.indexOf(v.path) >= 0
+      })
+      return topLvRoute || {}
+    },
+    defaultSubMenu() {
+      //console.log(this.$route.matched)
+      const topLvRoute = this.topLvRoute
+      const { path } = this.$route
+      const childRoute = Array.prototype.find.call(topLvRoute.children || [], (v) => {
+        return path.indexOf(v.path) >= 0
+      })
+      return `${topLvRoute.path}/${childRoute && childRoute.path}` || null
+    },
+    hasSubMenu() {
+      let topLvRoute = this.topLvRoute
+      return topLvRoute.meta && topLvRoute.meta.subMenu
     },
   },
 }
@@ -118,5 +161,17 @@ export default {
     margin-top: 12px;
     width: 120px;
   }
+}
+
+.content-header {
+  height: auto;
+  padding: 0;
+  right: 0;
+  // width: 100%;
+  position: fixed;
+  z-index: 101;
+}
+.top-submenu {
+  transition: 0ms;
 }
 </style>

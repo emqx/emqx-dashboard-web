@@ -52,6 +52,7 @@ module.exports = {
     },
   },
   assetsDir: 'static',
+  runtimeCompiler: true,
   publicPath: customConfig.publicPath,
   productionSourceMap: false,
   configureWebpack: {

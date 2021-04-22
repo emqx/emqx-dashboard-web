@@ -8,7 +8,7 @@ import { toLogin, getBasicAuthInfo } from '../common/utils'
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'hash',
+  mode: 'history',
   base: process.env.BASE_URL,
   scrollBehavior(to, from, savedPosition) {
     if (to.path === '/modules/detail' || (to.meta.keepAlive && savedPosition)) {

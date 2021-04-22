@@ -165,9 +165,9 @@ export default {
   padding: 0 20px 0 8px;
   background-color: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-  position: fixed;
-  top: 0;
-  right: 0;
+  // position: fixed;
+  // top: 0;
+  // right: 0;
   left: 201px;
   z-index: 100;
   transition: all 0.3s;

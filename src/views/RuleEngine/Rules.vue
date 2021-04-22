@@ -30,7 +30,7 @@
             <template slot-scope="{ row }">
               <router-link
                 :to="{
-                  path: `/rules/${row.id}`,
+                  path: `/ruleengine/rules/${row.id}`,
                   query: { oper: 'view' },
                 }"
                 >{{ row.id }}</router-link

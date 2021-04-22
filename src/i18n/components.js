@@ -51,6 +51,10 @@ export default {
     zh: '规则引擎',
     en: 'Rule Engine',
   },
+  ruleengine: {
+    zh: '规则引擎',
+    en: 'Rule Engine',
+  },
   resources: {
     zh: '资源',
     en: 'Resources',

@@ -27,6 +27,20 @@ body {
     Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 
+a {
+  color: $--color-primary;
+  text-decoration: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+
+  &:hover {
+    color: $--color-hover;
+  }
+}
+
 #app {
   min-width: 1200px;
   margin: 0 auto;

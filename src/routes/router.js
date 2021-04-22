@@ -123,74 +123,76 @@ let routes = [
       },
     ],
   },
-  // Schemas
-  {
-    path: '/schemas',
-    component: Layout,
-    meta: {
-      hideKey: 'schemas',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'schemas',
-        component: () => import('@/views/Schemas/Schemas'),
-      },
-      {
-        path: ':id',
-        name: 'schemas-details',
-        component: () => import('@/views/Schemas/SchemasDetails'),
-      },
-    ],
-  },
+
   // 规则
   {
-    path: '/rules',
+    path: '/ruleengine',
     component: Layout,
+    redirect: '/ruleengine/rules',
     meta: {
       hideKey: 'rules',
       authRequired: true,
+      subMenu: true,
     },
     children: [
       {
-        path: '',
+        path: 'rules',
         name: 'rules',
-        component: () => import('@/views/RuleEngine/Rules'),
+        component: { template: `<router-view></router-view>` },
+        children: [
+          {
+            path: '',
+            name: 'rules',
+            component: () => import('@/views/RuleEngine/Rules'),
+          },
+          {
+            path: 'create',
+            name: 'rules-create',
+            component: () => import('@/views/RuleEngine/RuleCreate'),
+          },
+          {
+            path: ':id',
+            name: 'rules-view',
+            component: () => import('@/views/RuleEngine/RuleView'),
+          },
+        ],
       },
+
+      // 资源
       {
-        path: 'create',
-        name: 'rules-create',
-        component: () => import('@/views/RuleEngine/RuleCreate'),
-      },
-      {
-        path: ':id',
-        name: 'rules-view',
-        component: () => import('@/views/RuleEngine/RuleView'),
-      },
-    ],
-  },
-  // 资源
-  {
-    path: '/resources',
-    component: Layout,
-    meta: {
-      hideKey: 'rules',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'resources',
+        path: 'resources',
         component: () => import('@/views/RuleEngine/Resources'),
+        meta: {
+          hideKey: 'rules',
+          authRequired: true,
+        },
+        children: [
+          {
+            path: ':id',
+            name: 'resources-view',
+            component: () => import('@/views/RuleEngine/ResourceView'),
+          },
+        ],
       },
+      // Schemas
       {
-        path: ':id',
-        name: 'resources-view',
-        component: () => import('@/views/RuleEngine/ResourceView'),
+        path: 'schemas',
+        component: () => import('@/views/Schemas/Schemas'),
+        meta: {
+          hideKey: 'schemas',
+          authRequired: true,
+        },
+        children: [
+          {
+            path: ':id',
+            name: 'schemas-details',
+            component: () => import('@/views/Schemas/SchemasDetails'),
+          },
+        ],
       },
     ],
   },
+
   // 告警
   {
     path: '/alerts',
@@ -215,6 +217,7 @@ let routes = [
     meta: {
       hideKey: 'tools',
       authRequired: true,
+      subMenu: true,
     },
     children: [
       {
@@ -227,86 +230,72 @@ let routes = [
       },
     ],
   },
-  // 黑名单
-  {
-    path: '/blacklist',
-    component: Layout,
-    meta: {
-      hideKey: 'general',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'blacklist',
-        component: () => import('@/views/General/Blacklist'),
-      },
-    ],
-  },
-  // 备份
-  {
-    path: '/backup',
-    component: Layout,
-    meta: {
-      hideKey: 'general',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'backup',
-        component: () => import('@/views/General/Backup'),
-      },
-    ],
-  },
+
   // 在线 Trace
+  // {
+  //   path: '/trace',
+  //   component: Layout,
+  //   meta: {
+  //     hideKey: 'general',
+  //     authRequired: true,
+  //   },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'trace',
+  //       component: () => import('@/views/General/LogTrace'),
+  //     },
+  //   ],
+  // },
   {
-    path: '/trace',
+    path: '/general',
     component: Layout,
+    redirect: '/general/application',
     meta: {
       hideKey: 'general',
       authRequired: true,
+      subMenu: true,
     },
     children: [
+      // 应用
       {
-        path: '',
-        name: 'trace',
-        component: () => import('@/views/General/LogTrace'),
-      },
-    ],
-  },
-  // 应用
-  {
-    path: '/application',
-    component: Layout,
-    meta: {
-      hideKey: 'general',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'application',
+        path: 'application',
         component: () => import('@/views/General/Application'),
+        meta: {
+          hideKey: 'general',
+          authRequired: true,
+        },
       },
-    ],
-  },
-  // 用户
-  {
-    path: '/users',
-    component: Layout,
-    meta: {
-      hideKey: 'general',
-      authRequired: true,
-    },
-    children: [
+      // 用户
       {
-        path: '',
-        name: 'users',
+        path: 'users',
         component: () => import('@/views/General/Users'),
+        meta: {
+          hideKey: 'general',
+          authRequired: true,
+        },
+      },
+      // 黑名单
+      {
+        path: 'blacklist',
+        component: () => import('@/views/General/Blacklist'),
+        meta: {
+          hideKey: 'general',
+          authRequired: true,
+        },
+      },
+      // 备份
+      {
+        path: 'backup',
+        component: () => import('@/views/General/Backup'),
+        meta: {
+          hideKey: 'general',
+          authRequired: true,
+        },
       },
     ],
   },
+
   // 设置
   {
     path: '/setting',
