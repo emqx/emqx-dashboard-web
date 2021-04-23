@@ -177,11 +177,11 @@ export default {
   },
   strip: {
     zh: '条',
-    en: 'strip',
+    en: 'msg',
   },
   second: {
     zh: '秒',
-    en: 'second',
+    en: 's',
   },
   currentMessageOutRate: {
     zh: '当前消息发出速度',
