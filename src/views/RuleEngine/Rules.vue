@@ -19,7 +19,7 @@
     <div class="app-wrapper">
       <el-card shadow="never" class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/ruleengine/rules/create')">
             {{ $t('Base.create') }}
           </el-button>
         </div>
@@ -339,7 +339,7 @@ export default {
         })
     },
     editRule(row) {
-      this.$router.push(`/rules/create?rule=${row.id}`)
+      this.$router.push(`/ruleengine/rules/create?rule=${row.id}`)
     },
   },
 }

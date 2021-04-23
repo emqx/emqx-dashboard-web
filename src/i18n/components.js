@@ -48,8 +48,8 @@ export default {
     en: 'Rule',
   },
   rules: {
-    zh: '规则引擎',
-    en: 'Rule Engine',
+    zh: '规则',
+    en: 'Rules',
   },
   ruleengine: {
     zh: '规则引擎',

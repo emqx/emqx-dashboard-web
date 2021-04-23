@@ -21,9 +21,8 @@ export default {
   margin: 24px 24px 0 24px;
 
   .page-header-top-start {
-    position: absolute;
-    right: 24px;
-    top: 16px;
+    float: right;
+    margin: 1em 5px;
     &.btn {
       top: 12px;
     }
@@ -34,10 +33,8 @@ export default {
     height: 100%;
     min-height: 100%;
     transition: 0.3s;
-    padding: 16px 24px;
-    p {
-      margin-bottom: 0px;
-    }
+    padding: 9px 15px;
+    overflow: hidden;
   }
 
   .page-header-title-view {
@@ -74,7 +71,8 @@ export default {
   }
 
   .description {
-    max-width: 500px;
+    max-width: 760px;
+    float: left;
   }
 }
 </style>

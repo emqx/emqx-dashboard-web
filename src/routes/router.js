@@ -142,7 +142,6 @@ let routes = [
         children: [
           {
             path: '',
-            name: 'rules',
             component: () => import('@/views/RuleEngine/Rules'),
           },
           {
@@ -170,7 +169,6 @@ let routes = [
         children: [
           {
             path: '',
-            name: 'resources',
             component: () => import('@/views/RuleEngine/Resources'),
           },
           {
@@ -183,12 +181,16 @@ let routes = [
       // Schemas
       {
         path: 'schemas',
-        component: () => import('@/views/Schemas/Schemas'),
         meta: {
           hideKey: 'schemas',
           authRequired: true,
         },
+        component: { template: `<router-view></router-view>` },
         children: [
+          {
+            path: '',
+            component: () => import('@/views/Schemas/Schemas'),
+          },
           {
             path: ':id',
             name: 'schemas-details',

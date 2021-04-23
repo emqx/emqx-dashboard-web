@@ -82,7 +82,6 @@ export default {
       return this.$store.state.leftBarCollapse ? '80px' : '200px'
     },
     elMainStyle() {
-      //return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px' }
       return !this.leftBarCollapse ? '200px' : '80px'
     },
     topLvRoute() {
@@ -94,16 +93,14 @@ export default {
     },
     defaultSubMenu() {
       //console.log(this.$route.matched)
-      const topLvRoute = this.topLvRoute
+      const { children, path: topPath } = this.topLvRoute
       const { path } = this.$route
-      const childRoute = Array.prototype.find.call(topLvRoute.children || [], (v) => {
-        return path.indexOf(v.path) >= 0
-      })
-      return `${topLvRoute.path}/${childRoute && childRoute.path}` || null
+      const childRoute = Array.prototype.find.call(children, (v) => path.indexOf(v.path) >= 0) || {}
+      return `${topPath}/${childRoute && childRoute.path}` || null
     },
     hasSubMenu() {
-      let topLvRoute = this.topLvRoute
-      return topLvRoute.meta && topLvRoute.meta.subMenu
+      const { meta } = this.topLvRoute
+      return meta && meta.subMenu
     },
   },
 }

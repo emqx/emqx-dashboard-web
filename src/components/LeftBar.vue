@@ -82,7 +82,7 @@ export default {
         icon: 'icon-shebeiguanli',
       },
       {
-        title: this.$t('components.rules'),
+        title: this.$t('components.ruleengine'),
         key: 'rules',
         icon: 'icon-guizeyinqing',
         path: '/ruleengine',

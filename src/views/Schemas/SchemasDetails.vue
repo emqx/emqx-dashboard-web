@@ -173,9 +173,9 @@
           <el-button :loading="saveLoading" type="primary" size="medium" @click="save">
             {{ $t('Base.create') }}
           </el-button>
-          <el-button type="default" size="medium" @click="$router.push({ path: '/schemas' })">
+          <!-- <el-button type="default" size="medium" @click="$router.push({ path: '/schemas' })">
             {{ $t('Base.cancel') }}
-          </el-button>
+          </el-button> -->
         </div>
       </el-card>
     </div>

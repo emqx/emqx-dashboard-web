@@ -25,7 +25,7 @@
             icon="el-icon-plus"
             @click="
               $router.push({
-                path: '/schemas/0',
+                path: '/ruleengine/schemas/0',
                 query: { oper: 'create' },
               })
             "
@@ -41,7 +41,7 @@
                 href="javascript:;"
                 @click="
                   $router.push({
-                    path: `/schemas/${row.name}`,
+                    path: `/ruleengine/schemas/${row.name}`,
                     query: { oper: 'view' },
                   })
                 "
