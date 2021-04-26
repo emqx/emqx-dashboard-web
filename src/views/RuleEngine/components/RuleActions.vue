@@ -170,7 +170,7 @@
         <el-form-item prop="name" :label="$t('RuleEngine.actionType')">
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-select class="reset-width" v-model="actionCategory" @change="actionCategoryChange">
+              <el-select class="reset-width" :disabled="isEdit" v-model="actionCategory" @change="actionCategoryChange">
                 <el-option
                   v-for="(value, index) in actionCategoryOptions"
                   :key="index"
@@ -183,9 +183,10 @@
               <emq-select
                 class="reset-width"
                 v-model="record.name"
+                :disabled="isEdit"
                 :field="{ options: availableActions[actionCategory] }"
                 :field-name="{ label: 'title', value: 'name' }"
-                style="width: 240px;"
+                style="width: 240px"
                 @change="actionTypeChange"
               >
               </emq-select>
@@ -210,7 +211,7 @@
             :field="{ options: availableResources }"
             :field-name="{ label: 'id', value: 'id' }"
             class="reset-width"
-            style="width: 403px;"
+            style="width: 403px"
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="custom-option" :title="item.description">
@@ -227,10 +228,7 @@
         <div v-if="selectedAction.params.$resource" class="line"></div>
 
         <el-row v-if="paramsLoading || paramsList.length > 0" class="params-item-wrapper" :gutter="50">
-          <div v-if="paramsLoading" class="params-loading-wrapper">
-            <a-skeleton active></a-skeleton>
-          </div>
-          <template v-else>
+          <template>
             <el-col
               v-for="(item, i) in paramsList"
               :key="i"
@@ -398,6 +396,7 @@ export default {
       },
       actions: [], // 全部 actions
       resources: [], // 全部资源
+      isEdit: false,
     }
   },
 
@@ -709,6 +708,7 @@ export default {
       this.actionDialogTitle = this.$t('RuleEngine.addActions')
       this.actionTypeChange(this.record.name, 'add')
       this.actionDialogVisible = true
+      this.isEdit = false
     },
     editAction(one, index) {
       const item = _.cloneDeep(one)
@@ -719,6 +719,7 @@ export default {
       this.record = { ...item }
       this.originRecord = { ...item }
       this.actionDialogVisible = true
+      this.isEdit = true
     },
     initEnableBatch(item) {
       const { _config, params } = { ...item }

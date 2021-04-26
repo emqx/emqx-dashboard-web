@@ -95,7 +95,7 @@
                   </el-form-item>
 
                   <el-form-item class="code-editor__item" :label="$t('RuleEngine.testOutput')">
-                    <div class="monaco-container monaco-test-output" style="height: 200px;">
+                    <div class="monaco-container monaco-test-output" style="height: 200px">
                       <monaco
                         id="testOutput"
                         v-model="testOutPut"
@@ -112,7 +112,7 @@
 
           <el-col :span="9" class="tips-form">
             <div class="tips-item">
-              <div style="color: #606266;">
+              <div style="color: #606266">
                 {{ $t('RuleEngine.currentEventAvailableField') }}
                 <transition name="el-fade-in-linear">
                   <span v-if="clipboardStatus" class="copy-success">{{ clipboardStatus }}</span>
@@ -132,7 +132,7 @@
             </div>
 
             <div class="tips-item">
-              <div style="color: #606266;">{{ $t('RuleEngine.exampleSql') }}</div>
+              <div style="color: #606266">{{ $t('RuleEngine.exampleSql') }}</div>
               <div class="tips-wrapper code">
                 <code>{{ selectEvent.sql_example }}</code>
               </div>
@@ -155,15 +155,18 @@
           <rule-actions ref="ruleAction" v-model="record.actions"> </rule-actions>
         </div>
       </a-card>
+    </div>
 
-      <div class="button-group__center">
-        <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
-          {{ $t('Base.cancel') }}
-        </el-button>
-        <el-button type="primary" size="medium" @click="save">
-          {{ isEdit ? $t('Base.confirm') : $t('Base.create') }}
-        </el-button>
-      </div>
+    <div
+      class="button-group__center rule-create-operation"
+      :style="{ width: $store.state.leftBarCollapse ? ' calc(100% - 80px)' : ' calc(100% - 200px)' }"
+    >
+      <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
+        {{ $t('Base.cancel') }}
+      </el-button>
+      <el-button type="primary" size="medium" @click="save">
+        {{ isEdit ? $t('Base.confirm') : $t('Base.create') }}
+      </el-button>
     </div>
   </div>
 </template>
@@ -523,6 +526,15 @@ export default {
     .el-radio__label {
       font-size: 13px;
     }
+  }
+
+  .rule-create-operation {
+    position: fixed;
+    bottom: 0;
+    background: #fff;
+    padding: 12px 0;
+    box-shadow: 0 -2px 2px 2px #eaeaea;
+    transition: all 0.3s;
   }
 }
 </style>
