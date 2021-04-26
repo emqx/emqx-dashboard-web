@@ -85,6 +85,10 @@ body {
       }
     }
   }
+
+  &:last-child {
+    margin-bottom: 50px;
+  }
 }
 
 .emq-table-header {
