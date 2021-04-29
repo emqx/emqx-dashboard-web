@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import hljs from 'highlight.js/lib/highlight'
+import hljs from 'highlight.js/lib/core'
 import 'highlight.js/styles/solarized-dark.css'
 import json from 'highlight.js/lib/languages/json'
 import sql from 'highlight.js/lib/languages/sql'

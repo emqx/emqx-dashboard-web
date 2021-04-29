@@ -55,7 +55,7 @@
               <span class="form-item-value">
                 <el-badge
                   is-dot
-                  :status="
+                  :type="
                     record.node_status === 'Running' ? 'success' : 'danger'
                   "
                 >

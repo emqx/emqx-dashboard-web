@@ -25,7 +25,7 @@
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.state') }}:</div>
             <span class="field-value">
-              <el-badge :status="isAlive ? 'success' : 'danger'" is-dot>
+              <el-badge :type="isAlive ? 'success' : 'danger'" is-dot>
               </el-badge
               ><span>{{
                 isAlive

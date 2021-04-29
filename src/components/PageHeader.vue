@@ -53,9 +53,10 @@ export default {
       }
     }
 
-    & + .page-header-content-view {
-      margin-top: 16px;
-    }
+  }
+
+  .page-header-content-view {
+    float: left;
   }
 
   .link-item {
