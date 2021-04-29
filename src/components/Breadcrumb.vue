@@ -2,7 +2,12 @@
   <div class="breadcrumb">
     <el-breadcrumb>
       <el-breadcrumb-item>
-        <router-link v-if="backPath" :to="backPath" tag="span" class="btn btn-default raw">
+        <router-link
+          v-if="backPath"
+          :to="backPath"
+          tag="span"
+          class="btn btn-default raw"
+        >
           {{ currentTitle }}
         </router-link>
         <span v-else class="btn btn-default raw">
@@ -54,7 +59,9 @@ export default {
       this.backPath = undefined
       this.currentTitle = this.$t(`components.${name}`)
 
-      if (['create', 'view', 'detail', 'add', 'select', 'manage'].includes(oper)) {
+      if (
+        ['create', 'view', 'detail', 'add', 'select', 'manage'].includes(oper)
+      ) {
         this.oper = this.$t(`Base.${oper}`)
         this.backPath = `/${name}`
       } else if (oper === 'node') {

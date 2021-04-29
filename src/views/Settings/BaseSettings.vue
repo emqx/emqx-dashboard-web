@@ -52,7 +52,9 @@ export default {
     async loadData() {
       const { mqttRes } = await loadConfig()
       Object.keys(mqttRes).forEach((key) => {
-        this.rules[key] = [{ required: true, message: this.$t('Settings.pleaseEnter') }]
+        this.rules[key] = [
+          { required: true, message: this.$t('Settings.pleaseEnter') },
+        ]
       })
       this.mqttRecord = mqttRes
       // 加载数据重新赋值 init

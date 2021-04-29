@@ -2,7 +2,13 @@
   <el-card shadow="never" class="listener-settings emq-list-card">
     <template v-if="!showConfigDetail">
       <div class="emq-table-header">
-        <el-button class="confirm-btn" type="primary" size="small" icon="el-icon-plus" @click="addListener">
+        <el-button
+          class="confirm-btn"
+          type="primary"
+          size="small"
+          icon="el-icon-plus"
+          @click="addListener"
+        >
           {{ $t('Base.add') }}
         </el-button>
       </div>
@@ -12,9 +18,18 @@
             <a @click="editListener(row)">{{ row.name }}</a>
           </template>
         </el-table-column>
-        <el-table-column prop="transport_type" :label="$t('Modules.listener_type')"></el-table-column>
-        <el-table-column prop="configs.listener" :label="$t('Modules.listen_on')"></el-table-column>
-        <el-table-column prop="configs.acceptors" label="Acceptors"></el-table-column>
+        <el-table-column
+          prop="transport_type"
+          :label="$t('Modules.listener_type')"
+        ></el-table-column>
+        <el-table-column
+          prop="configs.listener"
+          :label="$t('Modules.listen_on')"
+        ></el-table-column>
+        <el-table-column
+          prop="configs.acceptors"
+          label="Acceptors"
+        ></el-table-column>
         <el-table-column :label="$t('Settings.isOpened')">
           <template slot-scope="{ row }">
             <el-switch
@@ -37,7 +52,9 @@
           </span>
         </el-col>
         <el-col v-if="oper === 'edit'" :span="4" :offset="16">
-          <span class="delete-button" @click="deleteListener">{{ $t('Base.delete') }}</span>
+          <span class="delete-button" @click="deleteListener">{{
+            $t('Base.delete')
+          }}</span>
         </el-col>
       </el-row>
 
@@ -58,7 +75,13 @@
 </template>
 
 <script>
-import { loadlistenerConfigs, loadZoneConfigs, updateOneConfig, addOneConfig, deleteOneListener } from '@/api/settings'
+import {
+  loadlistenerConfigs,
+  loadZoneConfigs,
+  updateOneConfig,
+  addOneConfig,
+  deleteOneListener,
+} from '@/api/settings'
 import ConfigDetail from './components/ConfigDetail'
 
 export default {
@@ -105,10 +128,14 @@ export default {
         this.loadData()
       }
       if (!this.disabled) {
-        const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
-          type: 'warning',
-          cancelButtonText: this.$t('Settings.no'),
-        })
+        const status = await this.$confirm(
+          this.$t('Settings.noSaveConfirm'),
+          this.$t('Base.warning'),
+          {
+            type: 'warning',
+            cancelButtonText: this.$t('Settings.no'),
+          },
+        )
         if (status === 'confirm') {
           sureReturn()
           return true
@@ -137,13 +164,21 @@ export default {
       const { ...configs } = record
       if (this.oper !== 'add') {
         data = { transport_type: type, configs }
-        this.$confirm(this.$t('Settings.confirmUpdateListener'), this.$t('Base.warning'), {
-          confirmButtonText: this.$t('Base.confirm'),
-          cancelButtonText: this.$t('Base.cancel'),
-          type: 'warning',
-        })
+        this.$confirm(
+          this.$t('Settings.confirmUpdateListener'),
+          this.$t('Base.warning'),
+          {
+            confirmButtonText: this.$t('Base.confirm'),
+            cancelButtonText: this.$t('Base.cancel'),
+            type: 'warning',
+          },
+        )
           .then(async () => {
-            const res = await updateOneConfig('listeners', this.editListenerName, data)
+            const res = await updateOneConfig(
+              'listeners',
+              this.editListenerName,
+              data,
+            )
             if (res) {
               this.updataSuccess(name, 'edit')
             }
@@ -177,11 +212,15 @@ export default {
         enabled: !enabled,
       }
       if (enabled) {
-        this.$confirm(`${this.$t('Settings.isStopListener') + row.name}?`, this.$t('Base.warning'), {
-          confirmButtonText: this.$t('Base.confirm'),
-          cancelButtonText: this.$t('Base.cancel'),
-          type: 'warning',
-        })
+        this.$confirm(
+          `${this.$t('Settings.isStopListener') + row.name}?`,
+          this.$t('Base.warning'),
+          {
+            confirmButtonText: this.$t('Base.confirm'),
+            cancelButtonText: this.$t('Base.cancel'),
+            type: 'warning',
+          },
+        )
           .then(async () => {
             this.toggleEnabled(row, data)
           })
@@ -195,13 +234,20 @@ export default {
       this.loadData()
     },
     async deleteListener() {
-      this.$confirm(this.$t('Settings.isDeleteListener'), this.$t('Base.warning'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      })
+      this.$confirm(
+        this.$t('Settings.isDeleteListener'),
+        this.$t('Base.warning'),
+        {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        },
+      )
         .then(async () => {
-          const res = await deleteOneListener(this.editListenerName, this.transport_type)
+          const res = await deleteOneListener(
+            this.editListenerName,
+            this.transport_type,
+          )
           if (res) {
             this.$message.success(this.$t('Base.deleteSuccess'))
             this.returnList()

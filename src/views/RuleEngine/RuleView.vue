@@ -19,7 +19,11 @@
       <el-card shadow="never" class="emq-list-card" :loading="loading">
         <div class="emq-title">
           {{ $t('RuleEngine.runningMetrics') }}
-          <i class="btn btn-default" :class="reloading ? 'el-icon-loading' : 'el-icon-refresh'" @click="refreshData">
+          <i
+            class="btn btn-default"
+            :class="reloading ? 'el-icon-loading' : 'el-icon-refresh'"
+            @click="refreshData"
+          >
           </i>
         </div>
 
@@ -42,10 +46,15 @@
             </div>
             <div class="card-value">
               {{ record.metricsData.speed }}
-              <span class="card-unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
+              <span class="card-unit"
+                >{{ $t('RuleEngine.times') }}/{{
+                  $t('RuleEngine.second')
+                }}</span
+              >
             </div>
             <div class="card-desc">
-              {{ $t('RuleEngine.maximumSpeed') }}: {{ record.metricsData.speed_max }} {{ $t('RuleEngine.times') }}/{{
+              {{ $t('RuleEngine.maximumSpeed') }}:
+              {{ record.metricsData.speed_max }} {{ $t('RuleEngine.times') }}/{{
                 $t('RuleEngine.second')
               }}
             </div>
@@ -57,7 +66,11 @@
             </div>
             <div class="card-value">
               {{ record.metricsData.speed_last5m }}
-              <span class="card-unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
+              <span class="card-unit"
+                >{{ $t('RuleEngine.times') }}/{{
+                  $t('RuleEngine.second')
+                }}</span
+              >
             </div>
             <div class="card-desc">
               {{ $t('RuleEngine.averageExecutionSpeedInTheLast5Minutes') }}
@@ -94,13 +107,19 @@
             <span class="field-value">{{ configItem.fields }}</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">{{ $t('RuleEngine.selectConditions') }}:</div>
+            <div class="field-title">
+              {{ $t('RuleEngine.selectConditions') }}:
+            </div>
             <span class="field-value">{{ configItem.where }}</span>
           </li>
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.rule') }} SQL:</div>
             <div class="field-content">
-              <code-view v-if="record.rawsql" lang="sql" :code="record.rawsql"></code-view>
+              <code-view
+                v-if="record.rawsql"
+                lang="sql"
+                :code="record.rawsql"
+              ></code-view>
             </div>
           </li>
         </ul>
@@ -115,7 +134,11 @@
           </span>
         </div>
 
-        <rule-actions ref="ruleActions" v-model="record.actions" disabled></rule-actions>
+        <rule-actions
+          ref="ruleActions"
+          v-model="record.actions"
+          disabled
+        ></rule-actions>
       </el-card>
     </div>
   </div>

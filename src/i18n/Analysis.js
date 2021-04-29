@@ -1,7 +1,8 @@
 export default {
   metricsTip: {
     zh: '数据统计为实时刷新数据，包含自添加以来全部统计数据',
-    en: 'The metrics are real-time refresh data, including all statistics since the addition',
+    en:
+      'The metrics are real-time refresh data, including all statistics since the addition',
   },
   enable: {
     zh: '启用',

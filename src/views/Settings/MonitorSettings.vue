@@ -1,7 +1,12 @@
 <template>
   <el-card shadow="never" class="monitor-settings emq-list-card">
     <el-tabs v-model="settingType" :before-leave="handleBeforeLeave">
-      <el-tab-pane v-for="(item, index) in monitorList" :key="index" :label="item.type" :name="item.type">
+      <el-tab-pane
+        v-for="(item, index) in monitorList"
+        :key="index"
+        :label="item.type"
+        :name="item.type"
+      >
         <config-form
           v-if="settingType === item.type && item.configs"
           :ref="item.type"
@@ -46,10 +51,14 @@ export default {
     async handleBeforeLeave(activeName, oldName) {
       if (activeName !== oldName) {
         if (!this.disabled) {
-          const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
-            type: 'warning',
-            cancelButtonText: this.$t('Settings.no'),
-          })
+          const status = await this.$confirm(
+            this.$t('Settings.noSaveConfirm'),
+            this.$t('Base.warning'),
+            {
+              type: 'warning',
+              cancelButtonText: this.$t('Settings.no'),
+            },
+          )
           if (status === 'confirm') {
             this.$refs[oldName][0].cancel(false)
             return true
@@ -65,7 +74,9 @@ export default {
       monitorResList.forEach((item) => {
         item.rules = {}
         Object.keys(item.configs).forEach((key) => {
-          item.rules[key] = [{ required: true, message: this.$t('Settings.pleaseEnter') }]
+          item.rules[key] = [
+            { required: true, message: this.$t('Settings.pleaseEnter') },
+          ]
         })
       })
     },

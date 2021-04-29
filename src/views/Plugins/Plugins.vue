@@ -4,10 +4,21 @@
       <el-card shadow="never" class="search-wrapper">
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-radio-group v-model="status" size="small" border @change="loadData">
-              <el-radio-button label="all"> {{ $t('Plugins.all') }}({{ state.count }}) </el-radio-button>
-              <el-radio-button label="running"> {{ $t('Plugins.running') }}({{ state.running }}) </el-radio-button>
-              <el-radio-button label="stop"> {{ $t('Plugins.stopped') }}({{ state.stop }}) </el-radio-button>
+            <el-radio-group
+              v-model="status"
+              size="small"
+              border
+              @change="loadData"
+            >
+              <el-radio-button label="all">
+                {{ $t('Plugins.all') }}({{ state.count }})
+              </el-radio-button>
+              <el-radio-button label="running">
+                {{ $t('Plugins.running') }}({{ state.running }})
+              </el-radio-button>
+              <el-radio-button label="stop">
+                {{ $t('Plugins.stopped') }}({{ state.stop }})
+              </el-radio-button>
             </el-radio-group>
           </el-col>
 
@@ -58,15 +69,31 @@
       >
         <el-col v-for="item in listTableData" :key="item.name" :span="12">
           <div class="plugin-item">
-            <img class="logo" :src="iconMap[item.name]" alt="plugin-logo" width="90" height="90" />
+            <img
+              class="logo"
+              :src="iconMap[item.name]"
+              alt="plugin-logo"
+              width="90"
+              height="90"
+            />
 
             <div class="header">
               <div class="name">
-                <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
+                <el-badge
+                  :type="item.active ? 'success' : 'danger'"
+                  is-dot
+                ></el-badge>
                 <span>{{ item.name }}</span>
-                <el-tooltip effect="dark" :content="$t('Plugins.tutorial')" :open-delay="500" placement="top">
+                <el-tooltip
+                  effect="dark"
+                  :content="$t('Plugins.tutorial')"
+                  :open-delay="500"
+                  placement="top"
+                >
                   <a
-                    v-if="!primaryList.includes(item.name) && getLinks(item.name)"
+                    v-if="
+                      !primaryList.includes(item.name) && getLinks(item.name)
+                    "
                     class="tutorial"
                     href="javascript:;"
                     @click="openTutorialLink(item.name)"
@@ -76,7 +103,9 @@
                 </el-tooltip>
               </div>
               <div class="description">{{ item.description }}</div>
-              <div class="type-version">{{ item.version }} / {{ typeText(item.type) }}</div>
+              <div class="type-version">
+                {{ item.version }} / {{ typeText(item.type) }}
+              </div>
             </div>
 
             <div class="oper">
@@ -87,7 +116,11 @@
                   size="small"
                   @click="togglePlugin(item)"
                 >
-                  {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
+                  {{
+                    item.active
+                      ? $t('Plugins.stop')
+                      : $t('Plugins.startRunning')
+                  }}
                 </el-button>
                 <span v-else>--</span>
               </div>
@@ -109,7 +142,12 @@
           <div class="header">
             <div class="name">
               {{ item.name }}
-              <el-tooltip effect="dark" :content="$t('Plugins.tutorial')" :open-delay="500" placement="top">
+              <el-tooltip
+                effect="dark"
+                :content="$t('Plugins.tutorial')"
+                :open-delay="500"
+                placement="top"
+              >
                 <a
                   v-if="!primaryList.includes(item.name) && getLinks(item.name)"
                   class="tutorial"
@@ -129,8 +167,13 @@
           </div>
 
           <div class="state">
-            <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
-            <span>{{ item.active ? $t('Plugins.running') : $t('Plugins.stopped') }}</span>
+            <el-badge
+              :type="item.active ? 'success' : 'danger'"
+              is-dot
+            ></el-badge>
+            <span>{{
+              item.active ? $t('Plugins.running') : $t('Plugins.stopped')
+            }}</span>
           </div>
 
           <div class="oper">
@@ -140,7 +183,9 @@
               size="small"
               @click="togglePlugin(item)"
             >
-              {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
+              {{
+                item.active ? $t('Plugins.stop') : $t('Plugins.startRunning')
+              }}
             </el-button>
             <span v-else>--</span>
             <!-- <el-button
@@ -156,12 +201,21 @@
         </div>
       </div>
 
-      <el-card shadow="never" v-if="listTableData.length === 0" class="null-plugins">
+      <el-card
+        shadow="never"
+        v-if="listTableData.length === 0"
+        class="null-plugins"
+      >
         <p>{{ $t('Plugins.listNull') }}</p>
       </el-card>
     </div>
 
-    <el-dialog title="标题" width="520px" :visible.sync="moduleTipVisible" :close-on-click-modal="false">
+    <el-dialog
+      title="标题"
+      width="520px"
+      :visible.sync="moduleTipVisible"
+      :close-on-click-modal="false"
+    >
       <div slot="title" class="tip-title">
         <i class="el-icon-warning"></i>
         <span>{{ $t('Base.tips') }}</span>
@@ -177,7 +231,12 @@
         </el-checkbox>
       </div>
       <div class="tip-button">
-        <el-button type="primary" size="small" @click="moduleTipVisible = false">{{ $t('Overview.konw') }}</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="moduleTipVisible = false"
+          >{{ $t('Overview.konw') }}</el-button
+        >
       </div>
     </el-dialog>
   </div>
@@ -205,7 +264,12 @@ export default {
       tableData: [],
       listTableData: [],
       nodes: [],
-      primaryList: ['emqx_dashboard', 'emqx_management', 'emqx_conf', 'emqx_modules'],
+      primaryList: [
+        'emqx_dashboard',
+        'emqx_management',
+        'emqx_conf',
+        'emqx_modules',
+      ],
       nodeName: '',
       pluginTypes: {
         auth: this.$t('Plugins.authentication'),

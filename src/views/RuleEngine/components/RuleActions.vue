@@ -4,7 +4,9 @@
       <div class="action-item-head">
         <div class="action-item-type">
           <div class="title">{{ $t('RuleEngine.actionType') }}</div>
-          <div class="desc">{{ (item._config || {}).title }} ({{ item.name }})</div>
+          <div class="desc">
+            {{ (item._config || {}).title }} ({{ item.name }})
+          </div>
         </div>
         <div v-if="!disabled" class="action-item-btn">
           <span class="btn" @click="editAction(item, i)">
@@ -20,7 +22,12 @@
               :open-delay="500"
               :content="$t('RuleEngine.fallbackActionCreate')"
             >
-              <el-button slot="reference" type="text" icon="el-icon-plus" @click="handleAddFallbacks(item)">
+              <el-button
+                slot="reference"
+                type="text"
+                icon="el-icon-plus"
+                @click="handleAddFallbacks(item)"
+              >
                 {{ $t('RuleEngine.fallbackAction') }}
               </el-button>
             </el-popover>
@@ -44,12 +51,21 @@
             {{ $t('RuleEngine.detailedMetrics') }}
           </div>
           <div class="value">
-            <span class="btn btn-default show-btn" @click="toggleShowMetrics(item)">
-              {{ item.showList ? $t('RuleEngine.hide') : $t('Base.view') }}
+            <span
+              class="btn btn-default show-btn"
+              @click="toggleShowMetrics(item)"
+            >
+              {{
+                item.showList ? $t('RuleEngine.hide') : $t('RuleEngine.view')
+              }}
             </span>
           </div>
         </div>
-        <div v-for="(itemValue, itemValueIndex) in item._value" :key="itemValueIndex" class="action-item-field">
+        <div
+          v-for="(itemValue, itemValueIndex) in item._value"
+          :key="itemValueIndex"
+          class="action-item-field"
+        >
           <div class="title">{{ itemValue.label }}</div>
           <div class="value">{{ itemValue.value }}</div>
         </div>
@@ -59,7 +75,11 @@
         <div class="main-title">
           {{ $t('RuleEngine.actionMetricsTips') }}
         </div>
-        <div v-for="(metric, itemMetricIndex) in item.metrics" :key="itemMetricIndex" class="item">
+        <div
+          v-for="(metric, itemMetricIndex) in item.metrics"
+          :key="itemMetricIndex"
+          class="item"
+        >
           <span class="title">
             {{ $t('RuleEngine.node') }}
           </span>
@@ -77,11 +97,17 @@
 
       <template v-if="item.fallbacks && item.fallbacks.length">
         <el-divider></el-divider>
-        <div v-for="(fallback, k) in item.fallbacks" :key="k" class="action-item error-action">
+        <div
+          v-for="(fallback, k) in item.fallbacks"
+          :key="k"
+          class="action-item error-action"
+        >
           <div class="action-item-head">
             <div class="action-item-type">
               <div class="title">{{ $t('RuleEngine.actionType') }}</div>
-              <div class="desc">{{ (fallback._config || {}).title }} ({{ fallback.name }})</div>
+              <div class="desc">
+                {{ (fallback._config || {}).title }} ({{ fallback.name }})
+              </div>
             </div>
             <div v-if="!disabled" class="action-item-btn">
               <span class="btn" @click="editFallback(item, fallback, i)">
@@ -105,9 +131,13 @@
             </div>
             <div v-else class="action-item-btn action-item-type">
               <span class="title">{{ $t('RuleEngine.success') }} </span>
-              <span class="desc">{{ showFallbacksMtrics(fallback, 'success') }}</span>
+              <span class="desc">{{
+                showFallbacksMtrics(fallback, 'success')
+              }}</span>
               <span class="title">{{ $t('RuleEngine.fail') }} </span>
-              <span class="desc">{{ showFallbacksMtrics(fallback, 'failed') }} </span>
+              <span class="desc"
+                >{{ showFallbacksMtrics(fallback, 'failed') }}
+              </span>
             </div>
           </div>
 
@@ -121,8 +151,15 @@
                 {{ $t('RuleEngine.detailedMetrics') }}
               </div>
               <div class="value">
-                <span class="btn btn-default show-btn" @click="toggleShowMetrics(fallback)">
-                  {{ fallback.showList ? $t('RuleEngine.hide') : $t('Base.view') }}
+                <span
+                  class="btn btn-default show-btn"
+                  @click="toggleShowMetrics(fallback)"
+                >
+                  {{
+                    fallback.showList
+                      ? $t('RuleEngine.hide')
+                      : $t('RuleEngine.view')
+                  }}
                 </span>
               </div>
             </div>
@@ -161,16 +198,35 @@
       </template>
     </div>
 
-    <el-button v-if="!disabled" size="small" icon="el-icon-plus" @click="addAction">
+    <el-button
+      v-if="!disabled"
+      size="small"
+      icon="el-icon-plus"
+      @click="addAction"
+    >
       {{ $t('RuleEngine.addAction') }}
     </el-button>
 
-    <el-dialog :visible.sync="actionDialogVisible" :title="actionDialogTitle" width="520px">
-      <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
+    <el-dialog
+      :visible.sync="actionDialogVisible"
+      :title="actionDialogTitle"
+      width="520px"
+    >
+      <el-form
+        ref="record"
+        :model="record"
+        :rules="rules"
+        size="small"
+        label-position="top"
+      >
         <el-form-item prop="name" :label="$t('RuleEngine.actionType')">
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-select class="reset-width" :disabled="isEdit" v-model="actionCategory" @change="actionCategoryChange">
+              <el-select
+                class="reset-width"
+                v-model="actionCategory"
+                @change="actionCategoryChange"
+              >
                 <el-option
                   v-for="(value, index) in actionCategoryOptions"
                   :key="index"
@@ -194,15 +250,27 @@
           </el-row>
         </el-form-item>
 
-        <div v-if="selectedAction.title.length - selectedAction.description.length > 18" class="action-description">
+        <div
+          v-if="
+            selectedAction.title.length - selectedAction.description.length > 18
+          "
+          class="action-description"
+        >
           {{ selectedAction.description }}
         </div>
 
-        <el-form-item v-if="selectedAction.params.$resource" prop="params.$resource" label="">
+        <el-form-item
+          v-if="selectedAction.params.$resource"
+          prop="params.$resource"
+          label=""
+        >
           <span slot="label">
             {{ $t('RuleEngine.useOfResources') }}
             <el-popover trigger="hover" width="220" placement="top">
-              <div class="emq-popover-content" v-html="$t('RuleEngine.resourceSelectTip')"></div>
+              <div
+                class="emq-popover-content"
+                v-html="$t('RuleEngine.resourceSelectTip')"
+              ></div>
               <i slot="reference" class="el-icon-question"></i>
             </el-popover>
           </span>
@@ -214,7 +282,12 @@
             style="width: 403px"
             @visible-change="checkResource"
           >
-            <div slot="option" slot-scope="{ item }" class="custom-option" :title="item.description">
+            <div
+              slot="option"
+              slot-scope="{ item }"
+              class="custom-option"
+              :title="item.description"
+            >
               <span class="key">{{ item.description || item.id }}</span>
               <span class="value">{{ item.config.title }}</span>
             </div>
@@ -227,23 +300,49 @@
 
         <div v-if="selectedAction.params.$resource" class="line"></div>
 
+<<<<<<< HEAD
         <el-row v-if="paramsLoading || paramsList" class="params-item-wrapper" :gutter="50">
           <template>
             <el-col
               v-for="item in paramsList"
               :key="record.name + item.key"
               :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
+=======
+        <el-row
+          v-if="paramsLoading || paramsList.length > 0"
+          class="params-item-wrapper"
+          :gutter="50"
+        >
+          <template>
+            <el-col
+              v-for="(item, i) in paramsList"
+              :key="i"
+              :span="
+                item.type === 'textarea' || item.type === 'object' ? 24 : 12
+              "
+>>>>>>> refactor({multi-file}): format code styling for new eslint/prettier rules
             >
-              <el-form-item :class="item.key === 'sql' ? 'code-editor__item' : ''" v-bind="item.formItemAttributes">
-                <template v-if="item.formItemAttributes.description" slot="label">
+              <el-form-item
+                :class="item.key === 'sql' ? 'code-editor__item' : ''"
+                v-bind="item.formItemAttributes"
+              >
+                <template
+                  v-if="item.formItemAttributes.description"
+                  slot="label"
+                >
                   {{ item.formItemAttributes.label }}
                   <el-popover trigger="hover" width="220" placement="top">
-                    <div class="emq-popover-content" v-html="item.formItemAttributes.description"></div>
+                    <div
+                      class="emq-popover-content"
+                      v-html="item.formItemAttributes.description"
+                    ></div>
                     <i slot="reference" class="el-icon-question"></i>
                   </el-popover>
                 </template>
                 <template v-if="item.elType === 'object'">
-                  <key-and-value-editor v-model="record.params[item.key]"></key-and-value-editor>
+                  <key-and-value-editor
+                    v-model="record.params[item.key]"
+                  ></key-and-value-editor>
                 </template>
                 <template v-else-if="item.elType === 'cfgselect'">
                   <config-select
@@ -269,15 +368,25 @@
                     show-password
                   >
                   </el-input>
-                  <div v-else-if="item.key === 'sql'" class="monaco-container monaco-action__sql">
+                  <div
+                    v-else-if="item.key === 'sql'"
+                    class="monaco-container monaco-action__sql"
+                  >
                     <monaco
-                      :id="`${record.name}-sql${Math.random().toString(16).slice(3)}`"
+                      :id="`${record.name}-sql${Math.random()
+                        .toString(16)
+                        .slice(3)}`"
                       v-model="record.params.sql"
                       lang="sql"
                     >
                     </monaco>
                   </div>
-                  <el-input v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </el-input>
+                  <el-input
+                    v-else
+                    v-model="record.params[item.key]"
+                    v-bind="item.bindAttributes"
+                  >
+                  </el-input>
                 </template>
                 <template v-else>
                   <emq-select
@@ -286,7 +395,12 @@
                     v-bind="item.bindAttributes"
                   >
                   </emq-select>
-                  <emq-select v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </emq-select>
+                  <emq-select
+                    v-else
+                    v-model="record.params[item.key]"
+                    v-bind="item.bindAttributes"
+                  >
+                  </emq-select>
                 </template>
               </el-form-item>
             </el-col>
@@ -298,13 +412,23 @@
         <el-button size="small" @click="handleCancel">
           {{ $t('Base.cancel') }}
         </el-button>
-        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">
+        <el-button
+          class="dialog-primary-btn"
+          type="primary"
+          size="small"
+          @click="handleCreate"
+        >
           {{ $t('Base.confirm') }}
         </el-button>
       </div>
     </el-dialog>
 
-    <resource-dialog ref="resource" @created="confirmResource" @cache="confirmResource(null)"> </resource-dialog>
+    <resource-dialog
+      ref="resource"
+      @created="confirmResource"
+      @cache="confirmResource(null)"
+    >
+    </resource-dialog>
   </div>
 </template>
 
@@ -363,7 +487,10 @@ export default {
       originRules: {
         name: { required: true, message: this.$t('General.pleaseChoose') },
         params: {
-          $resource: { required: true, message: this.$t('General.pleaseChoose') },
+          $resource: {
+            required: true,
+            message: this.$t('RuleEngine.pleaseChoose'),
+          },
         },
       },
       originRecord: {
@@ -383,7 +510,10 @@ export default {
       rules: {
         name: { required: true, message: this.$t('General.pleaseChoose') },
         params: {
-          $resource: { required: true, message: this.$t('General.pleaseChoose') },
+          $resource: {
+            required: true,
+            message: this.$t('RuleEngine.pleaseChoose'),
+          },
         },
       },
       selectedAction: {
@@ -590,7 +720,10 @@ export default {
         this.record.params.$resource = id
       }
       this.loadResourceData()
-      this.currentOper = this.actionDialogTitle === this.$t('RuleEngine.editActions') ? 'edit' : 'add'
+      this.currentOper =
+        this.actionDialogTitle === this.$t('RuleEngine.editActions')
+          ? 'edit'
+          : 'add'
     },
 
     async loadResourceData() {
@@ -620,7 +753,10 @@ export default {
       }
       this.paramsList = form
       this.rules.params = {
-        $resource: { required: true, message: this.$t('General.pleaseChoose') },
+        $resource: {
+          required: true,
+          message: this.$t('RuleEngine.pleaseChoose'),
+        },
         ...rules,
       }
       this.paramsLoading = false
@@ -643,7 +779,10 @@ export default {
       const { form, rules } = configData
       this.originParamsList = form
       this.originRules.params = {
-        $resource: { required: true, message: this.$t('General.pleaseChoose') },
+        $resource: {
+          required: true,
+          message: this.$t('RuleEngine.pleaseChoose'),
+        },
         ...rules,
       }
       if (oper === 'add') {
@@ -691,7 +830,9 @@ export default {
     },
 
     actionTypeChange(actionName, oper = 'add') {
-      this.selectedAction = JSON.parse(JSON.stringify(this.actionsMap[actionName]))
+      this.selectedAction = JSON.parse(
+        JSON.stringify(this.actionsMap[actionName]),
+      )
       this.actionCategory = this.selectedAction.category
       this.paramsList = []
       this.paramsLoading = true

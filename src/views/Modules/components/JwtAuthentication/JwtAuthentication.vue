@@ -20,23 +20,33 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item prop="secret">
-                  <el-input v-model="record.secret" :placeholder="$t('Plugins.secret')" size="small"> </el-input>
+                  <el-input
+                    v-model="record.secret"
+                    :placeholder="$t('Plugins.secret')"
+                    size="small"
+                  >
+                  </el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-form-item>
-              <el-checkbox v-model="payloadVisible" size="small">Payload</el-checkbox>
+              <el-checkbox v-model="payloadVisible" size="small"
+                >Payload</el-checkbox
+              >
             </el-form-item>
 
             <template v-if="payloadVisible">
               <p class="jwt-payload-desc">
                 {{ $t('Plugins.payloadDesc') }}
-                <a :href="jwtDoc" target="_blank" rel="noopener">{{ $t('Plugins.jwtDoc') }}</a>
+                <a :href="jwtDoc" target="_blank" rel="noopener">{{
+                  $t('Plugins.jwtDoc')
+                }}</a>
               </p>
               <el-form-item prop="payload">
                 <div class="monaco-container" style="height: 200px">
-                  <monaco id="jwt-payload" v-model="record.payload" lang="json"> </monaco>
+                  <monaco id="jwt-payload" v-model="record.payload" lang="json">
+                  </monaco>
                 </div>
               </el-form-item>
               <p class="jwt-payload-desc">
@@ -44,7 +54,8 @@
               </p>
               <el-form-item prop="data">
                 <div class="monaco-container" style="height: 200px">
-                  <monaco id="jwt-data" v-model="record.data" lang="plaintext"> </monaco>
+                  <monaco id="jwt-data" v-model="record.data" lang="plaintext">
+                  </monaco>
                 </div>
               </el-form-item>
             </template>
@@ -70,7 +81,12 @@
       <el-table :data="records">
         <el-table-column prop="username" label="Username"></el-table-column>
         <el-table-column prop="clientid" label="Client ID"></el-table-column>
-        <el-table-column min-width="160px" prop="token" label="token" show-overflow-tooltip></el-table-column>
+        <el-table-column
+          min-width="160px"
+          prop="token"
+          label="token"
+          show-overflow-tooltip
+        ></el-table-column>
         <el-table-column width="120px">
           <template slot-scope="{ row }">
             <el-button
@@ -117,10 +133,23 @@ export default {
       },
       rules: {
         secret: { required: true, message: this.$t('Plugins.secretRequired') },
-        payload: { required: true, message: this.$t('Plugins.payloadRequired') },
+        payload: {
+          required: true,
+          message: this.$t('Plugins.payloadRequired'),
+        },
         data: { required: true, message: this.$t('Plugins.dataRequired') },
       },
-      algsOptions: ['HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'ES512'],
+      algsOptions: [
+        'HS256',
+        'HS384',
+        'HS512',
+        'RS256',
+        'RS384',
+        'RS512',
+        'ES256',
+        'ES384',
+        'ES512',
+      ],
       payloadVisible: false,
       pickerOptions: {
         disabledDate(time) {
@@ -170,7 +199,10 @@ export default {
           return
         }
         if (this.payloadVisible) {
-          this.records = this.getPayloadJWTData(this.record.payload, this.record.data)
+          this.records = this.getPayloadJWTData(
+            this.record.payload,
+            this.record.data,
+          )
         } else {
           this.records = this.getPrivateKeyJWTData()
         }

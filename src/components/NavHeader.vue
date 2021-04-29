@@ -3,7 +3,12 @@
     <div class="pull-left">
       <div class="func-item" @click="toggleLeftNarCollapse">
         <i
-          :class="['iconfont', $store.state.leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"
+          :class="[
+            'iconfont',
+            $store.state.leftBarCollapse
+              ? 'el-icon-s-unfold'
+              : 'el-icon-s-fold',
+          ]"
           style="font-size: 20px; line-height: 41px"
         >
         </i>
@@ -14,7 +19,12 @@
 
     <div class="pull-right">
       <!-- TODO: 补充使用情况 -->
-      <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
+      <el-tooltip
+        effect="dark"
+        :content="alertText"
+        placement="bottom"
+        :visible-arrow="false"
+      >
         <div class="alert-info func-item">
           <el-badge :value="alertCount" :hidden="!alertCount">
             <router-link
@@ -27,14 +37,26 @@
         </div>
       </el-tooltip>
 
-      <el-dropdown placement="bottom" class="user-info-dropdown" @command="handleLanguageDropdownCommand">
+      <el-dropdown
+        placement="bottom"
+        class="user-info-dropdown"
+        @command="handleLanguageDropdownCommand"
+      >
         <div class="user-info func-item">
           <span>
             <i class="iconfont icon-i18n"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="en" :class="{ active: language === 'en' }">English</el-dropdown-item>
-            <el-dropdown-item command="zh" :class="{ active: language === 'zh' }">中文</el-dropdown-item>
+            <el-dropdown-item
+              command="en"
+              :class="{ active: language === 'en' }"
+              >English</el-dropdown-item
+            >
+            <el-dropdown-item
+              command="zh"
+              :class="{ active: language === 'zh' }"
+              >中文</el-dropdown-item
+            >
           </el-dropdown-menu>
         </div>
       </el-dropdown>
@@ -48,9 +70,15 @@
         <div class="user-info func-item">
           <span>{{ username }}</span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="application">{{ $t('components.applicationManagement') }}</el-dropdown-item>
-            <el-dropdown-item command="users">{{ $t('components.usersManagement') }}</el-dropdown-item>
-            <el-dropdown-item divided command="login">{{ $t('components.logOut') }}</el-dropdown-item>
+            <el-dropdown-item command="application">{{
+              $t('components.applicationManagement')
+            }}</el-dropdown-item>
+            <el-dropdown-item command="users">{{
+              $t('components.usersManagement')
+            }}</el-dropdown-item>
+            <el-dropdown-item divided command="login">{{
+              $t('components.logOut')
+            }}</el-dropdown-item>
           </el-dropdown-menu>
         </div>
       </el-dropdown>
@@ -83,11 +111,15 @@ export default {
       return { left: !this.$store.state.leftBarCollapse ? '201px' : '80px' }
     },
     username() {
-      return this.$store.state.user.username || this.$t('components.notLoggedIn')
+      return (
+        this.$store.state.user.username || this.$t('components.notLoggedIn')
+      )
     },
     alertText() {
       return this.alertCount > 0
-        ? `${this.$t('components.theSystemHas')} ${this.alertCount} ${this.$t('components.noteAlertClickView')}`
+        ? `${this.$t('components.theSystemHas')} ${this.alertCount} ${this.$t(
+            'components.noteAlertClickView',
+          )}`
         : this.$t('components.noWarning')
     },
     language() {

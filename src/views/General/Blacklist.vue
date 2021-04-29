@@ -16,15 +16,40 @@
     <div class="app-wrapper">
       <el-card shadow="never" class="emq-list-card">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            @click="showDialog"
+          >
             {{ $t('Base.create') }}
           </el-button>
         </div>
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="who" min-width="120px" :label="$t('General.who')"> </el-table-column>
-          <el-table-column prop="as" min-width="120px" :label="$t('General.as')"> </el-table-column>
-          <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')"> </el-table-column>
-          <el-table-column prop="until" min-width="120px" :formatter="formatterUntil" :label="$t('General.until')">
+          <el-table-column
+            prop="who"
+            min-width="120px"
+            :label="$t('General.who')"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="as"
+            min-width="120px"
+            :label="$t('General.as')"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="reason"
+            min-width="120px"
+            :label="$t('General.reason')"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="until"
+            min-width="120px"
+            :formatter="formatterUntil"
+            :label="$t('General.until')"
+          >
           </el-table-column>
           <el-table-column prop="oper" width="120px" label="">
             <template slot-scope="{ row }">
@@ -50,12 +75,18 @@
       </el-card>
     </div>
 
-    <el-dialog width="520px" :title="$t('General.createBlacklist')" :visible.sync="dialogVisible" @close="clearInput">
+    <el-dialog
+      width="520px"
+      :title="$t('General.createBlacklist')"
+      :visible.sync="dialogVisible"
+      @close="clearInput"
+    >
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item prop="as" :label="$t('General.as')">
-              <emq-select v-model="record.as" :field="{ options: asOptions }"> </emq-select>
+              <emq-select v-model="record.as" :field="{ options: asOptions }">
+              </emq-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -83,8 +114,12 @@
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
+        <el-button plain size="small" @click="closeDialog">{{
+          $t('Base.cancel')
+        }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{
+          $t('Base.confirm')
+        }}</el-button>
       </div>
     </el-dialog>
   </div>

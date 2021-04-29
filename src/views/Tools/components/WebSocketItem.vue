@@ -18,7 +18,10 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <el-form-item prop="host" :label="$t('Tools.host')">
-                <el-input v-model="connection.host" :readonly="client.connected"></el-input>
+                <el-input
+                  v-model="connection.host"
+                  :readonly="client.connected"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -33,12 +36,19 @@
             </el-col>
             <el-col :span="8">
               <el-form-item prop="endpoint" :label="$t('Tools.mountPoint')">
-                <el-input v-model="connection.endpoint" placeholder="/mqtt" :readonly="client.connected"></el-input>
+                <el-input
+                  v-model="connection.endpoint"
+                  placeholder="/mqtt"
+                  :readonly="client.connected"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item prop="clientId" label="Client ID">
-                <el-input v-model="connection.clientId" :readonly="client.connected">
+                <el-input
+                  v-model="connection.clientId"
+                  :readonly="client.connected"
+                >
                   <i
                     slot="suffix"
                     :title="$t('Tools.randomGeneration')"
@@ -51,12 +61,18 @@
             </el-col>
             <el-col :span="8">
               <el-form-item prop="username" label="Username">
-                <el-input v-model="connection.username" :readonly="client.connected"></el-input>
+                <el-input
+                  v-model="connection.username"
+                  :readonly="client.connected"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item prop="password" label="Password">
-                <el-input v-model="connection.password" :readonly="client.connected"></el-input>
+                <el-input
+                  v-model="connection.password"
+                  :readonly="client.connected"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -71,9 +87,18 @@
             </el-col>
 
             <el-col :span="24" class="footer-area">
-              <el-checkbox v-model="connection.clean" :disabled="client.connected"> Clean Session </el-checkbox>
+              <el-checkbox
+                v-model="connection.clean"
+                :disabled="client.connected"
+              >
+                Clean Session
+              </el-checkbox>
 
-              <el-checkbox v-model="connection.ssl" :disabled="client.connected" @change="protocolsChange">
+              <el-checkbox
+                v-model="connection.ssl"
+                :disabled="client.connected"
+                @change="protocolsChange"
+              >
                 SSL
               </el-checkbox>
             </el-col>
@@ -88,7 +113,11 @@
                 @click="createConnection"
               >
                 {{
-                  client.connected ? $t('Tools.connected') : connecting ? $t('Tools.inConnection') : $t('Tools.connect')
+                  client.connected
+                    ? $t('Tools.connected')
+                    : connecting
+                    ? $t('Tools.inConnection')
+                    : $t('Tools.connect')
                 }}
               </el-button>
 
@@ -99,7 +128,11 @@
                 :disabled="!client.connected && !connecting"
                 @click="destroyConnection"
               >
-                {{ connecting ? $t('Tools.cancelConnection') : $t('Tools.disconnect') }}
+                {{
+                  connecting
+                    ? $t('Tools.cancelConnection')
+                    : $t('Tools.disconnect')
+                }}
               </el-button>
             </el-col>
           </el-row>
@@ -128,11 +161,19 @@
             </el-form-item>
 
             <el-form-item prop="qos" label="QoS">
-              <emq-select v-model.number="subscriptionsRecord.qos" :field="{ list: [0, 1, 2] }"></emq-select>
+              <emq-select
+                v-model.number="subscriptionsRecord.qos"
+                :field="{ list: [0, 1, 2] }"
+              ></emq-select>
             </el-form-item>
             <div>
               <el-form-item>
-                <el-button type="primary" size="small" class="conn-btn" @click="_doSubscribe">
+                <el-button
+                  type="primary"
+                  size="small"
+                  class="conn-btn"
+                  @click="_doSubscribe"
+                >
                   {{ $t('Tools.Subscribe') }}
                 </el-button>
               </el-form-item>
@@ -141,13 +182,31 @@
         </el-col>
 
         <el-col :span="12">
-          <el-table :data="subscriptions" max-height="400px" style="margin-top: 10px">
-            <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="180px"></el-table-column>
-            <el-table-column prop="qos" label="QoS" width="80px"></el-table-column>
-            <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
+          <el-table
+            :data="subscriptions"
+            max-height="400px"
+            style="margin-top: 10px"
+          >
+            <el-table-column
+              show-overflow-tooltip
+              prop="topic"
+              label="Topic"
+              min-width="180px"
+            ></el-table-column>
+            <el-table-column
+              prop="qos"
+              label="QoS"
+              width="80px"
+            ></el-table-column>
+            <el-table-column
+              prop="createAt"
+              :label="$t('Tools.time')"
+            ></el-table-column>
             <el-table-column width="80px">
               <template slot-scope="{ row }">
-                <a class="btn" @click="_doUnSubscribe(row)">{{ $t('Base.cancel') }}</a>
+                <a class="btn" @click="_doUnSubscribe(row)">{{
+                  $t('Base.cancel')
+                }}</a>
               </template>
             </el-table-column>
           </el-table>
@@ -178,19 +237,37 @@
             </el-col>
             <el-col :span="6">
               <el-form-item prop="payload" label="Payload">
-                <el-input v-model="messageRecord.payload" size="small"></el-input>
+                <el-input
+                  v-model="messageRecord.payload"
+                  size="small"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item prop="qos" label="QoS">
-                <emq-select v-model.number="messageRecord.qos" :field="{ list: [0, 1, 2] }" size="small"> </emq-select>
+                <emq-select
+                  v-model.number="messageRecord.qos"
+                  :field="{ list: [0, 1, 2] }"
+                  size="small"
+                >
+                </emq-select>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item>
                 <span slot="label">&nbsp;</span>
-                <el-checkbox v-model="messageRecord.retain" style="margin-right: 20px">Retain</el-checkbox>
-                <el-button type="primary" size="small" class="conn-btn" style="float: right" @click="_doPublish">
+                <el-checkbox
+                  v-model="messageRecord.retain"
+                  style="margin-right: 20px"
+                  >Retain</el-checkbox
+                >
+                <el-button
+                  type="primary"
+                  size="small"
+                  class="conn-btn"
+                  style="float: right"
+                  @click="_doPublish"
+                >
                   {{ $t('Tools.publish') }}
                 </el-button>
               </el-form-item>
@@ -203,38 +280,86 @@
         <el-col :span="12">
           <div class="message-btn">
             {{ $t('Tools.received') }}
-            <i class="icon el-icon-refresh" :title="$t('Tools.clear')" @click="messageIn = []"></i>
+            <i
+              class="icon el-icon-refresh"
+              :title="$t('Tools.clear')"
+              @click="messageIn = []"
+            ></i>
           </div>
-          <el-table class="list-table" :data="messageIn" max-height="400px" style="margin-top: 10px">
-            <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="120px"></el-table-column>
+          <el-table
+            class="list-table"
+            :data="messageIn"
+            max-height="400px"
+            style="margin-top: 10px"
+          >
+            <el-table-column
+              show-overflow-tooltip
+              prop="topic"
+              label="Topic"
+              min-width="120px"
+            ></el-table-column>
             <el-table-column prop="qos" label="QoS" width="80px">
-              <template slot-scope="{ row }"> {{ row.qos }} {{ row.retain ? ' Retain' : '' }} </template>
+              <template slot-scope="{ row }">
+                {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
+              </template>
             </el-table-column>
-            <el-table-column show-overflow-tooltip prop="payload" label="Payload" min-width="180px">
+            <el-table-column
+              show-overflow-tooltip
+              prop="payload"
+              label="Payload"
+              min-width="180px"
+            >
               <template slot-scope="{ row }">
                 <code>{{ row.payload }}</code>
               </template>
             </el-table-column>
-            <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
+            <el-table-column
+              prop="createAt"
+              :label="$t('Tools.time')"
+            ></el-table-column>
           </el-table>
         </el-col>
 
         <el-col :span="12">
           <div class="message-btn">
             {{ $t('Tools.published') }}
-            <i class="icon el-icon-refresh" :title="$t('Tools.clear')" @click="messageOut = []"></i>
+            <i
+              class="icon el-icon-refresh"
+              :title="$t('Tools.clear')"
+              @click="messageOut = []"
+            ></i>
           </div>
-          <el-table class="list-table" :data="messageOut" max-height="400px" style="margin-top: 10px">
-            <el-table-column show-overflow-tooltip prop="topic" label="Topic" min-width="120px"></el-table-column>
+          <el-table
+            class="list-table"
+            :data="messageOut"
+            max-height="400px"
+            style="margin-top: 10px"
+          >
+            <el-table-column
+              show-overflow-tooltip
+              prop="topic"
+              label="Topic"
+              min-width="120px"
+            ></el-table-column>
             <el-table-column prop="qos" label="QoS" width="80px">
-              <template slot-scope="{ row }"> {{ row.qos }} {{ row.retain ? ' Retain' : '' }} </template>
+              <template slot-scope="{ row }">
+                {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
+              </template>
             </el-table-column>
-            <el-table-column show-overflow-tooltip prop="payload" label="Payload" min-width="180px">
+            <el-table-column
+              show-overflow-tooltip
+              prop="payload"
+              label="Payload"
+              min-width="180px"
+            >
               <template slot-scope="{ row }">
                 <code>{{ row.payload }}</code>
               </template>
             </el-table-column>
-            <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
+            <el-table-column
+              prop="createAt"
+              :label="$t('Tools.time')"
+            ></el-table-column>
           </el-table>
         </el-col>
       </el-row>
@@ -274,7 +399,11 @@ export default {
       connectionRules: {
         host: { required: true },
         port: [
-          { type: 'number', required: true, message: this.$t('Tools.pleaseEnter') },
+          {
+            type: 'number',
+            required: true,
+            message: this.$t('Tools.pleaseEnter'),
+          },
           {
             type: 'number',
             min: 1,
@@ -283,7 +412,11 @@ export default {
           },
         ],
         keepalive: [
-          { type: 'number', required: true, message: this.$t('Tools.pleaseEnter') },
+          {
+            type: 'number',
+            required: true,
+            message: this.$t('Tools.pleaseEnter'),
+          },
           {
             type: 'number',
             min: 0,
@@ -353,7 +486,9 @@ export default {
     connectUrl() {
       const { host, port, ssl, endpoint } = this.connection
       const protocol = ssl ? 'wss://' : 'ws://'
-      return `${protocol}${host}:${port}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`
+      return `${protocol}${host}:${port}${
+        endpoint.startsWith('/') ? '' : '/'
+      }${endpoint}`
     },
   },
 
@@ -418,7 +553,9 @@ export default {
         if (error) {
           return
         }
-        this.subscriptions = this.subscriptions.filter(($) => $.topic !== item.topic)
+        this.subscriptions = this.subscriptions.filter(
+          ($) => $.topic !== item.topic,
+        )
       })
     },
     async _doSubscribe() {

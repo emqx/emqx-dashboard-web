@@ -35,21 +35,42 @@
                 <div v-for="(item, i) in configList" :key="i">
                   <template v-if="item.key !== 'listener'">
                     <el-col
-                      :span="item.type === 'textarea' || item.type === 'object' || item.type === 'array' ? 24 : 12"
+                      :span="
+                        item.type === 'textarea' ||
+                        item.type === 'object' ||
+                        item.type === 'array'
+                          ? 24
+                          : 12
+                      "
                     >
                       <el-form-item
-                        v-if="item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)"
+                        v-if="
+                          item.elType !== 'file' &&
+                          !['verify', 'tls_version'].includes(item.key)
+                        "
                         v-bind="item.formItemAttributes"
                       >
-                        <template v-if="item.formItemAttributes.description" slot="label">
+                        <template
+                          v-if="item.formItemAttributes.description"
+                          slot="label"
+                        >
                           {{ item.formItemAttributes.label }}
-                          <el-popover width="220" trigger="hover" placement="top">
-                            <div class="emq-popover-content" v-html="item.formItemAttributes.description"></div>
+                          <el-popover
+                            width="220"
+                            trigger="hover"
+                            placement="top"
+                          >
+                            <div
+                              class="emq-popover-content"
+                              v-html="item.formItemAttributes.description"
+                            ></div>
                             <i slot="reference" class="el-icon-question"></i>
                           </el-popover>
                         </template>
                         <template v-if="item.elType === 'object'">
-                          <key-and-value-editor v-model="record.config[item.key]"></key-and-value-editor>
+                          <key-and-value-editor
+                            v-model="record.config[item.key]"
+                          ></key-and-value-editor>
                         </template>
                         <template v-else-if="item.elType === 'array'">
                           <array-editor
@@ -87,7 +108,12 @@
                           >
                           </el-input>
 
-                          <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes"> </el-input>
+                          <el-input
+                            v-else
+                            v-model="record.config[item.key]"
+                            v-bind="item.bindAttributes"
+                          >
+                          </el-input>
                         </template>
 
                         <!-- select -->
@@ -112,13 +138,19 @@
                       <template v-else>
                         <el-form-item
                           v-if="
-                            ['true', true].includes(record.config['https_enabled']) ||
+                            ['true', true].includes(
+                              record.config['https_enabled'],
+                            ) ||
                             ['true', true].includes(record.config['ssl']) ||
-                            (record.config['ssl'] === undefined && record.config['https_enabled'] === undefined)
+                            (record.config['ssl'] === undefined &&
+                              record.config['https_enabled'] === undefined)
                           "
                           v-bind="item.formItemAttributes"
                         >
-                          <file-editor v-if="item.elType === 'file'" v-model="record.config[item.key]"></file-editor>
+                          <file-editor
+                            v-if="item.elType === 'file'"
+                            v-model="record.config[item.key]"
+                          ></file-editor>
                           <emq-select
                             v-else
                             v-model="record.config[item.key]"
@@ -202,7 +234,12 @@
 </template>
 
 <script>
-import { createModule, loadAllModules, updateModule, destroyModule } from '@/api/modules'
+import {
+  createModule,
+  loadAllModules,
+  updateModule,
+  destroyModule,
+} from '@/api/modules'
 import { renderParamsForm, fillI18n } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ArrayEditor from '@/components/ArrayEditor'
@@ -354,11 +391,17 @@ export default {
     },
     cleanFileContent(config) {
       const falseValues = [false, 'false']
-      if (falseValues.includes(config.ssl) || falseValues.includes(config.https_enabled)) {
+      if (
+        falseValues.includes(config.ssl) ||
+        falseValues.includes(config.https_enabled)
+      ) {
         config.verify = false
         Object.keys(config).forEach((key) => {
           const oneValue = config[key]
-          if (typeof oneValue === 'object' && Object.keys(oneValue).includes('file')) {
+          if (
+            typeof oneValue === 'object' &&
+            Object.keys(oneValue).includes('file')
+          ) {
             config[key] = {
               file: '',
               filename: '',
@@ -376,7 +419,10 @@ export default {
       if (!valid) {
         return
       }
-      if (Object.keys(this.listener).length && !this.record.config.listeners.length) {
+      if (
+        Object.keys(this.listener).length &&
+        !this.record.config.listeners.length
+      ) {
         this.$message.error(this.$t('Modules.emptyListenerTip'))
         return
       }
@@ -397,14 +443,18 @@ export default {
         this.buttonLoading = true
         this.record.type = this.moduleData.type
         const data = await createModule(this.record)
-        const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+        const addedModules =
+          JSON.parse(localStorage.getItem('addedModules')) || {}
         addedModules[data.type] = data.id
         localStorage.setItem('addedModules', JSON.stringify(addedModules))
         this.$message.success(this.$t('Modules.moduleAddSuccess'))
         this.exitDetail()
         this.buttonLoading = false
       } else {
-        const isEdited = !_.isEqual(this.record.config, this.originRecord.config)
+        const isEdited = !_.isEqual(
+          this.record.config,
+          this.originRecord.config,
+        )
         if (isEdited) {
           this.$confirm(this.$t('Modules.editTip'), this.$t('Base.warning'), {
             type: 'warning',
@@ -446,7 +496,9 @@ export default {
       Object.values(allFeatures).forEach((item) => {
         this.allModuleList = this.allModuleList.concat(item)
       })
-      const currentModule = this.allModuleList.find((item) => item.name === this.moduleData.type)
+      const currentModule = this.allModuleList.find(
+        (item) => item.name === this.moduleData.type,
+      )
       this.parseI18n([currentModule])
       const { params } = currentModule
 
@@ -468,7 +520,8 @@ export default {
         .then(async () => {
           await destroyModule(this.moduleData.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
-          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          const addedModules =
+            JSON.parse(localStorage.getItem('addedModules')) || {}
           delete addedModules[this.moduleData.type]
           localStorage.setItem('addedModules', JSON.stringify(addedModules))
           this.exitDetail()
@@ -481,7 +534,9 @@ export default {
         if (this.from === 'modules' || !isCancel) {
           this.$router.push('/modules')
         } else {
-          this.$router.push(`/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`)
+          this.$router.push(
+            `/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`,
+          )
         }
       }, 10)
     },
@@ -494,7 +549,9 @@ export default {
           this.record.config.listeners = listeners || []
         }
       }
-      this.originRecord.config.listeners = _.cloneDeep(this.record.config.listeners)
+      this.originRecord.config.listeners = _.cloneDeep(
+        this.record.config.listeners,
+      )
     },
     storeOriginData(configData) {
       const { form, rules } = configData

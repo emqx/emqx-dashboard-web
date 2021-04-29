@@ -7,7 +7,12 @@
             {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
           </p>
           <div class="page-header-top-start">
-            <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
+            <a
+              rel="noopener"
+              :href="docs.tutorial"
+              target="_blank"
+              class="link-item"
+            >
               <i class="icon el-icon-position"></i>
               {{ $t('RuleEngine.quickStart') }}
             </a>
@@ -19,7 +24,12 @@
     <div class="app-wrapper">
       <el-card shadow="never" class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/ruleengine/rules/create')">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            @click="$router.push('/ruleengine/rules/create')"
+          >
             {{ $t('Base.create') }}
           </el-button>
         </div>
@@ -37,7 +47,11 @@
               >
             </template>
           </el-table-column>
-          <el-table-column prop="for" min-width="120" :label="$t('RuleEngine.topic')">
+          <el-table-column
+            prop="for"
+            min-width="120"
+            :label="$t('RuleEngine.topic')"
+          >
             <template slot-scope="{ row }">
               <div v-for="(item, index) in row.for" :key="index">
                 {{ item }}
@@ -46,7 +60,10 @@
           </el-table-column>
           <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
             <template slot-scope="{ row }">
-              <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
+              <i
+                class="iconfont icon-tubiao-zhuzhuangtu btn btn-default"
+                @click="showMetrics(row)"
+              ></i>
             </template>
           </el-table-column>
           <el-table-column
@@ -57,7 +74,11 @@
           <el-table-column prop="status" :label="$t('RuleEngine.status')">
             <template slot-scope="{ row }">
               <el-tooltip
-                :content="row.enabled ? $t('RuleEngine.ruleEnabled') : $t('RuleEngine.ruleDisabled')"
+                :content="
+                  row.enabled
+                    ? $t('RuleEngine.ruleEnabled')
+                    : $t('RuleEngine.ruleDisabled')
+                "
                 placement="left"
               >
                 <el-switch
@@ -86,8 +107,12 @@
               <el-button type="dashed" size="mini" @click="editRule(row)">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="deleteRule(row)">
-                {{ $t('Base.delete') }}
+              <el-button
+                type="dashed danger"
+                size="mini"
+                @click="deleteRule(row)"
+              >
+                {{ $t('RuleEngine.delete') }}
               </el-button>
             </template>
           </el-table-column>
@@ -95,7 +120,11 @@
       </el-card>
     </div>
 
-    <el-drawer v-bind="rulesDrawer" direction="rtl" :visible.sync="metricsDrawerVisible">
+    <el-drawer
+      v-bind="rulesDrawer"
+      direction="rtl"
+      :visible.sync="metricsDrawerVisible"
+    >
       <div class="rule-metrics">
         <div class="metrics-item">
           <div class="metrics-item-title">
@@ -111,38 +140,62 @@
             </li>
 
             <li class="field-info-item">
-              <div class="field-title">{{ $t('RuleEngine.currentSpeed') }}:</div>
+              <div class="field-title">
+                {{ $t('RuleEngine.currentSpeed') }}:
+              </div>
 
               <span class="field-value">
                 {{ currentRules.metricsData.speed }}
-                <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
+                <span class="unit"
+                  >{{ $t('RuleEngine.times') }}/{{
+                    $t('RuleEngine.second')
+                  }}</span
+                >
               </span>
             </li>
 
             <li class="field-info-item">
-              <div class="field-title">{{ $t('RuleEngine.maximumSpeed') }}:</div>
+              <div class="field-title">
+                {{ $t('RuleEngine.maximumSpeed') }}:
+              </div>
               <span class="field-value">
                 {{ currentRules.metricsData.speed_max }}
-                <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
+                <span class="unit"
+                  >{{ $t('RuleEngine.times') }}/{{
+                    $t('RuleEngine.second')
+                  }}</span
+                >
               </span>
             </li>
 
             <li class="field-info-item">
-              <div class="field-title">{{ $t('RuleEngine.last5MinutesSpeed') }}:</div>
+              <div class="field-title">
+                {{ $t('RuleEngine.last5MinutesSpeed') }}:
+              </div>
               <span class="field-value">
                 {{ currentRules.metricsData.speed_last5m }}
-                <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
+                <span class="unit"
+                  >{{ $t('RuleEngine.times') }}/{{
+                    $t('RuleEngine.second')
+                  }}</span
+                >
               </span>
             </li>
           </ul>
         </div>
 
         <div class="metrics-item">
-          <div class="metrics-item-title">{{ $t('RuleEngine.actionMetrics') }}</div>
+          <div class="metrics-item-title">
+            {{ $t('RuleEngine.actionMetrics') }}
+          </div>
 
           <template v-if="currentRules.actions.length === 0"> </template>
 
-          <div v-for="(item, i) in currentRules.actions" :key="i" class="metrics-item-body">
+          <div
+            v-for="(item, i) in currentRules.actions"
+            :key="i"
+            class="metrics-item-body"
+          >
             <ul class="field-info metrics-item-body action-metrics">
               <div class="item-title">
                 {{ item.name }}
@@ -169,7 +222,14 @@
 </template>
 
 <script>
-import { loadRules, loadRuleDetails, loadActions, destroyRule, loadRuleEvents, updateRule } from '@/api/rules'
+import {
+  loadRules,
+  loadRuleDetails,
+  loadActions,
+  destroyRule,
+  loadRuleEvents,
+  updateRule,
+} from '@/api/rules'
 import { getLink } from '@/common/utils'
 
 export default {
@@ -264,7 +324,10 @@ export default {
 
   async created() {
     const events = await loadRuleEvents()
-    this.filterOptions.for = events.map(($) => ({ text: $.event, value: $.event }))
+    this.filterOptions.for = events.map(($) => ({
+      text: $.event,
+      value: $.event,
+    }))
     this.loadActionsFilter().then(this.loadData)
   },
 
@@ -306,7 +369,10 @@ export default {
       const actions = await loadActions({
         fillI18n: true,
       })
-      this.filterOptions.actions = actions.map(($) => ({ text: $.title, value: $.name }))
+      this.filterOptions.actions = actions.map(($) => ({
+        text: $.title,
+        value: $.name,
+      }))
 
       this.actionsMap = {}
       this.filterOptions.actions.forEach((action) => {
@@ -330,7 +396,9 @@ export default {
       updateRule(id, { enabled })
         .then((res) => {
           if (res) {
-            const msg = enabled ? this.$t('RuleEngine.ruleEnabled') : this.$t('RuleEngine.ruleDisabled')
+            const msg = enabled
+              ? this.$t('RuleEngine.ruleEnabled')
+              : this.$t('RuleEngine.ruleDisabled')
             this.$message.success(msg)
           }
         })

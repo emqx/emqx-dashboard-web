@@ -1,6 +1,9 @@
 <template>
   <div>
-    <pre ref="codeView" class="code-view"><code :class="lang">{{ code }}</code></pre>
+    <pre
+      ref="codeView"
+      class="code-view"
+    ><code :class="lang">{{ code }}</code></pre>
   </div>
 </template>
 

@@ -119,7 +119,8 @@ export default {
         .then(async () => {
           await destroyModule(item.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
-          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          const addedModules =
+            JSON.parse(localStorage.getItem('addedModules')) || {}
           delete addedModules[item.type]
           localStorage.setItem('addedModules', JSON.stringify(addedModules))
           this.loadData()

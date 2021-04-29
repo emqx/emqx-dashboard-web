@@ -2,7 +2,12 @@
   <div class="overview app-wrapper">
     <el-row class="content-wrapper" :gutter="20">
       <el-col :span="6">
-        <el-card shadow="never" class="app-card" :bordered="true" :loading="pageLoading">
+        <el-card
+          shadow="never"
+          class="app-card"
+          :bordered="true"
+          :loading="pageLoading"
+        >
           <div class="app-card-title">
             {{ $t('Overview.messageOut') }}
           </div>
@@ -11,10 +16,16 @@
             <span>
               {{ currentMetrics.sent }}
             </span>
-            <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
+            <span class="unit"
+              >{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span
+            >
 
             <div class="flux-wrapper">
-              <simple-line :value="currentMetricsLogs.sent" type="bar" color="#34c388"></simple-line>
+              <simple-line
+                :value="currentMetricsLogs.sent"
+                type="bar"
+                color="#34c388"
+              ></simple-line>
             </div>
           </div>
 
@@ -27,7 +38,12 @@
       </el-col>
 
       <el-col :span="6">
-        <el-card shadow="never" class="app-card" :bordered="true" :loading="pageLoading">
+        <el-card
+          shadow="never"
+          class="app-card"
+          :bordered="true"
+          :loading="pageLoading"
+        >
           <div class="app-card-title">
             {{ $t('Overview.messageIn') }}
           </div>
@@ -36,10 +52,15 @@
             <span>
               {{ currentMetrics.received }}
             </span>
-            <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
+            <span class="unit"
+              >{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span
+            >
 
             <div class="flux-wrapper">
-              <simple-line v-model="currentMetricsLogs.received" type="bar"></simple-line>
+              <simple-line
+                v-model="currentMetricsLogs.received"
+                type="bar"
+              ></simple-line>
             </div>
           </div>
 
@@ -52,7 +73,12 @@
       </el-col>
 
       <el-col :span="6">
-        <el-card shadow="never" class="app-card" :bordered="true" :loading="pageLoading">
+        <el-card
+          shadow="never"
+          class="app-card"
+          :bordered="true"
+          :loading="pageLoading"
+        >
           <div class="app-card-title">
             {{ $t('Overview.subscriptionNumber') }}
           </div>
@@ -62,7 +88,11 @@
               {{ currentMetrics.subscription }}
             </span>
             <div class="flux-wrapper">
-              <simple-line v-model="currentMetricsLogs.subscription" color="#58afff" type="bar"></simple-line>
+              <simple-line
+                v-model="currentMetricsLogs.subscription"
+                color="#58afff"
+                type="bar"
+              ></simple-line>
             </div>
           </div>
 
@@ -75,7 +105,12 @@
       </el-col>
 
       <el-col v-if="$hasShow('monitor.connections')" :span="6">
-        <el-card shadow="never" class="app-card" :bordered="true" :loading="pageLoading">
+        <el-card
+          shadow="never"
+          class="app-card"
+          :bordered="true"
+          :loading="pageLoading"
+        >
           <div class="app-card-title">
             {{ $t('Overview.connectionNumber') }}
           </div>
@@ -129,7 +164,12 @@
 
     <polyline-cards></polyline-cards>
 
-    <el-card shadow="never" v-if="$hasShow('monitor.license')" class="license-card" :loading="pageLoading">
+    <el-card
+      shadow="never"
+      v-if="$hasShow('monitor.license')"
+      class="license-card"
+      :loading="pageLoading"
+    >
       <div class="emq-title">
         {{ $t('Overview.license') }}
       </div>
@@ -178,17 +218,30 @@
         >
           {{ $t('Overview.licenseEvaluationTip') }}
         </div>
-        <div v-else-if="license.expiry === true" class="description" v-html="$t('Overview.licenseExpiryTip')">
+        <div
+          v-else-if="license.expiry === true"
+          class="description"
+          v-html="$t('Overview.licenseExpiryTip')"
+        >
           {{ $t('Overview.licenseExpiryTip') }}
         </div>
         <div v-else class="description">
           {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>
         <div
-          v-if="license.type === 'trial' && license.customer_type !== evaluation && license.expiry === false"
+          v-if="
+            license.type === 'trial' &&
+            license.customer_type !== evaluation &&
+            license.expiry === false
+          "
           class="oper"
         >
-          <el-tooltip effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false">
+          <el-tooltip
+            effect="dark"
+            :content="$t('Overview.forTrialEdition')"
+            placement="top"
+            :visible-arrow="false"
+          >
             <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
           </el-tooltip>
         </div>
@@ -214,10 +267,17 @@
         </p>
       </div>
       <div v-if="!isLicenseExpiry" class="tip-checkbox">
-        <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">{{ $t('Overview.notPromptAgain') }}</el-checkbox>
+        <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">{{
+          $t('Overview.notPromptAgain')
+        }}</el-checkbox>
       </div>
       <div class="tip-button">
-        <el-button type="primary" size="small" @click="licenseTipVisible = false">{{ $t('Overview.konw') }}</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="licenseTipVisible = false"
+          >{{ $t('Overview.konw') }}</el-button
+        >
       </div>
     </el-dialog>
   </div>
@@ -225,7 +285,11 @@
 
 <script>
 import Moment from 'moment'
-import { loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo } from '@/api/overview'
+import {
+  loadNodes as loadNodesApi,
+  loadCurrentMetrics,
+  loadLicenseInfo,
+} from '@/api/overview'
 import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
 import PercentageCards from './components/PercentageCards'
@@ -363,7 +427,9 @@ export default {
     formatConnection() {
       const { connection } = this.currentMetrics
       const { max_connections } = this.license
-      return `${this._formatNumber(connection)}/${this._formatNumber(max_connections)}`
+      return `${this._formatNumber(connection)}/${this._formatNumber(
+        max_connections,
+      )}`
     },
     _formatNumber(num) {
       if (num > 10000) {
@@ -376,7 +442,10 @@ export default {
       this.license = await loadLicenseInfo()
       setTimeout(() => {
         // evaluation 许可证
-        if (this.license.customer_type === this.evaluation && localStorage.getItem('licenseTipVisible') !== 'false') {
+        if (
+          this.license.customer_type === this.evaluation &&
+          localStorage.getItem('licenseTipVisible') !== 'false'
+        ) {
           this.licenseTipVisible = true
           this.isLicenseExpiry = false
           this.licenseTipWidth = 520
@@ -403,7 +472,10 @@ export default {
     },
     setCurrentMetricsLogsRealtime(state = {}) {
       ;['received', 'sent', 'subscription'].forEach((key) => {
-        this.currentMetricsLogs[key] = this.currentMetricsLogs[key] || { x: [], y: [] }
+        this.currentMetricsLogs[key] = this.currentMetricsLogs[key] || {
+          x: [],
+          y: [],
+        }
         const currentValue = state[key] || 0
         this.currentMetricsLogs[key].x.push(this.getNow())
         this.currentMetricsLogs[key].y.push(currentValue)

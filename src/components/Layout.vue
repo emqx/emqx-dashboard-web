@@ -3,14 +3,27 @@
   <div>
     <el-container>
       <el-aside :style="{ width: elAsideWidth }">
-        <div class="logo" :style="{ paddingLeft: leftBarCollapse ? '6px' : '20px', width: elAsideWidth }">
+        <div
+          class="logo"
+          :style="{
+            paddingLeft: leftBarCollapse ? '6px' : '20px',
+            width: elAsideWidth,
+          }"
+        >
           <img class="logo-img" src="../assets/emq_logo.svg" alt="logo" />
         </div>
         <left-bar></left-bar>
       </el-aside>
       <el-container class="layout" style="min-height: 100vh">
-        <el-main style="margin: 0; padding: 0" :style="{ marginLeft: elMainStyle }">
-          <el-header v-if="$hasShow('nav-header')" class="content-header" :style="{ left: elMainStyle }">
+        <el-main
+          style="margin: 0; padding: 0"
+          :style="{ marginLeft: elMainStyle }"
+        >
+          <el-header
+            v-if="$hasShow('nav-header')"
+            class="content-header"
+            :style="{ left: elMainStyle }"
+          >
             <nav-header></nav-header>
             <!-- <nav-tabs></nav-tabs> -->
             <template v-if="hasSubMenu">
@@ -22,9 +35,11 @@
                 class="top-submenu"
               >
                 <template v-for="route in topLvRoute.children">
-                  <el-menu-item :key="topLvRoute.path + '/' + route.path" :index="topLvRoute.path + '/' + route.path">{{
-                    $t(`components.${route.path}`)
-                  }}</el-menu-item>
+                  <el-menu-item
+                    :key="topLvRoute.path + '/' + route.path"
+                    :index="topLvRoute.path + '/' + route.path"
+                    >{{ $t(`components.${route.path}`) }}</el-menu-item
+                  >
                 </template>
               </el-menu>
             </template>
@@ -95,7 +110,9 @@ export default {
       //console.log(this.$route.matched)
       const { children, path: topPath } = this.topLvRoute
       const { path } = this.$route
-      const childRoute = Array.prototype.find.call(children, (v) => path.indexOf(v.path) >= 0) || {}
+      const childRoute =
+        Array.prototype.find.call(children, (v) => path.indexOf(v.path) >= 0) ||
+        {}
       return `${topPath}/${childRoute && childRoute.path}` || null
     },
     hasSubMenu() {

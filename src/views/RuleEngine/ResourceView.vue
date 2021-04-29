@@ -25,8 +25,13 @@
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.state') }}:</div>
             <span class="field-value">
-              <el-badge :status="isAlive ? 'success' : 'danger'" is-dot> </el-badge
-              ><span>{{ isAlive ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable') }}</span>
+              <el-badge :status="isAlive ? 'success' : 'danger'" is-dot>
+              </el-badge
+              ><span>{{
+                isAlive
+                  ? $t('RuleEngine.available')
+                  : $t('RuleEngine.notAvailable')
+              }}</span>
               <el-button
                 v-if="!isAlive"
                 :loading="reloading"
@@ -42,7 +47,9 @@
 
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.resourceTypes') }}:</div>
-            <span class="field-value">{{ record.typeInfo.title }} ({{ record.type }})</span>
+            <span class="field-value"
+              >{{ record.typeInfo.title }} ({{ record.type }})</span
+            >
           </li>
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.resourceDes') }}:</div>
@@ -55,7 +62,9 @@
           </li>
 
           <li class="field-info-item">
-            <div class="field-title">{{ $t('RuleEngine.detailedStatus') }}:</div>
+            <div class="field-title">
+              {{ $t('RuleEngine.detailedStatus') }}:
+            </div>
             <span class="field-value">
               <el-button type="dashed" size="mini" @click="toggleShowConfig">
                 {{ showConfig ? $t('RuleEngine.hide') : $t('Base.view') }}
@@ -82,7 +91,11 @@
 </template>
 
 <script>
-import { loadResourceDetails, reconnectResource, destroyResource } from '@/api/rules'
+import {
+  loadResourceDetails,
+  reconnectResource,
+  destroyResource,
+} from '@/api/rules'
 import ResourceNode from './components/ResourceNode'
 import ResourceField from './components/ResourceField'
 

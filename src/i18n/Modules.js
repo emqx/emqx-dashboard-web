@@ -180,7 +180,8 @@ export default {
     en: 'Submit',
   },
   editTip: {
-    zh: '应用更改将会短暂重启当前模块，可能会造成数据丢失或服务中断，请确保在不影响业务的情况下提交更改。',
+    zh:
+      '应用更改将会短暂重启当前模块，可能会造成数据丢失或服务中断，请确保在不影响业务的情况下提交更改。',
     en: `
       Applying changes will immediately restart the current module which may cause data loss
       or service interruption. Please make sure to submit the changes without affecting the business.`,
@@ -230,7 +231,8 @@ export default {
     en: 'Allowed',
   },
   useModulesTip: {
-    zh: 'EMQ X 提供了丰富的模块用于替换插件，建议您前往使用 <a href="/#/modules">模块</a>。',
+    zh:
+      'EMQ X 提供了丰富的模块用于替换插件，建议您前往使用 <a href="/#/modules">模块</a>。',
     en: `EMQ X provides a wealth of Modules to replace Plugin,
     it is recommended that you go to use <a href="/#/modules">Modules</a>.`,
   },

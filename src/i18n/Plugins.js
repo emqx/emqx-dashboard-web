@@ -120,8 +120,10 @@ export default {
     en: 'Stop Success',
   },
   pluginTips: {
-    zh: '该功能仅做调试使用，配置将在 Broker 重启后将丢失，请将配置写入相应配置文件',
-    en: 'The module is only used for debugging or testing, and the configuration will be lost when broker restart',
+    zh:
+      '该功能仅做调试使用，配置将在 Broker 重启后将丢失，请将配置写入相应配置文件',
+    en:
+      'The module is only used for debugging or testing, and the configuration will be lost when broker restart',
   },
   configuration: {
     zh: '配置信息',
@@ -160,7 +162,8 @@ export default {
     en: 'Algorithm',
   },
   payloadDesc: {
-    zh: '启用 verify_claims 时有效, 可以使用 %u，%c 占位符分别替换输入的 username 和 clientid，详见',
+    zh:
+      '启用 verify_claims 时有效, 可以使用 %u，%c 占位符分别替换输入的 username 和 clientid，详见',
     en:
       'It is valid when verify_claims is enabled. You can use% u and% c placeholders to replace the entered user name and clientid respectively. For details, see',
   },
@@ -203,7 +206,8 @@ export default {
   },
   mnesiaTip: {
     zh: '默认使用 Username，以 auth.mnesia.as 配置为准',
-    en: 'Username is used by default, but follow the auth.mnesia.as configuration',
+    en:
+      'Username is used by default, but follow the auth.mnesia.as configuration',
   },
   authMnesiaRequired: {
     zh: '请填写完整的认证信息',

@@ -1,5 +1,11 @@
 <template>
-  <el-select :value="rawValue" v-bind="$attrs" class="emq-select" v-on="$listeners" @change="valueChange">
+  <el-select
+    :value="rawValue"
+    v-bind="$attrs"
+    class="emq-select"
+    v-on="$listeners"
+    @change="valueChange"
+  >
     <slot>
       <el-option
         v-for="(item, i) in options"
@@ -61,7 +67,9 @@ export default {
   computed: {
     rawValue: {
       get() {
-        return typeof this.value === 'boolean' ? this.value.toString() : this.value
+        return typeof this.value === 'boolean'
+          ? this.value.toString()
+          : this.value
       },
       set(val) {
         let value = null
@@ -91,13 +99,23 @@ export default {
 
   created() {
     this.loadData()
-    this.$emit('updateConfig', this.extraConfigs[this.rawValue], this.rawValue, this.extraConfigs)
+    this.$emit(
+      'updateConfig',
+      this.extraConfigs[this.rawValue],
+      this.rawValue,
+      this.extraConfigs,
+    )
   },
 
   methods: {
     valueChange(type) {
       if (type) {
-        this.$emit('updateConfig', this.extraConfigs[type], type, this.extraConfigs)
+        this.$emit(
+          'updateConfig',
+          this.extraConfigs[type],
+          type,
+          this.extraConfigs,
+        )
       }
     },
     async loadData() {

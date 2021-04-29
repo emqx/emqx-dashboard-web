@@ -57,6 +57,7 @@ export default {
   },
   fileTooBig: {
     zh: '上传文件过大，请使用命令行工具上传',
-    en: 'The upload file is too large, please use the command line tool to upload',
+    en:
+      'The upload file is too large, please use the command line tool to upload',
   },
 }

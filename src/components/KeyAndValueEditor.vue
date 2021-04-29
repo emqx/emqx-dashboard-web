@@ -13,9 +13,17 @@
         ></el-input>
       </template>
     </el-table-column>
-    <el-table-column prop="value" :label="$t('components.value')" min-width="150px">
+    <el-table-column
+      prop="value"
+      :label="$t('components.value')"
+      min-width="150px"
+    >
       <template slot-scope="{ row }">
-        <el-input v-model="row.value" size="mini" @input="atInputChange"></el-input>
+        <el-input
+          v-model="row.value"
+          size="mini"
+          @input="atInputChange"
+        ></el-input>
       </template>
     </el-table-column>
     <el-table-column width="60px">

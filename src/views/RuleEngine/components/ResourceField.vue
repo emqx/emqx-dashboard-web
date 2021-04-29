@@ -2,10 +2,18 @@
   <el-row :gutter="40" class="resource-field">
     <ul class="field-info">
       <el-col v-for="(item, i) in configList" :key="i" :span="12">
-        <li v-if="item.value.filename !== ''" class="field-info-item" :title="item.description">
+        <li
+          v-if="item.value.filename !== ''"
+          class="field-info-item"
+          :title="item.description"
+        >
           <div class="field-title">{{ item.title }}:</div>
           <span class="field-value">
-            <span :class="{ 'field-password': showPwdIndex !== i && item.key === 'password' }">
+            <span
+              :class="{
+                'field-password': showPwdIndex !== i && item.key === 'password',
+              }"
+            >
               {{ item.value | itemValue({ i, key: item.key, showPwdIndex }) }}
             </span>
             <span
@@ -57,10 +65,14 @@ export default {
   computed: {
     configList() {
       // Show or hide certain items based on the value of ssl/https_enabled
-      const dependentList = this.config.filter((item) => item.key === 'ssl' || item.key === 'https_enabled')
+      const dependentList = this.config.filter(
+        (item) => item.key === 'ssl' || item.key === 'https_enabled',
+      )
       if (dependentList.length > 0 && !dependentList[0].value) {
         // hide
-        return this.config.filter((item) => !['verify', 'tls_version'].includes(item.key))
+        return this.config.filter(
+          (item) => !['verify', 'tls_version'].includes(item.key),
+        )
       }
       // show
       return this.config

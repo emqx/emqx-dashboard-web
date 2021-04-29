@@ -1,8 +1,20 @@
 <template>
-  <div class="nav-tabs" :style="{ left: !$store.state.leftBarCollapse ? '201px' : '80px' }">
-    <el-scrollbar ref="scrollContainer" :vertical="false" class="scroll-container">
-      <el-button plain size="mini" :class="{ active: isIndex }" @click="$router.push('/')">
-        {{ $t('components.monitor') }}
+  <div
+    class="nav-tabs"
+    :style="{ left: !$store.state.leftBarCollapse ? '201px' : '80px' }"
+  >
+    <el-scrollbar
+      ref="scrollContainer"
+      :vertical="false"
+      class="scroll-container"
+    >
+      <el-button
+        plain
+        size="mini"
+        :class="{ active: isIndex }"
+        @click="$router.push('/')"
+      >
+        {{ $t('Base.homePage') }}
       </el-button>
       <el-button
         v-for="(tab, index) in tabs"
@@ -18,7 +30,13 @@
         <template v-else-if="tab.name === 'clientid'">
           {{ tab.url | getClientId }}
         </template>
-        <template v-else-if="tab.name === 'ruleId' || tab.name === 'resourceId' || tab.name === 'schemaName'">
+        <template
+          v-else-if="
+            tab.name === 'ruleId' ||
+            tab.name === 'resourceId' ||
+            tab.name === 'schemaName'
+          "
+        >
           {{ tab.url | getParamsId }}
         </template>
         <template v-else>
@@ -106,7 +124,9 @@ export default {
         return
       }
       name = this.getTabName(name, oper)
-      const tabIndex = this.tabs.findIndex(($) => $.url === fullPath || $.name === name)
+      const tabIndex = this.tabs.findIndex(
+        ($) => $.url === fullPath || $.name === name,
+      )
       if (tabIndex === -1) {
         const tab = { name, url: fullPath }
         this.$store.dispatch('ADD_NAV_TABS', tab)

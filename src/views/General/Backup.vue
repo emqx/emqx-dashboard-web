@@ -11,7 +11,12 @@
     <div class="app-wrapper">
       <el-card shadow="never" class="emq-list-card">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="handleExport">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            @click="handleExport"
+          >
             {{ $t('Backup.createBackup') }}
           </el-button>
           <el-upload
@@ -32,14 +37,23 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="node" :label="$t('RuleEngine.node')"></el-table-column>
-          <el-table-column prop="filename" :label="$t('Backup.filename')"></el-table-column>
+          <el-table-column
+            prop="node"
+            :label="$t('RuleEngine.node')"
+          ></el-table-column>
+          <el-table-column
+            prop="filename"
+            :label="$t('Backup.filename')"
+          ></el-table-column>
           <el-table-column prop="size" :label="$t('Backup.size')">
             <template slot-scope="{ row }">
               {{ row.size | renderSize }}
             </template>
           </el-table-column>
-          <el-table-column prop="created_at" :label="$t('Backup.createAt')"></el-table-column>
+          <el-table-column
+            prop="created_at"
+            :label="$t('Backup.createAt')"
+          ></el-table-column>
           <el-table-column width="250px">
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="handleDownload(row)">{{ $t('Backup.download') }} </el-button>
@@ -56,7 +70,14 @@
 </template>
 
 <script>
-import { loadBackup, exportBackup, deleteBackup, downloadFile, importBackup, uploadBackupFile } from '@/api/backup'
+import {
+  loadBackup,
+  exportBackup,
+  deleteBackup,
+  downloadFile,
+  importBackup,
+  uploadBackupFile,
+} from '@/api/backup'
 
 export default {
   name: 'Backup',

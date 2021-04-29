@@ -23,7 +23,12 @@
               </el-input>
             </el-col>
             <div class="col-oper">
-              <el-button type="primary" icon="el-icon-plus" size="small" @click="save">
+              <el-button
+                type="primary"
+                icon="el-icon-plus"
+                size="small"
+                @click="save"
+              >
                 {{ $t('Base.add') }}
               </el-button>
             </div>
@@ -31,13 +36,18 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="username" :label="$t('Clients.username')"> </el-table-column>
+          <el-table-column prop="username" :label="$t('Clients.username')">
+          </el-table-column>
           <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="showEdit(row)">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="handleDelete(row)">
+              <el-button
+                type="dashed danger"
+                size="mini"
+                @click="handleDelete(row)"
+              >
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -46,8 +56,19 @@
       </el-card>
     </div>
 
-    <el-dialog :visible.sync="editVisible" width="400px" :title="$t('Base.edit')" @keyup.enter.native="handleEdit">
-      <el-form ref="editRecord" class="el-form--public app-info" size="medium" :rules="rules" :model="editRecord">
+    <el-dialog
+      :visible.sync="editVisible"
+      width="400px"
+      :title="$t('Base.edit')"
+      @keyup.enter.native="handleEdit"
+    >
+      <el-form
+        ref="editRecord"
+        class="el-form--public app-info"
+        size="medium"
+        :rules="rules"
+        :model="editRecord"
+      >
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item prop="username" :label="$t('Clients.username')">
@@ -56,14 +77,22 @@
           </el-col>
           <el-col :span="24">
             <el-form-item prop="password" label="Password">
-              <el-input v-model="editRecord.password" type="password"></el-input>
+              <el-input
+                v-model="editRecord.password"
+                type="password"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" class="cache-btn" @click="editVisible = false">
+        <el-button
+          plain
+          size="small"
+          class="cache-btn"
+          @click="editVisible = false"
+        >
           {{ $t('Base.cancel') }}
         </el-button>
         <el-button type="primary" size="small" @click="handleEdit">

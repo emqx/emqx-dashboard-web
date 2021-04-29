@@ -22,19 +22,36 @@
             :show-message="false"
             @keyup.enter.native="nativeLogin"
           >
-            <el-alert v-if="loginError" :title="loginError" type="error" @close="loginError = ''"> </el-alert>
+            <el-alert
+              v-if="loginError"
+              :title="loginError"
+              type="error"
+              @close="loginError = ''"
+            >
+            </el-alert>
 
             <el-form-item prop="username">
-              <el-input v-model="record.username" :placeholder="$t('Base.userName')"></el-input>
+              <el-input
+                v-model="record.username"
+                :placeholder="$t('Base.userName')"
+              ></el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input v-model="record.password" type="password" :placeholder="$t('Base.password')"></el-input>
+              <el-input
+                v-model="record.password"
+                type="password"
+                :placeholder="$t('Base.password')"
+              ></el-input>
             </el-form-item>
 
-            <el-checkbox v-model="record.remember">{{ $t('Base.remember') }}</el-checkbox>
+            <el-checkbox v-model="record.remember">{{
+              $t('Base.remember')
+            }}</el-checkbox>
 
             <el-form-item class="oper-wrapper" label="">
-              <el-button class="sub-btn" type="primary" @click="nativeLogin">{{ $t('Base.signIn') }}</el-button>
+              <el-button class="sub-btn" type="primary" @click="nativeLogin">{{
+                $t('Base.signIn')
+              }}</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -84,7 +101,11 @@ export default {
       this.fromCloud = true
     }
     const { lang } = this.$route.query
-    if (['en', 'zh'].indexOf(lang) !== -1 && this.language !== lang && this.fromCloud) {
+    if (
+      ['en', 'zh'].indexOf(lang) !== -1 &&
+      this.language !== lang &&
+      this.fromCloud
+    ) {
       document.querySelector('html').setAttribute('lang', lang)
       localStorage.setItem('language', lang)
       this.$i18n.locale = lang
@@ -105,9 +126,15 @@ export default {
             return
           }
           this.loginError = ''
-          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember })
+          this.$store.dispatch('UPDATE_USER_INFO', {
+            username,
+            password,
+            remember,
+          })
           setTimeout(() => {
-            const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query
+            const {
+              to = this.fromCloud ? '/users_and_acl' : '/',
+            } = this.$route.query
             this.$router.replace({
               path: to,
             })

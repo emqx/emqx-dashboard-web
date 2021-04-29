@@ -1,12 +1,19 @@
 <template>
   <div class="node-basic-card">
     <div class="version-wrapper">
-      <div class="version-title">{{ $t('Overview.version') }}: {{ record.version }}</div>
+      <div class="version-title">
+        {{ $t('Overview.version') }}: {{ record.version }}
+      </div>
     </div>
 
     <div class="basic-info">
       <el-row>
-        <el-form class="node-form" label-suffix=":" label-position="left" label-width="150px">
+        <el-form
+          class="node-form"
+          label-suffix=":"
+          label-position="left"
+          label-width="150px"
+        >
           <el-col :span="12">
             <el-form-item :label="$t('Overview.systemTime')">
               <span class="form-item-value">{{ record.datetime }}</span>
@@ -15,7 +22,8 @@
           <el-col :span="12">
             <el-form-item :label="$t('Overview.memory')">
               <span class="form-item-value">
-                {{ record.memory_used | formatMemory }} / {{ record.memory_total | formatMemory }}
+                {{ record.memory_used | formatMemory }} /
+                {{ record.memory_total | formatMemory }}
               </span>
             </el-form-item>
           </el-col>
@@ -36,20 +44,35 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="`Erlang ${$t('Overview.process')}`">
-              <span class="form-item-value">{{ record.process_used }} / {{ record.process_available }}</span>
+              <span class="form-item-value"
+                >{{ record.process_used }} /
+                {{ record.process_available }}</span
+              >
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.nodeState')">
               <span class="form-item-value">
-                <el-badge is-dot :status="record.node_status === 'Running' ? 'success' : 'danger'"> </el-badge
-                ><span>{{ record.node_status === 'Running' ? $t('Overview.running') : $t('Overview.stopped') }}</span>
+                <el-badge
+                  is-dot
+                  :status="
+                    record.node_status === 'Running' ? 'success' : 'danger'
+                  "
+                >
+                </el-badge
+                ><span>{{
+                  record.node_status === 'Running'
+                    ? $t('Overview.running')
+                    : $t('Overview.stopped')
+                }}</span>
               </span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="`CPU ${$t('Overview.load')}`">
-              <span class="form-item-value"> {{ record.load1 }} / {{ record.load5 }} / {{ record.load15 }} </span>
+              <span class="form-item-value">
+                {{ record.load1 }} / {{ record.load5 }} / {{ record.load15 }}
+              </span>
               <el-popover trigger="hover" content="load1/load5/load15">
                 <i slot="reference" class="el-icon-question"></i>
               </el-popover>
@@ -57,37 +80,52 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.currentConnection')">
-              <span class="form-item-value"> {{ record['connections.count'] }} / {{ record['connections.max'] }} </span>
+              <span class="form-item-value">
+                {{ record['connections.count'] }} /
+                {{ record['connections.max'] }}
+              </span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.topics')">
-              <span class="form-item-value"> {{ record['topics.count'] }} / {{ record['topics.max'] }} </span>
+              <span class="form-item-value">
+                {{ record['topics.count'] }} / {{ record['topics.max'] }}
+              </span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.subscription')">
               <span class="form-item-value">
-                {{ record['subscriptions.count'] }} / {{ record['subscriptions.max'] }}
+                {{ record['subscriptions.count'] }} /
+                {{ record['subscriptions.max'] }}
               </span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.retained')">
-              <span class="form-item-value"> {{ record['retained.count'] }} / {{ record['retained.max'] }} </span>
+              <span class="form-item-value">
+                {{ record['retained.count'] }} / {{ record['retained.max'] }}
+              </span>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.shareSubscription')">
               <span class="form-item-value">
-                {{ record['subscriptions.shared.count'] }} / {{ record['subscriptions.shared.max'] }}
+                {{ record['subscriptions.shared.count'] }} /
+                {{ record['subscriptions.shared.max'] }}
               </span>
             </el-form-item>
           </el-col>
         </el-form>
       </el-row>
 
-      <el-button v-if="showButton" class="form-btn" type="primary" size="small" @click="toDetails">
+      <el-button
+        v-if="showButton"
+        class="form-btn"
+        type="primary"
+        size="small"
+        @click="toDetails"
+      >
         {{ $t('Overview.viewMore') }}
       </el-button>
     </div>

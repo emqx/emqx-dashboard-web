@@ -1,8 +1,16 @@
 <template>
   <div class="listeners">
-    <div v-for="(item, index) in showItemList" :key="index" class="listener-item">
+    <div
+      v-for="(item, index) in showItemList"
+      :key="index"
+      class="listener-item"
+    >
       <div class="listener-item-head">
-        <div class="listener-item-type" v-for="(key, i) in Object.keys(item)" :key="i">
+        <div
+          class="listener-item-type"
+          v-for="(key, i) in Object.keys(item)"
+          :key="i"
+        >
           <div class="title">{{ $t(`Modules.${key}`) }}</div>
           <div class="desc">{{ item[key] }}</div>
         </div>
@@ -21,25 +29,50 @@
       {{ $t('Modules.addListener') }}
     </el-button>
 
-    <el-dialog @open="loadConfigList" :visible.sync="listenerDialogVisible" :title="listenerDialogTitle" width="520px">
-      <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
+    <el-dialog
+      @open="loadConfigList"
+      :visible.sync="listenerDialogVisible"
+      :title="listenerDialogTitle"
+      width="520px"
+    >
+      <el-form
+        ref="record"
+        :model="record"
+        :rules="rules"
+        size="small"
+        label-position="top"
+      >
         <el-row class="config-item-wrapper" :gutter="20">
           <template v-if="showConfigList.length > 0">
             <div v-for="(item, i) in showConfigList" :key="i">
-              <el-col :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12">
+              <el-col
+                :span="
+                  item.type === 'textarea' || item.type === 'object' ? 24 : 12
+                "
+              >
                 <el-form-item v-bind="item.formItemAttributes">
-                  <template v-if="item.formItemAttributes.description" slot="label">
+                  <template
+                    v-if="item.formItemAttributes.description"
+                    slot="label"
+                  >
                     {{ item.formItemAttributes.label }}
                     <el-popover width="220" trigger="hover" placement="top">
-                      <div class="emq-popover-content" v-html="item.formItemAttributes.description"></div>
+                      <div
+                        class="emq-popover-content"
+                        v-html="item.formItemAttributes.description"
+                      ></div>
                       <i slot="reference" class="el-icon-question"></i>
                     </el-popover>
                   </template>
                   <template v-if="item.elType === 'object'">
-                    <key-and-value-editor v-model="record.config[item.key]"></key-and-value-editor>
+                    <key-and-value-editor
+                      v-model="record.config[item.key]"
+                    ></key-and-value-editor>
                   </template>
                   <template v-else-if="item.elType === 'file'">
-                    <file-editor v-model="record.config[item.key]"></file-editor>
+                    <file-editor
+                      v-model="record.config[item.key]"
+                    ></file-editor>
                   </template>
                   <!-- input -->
                   <template v-else-if="item.elType !== 'select'">
@@ -56,7 +89,12 @@
                       show-password
                     >
                     </el-input>
-                    <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes"> </el-input>
+                    <el-input
+                      v-else
+                      v-model="record.config[item.key]"
+                      v-bind="item.bindAttributes"
+                    >
+                    </el-input>
                   </template>
                   <!-- select -->
                   <template v-else>
@@ -86,7 +124,12 @@
         <el-button size="small" @click="handleCancel">
           {{ $t('Base.cancel') }}
         </el-button>
-        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">
+        <el-button
+          class="dialog-primary-btn"
+          type="primary"
+          size="small"
+          @click="handleCreate"
+        >
           {{ $t('Base.confirm') }}
         </el-button>
       </div>
@@ -167,8 +210,22 @@ export default {
     if (this.value.length) {
       this.listenerList = this.value
       this.value.forEach((item) => {
-        const { listen_on, listener_type, acceptors, active_n, max_conn_rate, max_connections } = item
-        this.showItemList.push({ listen_on, listener_type, acceptors, active_n, max_conn_rate, max_connections })
+        const {
+          listen_on,
+          listener_type,
+          acceptors,
+          active_n,
+          max_conn_rate,
+          max_connections,
+        } = item
+        this.showItemList.push({
+          listen_on,
+          listener_type,
+          acceptors,
+          active_n,
+          max_conn_rate,
+          max_connections,
+        })
       })
     }
   },
@@ -217,7 +274,10 @@ export default {
           const { form, rules } = allData[item]
           // 上面的基础配置
           this.commonConfigs = this.commonConfigs.concat(form)
-          this.commonRules.config = Object.assign(this.commonRules.config, rules)
+          this.commonRules.config = Object.assign(
+            this.commonRules.config,
+            rules,
+          )
         } else {
           // 与监听类型关联的配置
           this.optionConfig[item] = allData[item]
@@ -231,7 +291,9 @@ export default {
       this.record = { ...this.commonRecord }
 
       if (this.currentOper === 'add') {
-        this.addDataAccordingListenerType(this.commonRecord.config.listener_type)
+        this.addDataAccordingListenerType(
+          this.commonRecord.config.listener_type,
+        )
       } else {
         this.addDataAccordingListenerType(this.selectedListener.listener_type)
       }
@@ -263,12 +325,33 @@ export default {
         }
       })
 
-      const { listen_on, listener_type, acceptors, active_n, max_conn_rate, max_connections } = config
+      const {
+        listen_on,
+        listener_type,
+        acceptors,
+        active_n,
+        max_conn_rate,
+        max_connections,
+      } = config
       if (this.currentOper === 'add') {
-        this.showItemList.push({ listen_on, listener_type, acceptors, active_n, max_conn_rate, max_connections })
+        this.showItemList.push({
+          listen_on,
+          listener_type,
+          acceptors,
+          active_n,
+          max_conn_rate,
+          max_connections,
+        })
         this.listenerList.push(config)
       } else {
-        const tempObj = { listen_on, listener_type, acceptors, active_n, max_conn_rate, max_connections }
+        const tempObj = {
+          listen_on,
+          listener_type,
+          acceptors,
+          active_n,
+          max_conn_rate,
+          max_connections,
+        }
         this.listenerList.splice(this.currentEditIndex, 1, config)
         this.showItemList.splice(this.currentEditIndex, 1, tempObj)
       }

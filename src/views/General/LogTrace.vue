@@ -11,18 +11,35 @@
     <div class="app-wrapper">
       <el-card shadow="never" class="emq-list-card">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="handleDialogOpen('create')">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            @click="handleDialogOpen('create')"
+          >
             {{ $t('LogTrace.createTrace') }}
           </el-button>
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="name" :label="$t('LogTrace.filter')"></el-table-column>
-          <el-table-column prop="type" :label="$t('LogTrace.type')"></el-table-column>
-          <el-table-column prop="level" :label="$t('LogTrace.level')"></el-table-column>
+          <el-table-column
+            prop="name"
+            :label="$t('LogTrace.filter')"
+          ></el-table-column>
+          <el-table-column
+            prop="type"
+            :label="$t('LogTrace.type')"
+          ></el-table-column>
+          <el-table-column
+            prop="level"
+            :label="$t('LogTrace.level')"
+          ></el-table-column>
           <el-table-column width="250px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="handleDialogOpen('view', row)"
+              <el-button
+                type="dashed"
+                size="mini"
+                @click="handleDialogOpen('view', row)"
                 >{{ $t('Overview.view') }}
               </el-button>
               <el-button type="dashed" size="mini" @click="handleDownload(row)">
@@ -44,41 +61,76 @@
 
     <el-dialog
       width="520px"
-      :title="accessType === 'view' ? $t('LogTrace.viewTrace') : $t('LogTrace.createTrace')"
+      :title="
+        accessType === 'view'
+          ? $t('LogTrace.viewTrace')
+          : $t('LogTrace.createTrace')
+      "
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
-      <el-form ref="recordForm" size="small" :model="record" :rules="accessType === 'view' ? {} : rules">
+      <el-form
+        ref="recordForm"
+        size="small"
+        :model="record"
+        :rules="accessType === 'view' ? {} : rules"
+      >
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item prop="type" :label="$t('LogTrace.type')">
-              <emq-select v-model="record.type" :field="{ options: typeOptions }" :disabled="accessType !== 'create'"
+              <emq-select
+                v-model="record.type"
+                :field="{ options: typeOptions }"
+                :disabled="accessType !== 'create'"
                 >>
               </emq-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item prop="level" :label="$t('LogTrace.level')">
-              <emq-select v-model="record.level" :field="{ list: levelOptions }" :disabled="accessType !== 'create'">
+              <emq-select
+                v-model="record.level"
+                :field="{ list: levelOptions }"
+                :disabled="accessType !== 'create'"
+              >
               </emq-select>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item prop="name" :label="$t('LogTrace.filter')">
-              <el-input v-model="record.name" :readonly="accessType !== 'create'"> </el-input>
+              <el-input
+                v-model="record.name"
+                :readonly="accessType !== 'create'"
+              >
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item prop="file" :label="$t('LogTrace.logPath')">
-              <el-input v-model="record.file" :readonly="accessType !== 'create'"> </el-input>
+              <el-input
+                v-model="record.file"
+                :readonly="accessType !== 'create'"
+              >
+              </el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
 
-      <div v-if="accessType === 'create'" slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="dialogVisible = false">{{ $t('Base.cancel') }}</el-button>
-        <el-button :loading="btnLoading === 'createBtn'" type="primary" size="small" @click="handleCreateTrace">
+      <div
+        v-if="accessType === 'create'"
+        slot="footer"
+        class="dialog-align-footer"
+      >
+        <el-button plain size="small" @click="dialogVisible = false">{{
+          $t('Base.cancel')
+        }}</el-button>
+        <el-button
+          :loading="btnLoading === 'createBtn'"
+          type="primary"
+          size="small"
+          @click="handleCreateTrace"
+        >
           {{ $t('Base.confirm') }}
         </el-button>
       </div>
@@ -107,7 +159,16 @@ export default {
         { label: this.$t('Clients.clientId'), value: 'clientid' },
         { label: this.$t('Subs.topic'), value: 'topic' },
       ],
-      levelOptions: ['debug', 'info', 'notice', 'warning', 'error', 'critical', 'alert', 'emergency'],
+      levelOptions: [
+        'debug',
+        'info',
+        'notice',
+        'warning',
+        'error',
+        'critical',
+        'alert',
+        'emergency',
+      ],
       btnLoading: undefined,
     }
   },

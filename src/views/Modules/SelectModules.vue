@@ -4,10 +4,15 @@
       <div class="inner-box">
         <div class="content" :style="contentStyle">
           <div class="content-left">
-            <span class="content-title">{{ $t('components.selectModules') }}</span>
+            <span class="content-title">{{
+              $t('components.selectModules')
+            }}</span>
             <span v-cloak class="modules-num">{{ canAddCount }}</span>
             <div
-              :class="['module-class', item.id === activeNavId ? 'active-nav' : '']"
+              :class="[
+                'module-class',
+                item.id === activeNavId ? 'active-nav' : '',
+              ]"
               v-for="item in classList"
               :key="item.id"
               @click="changeNav(item.id)"
@@ -35,8 +40,18 @@
     </div>
     <div class="content-box app-wrapper">
       <template v-if="!searchVal">
-        <div v-for="item in classList" :key="item.id" :id="item.id" class="link-content">
-          <p :class="['class-title', item.id === activeNavId ? 'active-title' : '']">
+        <div
+          v-for="item in classList"
+          :key="item.id"
+          :id="item.id"
+          class="link-content"
+        >
+          <p
+            :class="[
+              'class-title',
+              item.id === activeNavId ? 'active-title' : '',
+            ]"
+          >
             {{ item.name }}
           </p>
           <el-row v-if="allFeatures[item.id]" :gutter="20">
@@ -77,7 +92,11 @@
       </template>
       <template v-else>
         <el-row v-if="searchModuleInfo.length" :gutter="20">
-          <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
+          <el-col
+            v-for="(one, index) in searchModuleInfo"
+            :key="index"
+            :span="12"
+          >
             <div class="item-box">
               <div class="module-item" @click="toModuleDetail(one, searchModuleInfo)">
                 <div class="left-box">
@@ -152,7 +171,9 @@ export default {
       return store.state.lang
     },
     contentStyle() {
-      return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px' }
+      return {
+        marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px',
+      }
     },
   },
 
@@ -180,7 +201,8 @@ export default {
         .then(async () => {
           await destroyModule(item.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
-          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          const addedModules =
+            JSON.parse(localStorage.getItem('addedModules')) || {}
           delete addedModules[item.name]
           delete this.addedModules[item.name]
           localStorage.setItem('addedModules', JSON.stringify(addedModules))
@@ -209,7 +231,11 @@ export default {
         return
       }
       setTimeout(async () => {
-        const res = await matchSearch(this.allModuleList, 'localTitle', this.searchVal)
+        const res = await matchSearch(
+          this.allModuleList,
+          'localTitle',
+          this.searchVal,
+        )
         if (res) {
           this.searchModuleInfo = res
           this.searchLoading = false
@@ -260,7 +286,9 @@ export default {
           })
           .catch()
       }
-      this.$router.push(`/modules/detail?id=${this.activeNavId}&top=${this.scrollTop}`)
+      this.$router.push(
+        `/modules/detail?id=${this.activeNavId}&top=${this.scrollTop}`,
+      )
     },
     async getAddedModuleInfo(id) {
       const data = await showCreatedModuleInfo(id)
@@ -333,7 +361,10 @@ export default {
       }, 20)
     },
     scrollToTop() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      const scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop
       this.scrollTop = scrollTop
     },
     toReadMore(type) {

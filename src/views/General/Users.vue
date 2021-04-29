@@ -11,17 +11,35 @@
     <div class="app-wrapper">
       <el-card shadow="never" class="emq-list-card">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            @click="showDialog('create')"
+          >
             {{ $t('Base.create') }}
           </el-button>
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column min-width="120px" prop="username" :label="$t('General.userName')"></el-table-column>
-          <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')"></el-table-column>
+          <el-table-column
+            min-width="120px"
+            prop="username"
+            :label="$t('General.userName')"
+          ></el-table-column>
+          <el-table-column
+            min-width="60px"
+            prop="tags"
+            :label="$t('General.remark')"
+          ></el-table-column>
           <el-table-column width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">{{ $t('Base.edit') }} </el-button>
+              <el-button
+                type="dashed"
+                size="mini"
+                @click="showDialog('edit', row)"
+                >{{ $t('Base.edit') }}
+              </el-button>
               <el-button
                 v-if="row.tags !== 'administrator' && row.username !== 'admin'"
                 type="danger"
@@ -37,13 +55,20 @@
 
     <el-dialog
       width="520px"
-      :title="accessType === 'edit' ? $t('General.editorUser') : $t('General.creatingUser')"
+      :title="
+        accessType === 'edit'
+          ? $t('General.editorUser')
+          : $t('General.creatingUser')
+      "
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
         <el-form-item prop="username" :label="$t('General.userName')">
-          <el-input v-model="record.username" :disabled="accessType === 'edit'"></el-input>
+          <el-input
+            v-model="record.username"
+            :disabled="accessType === 'edit'"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="tags" :label="$t('General.remark')">
           <el-input v-model="record.tags"></el-input>
@@ -51,31 +76,61 @@
         <el-form-item
           v-if="accessType !== 'edit' || allowChange"
           prop="password"
-          :label="accessType === 'edit' ? $t('General.oldPassword') : $t('General.password')"
+          :label="
+            accessType === 'edit'
+              ? $t('General.oldPassword')
+              : $t('General.password')
+          "
         >
           <el-input v-model="record.password" type="password"></el-input>
         </el-form-item>
-        <el-form-item v-if="allowChange" prop="newPassword" :label="$t('General.newPassword')">
+        <el-form-item
+          v-if="allowChange"
+          prop="newPassword"
+          :label="$t('General.newPassword')"
+        >
           <el-input v-model="record.newPassword" type="password"></el-input>
         </el-form-item>
-        <el-form-item v-if="allowChange" prop="repeatPassword" :label="$t('General.confirmPassword')">
+        <el-form-item
+          v-if="allowChange"
+          prop="repeatPassword"
+          :label="$t('General.confirmPassword')"
+        >
           <el-input v-model="record.repeatPassword" type="password"></el-input>
         </el-form-item>
-        <el-link v-if="accessType === 'edit'" :underline="false" @click="togglePassword">
-          {{ allowChange ? $t('General.dontChangePassword') : $t('General.changePassword') }}
+        <el-link
+          v-if="accessType === 'edit'"
+          :underline="false"
+          @click="togglePassword"
+        >
+          {{
+            allowChange
+              ? $t('General.dontChangePassword')
+              : $t('General.changePassword')
+          }}
         </el-link>
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
+        <el-button plain size="small" @click="closeDialog">{{
+          $t('Base.cancel')
+        }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{
+          $t('Base.confirm')
+        }}</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { loadUser, createUser, updateUser, destroyUser, changePassword } from '@/api/function'
+import {
+  loadUser,
+  createUser,
+  updateUser,
+  destroyUser,
+  changePassword,
+} from '@/api/function'
 
 export default {
   name: 'Users',
@@ -101,8 +156,12 @@ export default {
       allowChange: false,
       record: {},
       rules: {
-        username: [{ required: true, message: this.$t('General.enterOneUserName') }],
-        tags: [{ required: true, message: this.$t('General.pleaseEnterNotes') }],
+        username: [
+          { required: true, message: this.$t('General.enterOneUserName') },
+        ],
+        tags: [
+          { required: true, message: this.$t('General.pleaseEnterNotes') },
+        ],
         password: [
           {
             required: true,
@@ -130,7 +189,10 @@ export default {
           },
         ],
         repeatPassword: [
-          { required: true, message: this.$t('General.pleaseEnterAConfirmationPassword') },
+          {
+            required: true,
+            message: this.$t('General.pleaseEnterAConfirmationPassword'),
+          },
           { validator: validatePass, trigger: ['blur', 'change'] },
         ],
       },

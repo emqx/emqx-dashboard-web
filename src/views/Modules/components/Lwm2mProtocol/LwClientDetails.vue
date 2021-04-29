@@ -17,7 +17,12 @@
     </el-card>
     <el-card shadow="never" class="emq-list-card">
       <el-collapse v-model="activeName" accordion @change="handleObjectChange">
-        <el-collapse-item v-for="(item, index) in objectNames" :key="index" title="" :name="item">
+        <el-collapse-item
+          v-for="(item, index) in objectNames"
+          :key="index"
+          title=""
+          :name="item"
+        >
           <div class="collapse-title" slot="title">
             <el-col :span="8">
               <span class="main-green">{{ objectList[item] }}</span>
@@ -27,18 +32,32 @@
             </el-col>
           </div>
           <div class="collapse-content">
-            <template v-if="Array.isArray(objectResources[item]) && objectResources[item].length">
+            <template
+              v-if="
+                Array.isArray(objectResources[item]) &&
+                objectResources[item].length
+              "
+            >
               <el-row class="row-titles">
                 <el-col :span="8">
-                  <span class="main-black row-title">{{ $t('Schemas.name') }}</span>
+                  <span class="main-black row-title">{{
+                    $t('Schemas.name')
+                  }}</span>
                 </el-col>
-                <el-col :span="2"><span class="main-black row-title">Path</span></el-col>
+                <el-col :span="2"
+                  ><span class="main-black row-title">Path</span></el-col
+                >
                 <el-col v-if="resourcesOperations[item]" :span="2">
-                  <span class="main-black row-title">{{ $t('Modules.dataType') }}</span>
+                  <span class="main-black row-title">{{
+                    $t('Modules.dataType')
+                  }}</span>
                 </el-col>
                 <el-col :span="6">
                   <el-button
-                    v-if="resourcesOperations[item] && resourcesOperations[item].includes('R')"
+                    v-if="
+                      resourcesOperations[item] &&
+                      resourcesOperations[item].includes('R')
+                    "
                     size="mini"
                     type="primary"
                     @click="batchRead(item)"
@@ -47,7 +66,10 @@
                     Read
                   </el-button>
                   <el-button
-                    v-if="resourcesOperations[item] && resourcesOperations[item].includes('W')"
+                    v-if="
+                      resourcesOperations[item] &&
+                      resourcesOperations[item].includes('W')
+                    "
                     size="mini"
                     type="primary"
                     @click="batchWrite(item)"
@@ -56,13 +78,28 @@
                   </el-button>
                 </el-col>
                 <el-col :span="2" :offset="resourcesOperations[item] ? 4 : 12">
-                  <el-button type="danger" size="mini" @click="handleDelete(item)" style="float: right">
+                  <el-button
+                    type="danger"
+                    size="mini"
+                    @click="handleDelete(item)"
+                    style="float: right"
+                  >
                     Delete
                   </el-button>
                 </el-col>
               </el-row>
-              <div v-for="(one, index) in objectResources[item]" :key="index" class="content-item">
-                <el-row :class="index < objectResources[item].length - 1 ? 'content-item-row' : ''">
+              <div
+                v-for="(one, index) in objectResources[item]"
+                :key="index"
+                class="content-item"
+              >
+                <el-row
+                  :class="
+                    index < objectResources[item].length - 1
+                      ? 'content-item-row'
+                      : ''
+                  "
+                >
                   <el-col :span="8">
                     <span class="main-black">{{ one.name }}</span>
                   </el-col>
@@ -79,7 +116,9 @@
                         :type="one.timeId ? 'primary' : 'dashed'"
                         class="observe-button"
                         @click="doObserve(one)"
-                        :disabled="one.timeId !== null && one.timeId !== undefined"
+                        :disabled="
+                          one.timeId !== null && one.timeId !== undefined
+                        "
                       >
                         Observe<i class="el-icon-refresh"></i>
                       </el-button>
@@ -93,7 +132,9 @@
                       >
                       </el-button>
                       <el-button
-                        :loading="btnLoading && clickedButton === `read${one.path}`"
+                        :loading="
+                          btnLoading && clickedButton === `read${one.path}`
+                        "
                         size="mini"
                         type="dashed"
                         @click="singleRead(one)"
@@ -101,10 +142,20 @@
                         Read
                       </el-button>
                     </template>
-                    <el-button v-if="one.operations.includes('W')" size="mini" type="dashed" @click="singleWrite(one)">
+                    <el-button
+                      v-if="one.operations.includes('W')"
+                      size="mini"
+                      type="dashed"
+                      @click="singleWrite(one)"
+                    >
                       Write
                     </el-button>
-                    <el-button v-if="one.operations.includes('E')" size="mini" type="dashed" @click="doExecute(one)">
+                    <el-button
+                      v-if="one.operations.includes('E')"
+                      size="mini"
+                      type="dashed"
+                      @click="doExecute(one)"
+                    >
                       Exec
                     </el-button>
                   </el-col>
@@ -115,7 +166,8 @@
                       :class="[
                         'row-value-item',
                         one.values[0] === 'Timed out' ||
-                        (typeof one.values[0] === 'string' && one.values[0].includes('Error: '))
+                        (typeof one.values[0] === 'string' &&
+                          one.values[0].includes('Error: '))
                           ? 'error-red'
                           : 'main-green',
                       ]"
@@ -130,7 +182,8 @@
               <el-col :span="2" :offset="8">
                 <span class="light-gray">
                   {{
-                    objectResources[item] && !Array.isArray(objectResources[item])
+                    objectResources[item] &&
+                    !Array.isArray(objectResources[item])
                       ? objectResources[item]
                       : $t('Modules.noData')
                   }}
@@ -148,13 +201,26 @@
       :visible.sync="writeDialogVisible"
       @close="handleClose"
     >
-      <el-form ref="record" class="el-form--public" :model="record" :rules="rules" size="small" label-position="top">
+      <el-form
+        ref="record"
+        class="el-form--public"
+        :model="record"
+        :rules="rules"
+        size="small"
+        label-position="top"
+      >
         <el-row :gutter="20">
           <div v-for="(item, index) in configList" :key="index">
-            <el-col :span="configList.length > 1 && item.dataType !== 'Opaque' ? 12 : 24">
+            <el-col
+              :span="
+                configList.length > 1 && item.dataType !== 'Opaque' ? 12 : 24
+              "
+            >
               <el-form-item :prop="item.path" label="">
                 <div slot="label">
-                  <span v-if="item.name.length > 30" :title="item.name">{{ item.name.slice(0, 30) + '...' }}</span>
+                  <span v-if="item.name.length > 30" :title="item.name">{{
+                    item.name.slice(0, 30) + '...'
+                  }}</span>
                   <span v-else>{{ item.name }}</span>
                 </div>
                 <emq-select
@@ -163,9 +229,13 @@
                   :field="{ list: ['true', 'false'] }"
                 >
                 </emq-select>
-                <el-input v-else-if="item.dataType === 'String'" v-model="record[item.path]"></el-input>
+                <el-input
+                  v-else-if="item.dataType === 'String'"
+                  v-model="record[item.path]"
+                ></el-input>
                 <template v-else-if="item.dataType === 'Time'">
-                  <el-date-picker v-model="record[item.path]" type="datetime"> </el-date-picker>
+                  <el-date-picker v-model="record[item.path]" type="datetime">
+                  </el-date-picker>
                 </template>
                 <el-input-number
                   v-else-if="item.dataType === 'Integer'"
@@ -183,8 +253,12 @@
                     <el-input v-model="record[item.path]"></el-input>
                   </el-col>
                   <el-col :span="8">
-                    <el-radio v-model="record.encoding[item.path]" label="hex">Hex</el-radio>
-                    <el-radio v-model="record.encoding[item.path]" label="plain">Plain</el-radio>
+                    <el-radio v-model="record.encoding[item.path]" label="hex"
+                      >Hex</el-radio
+                    >
+                    <el-radio v-model="record.encoding[item.path]" label="plain"
+                      >Plain</el-radio
+                    >
                   </el-col>
                 </template>
               </el-form-item>
@@ -194,7 +268,9 @@
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="handleClose">{{ $t('Base.cancel') }}</el-button>
+        <el-button plain size="small" @click="handleClose">{{
+          $t('Base.cancel')
+        }}</el-button>
         <el-button type="primary" size="small" @click="handleWrite">
           {{ $t('Base.confirm') }}
         </el-button>
@@ -208,10 +284,21 @@
       class="create-object"
       @close="handleCancelCreate"
     >
-      <emq-select v-model="createBasePath" :field="{ list: basePathOptions }" size="small"></emq-select>
+      <emq-select
+        v-model="createBasePath"
+        :field="{ list: basePathOptions }"
+        size="small"
+      ></emq-select>
       <div slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="handleCancelCreate">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="handleCreate" :disabled="!createBasePath">
+        <el-button plain size="small" @click="handleCancelCreate">{{
+          $t('Base.cancel')
+        }}</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="handleCreate"
+          :disabled="!createBasePath"
+        >
           {{ $t('Base.confirm') }}
         </el-button>
       </div>
@@ -261,7 +348,11 @@ export default {
   watch: {
     activeName: {
       handler(newName, oldName) {
-        if (!newName && oldName && Array.isArray(this.objectResources[oldName])) {
+        if (
+          !newName &&
+          oldName &&
+          Array.isArray(this.objectResources[oldName])
+        ) {
           this.objectResources[oldName].forEach((one) => {
             one.timeId = this.clearTimer(one.timeId)
           })
@@ -278,7 +369,10 @@ export default {
   },
 
   beforeDestroy() {
-    if (this.activeName && Array.isArray(this.objectResources[this.activeName])) {
+    if (
+      this.activeName &&
+      Array.isArray(this.objectResources[this.activeName])
+    ) {
       this.objectResources[this.activeName].forEach((one) => {
         one.timeId = this.clearTimer(one.timeId)
       })
@@ -347,16 +441,25 @@ export default {
         const getResponseFunction = async () => {
           try {
             this.resourcesOperations[path] = ''
-            const { code, content, codeMsg } = await getOrderResponse(this.nodeName, this.currentImei, 'discover', path)
+            const { code, content, codeMsg } = await getOrderResponse(
+              this.nodeName,
+              this.currentImei,
+              'discover',
+              path,
+            )
             if (Array.isArray(content)) {
               this.initObjectResourseValues(content)
               this.objectResources[path] = content
 
               content.forEach((one) => {
                 if (one.operations.includes('W')) {
-                  this.resourcesOperations[path] = this.resourcesOperations[path].concat('W')
+                  this.resourcesOperations[path] = this.resourcesOperations[
+                    path
+                  ].concat('W')
                 } else if (one.operations.includes('R')) {
-                  this.resourcesOperations[path] = this.resourcesOperations[path].concat('R')
+                  this.resourcesOperations[path] = this.resourcesOperations[
+                    path
+                  ].concat('R')
                 }
               })
             } else if (typeof content === 'object' && !Array.isArray(content)) {
@@ -405,7 +508,12 @@ export default {
       this.readTimeId = setInterval(async () => {
         try {
           count += 1
-          const { content } = await getOrderResponse(this.nodeName, this.currentImei, 'read', path)
+          const { content } = await getOrderResponse(
+            this.nodeName,
+            this.currentImei,
+            'read',
+            path,
+          )
           if (content) {
             assignValueFunction(content)
             this.readTimeId = this.clearTimer(this.readTimeId)
@@ -427,7 +535,10 @@ export default {
         (content) => {
           content.forEach((item) => {
             this.objectResources[path].forEach((one) => {
-              if (item.path.includes(`${one.path}/`) || item.path === one.path) {
+              if (
+                item.path.includes(`${one.path}/`) ||
+                item.path === one.path
+              ) {
                 one.values.push(item.value)
               }
             })
@@ -455,7 +566,12 @@ export default {
 
     async getObserveResult(way, one) {
       try {
-        const { content } = await getOrderResponse(this.nodeName, this.currentImei, way, one.path)
+        const { content } = await getOrderResponse(
+          this.nodeName,
+          this.currentImei,
+          way,
+          one.path,
+        )
         if (content) {
           const valueArr = []
           content.forEach((item) => {
@@ -497,7 +613,12 @@ export default {
           this.pubOrderByButton('execute', one.path)
           const getResponseFunction = async () => {
             try {
-              const { code, codeMsg } = await getOrderResponse(this.nodeName, this.currentImei, 'execute', one.path)
+              const { code, codeMsg } = await getOrderResponse(
+                this.nodeName,
+                this.currentImei,
+                'execute',
+                one.path,
+              )
               if (code && parseFloat(code) < 3) {
                 this.$message.success(this.$t('Base.operateSuccess'))
               } else if (codeMsg) {
@@ -573,7 +694,12 @@ export default {
 
     async getWriteResult(path, content, basePath) {
       try {
-        const { code, codeMsg } = await getOrderResponse(this.nodeName, this.currentImei, 'write', path)
+        const { code, codeMsg } = await getOrderResponse(
+          this.nodeName,
+          this.currentImei,
+          'write',
+          path,
+        )
         if (code && parseFloat(code) < 3) {
           this.$message.success(this.$t('Base.editSuccess'))
           const pathSplitArr = content[0].path.split('/')
@@ -656,7 +782,12 @@ export default {
           this.pubOrderByButton('delete', path)
           const getResponseFunction = async () => {
             try {
-              const { code, codeMsg } = await getOrderResponse(this.nodeName, this.currentImei, 'delete', path)
+              const { code, codeMsg } = await getOrderResponse(
+                this.nodeName,
+                this.currentImei,
+                'delete',
+                path,
+              )
               if (code && parseFloat(code) < 3) {
                 this.$message.success(this.$t('Base.deleteSuccess'))
                 this.activeName = ''

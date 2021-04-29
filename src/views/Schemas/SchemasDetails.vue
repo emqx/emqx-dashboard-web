@@ -34,7 +34,10 @@
             <el-col :span="10"> </el-col>
 
             <el-col :span="14">
-              <el-form-item :label="$t('Schemas.parser_type')" prop="parser_type">
+              <el-form-item
+                :label="$t('Schemas.parser_type')"
+                prop="parser_type"
+              >
                 <emq-select
                   v-model="record.parser_type"
                   :disabled="disabled"
@@ -48,7 +51,10 @@
             <!-- 3rd-party -->
             <template v-if="record.parser_type === THIRD_PARTY">
               <el-col :span="14">
-                <el-form-item :label="$t('Schemas.third_party_type')" prop="third_party_type">
+                <el-form-item
+                  :label="$t('Schemas.third_party_type')"
+                  prop="third_party_type"
+                >
                   <emq-select
                     v-model="record.third_party_type"
                     :disabled="disabled"
@@ -78,8 +84,15 @@
               <!-- TCP type -->
               <template v-if="record.third_party_type === TCP">
                 <el-col :span="14">
-                  <el-form-item :label="$t('Schemas.server')" prop="parser_addr.server">
-                    <el-input v-model="record.parser_addr.server" :disabled="disabled" placeholder="127.0.0.1:8081">
+                  <el-form-item
+                    :label="$t('Schemas.server')"
+                    prop="parser_addr.server"
+                  >
+                    <el-input
+                      v-model="record.parser_addr.server"
+                      :disabled="disabled"
+                      placeholder="127.0.0.1:8081"
+                    >
                     </el-input>
                   </el-form-item>
                 </el-col>
@@ -89,14 +102,21 @@
               <!-- Resources type -->
               <template v-if="record.third_party_type === RESOURCES">
                 <el-col :span="14">
-                  <el-form-item :label="$t('Schemas.resource')" prop="parser_addr.resource_id">
+                  <el-form-item
+                    :label="$t('Schemas.resource')"
+                    prop="parser_addr.resource_id"
+                  >
                     <emq-select
                       v-model="record.parser_addr.resource_id"
                       :field="{ options: availableResources }"
                       :field-name="{ label: 'id', value: 'id' }"
                       :disabled="disabled"
                     >
-                      <div slot="option" slot-scope="{ item }" class="custom-option">
+                      <div
+                        slot="option"
+                        slot-scope="{ item }"
+                        class="custom-option"
+                      >
                         <span class="label">{{ item.id }}</span>
                         <span class="value">{{ item.config.title }}</span>
                       </div>
@@ -107,13 +127,22 @@
               </template>
 
               <el-col :span="14">
-                <el-form-item :label="$t('Schemas.3rd_party_opts')" prop="parser_opts.3rd_party_opts">
-                  <el-input v-model="record.parser_opts['3rd_party_opts']" :disabled="disabled"></el-input>
+                <el-form-item
+                  :label="$t('Schemas.3rd_party_opts')"
+                  prop="parser_opts.3rd_party_opts"
+                >
+                  <el-input
+                    v-model="record.parser_opts['3rd_party_opts']"
+                    :disabled="disabled"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="10"> </el-col>
               <el-col :span="14">
-                <el-form-item :label="$t('Schemas.connect_timeout')" prop="parser_opts.connect_timeout">
+                <el-form-item
+                  :label="$t('Schemas.connect_timeout')"
+                  prop="parser_opts.connect_timeout"
+                >
                   <el-input
                     v-model="record.parser_opts.connect_timeout"
                     :disabled="disabled"
@@ -123,8 +152,15 @@
               </el-col>
               <el-col :span="10"> </el-col>
               <el-col :span="14">
-                <el-form-item :label="$t('Schemas.parse_timeout')" prop="parser_opts.parse_timeout">
-                  <el-input v-model="record.parser_opts.parse_timeout" :disabled="disabled" placeholder="5"></el-input>
+                <el-form-item
+                  :label="$t('Schemas.parse_timeout')"
+                  prop="parser_opts.parse_timeout"
+                >
+                  <el-input
+                    v-model="record.parser_opts.parse_timeout"
+                    :disabled="disabled"
+                    placeholder="5"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="10"> </el-col>
@@ -143,14 +179,21 @@
 
             <el-col v-else :span="14">
               <el-form-item :label="$t('Schemas.description')">
-                <el-input v-model="record.description" :disabled="disabled"></el-input>
+                <el-input
+                  v-model="record.description"
+                  :disabled="disabled"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="10"> </el-col>
 
             <!-- Schema code -->
             <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
-              <el-form-item class="code-editor__item" label="Schema" prop="schema">
+              <el-form-item
+                class="code-editor__item"
+                label="Schema"
+                prop="schema"
+              >
                 <div class="monaco-container monaco-schema">
                   <monaco
                     id="schema"
@@ -171,7 +214,12 @@
         </el-row>
 
         <div v-if="!disabled" class="button-group">
-          <el-button :loading="saveLoading" type="primary" size="medium" @click="save">
+          <el-button
+            :loading="saveLoading"
+            type="primary"
+            size="medium"
+            @click="save"
+          >
             {{ $t('Base.create') }}
           </el-button>
           <el-button type="default" size="medium" @click="$router.back()">
@@ -225,13 +273,25 @@ export default {
       },
       rules: {
         name: { required: true, message: this.$t('Schemas.nameRequired') },
-        parser_type: { required: true, message: this.$t('Schemas.parserTypeRequired') },
+        parser_type: {
+          required: true,
+          message: this.$t('Schemas.parserTypeRequired'),
+        },
         schema: { required: true, message: this.$t('Schemas.schemaRequired') },
-        third_party_type: { required: true, message: this.$t('Schemas.third_party_type_required') },
+        third_party_type: {
+          required: true,
+          message: this.$t('Schemas.third_party_type_required'),
+        },
         parser_addr: {
           url: { required: true, message: this.$t('Schemas.url_required') },
-          server: { required: true, message: this.$t('Schemas.server_required') },
-          resource_id: { required: true, message: this.$t('Schemas.resource_required') },
+          server: {
+            required: true,
+            message: this.$t('Schemas.server_required'),
+          },
+          resource_id: {
+            required: true,
+            message: this.$t('Schemas.resource_required'),
+          },
         },
       },
       availableResources: [],

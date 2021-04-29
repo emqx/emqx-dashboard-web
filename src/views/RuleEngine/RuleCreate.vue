@@ -27,7 +27,11 @@
               size="small"
               label-suffix=":"
             >
-              <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
+              <el-form-item
+                class="code-editor__item"
+                prop="rawsql"
+                :label="$t('RuleEngine.sqlInput')"
+              >
                 <!-- <div class="monaco-container monaco-sql" :style="{ height: `${sqlEditorHeight}px` }"> -->
                 <monaco
                   id="rule-sql"
@@ -47,12 +51,18 @@
                 <el-input v-model="record.id" :disabled="isEdit"></el-input>
               </el-form-item>
 
-              <el-form-item prop="description" :label="$t('RuleEngine.resourceDes')">
+              <el-form-item
+                prop="description"
+                :label="$t('RuleEngine.resourceDes')"
+              >
                 <el-input v-model="record.description"></el-input>
               </el-form-item>
 
               <el-form-item :label="$t('RuleEngine.sqlTest')">
-                <el-switch v-model="showTest" @change="initTestFormItem"></el-switch>
+                <el-switch
+                  v-model="showTest"
+                  @change="initTestFormItem"
+                ></el-switch>
                 <el-popover width="220" placement="right" trigger="hover">
                   {{ $t('RuleEngine.inputMetadata') }}
                   <i slot="reference" class="icon el-icon-question"></i>
@@ -64,10 +74,14 @@
                   <el-form-item
                     v-for="k in Object.keys(selectEvent.test_columns)"
                     :key="k"
-                    :class="{ 'code-sql': k === 'payload', payload: k === 'payload' }"
+                    :class="{
+                      'code-sql': k === 'payload',
+                      payload: k === 'payload',
+                    }"
                     v-bind="{ label: k, prop: `ctx.${k}` }"
                   >
-                    <el-input v-if="k !== 'payload'" v-model="record.ctx[k]"> </el-input>
+                    <el-input v-if="k !== 'payload'" v-model="record.ctx[k]">
+                    </el-input>
                     <template v-else>
                       <!-- <div class="monaco-container monaco-payload" :style="{ height: `${payloadEditorHeight}px` }"> -->
                       <monaco
@@ -96,7 +110,10 @@
                     </el-button>
                   </el-form-item>
 
-                  <el-form-item class="code-editor__item" :label="$t('RuleEngine.testOutput')">
+                  <el-form-item
+                    class="code-editor__item"
+                    :label="$t('RuleEngine.testOutput')"
+                  >
                     <!-- <div class="monaco-container monaco-test-output" style="height: 200px"> -->
                     <monaco
                       id="testOutput"
@@ -130,13 +147,18 @@
         </div>
 
         <div class="rule-action-wrapper">
-          <rule-actions ref="ruleAction" v-model="record.actions"> </rule-actions>
+          <rule-actions ref="ruleAction" v-model="record.actions">
+          </rule-actions>
         </div>
       </el-card>
     </div>
     <div
       class="button-group__center rule-create-operation"
-      :style="{ width: $store.state.leftBarCollapse ? ' calc(100% - 80px)' : ' calc(100% - 200px)' }"
+      :style="{
+        width: $store.state.leftBarCollapse
+          ? ' calc(100% - 80px)'
+          : ' calc(100% - 200px)',
+      }"
     >
       <el-button type="default" size="medium" @click="$router.back()">
         {{ $t('Base.cancel') }}
@@ -149,9 +171,20 @@
 </template>
 
 <script>
-import { loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule } from '@/api/rules'
+import {
+  loadRuleEvents,
+  SQLTest,
+  createRule,
+  loadRuleDetails,
+  updateRule,
+} from '@/api/rules'
 import { loadTopics } from '@/api/server'
-import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck, verifyID } from '@/common/utils'
+import {
+  sqlExampleFormatter,
+  ruleNewSqlParser,
+  ruleOldSqlCheck,
+  verifyID,
+} from '@/common/utils'
 import Monaco from '@/components/Monaco'
 // import StretchHeight from '@/components/StretchHeight'
 import RuleActions from './components/RuleActions'
@@ -180,7 +213,18 @@ export default {
       events: [],
       testOutPut: '',
       selectEvent: {
-        columns: ['clientid', 'username', 'event', 'id', 'payload', 'peername', 'qos', 'timestamp', 'topic', 'node'],
+        columns: [
+          'clientid',
+          'username',
+          'event',
+          'id',
+          'payload',
+          'peername',
+          'qos',
+          'timestamp',
+          'topic',
+          'node',
+        ],
         description: '$events/message_publish',
         event: '$events/message_publish',
         // sql_example: 'SELECT * FROM "t/#"',
@@ -205,7 +249,10 @@ export default {
         id: `rule:${Math.random().toString().slice(3, 9)}`,
       },
       rules: {
-        rawsql: { required: true, message: this.$t('RuleEngine.pleaseEnterTheSQL') },
+        rawsql: {
+          required: true,
+          message: this.$t('RuleEngine.pleaseEnterTheSQL'),
+        },
         id: { required: true, validator: verifyID },
       },
     }
@@ -266,13 +313,19 @@ export default {
       this.sqlParse(val, checkValues[0])
     },
     sqlParse(sql, oldEvent) {
-      this.$confirm(this.$t('RuleEngine.parse_confirm'), this.$t('Base.warning'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      })
+      this.$confirm(
+        this.$t('RuleEngine.parse_confirm'),
+        this.$t('Base.warning'),
+        {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        },
+      )
         .then(() => {
-          this.record.rawsql = sqlExampleFormatter(ruleNewSqlParser(sql, oldEvent))
+          this.record.rawsql = sqlExampleFormatter(
+            ruleNewSqlParser(sql, oldEvent),
+          )
         })
         .catch(() => {
           this.needCheckSql = false
@@ -305,7 +358,10 @@ export default {
       if (value === this.selectEvent.event) {
         return
       }
-      this.selectEvent = this.events.find(($) => $.event === value) || { columns: {}, test_columns: {} }
+      this.selectEvent = this.events.find(($) => $.event === value) || {
+        columns: {},
+        test_columns: {},
+      }
       this.sqlPrimaryKey = this.events.columns
       this.initTestFormItem()
     },
@@ -364,7 +420,9 @@ export default {
             if (error === 'SQL Not Match') {
               this.testOutPut = this.$t('RuleEngine.resultIsEmpty')
             } else {
-              this.testOutPut = `${this.$t('RuleEngine.checkForErrors')}:\n\n${error}`
+              this.testOutPut = `${this.$t(
+                'RuleEngine.checkForErrors',
+              )}:\n\n${error}`
             }
           })
       })

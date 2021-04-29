@@ -229,7 +229,8 @@ export default {
   },
   max_awaiting_rel_desc: {
     zh: '允许同时等待 PUBREL 的 QoS2 消息的最大数量',
-    en: 'Maximum number of QoS2 messages allowed to wait for PUBREL at the same time',
+    en:
+      'Maximum number of QoS2 messages allowed to wait for PUBREL at the same time',
   },
   recv_cnt_desc: {
     zh: '接收的 TCP 报文数量',

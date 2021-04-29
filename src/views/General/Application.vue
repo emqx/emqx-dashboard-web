@@ -8,7 +8,12 @@
           </p>
 
           <div class="page-header-top-start">
-            <a rel="noopener" :href="docs.restAPI" target="_blank" class="link-item">
+            <a
+              rel="noopener"
+              :href="docs.restAPI"
+              target="_blank"
+              class="link-item"
+            >
               <i class="icon el-icon-document"></i>
               {{ $t('General.productDocumentation') }}
             </a>
@@ -20,7 +25,12 @@
     <div class="app-wrapper">
       <el-card shadow="never" class="emq-list-card">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            @click="showDialog('create')"
+          >
             {{ $t('Base.create') }}
           </el-button>
         </div>
@@ -33,13 +43,19 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="name" :label="$t('General.appName')"></el-table-column>
+          <el-table-column
+            prop="name"
+            :label="$t('General.appName')"
+          ></el-table-column>
           <el-table-column
             prop="expired"
             :formatter="formatterExpired"
             :label="$t('General.expireAt')"
           ></el-table-column>
-          <el-table-column prop="desc" :label="$t('General.remark')"></el-table-column>
+          <el-table-column
+            prop="desc"
+            :label="$t('General.remark')"
+          ></el-table-column>
           <el-table-column :label="$t('General.isEnabled')">
             <template slot-scope="{ row }">
               <el-switch
@@ -67,33 +83,56 @@
 
     <el-dialog
       width="600px"
-      :title="accessType === 'edit' ? $t('General.editApp') : $t('General.createApp')"
+      :title="
+        accessType === 'edit' ? $t('General.editApp') : $t('General.createApp')
+      "
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
-      <el-form ref="recordForm" size="small" :model="record" :rules="accessType === 'view' ? {} : rules">
+      <el-form
+        ref="recordForm"
+        size="small"
+        :model="record"
+        :rules="accessType === 'view' ? {} : rules"
+      >
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item prop="app_id" label="AppID">
-              <el-input v-model="record.app_id" :readonly="accessType !== 'create'" :disabled="accessType === 'edit'">
+              <el-input
+                v-model="record.app_id"
+                :readonly="accessType !== 'create'"
+                :disabled="accessType === 'edit'"
+              >
               </el-input>
             </el-form-item>
           </el-col>
           <el-col v-if="accessType === 'view'" :span="12">
             <el-form-item prop="secret" :label="$t('General.secret')">
-              <el-input v-model="record.secret" :disabled="accessType === 'edit'" :readonly="accessType !== 'create'">
+              <el-input
+                v-model="record.secret"
+                :disabled="accessType === 'edit'"
+                :readonly="accessType !== 'create'"
+              >
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="name" :label="$t('General.appName')">
-              <el-input v-model="record.name" :disabled="accessType === 'edit'" :readonly="accessType === 'view'">
+              <el-input
+                v-model="record.name"
+                :disabled="accessType === 'edit'"
+                :readonly="accessType === 'view'"
+              >
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="status" :label="$t('General.isEnabled')">
-              <emq-select v-model="record.status" :field="{ options: enableOption }" :disabled="accessType === 'view'">
+              <emq-select
+                v-model="record.status"
+                :field="{ options: enableOption }"
+                :disabled="accessType === 'view'"
+              >
               </emq-select>
             </el-form-item>
           </el-col>
@@ -111,15 +150,26 @@
           </el-col>
           <el-col :span="12">
             <el-form-item prop="desc" :label="$t('General.remark')">
-              <el-input v-model="record.desc" :readonly="accessType === 'view'"></el-input>
+              <el-input
+                v-model="record.desc"
+                :readonly="accessType === 'view'"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
 
-      <div v-if="accessType !== 'view'" slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="dialogVisible = false">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
+      <div
+        v-if="accessType !== 'view'"
+        slot="footer"
+        class="dialog-align-footer"
+      >
+        <el-button plain size="small" @click="dialogVisible = false">{{
+          $t('Base.cancel')
+        }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{
+          $t('Base.confirm')
+        }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -128,7 +178,13 @@
 <script>
 import moment from 'moment'
 
-import { loadApp, createApp, showApp, updateApp, destroyAPP } from '@/api/function'
+import {
+  loadApp,
+  createApp,
+  showApp,
+  updateApp,
+  destroyAPP,
+} from '@/api/function'
 import { getLink } from '@/common/utils'
 
 export default {
@@ -155,8 +211,12 @@ export default {
         desc: '',
       },
       rules: {
-        name: [{ required: true, message: this.$t('General.pleaseEnterAppName') }],
-        app_id: [{ required: true, message: this.$t('General.pleaseEnterTheAppId') }],
+        name: [
+          { required: true, message: this.$t('General.pleaseEnterAppName') },
+        ],
+        app_id: [
+          { required: true, message: this.$t('General.pleaseEnterTheAppId') },
+        ],
         status: [{ required: true, message: this.$t('General.pleaseChoose') }],
       },
     }
@@ -224,7 +284,9 @@ export default {
         const record = { ...this.record }
         if (record.expired && typeof record.expired === 'string') {
           try {
-            record.expired = Math.floor(new Date(record.expired).getTime() / 1000)
+            record.expired = Math.floor(
+              new Date(record.expired).getTime() / 1000,
+            )
           } catch (e) {
             record.expired = null
           }

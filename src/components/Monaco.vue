@@ -1,5 +1,5 @@
 <template>
-  <div :id="`monaco-${id}`" :style="{height:height+'px' }"></div>
+  <div :id="`monaco-${id}`" :style="{ height: height + 'px' }"></div>
 </template>
 
 <script>
@@ -62,7 +62,8 @@ export default {
           name: 'WHERE',
           type: 'Keyword',
           detail: 'SQL',
-          documentation: 'Filters a result set to include only records that fulfill a specified condition. ',
+          documentation:
+            'Filters a result set to include only records that fulfill a specified condition. ',
         },
         {
           name: 'and',
@@ -159,9 +160,12 @@ export default {
       })
       // Qucik save method
       // eslint-disable-next-line
-      this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
-        this.$emit('qucik-save', this.value)
-      })
+      this.editor.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S,
+        () => {
+          this.$emit('qucik-save', this.value)
+        },
+      )
       // Update editor options
       this.editor.getModel().updateOptions({ tabSize: 2 })
     },
@@ -183,22 +187,25 @@ export default {
       return $hints
     },
     registerCustomHintsProvider() {
-      this.providerDisposeID = monaco.languages.registerCompletionItemProvider(this.lang, {
-        provideCompletionItems: (model, position) => {
-          const wordObj = model.getWordUntilPosition(position)
-          const hints = this.getHints(wordObj)
-          const range = {
-            startLineNumber: position.lineNumber,
-            endLineNumber: position.lineNumber,
-            startColumn: wordObj.startColumn,
-            endColumn: wordObj.endColumn,
-          }
-          return {
-            suggestions: createMonacoComplete(hints, range, wordObj),
-          }
+      this.providerDisposeID = monaco.languages.registerCompletionItemProvider(
+        this.lang,
+        {
+          provideCompletionItems: (model, position) => {
+            const wordObj = model.getWordUntilPosition(position)
+            const hints = this.getHints(wordObj)
+            const range = {
+              startLineNumber: position.lineNumber,
+              endLineNumber: position.lineNumber,
+              startColumn: wordObj.startColumn,
+              endColumn: wordObj.endColumn,
+            }
+            return {
+              suggestions: createMonacoComplete(hints, range, wordObj),
+            }
+          },
+          triggerCharacters: [' '],
         },
-        triggerCharacters: [' '],
-      })
+      )
     },
     registerCustomHoverProvider() {
       monaco.languages.register({ id: this.lang })

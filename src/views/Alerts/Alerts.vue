@@ -4,18 +4,41 @@
       <el-card class="emq-list-card" shadow="never">
         <div class="emq-table-header">
           <div></div>
-          <el-radio-group v-model="alertType" border size="mini" @change="loadData">
-            <el-radio-button label="present">{{ $t('Alerts.currentAlarm') }}</el-radio-button>
-            <el-radio-button label="history">{{ $t('Alerts.historyAlarm') }}</el-radio-button>
+          <el-radio-group
+            v-model="alertType"
+            border
+            size="mini"
+            @change="loadData"
+          >
+            <el-radio-button label="present">{{
+              $t('Alerts.currentAlarm')
+            }}</el-radio-button>
+            <el-radio-button label="history">{{
+              $t('Alerts.historyAlarm')
+            }}</el-radio-button>
           </el-radio-group>
         </div>
 
-        <el-table v-bind="alertTable" :data="tableData" class="data-list" :key="alertType">
-          <el-table-column prop="name" :label="$t('Alerts.alarmName')"></el-table-column>
-          <el-table-column prop="message" :label="$t('Alerts.alarmMsg')" min-width="140px">
+        <el-table v-bind="alertTable" :data="tableData" class="data-list">
+          <el-table-column
+            prop="name"
+            :label="$t('Alerts.alarmName')"
+          ></el-table-column>
+          <el-table-column
+            prop="message"
+            :label="$t('Alerts.alarmMsg')"
+            min-width="140px"
+          >
             <template slot-scope="{ row }">
-              <el-popover placement="top" trigger="hover" width="160" :open-delay="500">
-                <div v-for="(value, label) in row.details" :key="label">{{ label }}: {{ value }}</div>
+              <el-popover
+                placement="top"
+                trigger="hover"
+                width="160"
+                :open-delay="500"
+              >
+                <div v-for="(value, label) in row.details" :key="label">
+                  {{ label }}: {{ value }}
+                </div>
                 <span slot="reference" class="details">
                   <i class="iconfont icon-bangzhu"></i>
                 </span>
@@ -23,7 +46,10 @@
               <span>{{ row.message }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="node" :label="$t('Alerts.triggerNode')"></el-table-column>
+          <el-table-column
+            prop="node"
+            :label="$t('Alerts.triggerNode')"
+          ></el-table-column>
           <el-table-column prop="node" :label="$t('Alerts.alarmLevel')">
             <template>
               {{ $t('Alerts.system') }}
@@ -34,7 +60,11 @@
               {{ dateFormat(row.activate_at) }}
             </template>
           </el-table-column>
-          <el-table-column v-if="alertType === 'history'" prop="deactivate_at" :label="$t('Alerts.deactivateAt')">
+          <el-table-column
+            v-if="alertType === 'history'"
+            prop="deactivate_at"
+            :label="$t('Alerts.deactivateAt')"
+          >
             <template slot-scope="{ row }">
               {{ dateFormat(row.deactivate_at) }}
             </template>
@@ -105,7 +135,10 @@ export default {
       const stateMap = {
         0: this.$t('Alerts.normal'),
       }
-      return stateMap[state] || `${this.$t('Alerts.abnormal')} ${state} ${this.$t('Alerts.second')}`
+      return (
+        stateMap[state] ||
+        `${this.$t('Alerts.abnormal')} ${state} ${this.$t('Alerts.second')}`
+      )
     },
   },
 }

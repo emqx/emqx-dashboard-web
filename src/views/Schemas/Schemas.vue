@@ -7,7 +7,12 @@
             {{ $t('Schemas.schemaDesc') }}
           </p>
           <div class="page-header-top-start">
-            <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
+            <a
+              rel="noopener"
+              :href="docs.tutorial"
+              target="_blank"
+              class="link-item"
+            >
               <i class="icon el-icon-position"></i>
               {{ $t('Schemas.quickStart') }}
             </a>
@@ -58,11 +63,19 @@
             filter-placement="bottom"
           >
           </el-table-column>
-          <el-table-column prop="descr" show-overflow-tooltip :label="$t('Schemas.description')"></el-table-column>
+          <el-table-column
+            prop="descr"
+            show-overflow-tooltip
+            :label="$t('Schemas.description')"
+          ></el-table-column>
           <el-table-column width="80px">
             <template slot-scope="{ row }">
-              <el-button type="dashed danger" size="mini" @click="deleteData(row)">
-                {{ $t('Base.delete') }}
+              <el-button
+                type="dashed danger"
+                size="mini"
+                @click="deleteData(row)"
+              >
+                {{ $t('RuleEngine.delete') }}
               </el-button>
             </template>
           </el-table-column>

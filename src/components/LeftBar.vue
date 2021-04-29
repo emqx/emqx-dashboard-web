@@ -1,6 +1,11 @@
 <template>
   <div class="left-bar" :style="{ width: leftBarCollapse ? '80px' : '200px' }">
-    <el-menu :default-active="defaultSelectedKeys" :collapse="leftBarCollapse" class="menu-bgColor" router>
+    <el-menu
+      :default-active="defaultSelectedKeys"
+      :collapse="leftBarCollapse"
+      class="menu-bgColor"
+      router
+    >
       <template v-for="menu in menus">
         <template v-if="$hasShow(menu.key)">
           <el-menu-item :key="menu.path" :index="menu.path">
@@ -201,7 +206,9 @@ export default {
         if (!item.key || !item.children) {
           return
         }
-        if (item.children.find(($) => path.includes($.path) || path === $.path)) {
+        if (
+          item.children.find(($) => path.includes($.path) || path === $.path)
+        ) {
           if (!this.defaultOpenKeys.includes(item.key)) {
             this.defaultOpenKeys.push(item.key)
           }
@@ -232,7 +239,7 @@ export default {
   .el-menu--collapse {
     width: 80px;
 
-    & i{
+    & i {
       margin-left: 10px;
     }
   }

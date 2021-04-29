@@ -5,7 +5,12 @@
         <el-form :model="record" ref="record" :rules="rules">
           <el-col :span="6">
             <el-form-item>
-              <emq-select v-model="type" :field="{ options: typeOptions }" size="small" @selectChange="typeChange">
+              <emq-select
+                v-model="type"
+                :field="{ options: typeOptions }"
+                size="small"
+                @selectChange="typeChange"
+              >
               </emq-select>
             </el-form-item>
           </el-col>
@@ -42,7 +47,13 @@
           </el-col>
         </el-form>
         <div class="col-oper">
-          <el-button :loading="addLoading" type="primary" icon="el-icon-plus" size="small" @click="save">
+          <el-button
+            :loading="addLoading"
+            type="primary"
+            icon="el-icon-plus"
+            size="small"
+            @click="save"
+          >
             {{ $t('Base.add') }}
           </el-button>
         </div>
@@ -50,14 +61,27 @@
     </div>
     <el-row :gutter="20">
       <el-col :span="12">
-        <el-table :data="clientidTableData" class="data-list" v-loading="idListLoading">
-          <el-table-column prop="clientid" :label="$t('Clients.clientId')"> </el-table-column>
+        <el-table
+          :data="clientidTableData"
+          class="data-list"
+          v-loading="idListLoading"
+        >
+          <el-table-column prop="clientid" :label="$t('Clients.clientId')">
+          </el-table-column>
           <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showEdit(row, 'clientid')">
+              <el-button
+                type="dashed"
+                size="mini"
+                @click="showEdit(row, 'clientid')"
+              >
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="handleDelete(row, 'clientid')">
+              <el-button
+                type="dashed danger"
+                size="mini"
+                @click="handleDelete(row, 'clientid')"
+              >
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -79,14 +103,27 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <el-table :data="usernameTableData" class="data-list" v-loading="nameListLoading">
-          <el-table-column prop="username" :label="$t('Clients.username')"> </el-table-column>
+        <el-table
+          :data="usernameTableData"
+          class="data-list"
+          v-loading="nameListLoading"
+        >
+          <el-table-column prop="username" :label="$t('Clients.username')">
+          </el-table-column>
           <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showEdit(row, 'username')">
+              <el-button
+                type="dashed"
+                size="mini"
+                @click="showEdit(row, 'username')"
+              >
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="handleDelete(row, 'username')">
+              <el-button
+                type="dashed danger"
+                size="mini"
+                @click="handleDelete(row, 'username')"
+              >
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -108,27 +145,50 @@
         </div>
       </el-col>
     </el-row>
-    <el-dialog :visible.sync="editVisible" width="400px" :title="$t('Base.edit')" @keyup.enter.native="handleEdit">
-      <el-form ref="editRecord" class="el-form--public app-info" size="medium" :rules="rules" :model="editRecord">
+    <el-dialog
+      :visible.sync="editVisible"
+      width="400px"
+      :title="$t('Base.edit')"
+      @keyup.enter.native="handleEdit"
+    >
+      <el-form
+        ref="editRecord"
+        class="el-form--public app-info"
+        size="medium"
+        :rules="rules"
+        :model="editRecord"
+      >
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item
               prop="login"
-              :label="operType === 'clientid' ? $t('Clients.clientId') : $t('Clients.username')"
+              :label="
+                operType === 'clientid'
+                  ? $t('Clients.clientId')
+                  : $t('Clients.username')
+              "
             >
               <el-input v-model="editRecord.login" disabled></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item prop="password" label="Password">
-              <el-input v-model="editRecord.password" type="password"></el-input>
+              <el-input
+                v-model="editRecord.password"
+                type="password"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" class="cache-btn" @click="editVisible = false">
+        <el-button
+          plain
+          size="small"
+          class="cache-btn"
+          @click="editVisible = false"
+        >
           {{ $t('Base.cancel') }}
         </el-button>
         <el-button type="primary" size="small" @click="handleEdit">

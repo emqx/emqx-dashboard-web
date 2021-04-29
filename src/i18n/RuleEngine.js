@@ -65,7 +65,8 @@ export default {
   },
   editResourceTips: {
     zh: '确定修改该资源相关配置信息？',
-    en: 'Are you sure to modify the configuration information of this resource?',
+    en:
+      'Are you sure to modify the configuration information of this resource?',
   },
   resourceTypes: {
     zh: '资源类型',
@@ -234,7 +235,8 @@ export default {
     en: 'Upgrade Tip',
   },
   jsonDecodeUpgrade: {
-    zh: '当前版本取消对 payload 的自动 JSON 解码，选择 payload 中的字段请使用 json_decode 解码，如 SQL 示例。',
+    zh:
+      '当前版本取消对 payload 的自动 JSON 解码，选择 payload 中的字段请使用 json_decode 解码，如 SQL 示例。',
     en:
       'The current version cancels the automatic JSON decoding of the payload. Select the field in the payload and use json_decode to decode it, as in the SQL example.',
   },
@@ -381,7 +383,8 @@ export default {
   payload_doc: {
     en:
       'The payload, if in JSON format, will be automatically decoded, and the object information will be obtained by using payload.x in SQL',
-    zh: '消息内容, 如果是 JSON 格式将自动解码, 在 SQL 中使用 payload.x 获取对象信息',
+    zh:
+      '消息内容, 如果是 JSON 格式将自动解码, 在 SQL 中使用 payload.x 获取对象信息',
   },
   peername_doc: {
     en: 'Client peer host',
@@ -434,7 +437,8 @@ export default {
     zh: '会话取消订阅',
   },
   parse_confirm: {
-    en: 'Detected incompatible old SQL syntax, confirm to automatically convert it to the new version?',
+    en:
+      'Detected incompatible old SQL syntax, confirm to automatically convert it to the new version?',
     zh: '检测到不兼容的旧版 SQL 语法，是否自动转换为新版语法？',
   },
   fallbackAction: {
@@ -442,7 +446,8 @@ export default {
     zh: '失败备选动作',
   },
   fallbackActionCreate: {
-    en: 'Set the action that will be performed when an action execution error occurs (optional)',
+    en:
+      'Set the action that will be performed when an action execution error occurs (optional)',
     zh: '设置发生动作执行错误时将执行的动作（可选）',
   },
   fallbackActionTip: {
@@ -490,7 +495,8 @@ export default {
     en: 'Rule ID',
   },
   resourceSelectTip: {
-    zh: '下拉选项优先显示资源描述信息，没有描述信息则显示资源 ID，选中后显示的值为其 ID',
+    zh:
+      '下拉选项优先显示资源描述信息，没有描述信息则显示资源 ID，选中后显示的值为其 ID',
     en: `The drag-and-drop option gives priority to the resource description information,
     if there is no description information, the resource ID is displayed, but the relative ID displayed after selection`,
   },

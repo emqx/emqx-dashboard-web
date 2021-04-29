@@ -40,28 +40,67 @@ export default {
             this.$t('Clients.connectSuccess'),
           ],
           seriesData: [
-            { value: 0, name: this.$t('Clients.authSuccess'), itemStyle: { color: '#21BB7A' } },
-            { value: 0, name: this.$t('Clients.authFailed'), itemStyle: { color: '#FFC600' } },
-            { value: 0, name: this.$t('Clients.connectSuccess'), itemStyle: { color: '#3237A9' } },
+            {
+              value: 0,
+              name: this.$t('Clients.authSuccess'),
+              itemStyle: { color: '#21BB7A' },
+            },
+            {
+              value: 0,
+              name: this.$t('Clients.authFailed'),
+              itemStyle: { color: '#FFC600' },
+            },
+            {
+              value: 0,
+              name: this.$t('Clients.connectSuccess'),
+              itemStyle: { color: '#3237A9' },
+            },
           ],
         },
         {
           chartId: 'message',
           cardTitle: this.$t('Overview.message'),
-          legendData: [this.$t('Overview.receivedMsg'), this.$t('Overview.sentMsg'), this.$t('Overview.droppedMsg')],
+          legendData: [
+            this.$t('Overview.receivedMsg'),
+            this.$t('Overview.sentMsg'),
+            this.$t('Overview.droppedMsg'),
+          ],
           seriesData: [
-            { value: 0, name: this.$t('Overview.receivedMsg'), itemStyle: { color: '#CAEADE' } },
-            { value: 0, name: this.$t('Overview.sentMsg'), itemStyle: { color: '#35BFDE' } },
-            { value: 0, name: this.$t('Overview.droppedMsg'), itemStyle: { color: '#3E32E2' } },
+            {
+              value: 0,
+              name: this.$t('Overview.receivedMsg'),
+              itemStyle: { color: '#CAEADE' },
+            },
+            {
+              value: 0,
+              name: this.$t('Overview.sentMsg'),
+              itemStyle: { color: '#35BFDE' },
+            },
+            {
+              value: 0,
+              name: this.$t('Overview.droppedMsg'),
+              itemStyle: { color: '#3E32E2' },
+            },
           ],
         },
         {
           chartId: 'messageDrop',
           cardTitle: this.$t('Overview.messageDrop'),
-          legendData: [this.$t('Overview.expired'), this.$t('Overview.noSubscribers')],
+          legendData: [
+            this.$t('Overview.expired'),
+            this.$t('Overview.noSubscribers'),
+          ],
           seriesData: [
-            { value: 0, name: this.$t('Overview.expired'), itemStyle: { color: '#CDBFFA' } },
-            { value: 0, name: this.$t('Overview.noSubscribers'), itemStyle: { color: '#383F65' } },
+            {
+              value: 0,
+              name: this.$t('Overview.expired'),
+              itemStyle: { color: '#CDBFFA' },
+            },
+            {
+              value: 0,
+              name: this.$t('Overview.noSubscribers'),
+              itemStyle: { color: '#383F65' },
+            },
           ],
         },
       ],

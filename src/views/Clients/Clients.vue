@@ -43,7 +43,11 @@
                 ></el-input>
               </el-col>
               <el-col :span="8">
-                <el-select v-model="fuzzyParams.conn_state" size="small" :placeholder="$t('Clients.connectedStatus')">
+                <el-select
+                  v-model="fuzzyParams.conn_state"
+                  size="small"
+                  :placeholder="$t('Clients.connectedStatus')"
+                >
                   <el-option value="connected"></el-option>
                   <el-option value="disconnected"></el-option>
                 </el-select>
@@ -51,7 +55,11 @@
               <el-col :span="8">
                 <el-row class="form-item-row">
                   <el-col :span="8">
-                    <el-select v-model="fuzzyParams.comparator" class="comparator" size="small">
+                    <el-select
+                      v-model="fuzzyParams.comparator"
+                      class="comparator"
+                      size="small"
+                    >
                       <el-option label=">=" value="_gte"></el-option>
                       <el-option label="<=" value="_lte"></el-option>
                     </el-select>
@@ -70,28 +78,61 @@
                 </el-row>
               </el-col>
               <el-col :span="8">
-                <el-select v-model="fuzzyParams.proto_name" size="small" :placeholder="$t('Clients.protocol')">
-                  <el-option v-for="name in protoNames" :key="name" :value="name"> </el-option>
+                <el-select
+                  v-model="fuzzyParams.proto_name"
+                  size="small"
+                  :placeholder="$t('Clients.protocol')"
+                >
+                  <el-option
+                    v-for="name in protoNames"
+                    :key="name"
+                    :value="name"
+                  >
+                  </el-option>
                 </el-select>
               </el-col>
             </template>
             <div class="col-oper">
-              <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
+              <el-button
+                type="primary"
+                icon="el-icon-search"
+                size="small"
+                @click="handleSearch"
+              >
                 {{ $t('Clients.search') }}
               </el-button>
-              <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
+              <el-button
+                plain
+                size="small"
+                :icon="resetIcon"
+                @click="resetSearch"
+              >
                 {{ $t('Clients.reset') }}
               </el-button>
-              <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
-                {{ showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand') }}
-                <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+              <a
+                href="javascript:;"
+                class="show-more"
+                @click="showMoreQuery = !showMoreQuery"
+              >
+                {{
+                  showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand')
+                }}
+                <i
+                  :class="
+                    showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'
+                  "
+                ></i>
               </a>
             </div>
           </el-row>
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="clientid" min-width="130px" :label="$t('Clients.clientId')">
+          <el-table-column
+            prop="clientid"
+            min-width="130px"
+            :label="$t('Clients.clientId')"
+          >
             <template slot-scope="{ row }">
               <router-link
                 :to="{
@@ -104,11 +145,24 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="username" min-width="120px" :label="$t('Clients.username')"></el-table-column>
-          <el-table-column prop="ipaddress" min-width="120px" :label="$t('Clients.ipAddress')">
-            <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template>
+          <el-table-column
+            prop="username"
+            min-width="120px"
+            :label="$t('Clients.username')"
+          ></el-table-column>
+          <el-table-column
+            prop="ipaddress"
+            min-width="120px"
+            :label="$t('Clients.ipAddress')"
+          >
+            <template slot-scope="{ row }">
+              {{ row.ip_address }}:{{ row.port }}
+            </template>
           </el-table-column>
-          <el-table-column prop="keepalive" :label="$t('Clients.keepalive')"></el-table-column>
+          <el-table-column
+            prop="keepalive"
+            :label="$t('Clients.keepalive')"
+          ></el-table-column>
           <el-table-column
             prop="proto_name"
             filter-placement="bottom"
@@ -122,17 +176,38 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="connected" min-width="100px" :label="$t('Clients.connectedStatus')">
+          <el-table-column
+            prop="connected"
+            min-width="100px"
+            :label="$t('Clients.connectedStatus')"
+          >
             <template slot-scope="{ row }">
-              <el-badge is-dot :type="row.connected ? 'success' : 'danger'"> </el-badge>
-              <span>{{ row.connected ? $t('Clients.connected') : $t('Clients.disconnected') }}</span>
+              <el-badge is-dot :type="row.connected ? 'success' : 'danger'">
+              </el-badge>
+              <span>{{
+                row.connected
+                  ? $t('Clients.connected')
+                  : $t('Clients.disconnected')
+              }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="connected_at" min-width="140px" :label="$t('Clients.connectionAt')"></el-table-column>
+          <el-table-column
+            prop="connected_at"
+            min-width="140px"
+            :label="$t('Clients.connectionAt')"
+          ></el-table-column>
           <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
-              <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
-                {{ row.connected ? $t('Clients.kickOut') : $t('Clients.cleanSession') }}
+              <el-button
+                size="mini"
+                type="dashed"
+                @click="handleDisconnect(row)"
+              >
+                {{
+                  row.connected
+                    ? $t('Clients.kickOut')
+                    : $t('Clients.cleanSession')
+                }}
               </el-button>
             </template>
           </el-table-column>
@@ -189,7 +264,10 @@ export default {
       },
       count: 0,
       filterOptions: {
-        protoName: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M', 'Stomp'].map(($) => ({ text: $, value: $ })),
+        protoName: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M', 'Stomp'].map(($) => ({
+          text: $,
+          value: $,
+        })),
       },
       nodeName: '',
       currentNodes: [{ name: this.$t('RuleEngine.allNodes'), node: 'all' }],
@@ -243,7 +321,15 @@ export default {
     },
     genQueryParams(params) {
       let newParams = {}
-      const { _like_clientid, _like_username, ip_address, conn_state, proto_name, comparator, _connected_at } = params
+      const {
+        _like_clientid,
+        _like_username,
+        ip_address,
+        conn_state,
+        proto_name,
+        comparator,
+        _connected_at,
+      } = params
       newParams = {
         _like_clientid: _like_clientid || undefined,
         _like_username: _like_username || undefined,
@@ -290,7 +376,10 @@ export default {
       if (reload) {
         this.params._page = 1
       }
-      const data = await listNodeClients(this.nodeName, { ...this.params, ...params })
+      const data = await listNodeClients(this.nodeName, {
+        ...this.params,
+        ...params,
+      })
       const {
         items = [],
         meta: { count = 0, hasnext = false },

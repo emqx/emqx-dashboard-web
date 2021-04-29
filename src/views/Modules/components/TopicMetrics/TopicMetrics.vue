@@ -21,7 +21,13 @@
           >
             {{ $t('Base.create') }}
           </el-button>
-          <el-button v-else size="small" class="confirm-btn" type="primary" @click="handleModLoad">
+          <el-button
+            v-else
+            size="small"
+            class="confirm-btn"
+            type="primary"
+            @click="handleModLoad"
+          >
             {{ $t('Analysis.enable') }}
           </el-button>
         </div>
@@ -37,8 +43,15 @@
             <template slot-scope="props">
               <div class="expand-header">
                 {{ $t('Analysis.details') }}
-                <el-radio-group v-model="topicQos" :prop="props" class="topic-qos-radio" size="mini">
-                  <el-radio-button label="all">{{ $t('Plugins.all') }}</el-radio-button>
+                <el-radio-group
+                  v-model="topicQos"
+                  :prop="props"
+                  class="topic-qos-radio"
+                  size="mini"
+                >
+                  <el-radio-button label="all">{{
+                    $t('Plugins.all')
+                  }}</el-radio-button>
                   <el-radio-button label="qos0">QoS 0</el-radio-button>
                   <el-radio-button label="qos1">QoS 1</el-radio-button>
                   <el-radio-button label="qos2">QoS 2</el-radio-button>
@@ -50,7 +63,11 @@
                     <div>
                       {{ $t('Analysis.messageIn') }}
                       <span class="message-rate">
-                        {{ $t('Analysis.rateItem', [getCurrentTopicData('in', 'rate')]) }}
+                        {{
+                          $t('Analysis.rateItem', [
+                            getCurrentTopicData('in', 'rate'),
+                          ])
+                        }}
                         {{ $t('Analysis.rate') }}
                       </span>
                     </div>
@@ -64,7 +81,11 @@
                     <div>
                       {{ $t('Analysis.messageOut') }}
                       <span class="message-rate">
-                        {{ $t('Analysis.rateItem', [getCurrentTopicData('out', 'rate')]) }}
+                        {{
+                          $t('Analysis.rateItem', [
+                            getCurrentTopicData('out', 'rate'),
+                          ])
+                        }}
                         {{ $t('Analysis.rate') }}
                       </span>
                     </div>
@@ -78,7 +99,13 @@
                     <div>
                       {{ $t('Analysis.messageDrop') }}
                       <span class="message-rate">
-                        {{ $t('Analysis.rateItem', [getCurrentTopicDropRate(currentTopic['messages.dropped.rate'])]) }}
+                        {{
+                          $t('Analysis.rateItem', [
+                            getCurrentTopicDropRate(
+                              currentTopic['messages.dropped.rate'],
+                            ),
+                          ])
+                        }}
                         {{ $t('Analysis.rate') }}
                       </span>
                     </div>
@@ -90,16 +117,36 @@
               </el-row>
             </template>
           </el-table-column>
-          <el-table-column prop="topic" :label="$t('Topics.topic')"></el-table-column>
-          <el-table-column prop="messageIn" :label="$t('Analysis.messageIn')"></el-table-column>
-          <el-table-column prop="messageOut" :label="$t('Analysis.messageOut')"></el-table-column>
-          <el-table-column prop="messageDrop" :label="$t('Analysis.messageDrop')"></el-table-column>
+          <el-table-column
+            prop="topic"
+            :label="$t('Topics.topic')"
+          ></el-table-column>
+          <el-table-column
+            prop="messageIn"
+            :label="$t('Analysis.messageIn')"
+          ></el-table-column>
+          <el-table-column
+            prop="messageOut"
+            :label="$t('Analysis.messageOut')"
+          ></el-table-column>
+          <el-table-column
+            prop="messageDrop"
+            :label="$t('Analysis.messageDrop')"
+          ></el-table-column>
           <el-table-column>
             <template slot-scope="{ row, $index }">
-              <el-button size="mini" type="dashed" @click="viewTopicDetails(row, $index)">
+              <el-button
+                size="mini"
+                type="dashed"
+                @click="viewTopicDetails(row, $index)"
+              >
                 {{ $t('Base.view') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="deleteTopicMetric(row)">
+              <el-button
+                type="dashed danger"
+                size="mini"
+                @click="deleteTopicMetric(row)"
+              >
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -115,15 +162,26 @@
       class="create-subscribe"
       @keyup.enter.native="handleAdd"
     >
-      <el-form ref="record" class="el-form--public" :model="record" :rules="rules" size="small" label-position="top">
+      <el-form
+        ref="record"
+        class="el-form--public"
+        :model="record"
+        :rules="rules"
+        size="small"
+        label-position="top"
+      >
         <el-form-item prop="topic" :label="$t('Topics.topic')">
           <el-input v-model="record.topic" placeholder="Topic"></el-input>
         </el-form-item>
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="handleClose">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="handleAdd">{{ $t('Base.confirm') }}</el-button>
+        <el-button plain size="small" @click="handleClose">{{
+          $t('Base.cancel')
+        }}</el-button>
+        <el-button type="primary" size="small" @click="handleAdd">{{
+          $t('Base.confirm')
+        }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -246,7 +304,9 @@ export default {
       this.$refs.record.resetFields()
     },
     viewTopicDetails(row, index) {
-      const elExpand = document.querySelectorAll('.el-table__expand-icon')[index]
+      const elExpand = document.querySelectorAll('.el-table__expand-icon')[
+        index
+      ]
       if (elExpand) {
         elExpand.click()
       }
@@ -275,7 +335,9 @@ export default {
       const res = await loadTopicMetrics(row.topic)
       if (res) {
         this.currentTopic = res
-        this.$refs.crudTable.store.states.expandRows = expandedRows.length ? [row] : []
+        this.$refs.crudTable.store.states.expandRows = expandedRows.length
+          ? [row]
+          : []
         this.loadData()
         this.setLoadDetailInterval()
       }

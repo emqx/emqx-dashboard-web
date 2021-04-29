@@ -3,7 +3,10 @@
     <el-row>
       <el-col :span="22">
         <el-form-item style="margin-bottom: 0px">
-          <el-input v-model="value.filename" :placeholder="$t('Modules.fileTip')"></el-input>
+          <el-input
+            v-model="value.filename"
+            :placeholder="$t('Modules.fileTip')"
+          ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="2">

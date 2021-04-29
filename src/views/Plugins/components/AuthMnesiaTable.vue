@@ -10,7 +10,11 @@
                 <el-input
                   v-model="authRecord.login"
                   size="small"
-                  :placeholder="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')"
+                  :placeholder="
+                    fromCloud
+                      ? $t('Plugins.username')
+                      : $t('Plugins.usernameOrClientid')
+                  "
                   @keyup.enter.native="AuthSave"
                 >
                 </el-input>
@@ -21,7 +25,13 @@
                   :content="$t('Plugins.mnesiaTip')"
                   :tabindex="-1"
                 >
-                  <a slot="reference" class="tutorial" :href="mnesiaDoc" target="_blank" rel="noopener">
+                  <a
+                    slot="reference"
+                    class="tutorial"
+                    :href="mnesiaDoc"
+                    target="_blank"
+                    rel="noopener"
+                  >
                     <i class="iconfont icon-bangzhu"></i>
                   </a>
                 </el-popover>
@@ -37,7 +47,12 @@
                 </el-input>
               </el-col>
               <div class="col-oper">
-                <el-button type="primary" icon="el-icon-plus" size="small" @click="AuthSave">
+                <el-button
+                  type="primary"
+                  icon="el-icon-plus"
+                  size="small"
+                  @click="AuthSave"
+                >
                   {{ $t('Base.add') }}
                 </el-button>
               </div>
@@ -46,7 +61,11 @@
           <el-table :data="authTableData" class="data-list">
             <el-table-column
               prop="login"
-              :label="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')"
+              :label="
+                fromCloud
+                  ? $t('Plugins.username')
+                  : $t('Plugins.usernameOrClientid')
+              "
             >
             </el-table-column>
             <el-table-column prop="oper" width="120px">
@@ -54,7 +73,11 @@
                 <el-button type="dashed" size="mini" @click="showAuthEdit(row)">
                   {{ $t('Base.edit') }}
                 </el-button>
-                <el-button type="dashed danger" size="mini" @click="handleAuthDelete(row)">
+                <el-button
+                  type="dashed danger"
+                  size="mini"
+                  @click="handleAuthDelete(row)"
+                >
                   {{ $t('Base.delete') }}
                 </el-button>
               </template>
@@ -86,7 +109,11 @@
                   size="small"
                   value-key="label"
                   :fetch-suggestions="queryACLSearch"
-                  :placeholder="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')"
+                  :placeholder="
+                    fromCloud
+                      ? $t('Plugins.username')
+                      : $t('Plugins.usernameOrClientid')
+                  "
                   @select="handleACLSelect"
                   @keyup.enter.native="ACLSave"
                 >
@@ -98,7 +125,13 @@
                   :content="$t('Plugins.mnesiaTip')"
                   :tabindex="-1"
                 >
-                  <a slot="reference" class="tutorial" :href="mnesiaDoc" target="_blank" rel="noopener">
+                  <a
+                    slot="reference"
+                    class="tutorial"
+                    :href="mnesiaDoc"
+                    target="_blank"
+                    rel="noopener"
+                  >
                     <i class="iconfont icon-bangzhu"></i>
                   </a>
                 </el-popover>
@@ -113,13 +146,28 @@
                 </el-input>
               </el-col>
               <el-col :span="4">
-                <emq-select v-model="aclRecord.allow" size="small" :field="{ options: allowOptions }"> </emq-select>
+                <emq-select
+                  v-model="aclRecord.allow"
+                  size="small"
+                  :field="{ options: allowOptions }"
+                >
+                </emq-select>
               </el-col>
               <el-col :span="4">
-                <emq-select v-model="aclRecord.action" size="small" :field="{ options: actionOptions }"> </emq-select>
+                <emq-select
+                  v-model="aclRecord.action"
+                  size="small"
+                  :field="{ options: actionOptions }"
+                >
+                </emq-select>
               </el-col>
               <div class="col-oper">
-                <el-button type="primary" icon="el-icon-plus" size="small" @click="ACLSave">
+                <el-button
+                  type="primary"
+                  icon="el-icon-plus"
+                  size="small"
+                  @click="ACLSave"
+                >
                   {{ $t('Base.add') }}
                 </el-button>
               </div>
@@ -128,11 +176,17 @@
           <el-table :data="aclTableData" class="data-list">
             <el-table-column
               prop="login"
-              :label="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')"
+              :label="
+                fromCloud
+                  ? $t('Plugins.username')
+                  : $t('Plugins.usernameOrClientid')
+              "
             >
             </el-table-column>
-            <el-table-column prop="topic" :label="$t('Topics.topic')"> </el-table-column>
-            <el-table-column prop="action" :label="$t('Plugins.action')"> </el-table-column>
+            <el-table-column prop="topic" :label="$t('Topics.topic')">
+            </el-table-column>
+            <el-table-column prop="action" :label="$t('Plugins.action')">
+            </el-table-column>
             <el-table-column prop="allow" :label="$t('Plugins.isAllow')">
               <template slot-scope="{ row }">
                 {{ row.allow ? $t('Plugins.allow') : $t('Plugins.deny') }}
@@ -140,7 +194,11 @@
             </el-table-column>
             <el-table-column prop="oper" width="120px">
               <template slot-scope="{ row }">
-                <el-button type="dashed danger" size="mini" @click="handleACLDelete(row)">
+                <el-button
+                  type="dashed danger"
+                  size="mini"
+                  @click="handleACLDelete(row)"
+                >
                   {{ $t('Base.delete') }}
                 </el-button>
               </template>
@@ -164,24 +222,50 @@
       </el-card>
     </div>
 
-    <el-dialog :visible.sync="editVisible" width="400px" :title="$t('Base.edit')" @keyup.enter.native="handleAuthEdit">
-      <el-form ref="editRecord" class="el-form--public app-info" size="medium" :rules="rules" :model="editRecord">
+    <el-dialog
+      :visible.sync="editVisible"
+      width="400px"
+      :title="$t('Base.edit')"
+      @keyup.enter.native="handleAuthEdit"
+    >
+      <el-form
+        ref="editRecord"
+        class="el-form--public app-info"
+        size="medium"
+        :rules="rules"
+        :model="editRecord"
+      >
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item prop="login" :label="fromCloud ? $t('Plugins.username') : $t('Plugins.usernameOrClientid')">
+            <el-form-item
+              prop="login"
+              :label="
+                fromCloud
+                  ? $t('Plugins.username')
+                  : $t('Plugins.usernameOrClientid')
+              "
+            >
               <el-input v-model="editRecord.login" disabled></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item prop="password" label="Password">
-              <el-input v-model="editRecord.password" type="password"></el-input>
+              <el-input
+                v-model="editRecord.password"
+                type="password"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" class="cache-btn" @click="editVisible = false">
+        <el-button
+          plain
+          size="small"
+          class="cache-btn"
+          @click="editVisible = false"
+        >
           {{ $t('Base.cancel') }}
         </el-button>
         <el-button type="primary" size="small" @click="handleAuthEdit">

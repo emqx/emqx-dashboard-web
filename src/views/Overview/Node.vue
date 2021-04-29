@@ -20,7 +20,10 @@
           <div class="card-wrapper">
             <el-card shadow="never" class="emq-list-card">
               <div class="emq-title">{{ $t('Overview.basic') }}</div>
-              <node-basic-card :value="record" :show-button="false"></node-basic-card>
+              <node-basic-card
+                :value="record"
+                :show-button="false"
+              ></node-basic-card>
             </el-card>
 
             <el-card shadow="never" class="emq-list-card">
@@ -42,9 +45,19 @@
                   min-width="80px"
                   :label="$t('Overview.listenerAddress')"
                 ></el-table-column>
-                <el-table-column prop="acceptors" min-width="60px" label="Acceptors"></el-table-column>
-                <el-table-column prop="current_conns" min-width="120px" :label="$t('Overview.connectCurrentAndMax')">
-                  <template slot-scope="{ row }"> {{ row.current_conns }} / {{ row.max_conns }} </template>
+                <el-table-column
+                  prop="acceptors"
+                  min-width="60px"
+                  label="Acceptors"
+                ></el-table-column>
+                <el-table-column
+                  prop="current_conns"
+                  min-width="120px"
+                  :label="$t('Overview.connectCurrentAndMax')"
+                >
+                  <template slot-scope="{ row }">
+                    {{ row.current_conns }} / {{ row.max_conns }}
+                  </template>
                 </el-table-column>
               </el-table>
             </el-card>
@@ -64,22 +77,49 @@
               <el-row class="stats-row" :gutter="30">
                 <el-col :span="8">
                   <el-table :data="metricsData.client">
-                    <el-table-column prop="key" :label="$t('Overview.client')" min-width="100px"></el-table-column>
-                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                    <el-table-column
+                      prop="key"
+                      :label="$t('Overview.client')"
+                      min-width="100px"
+                    ></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      label=""
+                      width="120px"
+                      sortable
+                    ></el-table-column>
                   </el-table>
                 </el-col>
 
                 <el-col :span="8">
                   <el-table :data="metricsData.delivery">
-                    <el-table-column prop="key" label="Delivery" min-width="100px"></el-table-column>
-                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                    <el-table-column
+                      prop="key"
+                      label="Delivery"
+                      min-width="100px"
+                    ></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      label=""
+                      width="120px"
+                      sortable
+                    ></el-table-column>
                   </el-table>
                 </el-col>
 
                 <el-col :span="8">
                   <el-table :data="metricsData.session">
-                    <el-table-column prop="key" :label="$t('Overview.session')" min-width="100px"></el-table-column>
-                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                    <el-table-column
+                      prop="key"
+                      :label="$t('Overview.session')"
+                      min-width="100px"
+                    ></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      label=""
+                      width="120px"
+                      sortable
+                    ></el-table-column>
                   </el-table>
                 </el-col>
               </el-row>
@@ -92,7 +132,12 @@
                       :label="$t('Overview.mqttPackages')"
                       min-width="100px"
                     ></el-table-column>
-                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      label=""
+                      width="120px"
+                      sortable
+                    ></el-table-column>
                   </el-table>
                 </el-col>
 
@@ -103,14 +148,28 @@
                       :label="$t('Overview.messageNumber')"
                       min-width="100px"
                     ></el-table-column>
-                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      label=""
+                      width="120px"
+                      sortable
+                    ></el-table-column>
                   </el-table>
                 </el-col>
 
                 <el-col :span="8">
                   <el-table :data="metricsData.bytes">
-                    <el-table-column prop="key" :label="$t('Overview.traffic')" min-width="100px"></el-table-column>
-                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
+                    <el-table-column
+                      prop="key"
+                      :label="$t('Overview.traffic')"
+                      min-width="100px"
+                    ></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      label=""
+                      width="120px"
+                      sortable
+                    ></el-table-column>
                   </el-table>
                 </el-col>
               </el-row>
@@ -215,7 +274,13 @@ export default {
           'unsubscribe',
           'disconnected',
         ],
-        session: ['created', 'resumed', 'takeovered', 'discarded', 'terminated'],
+        session: [
+          'created',
+          'resumed',
+          'takeovered',
+          'discarded',
+          'terminated',
+        ],
         delivery: [
           'dropped',
           'dropped.no_local',
@@ -254,7 +319,10 @@ export default {
           }
         })
         // eslint-disable-next-line
-        const otherList = Object.entries(dataMap[key]).map(([key, value]) => ({ key, value }))
+        const otherList = Object.entries(dataMap[key]).map(([key, value]) => ({
+          key,
+          value,
+        }))
         return [...list, ...otherList]
       }
 
