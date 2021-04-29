@@ -60,7 +60,7 @@
 <script>
 import { loadAlarm, loadHistoryAlarm } from '@/api/common'
 import { getDateDiff } from '@/common/utils'
-import dateformat from 'dateformat'
+import moment from 'moment'
 
 export default {
   name: 'Alerts',
@@ -89,7 +89,8 @@ export default {
       if (typeof date !== 'number' && date === 'infinity') {
         return ''
       }
-      return dateformat(date / 1000, 'yyyy-mm-dd HH:MM:ss')
+      //return dateformat(date / 1000, 'yyyy-mm-dd HH:MM:ss')
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
     },
     async loadData() {
       if (this.alertType === 'present') {
