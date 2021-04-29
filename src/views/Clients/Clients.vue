@@ -438,5 +438,9 @@ export default {
       }
     }
   }
+
+  .el-badge {
+  height: 20px;
+}
 }
 </style>

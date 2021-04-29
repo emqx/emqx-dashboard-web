@@ -13,7 +13,12 @@
             :class="item.name === settingType ? 'delete-icon' : 'hide-delete'"
             @click="deleteZone(item.name)"
           >
-            <i class="el-icon-minus"></i>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              circle
+              size="mini"
+            ></el-button>
           </span>
         </div>
         <config-detail
@@ -30,7 +35,12 @@
       </el-tab-pane>
       <el-tab-pane label="" name="addZone">
         <span slot="label" size="mini">
-          <i class="el-icon-plus"></i>
+          <el-button
+            type="success"
+            icon="el-icon-plus"
+            circle
+            size="mini"
+          ></el-button>
         </span>
         <config-detail
           v-if="settingType === 'addZone'"
@@ -162,13 +172,17 @@ export default {
 
 <style lang="scss">
 .zone-settings {
-  .el-tabs__item.is-active {
-    .delete-icon {
-      visibility: hidden;
-    }
-    &:hover {
+  .el-tabs__item {
+    padding-right: 30px;
+    padding-left: 5px;
+    &.is-active {
       .delete-icon {
-        visibility: visible;
+        visibility: hidden;
+      }
+      &:hover {
+        .delete-icon {
+          visibility: visible;
+        }
       }
     }
   }
@@ -186,6 +200,9 @@ export default {
     }
     .hide-delete {
       display: none;
+    }
+    .delete-icon {
+      right: -26px;
     }
   }
 }

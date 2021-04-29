@@ -252,5 +252,11 @@ export default {
   .expand-column .cell {
     visibility: hidden;
   }
+
+  .el-badge {
+  height: 20px;
 }
+}
+
+
 </style>

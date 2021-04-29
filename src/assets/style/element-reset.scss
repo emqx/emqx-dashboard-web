@@ -11,6 +11,9 @@
     font-weight: 600;
   }
 }
+.el-badge {
+  height: 34px;
+}
 /* Button */
 .el-button {
   box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
@@ -112,6 +115,9 @@
   &.hover {
     background-color: rgba(52, 195, 136, 0.08);
   }
+}
+.el-select {
+  margin:0 3px;
 }
 
 /* Message */
