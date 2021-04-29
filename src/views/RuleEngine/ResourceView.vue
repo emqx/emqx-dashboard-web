@@ -140,7 +140,7 @@ export default {
           await destroyResource(this.record.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
           setTimeout(() => {
-            this.$router.push({ path: '/resources' })
+            this.$router.go(-1)
           }, 500)
         })
         .catch(() => {})

@@ -209,7 +209,7 @@ export default {
           await destroyRule(this.record.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
           setTimeout(() => {
-            this.$router.push({ path: '/rules' })
+            this.$router.go(-1)
           }, 500)
         })
         .catch(() => {})
