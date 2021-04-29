@@ -38,6 +38,8 @@ export default {
   }
 
   .page-header-title-view {
+    float: left;
+    margin-block-start: 1em;
     .title {
       display: inline-block;
       padding-right: 12px;
@@ -45,7 +47,7 @@ export default {
       font-weight: 700;
       font-size: 16px;
       line-height: 1.4;
-
+      margin-left: 20px;
       span {
         margin-right: 8px;
       }

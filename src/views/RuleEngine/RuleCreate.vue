@@ -28,18 +28,19 @@
               label-suffix=":"
             >
               <el-form-item class="code-editor__item" prop="rawsql" :label="$t('RuleEngine.sqlInput')">
-                <div class="monaco-container monaco-sql" :style="{ height: `${sqlEditorHeight}px` }">
-                  <monaco
-                    id="rule-sql"
-                    v-model="record.rawsql"
-                    class="sql"
-                    warp
-                    lang="sql"
-                    :provider="sqlProvider"
-                    @qucik-save="handleSQLTest"
-                  ></monaco>
-                </div>
-                <stretch-height v-model="sqlEditorHeight"></stretch-height>
+                <!-- <div class="monaco-container monaco-sql" :style="{ height: `${sqlEditorHeight}px` }"> -->
+                <monaco
+                  id="rule-sql"
+                  v-model="record.rawsql"
+                  class="sql"
+                  warp
+                  lang="sql"
+                  :provider="sqlProvider"
+                  @qucik-save="handleSQLTest"
+                  :height="sqlEditorHeight"
+                ></monaco>
+                <!-- </div> -->
+                <!-- <stretch-height v-model="sqlEditorHeight"></stretch-height> -->
               </el-form-item>
 
               <el-form-item prop="id" :label="$t('RuleEngine.ruleID')">
@@ -68,22 +69,23 @@
                   >
                     <el-input v-if="k !== 'payload'" v-model="record.ctx[k]"> </el-input>
                     <template v-else>
-                      <div class="monaco-container monaco-payload" :style="{ height: `${payloadEditorHeight}px` }">
-                        <monaco
-                          id="payload"
-                          v-model="record.ctx.payload"
-                          class="payload"
-                          :lang="payloadType"
-                          @qucik-save="handleSQLTest"
-                        ></monaco>
-                      </div>
+                      <!-- <div class="monaco-container monaco-payload" :style="{ height: `${payloadEditorHeight}px` }"> -->
+                      <monaco
+                        id="payload"
+                        v-model="record.ctx.payload"
+                        class="payload"
+                        :lang="payloadType"
+                        @qucik-save="handleSQLTest"
+                        :height="payloadEditorHeight"
+                      ></monaco>
+                      <!-- </div> -->
                       <div class="payload-type">
                         <el-radio-group v-model="payloadType">
                           <el-radio label="json">JSON</el-radio>
                           <el-radio label="plaintext">Plaintext</el-radio>
                         </el-radio-group>
                       </div>
-                      <stretch-height v-model="payloadEditorHeight" class="payload"> </stretch-height>
+                      <!-- <stretch-height v-model="payloadEditorHeight" class="payload"> </stretch-height> -->
                     </template>
                   </el-form-item>
 
@@ -95,15 +97,16 @@
                   </el-form-item>
 
                   <el-form-item class="code-editor__item" :label="$t('RuleEngine.testOutput')">
-                    <div class="monaco-container monaco-test-output" style="height: 200px">
-                      <monaco
-                        id="testOutput"
-                        v-model="testOutPut"
-                        class="test-output"
-                        lang="json"
-                        :disabled="true"
-                      ></monaco>
-                    </div>
+                    <!-- <div class="monaco-container monaco-test-output" style="height: 200px"> -->
+                    <monaco
+                      id="testOutput"
+                      v-model="testOutPut"
+                      class="test-output"
+                      lang="json"
+                      :disabled="true"
+                      height="200"
+                    ></monaco>
+                    <!-- </div> -->
                   </el-form-item>
                 </div>
               </el-collapse-transition>
@@ -135,7 +138,7 @@
       class="button-group__center rule-create-operation"
       :style="{ width: $store.state.leftBarCollapse ? ' calc(100% - 80px)' : ' calc(100% - 200px)' }"
     >
-      <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
+      <el-button type="default" size="medium" @click="$router.back()">
         {{ $t('Base.cancel') }}
       </el-button>
       <el-button type="primary" size="medium" @click="save">
@@ -150,7 +153,7 @@ import { loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule } from
 import { loadTopics } from '@/api/server'
 import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck, verifyID } from '@/common/utils'
 import Monaco from '@/components/Monaco'
-import StretchHeight from '@/components/StretchHeight'
+// import StretchHeight from '@/components/StretchHeight'
 import RuleActions from './components/RuleActions'
 import { ruleEngineProvider } from '@/common/provider'
 
@@ -160,7 +163,7 @@ export default {
   components: {
     RuleActions,
     Monaco,
-    StretchHeight,
+    // StretchHeight,
   },
 
   props: {},
@@ -170,7 +173,7 @@ export default {
       loadRuleEvents,
       isEdit: false,
       needCheckSql: true,
-      sqlEditorHeight: 320,
+      sqlEditorHeight: 300,
       payloadEditorHeight: 200,
       payloadType: 'json',
       topics: [],
@@ -392,14 +395,14 @@ export default {
         updateRule(this.currentRule, data).then(() => {
           this.$message.success(this.$t('Base.editSuccess'))
           setTimeout(() => {
-            this.$router.push({ path: '/rules' })
+            this.$router.go(-1)
           }, 600)
         })
       } else {
         createRule(data).then(() => {
           this.$message.success(this.$t('Base.createSuccess'))
           setTimeout(() => {
-            this.$router.push({ path: '/rules' })
+            this.$router.go(-1)
           }, 600)
         })
       }
@@ -479,8 +482,9 @@ export default {
   }
 
   .payload-type {
-    width: 100%;
+    // width: calc(100% - 1px);
     padding: 2px 12px;
+    margin-right: 1px;
     background: #f6f7fb;
     border: 1px solid #d9d9d9;
     border-top: none;

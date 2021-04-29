@@ -3,9 +3,9 @@
     <el-menu :default-active="defaultSelectedKeys" :collapse="leftBarCollapse" class="menu-bgColor" router>
       <template v-for="menu in menus">
         <template v-if="$hasShow(menu.key)">
-          <el-menu-item :key="menu.path" :index="menu.path" :style="{ paddingLeft: leftBarCollapse ? '30px' : '20px' }">
+          <el-menu-item :key="menu.path" :index="menu.path">
             <i :class="['iconfont', menu.icon]"></i>
-            <span>{{ menu.title }}</span>
+            <template #title>{{ menu.title }}</template>
           </el-menu-item>
         </template>
       </template>
@@ -225,18 +225,26 @@ export default {
     background-color: $color-theme;
     border-right: 1px solid $color-theme;
   }
-  .el-scrollbar {
-    height: 100vh;
-  }
+  // .el-scrollbar {
+  //   height: 100vh;
+  // }
 
   .el-menu--collapse {
     width: 80px;
+
+    & i{
+      margin-left: 10px;
+    }
   }
+  // .el-menu{
+  //   transition: all 0.3s;
+  // }
 
   .el-menu-item {
     color: #ddd;
-    & span {
-      padding-left: 20px;
+    transition: all 0.3s;
+    & i {
+      padding-right: 20px;
     }
     &:hover,
     &:focus,
@@ -244,9 +252,5 @@ export default {
       background-color: #00000075;
     }
   }
-
-  // .menu-text {
-  //   padding-left: 10px;
-  // }
 }
 </style>

@@ -167,6 +167,7 @@ export default {
   // width: 100%;
   position: fixed;
   z-index: 101;
+  transition: all 0.3s;
 }
 .top-submenu {
   transition: 0ms;

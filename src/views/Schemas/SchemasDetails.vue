@@ -151,7 +151,7 @@
             <!-- Schema code -->
             <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
               <el-form-item class="code-editor__item" label="Schema" prop="schema">
-                <div class="monaco-container monaco-schema" :style="{ height: `${editorHeight}px` }">
+                <div class="monaco-container monaco-schema">
                   <monaco
                     id="schema"
                     v-model="record.schema"
@@ -160,9 +160,10 @@
                     lang="plaintext"
                     :disabled="disabled"
                     @qucik-save="save"
+                    :height="editorHeight"
                   ></monaco>
                 </div>
-                <stretch-height v-model="editorHeight"></stretch-height>
+                <!-- <stretch-height v-model="editorHeight"></stretch-height> -->
               </el-form-item>
             </el-col>
             <el-col :span="10"> </el-col>
@@ -173,9 +174,9 @@
           <el-button :loading="saveLoading" type="primary" size="medium" @click="save">
             {{ $t('Base.create') }}
           </el-button>
-          <!-- <el-button type="default" size="medium" @click="$router.push({ path: '/schemas' })">
+          <el-button type="default" size="medium" @click="$router.back()">
             {{ $t('Base.cancel') }}
-          </el-button> -->
+          </el-button>
         </div>
       </el-card>
     </div>
@@ -254,7 +255,7 @@ export default {
   methods: {
     routeToSchemas() {
       setTimeout(() => {
-        this.$router.push({ path: '/schemas' })
+        this.$router.go(-1)
       }, 500)
     },
 

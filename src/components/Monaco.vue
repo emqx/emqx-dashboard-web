@@ -1,9 +1,9 @@
 <template>
-  <div :id="`monaco-${id}`" class="monaco-view"></div>
+  <div :id="`monaco-${id}`" :style="{height:height+'px' }"></div>
 </template>
 
 <script>
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
+import * as monaco from 'monaco-editor'
 import { createMonacoComplete, createMonacoHover } from '@/common/monacoUtils'
 
 export default {
@@ -33,6 +33,10 @@ export default {
     provider: {
       type: Array,
       default: () => [],
+    },
+    height: {
+      type: Number,
+      default: 220,
     },
   },
 
@@ -129,11 +133,11 @@ export default {
         value: this.value,
         language: this.lang,
         readOnly: this.disabled,
-        fontSize: 14,
+        fontSize: 12,
         automaticLayout: true,
         scrollBeyondLastLine: false,
-        lineNumbersMinChars: 2,
-        theme: 'vs',
+        lineNumbersMinChars: 3,
+        theme: 'vs-dark',
         minimap: {
           enabled: false,
         },
@@ -215,8 +219,8 @@ export default {
 </script>
 
 <style lang="scss">
-.monaco-view {
-  height: 100%;
-  position: relative;
-}
+// .monaco-view {
+//   height: 100%;
+//   position: relative;
+// }
 </style>

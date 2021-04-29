@@ -60,7 +60,7 @@ module.exports = {
       new MonacoWebpackPlugin({
         output: 'static/',
         languages: ['json', 'sql', 'plaintext', 'avro', 'protobuf'],
-        features: ['!gotoSymbol'],
+        features: ['wordHighlighter'],
       }),
     ],
   },
