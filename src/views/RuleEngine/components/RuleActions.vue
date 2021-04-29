@@ -433,7 +433,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
 /* eslint-disable vue/no-side-effects-in-computed-properties */
 import { loadActionsList, loadResource } from '@/api/rules'

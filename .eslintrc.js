@@ -9,7 +9,7 @@ module.exports = {
     'prettier',
   ],
   rules: {
-    'prettier/prettier': 'warning',
+    'prettier/prettier': 1,
     'no-console': 'off',
     'no-debugger': 'off',
     'import/extensions': 0,

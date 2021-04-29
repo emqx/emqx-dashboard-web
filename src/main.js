@@ -1,7 +1,5 @@
 import Vue from 'vue'
-// import 'babel-polyfill'
 import ElementUI from 'element-ui'
-import Waves from 'vue-directive-waves'
 import VueI18n from 'vue-i18n'
 import ElementLocale from 'element-ui/lib/locale'
 
@@ -21,7 +19,6 @@ Vue.config.productionTip = false
 Vue.use(VueI18n)
 Vue.use(installer)
 Vue.use(ElementUI)
-Vue.use(Waves)
 Vue.use(directive)
 
 const i18n = new VueI18n({

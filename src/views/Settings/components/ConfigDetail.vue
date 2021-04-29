@@ -136,7 +136,6 @@
 <script>
 import { loadZoneConfig, loadConfigSpec } from '@/api/settings'
 import { renderParamsForm, verifyID, verifyListener } from '@/common/utils'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
 
 export default {

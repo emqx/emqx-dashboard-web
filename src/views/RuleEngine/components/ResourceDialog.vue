@@ -206,7 +206,6 @@ import { loadResourceTypes, createResource, editResource } from '@/api/rules'
 import { renderParamsForm, verifyID } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import FileEditor from '@/components/FileEditor'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
 
 export default {

@@ -236,7 +236,6 @@ import { loadResource } from '@/api/rules'
 import { createSchema, viewSchema, deleteSchema } from '@/api/schemas'
 import detailsPage from '@/mixins/detailsPage'
 import Monaco from '@/components/Monaco'
-import StretchHeight from '@/components/StretchHeight'
 import { setTimeout } from 'timers'
 
 export default {
@@ -244,7 +243,6 @@ export default {
 
   components: {
     Monaco,
-    StretchHeight,
   },
 
   mixins: [detailsPage],
