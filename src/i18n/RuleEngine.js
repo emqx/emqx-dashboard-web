@@ -504,4 +504,5 @@ export default {
     en:
       '<p>Rule Engine is the core SQL-based data processing and distribution component on top of the standard MQTT. It makes it easy to filter and process MQTT messages and device lifecycle events and move data distribution to HTTP Server, database, message queues, or even another MQTT Broker.</p><p>1. Select the messages published to t/# and select all fields:</p><div class="code"><code>SELECT * FROM  "t/#"</code> </div><p>2. Select the client connected event and filter the device with Username \'emqx\' to get the connection information.</p><div class="code"><code>SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = \'emqx\'</code></div><p>For a detailed tutorial on the rule engine and SQL queries please refer to <a target="_blank" href="https://docs.emqx.io/en/broker/latest/rule/rule-engine.html">EMQ X Documentation</a>。</p>',
   },
+
 }
