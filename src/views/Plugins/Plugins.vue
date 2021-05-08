@@ -92,7 +92,7 @@
               </div>
               <!-- <div v-if="hasManagePage(item.name)" class="manage-btn">
                 <el-button type="dashed" :disabled="!item.active" size="small" @click="handleManage(item)">
-                  {{ $t('Plugins.manage') }}
+                  {{ $t('Base.manage') }}
                 </el-button>
               </div> -->
             </div>
@@ -153,7 +153,7 @@
               size="small"
               @click="handleManage(item)"
             >
-              {{ $t('Plugins.manage') }}
+              {{ $t('Base.manage') }}
             </el-button> -->
           </div>
         </div>

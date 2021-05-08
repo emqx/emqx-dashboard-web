@@ -1,15 +1,4 @@
 export default {
-  __not: [
-    '应用为调用',
-    '认证凭证，通过',
-    '可查询',
-    '调整',
-    '集群信息，对设备进行管理操作',
-    '请求一组数据',
-    '密码长度为三到三十二位',
-    '密码长度为三到三十二位',
-    '取消修改密码，删除密码数据',
-  ],
   confirmDelete: {
     zh: '确认删除应用?',
     en: 'Confirm delete?',
@@ -51,14 +40,6 @@ export default {
     zh: '启用',
     en: 'Enabled',
   },
-  edit: {
-    zh: '编辑',
-    en: 'Edit',
-  },
-  delete: {
-    zh: '删除',
-    en: 'Delete',
-  },
   editApp: {
     zh: '编辑应用',
     en: 'Edit',
@@ -95,21 +76,9 @@ export default {
     zh: '永不过期',
     en: 'Never expire',
   },
-  editorialSuccess: {
-    zh: '编辑成功',
-    en: 'Edit Success',
-  },
   successfulAppCreation: {
     zh: '创建应用成功',
     en: 'Successful app creation',
-  },
-  determineToDeleteTheApp: {
-    zh: '确定删除该应用',
-    en: 'Determine to delete the app',
-  },
-  successfulDeletion: {
-    zh: '删除成功',
-    en: 'Successful deletion',
   },
   cancelConfirm: {
     zh: '是否取消本次修改？',
@@ -202,10 +171,6 @@ export default {
   createUserSuccess: {
     zh: '创建用户成功',
     en: 'Create User Success',
-  },
-  determineToDeleteTheUser: {
-    zh: '确定删除该用户',
-    en: 'Confirm to delete the user',
   },
   passwordLength: {
     zh: '密码长度为 3~32 位',

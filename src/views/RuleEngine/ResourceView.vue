@@ -9,7 +9,7 @@
 
       <div class="page-header-top-start btn">
         <el-button type="danger" size="small" @click="deleteResource">
-          {{ $t('RuleEngine.delete') }}
+          {{ $t('Base.delete') }}
         </el-button>
       </div>
     </page-header>
@@ -63,7 +63,7 @@
             <div class="field-title">{{ $t('RuleEngine.detailedStatus') }}:</div>
             <span class="field-value">
               <el-button type="dashed" size="mini" @click="toggleShowConfig">
-                {{ showConfig ? $t('RuleEngine.hide') : $t('RuleEngine.view') }}
+                {{ showConfig ? $t('RuleEngine.hide') : $t('Base.view') }}
               </el-button>
             </span>
           </li>
@@ -143,7 +143,7 @@ export default {
         })
         .then(async () => {
           await destroyResource(this.record.id)
-          this.$message.success(this.$t('RuleEngine.successfulDeletion'))
+          this.$message.success(this.$t('Base.deleteSuccess'))
           setTimeout(() => {
             this.$router.push({ path: '/resources' })
           }, 500)

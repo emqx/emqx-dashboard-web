@@ -1,5 +1,4 @@
 export default {
-  __not: [],
   alarm: {
     zh: '告警',
     en: 'Alarm',
@@ -79,10 +78,6 @@ export default {
   endingTime: {
     zh: '结束时间',
     en: 'Ending time',
-  },
-  delete: {
-    zh: '删除',
-    en: 'Delete',
   },
   alarms: {
     zh: '告警列表',

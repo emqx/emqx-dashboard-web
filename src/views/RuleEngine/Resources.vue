@@ -65,10 +65,10 @@
                 {{ $t('RuleEngine.status') }}
               </el-button>
               <el-button type="dashed" size="mini" @click="handleDialogVisible('edit', row)">
-                {{ $t('RuleEngine.edit') }}
+                {{ $t('Base.edit') }}
               </el-button>
               <el-button type="dashed danger" size="mini" @click="deleteResource(row)">
-                {{ $t('RuleEngine.delete') }}
+                {{ $t('Base.delete') }}
               </el-button>
             </template>
           </el-table-column>
@@ -150,7 +150,7 @@ export default {
         .then(async () => {
           await destroyResource(row.id)
           this.loadData()
-          this.$message.success(this.$t('RuleEngine.successfulDeletion'))
+          this.$message.success(this.$t('Base.deleteSuccess'))
         })
         .catch(() => {})
     },

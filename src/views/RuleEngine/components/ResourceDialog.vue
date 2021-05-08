@@ -207,7 +207,7 @@ export default {
       },
       rules: {
         config: {},
-        type: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        type: { required: true, message: this.$t('General.pleaseChoose') },
         id: { required: true, validator: verifyID },
       },
     }

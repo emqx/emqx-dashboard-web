@@ -1,10 +1,4 @@
 export default {
-  __not: [
-    '此操作将停用并删除该资源,确认继续',
-    '规则要处理的主题，支持',
-    '主题通配符',
-    '规则引擎使用说起来语句配置二面消息流与设备事件的处理规则，内置多种灵活的数据处理方案',
-  ],
   foldDetails: {
     zh: '折叠详情',
     en: 'Fold Details',
@@ -93,10 +87,6 @@ export default {
     zh: '请输入',
     en: 'Please enter',
   },
-  pleaseChoose: {
-    zh: '请选择',
-    en: 'Please select',
-  },
   resourceAvailable: {
     zh: '资源可用',
     en: 'available',
@@ -104,14 +94,6 @@ export default {
   actionType: {
     zh: '动作类型',
     en: 'Action Type',
-  },
-  edit: {
-    zh: '编辑',
-    en: 'Edit',
-  },
-  delete: {
-    zh: '删除',
-    en: 'Delete',
   },
   remove: {
     zh: '移除',
@@ -164,10 +146,6 @@ export default {
   reconnect: {
     zh: '重连',
     en: 'Reconnect',
-  },
-  successfulDeletion: {
-    zh: '删除成功',
-    en: 'Successful deletion',
   },
   details: {
     zh: '详情',
@@ -299,14 +277,6 @@ export default {
   pleaseAddAResponseAction: {
     zh: '请添加响应动作',
     en: 'Please add a action',
-  },
-  createSuccess: {
-    zh: '创建成功',
-    en: 'Create Success',
-  },
-  editSuccess: {
-    zh: '编辑成功',
-    en: 'Edit Success',
   },
   resultIsEmpty: {
     zh: '输出为空',
@@ -528,4 +498,11 @@ export default {
     zh: '全部节点',
     en: 'All Nodes',
   },
+  sql_tips: {
+    zh:
+      '<p>规则引擎是标准 MQTT 之上基于 SQL 的核心数据处理与分发组件，可以方便的筛选并处理 MQTT 消息与设备生命周期事件，并将数据分发移动到 HTTP Server、数据库、消息队列甚至是另一个 MQTT Broker 中。</p><p>1. 选择 \'t/#\' 主题的消息，提取全部字段：</p><div class="code"><code>SELECT * FROM  "t/#"</code></div><p>2. 通过事件主题选择客户端连接事件，筛选 Username 为 \'emqx\' 的设备并获取连接信息：</p><div class="code"><code>SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = \'emqx\'</code></div><p>规则引擎和 SQL 语句的详细教程参见 <a target="_blank" href="https://docs.emqx.cn/broker/latest/rule/rule-engine.html">EMQ X 文档</a>。</p>`',
+    en:
+      '<p>Rule Engine is the core SQL-based data processing and distribution component on top of the standard MQTT. It makes it easy to filter and process MQTT messages and device lifecycle events and move data distribution to HTTP Server, database, message queues, or even another MQTT Broker.</p><p>1. Select the messages published to t/# and select all fields:</p><div class="code"><code>SELECT * FROM  "t/#"</code> </div><p>2. Select the client connected event and filter the device with Username \'emqx\' to get the connection information.</p><div class="code"><code>SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = \'emqx\'</code></div><p>For a detailed tutorial on the rule engine and SQL queries please refer to <a target="_blank" href="https://docs.emqx.io/en/broker/latest/rule/rule-engine.html">EMQ X Documentation</a>。</p>',
+  },
+
 }

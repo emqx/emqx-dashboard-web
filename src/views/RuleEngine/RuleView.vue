@@ -9,7 +9,7 @@
 
       <div class="page-header-top-start btn">
         <el-button type="danger" size="small" @click="deleteRule">
-          {{ $t('RuleEngine.delete') }}
+          {{ $t('Base.delete') }}
         </el-button>
       </div>
     </page-header>
@@ -207,7 +207,7 @@ export default {
         })
         .then(async () => {
           await destroyRule(this.record.id)
-          this.$message.success(this.$t('RuleEngine.successfulDeletion'))
+          this.$message.success(this.$t('Base.deleteSuccess'))
           setTimeout(() => {
             this.$router.push({ path: '/rules' })
           }, 500)

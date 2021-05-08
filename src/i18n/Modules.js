@@ -51,10 +51,6 @@ export default {
     zh: '模块编辑成功！',
     en: 'Module Edit Successfully!',
   },
-  select: {
-    zh: '选择',
-    en: 'Select',
-  },
   added: {
     zh: '已添加',
     en: 'Added',
@@ -134,10 +130,6 @@ export default {
   editListener: {
     zh: '编辑监听器',
     en: 'Edit Listener',
-  },
-  edit: {
-    zh: '编辑',
-    en: 'Edit',
   },
   remove: {
     zh: '移除',

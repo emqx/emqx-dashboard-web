@@ -111,32 +111,7 @@
           </el-col>
 
           <el-col :span="9" class="tips-form">
-            <div class="tips-item">
-              <div style="color: #606266">
-                {{ $t('RuleEngine.currentEventAvailableField') }}
-                <transition name="el-fade-in-linear">
-                  <span v-if="clipboardStatus" class="copy-success">{{ clipboardStatus }}</span>
-                </transition>
-              </div>
-              <div class="tips-wrapper code">
-                <span
-                  v-for="key in availableFields"
-                  :key="key"
-                  v-clipboard:cpoy="key"
-                  v-clipboard:success="copyAvailableFieldsSuccess"
-                  class="available-fields"
-                >
-                  {{ key }}
-                </span>
-              </div>
-            </div>
-
-            <div class="tips-item">
-              <div style="color: #606266">{{ $t('RuleEngine.exampleSql') }}</div>
-              <div class="tips-wrapper code">
-                <code>{{ selectEvent.sql_example }}</code>
-              </div>
-            </div>
+            <div class="tips-item" v-html="$t('RuleEngine.sql_tips')"></div>
           </el-col>
         </el-row>
       </a-card>
@@ -206,7 +181,7 @@ export default {
         columns: ['clientid', 'username', 'event', 'id', 'payload', 'peername', 'qos', 'timestamp', 'topic', 'node'],
         description: '$events/message_publish',
         event: '$events/message_publish',
-        sql_example: 'SELECT * FROM "t/#"',
+        // sql_example: 'SELECT * FROM "t/#"',
         test_columns: {
           clientid: 'c_emqx',
           username: 'u_emqx',
@@ -392,12 +367,12 @@ export default {
           })
       })
     },
-    copyAvailableFieldsSuccess() {
-      this.clipboardStatus = this.$t('Base.copied')
-      setTimeout(() => {
-        this.clipboardStatus = ''
-      }, 2000)
-    },
+    // copyAvailableFieldsSuccess() {
+    //   this.clipboardStatus = this.$t('Base.copied')
+    //   setTimeout(() => {
+    //     this.clipboardStatus = ''
+    //   }, 2000)
+    // },
     async save() {
       const valid = await this.$refs.record.validate()
       if (!valid) {
@@ -416,14 +391,14 @@ export default {
       }
       if (this.isEdit && this.currentRule) {
         updateRule(this.currentRule, data).then(() => {
-          this.$message.success(this.$t('RuleEngine.editSuccess'))
+          this.$message.success(this.$t('Base.editSuccess'))
           setTimeout(() => {
             this.$router.push({ path: '/rules' })
           }, 600)
         })
       } else {
         createRule(data).then(() => {
-          this.$message.success(this.$t('RuleEngine.createSuccess'))
+          this.$message.success(this.$t('Base.createSuccess'))
           setTimeout(() => {
             this.$router.push({ path: '/rules' })
           }, 600)
@@ -484,29 +459,17 @@ export default {
   }
 
   .tips-form {
-    .tips-item {
-      margin-bottom: 20px;
-      .notice {
-        color: #f5222d;
-      }
-
-      .copy-success {
-        color: #34c388;
-        float: right;
-      }
+    p {
+      margin: 10px 0;
     }
-  }
-
-  .tips-wrapper {
-    width: 100%;
-    word-break: break-word;
-    margin-top: 10px;
-    background: #f6f7fb;
-    border-radius: 4px;
-    color: #909399;
-    &.code {
-      border: none;
-      padding: 10px;
+    .tips-item {
+      padding: 5px;
+      background: #f6f7fb;
+      code {
+        padding: 5px;
+        background-color: #e6e6e6;
+        display: block;
+      }
     }
   }
 

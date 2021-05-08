@@ -21,15 +21,13 @@
           <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')"></el-table-column>
           <el-table-column width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)"
-                >{{ $t('General.edit') }}
-              </el-button>
+              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">{{ $t('Base.edit') }} </el-button>
               <el-button
                 v-if="row.tags !== 'administrator' && row.username !== 'admin'"
                 type="danger"
                 size="mini"
                 @click="deleteConfirm(row)"
-                >{{ $t('General.delete') }}
+                >{{ $t('Base.delete') }}
               </el-button>
             </template>
           </el-table-column>
@@ -197,7 +195,7 @@ export default {
               // 更新当前用户
               vue.$store.dispatch('UPDATE_USER_INFO', { username, password })
             }
-            vue.$message.success(vue.$t('General.editorialSuccess'))
+            vue.$message.success(vue.$t('Base.editSuccess'))
             vue.dialogVisible = false
             vue.allowChange = false
             vue.accessType = ''
@@ -226,7 +224,7 @@ export default {
         })
         .then(async () => {
           destroyUser(item.username).then(() => {
-            vue.$message.success(this.$t('General.successfulDeletion'))
+            vue.$message.success(this.$t('Base.deleteSuccess'))
             vue.loadData()
           })
         })

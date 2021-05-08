@@ -1,5 +1,4 @@
 export default {
-  __not: [],
   userCreate: {
     zh: 'https://docs.emqx.cn/cn/broker/latest/advanced/cli.html#admins-%E5%91%BD%E4%BB%A4',
     en: 'https://docs.emqx.io/en/broker/latest/advanced/cli.html#admins-command',
@@ -56,17 +55,9 @@ export default {
     zh: '详情',
     en: 'View',
   },
-  detail: {
-    zh: '详情',
-    en: 'View',
-  },
   edit: {
     zh: '编辑',
     en: 'Edit',
-  },
-  homePage: {
-    zh: '首页',
-    en: 'Home',
   },
   save: {
     zh: '保存',
@@ -95,10 +86,6 @@ export default {
   delete: {
     zh: '删除',
     en: 'Delete',
-  },
-  saveSuccess: {
-    zh: '保存成功',
-    en: 'Save Success',
   },
   applySuccess: {
     zh: '应用成功',
@@ -163,5 +150,9 @@ export default {
   operateSuccess: {
     zh: '操作成功',
     en: 'Successful operation',
+  },
+  detail: {
+    zh: '详情',
+    en: 'Details',
   },
 }

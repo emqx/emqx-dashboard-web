@@ -8,7 +8,7 @@
         </div>
         <div v-if="!disabled" class="action-item-btn">
           <span class="btn" @click="editAction(item, i)">
-            {{ $t('RuleEngine.edit') }}
+            {{ $t('Base.edit') }}
           </span>
           <span class="btn" @click="removeAction(i)">
             {{ $t('RuleEngine.remove') }}
@@ -45,7 +45,7 @@
           </div>
           <div class="value">
             <span class="btn btn-default show-btn" @click="toggleShowMetrics(item)">
-              {{ item.showList ? $t('RuleEngine.hide') : $t('RuleEngine.view') }}
+              {{ item.showList ? $t('RuleEngine.hide') : $t('Base.view') }}
             </span>
           </div>
         </div>
@@ -85,7 +85,7 @@
             </div>
             <div v-if="!disabled" class="action-item-btn">
               <span class="btn" @click="editFallback(item, fallback, i)">
-                {{ $t('RuleEngine.edit') }}
+                {{ $t('Base.edit') }}
               </span>
               <span class="btn" @click="removeFallback(item)">
                 {{ $t('RuleEngine.remove') }}
@@ -122,7 +122,7 @@
               </div>
               <div class="value">
                 <span class="btn btn-default show-btn" @click="toggleShowMetrics(fallback)">
-                  {{ fallback.showList ? $t('RuleEngine.hide') : $t('RuleEngine.view') }}
+                  {{ fallback.showList ? $t('RuleEngine.hide') : $t('Base.view') }}
                 </span>
               </div>
             </div>
@@ -361,9 +361,9 @@ export default {
       actionCategoryOptions: [],
       originParamsList: [],
       originRules: {
-        name: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        name: { required: true, message: this.$t('General.pleaseChoose') },
         params: {
-          $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+          $resource: { required: true, message: this.$t('General.pleaseChoose') },
         },
       },
       originRecord: {
@@ -381,9 +381,9 @@ export default {
         fallbacks: [],
       },
       rules: {
-        name: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        name: { required: true, message: this.$t('General.pleaseChoose') },
         params: {
-          $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+          $resource: { required: true, message: this.$t('General.pleaseChoose') },
         },
       },
       selectedAction: {
@@ -619,7 +619,7 @@ export default {
       }
       this.paramsList = form
       this.rules.params = {
-        $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        $resource: { required: true, message: this.$t('General.pleaseChoose') },
         ...rules,
       }
       this.paramsLoading = false
@@ -642,7 +642,7 @@ export default {
       const { form, rules } = configData
       this.originParamsList = form
       this.originRules.params = {
-        $resource: { required: true, message: this.$t('RuleEngine.pleaseChoose') },
+        $resource: { required: true, message: this.$t('General.pleaseChoose') },
         ...rules,
       }
       if (oper === 'add') {

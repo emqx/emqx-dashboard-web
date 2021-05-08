@@ -217,7 +217,7 @@ export default {
         }, 500)
       }
       if (needPrompt) {
-        this.$confirm(this.$t('Settings.cancelConfirm'), this.$t('Base.warning'), {
+        this.$confirm(this.$t('General.cancelConfirm'), this.$t('Base.warning'), {
           type: 'warning',
           cancelButtonText: this.$t('Settings.no'),
         })
