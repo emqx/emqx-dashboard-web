@@ -56,7 +56,7 @@
         class="emq-list-card plugin-cards-wrapper"
         :gutter="20"
       >
-        <el-col v-for="(item, i) in listTableData" :key="i" :span="12">
+        <el-col v-for="item in listTableData" :key="item.name" :span="12">
           <div class="plugin-item">
             <img class="logo" :src="iconMap[item.name]" alt="plugin-logo" width="90" height="90" />
 
@@ -102,7 +102,7 @@
 
       <!-- List -->
       <div v-if="displayType === 'list' && listTableData.length > 0" class="emq-list-card plugin-list-wrapper">
-        <div v-for="(item, i) in listTableData" :key="i" :gutter="20" class="plugin-item">
+        <div v-for="item in listTableData" :key="item.name" :gutter="20" class="plugin-item">
           <img class="logo" :src="iconMap[item.name]" alt="plugin-logo" width="60" height="60" />
 
           <div class="header">

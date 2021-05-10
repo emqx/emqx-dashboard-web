@@ -166,11 +166,10 @@ import { createModule, loadAllModules, updateModule, destroyModule } from '@/api
 import { renderParamsForm, fillI18n } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ArrayEditor from '@/components/ArrayEditor'
-import Listeners from './components/Listeners'
 import FileEditor from '@/components/FileEditor'
 import ConfigSelect from '@/components/ConfigSelect'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
+import Listeners from './components/Listeners'
 
 export default {
   name: 'ModuleDetail',
