@@ -149,12 +149,6 @@ export default {
         icon: 'icon-changjingguanli',
       },
       {
-        title: this.$t('components.plugins'),
-        key: 'plugins',
-        path: '/plugins',
-        icon: 'icon-kongjian',
-      },
-      {
         title: this.$t('components.alerts'),
         key: 'alerts',
         path: '/alerts',
@@ -207,6 +201,12 @@ export default {
             key: 'general.backup',
             path: '/backup',
             parentKey: 'general',
+          },
+          {
+            title: this.$t('components.plugins'),
+            key: 'plugins',
+            path: '/plugins',
+            icon: 'icon-kongjian',
           },
           // {
           //   title: this.$t('components.trace'),
