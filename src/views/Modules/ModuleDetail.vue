@@ -129,6 +129,13 @@
                   </template>
                 </div>
               </template>
+              <template v-else-if="!configList.length">
+                <div class="no-config">
+                  <i class="el-icon-warning"></i>
+                  <span>{{ $t('Modules.noConfig') }}</span>
+                  <span v-if="oper === 'add'">{{ $t('Modules.noConfigAdd')}}</span>
+                </div>
+              </template>
               <div v-else class="params-loading-wrapper">
                 <a-skeleton active></a-skeleton>
               </div>
@@ -141,7 +148,7 @@
             <Listeners v-model="record.config['listeners']" :listenerData="listener"> </Listeners>
           </div>
 
-          <div class="button-group__center">
+          <div class="button-group__center" v-if="configList.length || oper === 'add'">
             <el-button size="small" @click="exitDetail(true)">{{ $t('Base.cancel') }}</el-button>
             <el-button
               :loading="buttonLoading"
@@ -188,9 +195,6 @@
         </template>
       </el-tabs>
     </div>
-    <!-- <el-col :span="configList.length === 1 && fullSpanType.indexOf(configList[0].type) === -1 ? 9 : 16">
-      
-    </el-col> -->
   </div>
 </template>
 
@@ -316,14 +320,14 @@ export default {
           .catch()
       }
     },
-    cleanForm() {
-      if (this.$refs.record) {
-        setTimeout(() => {
-          this.$refs.record.resetFields()
-          this.configList = []
-        }, 10)
-      }
-    },
+    // cleanForm() {
+    //   if (this.$refs.record) {
+    //     setTimeout(() => {
+    //       this.$refs.record.resetFields()
+    //       this.configList = []
+    //     }, 10)
+    //   }
+    // },
     loadConfigList(params) {
       const { listener, ...paramsData } = params
       if (listener) {
@@ -469,7 +473,7 @@ export default {
         .catch(() => {})
     },
     exitDetail(isCancel = false) {
-      this.cleanForm()
+      //this.cleanForm()
       setTimeout(() => {
         if (this.from === 'modules' || !isCancel) {
           this.$router.push('/modules')
@@ -576,6 +580,18 @@ export default {
   .delete-btn {
     top: 50%;
     transform: translateY(-50%);
+  }
+
+  .no-config {
+    min-height: 100px;
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    line-height: 100px;
+
+    i {
+      margin-right: 5px;
+    }
   }
 }
 </style>

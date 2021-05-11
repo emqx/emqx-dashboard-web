@@ -96,12 +96,6 @@
         <el-row v-if="searchModuleInfo.length" :gutter="20">
           <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
             <div class="item-box">
-              <!-- <span
-                v-show="one.id && JSON.stringify(one.params) === '{}'"
-                @click="deleteModule(one, searchModuleInfo)"
-                class="delete-icon"
-              >
-              </span> -->
               <div class="module-item" @click="toModuleDetail(one, searchModuleInfo)">
                 <div class="left-box">
                   <img :src="one.img" alt="module-logo" class="item-img" />

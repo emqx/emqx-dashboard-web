@@ -32,12 +32,7 @@
       <el-row v-if="showList.length" :gutter="20" class="emq-list-card plugin-cards-wrapper">
         <el-col v-for="item in showList" :key="item.id" :span="24" class="module-list-item">
           <div class="item-box">
-            <!-- <span
-              v-show="JSON.stringify(item.config) === '[]' || JSON.stringify(item.config) === '{}'"
-              @click="deleteModule(item)"
-              class="delete-icon"
-            >
-            </span> -->
+
             <div class="module-item" @click="toEditModule(item)">
               <div class="left-box">
                 <img :src="item.img" alt="module-logo" class="item-img" />
@@ -58,9 +53,6 @@
                   }}</el-button>
                   <el-button size="small" @click.stop="toEditModule(item)">{{ $t('Modules.moduleEdit') }}</el-button>
                 </div>
-                <!-- <a href="javascript:;" @click.stop="toReadMore(item.type)" class="know-more">
-                  {{ $t('Modules.readMore') }}
-                </a> -->
               </div>
             </div>
           </div>
@@ -235,10 +227,6 @@ export default {
     i {
       cursor: pointer;
     }
-  }
-
-  .no-pointer {
-    cursor: default;
   }
 }
 </style>

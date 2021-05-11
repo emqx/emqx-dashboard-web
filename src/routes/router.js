@@ -358,11 +358,6 @@ let routes = [
         name: 'module-detail',
         component: () => import('@/views/Modules/ModuleDetail'),
       },
-      {
-        path: 'manage',
-        name: 'module-manage',
-        component: () => import('@/views/Modules/ModuleManage'),
-      },
     ],
   },
   {

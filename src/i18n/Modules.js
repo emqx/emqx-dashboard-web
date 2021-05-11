@@ -282,4 +282,12 @@ export default {
     zh: '请求超时',
     en: 'Request timed out',
   },
+  noConfig: {
+    zh: '此模块无需配置参数',
+    en: 'The module doesn\'t need any configuration',
+  },
+  noConfigAdd: {
+    zh:',添加之后即可启用',
+    en:',you couldn\'t use it before you add this module',
+  }
 }
