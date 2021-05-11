@@ -21,14 +21,14 @@
       </div>
     </page-header>
     <div class="app-wrapper">
-      <el-card>
-        <div class="emq-title module-title">
-          {{ $t('Modules.configuration') }}
-        </div>
-        <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
-          <el-row class="config-item-wrapper" :gutter="30">
-            <template v-if="configList.length > 0">
-              <el-col :span="16">
+      <el-tabs type="border-card" v-model="detailTabs">
+        <el-tab-pane :label="$t('Modules.configuration')" name="configuration">
+          <!-- <div class="emq-title module-title">
+            {{ $t('Modules.configuration') }}
+          </div> -->
+          <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
+            <el-row class="config-item-wrapper" :gutter="30">
+              <template v-if="configList.length > 0">
                 <div v-for="(item, i) in configList" :key="i">
                   <template v-if="item.key !== 'listener'">
                     <el-col
@@ -128,36 +128,69 @@
                     </el-col>
                   </template>
                 </div>
-              </el-col>
-            </template>
-            <div v-else class="params-loading-wrapper">
-              <a-skeleton active></a-skeleton>
+              </template>
+              <div v-else class="params-loading-wrapper">
+                <a-skeleton active></a-skeleton>
+              </div>
+            </el-row>
+          </el-form>
+          <div v-if="Object.keys(listener).length" class="listener-wrapper">
+            <div class="emq-title listener-title">
+              {{ $t('Modules.listener') }}
             </div>
-          </el-row>
-        </el-form>
-      </el-card>
-      <el-card v-if="Object.keys(listener).length" class="listener-wrapper">
-        <div class="emq-title listener-title">
-          {{ $t('Modules.listener') }}
-        </div>
-        <Listeners v-model="record.config['listeners']" :listenerData="listener"> </Listeners>
-      </el-card>
+            <Listeners v-model="record.config['listeners']" :listenerData="listener"> </Listeners>
+          </div>
+
+          <div class="button-group__center">
+            <el-button size="small" @click="exitDetail(true)">{{ $t('Base.cancel') }}</el-button>
+            <el-button
+              :loading="buttonLoading"
+              class="dialog-primary-btn"
+              type="primary"
+              size="small"
+              @click="handleCreate()"
+            >
+              <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>
+              <span v-else>{{ $t('Base.confirm') }}</span>
+            </el-button>
+          </div>
+        </el-tab-pane>
+        <!-- modules with more management tools-->
+        <template v-if="oper == 'edit'">
+          <template v-if="moduleData.type == 'mnesia_authentication'">
+            <el-tab-pane :label="$t('Modules.auth')" name="auth">
+              <mnesia-auth-table ref="auth"></mnesia-auth-table>
+            </el-tab-pane>
+            <el-tab-pane label="ACL" name="acl">
+              <mnesia-acl-table ref="acl"></mnesia-acl-table>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'jwt_authentication'">
+            <el-tab-pane :label="$t('Modules.tabJwt')" name="jwt">
+              <jwt-authentication></jwt-authentication>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'auth_sasl'">
+            <el-tab-pane :label="$t('Modules.tabSasl')" name="sasl">
+              <auth-sasl></auth-sasl>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'lwm2m_protocol'">
+            <el-tab-pane :label="$t('Modules.tabLwm2m')" name="lwm2m">
+              <lw-clients></lw-clients>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'topic_metrics'">
+            <el-tab-pane :label="$t('Modules.tabTopic')" name="topic">
+              <topic-metrics></topic-metrics>
+            </el-tab-pane>
+          </template>
+        </template>
+      </el-tabs>
     </div>
-    <el-col :span="configList.length === 1 && fullSpanType.indexOf(configList[0].type) === -1 ? 9 : 16">
-      <div class="button-group__center">
-        <el-button size="small" @click="exitDetail(true)">{{ $t('Base.cancel') }}</el-button>
-        <el-button
-          :loading="buttonLoading"
-          class="dialog-primary-btn"
-          type="primary"
-          size="small"
-          @click="handleCreate()"
-        >
-          <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>
-          <span v-else>{{ $t('Base.confirm') }}</span>
-        </el-button>
-      </div>
-    </el-col>
+    <!-- <el-col :span="configList.length === 1 && fullSpanType.indexOf(configList[0].type) === -1 ? 9 : 16">
+      
+    </el-col> -->
   </div>
 </template>
 
@@ -168,13 +201,32 @@ import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ArrayEditor from '@/components/ArrayEditor'
 import FileEditor from '@/components/FileEditor'
 import ConfigSelect from '@/components/ConfigSelect'
+import MnesiaAuthTable from './components/AuthMnesia/MnesiaAuthTable'
+import MnesiaAclTable from './components/AuthMnesia/MnesiaAclTable'
+import JwtAuthentication from './components/JwtAuthentication/JwtAuthentication'
+import AuthSasl from './components/AuthSasl/AuthSasl'
+import LwClients from './components/Lwm2mProtocol/LwClients'
+import TopicMetrics from './components/TopicMetrics/TopicMetrics'
+
 import _ from 'lodash'
 import Listeners from './components/Listeners'
 
 export default {
   name: 'ModuleDetail',
 
-  components: { KeyAndValueEditor, ArrayEditor, Listeners, FileEditor, ConfigSelect },
+  components: {
+    KeyAndValueEditor,
+    ArrayEditor,
+    Listeners,
+    FileEditor,
+    ConfigSelect,
+    MnesiaAuthTable,
+    MnesiaAclTable,
+    JwtAuthentication,
+    AuthSasl,
+    LwClients,
+    TopicMetrics,
+  },
 
   inheritAttrs: false,
 
@@ -199,6 +251,14 @@ export default {
         config: {},
       },
       buttonLoading: false,
+      detailTabs: 'configuration',
+      canManageModuleTypes: [
+        'mnesia_authentication',
+        'jwt_authentication',
+        'auth_sasl',
+        'lwm2m_protocol',
+        'topic_metrics',
+      ],
     }
   },
 
@@ -466,7 +526,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .module-detail {
   .page-header-content {
     padding: 16px 20px;
@@ -487,19 +547,10 @@ export default {
     }
   }
 
+  .el-form {
+    padding: 10px;
+  }
   .el-form-item {
-    .el-input {
-      width: 100%;
-    }
-
-    .el-select {
-      &:not(.reset-width) {
-        width: 330px;
-      }
-
-      width: 100%;
-    }
-
     .el-form-item__label {
       font-size: 14px;
       color: #606266;
@@ -515,7 +566,7 @@ export default {
   }
 
   .button-group__center {
-    margin-bottom: 24px;
+    margin: 20px 0;
   }
 
   .listener-wrapper {

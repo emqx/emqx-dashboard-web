@@ -58,7 +58,18 @@
                     <div class="item-content">
                       <div class="item-title">{{ one.title[lang] }}</div>
                       <div class="item-des">
-                        {{ one.description[lang] }}
+                        <span class="item-desc"> {{ one.description[lang] }}</span>
+                        <el-popover
+                          placement="bottom-end"
+                          trigger="hover"
+                          :content="one.description[lang]"
+                          width="300"
+                          :style="{ display: 'none' }"
+                        >
+                          <template #reference
+                            ><span class="read-more"><i18n path="Modules.readMore"></i18n></span
+                          ></template>
+                        </el-popover>
                       </div>
                     </div>
                   </div>
@@ -70,7 +81,7 @@
                       <el-button v-else disabled type="success" plain size="small">
                         {{ $t('Modules.added') }}
                       </el-button>
-                      <el-button @click="toReadMore(one.name)" type="info" size="small">
+                      <el-button @click.stop="toReadMore(one.name)" type="info" size="small">
                         {{ $t('Modules.readMore') }}
                       </el-button>
                     </div>
@@ -97,7 +108,18 @@
                   <div class="item-content">
                     <div class="item-title">{{ one.title[lang] }}</div>
                     <div class="item-des">
-                      {{ one.description[lang] }}
+                      <span class="item-desc"> {{ one.description[lang] }}</span>
+                      <el-popover
+                        placement="bottom-end"
+                        trigger="hover"
+                        :content="one.description[lang]"
+                        width="300"
+                        :style="{ display: 'none' }"
+                      >
+                        <template #reference
+                          ><span class="read-more"><i18n path="Modules.readMore"></i18n></span
+                        ></template>
+                      </el-popover>
                     </div>
                   </div>
                 </div>
@@ -109,7 +131,7 @@
                     <el-button v-else disabled type="success" plain size="small">
                       {{ $t('Modules.added') }}
                     </el-button>
-                    <el-button @click="toReadMore(one.name)" type="info" size="small">
+                    <el-button @click.stop="toReadMore(one.name)" type="info" size="small">
                       {{ $t('Modules.readMore') }}
                     </el-button>
                   </div>
@@ -176,12 +198,32 @@ export default {
     window.addEventListener('scroll', this.scrollToTop)
     this.returnPosition()
   },
+  updated() {
+    this.calcModulesDesc()
+  },
 
   destroyed() {
     window.removeEventListener('scroll', this.scrollToTop)
   },
 
   methods: {
+    calcModulesDesc() {
+      const containers = document.getElementsByClassName('item-desc')
+      const conFirst = (containers.length && containers[0]) || {}
+      const rect = conFirst.getBoundingClientRect()
+      const strTotal = Math.floor(rect.width / 7) * 2
+
+      for (let i = 0; i < containers.length; i += 1) {
+        const container = containers[i]
+        let textOriginal = container.textContent || ''
+        textOriginal = textOriginal.trim()
+        if (textOriginal.length <= strTotal) {
+        } else {
+          container.textContent = `${textOriginal.substr(0, strTotal)}...`
+          container.nextSibling.style.display = 'inline-block'
+        }
+      }
+    },
     deleteModule(item, list) {
       const index = list.indexOf(item)
       this.$msgbox
@@ -307,7 +349,7 @@ export default {
         if (id === 'auth') {
           this.backTo(0)
         } else {
-          this.backTo(offsetTop)
+          this.backTo(offsetTop - 180)
         }
       }, 5)
     },

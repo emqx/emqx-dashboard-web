@@ -38,10 +38,7 @@
               class="delete-icon"
             >
             </span> -->
-            <div
-              :class="['module-item', canManageModuleTypes.indexOf(item.type) === -1 ? 'no-pointer' : '']"
-              @click="manageModule(item)"
-            >
+            <div class="module-item" @click="toEditModule(item)">
               <div class="left-box">
                 <img :src="item.img" alt="module-logo" class="item-img" />
                 <div class="item-content">
@@ -59,9 +56,7 @@
                   <el-button type="success" size="small" v-else @click.stop="updataModule(item, true)">{{
                     $t('Modules.run')
                   }}</el-button>
-                  <el-button size="small" v-if="Object.keys(item.config).length" @click.stop="toEditModule(item)">{{
-                    $t('Modules.moduleEdit')
-                  }}</el-button>
+                  <el-button size="small" @click.stop="toEditModule(item)">{{ $t('Modules.moduleEdit') }}</el-button>
                 </div>
                 <!-- <a href="javascript:;" @click.stop="toReadMore(item.type)" class="know-more">
                   {{ $t('Modules.readMore') }}

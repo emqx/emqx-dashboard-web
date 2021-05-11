@@ -36,8 +36,8 @@ export default {
     en: 'Reconnect',
   },
   moduleEdit: {
-    zh: '模块编辑',
-    en: 'Module Edit',
+    zh: '管理',
+    en: 'Manage',
   },
   moduleAdd: {
     zh: '模块添加',
@@ -116,7 +116,7 @@ export default {
     en: 'Local Modules',
   },
   configuration: {
-    zh: '配置信息',
+    zh: '参数设置',
     en: 'Configuration',
   },
   listener: {
@@ -188,6 +188,22 @@ export default {
   confirmDelete: {
     zh: '确认删除？',
     en: 'Confirm Delete?',
+  },
+  tabJwt: {
+    zh: 'JWT工具',
+    en: 'JWT Tools',
+  },
+  tabSasl: {
+    zh: '认证信息',
+    en: 'Authentication Info',
+  },
+  tabLwm2m: {
+    zh: '客户端列表',
+    en: 'Clients List',
+  },
+  tabTopic: {
+    zh: '指标数据',
+    en: 'Topic Metrics',
   },
   listNull: {
     zh: '列表为空，请调整过滤条件再试',
