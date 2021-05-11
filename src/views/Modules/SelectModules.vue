@@ -285,22 +285,22 @@ export default {
         const data = { ...val }
         this.parseI18n([data])
         const { params } = data
-        if (!Object.keys(params).length) {
-          const requestParams = {
-            type: val.name,
-            config: {},
-          }
-          const responseData = await createModule(requestParams)
-          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
-          addedModules[responseData.type] = responseData.id
-          this.addedModules = addedModules
-          localStorage.setItem('addedModules', JSON.stringify(addedModules))
-          this.$message.success(this.$t('Modules.moduleAddSuccess'))
-          val.status = 'added'
-          val.id = responseData.id
-          list.splice(index, 1, val)
-          return
-        }
+        // if (!Object.keys(params).length) {
+        //   const requestParams = {
+        //     type: val.name,
+        //     config: {},
+        //   }
+        //   const responseData = await createModule(requestParams)
+        //   const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+        //   addedModules[responseData.type] = responseData.id
+        //   this.addedModules = addedModules
+        //   localStorage.setItem('addedModules', JSON.stringify(addedModules))
+        //   this.$message.success(this.$t('Modules.moduleAddSuccess'))
+        //   val.status = 'added'
+        //   val.id = responseData.id
+        //   list.splice(index, 1, val)
+        //   return
+        // }
         this.selectedModule = {
           paramsData: params,
           type: val.name,
