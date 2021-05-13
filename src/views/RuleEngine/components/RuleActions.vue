@@ -485,10 +485,12 @@ export default {
 
     async handleCreate() {
       this.initRecordEnableBatch()
-      const valid = await this.$refs.record.validate()
-      if (!valid) {
+      try {
+        await this.$refs.record.validate()
+      } catch (e) {
         return
       }
+
       // To boolean
       if (this.record.params) {
         Object.keys(this.record.params).forEach((key) => {
