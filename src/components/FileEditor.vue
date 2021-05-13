@@ -1,10 +1,11 @@
+/* eslint-disable */
 <template>
   <div class="file-editor">
     <el-row>
       <el-col :span="22">
         <el-form-item style="margin-bottom: 0px">
           <el-input
-            v-model="value.filename"
+            v-model="fileObj.filename"
             :placeholder="$t('Modules.fileTip')"
           ></el-input>
         </el-form-item>
@@ -39,6 +40,11 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  data: function () {
+    return {
+      fileObj: this.value,
+    }
   },
 
   methods: {

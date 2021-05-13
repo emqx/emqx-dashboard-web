@@ -300,27 +300,18 @@
 
         <div v-if="selectedAction.params.$resource" class="line"></div>
 
-<<<<<<< HEAD
-        <el-row v-if="paramsLoading || paramsList" class="params-item-wrapper" :gutter="50">
-          <template>
-            <el-col
-              v-for="item in paramsList"
-              :key="record.name + item.key"
-              :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
-=======
         <el-row
-          v-if="paramsLoading || paramsList.length > 0"
+          v-if="paramsLoading || paramsList"
           class="params-item-wrapper"
           :gutter="50"
         >
           <template>
             <el-col
-              v-for="(item, i) in paramsList"
-              :key="i"
+              v-for="item in paramsList"
+              :key="record.name + item.key"
               :span="
                 item.type === 'textarea' || item.type === 'object' ? 24 : 12
               "
->>>>>>> refactor({multi-file}): format code styling for new eslint/prettier rules
             >
               <el-form-item
                 :class="item.key === 'sql' ? 'code-editor__item' : ''"
@@ -539,7 +530,9 @@ export default {
       },
     },
     availableActions() {
-      const data = this.actions.filter(($) => ['$any', this.event].includes($.for))
+      const data = this.actions.filter(($) =>
+        ['$any', this.event].includes($.for),
+      )
       // .sort((prev, next) => prev.title.localeCompare(next.title))
       const unique = (arr) => [...new Set(arr)]
       this.actionCategoryOptions = unique(data.map((item) => item.category))
