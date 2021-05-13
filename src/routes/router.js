@@ -1,6 +1,8 @@
 /* eslint-disable */
 import Layout from '@/components/Layout'
 import store from '@/stores'
+import SelectModules from '@/views/Modules/SelectModules'
+import ModuleDetail from '@/views/Modules/ModuleDetail'
 
 const hide = store.state.config.hide || { routes: [], children: [] }
 
@@ -351,17 +353,12 @@ let routes = [
       {
         path: 'select',
         name: 'modules-select',
-        component: () => import('@/views/Modules/SelectModules'),
+        component: SelectModules,
       },
       {
         path: 'detail',
         name: 'module-detail',
-        component: () => import('@/views/Modules/ModuleDetail'),
-      },
-      {
-        path: 'manage',
-        name: 'module-manage',
-        component: () => import('@/views/Modules/ModuleManage'),
+        component: ModuleDetail
       },
     ],
   },

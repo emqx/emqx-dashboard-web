@@ -40,38 +40,53 @@
             {{ item.name }}
           </p>
           <el-row v-if="allFeatures[item.id]" :gutter="20">
-            <el-col v-for="(one, index) in allFeatures[item.id]" :key="index" :span="12">
+            <el-col v-for="one in allFeatures[item.id]" :key="one.id" :span="24" class="module-list-item">
               <div class="item-box">
-                <span
+                <!-- <span
                   v-show="one.id && JSON.stringify(one.params) === '{}'"
                   @click="deleteModule(one, allFeatures[item.id])"
                   class="delete-icon"
                 >
-                </span>
-                <el-card shadow="hover">
-                  <div class="module-item" @click="toModuleDetail(one, allFeatures[item.id])">
-                    <div class="left-box">
-                      <img :src="one.img" alt="module-logo" class="item-img" />
-                      <div class="item-content">
-                        <div class="item-title">{{ one.title[lang] }}</div>
-                        <div class="item-des">
-                          {{ one.description[lang] }}
-                        </div>
+                </span> -->
+                <div
+                  class="module-item"
+                  @click="toModuleDetail(one, allFeatures[item.id])"
+                  :style="{ cursor: one.status === 'added' ? 'default' : 'pointer' }"
+                >
+                  <div class="left-box">
+                    <img :src="one.img" alt="module-logo" class="item-img" />
+                    <div class="item-content">
+                      <div class="item-title">{{ one.title[lang] }}</div>
+                      <div class="item-des">
+                        <span class="item-desc"> {{ one.description[lang] }}</span>
+                        <el-popover
+                          placement="bottom-end"
+                          trigger="hover"
+                          :content="one.description[lang]"
+                          width="300"
+                          :style="{ display: 'none' }"
+                        >
+                          <template #reference
+                            ><span class="read-more"><i18n path="Modules.readMore"></i18n></span
+                          ></template>
+                        </el-popover>
                       </div>
                     </div>
-                    <div class="item-handle">
-                      <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
+                  </div>
+                  <div class="item-handle">
+                    <div class="handle-oper">
+                      <el-button v-if="one.status === 'unadd'" type="success" plain size="small">
                         {{ $t('Base.select') }}
                       </el-button>
-                      <el-button v-else class="start-btn" plain size="mini">
+                      <el-button v-else disabled type="success" plain size="small">
                         {{ $t('Modules.added') }}
                       </el-button>
-                      <a href="javascript:;" @click.stop="toReadMore(one.name)" class="know-more">
+                      <el-button @click.stop="toReadMore(one.name)" type="info" size="small">
                         {{ $t('Modules.readMore') }}
-                      </a>
+                      </el-button>
                     </div>
                   </div>
-                </el-card>
+                </div>
               </div>
             </el-col>
           </el-row>
@@ -81,36 +96,41 @@
         <el-row v-if="searchModuleInfo.length" :gutter="20">
           <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
             <div class="item-box">
-              <span
-                v-show="one.id && JSON.stringify(one.params) === '{}'"
-                @click="deleteModule(one, searchModuleInfo)"
-                class="delete-icon"
-              >
-              </span>
-              <el-card shadow="hover">
-                <div class="module-item" @click="toModuleDetail(one, searchModuleInfo)">
-                  <div class="left-box">
-                    <img :src="one.img" alt="module-logo" class="item-img" />
-                    <div class="item-content">
-                      <div class="item-title">{{ one.title[lang] }}</div>
-                      <div class="item-des">
-                        {{ one.description[lang] }}
-                      </div>
+              <div class="module-item" @click="toModuleDetail(one, searchModuleInfo)">
+                <div class="left-box">
+                  <img :src="one.img" alt="module-logo" class="item-img" />
+                  <div class="item-content">
+                    <div class="item-title">{{ one.title[lang] }}</div>
+                    <div class="item-des">
+                      <span class="item-desc"> {{ one.description[lang] }}</span>
+                      <el-popover
+                        placement="bottom-end"
+                        trigger="hover"
+                        :content="one.description[lang]"
+                        width="300"
+                        :style="{ display: 'none' }"
+                      >
+                        <template #reference
+                          ><span class="read-more"><i18n path="Modules.readMore"></i18n></span
+                        ></template>
+                      </el-popover>
                     </div>
                   </div>
-                  <div class="item-handle">
-                    <el-button v-if="one.status === 'unadd'" class="select-btn" type="dashed" size="mini">
+                </div>
+                <div class="item-handle">
+                  <div class="handle-oper">
+                    <el-button v-if="one.status === 'unadd'" size="small" type="success" plain>
                       {{ $t('Base.select') }}
                     </el-button>
-                    <el-button v-else class="start-btn" plain size="mini">
+                    <el-button v-else disabled type="success" plain size="small">
                       {{ $t('Modules.added') }}
                     </el-button>
-                    <a href="javascript:;" @click.stop="toReadMore(one.name)" class="know-more">
+                    <el-button @click.stop="toReadMore(one.name)" type="info" size="small">
                       {{ $t('Modules.readMore') }}
-                    </a>
+                    </el-button>
                   </div>
                 </div>
-              </el-card>
+              </div>
             </div>
           </el-col>
         </el-row>
@@ -172,12 +192,32 @@ export default {
     window.addEventListener('scroll', this.scrollToTop)
     this.returnPosition()
   },
+  updated() {
+    this.calcModulesDesc()
+  },
 
   destroyed() {
     window.removeEventListener('scroll', this.scrollToTop)
   },
 
   methods: {
+    calcModulesDesc() {
+      const containers = document.getElementsByClassName('item-desc')
+      const conFirst = (containers.length && containers[0]) || {}
+      const rect = conFirst.getBoundingClientRect()
+      const strTotal = Math.floor(rect.width / 7) * 2
+
+      for (let i = 0; i < containers.length; i += 1) {
+        const container = containers[i]
+        let textOriginal = container.textContent || ''
+        textOriginal = textOriginal.trim()
+        if (textOriginal.length <= strTotal) {
+        } else {
+          container.textContent = `${textOriginal.substr(0, strTotal)}...`
+          container.nextSibling.style.display = 'inline-block'
+        }
+      }
+    },
     deleteModule(item, list) {
       const index = list.indexOf(item)
       this.$msgbox
@@ -236,6 +276,7 @@ export default {
       return data
     },
     async toModuleDetail(val, list) {
+      if (val.status !== 'unadd') return
       const index = list.indexOf(val)
       const oper = val.status === 'unadd' ? 'add' : 'edit'
       this.oper = oper
@@ -244,22 +285,22 @@ export default {
         const data = { ...val }
         this.parseI18n([data])
         const { params } = data
-        if (!Object.keys(params).length) {
-          const requestParams = {
-            type: val.name,
-            config: {},
-          }
-          const responseData = await createModule(requestParams)
-          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
-          addedModules[responseData.type] = responseData.id
-          this.addedModules = addedModules
-          localStorage.setItem('addedModules', JSON.stringify(addedModules))
-          this.$message.success(this.$t('Modules.moduleAddSuccess'))
-          val.status = 'added'
-          val.id = responseData.id
-          list.splice(index, 1, val)
-          return
-        }
+        // if (!Object.keys(params).length) {
+        //   const requestParams = {
+        //     type: val.name,
+        //     config: {},
+        //   }
+        //   const responseData = await createModule(requestParams)
+        //   const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+        //   addedModules[responseData.type] = responseData.id
+        //   this.addedModules = addedModules
+        //   localStorage.setItem('addedModules', JSON.stringify(addedModules))
+        //   this.$message.success(this.$t('Modules.moduleAddSuccess'))
+        //   val.status = 'added'
+        //   val.id = responseData.id
+        //   list.splice(index, 1, val)
+        //   return
+        // }
         this.selectedModule = {
           paramsData: params,
           type: val.name,
@@ -302,7 +343,7 @@ export default {
         if (id === 'auth') {
           this.backTo(0)
         } else {
-          this.backTo(offsetTop)
+          this.backTo(offsetTop - 180)
         }
       }, 5)
     },
@@ -436,46 +477,19 @@ export default {
 
   .class-title {
     display: block;
-    margin-bottom: 30px;
+    margin: 0;
+    font-size: 16px;
     color: #101010;
-    font-weight: bold;
-  }
-
-  .content-box {
-    scroll-behavior: smooth;
-    padding: 16px 24px;
-    margin: 24px;
-    margin-top: 112px;
     background-color: #fff;
-  }
-
-  .module-item {
-    .item-handle {
-      text-align: center;
-      font-size: 14px;
-
-      .start-btn {
-        width: 60px;
-      }
-
-      .select-btn {
-        width: 50px;
-        font-size: 13px;
-        color: #999;
-        &:hover {
-          color: #23bd78;
-        }
-      }
+    font-weight: bold;
+    padding: 20px 10px 10px;
+    &.active-title {
+      color: #101010;
     }
   }
 
-  .active-title {
-    color: #34c388;
-  }
-
-  .link-content {
-    padding-top: 200px;
-    margin-top: -200px;
+  .content-box {
+    margin-top: 90px;
   }
 }
 </style>

@@ -7,7 +7,7 @@
             {{ $t('Modules.modules') }}
             <span v-cloak class="modules-num">{{ moduleCount }}</span>
             <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/select')">
-              {{ $t('Base.select') }}
+              {{ $t('Modules.moduleAdd') }}
             </el-button>
           </div>
           <el-col :span="6">
@@ -30,50 +30,31 @@
 
     <div class="app-wrapper">
       <el-row v-if="showList.length" :gutter="20" class="emq-list-card plugin-cards-wrapper">
-        <el-col v-for="item in showList" :key="item.id" :span="12">
+        <el-col v-for="item in showList" :key="item.id" :span="24" class="module-list-item">
           <div class="item-box">
-            <span
-              v-show="
-                (JSON.stringify(item.config) === '[]' || JSON.stringify(item.config) === '{}')
-              "
-              @click="deleteModule(item)"
-              class="delete-icon"
-            >
-            </span>
-            <el-card shadow="hover">
-              <div
-                :class="['module-item', canManageModuleTypes.indexOf(item.type) === -1 ? 'no-pointer' : '']"
-                @click="manageModule(item)"
-              >
-                <div class="left-box">
-                  <img :src="item.img" alt="module-logo" class="item-img" />
-                  <div class="item-content">
-                    <div class="item-title">{{ item.title[lang] }}</div>
-                    <div class="item-des">
-                      {{ item.description[lang] }}
-                    </div>
+
+            <div class="module-item" @click="toEditModule(item)">
+              <div class="left-box">
+                <img :src="item.img" alt="module-logo" class="item-img" />
+                <div class="item-content">
+                  <div class="item-title">{{ item.title[lang] }}</div>
+                  <div class="item-des">
+                    {{ item.description[lang] }}
                   </div>
-                </div>
-                <div class="item-handle" @click.stop="">
-                  <div class="handle-icons">
-                    <i
-                      v-if="item.enabled"
-                      @click.stop="updataModule(item, false)"
-                      class="el-icon-switch-button close"
-                    ></i>
-                    <i v-else @click.stop="updataModule(item, true)" class="el-icon-caret-right open"></i>
-                    <i
-                      v-if="Object.keys(item.config).length"
-                      @click.stop="toEditModule(item)"
-                      class="el-icon-edit-outline"
-                    ></i>
-                  </div>
-                  <a href="javascript:;" @click.stop="toReadMore(item.type)" class="know-more">
-                    {{ $t('Modules.readMore') }}
-                  </a>
                 </div>
               </div>
-            </el-card>
+              <div class="item-handle">
+                <div class="handle-oper">
+                  <el-button type="danger" size="small" v-if="item.enabled" @click.stop="updataModule(item, false)">{{
+                    $t('Modules.stop')
+                  }}</el-button>
+                  <el-button type="success" size="small" v-else @click.stop="updataModule(item, true)">{{
+                    $t('Modules.run')
+                  }}</el-button>
+                  <el-button size="small" @click.stop="toEditModule(item)">{{ $t('Modules.moduleEdit') }}</el-button>
+                </div>
+              </div>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -246,10 +227,6 @@ export default {
     i {
       cursor: pointer;
     }
-  }
-
-  .no-pointer {
-    cursor: default;
   }
 }
 </style>
