@@ -14,8 +14,11 @@
         </div>
       </div>
 
-      <div v-if="oper === 'edit'" class="page-header-top-start delete-btn" @click="deleteModule">
-        <el-button type="danger" size="small">
+      <div class="page-header-top-start oper-button">
+        <el-button type="info" size="small" @click="toReadMore(moduleData.type)">{{
+          $t('Modules.readMore')
+        }}</el-button>
+        <el-button type="danger" size="small" v-if="oper === 'edit'" @click="deleteModule">
           {{ $t('Base.delete') }}
         </el-button>
       </div>
@@ -526,6 +529,12 @@ export default {
         setTimeout(this.$refs.record.clearValidate, 10)
       }
     },
+    toReadMore(type) {
+      const langUrl = this.lang === 'zh' ? 'cn/cn/' : 'io/en/'
+      const url = `https://docs.emqx.${langUrl}enterprise/latest/modules/${type}.html`
+      const windowUrl = window.open(url)
+      windowUrl.opener = null
+    },
   },
 }
 </script>
@@ -534,6 +543,9 @@ export default {
 .module-detail {
   .page-header-content {
     padding: 16px 20px;
+  }
+  .oper-button {
+    top: calc(50% - 14px);
   }
 
   .module-title {

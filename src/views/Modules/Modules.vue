@@ -50,7 +50,9 @@
                   <el-button type="primary" size="small" v-else @click.stop="updataModule(item, true)">{{
                     $t('Modules.start')
                   }}</el-button>
-                  <el-button size="small" @click.stop="toEditModule(item)">{{ $t('Modules.moduleEdit') }}</el-button>
+                  <el-button class="know-more" size="small" @click.stop="toEditModule(item)">{{
+                    $t('Modules.moduleEdit')
+                  }}</el-button>
                 </div>
               </div>
             </div>
@@ -190,12 +192,6 @@ export default {
         localStorage.removeItem('addedModules')
       }
       this.showList = this.list
-    },
-    toReadMore(type) {
-      const langUrl = this.lang === 'zh' ? 'cn/cn/' : 'io/en/'
-      const url = `https://docs.emqx.${langUrl}enterprise/latest/modules/${type}.html`
-      const windowUrl = window.open(url)
-      windowUrl.opener = null
     },
   },
 }

@@ -50,25 +50,14 @@
                   <div class="left-box">
                     <img :src="one.img" alt="module-logo" class="item-img" />
                     <div class="item-content">
-                      <div class="item-title">{{ one.title[lang] }}</div>
+                      <div class="item-title" :title="one.description[lang]">{{ one.title[lang] }}</div>
                       <div class="item-des">
-                        <span class="item-desc"> {{ one.description[lang] }}</span>
-                        <el-popover
-                          placement="bottom-end"
-                          trigger="hover"
-                          :content="one.description[lang]"
-                          width="300"
-                          :style="{ display: 'none' }"
-                        >
-                          <template #reference
-                            ><span class="read-more"><i18n path="Modules.readMore"></i18n></span
-                          ></template>
-                        </el-popover>
+                        <span class="item-desc" :title="one.description[lang]"> {{ one.description[lang] }}</span>
                       </div>
                     </div>
                   </div>
                   <div class="item-handle">
-                    <div class="handle-oper">
+                    <div class="handle-oper select-oper">
                       <el-button v-if="one.status === 'unadd'" type="primary" plain size="small">
                         {{ $t('Base.select') }}
                       </el-button>
@@ -94,25 +83,14 @@
                 <div class="left-box">
                   <img :src="one.img" alt="module-logo" class="item-img" />
                   <div class="item-content">
-                    <div class="item-title">{{ one.title[lang] }}</div>
+                    <div class="item-title" :title="one.description[lang]">{{ one.title[lang] }}</div>
                     <div class="item-des">
-                      <span class="item-desc"> {{ one.description[lang] }}</span>
-                      <el-popover
-                        placement="bottom-end"
-                        trigger="hover"
-                        :content="one.description[lang]"
-                        width="300"
-                        :style="{ display: 'none' }"
-                      >
-                        <template #reference
-                          ><span class="read-more"><i18n path="Modules.readMore"></i18n></span
-                        ></template>
-                      </el-popover>
+                      <span class="item-desc" :title="one.description[lang]"> {{ one.description[lang] }}</span>
                     </div>
                   </div>
                 </div>
                 <div class="item-handle">
-                  <div class="handle-oper">
+                  <div class="handle-oper select-oper">
                     <el-button v-if="one.status === 'unadd'" size="small" type="primary" plain>
                       {{ $t('Base.select') }}
                     </el-button>
@@ -137,7 +115,7 @@
 </template>
 
 <script>
-import { loadAllModules, showCreatedModuleInfo, createModule, destroyModule } from '@/api/modules'
+import { loadAllModules, showCreatedModuleInfo, destroyModule } from '@/api/modules'
 import { fillI18n, matchSearch } from '@/common/utils'
 import store from '@/stores'
 
@@ -186,32 +164,11 @@ export default {
     window.addEventListener('scroll', this.scrollToTop)
     this.returnPosition()
   },
-  updated() {
-    this.calcModulesDesc()
-  },
-
   destroyed() {
     window.removeEventListener('scroll', this.scrollToTop)
   },
 
   methods: {
-    calcModulesDesc() {
-      const containers = document.getElementsByClassName('item-desc')
-      const conFirst = (containers.length && containers[0]) || {}
-      const rect = conFirst.getBoundingClientRect()
-      const strTotal = Math.floor(rect.width / 7) * 2
-
-      for (let i = 0; i < containers.length; i += 1) {
-        const container = containers[i]
-        let textOriginal = container.textContent || ''
-        textOriginal = textOriginal.trim()
-        if (textOriginal.length <= strTotal) {
-        } else {
-          container.textContent = `${textOriginal.substr(0, strTotal)}...`
-          container.nextSibling.style.display = 'inline-block'
-        }
-      }
-    },
     deleteModule(item, list) {
       const index = list.indexOf(item)
       this.$msgbox
@@ -279,22 +236,6 @@ export default {
         const data = { ...val }
         this.parseI18n([data])
         const { params } = data
-        // if (!Object.keys(params).length) {
-        //   const requestParams = {
-        //     type: val.name,
-        //     config: {},
-        //   }
-        //   const responseData = await createModule(requestParams)
-        //   const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
-        //   addedModules[responseData.type] = responseData.id
-        //   this.addedModules = addedModules
-        //   localStorage.setItem('addedModules', JSON.stringify(addedModules))
-        //   this.$message.success(this.$t('Modules.moduleAddSuccess'))
-        //   val.status = 'added'
-        //   val.id = responseData.id
-        //   list.splice(index, 1, val)
-        //   return
-        // }
         this.selectedModule = {
           paramsData: params,
           type: val.name,
