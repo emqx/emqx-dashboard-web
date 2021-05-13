@@ -69,10 +69,18 @@
           </el-table-column>
           <el-table-column>
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
+              <el-button
+                type="dashed"
+                size="mini"
+                @click="showDialog('edit', row)"
+              >
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="deleteConfirm(row)">
+              <el-button
+                type="dashed danger"
+                size="mini"
+                @click="deleteConfirm(row)"
+              >
                 {{ $t('Base.delete') }}
               </el-button>
             </template>

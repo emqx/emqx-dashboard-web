@@ -453,13 +453,11 @@ export default {
 
               content.forEach((one) => {
                 if (one.operations.includes('W')) {
-                  this.resourcesOperations[path] = this.resourcesOperations[
-                    path
-                  ].concat('W')
+                  this.resourcesOperations[path] =
+                    this.resourcesOperations[path].concat('W')
                 } else if (one.operations.includes('R')) {
-                  this.resourcesOperations[path] = this.resourcesOperations[
-                    path
-                  ].concat('R')
+                  this.resourcesOperations[path] =
+                    this.resourcesOperations[path].concat('R')
                 }
               })
             } else if (typeof content === 'object' && !Array.isArray(content)) {

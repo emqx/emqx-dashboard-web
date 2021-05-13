@@ -56,9 +56,16 @@
           ></el-table-column>
           <el-table-column width="250px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="handleDownload(row)">{{ $t('Backup.download') }} </el-button>
-              <el-button type="dashed" size="mini" @click="handleRestore(row)">{{ $t('Backup.restore') }} </el-button>
-              <el-button type="dashed danger" size="mini" @click="deleteConfirm(row)"
+              <el-button type="dashed" size="mini" @click="handleDownload(row)"
+                >{{ $t('Backup.download') }}
+              </el-button>
+              <el-button type="dashed" size="mini" @click="handleRestore(row)"
+                >{{ $t('Backup.restore') }}
+              </el-button>
+              <el-button
+                type="dashed danger"
+                size="mini"
+                @click="deleteConfirm(row)"
                 >{{ $t('Base.delete') }}
               </el-button>
             </template>

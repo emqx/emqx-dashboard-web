@@ -91,10 +91,8 @@ export default {
     en: 'The action when acl check reject current operation',
   },
   allow_anonymous: {
-    zh:
-      '如果未加载身份验证插件，则默认情况下允许匿名身份验证。建议在生产部署中禁用该选项！',
-    en:
-      'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
+    zh: '如果未加载身份验证插件，则默认情况下允许匿名身份验证。建议在生产部署中禁用该选项！',
+    en: 'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
   },
   retry_interval: {
     zh: 'QoS 1/2 消息传递的重试间隔',
@@ -114,8 +112,7 @@ export default {
   },
   flapping_threshold: {
     zh: '每分钟的状态更改次数，指定用于检测连接是否开始 flapping 的阈值',
-    en:
-      'The times of state change per minute, specifying the threshold which is used to detect if the connection starts flapping',
+    en: 'The times of state change per minute, specifying the threshold which is used to detect if the connection starts flapping',
   },
   mqtt_max_packet_size: {
     zh: '最大 MQTT 数据包大小',
@@ -204,8 +201,7 @@ export default {
   },
   app_desc: {
     zh: '用于自动使用 IP 地址构造节点名称如：${name}@127.0.0.1',
-    en:
-      'Used to automatically construct a node name using an IP address: ${name}@127.0.0.1',
+    en: 'Used to automatically construct a node name using an IP address: ${name}@127.0.0.1',
   },
   addr: {
     zh: '组播地址',
@@ -237,8 +233,7 @@ export default {
   },
   prefix_desc: {
     zh: '用于构造节点路径，路径为 v2/keys/<prefix>/<cluster.name>/<node.name>',
-    en:
-      'Used to construct a node path with v2/keys/<prefix>/<cluster.name>/<node.name>',
+    en: 'Used to construct a node path with v2/keys/<prefix>/<cluster.name>/<node.name>',
   },
   apiserver: {
     zh: 'k8s 服务器列表',
@@ -355,26 +350,22 @@ export default {
   },
   busy_port: {
     zh: '指定是否启用进程间消息通道拥塞监控',
-    en:
-      'Specify whether to enable inter-process message channel congestion monitoring',
+    en: 'Specify whether to enable inter-process message channel congestion monitoring',
   },
   large_heap: {
-    zh:
-      '启用堆栈大小监控并在进程执行垃圾回收后堆栈大小仍大于设定值时触发告警，0 表示禁用此监控',
+    zh: '启用堆栈大小监控并在进程执行垃圾回收后堆栈大小仍大于设定值时触发告警，0 表示禁用此监控',
     en: `
     Enable stack size monitoring and trigger an alarm when the stack size is
     still greater than the set value after the process is garbage collected, 0 means disable this monitoring`,
   },
   long_gc: {
-    zh:
-      '启用垃圾回收时间监控并在回收时间超过设定值时触发告警，0 表示禁用此监控',
+    zh: '启用垃圾回收时间监控并在回收时间超过设定值时触发告警，0 表示禁用此监控',
     en: `
     Enable garbage collection time monitoring and trigger an alarm
     when the collection time exceeds the set value, 0 means disable this monitoring`,
   },
   long_schedule: {
-    zh:
-      '启用进程调度时间监控并在调度时间超过设定值时触发告警，0 表示禁用此监控',
+    zh: '启用进程调度时间监控并在调度时间超过设定值时触发告警，0 表示禁用此监控',
     en: `
     Enable process scheduling time monitoring and trigger an alarm when the
     scheduling time exceeds the set value, 0 means disable this monitoring`,

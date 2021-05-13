@@ -582,9 +582,9 @@ export default {
   .tip-button {
     text-align: right;
   }
-  
+
   .el-badge {
-  height: 16px;
-}
+    height: 16px;
+  }
 }
 </style>

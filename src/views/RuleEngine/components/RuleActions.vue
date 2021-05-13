@@ -876,7 +876,8 @@ export default {
     },
     initRecordEnableBatch() {
       if (this.record.params.enable_batch !== undefined) {
-        this.record.params.enable_batch = this.record.params.enable_batch.toString()
+        this.record.params.enable_batch =
+          this.record.params.enable_batch.toString()
       }
     },
     removeAction(index) {

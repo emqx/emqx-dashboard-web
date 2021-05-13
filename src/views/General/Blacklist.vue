@@ -53,7 +53,9 @@
           </el-table-column>
           <el-table-column prop="oper" width="120px" label="">
             <template slot-scope="{ row }">
-              <el-button type="danger" size="mini" @click="deleteConfirm(row)">{{ $t('Base.delete') }} </el-button>
+              <el-button type="danger" size="mini" @click="deleteConfirm(row)"
+                >{{ $t('Base.delete') }}
+              </el-button>
             </template>
           </el-table-column>
         </el-table>

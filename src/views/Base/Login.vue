@@ -132,9 +132,8 @@ export default {
             remember,
           })
           setTimeout(() => {
-            const {
-              to = this.fromCloud ? '/users_and_acl' : '/',
-            } = this.$route.query
+            const { to = this.fromCloud ? '/users_and_acl' : '/' } =
+              this.$route.query
             this.$router.replace({
               path: to,
             })

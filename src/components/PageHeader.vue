@@ -52,7 +52,6 @@ export default {
         margin-right: 8px;
       }
     }
-
   }
 
   .page-header-content-view {

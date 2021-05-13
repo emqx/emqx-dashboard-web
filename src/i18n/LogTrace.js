@@ -1,7 +1,6 @@
 export default {
   logTraceDescription: {
-    zh:
-      '支持针对 ClientID 或 Topic 过滤日志并输出到文件。在使用日志追踪之前，必须将 primary log level 设置为 debug',
+    zh: '支持针对 ClientID 或 Topic 过滤日志并输出到文件。在使用日志追踪之前，必须将 primary log level 设置为 debug',
     en: `Support filtering logs for ClientID or Topic and output to files. Before using log tracking,
     the primary log level must be set to debug`,
   },

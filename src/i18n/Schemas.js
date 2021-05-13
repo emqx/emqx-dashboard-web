@@ -5,8 +5,7 @@ export default {
   },
   schemaDesc: {
     zh: '自定义消息编解码，支持 avro、protobuf 与外部编解码网关',
-    en:
-      'Custom message codec, support avro, protobuf and external codec gateway',
+    en: 'Custom message codec, support avro, protobuf and external codec gateway',
   },
   docs: {
     zh: '使用文档',
