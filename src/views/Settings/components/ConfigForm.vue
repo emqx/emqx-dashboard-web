@@ -286,21 +286,14 @@ export default {
         }, 500)
       }
       if (needPrompt) {
-<<<<<<< HEAD
-        this.$confirm(this.$t('General.cancelConfirm'), this.$t('Base.warning'), {
-          type: 'warning',
-          cancelButtonText: this.$t('Settings.no'),
-        })
-=======
         this.$confirm(
-          this.$t('Settings.cancelConfirm'),
+          this.$t('General.cancelConfirm'),
           this.$t('Base.warning'),
           {
             type: 'warning',
             cancelButtonText: this.$t('Settings.no'),
           },
         )
->>>>>>> refactor({multi-file}): format code styling for new eslint/prettier rules
           .then(() => {
             confirmCancel()
           })
