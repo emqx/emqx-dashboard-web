@@ -123,15 +123,15 @@ export default {
         icon: 'icon-guizeyinqing',
         children: [
           {
-            title: this.$t('components.resources'),
-            key: 'rules.resources',
-            path: '/resources',
-            parentKey: 'rules',
-          },
-          {
             title: this.$t('components.rule'),
             key: 'rules.ruleEngine',
             path: '/rules',
+            parentKey: 'rules',
+          },
+          {
+            title: this.$t('components.resources'),
+            key: 'rules.resources',
+            path: '/resources',
             parentKey: 'rules',
           },
           {
@@ -179,6 +179,12 @@ export default {
         icon: 'icon-fenzuguanli',
         children: [
           {
+            title: this.$t('components.plugins'),
+            key: 'plugins',
+            path: '/plugins',
+            icon: 'icon-kongjian',
+          },
+          {
             title: this.$t('components.application'),
             key: 'general.application',
             path: '/application',
@@ -202,12 +208,7 @@ export default {
             path: '/backup',
             parentKey: 'general',
           },
-          {
-            title: this.$t('components.plugins'),
-            key: 'plugins',
-            path: '/plugins',
-            icon: 'icon-kongjian',
-          },
+
           // {
           //   title: this.$t('components.trace'),
           //   key: 'general.trace',

@@ -42,12 +42,6 @@
           <el-row v-if="allFeatures[item.id]" :gutter="20">
             <el-col v-for="one in allFeatures[item.id]" :key="one.id" :span="24" class="module-list-item">
               <div class="item-box">
-                <!-- <span
-                  v-show="one.id && JSON.stringify(one.params) === '{}'"
-                  @click="deleteModule(one, allFeatures[item.id])"
-                  class="delete-icon"
-                >
-                </span> -->
                 <div
                   class="module-item"
                   @click="toModuleDetail(one, allFeatures[item.id])"
@@ -75,10 +69,10 @@
                   </div>
                   <div class="item-handle">
                     <div class="handle-oper">
-                      <el-button v-if="one.status === 'unadd'" type="success" plain size="small">
+                      <el-button v-if="one.status === 'unadd'" type="primary" plain size="small">
                         {{ $t('Base.select') }}
                       </el-button>
-                      <el-button v-else disabled type="success" plain size="small">
+                      <el-button v-else disabled type="primary" plain size="small">
                         {{ $t('Modules.added') }}
                       </el-button>
                       <el-button @click.stop="toReadMore(one.name)" type="info" size="small">
@@ -119,10 +113,10 @@
                 </div>
                 <div class="item-handle">
                   <div class="handle-oper">
-                    <el-button v-if="one.status === 'unadd'" size="small" type="success" plain>
+                    <el-button v-if="one.status === 'unadd'" size="small" type="primary" plain>
                       {{ $t('Base.select') }}
                     </el-button>
-                    <el-button v-else disabled type="success" plain size="small">
+                    <el-button v-else disabled type="primary" plain size="small">
                       {{ $t('Modules.added') }}
                     </el-button>
                     <el-button @click.stop="toReadMore(one.name)" type="info" size="small">

@@ -8,7 +8,7 @@
       </div>
       <div class="page-header-content-view">
         <div class="content">
-          <p class="description">
+          <p class="description module-desc">
             {{ moduleData.description[lang] }}
           </p>
         </div>
@@ -133,7 +133,7 @@
                 <div class="no-config">
                   <i class="el-icon-warning"></i>
                   <span>{{ $t('Modules.noConfig') }}</span>
-                  <span v-if="oper === 'add'">{{ $t('Modules.noConfigAdd')}}</span>
+                  <span v-if="oper === 'add'">{{ $t('Modules.noConfigAdd') }}</span>
                 </div>
               </template>
               <div v-else class="params-loading-wrapper">
@@ -549,6 +549,9 @@ export default {
       font-size: 12px;
       vertical-align: text-bottom;
     }
+  }
+  .module-desc {
+    max-width: 700px;
   }
 
   .el-form {

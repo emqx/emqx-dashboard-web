@@ -32,7 +32,6 @@
       <el-row v-if="showList.length" :gutter="20" class="emq-list-card plugin-cards-wrapper">
         <el-col v-for="item in showList" :key="item.id" :span="24" class="module-list-item">
           <div class="item-box">
-
             <div class="module-item" @click="toEditModule(item)">
               <div class="left-box">
                 <img :src="item.img" alt="module-logo" class="item-img" />
@@ -48,8 +47,8 @@
                   <el-button type="danger" size="small" v-if="item.enabled" @click.stop="updataModule(item, false)">{{
                     $t('Modules.stop')
                   }}</el-button>
-                  <el-button type="success" size="small" v-else @click.stop="updataModule(item, true)">{{
-                    $t('Modules.run')
+                  <el-button type="primary" size="small" v-else @click.stop="updataModule(item, true)">{{
+                    $t('Modules.start')
                   }}</el-button>
                   <el-button size="small" @click.stop="toEditModule(item)">{{ $t('Modules.moduleEdit') }}</el-button>
                 </div>
