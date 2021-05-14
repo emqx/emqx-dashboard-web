@@ -98,14 +98,14 @@
                 size="mini"
                 @click="handleDialogVisible('edit', row)"
               >
-                {{ $t('RuleEngine.edit') }}
+                {{ $t('Base.edit') }}
               </el-button>
               <el-button
                 type="dashed danger"
                 size="mini"
                 @click="deleteResource(row)"
               >
-                {{ $t('RuleEngine.delete') }}
+                {{ $t('Base.delete') }}
               </el-button>
             </template>
           </el-table-column>

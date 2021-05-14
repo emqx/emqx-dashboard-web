@@ -6,7 +6,12 @@
           <div class="content-left">
             {{ $t('Modules.modules') }}
             <span v-cloak class="modules-num">{{ moduleCount }}</span>
-            <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/select')">
+            <el-button
+              class="confirm-btn"
+              type="primary"
+              size="small"
+              @click="$router.push('/modules/select')"
+            >
               {{ $t('Modules.moduleAdd') }}
             </el-button>
           </div>
@@ -29,8 +34,17 @@
     </page-header>
 
     <div class="app-wrapper">
-      <el-row v-if="showList.length" :gutter="20" class="emq-list-card plugin-cards-wrapper">
-        <el-col v-for="item in showList" :key="item.id" :span="24" class="module-list-item">
+      <el-row
+        v-if="showList.length"
+        :gutter="20"
+        class="emq-list-card plugin-cards-wrapper"
+      >
+        <el-col
+          v-for="item in showList"
+          :key="item.id"
+          :span="24"
+          class="module-list-item"
+        >
           <div class="item-box">
             <div class="module-item" @click="toEditModule(item)">
               <div class="left-box">

@@ -128,9 +128,10 @@ export default {
   },
   mounted() {
     this.adjustLayout()
-    window.onresize = () => {
-      this.adjustLayout()
-    }
+    window.addEventListener('resize', this.adjustLayout)
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.adjustLayout)
   },
 
   methods: {
@@ -145,7 +146,6 @@ export default {
         ? (this.loginKeepHeight = true)
         : (this.loginKeepHeight = false)
       // wWidth >lWidth?(this.loginKeepWidth=true):(this.loginKeepWidth=false)
-      //console.log(this.loginKeepHeight,this.loginKeepWidth)
     },
     login() {
       const { username, password, remember } = this.record
@@ -263,12 +263,6 @@ export default {
     width: 640px;
     flex: 0 0 auto;
     box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-
-    // position: absolute;
-    // top: 50%;
-    // left: 50%;
-    // transform: translate(-50%, -50%);
-    // border-radius: 6px;
   }
 
   .oper-wrapper {

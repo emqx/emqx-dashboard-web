@@ -112,7 +112,7 @@
                 size="mini"
                 @click="deleteRule(row)"
               >
-                {{ $t('RuleEngine.delete') }}
+                {{ $t('Base.delete') }}
               </el-button>
             </template>
           </el-table-column>

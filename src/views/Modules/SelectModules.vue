@@ -55,12 +55,19 @@
             {{ item.name }}
           </p>
           <el-row v-if="allFeatures[item.id]" :gutter="20">
-            <el-col v-for="one in allFeatures[item.id]" :key="one.id" :span="24" class="module-list-item">
+            <el-col
+              v-for="one in allFeatures[item.id]"
+              :key="one.id"
+              :span="24"
+              class="module-list-item"
+            >
               <div class="item-box">
                 <div
                   class="module-item"
                   @click="toModuleDetail(one, allFeatures[item.id])"
-                  :style="{ cursor: one.status === 'added' ? 'default' : 'pointer' }"
+                  :style="{
+                    cursor: one.status === 'added' ? 'default' : 'pointer',
+                  }"
                 >
                   <div class="left-box">
                     <img :src="one.img" alt="module-logo" class="item-img" />
@@ -79,7 +86,11 @@
                       <el-button v-else disabled type="primary" plain size="small">
                         {{ $t('Modules.added') }}
                       </el-button>
-                      <el-button @click.stop="toReadMore(one.name)" type="info" size="small">
+                      <el-button
+                        @click.stop="toReadMore(one.name)"
+                        type="info"
+                        size="small"
+                      >
                         {{ $t('Modules.readMore') }}
                       </el-button>
                     </div>
@@ -98,7 +109,10 @@
             :span="12"
           >
             <div class="item-box">
-              <div class="module-item" @click="toModuleDetail(one, searchModuleInfo)">
+              <div
+                class="module-item"
+                @click="toModuleDetail(one, searchModuleInfo)"
+              >
                 <div class="left-box">
                   <img :src="one.img" alt="module-logo" class="item-img" />
                   <div class="item-content">
@@ -116,7 +130,11 @@
                     <el-button v-else disabled type="primary" plain size="small">
                       {{ $t('Modules.added') }}
                     </el-button>
-                    <el-button @click.stop="toReadMore(one.name)" type="info" size="small">
+                    <el-button
+                      @click.stop="toReadMore(one.name)"
+                      type="info"
+                      size="small"
+                    >
                       {{ $t('Modules.readMore') }}
                     </el-button>
                   </div>

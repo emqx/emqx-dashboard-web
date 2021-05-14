@@ -479,7 +479,7 @@ export default {
         params: {
           $resource: {
             required: true,
-            message: this.$t('RuleEngine.pleaseChoose'),
+            message: this.$t('General.pleaseChoose'),
           },
         },
       },
@@ -502,7 +502,7 @@ export default {
         params: {
           $resource: {
             required: true,
-            message: this.$t('RuleEngine.pleaseChoose'),
+            message: this.$t('General.pleaseChoose'),
           },
         },
       },
@@ -747,7 +747,7 @@ export default {
       this.rules.params = {
         $resource: {
           required: true,
-          message: this.$t('RuleEngine.pleaseChoose'),
+          message: this.$t('General.pleaseChoose'),
         },
         ...rules,
       }
@@ -773,7 +773,7 @@ export default {
       this.originRules.params = {
         $resource: {
           required: true,
-          message: this.$t('RuleEngine.pleaseChoose'),
+          message: this.$t('General.pleaseChoose'),
         },
         ...rules,
       }

@@ -29,7 +29,13 @@
           <!-- <div class="emq-title module-title">
             {{ $t('Modules.configuration') }}
           </div> -->
-          <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
+          <el-form
+            ref="record"
+            :model="record"
+            :rules="rules"
+            label-position="top"
+            size="small"
+          >
             <el-row class="config-item-wrapper" :gutter="30">
               <template v-if="configList.length > 0">
                 <div v-for="(item, i) in configList" :key="i">
@@ -180,11 +186,20 @@
             <div class="emq-title listener-title">
               {{ $t('Modules.listener') }}
             </div>
-            <Listeners v-model="record.config['listeners']" :listenerData="listener"> </Listeners>
+            <Listeners
+              v-model="record.config['listeners']"
+              :listenerData="listener"
+            >
+            </Listeners>
           </div>
 
-          <div class="button-group__center" v-if="configList.length || oper === 'add'">
-            <el-button size="small" @click="exitDetail(true)">{{ $t('Base.cancel') }}</el-button>
+          <div
+            class="button-group__center"
+            v-if="configList.length || oper === 'add'"
+          >
+            <el-button size="small" @click="exitDetail(true)">{{
+              $t('Base.cancel')
+            }}</el-button>
             <el-button
               :loading="buttonLoading"
               class="dialog-primary-btn"

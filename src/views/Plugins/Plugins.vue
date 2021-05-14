@@ -135,9 +135,23 @@
       </el-row>
 
       <!-- List -->
-      <div v-if="displayType === 'list' && listTableData.length > 0" class="emq-list-card plugin-list-wrapper">
-        <div v-for="item in listTableData" :key="item.name" :gutter="20" class="plugin-item">
-          <img class="logo" :src="iconMap[item.name]" alt="plugin-logo" width="60" height="60" />
+      <div
+        v-if="displayType === 'list' && listTableData.length > 0"
+        class="emq-list-card plugin-list-wrapper"
+      >
+        <div
+          v-for="item in listTableData"
+          :key="item.name"
+          :gutter="20"
+          class="plugin-item"
+        >
+          <img
+            class="logo"
+            :src="iconMap[item.name]"
+            alt="plugin-logo"
+            width="60"
+            height="60"
+          />
 
           <div class="header">
             <div class="name">

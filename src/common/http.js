@@ -79,7 +79,7 @@ axios.interceptors.request.use(
     } = config
     if (!user.username && tokenRequired) {
       toLogin()
-      throw new Error(httpMap['-1'] + `(${JSON.stringify(config)}`)
+      throw new Error(httpMap['-1'] + `(${JSON.stringify(config)})`)
     }
     config.auth.username = user.username
     config.auth.password = user.password
