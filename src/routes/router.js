@@ -27,7 +27,6 @@ let routes = [
   },
   {
     path: '/',
-    component: Layout,
     redirect: '/monitor',
     meta: {
       hideKey: '/',
@@ -43,7 +42,7 @@ let routes = [
     },
     children: [
       {
-        path: '/monitor',
+        path: '',
         name: 'monitor',
         component: () => import('@/views/Overview/Overview'),
       },
@@ -364,21 +363,15 @@ let routes = [
       {
         path: 'detail',
         name: 'module-detail',
-        component: ModuleDetail
+        component: ModuleDetail,
       },
     ],
   },
   {
     path: '*',
-    component: Layout,
     meta: {},
-    children: [
-      {
-        path: '',
-        name: 'not-found',
-        component: () => import('@/views/Base/NotFound'),
-      },
-    ],
+    name: 'not-found',
+    component: () => import('@/views/Base/NotFound'),
   },
 ]
 
