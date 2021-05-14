@@ -7,7 +7,7 @@ module.exports = {
         target: {
           chrome: 78,
           firefox: 75,
-          ie: 11,
+          safari: 10,
         },
         corejs: '3.10',
       },

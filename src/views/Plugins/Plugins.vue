@@ -355,7 +355,7 @@ export default {
       const { name } = item
       const node = this.nodeName
       this.$router.push({
-        path: `/plugins/${name}`,
+        path: `/general/plugins/${name}`,
         query: {
           node,
         },
@@ -443,7 +443,7 @@ export default {
     },
     handleManage(row) {
       this.$router.push({
-        path: `/plugins/${row.name}`,
+        path: `/general/plugins/${row.name}`,
       })
     },
   },

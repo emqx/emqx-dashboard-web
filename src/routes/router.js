@@ -3,6 +3,9 @@ import Layout from '@/components/Layout'
 import store from '@/stores'
 import SelectModules from '@/views/Modules/SelectModules'
 import ModuleDetail from '@/views/Modules/ModuleDetail'
+import RuleCreate from '@/views/RuleEngine/RuleCreate'
+import SchemasDetails from '@/views/Schemas/SchemasDetails'
+import Overview from '@/views/Overview/Overview'
 
 const hide = store.state.config.hide || { routes: [], children: [] }
 
@@ -44,7 +47,7 @@ let routes = [
       {
         path: '',
         name: 'monitor',
-        component: () => import('@/views/Overview/Overview'),
+        component: Overview,
       },
       {
         path: '/monitor/node',
@@ -146,7 +149,7 @@ let routes = [
           {
             path: 'create',
             name: 'rules-create',
-            component: () => import('@/views/RuleEngine/RuleCreate'),
+            component: RuleCreate,
           },
           {
             path: ':id',
@@ -193,7 +196,7 @@ let routes = [
           {
             path: ':id',
             name: 'schemas-details',
-            component: () => import('@/views/Schemas/SchemasDetails'),
+            component: SchemasDetails,
           },
         ],
       },
@@ -265,6 +268,27 @@ let routes = [
       subMenu: true,
     },
     children: [
+      // 插件
+      {
+        path: 'plugins',
+        component: { template: `<router-view></router-view>` },
+        meta: {
+          hideKey: 'plugins',
+          authRequired: true,
+        },
+        children: [
+          {
+            path: '',
+            name: 'plugins',
+            component: () => import('@/views/Plugins/Plugins'),
+          },
+          {
+            path: 'plugins/:pluginName',
+            name: 'pluginsName',
+            component: () => import('@/views/Plugins/PluginsManage'),
+          },
+        ],
+      },
       // 应用
       {
         path: 'application',
@@ -320,27 +344,7 @@ let routes = [
       },
     ],
   },
-  // 插件
-  {
-    path: '/plugins',
-    component: Layout,
-    meta: {
-      hideKey: 'plugins',
-      authRequired: true,
-    },
-    children: [
-      {
-        path: '',
-        name: 'plugins',
-        component: () => import('@/views/Plugins/Plugins'),
-      },
-      {
-        path: '/plugins/:pluginName',
-        name: 'pluginsName',
-        component: () => import('@/views/Plugins/PluginsManage'),
-      },
-    ],
-  },
+
   // 模块
   {
     path: '/modules',

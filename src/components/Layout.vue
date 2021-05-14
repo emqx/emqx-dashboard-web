@@ -22,7 +22,7 @@
           <el-header
             v-if="$hasShow('nav-header')"
             class="content-header"
-            :style="{ left: elMainStyle }"
+            :style="{ left: elMainStyle,height:'auto' }"
           >
             <nav-header></nav-header>
             <!-- <nav-tabs></nav-tabs> -->
@@ -178,13 +178,14 @@ export default {
 }
 
 .content-header {
-  height: auto;
+  // height: auto;
   padding: 0;
   right: 0;
   // width: 100%;
   position: fixed;
   z-index: 101;
   transition: all 0.3s;
+  box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
 }
 .top-submenu {
   transition: 0ms;
