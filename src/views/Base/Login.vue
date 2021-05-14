@@ -1,6 +1,17 @@
 <template>
-  <div class="login">
-    <el-card shadow="never" v-if="isNeedAuth" class="login-card emq-list-card">
+  <div
+    :class="[
+      'login',
+      loginKeepHeight && 'login-align-height',
+      loginKeepWidth && 'login-align-width',
+    ]"
+  >
+    <el-card
+      shadow="never"
+      v-if="isNeedAuth"
+      class="login-card emq-list-card"
+      id="login"
+    >
       <div class="split-wrapper">
         <div class="logo-wrapper"></div>
 
@@ -87,6 +98,8 @@ export default {
       isNeedAuth: true,
       fullLoading: false,
       fromCloud: false,
+      loginKeepHeight: false,
+      loginKeepWidth: false,
     }
   },
 
@@ -113,8 +126,27 @@ export default {
     this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
     this.autoLogin()
   },
+  mounted() {
+    this.adjustLayout()
+    window.onresize = () => {
+      this.adjustLayout()
+    }
+  },
 
   methods: {
+    adjustLayout() {
+      const wWidth = window.innerWidth
+      const wHeight = window.innerHeight
+      const loginDom = document.querySelector('#login')
+      const lWidth = loginDom.clientWidth
+      const lHeight = loginDom.clientHeight
+
+      wHeight > lHeight
+        ? (this.loginKeepHeight = true)
+        : (this.loginKeepHeight = false)
+      // wWidth >lWidth?(this.loginKeepWidth=true):(this.loginKeepWidth=false)
+      //console.log(this.loginKeepHeight,this.loginKeepWidth)
+    },
     login() {
       const { username, password, remember } = this.record
       auth({
@@ -180,9 +212,12 @@ export default {
 
 <style lang="scss">
 .login {
-  width: 100vw;
-  min-height: 100vh;
-  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  // width: 100vw;
+  // height: 100vh;
 
   .emq-title {
     margin-bottom: 32px;
@@ -226,11 +261,14 @@ export default {
 
   .login-card {
     width: 640px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 6px;
+    flex: 0 0 auto;
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+
+    // position: absolute;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%, -50%);
+    // border-radius: 6px;
   }
 
   .oper-wrapper {
@@ -240,5 +278,11 @@ export default {
   .sub-btn {
     width: 100%;
   }
+}
+.login-align-height {
+  height: 100vh;
+}
+.login-align-width {
+  width: 100vw;
 }
 </style>
