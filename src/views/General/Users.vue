@@ -35,7 +35,8 @@
           <el-table-column width="120px">
             <template slot-scope="{ row }">
               <el-button
-                type="dashed"
+                type="primary"
+                plain
                 size="mini"
                 @click="showDialog('edit', row)"
                 >{{ $t('Base.edit') }}
@@ -44,6 +45,7 @@
                 v-if="row.tags !== 'administrator' && row.username !== 'admin'"
                 type="danger"
                 size="mini"
+                plain
                 @click="deleteConfirm(row)"
                 >{{ $t('Base.delete') }}
               </el-button>

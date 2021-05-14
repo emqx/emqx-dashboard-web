@@ -22,27 +22,26 @@
           <el-header
             v-if="$hasShow('nav-header')"
             class="content-header"
-            :style="{ left: elMainStyle,height:'auto' }"
+            :style="{ left: elMainStyle, height: 'auto' }"
           >
             <nav-header></nav-header>
             <!-- <nav-tabs></nav-tabs> -->
-            <template v-if="hasSubMenu">
-              <el-menu
-                :default-active="defaultSubMenu"
-                mode="horizontal"
-                router
-                style="padding: 0 10px"
-                class="top-submenu"
-              >
-                <template v-for="route in topLvRoute.children">
-                  <el-menu-item
-                    :key="topLvRoute.path + '/' + route.path"
-                    :index="topLvRoute.path + '/' + route.path"
-                    >{{ $t(`components.${route.path}`) }}</el-menu-item
-                  >
-                </template>
-              </el-menu>
-            </template>
+            <el-menu
+              v-if="hasSubMenu"
+              :default-active="defaultSubMenu"
+              mode="horizontal"
+              router
+              style="padding: 0 10px"
+              class="top-submenu"
+            >
+              <template v-for="route in topLvRoute.children">
+                <el-menu-item
+                  :key="topLvRoute.path + '/' + route.path"
+                  :index="topLvRoute.path + '/' + route.path"
+                  >{{ $t(`components.${route.path}`) }}</el-menu-item
+                >
+              </template>
+            </el-menu>
           </el-header>
 
           <div
@@ -188,6 +187,6 @@ export default {
   box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
 }
 .top-submenu {
-  transition: 0ms;
+  transition: none;
 }
 </style>

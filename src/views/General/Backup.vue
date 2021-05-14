@@ -56,14 +56,19 @@
           ></el-table-column>
           <el-table-column width="250px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="handleDownload(row)"
+              <el-button type="primary" size="mini" @click="handleDownload(row)"
                 >{{ $t('Backup.download') }}
               </el-button>
-              <el-button type="dashed" size="mini" @click="handleRestore(row)"
+              <el-button
+                type="primary"
+                plain
+                size="mini"
+                @click="handleRestore(row)"
                 >{{ $t('Backup.restore') }}
               </el-button>
               <el-button
-                type="dashed danger"
+                type="danger"
+                plain
                 size="mini"
                 @click="deleteConfirm(row)"
                 >{{ $t('Base.delete') }}
@@ -124,7 +129,12 @@ export default {
       this.tableData = await loadBackup()
     },
     async handleExport() {
-      const res = await exportBackup()
+      let res
+      try {
+        res = await exportBackup()
+      } catch (e) {
+        return
+      }
       if (res) {
         this.$message.success(this.$t('Base.createSuccess'))
         this.loadData()

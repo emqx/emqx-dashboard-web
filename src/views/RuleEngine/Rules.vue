@@ -104,12 +104,18 @@
           </el-table-column>
           <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="editRule(row)">
+              <el-button
+                plain
+                type="primary"
+                size="mini"
+                @click="editRule(row)"
+              >
                 {{ $t('Base.edit') }}
               </el-button>
               <el-button
-                type="dashed danger"
+                type="danger"
                 size="mini"
+                plain
                 @click="deleteRule(row)"
               >
                 {{ $t('Base.delete') }}

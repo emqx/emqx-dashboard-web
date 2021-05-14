@@ -70,15 +70,17 @@
           <el-table-column>
             <template slot-scope="{ row }">
               <el-button
-                type="dashed"
+                plain
+                type="primary"
                 size="mini"
                 @click="showDialog('edit', row)"
               >
                 {{ $t('Base.edit') }}
               </el-button>
               <el-button
-                type="dashed danger"
+                type="danger"
                 size="mini"
+                plain
                 @click="deleteConfirm(row)"
               >
                 {{ $t('Base.delete') }}

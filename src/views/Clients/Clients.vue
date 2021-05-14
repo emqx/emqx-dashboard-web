@@ -200,7 +200,8 @@
             <template slot-scope="{ row }">
               <el-button
                 size="mini"
-                type="dashed"
+                type="danger"
+                plain
                 @click="handleDisconnect(row)"
               >
                 {{
