@@ -40,8 +40,8 @@ export default {
     en: 'Manage',
   },
   moduleAdd: {
-    zh: '模块添加',
-    en: 'Module Add',
+    zh: '添加模块',
+    en: 'Add Module',
   },
   moduleAddSuccess: {
     zh: '模块添加成功！',
@@ -64,12 +64,16 @@ export default {
     en: 'Read More',
   },
   run: {
-    zh: '启动',
+    zh: '运行',
     en: 'Run',
   },
   stop: {
     zh: '停止',
     en: 'Stop',
+  },
+  start: {
+    zh: '启动',
+    en: 'Start',
   },
   noData: {
     zh: '暂无数据',
@@ -284,10 +288,10 @@ export default {
   },
   noConfig: {
     zh: '此模块无需配置参数',
-    en: 'The module doesn\'t need any configuration',
+    en: "The module doesn't need any configuration",
   },
   noConfigAdd: {
-    zh:',添加之后即可启用',
-    en:',you couldn\'t use it before you add this module',
-  }
+    zh: ',添加之后即可启用',
+    en: ",you couldn't use it before you add this module",
+  },
 }
