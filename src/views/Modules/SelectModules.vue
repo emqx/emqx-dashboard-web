@@ -324,7 +324,7 @@ export default {
         if (id === 'auth') {
           this.backTo(0)
         } else {
-          this.backTo(offsetTop - 180)
+          this.backTo(offsetTop - 10)
         }
       }, 5)
     },
@@ -405,19 +405,19 @@ export default {
     width: 100%;
     height: 112px;
     position: fixed;
-    top: 80px;
+    top: 48px;
     right: 0;
     z-index: 9;
 
     .inner-box {
       background: #f0f2f5;
-      padding: 24px;
+      padding: 10px 24px;
       box-sizing: border-box;
     }
 
     .content {
       height: 64px;
-      padding: 0 24px;
+      padding: 0 16px;
       box-sizing: border-box;
       background-color: #fff;
       justify-content: space-between;
@@ -473,7 +473,7 @@ export default {
   }
 
   .content-box {
-    margin-top: 90px;
+    margin-top: 110px;
   }
 }
 </style>

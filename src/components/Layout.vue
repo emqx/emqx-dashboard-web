@@ -46,10 +46,8 @@
 
           <div
             :style="{
-              minHeight: '360px',
-              minWidth: '600px',
-              overflowX: 'hidden',
-              marginTop: hasSubMenu ? '100px' : '50px',
+              position: 'relative',
+              marginTop: hasSubMenu ? '110px' : '60px',
             }"
           >
             <!-- <transition name="fade-transform" mode="out-in"> -->
