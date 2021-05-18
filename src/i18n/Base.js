@@ -155,4 +155,12 @@ export default {
     zh: '详情',
     en: 'Details',
   },
+  unameRequired: {
+    zh: '请填写用户名',
+    en: 'username is required',
+  },
+  passwordRequired: {
+    zh: '请填写密码',
+    en: 'password is required',
+  },
 }

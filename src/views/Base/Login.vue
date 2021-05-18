@@ -30,7 +30,6 @@
             :model="record"
             :rules="rules"
             hide-required-asterisk
-            :show-message="false"
             @keyup.enter.native="nativeLogin"
           >
             <el-alert
@@ -60,9 +59,13 @@
             }}</el-checkbox>
 
             <el-form-item class="oper-wrapper" label="">
-              <el-button class="sub-btn" type="primary" @click="nativeLogin">{{
-                $t('Base.signIn')
-              }}</el-button>
+              <el-button
+                class="sub-btn"
+                type="primary"
+                @click="nativeLogin"
+                :loading="logining"
+                >{{ $t('Base.signIn') }}</el-button
+              >
             </el-form-item>
           </el-form>
         </div>
@@ -91,9 +94,22 @@ export default {
         remember: false,
       },
       loginError: '',
+      logining: false,
       rules: {
-        username: { required: true },
-        password: { required: true },
+        username: [
+          {
+            required: true,
+            message: this.$t('Base.unameRequired'),
+            trigger: blur,
+          },
+        ],
+        password: [
+          {
+            required: true,
+            message: this.$t('Base.passwordRequired'),
+            trigger: blur,
+          },
+        ],
       },
       isNeedAuth: true,
       fullLoading: false,
@@ -149,6 +165,9 @@ export default {
     },
     login() {
       const { username, password, remember } = this.record
+      this.logining = true
+      this.loginError = ''
+
       auth({
         username,
         password,
@@ -157,7 +176,6 @@ export default {
           if (!res) {
             return
           }
-          this.loginError = ''
           this.$store.dispatch('UPDATE_USER_INFO', {
             username,
             password,
@@ -180,6 +198,7 @@ export default {
           }
           this.isNeedAuth = true
           this.loginError = error
+          this.logining = false
         })
     },
 
@@ -215,7 +234,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 10px;
+  // margin: 10px;
   // width: 100vw;
   // height: 100vh;
 
@@ -232,7 +251,7 @@ export default {
     background-size: 100%;
     background-repeat: no-repeat;
     position: relative;
-    height: 512px;
+    height: 383px;
     border-radius: 6px 0 0 6px;
 
     .logo {
@@ -256,7 +275,7 @@ export default {
     width: 50%;
     float: left;
     padding: 24px;
-    height: 512px;
+    height: 410px;
   }
 
   .login-card {
