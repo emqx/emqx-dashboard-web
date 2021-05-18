@@ -252,6 +252,8 @@
 
         <div
           v-if="
+            selectedAction.title &&
+            selectedAction.description &&
             selectedAction.title.length - selectedAction.description.length > 18
           "
           class="action-description"
@@ -260,7 +262,7 @@
         </div>
 
         <el-form-item
-          v-if="selectedAction.params.$resource"
+          v-if="selectedAction.params && selectedAction.params.$resource"
           prop="params.$resource"
           label=""
         >
@@ -298,7 +300,10 @@
           </span>
         </el-form-item>
 
-        <div v-if="selectedAction.params.$resource" class="line"></div>
+        <div
+          v-if="selectedAction.params && selectedAction.params.$resource"
+          class="line"
+        ></div>
 
         <el-row
           v-if="paramsLoading || paramsList"
@@ -822,10 +827,8 @@ export default {
     },
 
     actionTypeChange(actionName, oper = 'add') {
-      this.selectedAction = JSON.parse(
-        JSON.stringify(this.actionsMap[actionName]),
-      )
-      this.actionCategory = this.selectedAction.category
+      this.selectedAction = this.actionsMap[actionName] || {}
+      this.actionCategory = this.selectedAction?.category
       this.paramsList = []
       this.paramsLoading = true
       this.loadParamsList(oper)

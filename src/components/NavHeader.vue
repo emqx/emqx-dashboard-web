@@ -70,10 +70,10 @@
         <div class="user-info func-item">
           <span>{{ username }}</span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="application">{{
+            <el-dropdown-item command="general/application">{{
               $t('components.applicationManagement')
             }}</el-dropdown-item>
-            <el-dropdown-item command="users">{{
+            <el-dropdown-item command="general/users">{{
               $t('components.usersManagement')
             }}</el-dropdown-item>
             <el-dropdown-item divided command="login">{{
@@ -170,7 +170,7 @@ export default {
         return
       }
       if (command !== 'login') {
-        this.$router.push({ path: `/${command}` })
+        this.$router.push({ path: `/${command}` }).catch(e=>e)
         return
       }
       this.$msgbox

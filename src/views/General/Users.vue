@@ -42,7 +42,7 @@
                 >{{ $t('Base.edit') }}
               </el-button>
               <el-button
-                v-if="row.tags !== 'administrator' && row.username !== 'admin'"
+                :disabled="row.tags === 'administrator' || row.username === 'admin'"
                 type="danger"
                 size="mini"
                 plain
