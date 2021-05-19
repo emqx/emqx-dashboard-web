@@ -184,10 +184,8 @@ export default {
     en: 'Condition',
   },
   definingRuleConditionsAndDataProcessing: {
-    zh:
-      '使用 SQL 设定规则，对消息数据筛选、编解码、变型，灵活地将处理后的数据无缝转发至数据库、流处理、API 网关等数据目的地',
-    en:
-      'Use SQL to set rules to filter, encode, decode, and modify message data, and seamlessly forward processed data to data destinations such as databases, stream processing, and API gateways',
+    zh: '使用 SQL 设定规则，对消息数据筛选、编解码、变型，灵活地将处理后的数据无缝转发至数据库、流处理、API 网关等数据目的地',
+    en: 'Use SQL to set rules to filter, encode, decode, and modify message data, and seamlessly forward processed data to data destinations such as databases, stream processing, and API gateways',
   },
   triggerEvent: {
     zh: '触发事件',
@@ -235,8 +233,7 @@ export default {
   },
   jsonDecodeUpgrade: {
     zh: '当前版本取消对 payload 的自动 JSON 解码，选择 payload 中的字段请使用 json_decode 解码，如 SQL 示例。',
-    en:
-      'The current version cancels the automatic JSON decoding of the payload. Select the field in the payload and use json_decode to decode it, as in the SQL example.',
+    en: 'The current version cancels the automatic JSON decoding of the payload. Select the field in the payload and use json_decode to decode it, as in the SQL example.',
   },
   exampleSql: {
     zh: '规则 SQL 示例',
@@ -379,8 +376,7 @@ export default {
     zh: 'MQTT message id',
   },
   payload_doc: {
-    en:
-      'The payload, if in JSON format, will be automatically decoded, and the object information will be obtained by using payload.x in SQL',
+    en: 'The payload, if in JSON format, will be automatically decoded, and the object information will be obtained by using payload.x in SQL',
     zh: '消息内容, 如果是 JSON 格式将自动解码, 在 SQL 中使用 payload.x 获取对象信息',
   },
   peername_doc: {
@@ -396,10 +392,8 @@ export default {
     zh: '当前毫秒级时间戳',
   },
   topic_doc: {
-    en:
-      'Currently MQTT topic can be filtered by wildcards in SQL.  When multiple topics are included in subscribe and unsubscribe, only the first one will be obtained here. To obtain all topics, please use topic_filters',
-    zh:
-      '当前 MQTT 主题, SQL 中可以使用通配符进行筛选.\nSubscribe 与 Unsubscribe 请求中包含多个主题时, 这里只会获取到第一个, 如需获取全部请使用 topic_filters',
+    en: 'Currently MQTT topic can be filtered by wildcards in SQL.  When multiple topics are included in subscribe and unsubscribe, only the first one will be obtained here. To obtain all topics, please use topic_filters',
+    zh: '当前 MQTT 主题, SQL 中可以使用通配符进行筛选.\nSubscribe 与 Unsubscribe 请求中包含多个主题时, 这里只会获取到第一个, 如需获取全部请使用 topic_filters',
   },
   node_doc: {
     en: 'Node name of the trigger event',
@@ -499,10 +493,7 @@ export default {
     en: 'All Nodes',
   },
   sql_tips: {
-    zh:
-      '<p>规则引擎是标准 MQTT 之上基于 SQL 的核心数据处理与分发组件，可以方便的筛选并处理 MQTT 消息与设备生命周期事件，并将数据分发移动到 HTTP Server、数据库、消息队列甚至是另一个 MQTT Broker 中。</p><p>1. 选择 \'t/#\' 主题的消息，提取全部字段：</p><div class="code"><code>SELECT * FROM  "t/#"</code></div><p>2. 通过事件主题选择客户端连接事件，筛选 Username 为 \'emqx\' 的设备并获取连接信息：</p><div class="code"><code>SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = \'emqx\'</code></div><p>规则引擎和 SQL 语句的详细教程参见 <a target="_blank" href="https://docs.emqx.cn/broker/latest/rule/rule-engine.html">EMQ X 文档</a>。</p>`',
-    en:
-      '<p>Rule Engine is the core SQL-based data processing and distribution component on top of the standard MQTT. It makes it easy to filter and process MQTT messages and device lifecycle events and move data distribution to HTTP Server, database, message queues, or even another MQTT Broker.</p><p>1. Select the messages published to t/# and select all fields:</p><div class="code"><code>SELECT * FROM  "t/#"</code> </div><p>2. Select the client connected event and filter the device with Username \'emqx\' to get the connection information.</p><div class="code"><code>SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = \'emqx\'</code></div><p>For a detailed tutorial on the rule engine and SQL queries please refer to <a target="_blank" href="https://docs.emqx.io/en/broker/latest/rule/rule-engine.html">EMQ X Documentation</a>。</p>',
+    zh: '<p>规则引擎是标准 MQTT 之上基于 SQL 的核心数据处理与分发组件，可以方便的筛选并处理 MQTT 消息与设备生命周期事件，并将数据分发移动到 HTTP Server、数据库、消息队列甚至是另一个 MQTT Broker 中。</p><p>1. 选择 \'t/#\' 主题的消息，提取全部字段：</p><div class="code"><code>SELECT * FROM  "t/#"</code></div><p>2. 通过事件主题选择客户端连接事件，筛选 Username 为 \'emqx\' 的设备并获取连接信息：</p><div class="code"><code>SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = \'emqx\'</code></div><p>规则引擎和 SQL 语句的详细教程参见 <a target="_blank" href="https://docs.emqx.cn/enterprise/latest/rule/rule-engine.html">EMQ X 文档</a>。</p>',
+    en: '<p>Rule Engine is the core SQL-based data processing and distribution component on top of the standard MQTT. It makes it easy to filter and process MQTT messages and device lifecycle events and move data distribution to HTTP Server, database, message queues, or even another MQTT Broker.</p><p>1. Select the messages published to t/# and select all fields:</p><div class="code"><code>SELECT * FROM  "t/#"</code> </div><p>2. Select the client connected event and filter the device with Username \'emqx\' to get the connection information.</p><div class="code"><code>SELECT clientid, connected_at FROM "$events/client_connected" WHERE username = \'emqx\'</code></div><p>For a detailed tutorial on the rule engine and SQL queries please refer to <a target="_blank" href="https://docs.emqx.io/en/enterprise/latest/rule/rule-engine.html">EMQ X Documentation</a>.</p>',
   },
-
 }
