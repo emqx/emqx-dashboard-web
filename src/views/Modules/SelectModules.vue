@@ -72,18 +72,33 @@
                   <div class="left-box">
                     <img :src="one.img" alt="module-logo" class="item-img" />
                     <div class="item-content">
-                      <div class="item-title" :title="one.description[lang]">{{ one.title[lang] }}</div>
+                      <div class="item-title" :title="one.description[lang]">
+                        {{ one.title[lang] }}
+                      </div>
                       <div class="item-des">
-                        <span class="item-desc" :title="one.description[lang]"> {{ one.description[lang] }}</span>
+                        <span class="item-desc" :title="one.description[lang]">
+                          {{ one.description[lang] }}</span
+                        >
                       </div>
                     </div>
                   </div>
                   <div class="item-handle">
                     <div class="handle-oper select-oper">
-                      <el-button v-if="one.status === 'unadd'" type="primary" plain size="small">
+                      <el-button
+                        v-if="one.status === 'unadd'"
+                        type="primary"
+                        plain
+                        size="small"
+                      >
                         {{ $t('Base.select') }}
                       </el-button>
-                      <el-button v-else disabled type="primary" plain size="small">
+                      <el-button
+                        v-else
+                        disabled
+                        type="primary"
+                        plain
+                        size="small"
+                      >
                         {{ $t('Modules.added') }}
                       </el-button>
                       <el-button
@@ -116,18 +131,33 @@
                 <div class="left-box">
                   <img :src="one.img" alt="module-logo" class="item-img" />
                   <div class="item-content">
-                    <div class="item-title" :title="one.description[lang]">{{ one.title[lang] }}</div>
+                    <div class="item-title" :title="one.description[lang]">
+                      {{ one.title[lang] }}
+                    </div>
                     <div class="item-des">
-                      <span class="item-desc" :title="one.description[lang]"> {{ one.description[lang] }}</span>
+                      <span class="item-desc" :title="one.description[lang]">
+                        {{ one.description[lang] }}</span
+                      >
                     </div>
                   </div>
                 </div>
                 <div class="item-handle">
                   <div class="handle-oper select-oper">
-                    <el-button v-if="one.status === 'unadd'" size="small" type="primary" plain>
+                    <el-button
+                      v-if="one.status === 'unadd'"
+                      size="small"
+                      type="primary"
+                      plain
+                    >
                       {{ $t('Base.select') }}
                     </el-button>
-                    <el-button v-else disabled type="primary" plain size="small">
+                    <el-button
+                      v-else
+                      disabled
+                      type="primary"
+                      plain
+                      size="small"
+                    >
                       {{ $t('Modules.added') }}
                     </el-button>
                     <el-button
@@ -152,7 +182,11 @@
 </template>
 
 <script>
-import { loadAllModules, showCreatedModuleInfo, destroyModule } from '@/api/modules'
+import {
+  loadAllModules,
+  showCreatedModuleInfo,
+  destroyModule,
+} from '@/api/modules'
 import { fillI18n, matchSearch } from '@/common/utils'
 import store from '@/stores'
 

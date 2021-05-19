@@ -58,15 +58,26 @@
               </div>
               <div class="item-handle">
                 <div class="handle-oper">
-                  <el-button type="danger" size="small" v-if="item.enabled" @click.stop="updataModule(item, false)">{{
-                    $t('Modules.stop')
-                  }}</el-button>
-                  <el-button type="primary" size="small" v-else @click.stop="updataModule(item, true)">{{
-                    $t('Modules.start')
-                  }}</el-button>
-                  <el-button class="know-more" size="small" @click.stop="toEditModule(item)">{{
-                    $t('Modules.moduleEdit')
-                  }}</el-button>
+                  <el-button
+                    type="danger"
+                    size="small"
+                    v-if="item.enabled"
+                    @click.stop="updataModule(item, false)"
+                    >{{ $t('Modules.stop') }}</el-button
+                  >
+                  <el-button
+                    type="primary"
+                    size="small"
+                    v-else
+                    @click.stop="updataModule(item, true)"
+                    >{{ $t('Modules.start') }}</el-button
+                  >
+                  <el-button
+                    class="know-more"
+                    size="small"
+                    @click.stop="toEditModule(item)"
+                    >{{ $t('Modules.moduleEdit') }}</el-button
+                  >
                 </div>
               </div>
             </div>

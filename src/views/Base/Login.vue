@@ -157,8 +157,12 @@ export default {
       const loginDom = document.querySelector('#login')
       const lWidth = loginDom.clientWidth
       const lHeight = loginDom.clientHeight
+      const loginParentDomStyle = window.getComputedStyle(
+        loginDom.parentElement,
+      )
+      const lpPadding = loginParentDomStyle.paddingTop
 
-      wHeight > lHeight
+      wHeight > lHeight + 2 * parseInt(lpPadding)
         ? (this.loginKeepHeight = true)
         : (this.loginKeepHeight = false)
       // wWidth >lWidth?(this.loginKeepWidth=true):(this.loginKeepWidth=false)
@@ -234,6 +238,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 10px;
   // margin: 10px;
   // width: 100vw;
   // height: 100vh;

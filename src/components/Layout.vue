@@ -31,7 +31,6 @@
               :default-active="defaultSubMenu"
               mode="horizontal"
               router
-              style="padding: 0 10px"
               class="top-submenu"
             >
               <template v-for="route in topLvRoute.children">
@@ -68,7 +67,6 @@
 <script>
 import LeftBar from '@/components/LeftBar'
 import NavHeader from '@/components/NavHeader'
-// import NavTabs from '@/components/NavTabs2.vue'
 import routes from '@/routes/router'
 
 export default {
@@ -77,7 +75,6 @@ export default {
   components: {
     NavHeader,
     LeftBar,
-    // NavTabs,
   },
 
   data() {
@@ -104,7 +101,6 @@ export default {
       return topLvRoute || {}
     },
     defaultSubMenu() {
-      //console.log(this.$route.matched)
       const { children, path: topPath } = this.topLvRoute
       const { path } = this.$route
       const childRoute =
@@ -175,10 +171,8 @@ export default {
 }
 
 .content-header {
-  // height: auto;
   padding: 0;
   right: 0;
-  // width: 100%;
   position: fixed;
   z-index: 101;
   transition: all 0.3s;
@@ -186,5 +180,6 @@ export default {
 }
 .top-submenu {
   transition: none;
+  padding: 0 10px;
 }
 </style>

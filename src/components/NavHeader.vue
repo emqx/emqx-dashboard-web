@@ -170,7 +170,7 @@ export default {
         return
       }
       if (command !== 'login') {
-        this.$router.push({ path: `/${command}` }).catch(e=>e)
+        this.$router.push({ path: `/${command}` }).catch((e) => e)
         return
       }
       this.$msgbox

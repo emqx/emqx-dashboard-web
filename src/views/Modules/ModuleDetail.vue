@@ -15,10 +15,18 @@
       </div>
 
       <div class="page-header-top-start oper-button">
-        <el-button type="info" size="small" @click="toReadMore(moduleData.type)">{{
-          $t('Modules.readMore')
-        }}</el-button>
-        <el-button type="danger" size="small" v-if="oper === 'edit'" @click="deleteModule">
+        <el-button
+          type="info"
+          size="small"
+          @click="toReadMore(moduleData.type)"
+          >{{ $t('Modules.readMore') }}</el-button
+        >
+        <el-button
+          type="danger"
+          size="small"
+          v-if="oper === 'edit'"
+          @click="deleteModule"
+        >
           {{ $t('Base.delete') }}
         </el-button>
       </div>
@@ -174,7 +182,9 @@
                 <div class="no-config">
                   <i class="el-icon-warning"></i>
                   <span>{{ $t('Modules.noConfig') }}</span>
-                  <span v-if="oper === 'add'">{{ $t('Modules.noConfigAdd') }}</span>
+                  <span v-if="oper === 'add'">{{
+                    $t('Modules.noConfigAdd')
+                  }}</span>
                 </div>
               </template>
               <div v-else class="params-loading-wrapper">

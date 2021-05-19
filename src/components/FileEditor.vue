@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
   <div class="file-editor">
     <el-row>

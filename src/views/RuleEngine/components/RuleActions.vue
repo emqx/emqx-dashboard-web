@@ -306,7 +306,7 @@
         ></div>
 
         <el-row
-          v-if="paramsLoading || paramsList"
+          v-if="paramsLoading || paramsList.length"
           class="params-item-wrapper"
           :gutter="50"
         >
