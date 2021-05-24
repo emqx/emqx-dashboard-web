@@ -121,7 +121,7 @@
                       class="test-output"
                       lang="json"
                       :disabled="true"
-                      height="200"
+                      :height="200"
                     ></monaco>
                     <!-- </div> -->
                   </el-form-item>

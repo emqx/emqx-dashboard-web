@@ -8,4 +8,9 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize', this.chart.resize)
   },
+  watch: {
+    '$store.state.leftBarCollapse'() {
+      setTimeout(this.chart.resize, 300) //leftBarCollapse's animation is 300ms normally
+    },
+  },
 }

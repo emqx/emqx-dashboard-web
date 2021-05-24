@@ -5,6 +5,7 @@
       :collapse="leftBarCollapse"
       class="menu-bgColor"
       router
+      :collapse-transition="false"
     >
       <template v-for="menu in menus">
         <template v-if="$hasShow(menu.key)">

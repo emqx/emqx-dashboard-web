@@ -3,15 +3,11 @@
   <div>
     <el-container>
       <el-aside :style="{ width: elAsideWidth }">
-        <div
-          class="logo"
-          :style="{
-            paddingLeft: leftBarCollapse ? '6px' : '20px',
-            width: elAsideWidth,
-          }"
-        >
-          <img class="logo-img" src="../assets/emq_logo.svg" alt="logo" />
-        </div>
+        <router-link to="/">
+          <div :class="['logo', leftBarCollapse ? 'logo-colap' : '']">
+            <img class="logo-img" src="../assets/emq_logo.svg" alt="logo" />
+          </div>
+        </router-link>
         <left-bar></left-bar>
       </el-aside>
       <el-container class="layout" style="min-height: 100vh">
@@ -142,7 +138,7 @@ export default {
 }
 
 .logo {
-  text-align: center;
+  // text-align: center;
   width: 200px;
   height: 60px;
   line-height: 60px;
@@ -150,23 +146,29 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
+  justify-content: center;
   z-index: 100;
   transition: all 0.3s;
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  // padding: 0 20px;
   background: #2f333e;
 
   .logo-img {
-    width: 72px;
-    height: auto;
-    position: relative;
-    left: -3px;
+    width: 100px;
+    transition: all 0.6s;
   }
 
   .line {
     margin-top: 12px;
     width: 120px;
+  }
+}
+
+.logo-colap {
+  width: 80px;
+  .logo-img {
+    width: 70px;
   }
 }
 
