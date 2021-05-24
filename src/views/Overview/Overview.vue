@@ -249,7 +249,6 @@
     </el-card>
 
     <el-dialog
-      title="标题"
       :width="`${licenseTipWidth}px`"
       :visible.sync="licenseTipVisible"
       :close-on-click-modal="false"
