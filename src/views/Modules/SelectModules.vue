@@ -35,7 +35,7 @@
     </div>
     <div class="content-box app-wrapper">
       <template v-if="!searchVal">
-        <div v-for="item in classList" :key="item.id" :id="item.id" class="link-content">
+        <div v-for="item in classList" :key="item.id" :id="item.id">
           <p :class="['class-title', item.id === activeNavId ? 'active-title' : '']">
             {{ item.name }}
           </p>
@@ -77,7 +77,7 @@
       </template>
       <template v-else>
         <el-row v-if="searchModuleInfo.length" :gutter="20">
-          <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
+          <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="24" class="module-list-item">
             <div class="item-box">
               <div class="module-item" @click="toModuleDetail(one, searchModuleInfo)">
                 <div class="left-box">
