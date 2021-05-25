@@ -292,6 +292,6 @@ export default {
   },
   noConfigAdd: {
     zh: ',添加之后即可启用',
-    en: ",you couldn't use it before you add this module",
+    en: ', you can use it after adding this module',
   },
 }
