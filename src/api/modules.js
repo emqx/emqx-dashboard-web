@@ -54,9 +54,7 @@ export function addAcl(body = {}) {
 }
 
 export function deleteAcl(type, id, topic) {
-  return http.delete(
-    `/acl/${type}/${encodeURIComponent(id)}/topic/${encodeURIComponent(topic)}`,
-  )
+  return http.delete(`/acl/${type}/${encodeURIComponent(id)}/topic/${encodeURIComponent(topic)}`)
 }
 
 export function delete$allAcl(topic) {
@@ -86,15 +84,11 @@ export function editSasl(body) {
 }
 
 export function deleteSasl(mechanism, username) {
-  return http.delete(
-    `/sasl?mechanism=${mechanism}&username=${encodeURIComponent(username)}`,
-  )
+  return http.delete(`/sasl?mechanism=${mechanism}&username=${encodeURIComponent(username)}`)
 }
 
 export function showSasl(mechanism, username) {
-  return http.get(
-    `/sasl?mechanism=${mechanism}&username=${encodeURIComponent(username)}`,
-  )
+  return http.get(`/sasl?mechanism=${mechanism}&username=${encodeURIComponent(username)}`)
 }
 
 // lwm2m_protocol
@@ -103,9 +97,7 @@ export function getLwClients(nodeName) {
 }
 
 export function getOrderResponse(nodeName, imei, msgType, path) {
-  return http.get(
-    `/nodes/${nodeName}/lookup_cmd/${imei}?msgType=${msgType}&path=${path}`,
-  )
+  return http.get(`/nodes/${nodeName}/lookup_cmd/${imei}?msgType=${msgType}&path=${path}`)
 }
 
 export function publishOrder(body) {

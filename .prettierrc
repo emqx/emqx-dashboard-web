@@ -4,6 +4,6 @@
   "useTabs": false,
   "semi": false,
   "trailingComma": "all",
-  "printWidth": 80,
+  "printWidth": 100,
   "bracketSpacing": true
 }

@@ -122,9 +122,7 @@ export function addAuthMnesiaACL(body) {
 
 // Delete Auth mnesia ACL
 export function deleteAuthMnesiaACL(login, topic) {
-  return http.delete(
-    `/emqx_acl/${encodeURIComponent(login)}/${encodeURIComponent(topic)}`,
-  )
+  return http.delete(`/emqx_acl/${encodeURIComponent(login)}/${encodeURIComponent(topic)}`)
 }
 
 // Auth mnesia ACL Detail

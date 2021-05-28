@@ -34,9 +34,7 @@ export async function loadClientDetail(clientId) {
 
 // 搜索单个节点的订阅
 export function loadSubscriptions(nodeName, clientId) {
-  return http.get(
-    `/nodes/${nodeName}/subscriptions/${encodeURIComponent(clientId)}`,
-  )
+  return http.get(`/nodes/${nodeName}/subscriptions/${encodeURIComponent(clientId)}`)
 }
 
 export function unSubscription(body = {}) {

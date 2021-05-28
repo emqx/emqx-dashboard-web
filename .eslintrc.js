@@ -14,6 +14,7 @@ module.exports = {
     'no-debugger': 'off',
     'import/extensions': 0,
     'vue/no-v-html': 'off',
+    'vue/html-self-closing':0,
     semi: 0,
     'import/no-cycle': 0,
     'max-len': 0,

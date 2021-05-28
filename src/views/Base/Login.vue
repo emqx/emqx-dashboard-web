@@ -32,14 +32,6 @@
             hide-required-asterisk
             @keyup.enter.native="nativeLogin"
           >
-            <el-alert
-              v-if="loginError"
-              :title="loginError"
-              type="error"
-              @close="loginError = ''"
-            >
-            </el-alert>
-
             <el-form-item prop="username">
               <el-input
                 v-model="record.username"
@@ -78,6 +70,7 @@
 import { auth } from '@/api/common'
 import { awaitWrap } from '@/common/utils'
 import store from '@/stores'
+// import { ElMessage } from 'element-ui'
 
 export default {
   name: 'Login',
@@ -93,7 +86,6 @@ export default {
         password: '',
         remember: false,
       },
-      loginError: '',
       logining: false,
       rules: {
         username: [
@@ -170,7 +162,6 @@ export default {
     login() {
       const { username, password, remember } = this.record
       this.logining = true
-      this.loginError = ''
 
       auth({
         username,
@@ -201,7 +192,7 @@ export default {
             this.fullLoading.close()
           }
           this.isNeedAuth = true
-          this.loginError = error
+          this.$message.error({ message: error, type: 'error' })
           this.logining = false
         })
     },
