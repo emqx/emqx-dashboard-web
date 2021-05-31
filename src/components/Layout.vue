@@ -1,12 +1,12 @@
 <template>
-  <el-container class="layout" style="min-height: 100vh;">
+  <el-container class="layout" style="min-height: 100vh">
     <!-- 左侧 -->
-    <el-aside width="auto">
+    <el-aside width="auto" v-if="!layoutParams.hideLeft">
       <left-bar></left-bar>
     </el-aside>
 
-    <el-main style="margin: 0; padding: 0;" :style="elMainStyle">
-      <el-header v-if="$hasShow('nav-header')" style="height: 80px; padding: 0;">
+    <el-main style="margin: 0; padding: 0" :style="elMainStyle">
+      <el-header v-if="$hasShow('nav-header') && !layoutParams.hideHeader" style="height: 80px; padding: 0">
         <nav-header></nav-header>
         <nav-tabs></nav-tabs>
       </el-header>
@@ -43,6 +43,11 @@ export default {
     return {
       collapsed: false,
       theme: 'light',
+
+      layoutParmas: {
+        hideLeft: false,
+        hideHeader: false,
+      },
     }
   },
 
@@ -51,7 +56,31 @@ export default {
       return this.$store.state.leftBarCollapse ? 'auto' : '200px'
     },
     elMainStyle() {
-      return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px' }
+      let px = 0
+      if (!this.layoutParams.hideLeft) {
+        px = !this.$store.state.leftBarCollapse ? 200 : 80
+      }
+      return { marginLeft: `${px}px` }
+    },
+  },
+
+  beforeMount() {
+    this.getLayoutParams()
+  },
+
+  methods: {
+    getLayoutParams() {
+      const params = this.$route.query
+      this.setAppMinWidth(params.hide_left)
+      this.layoutParams = {
+        hideLeft: params.hide_left,
+        hideHeader: params.hide_header,
+      }
+    },
+    setAppMinWidth(hideLeft) {
+      if (hideLeft) {
+        document.querySelector('#app').style.minWidth = '1000px'
+      }
     },
   },
 }
