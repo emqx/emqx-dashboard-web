@@ -20,21 +20,17 @@ const router = new Router({
 })
 
 router.beforeEach((form, to, next) => {
-  const { authRequired = false, before, hideLeftBar = false } = to.meta
+  const { before, hideLeftBar = false } = to.meta
   const { hideLeftBar: hideLeftBarForm = false } = form.meta
 
-  if (authRequired && !getBasicAuthInfo().username) {
-    toLogin()
-  } else {
-    if (before) {
-      before()
-    }
-    // 当前路由隐藏左侧菜单
-    if (hideLeftBarForm !== hideLeftBar) {
-      store.dispatch('SET_LEFT_BAR_COLLAPSE', !hideLeftBar)
-    }
-    next()
+  if (before) {
+    before()
   }
+  // 当前路由隐藏左侧菜单
+  if (hideLeftBarForm !== hideLeftBar) {
+    store.dispatch('SET_LEFT_BAR_COLLAPSE', !hideLeftBar)
+  }
+  next()
 })
 
 export default router
