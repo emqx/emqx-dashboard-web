@@ -120,9 +120,9 @@ export default {
         icon: 'icon-changjingguanli',
       },
       {
-        title: this.$t('components.alerts'),
-        key: 'alerts',
-        path: '/alerts',
+        title: this.$t('components.alarm'),
+        key: 'alarm',
+        path: '/alarm',
         icon: 'icon-gaojing',
       },
       {
@@ -207,9 +207,7 @@ export default {
         if (!item.key || !item.children) {
           return
         }
-        if (
-          item.children.find(($) => path.includes($.path) || path === $.path)
-        ) {
+        if (item.children.find(($) => path.includes($.path) || path === $.path)) {
           if (!this.defaultOpenKeys.includes(item.key)) {
             this.defaultOpenKeys.push(item.key)
           }

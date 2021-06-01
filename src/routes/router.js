@@ -209,17 +209,17 @@ let routes = [
 
   // 告警
   {
-    path: '/alerts',
+    path: '/alarm',
     component: Layout,
-    redirect: '/alerts/list',
+    // redirect: '/alerts/list',
     meta: {
-      hideKey: 'alerts',
+      hideKey: 'alarm',
       authRequired: true,
     },
     children: [
       {
-        path: 'list',
-        name: 'alerts',
+        path: '',
+        name: 'alarm',
         component: () => import('@/views/Alerts/Alerts'),
       },
     ],

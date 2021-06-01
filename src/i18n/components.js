@@ -67,7 +67,7 @@ export default {
     zh: '主题监控',
     en: 'Topic metrics',
   },
-  alerts: {
+  alarm: {
     zh: '告警',
     en: 'Alarm',
   },
