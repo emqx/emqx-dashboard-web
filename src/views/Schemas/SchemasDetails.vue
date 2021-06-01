@@ -31,7 +31,6 @@
                 <el-input v-model="record.name" :disabled="disabled"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="10"> </el-col>
 
             <el-col :span="14">
               <el-form-item :label="$t('Schemas.parser_type')" prop="parser_type">
@@ -43,7 +42,6 @@
                 </emq-select>
               </el-form-item>
             </el-col>
-            <el-col :span="10"> </el-col>
 
             <!-- 3rd-party -->
             <template v-if="record.parser_type === THIRD_PARTY">
@@ -53,12 +51,10 @@
                     v-model="record.third_party_type"
                     :disabled="disabled"
                     :field="{ list: ['HTTP', 'TCP', 'Resources'] }"
-                    @change="handle3rdTypeChange"
                   >
                   </emq-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="10"> </el-col>
 
               <!-- HTTP type -->
               <template v-if="record.third_party_type === HTTP">
@@ -72,7 +68,6 @@
                     </el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="10"> </el-col>
               </template>
 
               <!-- TCP type -->
@@ -87,7 +82,6 @@
                     </el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="10"> </el-col>
               </template>
 
               <!-- Resources type -->
@@ -107,7 +101,6 @@
                     </emq-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="10"> </el-col>
               </template>
 
               <el-col :span="14">
@@ -121,7 +114,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="10"> </el-col>
+
               <el-col :span="14">
                 <el-form-item
                   :label="$t('Schemas.connect_timeout')"
@@ -134,7 +127,7 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="10"> </el-col>
+
               <el-col :span="14">
                 <el-form-item :label="$t('Schemas.parse_timeout')" prop="parser_opts.parse_timeout">
                   <el-input
@@ -144,79 +137,40 @@
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="10"> </el-col>
             </template>
 
             <!-- View -->
-            <template v-if="accessType === 'view'">
+            <template>
               <el-col :span="14">
                 <el-form-item :label="$t('Schemas.description')">
                   <el-input v-model="record.descr" :disabled="true"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="10"> </el-col>
-              <el-col :span="10"> </el-col>
             </template>
-
-            <el-col v-else :span="14">
-              <el-form-item :label="$t('Schemas.description')">
-                <el-input v-model="record.description" :disabled="disabled"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="10"> </el-col>
-
-            <!-- Schema code -->
-            <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
-              <el-form-item class="code-editor__item" label="Schema" prop="schema">
-                <div class="monaco-container monaco-schema">
-                  <monaco
-                    id="schema"
-                    v-model="record.schema"
-                    class="schema-code"
-                    warp
-                    lang="plaintext"
-                    :disabled="disabled"
-                    @qucik-save="save"
-                    :height="editorHeight"
-                  ></monaco>
-                </div>
-                <!-- <stretch-height v-model="editorHeight"></stretch-height> -->
-              </el-form-item>
-            </el-col>
-            <el-col :span="10"> </el-col>
           </el-form>
         </el-row>
-
-        <div v-if="!disabled" class="button-group">
-          <el-button :loading="saveLoading" type="primary" size="medium" @click="save">
-            {{ $t('Base.create') }}
-          </el-button>
-          <el-button type="default" size="medium" @click="$router.back()">
-            {{ $t('Base.cancel') }}
-          </el-button>
-        </div>
       </el-card>
     </div>
   </div>
 </template>
 
 <script>
-import { loadResource } from '@/api/rules'
-import { createSchema, viewSchema, deleteSchema } from '@/api/schemas'
-import Monaco from '@/components/Monaco'
+// import { loadResource } from '@/api/rules'
+import { viewSchema, deleteSchema } from '@/api/schemas'
+// import Monaco from '@/components/Monaco'
 
 export default {
   name: 'SchemasDetails',
 
   components: {
-    Monaco,
+    // Monaco,
   },
   computed: {
     disabled() {
-      return this.$route.query.oper === 'view'
+      return true
     },
     detailsID() {
-      return this.$route.params.id
+      return this.$route.query.id
     },
   },
   data() {
@@ -265,29 +219,17 @@ export default {
         },
       },
       availableResources: [],
-      saveLoading: false,
-      accessType: undefined,
     }
   },
 
   watch: {
     $route(val) {
-      const { id } = val.params
-      if (id !== '0') {
-        this.viewDetails(val.params.id)
-      } else {
-        setTimeout(() => {
-          this.$refs.record.clearValidate()
-          this.$refs.record.resetFields()
-        }, 500)
-      }
+      const { id } = val.query
+      this.viewDetails(id)
     },
   },
   created() {
-    this.accessType = this.$route.query.oper
-    if (this.accessType === 'view') {
-      this.viewDetails(this.detailsID)
-    }
+    this.viewDetails(this.detailsID)
   },
 
   methods: {
@@ -295,20 +237,6 @@ export default {
       setTimeout(() => {
         this.$router.go(-1)
       }, 500)
-    },
-
-    async save() {
-      const valid = await this.$refs.record.validate()
-      if (!valid) {
-        return
-      }
-      this.saveLoading = true
-      const res = await createSchema(this.record)
-      if (res) {
-        this.$message.success(this.$t('Base.createSuccess'))
-        this.routeToSchemas()
-      }
-      this.saveLoading = false
     },
 
     async viewDetails(id) {
@@ -330,16 +258,6 @@ export default {
           }
         })
         .catch(() => {})
-    },
-
-    async handle3rdTypeChange(val) {
-      if (val === this.RESOURCES) {
-        const res = await loadResource()
-        if (res) {
-          const types = ['parser_tcp', 'parser_http']
-          this.availableResources = res.filter(($) => types.includes($.type))
-        }
-      }
     },
   },
 }

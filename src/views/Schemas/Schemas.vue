@@ -7,12 +7,7 @@
             {{ $t('Schemas.schemaDesc') }}
           </p>
           <div class="page-header-top-start">
-            <a
-              rel="noopener"
-              :href="docs.tutorial"
-              target="_blank"
-              class="link-item"
-            >
+            <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
               <i class="icon el-icon-position"></i>
               {{ $t('Schemas.quickStart') }}
             </a>
@@ -30,8 +25,7 @@
             icon="el-icon-plus"
             @click="
               $router.push({
-                path: '/ruleengine/schemas/0',
-                query: { oper: 'create' },
+                path: '/ruleengine/schemas/create',
               })
             "
           >
@@ -42,17 +36,9 @@
         <el-table :data="tableData" class="data-list">
           <el-table-column prop="name" :label="$t('Schemas.name')">
             <template slot-scope="{ row }">
-              <a
-                href="javascript:;"
-                @click="
-                  $router.push({
-                    path: `/ruleengine/schemas/${row.name}`,
-                    query: { oper: 'view' },
-                  })
-                "
-              >
-                {{ row.name }}
-              </a>
+              <router-link :to="{ path: '/ruleengine/schemas/detail', query: { id: row.name } }">{{
+                row.name
+              }}</router-link>
             </template>
           </el-table-column>
           <el-table-column
@@ -70,11 +56,7 @@
           ></el-table-column>
           <el-table-column width="80px">
             <template slot-scope="{ row }">
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="deleteData(row)"
-              >
+              <el-button type="danger" size="mini" plain @click="deleteData(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
