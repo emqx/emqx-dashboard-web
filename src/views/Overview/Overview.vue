@@ -5,8 +5,6 @@
         <el-card
           shadow="never"
           class="app-card"
-          :bordered="true"
-          :loading="pageLoading"
         >
           <div class="app-card-title">
             {{ $t('Overview.messageOut') }}
@@ -38,12 +36,7 @@
       </el-col>
 
       <el-col :span="6">
-        <el-card
-          shadow="never"
-          class="app-card"
-          :bordered="true"
-          :loading="pageLoading"
-        >
+        <el-card shadow="never" class="app-card">
           <div class="app-card-title">
             {{ $t('Overview.messageIn') }}
           </div>
@@ -76,8 +69,6 @@
         <el-card
           shadow="never"
           class="app-card"
-          :bordered="true"
-          :loading="pageLoading"
         >
           <div class="app-card-title">
             {{ $t('Overview.subscriptionNumber') }}
@@ -108,8 +99,6 @@
         <el-card
           shadow="never"
           class="app-card"
-          :bordered="true"
-          :loading="pageLoading"
         >
           <div class="app-card-title">
             {{ $t('Overview.connectionNumber') }}
@@ -141,16 +130,15 @@
         <div class="title">
           {{ $t('Overview.nodeData') }}
         </div>
-        <div class="type-filter">
-          <emq-select
-            v-model="nodeName"
-            size="mini"
-            style="margin-right: 20px"
-            :field="{ options: nodes }"
-            :field-name="{ label: 'name', value: 'node' }"
-            @change="dataTypeChange"
-          ></emq-select>
-        </div>
+
+        <el-dropdown @command="dataTypeChange" :style="{cursor:'pointer'}">
+        <span class="el-dropdown-link">
+            {{this.nodeName}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="node of nodes" :key="node.node" :command="node.node">{{node.node}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
 
       <div class="basic">
@@ -416,7 +404,8 @@ export default {
         localStorage.setItem('licenseTipVisible', false)
       }
     },
-    dataTypeChange() {
+    dataTypeChange(val) {
+      this.nodeName = val
       this.loadNodes()
     },
     async loadNodes() {
@@ -522,7 +511,7 @@ export default {
   }
 
   .app-card {
-    @include trans-up-mixin(-1px);
+    // @include trans-up-mixin(-1px);
     border-radius: 8px;
 
     .app-card-title {

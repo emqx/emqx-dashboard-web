@@ -192,7 +192,7 @@ export default {
             this.fullLoading.close()
           }
           this.isNeedAuth = true
-          this.$message.error({ message: error, type: 'error' })
+          this.$message.error({ message: error, type: 'error',duration:6000 })
           this.logining = false
         })
     },

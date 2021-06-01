@@ -134,7 +134,7 @@ export default {
   margin-top: 20px;
 
   .doughnut-card {
-    @include trans-up-mixin(-1px);
+    // @include trans-up-mixin(-1px);
     border-radius: 8px;
     height: 255px;
   }
