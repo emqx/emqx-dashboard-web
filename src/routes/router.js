@@ -194,6 +194,10 @@ let routes = [
             component: () => import('@/views/Schemas/Schemas'),
           },
           {
+            path: 'create',
+            component: () => import('@/views/Schemas/SchemasCreate'),
+          },
+          {
             path: ':id',
             name: 'schemas-details',
             component: SchemasDetails,

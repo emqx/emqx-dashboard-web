@@ -34,10 +34,7 @@
             <el-col :span="10"> </el-col>
 
             <el-col :span="14">
-              <el-form-item
-                :label="$t('Schemas.parser_type')"
-                prop="parser_type"
-              >
+              <el-form-item :label="$t('Schemas.parser_type')" prop="parser_type">
                 <emq-select
                   v-model="record.parser_type"
                   :disabled="disabled"
@@ -51,10 +48,7 @@
             <!-- 3rd-party -->
             <template v-if="record.parser_type === THIRD_PARTY">
               <el-col :span="14">
-                <el-form-item
-                  :label="$t('Schemas.third_party_type')"
-                  prop="third_party_type"
-                >
+                <el-form-item :label="$t('Schemas.third_party_type')" prop="third_party_type">
                   <emq-select
                     v-model="record.third_party_type"
                     :disabled="disabled"
@@ -84,10 +78,7 @@
               <!-- TCP type -->
               <template v-if="record.third_party_type === TCP">
                 <el-col :span="14">
-                  <el-form-item
-                    :label="$t('Schemas.server')"
-                    prop="parser_addr.server"
-                  >
+                  <el-form-item :label="$t('Schemas.server')" prop="parser_addr.server">
                     <el-input
                       v-model="record.parser_addr.server"
                       :disabled="disabled"
@@ -102,21 +93,14 @@
               <!-- Resources type -->
               <template v-if="record.third_party_type === RESOURCES">
                 <el-col :span="14">
-                  <el-form-item
-                    :label="$t('Schemas.resource')"
-                    prop="parser_addr.resource_id"
-                  >
+                  <el-form-item :label="$t('Schemas.resource')" prop="parser_addr.resource_id">
                     <emq-select
                       v-model="record.parser_addr.resource_id"
                       :field="{ options: availableResources }"
                       :field-name="{ label: 'id', value: 'id' }"
                       :disabled="disabled"
                     >
-                      <div
-                        slot="option"
-                        slot-scope="{ item }"
-                        class="custom-option"
-                      >
+                      <div slot="option" slot-scope="{ item }" class="custom-option">
                         <span class="label">{{ item.id }}</span>
                         <span class="value">{{ item.config.title }}</span>
                       </div>
@@ -152,10 +136,7 @@
               </el-col>
               <el-col :span="10"> </el-col>
               <el-col :span="14">
-                <el-form-item
-                  :label="$t('Schemas.parse_timeout')"
-                  prop="parser_opts.parse_timeout"
-                >
+                <el-form-item :label="$t('Schemas.parse_timeout')" prop="parser_opts.parse_timeout">
                   <el-input
                     v-model="record.parser_opts.parse_timeout"
                     :disabled="disabled"
@@ -179,21 +160,14 @@
 
             <el-col v-else :span="14">
               <el-form-item :label="$t('Schemas.description')">
-                <el-input
-                  v-model="record.description"
-                  :disabled="disabled"
-                ></el-input>
+                <el-input v-model="record.description" :disabled="disabled"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="10"> </el-col>
 
             <!-- Schema code -->
             <el-col v-if="record.parser_type !== THIRD_PARTY" :span="14">
-              <el-form-item
-                class="code-editor__item"
-                label="Schema"
-                prop="schema"
-              >
+              <el-form-item class="code-editor__item" label="Schema" prop="schema">
                 <div class="monaco-container monaco-schema">
                   <monaco
                     id="schema"
@@ -214,12 +188,7 @@
         </el-row>
 
         <div v-if="!disabled" class="button-group">
-          <el-button
-            :loading="saveLoading"
-            type="primary"
-            size="medium"
-            @click="save"
-          >
+          <el-button :loading="saveLoading" type="primary" size="medium" @click="save">
             {{ $t('Base.create') }}
           </el-button>
           <el-button type="default" size="medium" @click="$router.back()">
@@ -234,9 +203,7 @@
 <script>
 import { loadResource } from '@/api/rules'
 import { createSchema, viewSchema, deleteSchema } from '@/api/schemas'
-import detailsPage from '@/mixins/detailsPage'
 import Monaco from '@/components/Monaco'
-import { setTimeout } from 'timers'
 
 export default {
   name: 'SchemasDetails',
@@ -244,9 +211,14 @@ export default {
   components: {
     Monaco,
   },
-
-  mixins: [detailsPage],
-
+  computed: {
+    disabled() {
+      return this.$route.query.oper === 'view'
+    },
+    detailsID() {
+      return this.$route.params.id
+    },
+  },
   data() {
     return {
       editorHeight: 320,
@@ -293,6 +265,8 @@ export default {
         },
       },
       availableResources: [],
+      saveLoading: false,
+      accessType: undefined,
     }
   },
 
@@ -308,6 +282,12 @@ export default {
         }, 500)
       }
     },
+  },
+  created() {
+    this.accessType = this.$route.query.oper
+    if (this.accessType === 'view') {
+      this.viewDetails(this.detailsID)
+    }
   },
 
   methods: {
