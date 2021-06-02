@@ -115,15 +115,12 @@ export default new Vuex.Store({
       state.alertCount = count
     },
     UPDATE_USER_INFO(state, userInfo) {
-      // eslint-disable-next-line
       state.user = userInfo
     },
     LOADING(state, loading) {
-      // eslint-disable-next-line
       state.loading = loading
     },
     SET_LEFT_BAR_COLLAPSE(state, collapse) {
-      // eslint-disable-next-line
       state.leftBarCollapse = collapse
       localStorage.setItem('leftBarCollapse', collapse)
     },

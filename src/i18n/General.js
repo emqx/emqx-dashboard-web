@@ -180,8 +180,8 @@ export default {
     en: 'Confirm delete?',
   },
   blacklistTips: {
-    zh: '通过黑名单禁止客户端建立连接，该功能适用于管理少量客户端，客户端认证请使用',
-    en: 'The blacklist prohibits clients from establishing connections. This function is suitable for managing a small number of clients. For client authentication, view',
+    zh: '通过黑名单禁止客户端建立连接，该功能适用于管理少量客户端。',
+    en: 'The blacklist prohibits clients from establishing connections. This function is suitable for managing a small number of clients.',
   },
   authDocs: {
     zh: '认证文档',

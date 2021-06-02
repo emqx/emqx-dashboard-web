@@ -3,13 +3,15 @@
     <page-header :back-title="$t('General.blacklist')">
       <div class="page-header-content-view">
         <div class="content">
-          <p class="description">
             {{ $t('General.blacklistTips') }}
-            <a :href="docs.tutorial" target="_blank">
+            
+        </div>
+      </div>
+      <div class="page-header-top-start">
+        <a :href="docs.tutorial" target="_blank" class="link-item">
+          <i class="icon el-icon-document"></i>
               {{ $t('General.authDocs') }}
             </a>
-          </p>
-        </div>
       </div>
     </page-header>
 
@@ -255,8 +257,6 @@ export default {
 
 <style lang="scss" scoped>
 .blacklist {
-  .description {
-    max-width: 500px;
-  }
+
 }
 </style>

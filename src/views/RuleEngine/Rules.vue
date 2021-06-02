@@ -3,10 +3,10 @@
     <page-header>
       <div class="page-header-content-view">
         <div class="content">
-          <p class="description">
             {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
-          </p>
-          <div class="page-header-top-start">
+        </div>
+      </div>
+      <div class="page-header-top-start">
             <a
               rel="noopener"
               :href="docs.tutorial"
@@ -17,8 +17,6 @@
               {{ $t('RuleEngine.quickStart') }}
             </a>
           </div>
-        </div>
-      </div>
     </page-header>
 
     <div class="app-wrapper">

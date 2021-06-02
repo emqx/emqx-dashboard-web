@@ -8,9 +8,7 @@
       </div>
       <div class="page-header-content-view">
         <div class="content">
-          <p class="description module-desc">
             {{ moduleData.description[lang] }}
-          </p>
         </div>
       </div>
 
@@ -627,7 +625,7 @@ export default {
     padding: 16px 20px;
   }
   .oper-button {
-    top: calc(50% - 14px);
+    // white-space: nowrap;
   }
 
   .module-title {
