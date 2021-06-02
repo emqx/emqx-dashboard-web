@@ -11,7 +11,7 @@
         <nav-tabs></nav-tabs>
       </el-header>
 
-      <div :style="{ minHeight: '360px', minWidth: '600px', overflowX: 'hidden' }">
+      <div ref="body" :style="{ minHeight: '360px', minWidth: '600px', overflowX: 'hidden' }">
         <transition name="fade-transform" mode="out-in">
           <keep-alive>
             <router-view v-if="$route.meta.keepAlive"></router-view>
@@ -67,6 +67,14 @@ export default {
   beforeMount() {
     this.getLayoutParams()
   },
+  mounted() {
+    this.refreshParentHeight()
+  },
+  updated() {
+    setTimeout(() => {
+      this.refreshParentHeight()
+    }, 1000)
+  },
 
   methods: {
     getLayoutParams() {
@@ -80,6 +88,12 @@ export default {
     setAppMinWidth(hideLeft) {
       if (hideLeft) {
         document.querySelector('#app').style.minWidth = '1000px'
+      }
+    },
+    refreshParentHeight() {
+      if (window.parent) {
+        const height = this.$refs.body.offsetHeight
+        window.parent.postMessage({ height: height > 700 ? height : 700 }, '*')
       }
     },
   },
