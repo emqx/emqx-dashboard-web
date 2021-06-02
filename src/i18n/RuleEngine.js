@@ -179,6 +179,10 @@ export default {
     zh: '创建规则',
     en: 'Create Rules',
   },
+  editRules: {
+    zh: '编辑规则',
+    en: 'Edit Rules',
+  },
   condition: {
     zh: '条件',
     en: 'Condition',
