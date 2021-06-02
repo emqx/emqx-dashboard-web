@@ -2,7 +2,7 @@
   <div class="rule-create">
     <page-header>
       <div class="page-header-title-view">
-        <div class="title">{{ $t('RuleEngine.createRules') }}</div>
+        <div class="title">{{ isEdit ? $t('RuleEngine.editRules') : $t('RuleEngine.createRules') }}</div>
       </div>
 
       <div class="page-header-content-view">
