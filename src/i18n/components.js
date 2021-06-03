@@ -183,4 +183,24 @@ export default {
     zh: '在线 Trace',
     en: 'Online Trace',
   },
+  monitorSettings: {
+    zh: '监控告警',
+    en: 'Monitor Alarm',
+  },
+  clusterSettings: {
+    zh: '集群设置',
+    en: 'Cluster',
+  },
+  listenerSettings: {
+    zh: '监听器',
+    en: 'Listeners',
+  },
+  baseSettings: {
+    zh: '基础设置',
+    en: 'Basic',
+  },
+  zoneSettings: {
+    zh: 'zone',
+    en: 'zone',
+  },
 }

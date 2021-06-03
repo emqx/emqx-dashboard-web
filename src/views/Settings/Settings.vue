@@ -1,22 +1,12 @@
 <template>
   <div class="settings">
     <div v-if="showSettings" class="app-wrapper">
-      <el-tabs
-        v-model="activeName"
-        type="card"
-        :before-leave="handleBeforeLeave"
-      >
+      <el-tabs v-model="activeName" type="card" :before-leave="handleBeforeLeave">
         <el-tab-pane :label="$t('Settings.basic')" name="baseSettings">
-          <base-settings
-            v-if="activeName === 'baseSettings'"
-            ref="baseSettings"
-          ></base-settings>
+          <base-settings v-if="activeName === 'baseSettings'" ref="baseSettings"></base-settings>
         </el-tab-pane>
         <el-tab-pane label="Zone" name="zoneSettings">
-          <zone-settings
-            v-if="activeName === 'zoneSettings'"
-            ref="zoneSettings"
-          ></zone-settings>
+          <zone-settings v-if="activeName === 'zoneSettings'" ref="zoneSettings"></zone-settings>
         </el-tab-pane>
         <el-tab-pane :label="$t('Settings.listeners')" name="listenerSettings">
           <listener-settings
@@ -24,10 +14,7 @@
             ref="listenerSettings"
           ></listener-settings>
         </el-tab-pane>
-        <el-tab-pane
-          :label="$t('Settings.monitorAlarm')"
-          name="monitorSettings"
-        >
+        <el-tab-pane :label="$t('Settings.monitorAlarm')" name="monitorSettings">
           <monitor-settings
             v-if="activeName === 'monitorSettings'"
             ref="monitorSettings"
@@ -46,12 +33,7 @@
       <p v-html="$t('Settings.openModuleTip')">
         {{ $t('Settings.openModuleTip') }}
       </p>
-      <el-button
-        size="small"
-        class="confirm-btn"
-        type="primary"
-        @click="handleModLoad"
-      >
+      <el-button size="small" class="confirm-btn" type="primary" @click="handleModLoad">
         {{ $t('Analysis.enable') }}
       </el-button>
     </div>
@@ -80,13 +62,18 @@ export default {
 
   data() {
     return {
-      activeName: 'baseSettings',
+      activeName: '',
       showSettings: false,
     }
   },
+  watch: {
+    activeName(val) {
+      this.showSettings && this.$router.push({ path: '/setting/' + val }).catch((e) => {})
+    },
+  },
 
-  created() {
-    this.getStatus()
+  async created() {
+    await this.getStatus()
   },
 
   methods: {
@@ -94,6 +81,7 @@ export default {
       const data = await loadCreatedModules()
       const res = data.find(($) => $.type === 'hot_confs' && $.enabled === true)
       this.showSettings = res !== undefined
+      this.showSettings && (this.activeName = this.$route.params.part || 'baseSettings')
     },
     async handleModLoad() {
       await enableTopicMetrics({ type: 'hot_confs' })
@@ -149,8 +137,7 @@ export default {
       flex: 1;
     }
 
-    .el-form-item.is-required:not(.is-no-asterisk)
-      > .el-form-item__label:before,
+    .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before,
     .el-form-item.is-required:not(.is-no-asterisk)
       .el-form-item__label-wrap
       > .el-form-item__label:before {

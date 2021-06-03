@@ -351,6 +351,11 @@ let routes = [
         name: 'setting',
         component: () => import('@/views/Settings/Settings'),
       },
+      {
+        path: ':part',
+        name: 'setting-part',
+        component: () => import('@/views/Settings/Settings'),
+      },
     ],
   },
 
