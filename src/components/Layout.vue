@@ -74,6 +74,11 @@ export default {
     } else {
       setTimeout(() => this.refreshParentHeight(), 0)
     }
+    window.addEventListener('message', (event) => {
+      if (typeof event.data === 'object' && 'lang' in event.data && event.data.lang !== this.$store.state.lang) {
+        this.setLanguage(event.data.lang)
+      }
+    })
   },
   updated() {
     setTimeout(() => {
@@ -100,6 +105,9 @@ export default {
         const height = this.$refs.body.offsetHeight
         window.parent.postMessage({ height: height > minHeight ? height : minHeight }, '*')
       }
+    },
+    setLanguage(lang) {
+      this.$store.dispatch('SET_LANGUAGE', lang)
     },
   },
 }
