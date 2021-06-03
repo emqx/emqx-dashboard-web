@@ -108,8 +108,8 @@ export default {
     en: 'Disconnected At',
   },
   connectedStatus: {
-    zh: '连接状态',
-    en: 'Connect Status',
+    zh: '状态',
+    en: 'Status',
   },
   connected: {
     zh: '已连接',

@@ -1,9 +1,11 @@
 <template>
   <div class="clients">
     <page-header>
+      <div class="page-header-title-view">
+        <div class="title">{{ $t('Clients.currentConnection') }}</div>
+      </div>
       <div class="page-header-content-view">
         <div class="content">
-          {{ $t('Clients.currentConnection') }}
           <emq-select
             v-model="nodeName"
             class="node-select"
@@ -55,11 +57,7 @@
               <el-col :span="8">
                 <el-row class="form-item-row">
                   <el-col :span="8">
-                    <el-select
-                      v-model="fuzzyParams.comparator"
-                      class="comparator"
-                      size="small"
-                    >
+                    <el-select v-model="fuzzyParams.comparator" class="comparator" size="small">
                       <el-option label=">=" value="_gte"></el-option>
                       <el-option label="<=" value="_lte"></el-option>
                     </el-select>
@@ -83,56 +81,27 @@
                   size="small"
                   :placeholder="$t('Clients.protocol')"
                 >
-                  <el-option
-                    v-for="name in protoNames"
-                    :key="name"
-                    :value="name"
-                  >
-                  </el-option>
+                  <el-option v-for="name in protoNames" :key="name" :value="name"> </el-option>
                 </el-select>
               </el-col>
             </template>
             <div class="col-oper">
-              <el-button
-                type="primary"
-                icon="el-icon-search"
-                size="small"
-                @click="handleSearch"
-              >
+              <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
                 {{ $t('Clients.search') }}
               </el-button>
-              <el-button
-                plain
-                size="small"
-                :icon="resetIcon"
-                @click="resetSearch"
-              >
+              <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
                 {{ $t('Clients.reset') }}
               </el-button>
-              <a
-                href="javascript:;"
-                class="show-more"
-                @click="showMoreQuery = !showMoreQuery"
-              >
-                {{
-                  showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand')
-                }}
-                <i
-                  :class="
-                    showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'
-                  "
-                ></i>
+              <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
+                {{ showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand') }}
+                <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
               </a>
             </div>
           </el-row>
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column
-            prop="clientid"
-            min-width="130px"
-            :label="$t('Clients.clientId')"
-          >
+          <el-table-column prop="clientid" sortable :label="$t('Clients.clientId')">
             <template slot-scope="{ row }">
               <router-link
                 :to="{
@@ -147,22 +116,13 @@
 
           <el-table-column
             prop="username"
-            min-width="120px"
+            sortable
             :label="$t('Clients.username')"
           ></el-table-column>
-          <el-table-column
-            prop="ipaddress"
-            min-width="120px"
-            :label="$t('Clients.ipAddress')"
-          >
-            <template slot-scope="{ row }">
-              {{ row.ip_address }}:{{ row.port }}
-            </template>
+          <el-table-column prop="ipaddress" sortable :label="$t('Clients.ipAddress')">
+            <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template>
           </el-table-column>
-          <el-table-column
-            prop="keepalive"
-            :label="$t('Clients.keepalive')"
-          ></el-table-column>
+          <el-table-column prop="keepalive" sortable :label="$t('Clients.keepalive')"></el-table-column>
           <el-table-column
             prop="proto_name"
             filter-placement="bottom"
@@ -178,37 +138,25 @@
           </el-table-column>
           <el-table-column
             prop="connected"
-            min-width="100px"
+            sortable
             :label="$t('Clients.connectedStatus')"
           >
             <template slot-scope="{ row }">
-              <el-badge is-dot :type="row.connected ? 'success' : 'danger'">
-              </el-badge>
+              <el-badge is-dot :type="row.connected ? 'success' : 'danger'"> </el-badge>
               <span>{{
-                row.connected
-                  ? $t('Clients.connected')
-                  : $t('Clients.disconnected')
+                row.connected ? $t('Clients.connected') : $t('Clients.disconnected')
               }}</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="connected_at"
-            min-width="140px"
+            sortable
             :label="$t('Clients.connectionAt')"
           ></el-table-column>
           <el-table-column prop="oper" :label="$t('Base.operation')">
             <template slot-scope="{ row }">
-              <el-button
-                size="mini"
-                type="danger"
-                plain
-                @click="handleDisconnect(row)"
-              >
-                {{
-                  row.connected
-                    ? $t('Clients.kickOut')
-                    : $t('Clients.cleanSession')
-                }}
+              <el-button size="mini" type="danger" plain @click="handleDisconnect(row)">
+                {{ row.connected ? $t('Clients.kickOut') : $t('Clients.cleanSession') }}
               </el-button>
             </template>
           </el-table-column>

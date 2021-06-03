@@ -28,8 +28,8 @@
         </div>
 
         <el-table v-bind="rulesTable" :data="tableData" class="data-list">
-          <el-table-column type="index" width="50" label=" "> </el-table-column>
-          <el-table-column prop="id" label="ID">
+          <el-table-column type="index" label="No"> </el-table-column>
+          <el-table-column prop="id" label="ID" sortable>
             <template slot-scope="{ row }">
               <router-link
                 :to="{
@@ -40,7 +40,7 @@
               >
             </template>
           </el-table-column>
-          <el-table-column prop="for" min-width="120" :label="$t('RuleEngine.topic')">
+          <el-table-column prop="for" sortable :label="$t('RuleEngine.topic')">
             <template slot-scope="{ row }">
               <div v-for="(item, index) in row.for" :key="index">
                 {{ item }}
@@ -58,6 +58,7 @@
           <el-table-column
             prop="description"
             show-overflow-tooltip
+            sortable
             :label="$t('RuleEngine.describe')"
           ></el-table-column>
           <el-table-column prop="status" :label="$t('RuleEngine.status')">

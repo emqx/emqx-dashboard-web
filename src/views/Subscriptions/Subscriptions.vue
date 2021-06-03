@@ -1,9 +1,11 @@
 <template>
   <div class="subscriptions">
     <page-header>
+      <div class="page-header-title-view">
+        <div class="title">{{ $t('Subs.currentSubs') }}</div>
+      </div>
       <div class="page-header-content-view">
         <div class="content">
-          {{ $t('Subs.currentSubs') }}
           <emq-select
             v-model="nodeName"
             class="node-select"
@@ -30,33 +32,19 @@
             <el-col :span="8" class="form-item-col">
               <el-row class="form-item-row">
                 <el-col :span="8">
-                  <el-select
-                    v-model="fuzzyParams.match"
-                    class="match"
-                    size="small"
-                  >
+                  <el-select v-model="fuzzyParams.match" class="match" size="small">
                     <el-option label="filter" value="_match_topic"></el-option>
                     <el-option label="topic" value="topic"></el-option>
                   </el-select>
                 </el-col>
                 <el-col :span="16">
-                  <el-input
-                    v-model="fuzzyParams.topic"
-                    type="text"
-                    size="small"
-                  >
-                  </el-input>
+                  <el-input v-model="fuzzyParams.topic" type="text" size="small"> </el-input>
                 </el-col>
               </el-row>
             </el-col>
             <template v-if="showMoreQuery">
               <el-col :span="8">
-                <el-select
-                  v-model="fuzzyParams.qos"
-                  clearable
-                  size="small"
-                  placeholder="QoS"
-                >
+                <el-select v-model="fuzzyParams.qos" clearable size="small" placeholder="QoS">
                   <el-option :value="0"></el-option>
                   <el-option :value="1"></el-option>
                   <el-option :value="2"></el-option>
@@ -73,35 +61,15 @@
               </el-col>
             </template>
             <div class="col-oper">
-              <el-button
-                type="primary"
-                icon="el-icon-search"
-                size="small"
-                @click="handleSearch"
-              >
+              <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
                 {{ $t('Clients.search') }}
               </el-button>
-              <el-button
-                plain
-                size="small"
-                :icon="resetIcon"
-                @click="resetSearch"
-              >
+              <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
                 {{ $t('Clients.reset') }}
               </el-button>
-              <a
-                href="javascript:;"
-                class="show-more"
-                @click="showMoreQuery = !showMoreQuery"
-              >
-                {{
-                  showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand')
-                }}
-                <i
-                  :class="
-                    showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'
-                  "
-                ></i>
+              <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
+                {{ showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand') }}
+                <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
               </a>
             </div>
           </el-row>
@@ -113,10 +81,7 @@
             min-width="130px"
             :label="$t('Clients.clientId')"
           ></el-table-column>
-          <el-table-column
-            prop="topic"
-            :label="$t('Subs.topic')"
-          ></el-table-column>
+          <el-table-column prop="topic" :label="$t('Subs.topic')"></el-table-column>
           <el-table-column prop="qos" label="QoS"></el-table-column>
         </el-table>
 

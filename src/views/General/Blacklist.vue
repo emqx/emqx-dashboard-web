@@ -30,27 +30,27 @@
         <el-table :data="tableData" class="data-list">
           <el-table-column
             prop="who"
-            min-width="120px"
             :label="$t('General.who')"
           >
           </el-table-column>
           <el-table-column
             prop="as"
-            min-width="120px"
             :label="$t('General.as')"
+            sortable
           >
           </el-table-column>
           <el-table-column
             prop="reason"
             min-width="120px"
             :label="$t('General.reason')"
+            sortable
           >
           </el-table-column>
           <el-table-column
             prop="until"
-            min-width="120px"
             :formatter="formatterUntil"
             :label="$t('General.until')"
+            sortable
           >
           </el-table-column>
           <el-table-column prop="oper" :label="$t('Base.operation')">

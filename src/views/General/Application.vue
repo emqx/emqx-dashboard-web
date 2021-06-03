@@ -23,14 +23,14 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="app_id" label="AppID">
+          <el-table-column prop="app_id" label="AppID" sortable>
             <template slot-scope="{ row }">
               <span class="btn" @click="showDialog('view', row)">
                 {{ row.app_id }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="name" :label="$t('General.appName')"></el-table-column>
+          <el-table-column prop="name" :label="$t('General.appName')" sortable></el-table-column>
           <el-table-column
             prop="expired"
             :formatter="formatterExpired"

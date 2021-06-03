@@ -23,12 +23,12 @@
 
         <el-table :data="tableData" class="data-list">
           <el-table-column
-            min-width="120px"
+          sortable
             prop="username"
             :label="$t('General.userName')"
           ></el-table-column>
           <el-table-column
-            min-width="60px"
+            sortable
             prop="tags"
             :label="$t('General.remark')"
           ></el-table-column>

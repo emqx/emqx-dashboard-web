@@ -142,6 +142,10 @@
   }
   .el-table__header-wrapper {
     border-radius: 4px;
+
+    .cell{
+      line-height: 37px;
+    }
   }
   thead {
     border-bottom-color: #fff;
