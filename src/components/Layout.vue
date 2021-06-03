@@ -68,7 +68,12 @@ export default {
     this.getLayoutParams()
   },
   mounted() {
-    this.refreshParentHeight()
+    if (this.$route.name === 'monitor') {
+      this.refreshParentHeight(1500)
+      setTimeout(() => this.refreshParentHeight(), 3000)
+    } else {
+      setTimeout(() => this.refreshParentHeight(), 0)
+    }
   },
   updated() {
     setTimeout(() => {
@@ -90,10 +95,10 @@ export default {
         document.querySelector('#app').style.minWidth = '1000px'
       }
     },
-    refreshParentHeight() {
+    refreshParentHeight(minHeight = 700) {
       if (window.parent) {
         const height = this.$refs.body.offsetHeight
-        window.parent.postMessage({ height: height > 700 ? height : 700 }, '*')
+        window.parent.postMessage({ height: height > minHeight ? height : minHeight }, '*')
       }
     },
   },
