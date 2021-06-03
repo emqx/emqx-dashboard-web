@@ -2,12 +2,9 @@
   <div class="client-details">
     <page-header>
       <div class="page-header-title-view">
-        <div style="display: flex; align-items: center">
           <span class="title">
             {{ clientId }}
           </span>
-          <el-badge :type="connStatus">{{ connStatusText }}</el-badge>
-        </div>
       </div>
 
       <div class="page-header-top-start btn">
@@ -510,6 +507,11 @@ export default {
 
   .more-info {
     margin-top: 20px;
+  }
+
+  .btn{
+    flex-grow: 1;
+    text-align: end;
   }
 }
 </style>

@@ -3,20 +3,15 @@
     <page-header>
       <div class="page-header-content-view">
         <div class="content">
-            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
+          {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
         </div>
       </div>
       <div class="page-header-top-start">
-            <a
-              rel="noopener"
-              :href="docs.tutorial"
-              target="_blank"
-              class="link-item"
-            >
-              <i class="icon el-icon-position"></i>
-              {{ $t('RuleEngine.quickStart') }}
-            </a>
-          </div>
+        <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
+          <i class="icon el-icon-position"></i>
+          {{ $t('RuleEngine.quickStart') }}
+        </a>
+      </div>
     </page-header>
 
     <div class="app-wrapper">
@@ -38,18 +33,14 @@
             <template slot-scope="{ row }">
               <router-link
                 :to="{
-                  path: `/ruleengine/rules/${row.id}`,
-                  query: { oper: 'view' },
+                  path: `/ruleengine/rules/detail`,
+                  query: { id: row.id },
                 }"
                 >{{ row.id }}</router-link
               >
             </template>
           </el-table-column>
-          <el-table-column
-            prop="for"
-            min-width="120"
-            :label="$t('RuleEngine.topic')"
-          >
+          <el-table-column prop="for" min-width="120" :label="$t('RuleEngine.topic')">
             <template slot-scope="{ row }">
               <div v-for="(item, index) in row.for" :key="index">
                 {{ item }}
@@ -73,9 +64,7 @@
             <template slot-scope="{ row }">
               <el-tooltip
                 :content="
-                  row.enabled
-                    ? $t('RuleEngine.ruleEnabled')
-                    : $t('RuleEngine.ruleDisabled')
+                  row.enabled ? $t('RuleEngine.ruleEnabled') : $t('RuleEngine.ruleDisabled')
                 "
                 placement="left"
               >
@@ -102,20 +91,10 @@
           </el-table-column>
           <el-table-column width="120px" prop="id">
             <template slot-scope="{ row }">
-              <el-button
-                plain
-                type="primary"
-                size="mini"
-                @click="editRule(row)"
-              >
+              <el-button plain type="primary" size="mini" @click="editRule(row)">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button
-                type="danger"
-                size="mini"
-                plain
-                @click="deleteRule(row)"
-              >
+              <el-button type="danger" size="mini" plain @click="deleteRule(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -124,11 +103,7 @@
       </el-card>
     </div>
 
-    <el-drawer
-      v-bind="rulesDrawer"
-      direction="rtl"
-      :visible.sync="metricsDrawerVisible"
-    >
+    <el-drawer v-bind="rulesDrawer" direction="rtl" :visible.sync="metricsDrawerVisible">
       <div class="rule-metrics">
         <div class="metrics-item">
           <div class="metrics-item-title">
@@ -144,45 +119,27 @@
             </li>
 
             <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('RuleEngine.currentSpeed') }}:
-              </div>
+              <div class="field-title">{{ $t('RuleEngine.currentSpeed') }}:</div>
 
               <span class="field-value">
                 {{ currentRules.metricsData.speed }}
-                <span class="unit"
-                  >{{ $t('RuleEngine.times') }}/{{
-                    $t('RuleEngine.second')
-                  }}</span
-                >
+                <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
 
             <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('RuleEngine.maximumSpeed') }}:
-              </div>
+              <div class="field-title">{{ $t('RuleEngine.maximumSpeed') }}:</div>
               <span class="field-value">
                 {{ currentRules.metricsData.speed_max }}
-                <span class="unit"
-                  >{{ $t('RuleEngine.times') }}/{{
-                    $t('RuleEngine.second')
-                  }}</span
-                >
+                <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
 
             <li class="field-info-item">
-              <div class="field-title">
-                {{ $t('RuleEngine.last5MinutesSpeed') }}:
-              </div>
+              <div class="field-title">{{ $t('RuleEngine.last5MinutesSpeed') }}:</div>
               <span class="field-value">
                 {{ currentRules.metricsData.speed_last5m }}
-                <span class="unit"
-                  >{{ $t('RuleEngine.times') }}/{{
-                    $t('RuleEngine.second')
-                  }}</span
-                >
+                <span class="unit">{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span>
               </span>
             </li>
           </ul>
@@ -195,11 +152,7 @@
 
           <template v-if="currentRules.actions.length === 0"> </template>
 
-          <div
-            v-for="(item, i) in currentRules.actions"
-            :key="i"
-            class="metrics-item-body"
-          >
+          <div v-for="(item, i) in currentRules.actions" :key="i" class="metrics-item-body">
             <ul class="field-info metrics-item-body action-metrics">
               <div class="item-title">
                 {{ item.name }}

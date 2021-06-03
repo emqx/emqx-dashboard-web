@@ -179,7 +179,7 @@ export default {
       return this.$store.state.loading
     },
     ruleId() {
-      return this.$route.params.id
+      return this.$route.query.id
     },
     configItem() {
       if (!this.record.id) {
@@ -251,6 +251,10 @@ export default {
 
   .rule-metrics-table {
     margin-top: 20px;
+  }
+  .btn{
+    flex-grow: 1;
+    text-align: right;
   }
 }
 </style>

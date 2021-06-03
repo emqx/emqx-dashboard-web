@@ -31,6 +31,7 @@ export default {
     transition: 0.3s;
     padding: 17px 15px;
     display: flex;
+    align-items: center;
   }
 
   .page-header-title-view {
@@ -45,6 +46,7 @@ export default {
 
   .page-header-content-view {
     flex-grow: 1;
+    padding-right: 10px;
   }
 
   .link-item {

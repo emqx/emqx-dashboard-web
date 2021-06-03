@@ -152,8 +152,8 @@ let routes = [
             component: RuleCreate,
           },
           {
-            path: ':id',
-            name: 'rules-view',
+            path: 'detail',
+            name: 'rules-detail',
             component: () => import('@/views/RuleEngine/RuleView'),
           },
         ],
