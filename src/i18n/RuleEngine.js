@@ -471,6 +471,10 @@ export default {
     zh: '描述',
     en: 'Description',
   },
+  operation: {
+    zh: '操作',
+    en: 'operations',
+  },
   id_len_tip: {
     zh: '最长64位',
     en: 'The longest 64',

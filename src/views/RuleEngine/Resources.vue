@@ -13,24 +13,11 @@
           </el-button>
         </div>
 
-        <el-table
-          :data="tableData"
-          class="data-list"
-          @expand-change="handleExpandChange"
-        >
-          <el-table-column
-            class-name="expand-column"
-            prop="id"
-            type="expand"
-            width="1px"
-          >
+        <el-table :data="tableData" class="data-list" @expand-change="handleExpandChange">
+          <el-table-column class-name="expand-column" prop="id" type="expand" width="1px">
             <template slot-scope="{ row }">
               <!-- 列表展示每个节点上资源的状态 -->
-              <el-card
-                shadow="never"
-                class="resource-node-wrapper"
-                :loading="row.loading"
-              >
+              <el-card shadow="never" class="resource-node-wrapper" :loading="row.loading">
                 <el-row :gutter="40">
                   <el-col :span="12">
                     <div class="emq-title h3">
@@ -39,21 +26,14 @@
                         {{ $t('RuleEngine.resourceStatusTips') }}
                       </div>
                     </div>
-                    <resource-node
-                      :value="row"
-                      @change="handleExpandChange"
-                    ></resource-node>
+                    <resource-node :value="row" @change="handleExpandChange"></resource-node>
                   </el-col>
                 </el-row>
               </el-card>
             </template>
           </el-table-column>
 
-          <el-table-column
-            prop="id"
-            min-width="80px"
-            :label="$t('RuleEngine.resourceID')"
-          >
+          <el-table-column prop="id" min-width="80px" :label="$t('RuleEngine.resourceID')">
             <template slot-scope="{ row }">
               <span class="btn" @click="showResource(row)">{{ row.id }}</span>
             </template>
@@ -73,38 +53,23 @@
             show-overflow-tooltip
             :label="$t('RuleEngine.resourceDes')"
           ></el-table-column>
-          <el-table-column prop="isAvailable">
+          <el-table-column prop="isAvailable" :label="$t('RuleEngine.status')">
             <template slot-scope="{ row }">
-              <el-badge :type="row.isAvailable ? 'success' : 'danger'" is-dot>
-              </el-badge
+              <el-badge :type="row.isAvailable ? 'success' : 'danger'" is-dot> </el-badge
               ><span>{{
-                row.isAvailable
-                  ? $t('RuleEngine.available')
-                  : $t('RuleEngine.notAvailable')
+                row.isAvailable ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')
               }}</span>
             </template>
           </el-table-column>
-          <el-table-column width="200px" prop="id">
+          <el-table-column width="200px" prop="id" :label="$t('RuleEngine.operation')">
             <template slot-scope="{ row, $index }">
-              <el-button
-                type="dashed"
-                size="mini"
-                @click="viewResourcesStatus(row, $index)"
-              >
+              <el-button size="mini" @click="viewResourcesStatus(row, $index)">
                 {{ $t('RuleEngine.status') }}
               </el-button>
-              <el-button
-                type="dashed"
-                size="mini"
-                @click="handleDialogVisible('edit', row)"
-              >
+              <el-button size="mini" @click="handleDialogVisible('edit', row)">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="deleteResource(row)"
-              >
+              <el-button type="danger" size="mini" plain @click="deleteResource(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -123,12 +88,7 @@
 </template>
 
 <script>
-import {
-  loadResource,
-  loadResourceTypes,
-  destroyResource,
-  loadResourceDetails,
-} from '@/api/rules'
+import { loadResource, loadResourceTypes, destroyResource, loadResourceDetails } from '@/api/rules'
 import ResourceNode from './components/ResourceNode'
 import ResourceDialog from './components/ResourceDialog.vue'
 
@@ -165,9 +125,7 @@ export default {
     },
 
     viewResourcesStatus(row, index) {
-      const elExpand = document.querySelectorAll('.el-table__expand-icon')[
-        index
-      ]
+      const elExpand = document.querySelectorAll('.el-table__expand-icon')[index]
       if (elExpand) {
         elExpand.click()
       }
@@ -232,8 +190,8 @@ export default {
     },
     showResource(row) {
       this.$router.push({
-        path: `/ruleengine/resources/${row.id}`,
-        query: { oper: 'view' },
+        path: `/ruleengine/resources/detail`,
+        query: { id: row.id },
       })
     },
     resourceTypesColumnFilter(value, row) {

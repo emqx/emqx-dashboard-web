@@ -54,7 +54,7 @@ export default {
       this.pathList = path.split('/').slice(1)
     },
     getAlernateKeyFromBase(oper) {
-      return ['create', 'view', 'detail', 'add', 'select', 'manage'].includes(oper)
+      return ['create', 'view', 'detail', 'add', 'select', 'manage','edit'].includes(oper)
     },
     getTitle(key) {
       return this.getAlernateKeyFromBase(key)

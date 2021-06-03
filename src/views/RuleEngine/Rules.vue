@@ -89,7 +89,7 @@
             :label="$t('RuleEngine.responseAction')"
           >
           </el-table-column>
-          <el-table-column width="120px" prop="id">
+          <el-table-column width="120px" prop="id" :label="$t('RuleEngine.operation')">
             <template slot-scope="{ row }">
               <el-button plain type="primary" size="mini" @click="editRule(row)">
                 {{ $t('Base.edit') }}
@@ -364,7 +364,7 @@ export default {
         })
     },
     editRule(row) {
-      this.$router.push(`/ruleengine/rules/create?rule=${row.id}`)
+      this.$router.push(`/ruleengine/rules/edit?rule=${row.id}`)
     },
   },
 }

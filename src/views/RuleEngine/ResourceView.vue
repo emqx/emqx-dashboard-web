@@ -25,12 +25,9 @@
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.state') }}:</div>
             <span class="field-value">
-              <el-badge :type="isAlive ? 'success' : 'danger'" is-dot>
-              </el-badge
+              <el-badge :type="isAlive ? 'success' : 'danger'" is-dot> </el-badge
               ><span>{{
-                isAlive
-                  ? $t('RuleEngine.available')
-                  : $t('RuleEngine.notAvailable')
+                isAlive ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')
               }}</span>
               <el-button
                 v-if="!isAlive"
@@ -47,9 +44,7 @@
 
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.resourceTypes') }}:</div>
-            <span class="field-value"
-              >{{ record.typeInfo.title }} ({{ record.type }})</span
-            >
+            <span class="field-value">{{ record.typeInfo.title }} ({{ record.type }})</span>
           </li>
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.resourceDes') }}:</div>
@@ -62,20 +57,9 @@
           </li>
 
           <li class="field-info-item">
-            <div class="field-title">
-              {{ $t('RuleEngine.detailedStatus') }}:
-            </div>
-            <span class="field-value">
-              <el-button type="dashed" size="mini" @click="toggleShowConfig">
-                {{ showConfig ? $t('RuleEngine.hide') : $t('Base.view') }}
-              </el-button>
-            </span>
-          </li>
+            <div class="field-title">{{ $t('RuleEngine.detailedStatus') }}:</div>
 
-          <li v-if="showConfig" class="field-info-item">
-            <el-collapse-transition>
-              <resource-node :value="record" @change="loadData"></resource-node>
-            </el-collapse-transition>
+            <resource-node :value="record" @change="loadData"></resource-node>
           </li>
         </ul>
       </el-card>
@@ -91,11 +75,7 @@
 </template>
 
 <script>
-import {
-  loadResourceDetails,
-  reconnectResource,
-  destroyResource,
-} from '@/api/rules'
+import { loadResourceDetails, reconnectResource, destroyResource } from '@/api/rules'
 import ResourceNode from './components/ResourceNode'
 import ResourceField from './components/ResourceField'
 
@@ -115,12 +95,11 @@ export default {
         typeInfo: {},
         status: [],
       },
-      showConfig: false,
     }
   },
   computed: {
     resourceId() {
-      return this.$route.params.id
+      return this.$route.query.id
     },
     isAlive() {
       const { status = [] } = this.record
@@ -158,9 +137,6 @@ export default {
         })
         .catch(() => {})
     },
-    toggleShowConfig() {
-      this.showConfig = !this.showConfig
-    },
     async reconnectResource() {
       this.reloading = true
       reconnectResource(this.resourceId)
@@ -190,6 +166,10 @@ export default {
 
   .field-title {
     width: 110px;
+  }
+  .btn {
+    flex-grow: 1;
+    text-align: right;
   }
 }
 </style>

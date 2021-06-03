@@ -152,6 +152,11 @@ let routes = [
             component: RuleCreate,
           },
           {
+            path: 'edit',
+            name: 'rules-edit',
+            component: RuleCreate,
+          },
+          {
             path: 'detail',
             name: 'rules-detail',
             component: () => import('@/views/RuleEngine/RuleView'),
@@ -174,8 +179,8 @@ let routes = [
             component: () => import('@/views/RuleEngine/Resources'),
           },
           {
-            path: ':id',
-            name: 'resources-view',
+            path: 'detail',
+            name: 'resources-detail',
             component: () => import('@/views/RuleEngine/ResourceView'),
           },
         ],
