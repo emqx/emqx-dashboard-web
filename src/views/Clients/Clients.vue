@@ -196,7 +196,7 @@
             min-width="140px"
             :label="$t('Clients.connectionAt')"
           ></el-table-column>
-          <el-table-column prop="oper" width="120px">
+          <el-table-column prop="oper" :label="$t('Base.operation')">
             <template slot-scope="{ row }">
               <el-button
                 size="mini"

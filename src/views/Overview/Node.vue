@@ -4,14 +4,6 @@
       <div class="page-header-title-view">
         <div class="title">{{ name }}</div>
       </div>
-
-      <div class="page-header-content-view">
-        <div class="content">
-          <p class="description">
-            {{ $t('Overview.currentNodeInfo') }}
-          </p>
-        </div>
-      </div>
     </page-header>
 
     <div class="app-wrapper">

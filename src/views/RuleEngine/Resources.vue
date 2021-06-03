@@ -61,7 +61,7 @@
               }}</span>
             </template>
           </el-table-column>
-          <el-table-column width="200px" prop="id" :label="$t('RuleEngine.operation')">
+          <el-table-column width="200px" prop="id" :label="$t('Base.operation')">
             <template slot-scope="{ row, $index }">
               <el-button size="mini" @click="viewResourcesStatus(row, $index)">
                 {{ $t('RuleEngine.status') }}

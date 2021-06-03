@@ -163,4 +163,8 @@ export default {
     zh: '请填写密码',
     en: 'password is required',
   },
+  operation: {
+    zh: '操作',
+    en: 'Operations',
+  },
 }

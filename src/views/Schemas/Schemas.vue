@@ -54,7 +54,7 @@
             show-overflow-tooltip
             :label="$t('Schemas.description')"
           ></el-table-column>
-          <el-table-column width="80px">
+          <el-table-column :label="$t('Base.operation')">
             <template slot-scope="{ row }">
               <el-button type="danger" size="mini" plain @click="deleteData(row)">
                 {{ $t('Base.delete') }}

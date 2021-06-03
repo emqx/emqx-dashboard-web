@@ -32,7 +32,7 @@
             prop="tags"
             :label="$t('General.remark')"
           ></el-table-column>
-          <el-table-column width="120px">
+          <el-table-column :label="$t('Base.operation')">
             <template slot-scope="{ row }">
               <el-button
                 type="primary"

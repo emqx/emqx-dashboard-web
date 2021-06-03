@@ -53,7 +53,7 @@
             :label="$t('General.until')"
           >
           </el-table-column>
-          <el-table-column prop="oper" width="120px" label="">
+          <el-table-column prop="oper" :label="$t('Base.operation')">
             <template slot-scope="{ row }">
               <el-button
                 plain

@@ -89,7 +89,7 @@
             :label="$t('RuleEngine.responseAction')"
           >
           </el-table-column>
-          <el-table-column width="120px" prop="id" :label="$t('RuleEngine.operation')">
+          <el-table-column width="120px" prop="id" :label="$t('Base.operation')">
             <template slot-scope="{ row }">
               <el-button plain type="primary" size="mini" @click="editRule(row)">
                 {{ $t('Base.edit') }}

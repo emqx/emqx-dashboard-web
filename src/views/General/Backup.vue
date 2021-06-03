@@ -54,7 +54,7 @@
             prop="created_at"
             :label="$t('Backup.createAt')"
           ></el-table-column>
-          <el-table-column width="250px">
+          <el-table-column :label="$t('Base.operation')">
             <template slot-scope="{ row }">
               <el-button type="primary" size="mini" @click="handleDownload(row)"
                 >{{ $t('Backup.download') }}
