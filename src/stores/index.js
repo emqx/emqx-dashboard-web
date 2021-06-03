@@ -13,11 +13,23 @@ function checkLanguage(lang) {
   }
   return ''
 }
+function getLanguageQueried() {
+  try {
+    const matchedArr = window.location.href.match(/([^?]+)\?([^?]+)/)
+    if (!matchedArr || !matchedArr[2]) {
+      return ''
+    }
+    return new URLSearchParams(matchedArr[2]).get('lang')
+  } catch (error) {
+    return ''
+  }
+}
 function getDefaultLanguage() {
   const browserLanguage = checkLanguage(navigator.language.substr(0, 2))
   const localStorageLanguage = checkLanguage(localStorage.getItem('language'))
   const defaultLanguage = (window.EMQX_CONFIG || {}).language
-  return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
+  const languageQueried = getLanguageQueried()
+  return languageQueried || localStorageLanguage || defaultLanguage || browserLanguage || 'en'
 }
 function getConfigState() {
   const buildEnv = process.env.VUE_APP_BUILD_ENV || BASE_ENV

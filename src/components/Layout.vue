@@ -63,22 +63,23 @@ export default {
       return { marginLeft: `${px}px` }
     },
   },
-
-  beforeMount() {
-    this.getLayoutParams()
-  },
-  mounted() {
-    if (this.$route.name === 'monitor') {
-      this.refreshParentHeight(1500)
-      setTimeout(() => this.refreshParentHeight(), 3000)
-    } else {
-      setTimeout(() => this.refreshParentHeight(), 0)
-    }
+  created() {
     window.addEventListener('message', (event) => {
       if (typeof event.data === 'object' && 'lang' in event.data && event.data.lang !== this.$store.state.lang) {
         this.setLanguage(event.data.lang)
       }
     })
+  },
+  beforeMount() {
+    this.getLayoutParams()
+  },
+  mounted() {
+    if (this.$route.name === 'monitor') {
+      this.refreshParentHeight(1600)
+      setTimeout(() => this.refreshParentHeight(), 1024)
+    } else {
+      setTimeout(() => this.refreshParentHeight(), 0)
+    }
   },
   updated() {
     setTimeout(() => {
@@ -103,6 +104,7 @@ export default {
     refreshParentHeight(minHeight = 700) {
       if (window.parent) {
         const height = this.$refs.body.offsetHeight
+        console.log(height)
         window.parent.postMessage({ height: height > minHeight ? height : minHeight }, '*')
       }
     },
