@@ -52,7 +52,7 @@ module.exports = {
     },
   },
   assetsDir: 'static',
-  publicPath: customConfig.publicPath,
+  publicPath: process.env.NODE_ENV === 'development' ? '' : '/dashboard-ui',
   productionSourceMap: false,
   configureWebpack: {
     plugins: [
