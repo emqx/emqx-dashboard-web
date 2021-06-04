@@ -104,7 +104,6 @@ export default {
     refreshParentHeight(minHeight = 700) {
       if (window.parent) {
         const height = this.$refs.body.offsetHeight
-        console.log(height)
         window.parent.postMessage({ height: height > minHeight ? height : minHeight }, '*')
       }
     },
