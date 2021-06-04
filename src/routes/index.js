@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/stores'
@@ -20,13 +19,8 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  const {
-    authRequired = false,
-    before,
-    hideLeftBar = false,
-  } = to?.matched[0]?.meta || to.meta
-  const { hideLeftBar: hideLeftBarForm = false } =
-    from?.matched[0]?.meta || from.meta
+  const { authRequired = false, before, hideLeftBar = false } = to?.matched[0]?.meta || to.meta
+  const { hideLeftBar: hideLeftBarForm = false } = from?.matched[0]?.meta || from.meta
 
   if (authRequired && !getBasicAuthInfo().username) {
     toLogin()

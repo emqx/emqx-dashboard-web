@@ -263,4 +263,9 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+  .btn {
+    flex-grow: 1;
+    text-align: right;
+  }
+</style>

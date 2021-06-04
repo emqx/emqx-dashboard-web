@@ -65,7 +65,6 @@ export default new Vuex.Store({
       localStorage.setItem('language', lang)
       commit('SET_LANGUAGE', lang)
       setTimeout(() => {
-        // eslint-disable-next-line
         location.reload()
       }, 400)
     },
@@ -93,7 +92,6 @@ export default new Vuex.Store({
     },
     REMOVE_NAV_TABS({ commit, state }, tab) {
       const tabs = [...state.navTabs]
-      // eslint-disable-next-line
       for (const [index, value] of tabs.entries()) {
         if (value.url === tab.url) {
           tabs.splice(index, 1)

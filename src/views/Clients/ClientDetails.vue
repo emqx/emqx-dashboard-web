@@ -44,7 +44,7 @@
                     <span class="field-value">{{ record.node }}</span>
                   </li>
                   <li class="field-info-item">
-                    <div class="field-title">{{ $t('Clients.clientId') }}</div>
+                    <div class="field-title">{{ $t('Clients.clientid') }}:</div>
                     <span class="field-value">{{ record.clientid }}</span>
                   </li>
                   <li class="field-info-item">
@@ -179,7 +179,7 @@
                   </li>
                   <li class="field-info-item">
                     <div class="field-title">
-                      {{ $t('Clients.max_awaiting_rel') }}
+                      {{ $t('Clients.max_awaiting_rel') }}:
                     </div>
                     <span>{{ record.max_awaiting_rel }}</span>
                   </li>
