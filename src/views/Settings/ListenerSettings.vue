@@ -13,23 +13,22 @@
         </el-button>
       </div>
       <el-table :data="listeners">
-        <el-table-column prop="name" :label="$t('Settings.listenerName')">
+        <el-table-column prop="name" :label="$t('Settings.listenerName')" sortable>
           <template slot-scope="{ row }">
             <a @click="editListener(row)">{{ row.name }}</a>
           </template>
         </el-table-column>
         <el-table-column
           prop="transport_type"
+          sortable
           :label="$t('Modules.listener_type')"
         ></el-table-column>
         <el-table-column
           prop="configs.listener"
+          sortable
           :label="$t('Modules.listen_on')"
         ></el-table-column>
-        <el-table-column
-          prop="configs.acceptors"
-          label="Acceptors"
-        ></el-table-column>
+        <el-table-column prop="configs.acceptors" label="Acceptors" sortable></el-table-column>
         <el-table-column :label="$t('Settings.isOpened')">
           <template slot-scope="{ row }">
             <el-switch
@@ -52,9 +51,7 @@
           </span>
         </el-col>
         <el-col v-if="oper === 'edit'" :span="4" :offset="16">
-          <span class="delete-button" @click="deleteListener">{{
-            $t('Base.delete')
-          }}</span>
+          <span class="delete-button" @click="deleteListener">{{ $t('Base.delete') }}</span>
         </el-col>
       </el-row>
 
@@ -164,21 +161,13 @@ export default {
       const { ...configs } = record
       if (this.oper !== 'add') {
         data = { transport_type: type, configs }
-        this.$confirm(
-          this.$t('Settings.confirmUpdateListener'),
-          this.$t('Base.warning'),
-          {
-            confirmButtonText: this.$t('Base.confirm'),
-            cancelButtonText: this.$t('Base.cancel'),
-            type: 'warning',
-          },
-        )
+        this.$confirm(this.$t('Settings.confirmUpdateListener'), this.$t('Base.warning'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
           .then(async () => {
-            const res = await updateOneConfig(
-              'listeners',
-              this.editListenerName,
-              data,
-            )
+            const res = await updateOneConfig('listeners', this.editListenerName, data)
             if (res) {
               this.updataSuccess(name, 'edit')
             }
@@ -234,20 +223,13 @@ export default {
       this.loadData()
     },
     async deleteListener() {
-      this.$confirm(
-        this.$t('Settings.isDeleteListener'),
-        this.$t('Base.warning'),
-        {
-          confirmButtonText: this.$t('Base.confirm'),
-          cancelButtonText: this.$t('Base.cancel'),
-          type: 'warning',
-        },
-      )
+      this.$confirm(this.$t('Settings.isDeleteListener'), this.$t('Base.warning'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
         .then(async () => {
-          const res = await deleteOneListener(
-            this.editListenerName,
-            this.transport_type,
-          )
+          const res = await deleteOneListener(this.editListenerName, this.transport_type)
           if (res) {
             this.$message.success(this.$t('Base.deleteSuccess'))
             this.returnList()

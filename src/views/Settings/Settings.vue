@@ -70,6 +70,9 @@ export default {
     activeName(val) {
       this.showSettings && this.$router.push({ path: '/setting/' + val }).catch((e) => {})
     },
+    '$route.params.part'(val) {
+      this.setShowTab()
+    },
   },
 
   async created() {
@@ -77,11 +80,14 @@ export default {
   },
 
   methods: {
+    setShowTab() {
+      return this.showSettings && (this.activeName = this.$route.params.part || 'baseSettings')
+    },
     async getStatus() {
       const data = await loadCreatedModules()
       const res = data.find(($) => $.type === 'hot_confs' && $.enabled === true)
       this.showSettings = res !== undefined
-      this.showSettings && (this.activeName = this.$route.params.part || 'baseSettings')
+      this.setShowTab()
     },
     async handleModLoad() {
       await enableTopicMetrics({ type: 'hot_confs' })
