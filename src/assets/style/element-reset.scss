@@ -72,6 +72,9 @@
   &__inner:focus {
     box-shadow: 0 0 0 2px rgba(52, 195, 136, 0.2);
   }
+  &--small{
+    font-size: 14px; //fix a bug in Chrome
+  }
 }
 
 /* Form */
