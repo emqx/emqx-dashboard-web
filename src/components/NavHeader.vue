@@ -28,7 +28,7 @@
         <div class="alert-info func-item">
           <el-badge :value="alertCount" :hidden="!alertCount">
             <router-link
-              to="/alerts/list"
+              to="/alarm"
               tag="i"
               class="iconfont icon-Notificationlisttongzhiliebiao"
               @click="clearAlert"

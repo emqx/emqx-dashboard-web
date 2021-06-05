@@ -4,15 +4,10 @@
       <div class="inner-box">
         <div class="content" :style="contentStyle">
           <div class="content-left">
-            <span class="content-title">{{
-              $t('components.selectModules')
-            }}</span>
+            <span class="content-title">{{ $t('components.selectModules') }}</span>
             <span v-cloak class="modules-num">{{ canAddCount }}</span>
             <div
-              :class="[
-                'module-class',
-                item.id === activeNavId ? 'active-nav' : '',
-              ]"
+              :class="['module-class', item.id === activeNavId ? 'active-nav' : '']"
               v-for="item in classList"
               :key="item.id"
               @click="changeNav(item.id)"
@@ -40,18 +35,8 @@
     </div>
     <div class="content-box app-wrapper">
       <template v-if="!searchVal">
-        <div
-          v-for="item in classList"
-          :key="item.id"
-          :id="item.id"
-          class="link-content"
-        >
-          <p
-            :class="[
-              'class-title',
-              item.id === activeNavId ? 'active-title' : '',
-            ]"
-          >
+        <div v-for="item in classList" :key="item.id" :id="item.id" class="link-content">
+          <p :class="['class-title', item.id === activeNavId ? 'active-title' : '']">
             {{ item.name }}
           </p>
           <el-row v-if="allFeatures[item.id]" :gutter="20">
@@ -84,28 +69,13 @@
                   </div>
                   <div class="item-handle">
                     <div class="handle-oper select-oper">
-                      <el-button
-                        v-if="one.status === 'unadd'"
-                        type="primary"
-                        plain
-                        size="small"
-                      >
+                      <el-button v-if="one.status === 'unadd'" type="primary" plain size="small">
                         {{ $t('Base.select') }}
                       </el-button>
-                      <el-button
-                        v-else
-                        disabled
-                        type="primary"
-                        plain
-                        size="small"
-                      >
+                      <el-button v-else disabled type="primary" plain size="small">
                         {{ $t('Modules.added') }}
                       </el-button>
-                      <el-button
-                        @click.stop="toReadMore(one.name)"
-                        type="info"
-                        size="small"
-                      >
+                      <el-button @click.stop="toReadMore(one.name)" type="info" size="small">
                         {{ $t('Modules.readMore') }}
                       </el-button>
                     </div>
@@ -118,16 +88,9 @@
       </template>
       <template v-else>
         <el-row v-if="searchModuleInfo.length" :gutter="20">
-          <el-col
-            v-for="(one, index) in searchModuleInfo"
-            :key="index"
-            :span="12"
-          >
+          <el-col v-for="(one, index) in searchModuleInfo" :key="index" :span="12">
             <div class="item-box">
-              <div
-                class="module-item"
-                @click="toModuleDetail(one, searchModuleInfo)"
-              >
+              <div class="module-item" @click="toModuleDetail(one, searchModuleInfo)">
                 <div class="left-box">
                   <img :src="one.img" alt="module-logo" class="item-img" />
                   <div class="item-content">
@@ -143,28 +106,13 @@
                 </div>
                 <div class="item-handle">
                   <div class="handle-oper select-oper">
-                    <el-button
-                      v-if="one.status === 'unadd'"
-                      size="small"
-                      type="primary"
-                      plain
-                    >
+                    <el-button v-if="one.status === 'unadd'" size="small" type="primary" plain>
                       {{ $t('Base.select') }}
                     </el-button>
-                    <el-button
-                      v-else
-                      disabled
-                      type="primary"
-                      plain
-                      size="small"
-                    >
+                    <el-button v-else disabled type="primary" plain size="small">
                       {{ $t('Modules.added') }}
                     </el-button>
-                    <el-button
-                      @click.stop="toReadMore(one.name)"
-                      type="info"
-                      size="small"
-                    >
+                    <el-button @click.stop="toReadMore(one.name)" type="info" size="small">
                       {{ $t('Modules.readMore') }}
                     </el-button>
                   </div>
@@ -182,11 +130,7 @@
 </template>
 
 <script>
-import {
-  loadAllModules,
-  showCreatedModuleInfo,
-  destroyModule,
-} from '@/api/modules'
+import { loadAllModules, showCreatedModuleInfo, destroyModule } from '@/api/modules'
 import { fillI18n, matchSearch } from '@/common/utils'
 import store from '@/stores'
 
@@ -253,8 +197,7 @@ export default {
         .then(async () => {
           await destroyModule(item.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
-          const addedModules =
-            JSON.parse(localStorage.getItem('addedModules')) || {}
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
           delete addedModules[item.name]
           delete this.addedModules[item.name]
           localStorage.setItem('addedModules', JSON.stringify(addedModules))
@@ -283,11 +226,7 @@ export default {
         return
       }
       setTimeout(async () => {
-        const res = await matchSearch(
-          this.allModuleList,
-          'localTitle',
-          this.searchVal,
-        )
+        const res = await matchSearch(this.allModuleList, 'localTitle', this.searchVal)
         if (res) {
           this.searchModuleInfo = res
           this.searchLoading = false
@@ -338,9 +277,7 @@ export default {
           })
           .catch()
       }
-      this.$router.push(
-        `/modules/detail?id=${this.activeNavId}&top=${this.scrollTop}`,
-      )
+      this.$router.push(`/modules/detail?id=${this.activeNavId}&top=${this.scrollTop}`)
     },
     async getAddedModuleInfo(id) {
       const data = await showCreatedModuleInfo(id)
@@ -414,9 +351,7 @@ export default {
     },
     scrollToTop() {
       const scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop
+        window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       this.scrollTop = scrollTop
     },
     toReadMore(type) {
@@ -458,6 +393,12 @@ export default {
 
       .content-left {
         display: flex;
+        scrollbar-width: none;
+        overflow: auto hidden;
+        &::-webkit-scrollbar {
+          // width: 0;
+          height:0;
+        }
       }
 
       span {
