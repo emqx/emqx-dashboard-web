@@ -104,9 +104,9 @@ export default {
   },
 
   created() {
-    if (store.state.config.baseURL === '/dashboard') {
-      this.fromCloud = true
-    }
+    // if (store.state.config.baseURL === '/dashboard') {
+    //   this.fromCloud = true
+    // }
     const { lang } = this.$route.query
     if (['en', 'zh'].indexOf(lang) !== -1 && this.language !== lang && this.fromCloud) {
       document.querySelector('html').setAttribute('lang', lang)

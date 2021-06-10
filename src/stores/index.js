@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import config from '../../script/config'
+// import config from '../../script/config'
 
 Vue.use(Vuex)
 
@@ -19,15 +19,15 @@ function getDefaultLanguage() {
   const defaultLanguage = (window.EMQX_CONFIG || {}).language
   return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
 }
-function getConfigState() {
-  const buildEnv = process.env.VUE_APP_BUILD_ENV || BASE_ENV
-  const envConfig = config[buildEnv] || config.base
+// function getConfigState() {
+//   const buildEnv = process.env.VUE_APP_BUILD_ENV || BASE_ENV
+//   const envConfig = config[buildEnv] || config.base
 
-  return {
-    ...config.base,
-    ...envConfig,
-  }
-}
+//   return {
+//     ...config.base,
+//     ...envConfig,
+//   }
+// }
 function getNavTabs() {
   return JSON.parse(localStorage.getItem('navTabs')) || []
 }
@@ -46,7 +46,7 @@ export default new Vuex.Store({
     lang: getDefaultLanguage(),
     leftBarCollapse: getCollapse(),
     alertCount: 0,
-    config: getConfigState(),
+    // config: getConfigState(),
     navTabs: getNavTabs(),
     selectedModule: JSON.parse(localStorage.getItem('selectedModule')) || {},
   },
@@ -55,9 +55,9 @@ export default new Vuex.Store({
       localStorage.setItem('selectedModule', JSON.stringify(selectedModule))
       commit('UPDATE_MODULE', selectedModule)
     },
-    UPDATE_CONFIG({ commit }, customConfig) {
-      commit('UPDATE_CONFIG', customConfig)
-    },
+    // UPDATE_CONFIG({ commit }, customConfig) {
+    //   commit('UPDATE_CONFIG', customConfig)
+    // },
     SET_ALERT_COUNT({ commit }, count = 0) {
       commit('SET_ALERT_COUNT', count)
     },
@@ -106,9 +106,9 @@ export default new Vuex.Store({
     UPDATE_MODULE(state, selectedModule) {
       state.selectedModule = selectedModule
     },
-    UPDATE_CONFIG(state, customConfig) {
-      state.config = customConfig
-    },
+    // UPDATE_CONFIG(state, customConfig) {
+    //   state.config = customConfig
+    // },
     SET_ALERT_COUNT(state, count) {
       state.alertCount = count
     },

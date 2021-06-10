@@ -1,31 +1,31 @@
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
-const mock = require('./script/mock.json')
-const config = require('./script/config.json')
+// const mock = require('./script/mock.json')
+// const config = require('./script/config.json')
 
 const { NODE_ENV, VUE_APP_BUILD_ENV = 'base' } = process.env
 
-const before = (app) => {
-  // 开发环境下可以使用 mock 数据
-  if (NODE_ENV === 'development' && mock) {
-    const { api } = mock
-    api.forEach((item) => {
-      app.get(`/api/v4${item.url}`, (req, res) => {
-        res.json(item.data)
-      })
-    })
-  }
-}
+// const before = (app) => {
+//   // 开发环境下可以使用 mock 数据
+//   if (NODE_ENV === 'development' && mock) {
+//     const { api } = mock
+//     api.forEach((item) => {
+//       app.get(`/api/v4${item.url}`, (req, res) => {
+//         res.json(item.data)
+//       })
+//     })
+//   }
+// }
 
-const customConfig = {
-  ...config.base,
-  ...(config[VUE_APP_BUILD_ENV] || {}),
-}
+// const customConfig = {
+//   ...config.base,
+//   ...(config[VUE_APP_BUILD_ENV] || {}),
+// }
 
 module.exports = {
   devServer: {
     port: 3001,
     disableHostCheck: true,
-    before,
+    // before,
     proxy: {
       '/api': {
         target: process.env.HOST_URL || 'http://127.0.0.1:18083',
@@ -53,7 +53,7 @@ module.exports = {
   },
   assetsDir: 'static',
   runtimeCompiler: true,
-  publicPath: customConfig.publicPath,
+  publicPath: '/',
   productionSourceMap: false,
   configureWebpack: {
     plugins: [

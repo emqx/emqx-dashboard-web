@@ -311,13 +311,13 @@ export const sqlExampleFormatter = (sql) => {
  * @param scope 查询的隐藏属性
  * @return boolean
  */
-export const hasShow = (scope = '') => {
-  const hide = store.state.config.hide || { routes: [], children: [] }
-  if (!scope) {
-    return true
-  }
-  return !(hide.routes.includes(scope) || hide.children.includes(scope))
-}
+// export const hasShow = (scope = '') => {
+//   const hide = store.state.config.hide || { routes: [], children: [] }
+//   if (!scope) {
+//     return true
+//   }
+//   return !(hide.routes.includes(scope) || hide.children.includes(scope))
+// }
 
 /**
  * 取 URL 具体的一个参数值

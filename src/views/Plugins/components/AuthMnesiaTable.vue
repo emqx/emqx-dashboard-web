@@ -297,9 +297,9 @@ export default {
   },
 
   created() {
-    if (store.state.config.baseURL === '/dashboard') {
-      this.fromCloud = true
-    }
+    // if (store.state.config.baseURL === '/dashboard') {
+    //   this.fromCloud = true
+    // }
     this.loadMnesia()
     this.loadACL()
   },

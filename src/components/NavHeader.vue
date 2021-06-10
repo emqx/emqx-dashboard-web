@@ -51,7 +51,6 @@
       </el-dropdown>
 
       <el-dropdown
-        v-if="$hasShow('navbar.user')"
         placement="bottom"
         class="user-info-dropdown"
         @command="handleDropdownCommand"

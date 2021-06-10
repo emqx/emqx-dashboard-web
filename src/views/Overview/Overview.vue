@@ -82,7 +82,7 @@
         </el-card>
       </el-col>
 
-      <el-col v-if="$hasShow('monitor.connections')" :span="6">
+      <el-col :span="6">
         <el-card shadow="never" class="app-card">
           <div class="app-card-title">
             {{ $t('Overview.connectionNumber') }}
@@ -140,7 +140,6 @@
 
     <el-card
       shadow="never"
-      v-if="$hasShow('monitor.license')"
       class="license-card"
       :loading="pageLoading"
     >
@@ -184,7 +183,7 @@
         </template>
       </ul>
 
-      <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
+      <div class="license-card-footer">
         <div
           v-if="license.customer_type === evaluation"
           class="description"

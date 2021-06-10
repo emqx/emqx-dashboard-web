@@ -65,7 +65,7 @@ Object.assign(axios.defaults, {
     'Content-Type': 'application/json',
     'Cache-Control': 'no-cache',
   },
-  baseURL: store.state.config.baseURL,
+  baseURL: '/api/v4',
   timeout: store.state.httpTimeout,
   auth: {},
 })

@@ -7,7 +7,7 @@ import RuleCreate from '@/views/RuleEngine/RuleCreate'
 import SchemasDetails from '@/views/Schemas/SchemasDetails'
 import Overview from '@/views/Overview/Overview'
 
-const hide = store.state.config.hide || { routes: [], children: [] }
+// const hide = store.state.config.hide || { routes: [], children: [] }
 
 let routes = [
   {
@@ -393,10 +393,10 @@ let routes = [
   },
 ]
 
-if (hide.routes && hide.routes.length) {
-  hide.routes.forEach((hideRoute) => {
-    routes = routes.filter((route) => route.meta.hideKey !== hideRoute)
-  })
-}
+// if (hide.routes && hide.routes.length) {
+//   hide.routes.forEach((hideRoute) => {
+//     routes = routes.filter((route) => route.meta.hideKey !== hideRoute)
+//   })
+// }
 
 export default routes

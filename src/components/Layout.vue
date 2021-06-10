@@ -13,7 +13,6 @@
       <el-container class="layout" style="min-height: 100vh">
         <el-main style="margin: 0; padding: 0" :style="{ marginLeft: elMainStyle }">
           <el-header
-            v-if="$hasShow('nav-header')"
             class="content-header"
             :style="{ left: elMainStyle, height: 'auto' }"
           >
