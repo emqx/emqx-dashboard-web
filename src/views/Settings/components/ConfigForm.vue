@@ -13,71 +13,33 @@
       <div v-for="(key, index) in showKeyList" :key="index">
         <el-col :span="12">
           <el-form-item :label="key === '' ? 'listener_on' : key" :prop="key">
-            <template
-              v-if="deepRecord[key] === 'true' || deepRecord[key] === 'false'"
-            >
-              <emq-select
-                v-model="recordConfig[key]"
-                :field="{ options: boolOptions }"
-              >
+            <template v-if="deepRecord[key] === 'true' || deepRecord[key] === 'false'">
+              <emq-select v-model="recordConfig[key]" :field="{ options: boolOptions }">
               </emq-select>
             </template>
 
-            <template
-              v-else-if="
-                deepRecord[key] === 'allow' || deepRecord[key] === 'deny'
-              "
-            >
-              <emq-select
-                v-model="recordConfig[key]"
-                :field="{ options: permitOptions }"
-              >
+            <template v-else-if="deepRecord[key] === 'allow' || deepRecord[key] === 'deny'">
+              <emq-select v-model="recordConfig[key]" :field="{ options: permitOptions }">
               </emq-select>
             </template>
 
-            <template
-              v-else-if="
-                deepRecord[key] === 'ignore' || deepRecord[key] === 'disconnect'
-              "
-            >
-              <emq-select
-                v-model="recordConfig[key]"
-                :field="{ options: actionOptions }"
-              >
+            <template v-else-if="deepRecord[key] === 'ignore' || deepRecord[key] === 'disconnect'">
+              <emq-select v-model="recordConfig[key]" :field="{ options: actionOptions }">
               </emq-select>
             </template>
 
-            <template
-              v-else-if="deepRecord[key] === 'on' || deepRecord[key] === 'off'"
-            >
-              <emq-select
-                v-model="recordConfig[key]"
-                :field="{ options: enableOptions }"
-              >
+            <template v-else-if="deepRecord[key] === 'on' || deepRecord[key] === 'off'">
+              <emq-select v-model="recordConfig[key]" :field="{ options: enableOptions }">
               </emq-select>
             </template>
 
-            <template
-              v-else-if="
-                deepRecord[key] === 'highest' || deepRecord[key] === 'lowest'
-              "
-            >
-              <emq-select
-                v-model="recordConfig[key]"
-                :field="{ options: priorityOptions }"
-              >
+            <template v-else-if="deepRecord[key] === 'highest' || deepRecord[key] === 'lowest'">
+              <emq-select v-model="recordConfig[key]" :field="{ options: priorityOptions }">
               </emq-select>
             </template>
 
-            <template
-              v-else-if="
-                key === 'max_qos_allowed' || key === 'mqtt_max_qos_allowed'
-              "
-            >
-              <emq-select
-                v-model="recordConfig[key]"
-                :field="{ options: qosOptions }"
-              >
+            <template v-else-if="key === 'max_qos_allowed' || key === 'mqtt_max_qos_allowed'">
+              <emq-select v-model="recordConfig[key]" :field="{ options: qosOptions }">
               </emq-select>
             </template>
 
@@ -97,27 +59,15 @@
         </el-col>
       </div>
     </el-form>
-    <el-col
-      v-if="recordKeys['nullKeyList'].length"
-      :span="24"
-      class="show-more"
-    >
+    <el-col v-if="recordKeys['nullKeyList'].length" :span="24" class="show-more">
       <a href="javascript:;" @click="toggleRecords">
         {{ showMoreItems ? $t('Clients.collapse') : $t('Clients.expand') }}
-        <i
-          :class="showMoreItems ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"
-        ></i>
+        <i :class="showMoreItems ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
       </a>
     </el-col>
 
     <el-col class="button-group__center" :span="12">
-      <el-button
-        plain
-        :disabled="selfDisabled"
-        type="default"
-        size="medium"
-        @click="cancel"
-      >
+      <el-button plain :disabled="selfDisabled" type="default" size="medium" @click="cancel">
         {{ $t('Base.cancel') }}
       </el-button>
       <el-button
@@ -229,9 +179,7 @@ export default {
     },
     showMoreItems(val) {
       const scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop
+        window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       if (val) {
         setTimeout(() => {
           document.documentElement.scrollTop = scrollTop
@@ -286,14 +234,10 @@ export default {
         }, 500)
       }
       if (needPrompt) {
-        this.$confirm(
-          this.$t('General.cancelConfirm'),
-          this.$t('Base.warning'),
-          {
-            type: 'warning',
-            cancelButtonText: this.$t('Settings.no'),
-          },
-        )
+        this.$confirm(this.$t('General.cancelConfirm'), this.$t('Base.warning'), {
+          type: 'warning',
+          cancelButtonText: this.$t('Settings.no'),
+        })
           .then(() => {
             confirmCancel()
           })

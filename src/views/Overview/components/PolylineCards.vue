@@ -71,14 +71,7 @@ export default {
         sent: this.chartDataFill(32),
         received: this.chartDataFill(32),
       },
-      dataTypeList: [
-        'dropped',
-        'connection',
-        'route',
-        'subscriptions',
-        'sent',
-        'received',
-      ],
+      dataTypeList: ['dropped', 'connection', 'route', 'subscriptions', 'sent', 'received'],
       timerMetrics: null,
       bigChartItem: {},
     }
@@ -93,18 +86,9 @@ export default {
     },
     chartColorList() {
       const getLineColors = (index) => {
-        const totalColors = [
-          '#22BB7A',
-          '#4065E0',
-          '#EEC90D',
-          '#07E3E4',
-          '#6ECAFA',
-          '#AF79FF',
-        ]
+        const totalColors = ['#22BB7A', '#4065E0', '#EEC90D', '#07E3E4', '#6ECAFA', '#AF79FF']
         // Swap the first and index positions
-        const changedColorArr = [
-          ...totalColors.splice(0, 1, totalColors[index]),
-        ]
+        const changedColorArr = [...totalColors.splice(0, 1, totalColors[index])]
         totalColors.splice(index, 1, changedColorArr[0])
         return totalColors
       }
@@ -139,9 +123,7 @@ export default {
         this.dataTypeList.forEach(async (typeName) => {
           const data = await loadMetricsLog(false, typeName)
           this.metricTitles = Object.keys(data)
-          this.metricLog[typeName] = this.chartDataFill(
-            this.metricTitles.length,
-          )
+          this.metricLog[typeName] = this.chartDataFill(this.metricTitles.length)
           const currentData = this.metricLog[typeName]
           this.metricTitles.forEach((key, index) => {
             data[key].forEach((item) => {

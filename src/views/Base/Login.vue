@@ -6,12 +6,7 @@
       loginKeepWidth && 'login-align-width',
     ]"
   >
-    <el-card
-      shadow="never"
-      v-if="isNeedAuth"
-      class="login-card emq-list-card"
-      id="login"
-    >
+    <el-card shadow="never" v-if="isNeedAuth" class="login-card emq-list-card" id="login">
       <div class="split-wrapper">
         <div class="logo-wrapper"></div>
 
@@ -33,10 +28,7 @@
             @keyup.enter.native="nativeLogin"
           >
             <el-form-item prop="username">
-              <el-input
-                v-model="record.username"
-                :placeholder="$t('Base.userName')"
-              ></el-input>
+              <el-input v-model="record.username" :placeholder="$t('Base.userName')"></el-input>
             </el-form-item>
             <el-form-item prop="password">
               <el-input
@@ -46,18 +38,12 @@
               ></el-input>
             </el-form-item>
 
-            <el-checkbox v-model="record.remember">{{
-              $t('Base.remember')
-            }}</el-checkbox>
+            <el-checkbox v-model="record.remember">{{ $t('Base.remember') }}</el-checkbox>
 
             <el-form-item class="oper-wrapper" label="">
-              <el-button
-                class="sub-btn"
-                type="primary"
-                @click="nativeLogin"
-                :loading="logining"
-                >{{ $t('Base.signIn') }}</el-button
-              >
+              <el-button class="sub-btn" type="primary" @click="nativeLogin" :loading="logining">{{
+                $t('Base.signIn')
+              }}</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -122,11 +108,7 @@ export default {
       this.fromCloud = true
     }
     const { lang } = this.$route.query
-    if (
-      ['en', 'zh'].indexOf(lang) !== -1 &&
-      this.language !== lang &&
-      this.fromCloud
-    ) {
+    if (['en', 'zh'].indexOf(lang) !== -1 && this.language !== lang && this.fromCloud) {
       document.querySelector('html').setAttribute('lang', lang)
       localStorage.setItem('language', lang)
       this.$i18n.locale = lang
@@ -149,9 +131,7 @@ export default {
       const loginDom = document.querySelector('#login')
       const lWidth = loginDom.clientWidth
       const lHeight = loginDom.clientHeight
-      const loginParentDomStyle = window.getComputedStyle(
-        loginDom.parentElement,
-      )
+      const loginParentDomStyle = window.getComputedStyle(loginDom.parentElement)
       const lpPadding = loginParentDomStyle.paddingTop
 
       wHeight > lHeight + 2 * parseInt(lpPadding)
@@ -177,8 +157,7 @@ export default {
             remember,
           })
           setTimeout(() => {
-            const { to = this.fromCloud ? '/users_and_acl' : '/' } =
-              this.$route.query
+            const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query
             this.$router.replace({
               path: to,
             })
@@ -192,7 +171,7 @@ export default {
             this.fullLoading.close()
           }
           this.isNeedAuth = true
-          this.$message.error({ message: error, type: 'error',duration:6000 })
+          this.$message.error({ message: error, type: 'error', duration: 6000 })
           this.logining = false
         })
     },

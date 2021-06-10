@@ -222,7 +222,8 @@ export default {
 @import '../assets/style/variables';
 
 .left-bar {
-  min-height: calc(100vh - 60px);
+  margin-top: 60px;
+  height: calc(100vh - 60px);
   background-color: $color-theme;
   transition: all 0.3s;
   // margin-top: 60px;

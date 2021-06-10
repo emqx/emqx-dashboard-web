@@ -47,16 +47,12 @@
             <div class="card-value">
               {{ record.metricsData.speed }}
               <span class="card-unit"
-                >{{ $t('RuleEngine.times') }}/{{
-                  $t('RuleEngine.second')
-                }}</span
+                >{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span
               >
             </div>
             <div class="card-desc">
-              {{ $t('RuleEngine.maximumSpeed') }}:
-              {{ record.metricsData.speed_max }} {{ $t('RuleEngine.times') }}/{{
-                $t('RuleEngine.second')
-              }}
+              {{ $t('RuleEngine.maximumSpeed') }}: {{ record.metricsData.speed_max }}
+              {{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}
             </div>
           </el-col>
 
@@ -67,9 +63,7 @@
             <div class="card-value">
               {{ record.metricsData.speed_last5m }}
               <span class="card-unit"
-                >{{ $t('RuleEngine.times') }}/{{
-                  $t('RuleEngine.second')
-                }}</span
+                >{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span
               >
             </div>
             <div class="card-desc">
@@ -107,19 +101,13 @@
             <span class="field-value">{{ configItem.fields }}</span>
           </li>
           <li class="field-info-item">
-            <div class="field-title">
-              {{ $t('RuleEngine.selectConditions') }}:
-            </div>
+            <div class="field-title">{{ $t('RuleEngine.selectConditions') }}:</div>
             <span class="field-value">{{ configItem.where }}</span>
           </li>
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.rule') }} SQL:</div>
             <div class="field-content">
-              <code-view
-                v-if="record.rawsql"
-                lang="sql"
-                :code="record.rawsql"
-              ></code-view>
+              <code-view v-if="record.rawsql" lang="sql" :code="record.rawsql"></code-view>
             </div>
           </li>
         </ul>
@@ -134,11 +122,7 @@
           </span>
         </div>
 
-        <rule-actions
-          ref="ruleActions"
-          v-model="record.actions"
-          disabled
-        ></rule-actions>
+        <rule-actions ref="ruleActions" v-model="record.actions" disabled></rule-actions>
       </el-card>
     </div>
   </div>
@@ -252,7 +236,7 @@ export default {
   .rule-metrics-table {
     margin-top: 20px;
   }
-  .btn{
+  .btn {
     flex-grow: 1;
     text-align: right;
   }

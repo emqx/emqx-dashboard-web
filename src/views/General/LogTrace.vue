@@ -22,24 +22,12 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column
-            prop="name"
-            :label="$t('LogTrace.filter')"
-          ></el-table-column>
-          <el-table-column
-            prop="type"
-            :label="$t('LogTrace.type')"
-          ></el-table-column>
-          <el-table-column
-            prop="level"
-            :label="$t('LogTrace.level')"
-          ></el-table-column>
+          <el-table-column prop="name" :label="$t('LogTrace.filter')"></el-table-column>
+          <el-table-column prop="type" :label="$t('LogTrace.type')"></el-table-column>
+          <el-table-column prop="level" :label="$t('LogTrace.level')"></el-table-column>
           <el-table-column width="250px">
             <template slot-scope="{ row }">
-              <el-button
-                type="dashed"
-                size="mini"
-                @click="handleDialogOpen('view', row)"
+              <el-button type="dashed" size="mini" @click="handleDialogOpen('view', row)"
                 >{{ $t('Overview.view') }}
               </el-button>
               <el-button type="dashed" size="mini" @click="handleDownload(row)">
@@ -61,11 +49,7 @@
 
     <el-dialog
       width="520px"
-      :title="
-        accessType === 'view'
-          ? $t('LogTrace.viewTrace')
-          : $t('LogTrace.createTrace')
-      "
+      :title="accessType === 'view' ? $t('LogTrace.viewTrace') : $t('LogTrace.createTrace')"
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
@@ -98,30 +82,18 @@
           </el-col>
           <el-col :span="24">
             <el-form-item prop="name" :label="$t('LogTrace.filter')">
-              <el-input
-                v-model="record.name"
-                :readonly="accessType !== 'create'"
-              >
-              </el-input>
+              <el-input v-model="record.name" :readonly="accessType !== 'create'"> </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item prop="file" :label="$t('LogTrace.logPath')">
-              <el-input
-                v-model="record.file"
-                :readonly="accessType !== 'create'"
-              >
-              </el-input>
+              <el-input v-model="record.file" :readonly="accessType !== 'create'"> </el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
 
-      <div
-        v-if="accessType === 'create'"
-        slot="footer"
-        class="dialog-align-footer"
-      >
+      <div v-if="accessType === 'create'" slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="dialogVisible = false">{{
           $t('Base.cancel')
         }}</el-button>

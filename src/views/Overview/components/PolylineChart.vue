@@ -101,10 +101,7 @@ export default {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color:
-                  i % 6 === 0 && i !== 0
-                    ? this.chartColors[6]
-                    : this.chartColors[i % 6],
+                color: i % 6 === 0 && i !== 0 ? this.chartColors[6] : this.chartColors[i % 6],
               },
               {
                 offset: 1,

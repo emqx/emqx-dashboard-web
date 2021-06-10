@@ -2,10 +2,7 @@
   <div class="overview app-wrapper">
     <el-row class="content-wrapper" :gutter="20">
       <el-col :span="6">
-        <el-card
-          shadow="never"
-          class="app-card"
-        >
+        <el-card shadow="never" class="app-card">
           <div class="app-card-title">
             {{ $t('Overview.messageOut') }}
           </div>
@@ -14,9 +11,7 @@
             <span>
               {{ currentMetrics.sent }}
             </span>
-            <span class="unit"
-              >{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span
-            >
+            <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
 
             <div class="flux-wrapper">
               <simple-line
@@ -45,15 +40,10 @@
             <span>
               {{ currentMetrics.received }}
             </span>
-            <span class="unit"
-              >{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span
-            >
+            <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
 
             <div class="flux-wrapper">
-              <simple-line
-                v-model="currentMetricsLogs.received"
-                type="bar"
-              ></simple-line>
+              <simple-line v-model="currentMetricsLogs.received" type="bar"></simple-line>
             </div>
           </div>
 
@@ -66,10 +56,7 @@
       </el-col>
 
       <el-col :span="6">
-        <el-card
-          shadow="never"
-          class="app-card"
-        >
+        <el-card shadow="never" class="app-card">
           <div class="app-card-title">
             {{ $t('Overview.subscriptionNumber') }}
           </div>
@@ -96,10 +83,7 @@
       </el-col>
 
       <el-col v-if="$hasShow('monitor.connections')" :span="6">
-        <el-card
-          shadow="never"
-          class="app-card"
-        >
+        <el-card shadow="never" class="app-card">
           <div class="app-card-title">
             {{ $t('Overview.connectionNumber') }}
           </div>
@@ -131,12 +115,14 @@
           {{ $t('Overview.nodeData') }}
         </div>
 
-        <el-dropdown @command="dataTypeChange" :style="{cursor:'pointer'}">
-        <span class="el-dropdown-link">
-            {{this.nodeName}}<i class="el-icon-arrow-down el-icon--right"></i>
+        <el-dropdown @command="dataTypeChange" :style="{ cursor: 'pointer' }">
+          <span class="el-dropdown-link">
+            {{ this.nodeName }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="node of nodes" :key="node.node" :command="node.node">{{node.node}}</el-dropdown-item>
+            <el-dropdown-item v-for="node of nodes" :key="node.node" :command="node.node">{{
+              node.node
+            }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -259,12 +245,9 @@
         }}</el-checkbox>
       </div>
       <div class="tip-button">
-        <el-button
-          type="primary"
-          size="small"
-          @click="licenseTipVisible = false"
-          >{{ $t('Overview.konw') }}</el-button
-        >
+        <el-button type="primary" size="small" @click="licenseTipVisible = false">{{
+          $t('Overview.konw')
+        }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -272,11 +255,7 @@
 
 <script>
 import Moment from 'moment'
-import {
-  loadNodes as loadNodesApi,
-  loadCurrentMetrics,
-  loadLicenseInfo,
-} from '@/api/overview'
+import { loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo } from '@/api/overview'
 import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
 import PercentageCards from './components/PercentageCards'
@@ -415,9 +394,7 @@ export default {
     formatConnection() {
       const { connection } = this.currentMetrics
       const { max_connections } = this.license
-      return `${this._formatNumber(connection)}/${this._formatNumber(
-        max_connections,
-      )}`
+      return `${this._formatNumber(connection)}/${this._formatNumber(max_connections)}`
     },
     _formatNumber(num) {
       if (num > 10000) {

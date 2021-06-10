@@ -160,12 +160,9 @@ export default {
       })
       // Qucik save method
       // eslint-disable-next-line
-      this.editor.addCommand(
-        monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S,
-        () => {
-          this.$emit('qucik-save', this.value)
-        },
-      )
+      this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
+        this.$emit('qucik-save', this.value)
+      })
       // Update editor options
       this.editor.getModel().updateOptions({ tabSize: 2 })
     },
@@ -187,25 +184,22 @@ export default {
       return $hints
     },
     registerCustomHintsProvider() {
-      this.providerDisposeID = monaco.languages.registerCompletionItemProvider(
-        this.lang,
-        {
-          provideCompletionItems: (model, position) => {
-            const wordObj = model.getWordUntilPosition(position)
-            const hints = this.getHints(wordObj)
-            const range = {
-              startLineNumber: position.lineNumber,
-              endLineNumber: position.lineNumber,
-              startColumn: wordObj.startColumn,
-              endColumn: wordObj.endColumn,
-            }
-            return {
-              suggestions: createMonacoComplete(hints, range, wordObj),
-            }
-          },
-          triggerCharacters: [' '],
+      this.providerDisposeID = monaco.languages.registerCompletionItemProvider(this.lang, {
+        provideCompletionItems: (model, position) => {
+          const wordObj = model.getWordUntilPosition(position)
+          const hints = this.getHints(wordObj)
+          const range = {
+            startLineNumber: position.lineNumber,
+            endLineNumber: position.lineNumber,
+            startColumn: wordObj.startColumn,
+            endColumn: wordObj.endColumn,
+          }
+          return {
+            suggestions: createMonacoComplete(hints, range, wordObj),
+          }
         },
-      )
+        triggerCharacters: [' '],
+      })
     },
     registerCustomHoverProvider() {
       monaco.languages.register({ id: this.lang })

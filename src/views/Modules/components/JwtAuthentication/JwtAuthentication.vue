@@ -31,22 +31,17 @@
             </el-row>
 
             <el-form-item>
-              <el-checkbox v-model="payloadVisible" size="small"
-                >Payload</el-checkbox
-              >
+              <el-checkbox v-model="payloadVisible" size="small">Payload</el-checkbox>
             </el-form-item>
 
             <template v-if="payloadVisible">
               <p class="jwt-payload-desc">
                 {{ $t('Plugins.payloadDesc') }}
-                <a :href="jwtDoc" target="_blank" rel="noopener">{{
-                  $t('Plugins.jwtDoc')
-                }}</a>
+                <a :href="jwtDoc" target="_blank" rel="noopener">{{ $t('Plugins.jwtDoc') }}</a>
               </p>
               <el-form-item prop="payload">
                 <div class="monaco-container" style="height: 200px">
-                  <monaco id="jwt-payload" v-model="record.payload" lang="json">
-                  </monaco>
+                  <monaco id="jwt-payload" v-model="record.payload" lang="json"> </monaco>
                 </div>
               </el-form-item>
               <p class="jwt-payload-desc">
@@ -54,8 +49,7 @@
               </p>
               <el-form-item prop="data">
                 <div class="monaco-container" style="height: 200px">
-                  <monaco id="jwt-data" v-model="record.data" lang="plaintext">
-                  </monaco>
+                  <monaco id="jwt-data" v-model="record.data" lang="plaintext"> </monaco>
                 </div>
               </el-form-item>
             </template>
@@ -199,10 +193,7 @@ export default {
           return
         }
         if (this.payloadVisible) {
-          this.records = this.getPayloadJWTData(
-            this.record.payload,
-            this.record.data,
-          )
+          this.records = this.getPayloadJWTData(this.record.payload, this.record.data)
         } else {
           this.records = this.getPrivateKeyJWTData()
         }

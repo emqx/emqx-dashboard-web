@@ -12,10 +12,7 @@
           <div class="card-wrapper">
             <el-card shadow="never" class="emq-list-card">
               <div class="emq-title">{{ $t('Overview.basic') }}</div>
-              <node-basic-card
-                :value="record"
-                :show-button="false"
-              ></node-basic-card>
+              <node-basic-card :value="record" :show-button="false"></node-basic-card>
             </el-card>
 
             <el-card shadow="never" class="emq-list-card">
@@ -74,12 +71,7 @@
                       :label="$t('Overview.client')"
                       min-width="100px"
                     ></el-table-column>
-                    <el-table-column
-                      prop="value"
-                      label=""
-                      width="120px"
-                      sortable
-                    ></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
                   </el-table>
                 </el-col>
 
@@ -90,12 +82,7 @@
                       label="Delivery"
                       min-width="100px"
                     ></el-table-column>
-                    <el-table-column
-                      prop="value"
-                      label=""
-                      width="120px"
-                      sortable
-                    ></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
                   </el-table>
                 </el-col>
 
@@ -106,12 +93,7 @@
                       :label="$t('Overview.session')"
                       min-width="100px"
                     ></el-table-column>
-                    <el-table-column
-                      prop="value"
-                      label=""
-                      width="120px"
-                      sortable
-                    ></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
                   </el-table>
                 </el-col>
               </el-row>
@@ -124,12 +106,7 @@
                       :label="$t('Overview.mqttPackages')"
                       min-width="100px"
                     ></el-table-column>
-                    <el-table-column
-                      prop="value"
-                      label=""
-                      width="120px"
-                      sortable
-                    ></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
                   </el-table>
                 </el-col>
 
@@ -140,12 +117,7 @@
                       :label="$t('Overview.messageNumber')"
                       min-width="100px"
                     ></el-table-column>
-                    <el-table-column
-                      prop="value"
-                      label=""
-                      width="120px"
-                      sortable
-                    ></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
                   </el-table>
                 </el-col>
 
@@ -156,12 +128,7 @@
                       :label="$t('Overview.traffic')"
                       min-width="100px"
                     ></el-table-column>
-                    <el-table-column
-                      prop="value"
-                      label=""
-                      width="120px"
-                      sortable
-                    ></el-table-column>
+                    <el-table-column prop="value" label="" width="120px" sortable></el-table-column>
                   </el-table>
                 </el-col>
               </el-row>
@@ -266,13 +233,7 @@ export default {
           'unsubscribe',
           'disconnected',
         ],
-        session: [
-          'created',
-          'resumed',
-          'takeovered',
-          'discarded',
-          'terminated',
-        ],
+        session: ['created', 'resumed', 'takeovered', 'discarded', 'terminated'],
         delivery: [
           'dropped',
           'dropped.no_local',

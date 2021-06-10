@@ -2,11 +2,7 @@
   <el-row :gutter="40" class="resource-field">
     <ul class="field-info">
       <el-col v-for="(item, i) in configList" :key="i" :span="12">
-        <li
-          v-if="item.value.filename !== ''"
-          class="field-info-item"
-          :title="item.description"
-        >
+        <li v-if="item.value.filename !== ''" class="field-info-item" :title="item.description">
           <div class="field-title">{{ item.title }}:</div>
           <span class="field-value">
             <span
@@ -70,9 +66,7 @@ export default {
       )
       if (dependentList.length > 0 && !dependentList[0].value) {
         // hide
-        return this.config.filter(
-          (item) => !['verify', 'tls_version'].includes(item.key),
-        )
+        return this.config.filter((item) => !['verify', 'tls_version'].includes(item.key))
       }
       // show
       return this.config

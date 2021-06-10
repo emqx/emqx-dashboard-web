@@ -5,41 +5,25 @@
         <el-form :model="record" ref="record" :rules="rules">
           <el-col v-if="type !== '$all'" :span="6">
             <el-form-item :prop="type">
-              <el-input
-                v-model="record[type]"
-                size="small"
-                :placeholder="$t(`Clients.${type}`)"
-              >
+              <el-input v-model="record[type]" size="small" :placeholder="$t(`Clients.${type}`)">
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item prop="topic">
-              <el-input
-                v-model="record.topic"
-                size="small"
-                :placeholder="$t('Topics.topic')"
-              >
+              <el-input v-model="record.topic" size="small" :placeholder="$t('Topics.topic')">
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item prop="access">
-              <emq-select
-                v-model="record.access"
-                size="small"
-                :field="{ options: accessOptions }"
-              >
+              <emq-select v-model="record.access" size="small" :field="{ options: accessOptions }">
               </emq-select>
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item prop="action">
-              <emq-select
-                v-model="record.action"
-                size="small"
-                :field="{ options: actionOptions }"
-              >
+              <emq-select v-model="record.action" size="small" :field="{ options: actionOptions }">
               </emq-select>
             </el-form-item>
           </el-col>
@@ -58,30 +42,18 @@
       </el-row>
     </div>
     <el-table :data="tableData" class="data-list" v-loading="listLoading">
-      <el-table-column
-        v-if="type !== '$all'"
-        :prop="type"
-        :label="$t(`Clients.${type}`)"
-      >
+      <el-table-column v-if="type !== '$all'" :prop="type" :label="$t(`Clients.${type}`)">
       </el-table-column>
-      <el-table-column prop="topic" :label="$t('Topics.topic')">
-      </el-table-column>
-      <el-table-column prop="action" :label="$t('Modules.action')">
-      </el-table-column>
+      <el-table-column prop="topic" :label="$t('Topics.topic')"> </el-table-column>
+      <el-table-column prop="action" :label="$t('Modules.action')"> </el-table-column>
       <el-table-column prop="access" :label="$t('Modules.isAllow')">
         <template slot-scope="{ row }">
-          {{
-            row.access === 'allow' ? $t('Modules.allow') : $t('Modules.deny')
-          }}
+          {{ row.access === 'allow' ? $t('Modules.allow') : $t('Modules.deny') }}
         </template>
       </el-table-column>
       <el-table-column prop="oper" width="120px">
         <template slot-scope="{ row }">
-          <el-button
-            type="dashed danger"
-            size="mini"
-            @click="handleDelete(row)"
-          >
+          <el-button type="dashed danger" size="mini" @click="handleDelete(row)">
             {{ $t('Base.delete') }}
           </el-button>
         </template>

@@ -1,10 +1,6 @@
 <template>
   <el-dialog
-    :title="
-      oper === 'edit'
-        ? $t('RuleEngine.editResources')
-        : $t('RuleEngine.createResources')
-    "
+    :title="oper === 'edit' ? $t('RuleEngine.editResources') : $t('RuleEngine.createResources')"
     class="resource-dialog"
     width="520px"
     v-bind="$attrs"
@@ -14,13 +10,7 @@
     @open="loadData"
     @close="clearForm"
   >
-    <el-form
-      ref="record"
-      :model="record"
-      :rules="rules"
-      label-position="top"
-      size="small"
-    >
+    <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
       <el-form-item prop="type" :label="$t('RuleEngine.resourceTypes')">
         <emq-select
           v-model="record.type"
@@ -45,17 +35,11 @@
       <el-row v-if="record.type" class="config-item-wrapper" :gutter="20">
         <el-col :span="12">
           <el-form-item prop="id" :label="$t('RuleEngine.resourceID')">
-            <el-input
-              v-model="record.id"
-              :disabled="oper === 'edit'"
-            ></el-input>
+            <el-input v-model="record.id" :disabled="oper === 'edit'"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item
-            prop="description"
-            :label="$t('RuleEngine.resourceDes')"
-          >
+          <el-form-item prop="description" :label="$t('RuleEngine.resourceDes')">
             <el-input
               v-model="record.description"
               :placeholder="$t('RuleEngine.pleaseEnter')"
@@ -72,10 +56,7 @@
             :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
           >
             <el-form-item
-              v-if="
-                item.elType !== 'file' &&
-                !['verify', 'tls_version'].includes(item.key)
-              "
+              v-if="item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)"
               v-bind="item.formItemAttributes"
             >
               <template v-if="item.formItemAttributes.description" slot="label">
@@ -89,9 +70,7 @@
                 </el-popover>
               </template>
               <template v-if="item.elType === 'object'">
-                <key-and-value-editor
-                  v-model="record.config[item.key]"
-                ></key-and-value-editor>
+                <key-and-value-editor v-model="record.config[item.key]"></key-and-value-editor>
               </template>
               <!-- input -->
               <template v-else-if="item.elType !== 'select'">
@@ -110,11 +89,7 @@
                 >
                 </el-input>
 
-                <el-input
-                  v-else
-                  v-model="record.config[item.key]"
-                  v-bind="item.bindAttributes"
-                >
+                <el-input v-else v-model="record.config[item.key]" v-bind="item.bindAttributes">
                 </el-input>
               </template>
 
@@ -163,21 +138,15 @@
           </el-col>
           <el-col
             v-if="
-              ([false, 'false'].includes(record.config['ssl']) &&
-                wholeConfigList.length > 11) ||
-              (![false, 'false'].includes(record.config['ssl']) &&
-                wholeConfigList.length > 8)
+              ([false, 'false'].includes(record.config['ssl']) && wholeConfigList.length > 11) ||
+              (![false, 'false'].includes(record.config['ssl']) && wholeConfigList.length > 8)
             "
             :span="24"
             class="show-more"
           >
             <a href="javascript:;" @click="showWholeList">
               {{ showMoreItem ? $t('Clients.collapse') : $t('Clients.expand') }}
-              <i
-                :class="
-                  showMoreItem ? 'el-icon-arrow-up' : 'el-icon-arrow-down'
-                "
-              ></i>
+              <i :class="showMoreItem ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
             </a>
           </el-col>
         </template>
@@ -185,9 +154,7 @@
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
-      <el-button size="small" @click="handleCache">{{
-        $t('Base.cancel')
-      }}</el-button>
+      <el-button size="small" @click="handleCache">{{ $t('Base.cancel') }}</el-button>
       <el-button
         :loading="loadingButton === 'createButton'"
         class="dialog-primary-btn"
@@ -369,17 +336,11 @@ export default {
 
     cleanFileContent(config) {
       const falseValues = [false, 'false']
-      if (
-        falseValues.includes(config.ssl) ||
-        falseValues.includes(config.https_enabled)
-      ) {
+      if (falseValues.includes(config.ssl) || falseValues.includes(config.https_enabled)) {
         config.verify = false
         Object.keys(config).forEach((key) => {
           const oneValue = config[key]
-          if (
-            typeof oneValue === 'object' &&
-            Object.keys(oneValue).includes('file')
-          ) {
+          if (typeof oneValue === 'object' && Object.keys(oneValue).includes('file')) {
             config[key] = {
               file: '',
               filename: '',
@@ -403,8 +364,7 @@ export default {
       const { configVal } = this.editItem
       const { config, description } = record
       const notChangeInfos =
-        _.isEqual(configVal, config) &&
-        description === this.editItem.description
+        _.isEqual(configVal, config) && description === this.editItem.description
       if (notChangeInfos) {
         this.dialogVisible = false
         this.selfVisible = false
@@ -420,15 +380,11 @@ export default {
           }, 100)
         }
       }
-      this.$confirm(
-        this.$t('RuleEngine.editResourceTips'),
-        this.$t('Base.warning'),
-        {
-          type: 'warning',
-          cancelButtonText: this.$t('Base.cancel'),
-          confirmButtonText: this.$t('Base.confirm'),
-        },
-      )
+      this.$confirm(this.$t('RuleEngine.editResourceTips'), this.$t('Base.warning'), {
+        type: 'warning',
+        cancelButtonText: this.$t('Base.cancel'),
+        confirmButtonText: this.$t('Base.confirm'),
+      })
         .then(async () => {
           this.loadingButton = 'createButton'
           RequestEditResource()
@@ -446,9 +402,7 @@ export default {
         return
       }
       const successMsg =
-        this.oper === 'add'
-          ? this.$t('Base.createSuccess')
-          : this.$t('Base.editSuccess')
+        this.oper === 'add' ? this.$t('Base.createSuccess') : this.$t('Base.editSuccess')
       this.$message.success(successMsg)
       this.$emit('created', id)
       this.dialogVisible = false

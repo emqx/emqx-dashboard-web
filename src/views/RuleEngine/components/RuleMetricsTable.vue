@@ -4,11 +4,7 @@
       <div class="ctl-title btn btn-default" @click="toggleShowTable">
         <slot>
           <span>
-            {{
-              showTable
-                ? $t('RuleEngine.foldDetails')
-                : $t('RuleEngine.showDetails')
-            }}
+            {{ showTable ? $t('RuleEngine.foldDetails') : $t('RuleEngine.showDetails') }}
           </span>
           <i :class="showTable ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
         </slot>
@@ -16,18 +12,9 @@
 
       <el-collapse-transition>
         <el-table v-if="showTable" :data="metrics">
-          <el-table-column
-            prop="node"
-            :label="$t('RuleEngine.node')"
-          ></el-table-column>
-          <el-table-column
-            prop="matched"
-            :label="$t('RuleEngine.numberOfHits')"
-          ></el-table-column>
-          <el-table-column
-            prop="speed"
-            :label="$t('RuleEngine.currentSpeed')"
-          ></el-table-column>
+          <el-table-column prop="node" :label="$t('RuleEngine.node')"></el-table-column>
+          <el-table-column prop="matched" :label="$t('RuleEngine.numberOfHits')"></el-table-column>
+          <el-table-column prop="speed" :label="$t('RuleEngine.currentSpeed')"></el-table-column>
           <el-table-column
             prop="speed_max"
             :label="$t('RuleEngine.maximumSpeed')"

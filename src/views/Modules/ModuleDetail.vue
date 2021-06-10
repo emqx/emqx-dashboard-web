@@ -8,23 +8,15 @@
       </div>
       <div class="page-header-content-view">
         <div class="content">
-            {{ moduleData.description[lang] }}
+          {{ moduleData.description[lang] }}
         </div>
       </div>
 
       <div class="page-header-top-start oper-button">
-        <el-button
-          type="info"
-          size="small"
-          @click="toReadMore(moduleData.type)"
-          >{{ $t('Modules.readMore') }}</el-button
-        >
-        <el-button
-          type="danger"
-          size="small"
-          v-if="oper === 'edit'"
-          @click="deleteModule"
-        >
+        <el-button type="info" size="small" @click="toReadMore(moduleData.type)">{{
+          $t('Modules.readMore')
+        }}</el-button>
+        <el-button type="danger" size="small" v-if="oper === 'edit'" @click="deleteModule">
           {{ $t('Base.delete') }}
         </el-button>
       </div>
@@ -35,43 +27,27 @@
           <!-- <div class="emq-title module-title">
             {{ $t('Modules.configuration') }}
           </div> -->
-          <el-form
-            ref="record"
-            :model="record"
-            :rules="rules"
-            label-position="top"
-            size="small"
-          >
+          <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
             <el-row class="config-item-wrapper" :gutter="30">
               <template v-if="configList.length > 0">
                 <div v-for="(item, i) in configList" :key="i">
                   <template v-if="item.key !== 'listener'">
                     <el-col
                       :span="
-                        item.type === 'textarea' ||
-                        item.type === 'object' ||
-                        item.type === 'array'
+                        item.type === 'textarea' || item.type === 'object' || item.type === 'array'
                           ? 24
                           : 12
                       "
                     >
                       <el-form-item
                         v-if="
-                          item.elType !== 'file' &&
-                          !['verify', 'tls_version'].includes(item.key)
+                          item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)
                         "
                         v-bind="item.formItemAttributes"
                       >
-                        <template
-                          v-if="item.formItemAttributes.description"
-                          slot="label"
-                        >
+                        <template v-if="item.formItemAttributes.description" slot="label">
                           {{ item.formItemAttributes.label }}
-                          <el-popover
-                            width="220"
-                            trigger="hover"
-                            placement="top"
-                          >
+                          <el-popover width="220" trigger="hover" placement="top">
                             <div
                               class="emq-popover-content"
                               v-html="item.formItemAttributes.description"
@@ -150,9 +126,7 @@
                       <template v-else>
                         <el-form-item
                           v-if="
-                            ['true', true].includes(
-                              record.config['https_enabled'],
-                            ) ||
+                            ['true', true].includes(record.config['https_enabled']) ||
                             ['true', true].includes(record.config['ssl']) ||
                             (record.config['ssl'] === undefined &&
                               record.config['https_enabled'] === undefined)
@@ -180,9 +154,7 @@
                 <div class="no-config">
                   <i class="el-icon-warning"></i>
                   <span>{{ $t('Modules.noConfig') }}</span>
-                  <span v-if="oper === 'add'">{{
-                    $t('Modules.noConfigAdd')
-                  }}</span>
+                  <span v-if="oper === 'add'">{{ $t('Modules.noConfigAdd') }}</span>
                 </div>
               </template>
               <div v-else class="params-loading-wrapper">
@@ -194,20 +166,11 @@
             <div class="emq-title listener-title">
               {{ $t('Modules.listener') }}
             </div>
-            <Listeners
-              v-model="record.config['listeners']"
-              :listenerData="listener"
-            >
-            </Listeners>
+            <Listeners v-model="record.config['listeners']" :listenerData="listener"> </Listeners>
           </div>
 
-          <div
-            class="button-group__center"
-            v-if="configList.length || oper === 'add'"
-          >
-            <el-button size="small" @click="exitDetail(true)">{{
-              $t('Base.cancel')
-            }}</el-button>
+          <div class="button-group__center" v-if="configList.length || oper === 'add'">
+            <el-button size="small" @click="exitDetail(true)">{{ $t('Base.cancel') }}</el-button>
             <el-button
               :loading="buttonLoading"
               class="dialog-primary-btn"
@@ -257,12 +220,7 @@
 </template>
 
 <script>
-import {
-  createModule,
-  loadAllModules,
-  updateModule,
-  destroyModule,
-} from '@/api/modules'
+import { createModule, loadAllModules, updateModule, destroyModule } from '@/api/modules'
 import { renderParamsForm, fillI18n } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ArrayEditor from '@/components/ArrayEditor'
@@ -414,17 +372,11 @@ export default {
     },
     cleanFileContent(config) {
       const falseValues = [false, 'false']
-      if (
-        falseValues.includes(config.ssl) ||
-        falseValues.includes(config.https_enabled)
-      ) {
+      if (falseValues.includes(config.ssl) || falseValues.includes(config.https_enabled)) {
         config.verify = false
         Object.keys(config).forEach((key) => {
           const oneValue = config[key]
-          if (
-            typeof oneValue === 'object' &&
-            Object.keys(oneValue).includes('file')
-          ) {
+          if (typeof oneValue === 'object' && Object.keys(oneValue).includes('file')) {
             config[key] = {
               file: '',
               filename: '',
@@ -442,10 +394,7 @@ export default {
       if (!valid) {
         return
       }
-      if (
-        Object.keys(this.listener).length &&
-        !this.record.config.listeners.length
-      ) {
+      if (Object.keys(this.listener).length && !this.record.config.listeners.length) {
         this.$message.error(this.$t('Modules.emptyListenerTip'))
         return
       }
@@ -466,18 +415,14 @@ export default {
         this.buttonLoading = true
         this.record.type = this.moduleData.type
         const data = await createModule(this.record)
-        const addedModules =
-          JSON.parse(localStorage.getItem('addedModules')) || {}
+        const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
         addedModules[data.type] = data.id
         localStorage.setItem('addedModules', JSON.stringify(addedModules))
         this.$message.success(this.$t('Modules.moduleAddSuccess'))
         this.exitDetail()
         this.buttonLoading = false
       } else {
-        const isEdited = !_.isEqual(
-          this.record.config,
-          this.originRecord.config,
-        )
+        const isEdited = !_.isEqual(this.record.config, this.originRecord.config)
         if (isEdited) {
           this.$confirm(this.$t('Modules.editTip'), this.$t('Base.warning'), {
             type: 'warning',
@@ -519,9 +464,7 @@ export default {
       Object.values(allFeatures).forEach((item) => {
         this.allModuleList = this.allModuleList.concat(item)
       })
-      const currentModule = this.allModuleList.find(
-        (item) => item.name === this.moduleData.type,
-      )
+      const currentModule = this.allModuleList.find((item) => item.name === this.moduleData.type)
       this.parseI18n([currentModule])
       const { params } = currentModule
 
@@ -543,8 +486,7 @@ export default {
         .then(async () => {
           await destroyModule(this.moduleData.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
-          const addedModules =
-            JSON.parse(localStorage.getItem('addedModules')) || {}
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
           delete addedModules[this.moduleData.type]
           localStorage.setItem('addedModules', JSON.stringify(addedModules))
           this.exitDetail()
@@ -572,9 +514,7 @@ export default {
           this.record.config.listeners = listeners || []
         }
       }
-      this.originRecord.config.listeners = _.cloneDeep(
-        this.record.config.listeners,
-      )
+      this.originRecord.config.listeners = _.cloneDeep(this.record.config.listeners)
     },
     storeOriginData(configData) {
       const { form, rules } = configData

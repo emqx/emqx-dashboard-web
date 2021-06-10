@@ -4,10 +4,9 @@
       <div class="page-header-content-view">
         <div class="content">
           <div>
-            {{ $t('Clients.currentConnection') }}:<span
-              class="current-clients"
-              >{{ connectedCount }}</span
-            >
+            {{ $t('Clients.currentConnection') }}:<span class="current-clients">{{
+              connectedCount
+            }}</span>
           </div>
           <emq-select
             v-model="nodeName"
@@ -20,10 +19,7 @@
         </div>
       </div>
     </page-header>
-    <lw-client-details
-      v-if="$route.query.imei"
-      :nodeName="nodeName"
-    ></lw-client-details>
+    <lw-client-details v-if="$route.query.imei" :nodeName="nodeName"></lw-client-details>
     <el-card shadow="never" v-else class="emq-list-card">
       <div class="lw-clients-header">
         <el-col :span="8" :offset="16">
@@ -47,13 +43,10 @@
             <a @click="showClientDetails(row)">{{ row.imei }}</a>
           </template>
         </el-table-column>
-        <el-table-column prop="ip_address" :label="$t('Clients.ipAddress')">
-        </el-table-column>
-        <el-table-column prop="port" :label="$t('Clients.port')">
-        </el-table-column>
+        <el-table-column prop="ip_address" :label="$t('Clients.ipAddress')"> </el-table-column>
+        <el-table-column prop="port" :label="$t('Clients.port')"> </el-table-column>
         <el-table-column prop="lifetime" label="LifeTime"> </el-table-column>
-        <el-table-column prop="version" :label="$t('Schemas.version')">
-        </el-table-column>
+        <el-table-column prop="version" :label="$t('Schemas.version')"> </el-table-column>
         <el-table-column width="120px">
           <template slot-scope="{ row }">
             <el-button size="mini" type="dashed" @click="handleDisconnect(row)">

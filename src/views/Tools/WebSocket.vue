@@ -7,12 +7,7 @@
         :before-leave="handleBeforeLeave"
         @tab-remove="handleTabEdit"
       >
-        <el-tab-pane
-          v-for="(item, i) in tabs"
-          :key="i"
-          :closable="i > 0"
-          :name="item.name"
-        >
+        <el-tab-pane v-for="(item, i) in tabs" :key="i" :closable="i > 0" :name="item.name">
           <span slot="label">
             <el-badge
               class="message-count"
@@ -134,9 +129,7 @@ export default {
     overflow: visible;
   }
 
-  .el-tabs--top.el-tabs--border-card
-    > .el-tabs__header
-    .el-tabs__item:nth-child(2),
+  .el-tabs--top.el-tabs--border-card > .el-tabs__header .el-tabs__item:nth-child(2),
   .el-tabs--top.el-tabs--card > .el-tabs__header .el-tabs__item:nth-child(2),
   .el-tabs--top .el-tabs--left > .el-tabs__header .el-tabs__item:nth-child(2),
   .el-tabs--top .el-tabs--right > .el-tabs__header .el-tabs__item:nth-child(2) {

@@ -11,12 +11,7 @@
     <div class="app-wrapper">
       <el-card shadow="never" class="emq-list-card">
         <div class="emq-table-header">
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-plus"
-            @click="handleExport"
-          >
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="handleExport">
             {{ $t('Backup.createBackup') }}
           </el-button>
           <el-upload
@@ -37,11 +32,7 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column
-            prop="node"
-            :label="$t('RuleEngine.node')"
-            sortable
-          ></el-table-column>
+          <el-table-column prop="node" :label="$t('RuleEngine.node')" sortable></el-table-column>
           <el-table-column
             prop="filename"
             :label="$t('Backup.filename')"
@@ -62,18 +53,10 @@
               <el-button type="primary" size="mini" @click="handleDownload(row)"
                 >{{ $t('Backup.download') }}
               </el-button>
-              <el-button
-                type="primary"
-                plain
-                size="mini"
-                @click="handleRestore(row)"
+              <el-button type="primary" plain size="mini" @click="handleRestore(row)"
                 >{{ $t('Backup.restore') }}
               </el-button>
-              <el-button
-                type="danger"
-                plain
-                size="mini"
-                @click="deleteConfirm(row)"
+              <el-button type="danger" plain size="mini" @click="deleteConfirm(row)"
                 >{{ $t('Base.delete') }}
               </el-button>
             </template>

@@ -74,9 +74,7 @@ export default {
       monitorResList.forEach((item) => {
         item.rules = {}
         Object.keys(item.configs).forEach((key) => {
-          item.rules[key] = [
-            { required: true, message: this.$t('Settings.pleaseEnter') },
-          ]
+          item.rules[key] = [{ required: true, message: this.$t('Settings.pleaseEnter') }]
         })
       })
     },

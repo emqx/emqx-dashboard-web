@@ -9,34 +9,18 @@
               size="small"
               :placeholder="$t('Topics.topic')"
             ></el-input>
-            <el-button
-              type="primary"
-              icon="el-icon-search"
-              size="small"
-              @click="handleSearch"
-            >
+            <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
               {{ $t('Clients.search') }}
             </el-button>
-            <el-button
-              plain
-              size="small"
-              :icon="resetIcon"
-              @click="resetSearch"
-            >
+            <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
               {{ searchValue ? $t('Clients.reset') : $t('Clients.refresh') }}
             </el-button>
           </div>
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column
-            prop="topic"
-            :label="$t('Topics.topic')"
-          ></el-table-column>
-          <el-table-column
-            prop="node"
-            :label="$t('Clients.node')"
-          ></el-table-column>
+          <el-table-column prop="topic" :label="$t('Topics.topic')"></el-table-column>
+          <el-table-column prop="node" :label="$t('Clients.node')"></el-table-column>
         </el-table>
 
         <div class="emq-table-footer">

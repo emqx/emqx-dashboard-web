@@ -63,9 +63,7 @@ export default {
   computed: {
     rawValue: {
       get() {
-        return typeof this.value === 'boolean'
-          ? this.value.toString()
-          : this.value
+        return typeof this.value === 'boolean' ? this.value.toString() : this.value
       },
       set(val) {
         let value = null

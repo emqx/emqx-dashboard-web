@@ -3,7 +3,7 @@
     <page-header>
       <div class="page-header-content-view">
         <div class="content">
-            {{ $t('General.applicationIsCalled') }}
+          {{ $t('General.applicationIsCalled') }}
         </div>
       </div>
       <div class="page-header-top-start">
@@ -48,7 +48,7 @@
               </el-switch>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('Base.operation')"> 
+          <el-table-column :label="$t('Base.operation')">
             <template slot-scope="{ row }">
               <el-button plain type="primary" size="mini" @click="showDialog('edit', row)">
                 {{ $t('Base.edit') }}

@@ -122,7 +122,11 @@
           <el-table-column prop="ipaddress" sortable :label="$t('Clients.ipAddress')">
             <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template>
           </el-table-column>
-          <el-table-column prop="keepalive" sortable :label="$t('Clients.keepalive')"></el-table-column>
+          <el-table-column
+            prop="keepalive"
+            sortable
+            :label="$t('Clients.keepalive')"
+          ></el-table-column>
           <el-table-column
             prop="proto_name"
             filter-placement="bottom"
@@ -136,11 +140,7 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="connected"
-            sortable
-            :label="$t('Clients.connectedStatus')"
-          >
+          <el-table-column prop="connected" sortable :label="$t('Clients.connectedStatus')">
             <template slot-scope="{ row }">
               <el-badge is-dot :type="row.connected ? 'success' : 'danger'"> </el-badge>
               <span>{{

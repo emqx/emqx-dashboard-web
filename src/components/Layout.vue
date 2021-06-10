@@ -11,10 +11,7 @@
         <left-bar></left-bar>
       </el-aside>
       <el-container class="layout" style="min-height: 100vh">
-        <el-main
-          style="margin: 0; padding: 0"
-          :style="{ marginLeft: elMainStyle }"
-        >
+        <el-main style="margin: 0; padding: 0" :style="{ marginLeft: elMainStyle }">
           <el-header
             v-if="$hasShow('nav-header')"
             class="content-header"
@@ -99,9 +96,7 @@ export default {
     defaultSubMenu() {
       const { children, path: topPath } = this.topLvRoute
       const { path } = this.$route
-      const childRoute =
-        Array.prototype.find.call(children, (v) => path.indexOf(v.path) >= 0) ||
-        {}
+      const childRoute = Array.prototype.find.call(children, (v) => path.indexOf(v.path) >= 0) || {}
       return `${topPath}/${childRoute && childRoute.path}` || null
     },
     hasSubMenu() {
@@ -123,8 +118,8 @@ export default {
   top: 0;
   left: 0;
   z-index: 100;
-  margin-top: 60px;
-  height: calc(100vh - 60px);
+  // margin-top: 60px;
+  // height: calc(100vh - 60px);
   overflow-x: hidden;
 
   scrollbar-width: none;

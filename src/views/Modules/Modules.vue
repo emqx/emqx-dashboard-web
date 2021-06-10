@@ -34,17 +34,8 @@
     </page-header>
 
     <div class="app-wrapper">
-      <el-row
-        v-if="showList.length"
-        :gutter="20"
-        class="emq-list-card plugin-cards-wrapper"
-      >
-        <el-col
-          v-for="item in showList"
-          :key="item.id"
-          :span="24"
-          class="module-list-item"
-        >
+      <el-row v-if="showList.length" :gutter="20" class="emq-list-card plugin-cards-wrapper">
+        <el-col v-for="item in showList" :key="item.id" :span="24" class="module-list-item">
           <div class="item-box">
             <div class="module-item" @click="toEditModule(item)">
               <div class="left-box">
@@ -72,12 +63,9 @@
                     @click.stop="updataModule(item, true)"
                     >{{ $t('Modules.start') }}</el-button
                   >
-                  <el-button
-                    class="know-more"
-                    size="small"
-                    @click.stop="toEditModule(item)"
-                    >{{ $t('Modules.moduleEdit') }}</el-button
-                  >
+                  <el-button class="know-more" size="small" @click.stop="toEditModule(item)">{{
+                    $t('Modules.moduleEdit')
+                  }}</el-button>
                 </div>
               </div>
             </div>
@@ -144,8 +132,7 @@ export default {
         .then(async () => {
           await destroyModule(item.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
-          const addedModules =
-            JSON.parse(localStorage.getItem('addedModules')) || {}
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
           delete addedModules[item.type]
           localStorage.setItem('addedModules', JSON.stringify(addedModules))
           this.loadData()

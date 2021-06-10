@@ -8,12 +8,7 @@ import store from '@/stores'
 import router from '@/routes'
 import lang from '@/i18n'
 
-import {
-  enDocsLink,
-  zhDocsLink,
-  pluginsZh,
-  pluginsEn,
-} from '@/common/link_urls'
+import { enDocsLink, zhDocsLink, pluginsZh, pluginsEn } from '@/common/link_urls'
 
 const locale = store.state.lang
 const VueI18n = lang[locale]
@@ -42,8 +37,7 @@ export function toLogin() {
  * @param Promise
  * @return Promise
  */
-export const awaitWrap = (promise) =>
-  promise.then((data) => data).catch((err) => null)
+export const awaitWrap = (promise) => promise.then((data) => data).catch((err) => null)
 
 /**
  * 安全的转化 JSON 字符串
@@ -191,8 +185,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       elType = 'select'
       field = { list: enumValue }
     }
-    const inputPlaceholder =
-      description.length < 24 && propPrefix !== 'configs' ? description : ''
+    const inputPlaceholder = description.length < 24 && propPrefix !== 'configs' ? description : ''
     // 表单类型, 渲染使用的属性
     form.push({
       formItemAttributes: {
@@ -205,8 +198,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       },
       bindAttributes: {
         type: inputType,
-        field:
-          elType === 'select' || elType === 'cfgselect' ? field : undefined,
+        field: elType === 'select' || elType === 'cfgselect' ? field : undefined,
         placeholder: inputPlaceholder,
         rows: inputType === 'textarea' ? 5 : 0,
       },
@@ -235,9 +227,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       }
     }
     if (enumValue) {
-      const options = enumValue.map(($) =>
-        typeof $ === 'boolean' ? $.toString() : $,
-      )
+      const options = enumValue.map(($) => (typeof $ === 'boolean' ? $.toString() : $))
       rules[k].push({ type: 'enum', enum: options })
     }
   }

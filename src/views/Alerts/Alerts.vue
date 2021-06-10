@@ -4,38 +4,17 @@
       <el-card class="emq-list-card" shadow="never">
         <div class="emq-table-header">
           <div></div>
-          <el-radio-group
-            v-model="alertType"
-            border
-            size="mini"
-            @change="loadData"
-          >
-            <el-radio-button label="present">{{
-              $t('Alerts.currentAlarm')
-            }}</el-radio-button>
-            <el-radio-button label="history">{{
-              $t('Alerts.historyAlarm')
-            }}</el-radio-button>
+          <el-radio-group v-model="alertType" border size="mini" @change="loadData">
+            <el-radio-button label="present">{{ $t('Alerts.currentAlarm') }}</el-radio-button>
+            <el-radio-button label="history">{{ $t('Alerts.historyAlarm') }}</el-radio-button>
           </el-radio-group>
         </div>
 
         <el-table v-bind="alertTable" :data="tableData" class="data-list">
-          <el-table-column
-            prop="name"
-            :label="$t('Alerts.alarmName')"
-          ></el-table-column>
-          <el-table-column
-            prop="message"
-            :label="$t('Alerts.alarmMsg')"
-            min-width="140px"
-          >
+          <el-table-column prop="name" :label="$t('Alerts.alarmName')"></el-table-column>
+          <el-table-column prop="message" :label="$t('Alerts.alarmMsg')" min-width="140px">
             <template slot-scope="{ row }">
-              <el-popover
-                placement="top"
-                trigger="hover"
-                width="160"
-                :open-delay="500"
-              >
+              <el-popover placement="top" trigger="hover" width="160" :open-delay="500">
                 <div v-for="(value, label) in row.details" :key="label">
                   {{ label }}: {{ value }}
                 </div>
@@ -46,10 +25,7 @@
               <span>{{ row.message }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="node"
-            :label="$t('Alerts.triggerNode')"
-          ></el-table-column>
+          <el-table-column prop="node" :label="$t('Alerts.triggerNode')"></el-table-column>
           <el-table-column prop="node" :label="$t('Alerts.alarmLevel')">
             <template>
               {{ $t('Alerts.system') }}
@@ -135,10 +111,7 @@ export default {
       const stateMap = {
         0: this.$t('Alerts.normal'),
       }
-      return (
-        stateMap[state] ||
-        `${this.$t('Alerts.abnormal')} ${state} ${this.$t('Alerts.second')}`
-      )
+      return stateMap[state] || `${this.$t('Alerts.abnormal')} ${state} ${this.$t('Alerts.second')}`
     },
   },
 }

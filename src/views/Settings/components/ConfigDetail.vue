@@ -102,20 +102,12 @@
         <a href="javascript:;" @click="toggleRecords">
           <span>
             {{ showMoreItems ? $t('Clients.collapse') : $t('Clients.expand') }}
-            <i
-              :class="showMoreItems ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"
-            ></i>
+            <i :class="showMoreItems ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
           </span>
         </a>
       </el-col>
       <el-col class="button-group__center" :span="12">
-        <el-button
-          plain
-          :disabled="selfDisabled"
-          type="default"
-          size="medium"
-          @click="cancel"
-        >
+        <el-button plain :disabled="selfDisabled" type="default" size="medium" @click="cancel">
           {{ $t('Base.cancel') }}
         </el-button>
         <el-button
@@ -232,9 +224,7 @@ export default {
     },
     showMoreItems(val) {
       const scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop
+        window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
       if (val) {
         setTimeout(() => {
           document.documentElement.scrollTop = scrollTop
@@ -285,8 +275,7 @@ export default {
       Object.keys(listeners).forEach((type) => {
         const diffTypeConfig = listeners[type]
         Object.keys(diffTypeConfig).forEach((key) => {
-          diffTypeConfig[key].description =
-            diffTypeConfig[key].description[this.lang]
+          diffTypeConfig[key].description = diffTypeConfig[key].description[this.lang]
         })
         if (type === 'tcp') {
           this.configData = renderParamsForm(diffTypeConfig, 'configs')
@@ -379,14 +368,11 @@ export default {
     },
     initConfigs(configs) {
       const { form, rules } = configs
-      this.configList =
-        this.from === 'listener' ? form : form.sort(this.sortKeyName)
+      this.configList = this.from === 'listener' ? form : form.sort(this.sortKeyName)
       this.showConfigList = [...this.configList]
       this.rules.configs = rules
       if (this.from === 'listener') {
-        const verifyListenerArr = [
-          { required: true, validator: verifyListener },
-        ]
+        const verifyListenerArr = [{ required: true, validator: verifyListener }]
         this.rules.configs.listener = verifyListenerArr
       }
       this.record.configs = {}
@@ -404,9 +390,7 @@ export default {
       const commonRules = { ...rules }
       const totalConfigs = {
         form: typeConfigs.form ? form.concat(typeConfigs.form) : form,
-        rules: typeConfigs.rules
-          ? Object.assign(commonRules, typeConfigs.rules)
-          : rules,
+        rules: typeConfigs.rules ? Object.assign(commonRules, typeConfigs.rules) : rules,
       }
       this.initConfigs(totalConfigs)
       this.record.type = type
@@ -437,14 +421,10 @@ export default {
         }, 500)
       }
       if (needPrompt) {
-        this.$confirm(
-          this.$t('Settings.cancelConfirm'),
-          this.$t('Base.warning'),
-          {
-            type: 'warning',
-            cancelButtonText: this.$t('Settings.no'),
-          },
-        )
+        this.$confirm(this.$t('Settings.cancelConfirm'), this.$t('Base.warning'), {
+          type: 'warning',
+          cancelButtonText: this.$t('Settings.no'),
+        })
           .then(() => {
             confirmCancel()
           })

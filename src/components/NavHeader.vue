@@ -5,9 +5,7 @@
         <i
           :class="[
             'iconfont',
-            $store.state.leftBarCollapse
-              ? 'el-icon-s-unfold'
-              : 'el-icon-s-fold',
+            $store.state.leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold',
           ]"
           style="font-size: 20px; line-height: 41px"
         >
@@ -19,12 +17,7 @@
 
     <div class="pull-right">
       <!-- TODO: 补充使用情况 -->
-      <el-tooltip
-        effect="dark"
-        :content="alertText"
-        placement="bottom"
-        :visible-arrow="false"
-      >
+      <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
         <div class="alert-info func-item">
           <el-badge :value="alertCount" :hidden="!alertCount">
             <router-link
@@ -47,14 +40,10 @@
             <i class="iconfont icon-i18n"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item
-              command="en"
-              :class="{ active: language === 'en' }"
+            <el-dropdown-item command="en" :class="{ active: language === 'en' }"
               >English</el-dropdown-item
             >
-            <el-dropdown-item
-              command="zh"
-              :class="{ active: language === 'zh' }"
+            <el-dropdown-item command="zh" :class="{ active: language === 'zh' }"
               >中文</el-dropdown-item
             >
           </el-dropdown-menu>
@@ -111,9 +100,7 @@ export default {
       return { left: !this.$store.state.leftBarCollapse ? '201px' : '80px' }
     },
     username() {
-      return (
-        this.$store.state.user.username || this.$t('components.notLoggedIn')
-      )
+      return this.$store.state.user.username || this.$t('components.notLoggedIn')
     },
     alertText() {
       return this.alertCount > 0

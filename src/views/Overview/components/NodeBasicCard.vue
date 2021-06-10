@@ -1,19 +1,12 @@
 <template>
   <div class="node-basic-card">
     <div class="version-wrapper">
-      <div class="version-title">
-        {{ $t('Overview.version') }}: {{ record.version }}
-      </div>
+      <div class="version-title">{{ $t('Overview.version') }}: {{ record.version }}</div>
     </div>
 
     <div class="basic-info">
       <el-row>
-        <el-form
-          class="node-form"
-          label-suffix=":"
-          label-position="left"
-          label-width="150px"
-        >
+        <el-form class="node-form" label-suffix=":" label-position="left" label-width="150px">
           <el-col :span="12">
             <el-form-item :label="$t('Overview.systemTime')">
               <span class="form-item-value">{{ record.datetime }}</span>
@@ -45,25 +38,17 @@
           <el-col :span="12">
             <el-form-item :label="`Erlang ${$t('Overview.process')}`">
               <span class="form-item-value"
-                >{{ record.process_used }} /
-                {{ record.process_available }}</span
+                >{{ record.process_used }} / {{ record.process_available }}</span
               >
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.nodeState')">
               <span class="form-item-value">
-                <el-badge
-                  is-dot
-                  :type="
-                    record.node_status === 'Running' ? 'success' : 'danger'
-                  "
-                >
+                <el-badge is-dot :type="record.node_status === 'Running' ? 'success' : 'danger'">
                 </el-badge
                 ><span>{{
-                  record.node_status === 'Running'
-                    ? $t('Overview.running')
-                    : $t('Overview.stopped')
+                  record.node_status === 'Running' ? $t('Overview.running') : $t('Overview.stopped')
                 }}</span>
               </span>
             </el-form-item>
@@ -119,13 +104,7 @@
         </el-form>
       </el-row>
 
-      <el-button
-        v-if="showButton"
-        class="form-btn"
-        type="primary"
-        size="small"
-        @click="toDetails"
-      >
+      <el-button v-if="showButton" class="form-btn" type="primary" size="small" @click="toDetails">
         {{ $t('Overview.viewMore') }}
       </el-button>
     </div>

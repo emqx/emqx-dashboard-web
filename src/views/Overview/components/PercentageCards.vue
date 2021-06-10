@@ -86,10 +86,7 @@ export default {
         {
           chartId: 'messageDrop',
           cardTitle: this.$t('Overview.messageDrop'),
-          legendData: [
-            this.$t('Overview.expired'),
-            this.$t('Overview.noSubscribers'),
-          ],
+          legendData: [this.$t('Overview.expired'), this.$t('Overview.noSubscribers')],
           seriesData: [
             {
               value: 0,

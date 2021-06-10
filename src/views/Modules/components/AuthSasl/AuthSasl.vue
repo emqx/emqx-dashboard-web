@@ -19,25 +19,15 @@
       <el-table :data="tableData">
         <el-table-column prop="username" :label="$t('Clients.username')">
           <template slot-scope="{ row }">
-            <a href="javascript:;" @click="showDialog('view', row)">{{
-              row.username
-            }}</a>
+            <a href="javascript:;" @click="showDialog('view', row)">{{ row.username }}</a>
           </template>
         </el-table-column>
         <el-table-column prop="oper" width="120px">
           <template slot-scope="{ row }">
-            <el-button
-              type="dashed"
-              size="mini"
-              @click="showDialog('edit', row)"
-            >
+            <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
               {{ $t('Base.edit') }}
             </el-button>
-            <el-button
-              type="dashed danger"
-              size="mini"
-              @click="handleDelete(row)"
-            >
+            <el-button type="dashed danger" size="mini" @click="handleDelete(row)">
               {{ $t('Base.delete') }}
             </el-button>
           </template>
@@ -61,11 +51,7 @@
           label-position="top"
         >
           <el-col :span="12">
-            <el-form-item
-              class="mechanism-item"
-              prop="mechanism"
-              :label="$t('Modules.mechanism')"
-            >
+            <el-form-item class="mechanism-item" prop="mechanism" :label="$t('Modules.mechanism')">
               <emq-select
                 v-model="record.mechanism"
                 :field="{ list: mechanismOptions }"
@@ -84,26 +70,16 @@
           </el-col>
           <el-col v-if="oper !== 'view'" :span="12">
             <el-form-item prop="password" :label="$t('Base.password')">
-              <el-input
-                v-model="record.password"
-                type="password"
-                show-password
-              ></el-input>
+              <el-input v-model="record.password" type="password" show-password></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="salt" label="salt">
-              <el-input
-                v-model="record.salt"
-                :readonly="oper === 'view'"
-              ></el-input>
+              <el-input v-model="record.salt" :readonly="oper === 'view'"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item
-              prop="iteration_count"
-              :label="$t('Modules.iterationCount')"
-            >
+            <el-form-item prop="iteration_count" :label="$t('Modules.iterationCount')">
               <el-input
                 v-model.number="record.iteration_count"
                 type="number"
@@ -113,11 +89,7 @@
           </el-col>
           <template v-if="oper === 'view'">
             <el-col :span="24">
-              <el-form-item
-                class="key-items"
-                prop="stored_key"
-                :label="$t('Modules.storedKey')"
-              >
+              <el-form-item class="key-items" prop="stored_key" :label="$t('Modules.storedKey')">
                 <el-input
                   v-model="record.stored_key"
                   :readonly="oper === 'view'"
@@ -133,11 +105,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item
-                class="key-items"
-                prop="server_key"
-                :label="$t('Modules.serverKey')"
-              >
+              <el-form-item class="key-items" prop="server_key" :label="$t('Modules.serverKey')">
                 <el-input
                   v-model="record.server_key"
                   :readonly="oper === 'view'"
@@ -157,9 +125,7 @@
       </el-row>
 
       <div v-if="oper !== 'view'" slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="handleClose">{{
-          $t('Base.cancel')
-        }}</el-button>
+        <el-button plain size="small" @click="handleClose">{{ $t('Base.cancel') }}</el-button>
         <el-button type="primary" size="small" @click="handleUpdate">{{
           $t('Base.confirm')
         }}</el-button>
@@ -169,13 +135,7 @@
 </template>
 
 <script>
-import {
-  getSaslList,
-  addSasl,
-  deleteSasl,
-  showSasl,
-  editSasl,
-} from '@/api/modules'
+import { getSaslList, addSasl, deleteSasl, showSasl, editSasl } from '@/api/modules'
 
 export default {
   name: 'AuthSasl',
@@ -200,9 +160,7 @@ export default {
         iteration_count: 4096,
       },
       rules: {
-        mechanism: [
-          { required: true, message: this.$t('General.pleaseChoose') },
-        ],
+        mechanism: [{ required: true, message: this.$t('General.pleaseChoose') }],
         username: [{ required: true, message: this.$t('General.pleaseEnter') }],
         password: [{ required: true, message: this.$t('General.pleaseEnter') }],
         salt: [{ required: true, message: this.$t('General.pleaseEnter') }],

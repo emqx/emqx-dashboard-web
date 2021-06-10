@@ -9,11 +9,11 @@
         </div>
       </div>
       <div class="page-header-top-start">
-            <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
-              <i class="icon el-icon-position"></i>
-              {{ $t('Schemas.quickStart') }}
-            </a>
-          </div>
+        <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
+          <i class="icon el-icon-position"></i>
+          {{ $t('Schemas.quickStart') }}
+        </a>
+      </div>
     </page-header>
 
     <div class="app-wrapper">

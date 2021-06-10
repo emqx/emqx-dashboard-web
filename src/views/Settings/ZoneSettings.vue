@@ -1,24 +1,14 @@
 <template>
   <el-card shadow="never" class="zone-settings emq-list-card">
     <el-tabs v-model="settingType" :before-leave="handleBeforeLeave">
-      <el-tab-pane
-        v-for="(item, index) in zoneList"
-        :key="index"
-        label=""
-        :name="item.name"
-      >
+      <el-tab-pane v-for="(item, index) in zoneList" :key="index" label="" :name="item.name">
         <div slot="label" size="mini" class="label-box">
           {{ item.name }}
           <span
             :class="item.name === settingType ? 'delete-icon' : 'hide-delete'"
             @click="deleteZone(item.name)"
           >
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              circle
-              size="mini"
-            ></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle size="mini"></el-button>
           </span>
         </div>
         <config-detail
@@ -35,12 +25,7 @@
       </el-tab-pane>
       <el-tab-pane label="" name="addZone">
         <span slot="label" size="mini">
-          <el-button
-            type="success"
-            icon="el-icon-plus"
-            circle
-            size="mini"
-          ></el-button>
+          <el-button type="success" icon="el-icon-plus" circle size="mini"></el-button>
         </span>
         <config-detail
           v-if="settingType === 'addZone'"
@@ -57,12 +42,7 @@
 </template>
 
 <script>
-import {
-  loadZoneConfigs,
-  updateOneConfig,
-  addOneConfig,
-  deleteOneZone,
-} from '../../api/settings'
+import { loadZoneConfigs, updateOneConfig, addOneConfig, deleteOneZone } from '../../api/settings'
 import ConfigDetail from './components/ConfigDetail'
 
 export default {
@@ -105,9 +85,7 @@ export default {
             },
           )
           if (status === 'confirm') {
-            const child = this.$refs[oldName].length
-              ? this.$refs[oldName][0]
-              : this.$refs[oldName]
+            const child = this.$refs[oldName].length ? this.$refs[oldName][0] : this.$refs[oldName]
             child.cancel(false)
             return true
           }

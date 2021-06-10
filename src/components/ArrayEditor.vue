@@ -7,24 +7,12 @@
         size="mini"
         :header-cell-class-name="addHeaderCellClassName"
       >
-        <el-table-column
-          :label="item"
-          v-for="(item, index) in headers"
-          :key="index"
-        >
+        <el-table-column :label="item" v-for="(item, index) in headers" :key="index">
           <template slot="header">
             <span class="my-header">
               {{ item }}
-              <el-popover
-                v-if="descriptionDic[item]"
-                width="220"
-                trigger="hover"
-                placement="top"
-              >
-                <div
-                  class="emq-popover-content"
-                  v-html="descriptionDic[item]"
-                ></div>
+              <el-popover v-if="descriptionDic[item]" width="220" trigger="hover" placement="top">
+                <div class="emq-popover-content" v-html="descriptionDic[item]"></div>
                 <i slot="reference" class="el-icon-question"></i>
               </el-popover>
             </span>

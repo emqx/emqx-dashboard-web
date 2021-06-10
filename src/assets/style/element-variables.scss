@@ -11,8 +11,7 @@ $--fade-transition: opacity 300ms cubic-bezier(0.23, 1, 0.32, 1) !default;
 $--fade-linear-transition: opacity 200ms linear !default;
 $--md-fade-transition: transform 300ms cubic-bezier(0.23, 1, 0.32, 1),
   opacity 300ms cubic-bezier(0.23, 1, 0.32, 1) !default;
-$--border-transition-base: border-color 0.2s
-  cubic-bezier(0.645, 0.045, 0.355, 1) !default;
+$--border-transition-base: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1) !default;
 $--color-transition-base: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1) !default;
 
 /* Color
@@ -27,51 +26,15 @@ $--color-hover: #59cf9a !default;
 $--color-white: #ffffff !default;
 /// color|1|Background Color|4
 $--color-black: #000000 !default;
-$--color-primary-light-1: mix(
-  $--color-white,
-  $--color-primary,
-  10%
-) !default; /* 53a8ff */
-$--color-primary-light-2: mix(
-  $--color-white,
-  $--color-primary,
-  20%
-) !default; /* 66b1ff */
-$--color-primary-light-3: mix(
-  $--color-white,
-  $--color-primary,
-  30%
-) !default; /* 79bbff */
-$--color-primary-light-4: mix(
-  $--color-white,
-  $--color-primary,
-  40%
-) !default; /* 8cc5ff */
-$--color-primary-light-5: mix(
-  $--color-white,
-  $--color-primary,
-  50%
-) !default; /* a0cfff */
-$--color-primary-light-6: mix(
-  $--color-white,
-  $--color-primary,
-  60%
-) !default; /* b3d8ff */
-$--color-primary-light-7: mix(
-  $--color-white,
-  $--color-primary,
-  70%
-) !default; /* c6e2ff */
-$--color-primary-light-8: mix(
-  $--color-white,
-  $--color-primary,
-  80%
-) !default; /* d9ecff */
-$--color-primary-light-9: mix(
-  $--color-white,
-  $--color-primary,
-  90%
-) !default; /* ecf5ff */
+$--color-primary-light-1: mix($--color-white, $--color-primary, 10%) !default; /* 53a8ff */
+$--color-primary-light-2: mix($--color-white, $--color-primary, 20%) !default; /* 66b1ff */
+$--color-primary-light-3: mix($--color-white, $--color-primary, 30%) !default; /* 79bbff */
+$--color-primary-light-4: mix($--color-white, $--color-primary, 40%) !default; /* 8cc5ff */
+$--color-primary-light-5: mix($--color-white, $--color-primary, 50%) !default; /* a0cfff */
+$--color-primary-light-6: mix($--color-white, $--color-primary, 60%) !default; /* b3d8ff */
+$--color-primary-light-7: mix($--color-white, $--color-primary, 70%) !default; /* c6e2ff */
+$--color-primary-light-8: mix($--color-white, $--color-primary, 80%) !default; /* d9ecff */
+$--color-primary-light-9: mix($--color-white, $--color-primary, 90%) !default; /* ecf5ff */
 
 /// color|1|Functional Color|1
 $--color-success: #52c41a !default;
@@ -888,10 +851,7 @@ $--loading-fullscreen-spinner-size: 50px !default;
 /* Scrollbar
 --------------------------*/
 $--scrollbar-background-color: rgba($--color-text-secondary, 0.3) !default;
-$--scrollbar-hover-background-color: rgba(
-  $--color-text-secondary,
-  0.5
-) !default;
+$--scrollbar-hover-background-color: rgba($--color-text-secondary, 0.5) !default;
 
 /* Carousel
 --------------------------*/

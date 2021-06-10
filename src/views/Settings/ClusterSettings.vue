@@ -14,11 +14,7 @@
       >
         <el-col :span="12">
           <el-form-item :label="$t('Settings.clusterType')" prop="type">
-            <emq-select
-              v-model="record.type"
-              :disabled="true"
-              :field="{ options: clusterTypes }"
-            >
+            <emq-select v-model="record.type" :disabled="true" :field="{ options: clusterTypes }">
             </emq-select>
           </el-form-item>
         </el-col>
@@ -30,10 +26,7 @@
           <el-col :span="24">
             <el-form-item :label="$t('Settings.currentNode')">
               <div v-for="(node, index) in currentNodes" :key="index">
-                <span
-                  :class="['join-status', node.joined ? 'is-join' : 'not-join']"
-                  :span="14"
-                >
+                <span :class="['join-status', node.joined ? 'is-join' : 'not-join']" :span="14">
                   {{ node.name }}
                 </span>
                 <a
@@ -45,11 +38,7 @@
                   {{ $t('Overview.view') }}
                 </a>
                 <a
-                  v-if="
-                    node.joined &&
-                    currentNodes.length > 1 &&
-                    record.type === 'manual'
-                  "
+                  v-if="node.joined && currentNodes.length > 1 && record.type === 'manual'"
                   class="node-oper danger"
                   href="javascript:;"
                   @click="removeNode(node.name)"
@@ -57,10 +46,7 @@
                   {{ $t('Settings.remove') }}
                 </a>
                 <!-- static -->
-                <span
-                  v-else-if="!node.joined && record.type === 'static'"
-                  class="not-join__desc"
-                >
+                <span v-else-if="!node.joined && record.type === 'static'" class="not-join__desc">
                   {{ $t('Settings.notJoined') }}
                 </span>
               </div>
@@ -70,10 +56,7 @@
           <template v-if="record.type === 'manual'">
             <el-col :span="12">
               <el-form-item prop="config.node">
-                <el-input
-                  v-model="record.config.node"
-                  :placeholder="$t('Settings.nodeRequired')"
-                >
+                <el-input v-model="record.config.node" :placeholder="$t('Settings.nodeRequired')">
                 </el-input>
               </el-form-item>
             </el-col>
@@ -89,10 +72,7 @@
         <template v-if="record.type === 'dns'">
           <el-col :span="12">
             <el-form-item :label="$t('Settings.dnsName')" prop="config.name">
-              <el-input
-                v-model="record.config.name"
-                :disabled="true"
-              ></el-input>
+              <el-input v-model="record.config.name" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
@@ -110,28 +90,19 @@
         <template v-if="record.type === 'mcast'">
           <el-col :span="12">
             <el-form-item :label="$t('Settings.addr')" prop="config.addr">
-              <el-input
-                v-model="record.config.addr"
-                :disabled="true"
-              ></el-input>
+              <el-input v-model="record.config.addr" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Settings.ports')" prop="config.ports">
-              <el-input
-                v-model="record.config.ports"
-                :disabled="true"
-              ></el-input>
+              <el-input v-model="record.config.ports" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Settings.iface')" prop="config.iface">
-              <el-input
-                v-model="record.config.iface"
-                :disabled="true"
-              ></el-input>
+              <el-input v-model="record.config.iface" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
@@ -143,10 +114,7 @@
           <el-col :span="12" class="form-item-desc"> </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Settings.loop')" prop="config.loop">
-              <el-input
-                v-model="record.config.loop"
-                :disabled="true"
-              ></el-input>
+              <el-input v-model="record.config.loop" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
@@ -156,19 +124,13 @@
         <template v-if="record.type === 'etcd'">
           <el-col :span="12">
             <el-form-item :label="$t('Settings.server')" prop="config.server">
-              <el-input
-                v-model="record.config.server"
-                :disabled="true"
-              ></el-input>
+              <el-input v-model="record.config.server" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Settings.prefix')" prop="config.prefix">
-              <el-input
-                v-model="record.config.prefix"
-                :disabled="true"
-              ></el-input>
+              <el-input v-model="record.config.prefix" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc">
@@ -176,10 +138,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="TTL" prop="config.node_ttl">
-              <el-input
-                v-model="record.config.node_ttl"
-                :disabled="true"
-              ></el-input>
+              <el-input v-model="record.config.node_ttl" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
@@ -188,75 +147,42 @@
         <!-- k8s -->
         <template v-if="record.type === 'k8s'">
           <el-col :span="12">
-            <el-form-item
-              :label="$t('Settings.apiserver')"
-              prop="config.apiserver"
-            >
-              <el-input
-                v-model="record.config.apiserver"
-                :disabled="true"
-              ></el-input>
+            <el-form-item :label="$t('Settings.apiserver')" prop="config.apiserver">
+              <el-input v-model="record.config.apiserver" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
           <el-col :span="12">
-            <el-form-item
-              :label="$t('Settings.service_name')"
-              prop="config.service_name"
-            >
-              <el-input
-                v-model="record.config.service_name"
-                :disabled="true"
-              ></el-input>
+            <el-form-item :label="$t('Settings.service_name')" prop="config.service_name">
+              <el-input v-model="record.config.service_name" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
           <el-col :span="12">
-            <el-form-item
-              :label="$t('Settings.address_type')"
-              prop="config.address_type"
-            >
-              <el-input
-                v-model="record.config.address_type"
-                :disabled="true"
-              ></el-input>
+            <el-form-item :label="$t('Settings.address_type')" prop="config.address_type">
+              <el-input v-model="record.config.address_type" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc">
             {{ $t('Settings.address_type_desc') }}
           </el-col>
           <el-col :span="12">
-            <el-form-item
-              :label="$t('Settings.app_name')"
-              prop="config.app_name"
-            >
-              <el-input
-                v-model="record.config.app_name"
-                :disabled="true"
-              ></el-input>
+            <el-form-item :label="$t('Settings.app_name')" prop="config.app_name">
+              <el-input v-model="record.config.app_name" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc">
             {{ $t('Settings.app_name_desc') }}
           </el-col>
           <el-col :span="12">
-            <el-form-item
-              :label="$t('Settings.namespace')"
-              prop="config.namespace"
-            >
-              <el-input
-                v-model="record.config.namespace"
-                :disabled="true"
-              ></el-input>
+            <el-form-item :label="$t('Settings.namespace')" prop="config.namespace">
+              <el-input v-model="record.config.namespace" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Settings.suffix')" prop="config.suffix">
-              <el-input
-                v-model="record.config.suffix"
-                :disabled="true"
-              ></el-input>
+              <el-input v-model="record.config.suffix" :disabled="true"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="form-item-desc"> </el-col>
@@ -267,12 +193,7 @@
 </template>
 
 <script>
-import {
-  loadCluster,
-  loadNodes,
-  inviteNode,
-  forceLeaveNode,
-} from '../../api/cluster'
+import { loadCluster, loadNodes, inviteNode, forceLeaveNode } from '../../api/cluster'
 
 export default {
   name: 'ClusterSettings',
@@ -328,13 +249,9 @@ export default {
       })
     },
     removeNode(name) {
-      this.$confirm(
-        this.$t('Settings.removeConfirm'),
-        this.$t('Base.warning'),
-        {
-          type: 'warning',
-        },
-      )
+      this.$confirm(this.$t('Settings.removeConfirm'), this.$t('Base.warning'), {
+        type: 'warning',
+      })
         .then(async () => {
           const res = await forceLeaveNode(name)
           if (res) {
@@ -351,9 +268,7 @@ export default {
       }
       const unique = (arr) => [...new Set(arr)]
       const allNodes = [...currentNodes, ...seeds]
-      const diff = allNodes.filter(
-        (item) => allNodes.indexOf(item) === allNodes.lastIndexOf(item),
-      )
+      const diff = allNodes.filter((item) => allNodes.indexOf(item) === allNodes.lastIndexOf(item))
       const uniqueNodes = unique(allNodes)
 
       return uniqueNodes.map((node) => {

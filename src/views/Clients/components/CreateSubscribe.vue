@@ -9,13 +9,7 @@
     @close="close"
     @open="open"
   >
-    <el-form
-      ref="record"
-      :model="record"
-      :rules="rules"
-      size="small"
-      label-position="top"
-    >
+    <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
       <el-form-item v-if="!clientId" prop="clientid" label="Client ID">
         <el-input v-model="record.clientid" placeholder="Client ID"></el-input>
       </el-form-item>
@@ -23,20 +17,13 @@
         <el-input v-model="record.topic" placeholder="Topic"></el-input>
       </el-form-item>
       <el-form-item prop="qos" label="QoS">
-        <emq-select
-          v-model="record.qos"
-          :field="{ list: [0, 1, 2] }"
-        ></emq-select>
+        <emq-select v-model="record.qos" :field="{ list: [0, 1, 2] }"></emq-select>
       </el-form-item>
     </el-form>
 
     <div slot="footer" class="dialog-align-footer">
-      <el-button plain size="small" @click="close">{{
-        $t('Base.cancel')
-      }}</el-button>
-      <el-button type="primary" size="small" @click="handleAdd">{{
-        $t('Base.add')
-      }}</el-button>
+      <el-button plain size="small" @click="close">{{ $t('Base.cancel') }}</el-button>
+      <el-button type="primary" size="small" @click="handleAdd">{{ $t('Base.add') }}</el-button>
     </div>
   </el-dialog>
 </template>

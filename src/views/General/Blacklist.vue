@@ -3,48 +3,28 @@
     <page-header :back-title="$t('General.blacklist')">
       <div class="page-header-content-view">
         <div class="content">
-            {{ $t('General.blacklistTips') }}
-            
+          {{ $t('General.blacklistTips') }}
         </div>
       </div>
       <div class="page-header-top-start">
         <a :href="docs.tutorial" target="_blank" class="link-item">
           <i class="icon el-icon-document"></i>
-              {{ $t('General.authDocs') }}
-            </a>
+          {{ $t('General.authDocs') }}
+        </a>
       </div>
     </page-header>
 
     <div class="app-wrapper">
       <el-card shadow="never" class="emq-list-card">
         <div class="emq-table-header">
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-plus"
-            @click="showDialog"
-          >
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog">
             {{ $t('Base.create') }}
           </el-button>
         </div>
         <el-table :data="tableData" class="data-list">
-          <el-table-column
-            prop="who"
-            :label="$t('General.who')"
-          >
-          </el-table-column>
-          <el-table-column
-            prop="as"
-            :label="$t('General.as')"
-            sortable
-          >
-          </el-table-column>
-          <el-table-column
-            prop="reason"
-            min-width="120px"
-            :label="$t('General.reason')"
-            sortable
-          >
+          <el-table-column prop="who" :label="$t('General.who')"> </el-table-column>
+          <el-table-column prop="as" :label="$t('General.as')" sortable> </el-table-column>
+          <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')" sortable>
           </el-table-column>
           <el-table-column
             prop="until"
@@ -55,11 +35,7 @@
           </el-table-column>
           <el-table-column prop="oper" :label="$t('Base.operation')">
             <template slot-scope="{ row }">
-              <el-button
-                plain
-                type="danger"
-                size="mini"
-                @click="deleteConfirm(row)"
+              <el-button plain type="danger" size="mini" @click="deleteConfirm(row)"
                 >{{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -93,8 +69,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item prop="as" :label="$t('General.as')">
-              <emq-select v-model="record.as" :field="{ options: asOptions }">
-              </emq-select>
+              <emq-select v-model="record.as" :field="{ options: asOptions }"> </emq-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -122,12 +97,8 @@
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="closeDialog">{{
-          $t('Base.cancel')
-        }}</el-button>
-        <el-button type="primary" size="small" @click="save">{{
-          $t('Base.confirm')
-        }}</el-button>
+        <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
+        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -257,6 +228,5 @@ export default {
 
 <style lang="scss" scoped>
 .blacklist {
-
 }
 </style>

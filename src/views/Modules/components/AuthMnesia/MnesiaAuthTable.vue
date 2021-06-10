@@ -61,27 +61,14 @@
     </div>
     <el-row :gutter="20">
       <el-col :span="12">
-        <el-table
-          :data="clientidTableData"
-          class="data-list"
-          v-loading="idListLoading"
-        >
-          <el-table-column prop="clientid" :label="$t('Clients.clientId')">
-          </el-table-column>
+        <el-table :data="clientidTableData" class="data-list" v-loading="idListLoading">
+          <el-table-column prop="clientid" :label="$t('Clients.clientId')"> </el-table-column>
           <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
-              <el-button
-                type="dashed"
-                size="mini"
-                @click="showEdit(row, 'clientid')"
-              >
+              <el-button type="dashed" size="mini" @click="showEdit(row, 'clientid')">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="handleDelete(row, 'clientid')"
-              >
+              <el-button type="dashed danger" size="mini" @click="handleDelete(row, 'clientid')">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -103,27 +90,14 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <el-table
-          :data="usernameTableData"
-          class="data-list"
-          v-loading="nameListLoading"
-        >
-          <el-table-column prop="username" :label="$t('Clients.username')">
-          </el-table-column>
+        <el-table :data="usernameTableData" class="data-list" v-loading="nameListLoading">
+          <el-table-column prop="username" :label="$t('Clients.username')"> </el-table-column>
           <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
-              <el-button
-                type="dashed"
-                size="mini"
-                @click="showEdit(row, 'username')"
-              >
+              <el-button type="dashed" size="mini" @click="showEdit(row, 'username')">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button
-                type="dashed danger"
-                size="mini"
-                @click="handleDelete(row, 'username')"
-              >
+              <el-button type="dashed danger" size="mini" @click="handleDelete(row, 'username')">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -162,33 +136,21 @@
           <el-col :span="24">
             <el-form-item
               prop="login"
-              :label="
-                operType === 'clientid'
-                  ? $t('Clients.clientId')
-                  : $t('Clients.username')
-              "
+              :label="operType === 'clientid' ? $t('Clients.clientId') : $t('Clients.username')"
             >
               <el-input v-model="editRecord.login" disabled></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item prop="password" label="Password">
-              <el-input
-                v-model="editRecord.password"
-                type="password"
-              ></el-input>
+              <el-input v-model="editRecord.password" type="password"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button
-          plain
-          size="small"
-          class="cache-btn"
-          @click="editVisible = false"
-        >
+        <el-button plain size="small" class="cache-btn" @click="editVisible = false">
           {{ $t('Base.cancel') }}
         </el-button>
         <el-button type="primary" size="small" @click="handleEdit">

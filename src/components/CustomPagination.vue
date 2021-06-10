@@ -1,18 +1,10 @@
 <template>
   <div class="custom-pagination">
-    <a
-      :class="['prev', page === 1 ? 'disabled' : '']"
-      href="javascript:;"
-      @click="prev"
-    >
+    <a :class="['prev', page === 1 ? 'disabled' : '']" href="javascript:;" @click="prev">
       <i class="el-icon-arrow-left"></i>
       {{ $t('Base.prev') }}
     </a>
-    <a
-      :class="['next', hasnext ? '' : 'disabled']"
-      href="javascript:;"
-      @click="next"
-    >
+    <a :class="['next', hasnext ? '' : 'disabled']" href="javascript:;" @click="next">
       {{ $t('Base.next') }}
       <i class="el-icon-arrow-right"></i>
     </a>

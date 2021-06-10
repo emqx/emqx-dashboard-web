@@ -1,19 +1,7 @@
 <template>
-  <div
-    class="nav-tabs"
-    :style="{ left: !$store.state.leftBarCollapse ? '201px' : '80px' }"
-  >
-    <el-scrollbar
-      ref="scrollContainer"
-      :vertical="false"
-      class="scroll-container"
-    >
-      <el-button
-        plain
-        size="mini"
-        :class="{ active: isIndex }"
-        @click="$router.push('/')"
-      >
+  <div class="nav-tabs" :style="{ left: !$store.state.leftBarCollapse ? '201px' : '80px' }">
+    <el-scrollbar ref="scrollContainer" :vertical="false" class="scroll-container">
+      <el-button plain size="mini" :class="{ active: isIndex }" @click="$router.push('/')">
         {{ $t('Base.homePage') }}
       </el-button>
       <el-button
@@ -32,9 +20,7 @@
         </template>
         <template
           v-else-if="
-            tab.name === 'ruleId' ||
-            tab.name === 'resourceId' ||
-            tab.name === 'schemaName'
+            tab.name === 'ruleId' || tab.name === 'resourceId' || tab.name === 'schemaName'
           "
         >
           {{ tab.url | getParamsId }}
@@ -124,9 +110,7 @@ export default {
         return
       }
       name = this.getTabName(name, oper)
-      const tabIndex = this.tabs.findIndex(
-        ($) => $.url === fullPath || $.name === name,
-      )
+      const tabIndex = this.tabs.findIndex(($) => $.url === fullPath || $.name === name)
       if (tabIndex === -1) {
         const tab = { name, url: fullPath }
         this.$store.dispatch('ADD_NAV_TABS', tab)

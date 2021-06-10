@@ -51,18 +51,12 @@
                 <el-input v-model="record.id" :disabled="isEdit"></el-input>
               </el-form-item>
 
-              <el-form-item
-                prop="description"
-                :label="$t('RuleEngine.resourceDes')"
-              >
+              <el-form-item prop="description" :label="$t('RuleEngine.resourceDes')">
                 <el-input v-model="record.description"></el-input>
               </el-form-item>
 
               <el-form-item :label="$t('RuleEngine.sqlTest')">
-                <el-switch
-                  v-model="showTest"
-                  @change="initTestFormItem"
-                ></el-switch>
+                <el-switch v-model="showTest" @change="initTestFormItem"></el-switch>
                 <el-popover width="220" placement="right" trigger="hover">
                   {{ $t('RuleEngine.inputMetadata') }}
                   <i slot="reference" class="icon el-icon-question"></i>
@@ -80,8 +74,7 @@
                     }"
                     v-bind="{ label: k, prop: `ctx.${k}` }"
                   >
-                    <el-input v-if="k !== 'payload'" v-model="record.ctx[k]">
-                    </el-input>
+                    <el-input v-if="k !== 'payload'" v-model="record.ctx[k]"> </el-input>
                     <template v-else>
                       <!-- <div class="monaco-container monaco-payload" :style="{ height: `${payloadEditorHeight}px` }"> -->
                       <monaco
@@ -110,10 +103,7 @@
                     </el-button>
                   </el-form-item>
 
-                  <el-form-item
-                    class="code-editor__item"
-                    :label="$t('RuleEngine.testOutput')"
-                  >
+                  <el-form-item class="code-editor__item" :label="$t('RuleEngine.testOutput')">
                     <!-- <div class="monaco-container monaco-test-output" style="height: 200px"> -->
                     <monaco
                       id="testOutput"
@@ -147,17 +137,14 @@
         </div>
 
         <div class="rule-action-wrapper">
-          <rule-actions ref="ruleAction" v-model="record.actions">
-          </rule-actions>
+          <rule-actions ref="ruleAction" v-model="record.actions"> </rule-actions>
         </div>
       </el-card>
     </div>
     <div
       class="button-group__center rule-create-operation"
       :style="{
-        width: $store.state.leftBarCollapse
-          ? ' calc(100% - 80px)'
-          : ' calc(100% - 200px)',
+        width: $store.state.leftBarCollapse ? ' calc(100% - 80px)' : ' calc(100% - 200px)',
       }"
     >
       <el-button type="default" size="medium" @click="$router.back()">
@@ -171,20 +158,9 @@
 </template>
 
 <script>
-import {
-  loadRuleEvents,
-  SQLTest,
-  createRule,
-  loadRuleDetails,
-  updateRule,
-} from '@/api/rules'
+import { loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule } from '@/api/rules'
 import { loadTopics } from '@/api/server'
-import {
-  sqlExampleFormatter,
-  ruleNewSqlParser,
-  ruleOldSqlCheck,
-  verifyID,
-} from '@/common/utils'
+import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck, verifyID } from '@/common/utils'
 import Monaco from '@/components/Monaco'
 // import StretchHeight from '@/components/StretchHeight'
 import RuleActions from './components/RuleActions'
@@ -313,19 +289,13 @@ export default {
       this.sqlParse(val, checkValues[0])
     },
     sqlParse(sql, oldEvent) {
-      this.$confirm(
-        this.$t('RuleEngine.parse_confirm'),
-        this.$t('Base.warning'),
-        {
-          confirmButtonText: this.$t('Base.confirm'),
-          cancelButtonText: this.$t('Base.cancel'),
-          type: 'warning',
-        },
-      )
+      this.$confirm(this.$t('RuleEngine.parse_confirm'), this.$t('Base.warning'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
         .then(() => {
-          this.record.rawsql = sqlExampleFormatter(
-            ruleNewSqlParser(sql, oldEvent),
-          )
+          this.record.rawsql = sqlExampleFormatter(ruleNewSqlParser(sql, oldEvent))
         })
         .catch(() => {
           this.needCheckSql = false
@@ -420,9 +390,7 @@ export default {
             if (error === 'SQL Not Match') {
               this.testOutPut = this.$t('RuleEngine.resultIsEmpty')
             } else {
-              this.testOutPut = `${this.$t(
-                'RuleEngine.checkForErrors',
-              )}:\n\n${error}`
+              this.testOutPut = `${this.$t('RuleEngine.checkForErrors')}:\n\n${error}`
             }
           })
       })
