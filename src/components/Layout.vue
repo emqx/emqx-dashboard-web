@@ -2,7 +2,7 @@
   <!-- 左侧 -->
   <div>
     <el-container>
-      <el-aside :style="{ width: elAsideWidth }">
+      <el-aside :style="{ width: leftBarCollapse ? '80px' : '200px' }">
         <router-link to="/">
           <div :class="['logo', leftBarCollapse ? 'logo-colap' : '']">
             <img class="logo-img" src="../assets/emq_logo.svg" alt="logo" />
@@ -12,10 +12,7 @@
       </el-aside>
       <el-container class="layout" style="min-height: 100vh">
         <el-main style="margin: 0; padding: 0" :style="{ marginLeft: elMainStyle }">
-          <el-header
-            class="content-header"
-            :style="{ left: elMainStyle, height: 'auto' }"
-          >
+          <el-header class="content-header" :style="{ left: elMainStyle, height: 'auto' }">
             <nav-header></nav-header>
             <!-- <nav-tabs></nav-tabs> -->
             <el-menu
@@ -79,9 +76,9 @@ export default {
     leftBarCollapse() {
       return this.$store.state.leftBarCollapse
     },
-    elAsideWidth() {
-      return this.$store.state.leftBarCollapse ? '80px' : '200px'
-    },
+    // elAsideWidth() {
+    //   return this.$store.state.leftBarCollapse ? '80px' : '200px'
+    // },
     elMainStyle() {
       return !this.leftBarCollapse ? '200px' : '80px'
     },

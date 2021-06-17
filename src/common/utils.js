@@ -27,9 +27,9 @@ export function getBasicAuthInfo() {
  * @param null
  * @return null
  */
-export function toLogin() {
+export function toLogin(path) {
   store.dispatch('UPDATE_USER_INFO', { logOut: true })
-  router.push({ path: '/login', query: { to: router.fullPath } })
+  router.push({ path: '/login', query: { to: path ? path : undefined } })
 }
 
 /**

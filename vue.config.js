@@ -23,7 +23,7 @@ const { NODE_ENV, VUE_APP_BUILD_ENV = 'base' } = process.env
 
 module.exports = {
   devServer: {
-    port: 3001,
+    port: 4000,
     disableHostCheck: true,
     // before,
     proxy: {
