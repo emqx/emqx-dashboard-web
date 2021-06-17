@@ -167,4 +167,8 @@ export default {
     zh: '操作',
     en: 'Operations',
   },
+  logining: {
+    zh: '登录中,请稍候...',
+    en: 'Logining.Please wait...',
+  },
 }

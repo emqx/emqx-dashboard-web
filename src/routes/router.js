@@ -19,15 +19,15 @@ let routes = [
     },
     component: () => import('@/views/Base/Login'),
   },
-  {
-    path: '/login/:username/:password',
-    name: 'login-no-auth',
-    meta: {
-      hideKey: 'base',
-      authRequired: false,
-    },
-    component: () => import('@/views/Base/Login'),
-  },
+  // {
+  //   path: '/login/:username/:password',
+  //   name: 'login-no-auth',
+  //   meta: {
+  //     hideKey: 'base',
+  //     authRequired: false,
+  //   },
+  //   component: () => import('@/views/Base/Login'),
+  // },
   {
     path: '/',
     redirect: '/monitor',

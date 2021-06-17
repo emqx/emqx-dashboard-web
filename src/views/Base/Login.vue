@@ -97,24 +97,10 @@ export default {
     }
   },
 
-  computed: {
-    // lang() {
-    //   return this.$store.state.lang
-    // },
-  },
+  computed: {},
 
   created() {
-    // if (store.state.config.baseURL === '/dashboard') {
-    //   this.fromCloud = true
-    // }
-    // const { lang } = this.$route.query
-    // if (['en', 'zh'].indexOf(lang) !== -1 && this.language !== lang && this.fromCloud) {
-    //   document.querySelector('html').setAttribute('lang', lang)
-    //   localStorage.setItem('language', lang)
-    //   this.$i18n.locale = lang
-    // }
-    this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
-    this.autoLogin()
+    this.login(true)
   },
   mounted() {
     this.adjustLayout()
@@ -139,9 +125,14 @@ export default {
         : (this.loginKeepHeight = false)
       // wWidth >lWidth?(this.loginKeepWidth=true):(this.loginKeepWidth=false)
     },
-    login() {
-      const { username, password, remember } = this.record
+    login(auto = false) {
+      let userInfo
+      if (auto) {
+        userInfo = localStorage.getItem('user') || sessionStorage.getItem('user')
+      }
+      const { username, password, remember } = JSON.parse(userInfo) || this.record
       this.logining = true
+      auto && this.$message({ message: this.$t('Base.logining') })
 
       auth({
         username,
@@ -156,6 +147,7 @@ export default {
             password,
             remember,
           })
+
           setTimeout(() => {
             const { to = '/' } = this.$route.query
             this.$router.replace({
@@ -171,7 +163,7 @@ export default {
             this.fullLoading.close()
           }
           this.isNeedAuth = true
-          this.$message.error({ message: error, type: 'error', duration: 6000 })
+          this.$message({ message: error, type: 'error', duration: 6000 })
           this.logining = false
         })
     },
@@ -180,23 +172,6 @@ export default {
       if (!(await awaitWrap(this.$refs.record.validate()))) {
         return
       }
-      this.login()
-    },
-
-    autoLogin() {
-      const { username, password } = this.$route.params
-      this.isNeedAuth = !(username && password)
-      if (this.isNeedAuth) {
-        return
-      }
-      this.fullLoading = this.$loading({
-        lock: true,
-        text: this.$t('Base.loging'),
-        spinner: 'el-icon-loading',
-        background: '#fff',
-      })
-      this.record.username = username
-      this.record.password = password
       this.login()
     },
   },
