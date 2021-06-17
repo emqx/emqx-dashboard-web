@@ -138,11 +138,7 @@
 
     <polyline-cards></polyline-cards>
 
-    <el-card
-      shadow="never"
-      class="license-card"
-      :loading="pageLoading"
-    >
+    <el-card shadow="never" class="license-card" :loading="pageLoading">
       <div class="emq-title">
         {{ $t('Overview.license') }}
       </div>
@@ -393,14 +389,11 @@ export default {
     formatConnection() {
       const { connection } = this.currentMetrics
       const { max_connections } = this.license
-      return `${this._formatNumber(connection)}/${this._formatNumber(max_connections)}`
+      return `${this._formatNumber(connection)} / ${this._formatNumber(max_connections)}`
     },
     _formatNumber(num) {
-      if (num > 10000) {
-        const value = num / 1000
-        return `${parseInt(value * 100, 10) / 100}K`
-      }
-      return num
+      let number = String(parseInt(num))
+      return number.replace(/(\d{1,3})(?=(\d{3})+($|\.))/g, '$1,')
     },
     async loadLicenseData() {
       this.license = await loadLicenseInfo()
@@ -583,15 +576,14 @@ export default {
 
       .content {
         margin-top: 6px;
+        width: 90%;
       }
 
       .el-progress {
         .el-progress__text {
           display: block;
           padding-left: 0;
-          margin-top: 6px;
-          margin-left: 0;
-          font-size: 12px !important;
+          margin-top: 9px;
         }
       }
     }
