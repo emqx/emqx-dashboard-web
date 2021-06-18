@@ -42,7 +42,7 @@ function getCollapse() {
 export default new Vuex.Store({
   state: {
     loading: false,
-    user: JSON.parse(localStorage.user || sessionStorage.user || '{}') || {},
+    user: JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user')) || {},
     lang: getDefaultLanguage(),
     leftBarCollapse: getCollapse(),
     alertCount: 0,

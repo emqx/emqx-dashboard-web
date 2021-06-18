@@ -19,22 +19,19 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+  // console.log(to,from)
   const { fullPath } = to
-  const { authRequired = false, before, hideLeftBar = false } = to?.matched[0]?.meta || to.meta
-  const { hideLeftBar: hideLeftBarForm = false } = from?.matched[0]?.meta || from.meta
+  const { authRequired = false } = to?.matched[0]?.meta || to.meta
+  // const { hideLeftBar: hideLeftBarForm = false } = from?.matched[0]?.meta || from.meta
 
   if (authRequired && !getBasicAuthInfo().username) {
     toLogin(fullPath)
-  } else {
-    if (before) {
-      before()
-    }
-    // 当前路由隐藏左侧菜单
-    if (hideLeftBarForm !== hideLeftBar) {
-      store.dispatch('SET_LEFT_BAR_COLLAPSE', !hideLeftBar)
-    }
-    next()
   }
+  next()
+})
+
+window.addEventListener('popstate', (e) => {
+  console.log(e.state)
 })
 
 export default router

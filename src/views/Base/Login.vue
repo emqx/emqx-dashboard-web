@@ -6,7 +6,7 @@
       loginKeepWidth && 'login-align-width',
     ]"
   >
-    <el-card shadow="never" v-if="isNeedAuth" class="login-card emq-list-card" id="login">
+    <el-card shadow="never" class="login-card emq-list-card" id="login">
       <div class="split-wrapper">
         <div class="logo-wrapper"></div>
 
@@ -28,13 +28,18 @@
             @keyup.enter.native="nativeLogin"
           >
             <el-form-item prop="username">
-              <el-input v-model="record.username" :placeholder="$t('Base.userName')"></el-input>
+              <el-input
+                v-model="record.username"
+                :placeholder="$t('Base.userName')"
+                tabindex="1"
+              ></el-input>
             </el-form-item>
             <el-form-item prop="password">
               <el-input
                 v-model="record.password"
                 type="password"
                 :placeholder="$t('Base.password')"
+                tabindex="2"
               ></el-input>
             </el-form-item>
 
@@ -54,17 +59,12 @@
 
 <script>
 import { auth } from '@/api/common'
-import { awaitWrap } from '@/common/utils'
-import store from '@/stores'
-// import { ElMessage } from 'element-ui'
+import { awaitWrap, getBasicAuthInfo } from '@/common/utils'
 
 export default {
   name: 'Login',
-
   components: {},
-
   props: {},
-
   data() {
     return {
       record: {
@@ -89,9 +89,6 @@ export default {
           },
         ],
       },
-      isNeedAuth: true,
-      fullLoading: false,
-      // fromCloud: false,
       loginKeepHeight: false,
       loginKeepWidth: false,
     }
@@ -126,48 +123,39 @@ export default {
       // wWidth >lWidth?(this.loginKeepWidth=true):(this.loginKeepWidth=false)
     },
     login(auto = false) {
-      let userInfo
-      if (auto) {
-        userInfo = localStorage.getItem('user') || sessionStorage.getItem('user')
-      }
-      const { username, password, remember } = JSON.parse(userInfo) || this.record
-      this.logining = true
-      auto && this.$message({ message: this.$t('Base.logining') })
+      const { username, password, remember } = (auto && getBasicAuthInfo()) || this.record
+      auto && username && password && this.redirect()
 
-      auth({
-        username,
-        password,
-      })
-        .then((res) => {
-          if (!res) {
-            return
-          }
-          this.$store.dispatch('UPDATE_USER_INFO', {
-            username,
-            password,
-            remember,
-          })
-
-          setTimeout(() => {
-            const { to = '/' } = this.$route.query
-            this.$router.replace({
-              path: to,
-            })
-            if (!this.isNeedAuth) {
-              this.fullLoading.close()
+      if (!auto) {
+        this.logining = true
+        auth({
+          username,
+          password,
+        })
+          .then((res) => {
+            if (!res) {
+              return
             }
-          }, 500)
-        })
-        .catch((error) => {
-          if (!this.isNeedAuth) {
-            this.fullLoading.close()
-          }
-          this.isNeedAuth = true
-          this.$message({ message: error, type: 'error', duration: 6000 })
-          this.logining = false
-        })
-    },
+            this.$store.dispatch('UPDATE_USER_INFO', {
+              username,
+              password,
+              remember,
+            })
 
+            setTimeout(this.redirect, 200)
+          })
+          .catch((error) => {
+            this.$message({ message: error, type: 'error', duration: 6000 })
+            this.logining = false
+          })
+      }
+    },
+    redirect() {
+      const { to = '/' } = this.$route.query
+      this.$router.push({
+        path: to,
+      })
+    },
     async nativeLogin() {
       if (!(await awaitWrap(this.$refs.record.validate()))) {
         return
