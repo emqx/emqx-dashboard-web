@@ -152,7 +152,7 @@ export default {
     },
     redirect() {
       const { to = '/' } = this.$route.query
-      this.$router.push({
+      this.$router.replace({
         path: to,
       })
     },

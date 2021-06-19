@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '@/stores'
 import routes from './router'
 import { toLogin, getBasicAuthInfo } from '../common/utils'
 
@@ -19,7 +18,6 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  // console.log(to,from)
   const { fullPath } = to
   const { authRequired = false } = to?.matched[0]?.meta || to.meta
   // const { hideLeftBar: hideLeftBarForm = false } = from?.matched[0]?.meta || from.meta
@@ -28,10 +26,6 @@ router.beforeEach((to, from, next) => {
     toLogin(fullPath)
   }
   next()
-})
-
-window.addEventListener('popstate', (e) => {
-  console.log(e.state)
 })
 
 export default router

@@ -1,13 +1,10 @@
 /* eslint-disable */
 import Layout from '@/components/Layout'
-import store from '@/stores'
 import SelectModules from '@/views/Modules/SelectModules'
 import ModuleDetail from '@/views/Modules/ModuleDetail'
 import RuleCreate from '@/views/RuleEngine/RuleCreate'
 import SchemasDetails from '@/views/Schemas/SchemasDetails'
 import Overview from '@/views/Overview/Overview'
-
-// const hide = store.state.config.hide || { routes: [], children: [] }
 
 let routes = [
   {
@@ -19,15 +16,6 @@ let routes = [
     },
     component: () => import('@/views/Base/Login'),
   },
-  // {
-  //   path: '/login/:username/:password',
-  //   name: 'login-no-auth',
-  //   meta: {
-  //     hideKey: 'base',
-  //     authRequired: false,
-  //   },
-  //   component: () => import('@/views/Base/Login'),
-  // },
   {
     path: '/',
     redirect: '/monitor',
@@ -392,11 +380,5 @@ let routes = [
     component: () => import('@/views/Base/NotFound'),
   },
 ]
-
-// if (hide.routes && hide.routes.length) {
-//   hide.routes.forEach((hideRoute) => {
-//     routes = routes.filter((route) => route.meta.hideKey !== hideRoute)
-//   })
-// }
 
 export default routes

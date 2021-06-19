@@ -1,11 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// import config from '../../script/config'
-
 Vue.use(Vuex)
-
-const BASE_ENV = 'base'
 
 function checkLanguage(lang) {
   if (['en', 'zh'].includes(lang)) {
@@ -19,15 +15,7 @@ function getDefaultLanguage() {
   const defaultLanguage = (window.EMQX_CONFIG || {}).language
   return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
 }
-// function getConfigState() {
-//   const buildEnv = process.env.VUE_APP_BUILD_ENV || BASE_ENV
-//   const envConfig = config[buildEnv] || config.base
 
-//   return {
-//     ...config.base,
-//     ...envConfig,
-//   }
-// }
 function getNavTabs() {
   return JSON.parse(localStorage.getItem('navTabs')) || []
 }

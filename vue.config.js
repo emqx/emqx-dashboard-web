@@ -2,7 +2,7 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 // const mock = require('./script/mock.json')
 // const config = require('./script/config.json')
 
-const { NODE_ENV, VUE_APP_BUILD_ENV = 'base' } = process.env
+// const { NODE_ENV, VUE_APP_BUILD_ENV = 'base' } = process.env
 
 // const before = (app) => {
 //   // 开发环境下可以使用 mock 数据
@@ -31,13 +31,13 @@ module.exports = {
         target: process.env.HOST_URL || 'http://127.0.0.1:18083',
         changeOrigin: true,
       },
-      '/dashboard': {
-        target: process.env.HOST_URL || 'http://127.0.0.1:18083/api/v4',
-        changeOrigin: true,
-        pathRewrite: {
-          '/dashboard': '',
-        },
-      },
+      // '/dashboard': {
+      //   target: process.env.HOST_URL || 'http://127.0.0.1:18083/api/v4',
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '/dashboard': '',
+      //   },
+      // },
     },
   },
   css: {

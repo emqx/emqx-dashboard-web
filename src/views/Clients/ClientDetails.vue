@@ -209,19 +209,15 @@
             <el-table :data="subscriptions" class="data-list">
               <el-table-column
                 prop="topic"
-                min-width="110px"
                 show-overflow-tooltip
                 label="Topic"
+                sortable
               ></el-table-column>
-              <el-table-column prop="qos" min-width="110px" label="QoS"></el-table-column>
-              <el-table-column
-                prop="node"
-                min-width="80px"
-                :label="$t('Clients.node')"
-              ></el-table-column>
-              <el-table-column prop="clientid" width="100px">
+              <el-table-column prop="qos" sortable min-width="110px" label="QoS"></el-table-column>
+              <el-table-column prop="node" sortable :label="$t('Clients.node')"></el-table-column>
+              <el-table-column prop="clientid" :label="$t('Base.operation')">
                 <template slot-scope="{ row }">
-                  <el-button type="dashed" size="mini" @click="handleUnSubscription(row)">
+                  <el-button plain type="danger" size="mini" @click="handleUnSubscription(row)">
                     {{ $t('Clients.unsubscribe') }}
                   </el-button>
                 </template>
