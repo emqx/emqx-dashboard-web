@@ -13,8 +13,8 @@ body * {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: normal;
-  src: local('Roboto Light'), local('Roboto-Light'), url(../fonts/Roboto-Light.woff) format('woff'),
-    url(../fonts/Roboto-Light.ttf) format('truetype');
+  src: url(../fonts/Roboto-Regular.ttf) format('truetype'), url(../fonts/Roboto-Black.ttf) format('truetype'), url(../fonts/Roboto-BlackItalic.ttf) format('truetype'),
+  url(../fonts/Roboto-Italic.ttf) format('truetype');
 }
 
 body {
@@ -23,9 +23,7 @@ body {
   margin: 0;
   color: rgba(0, 0, 0, 0.65);
   font-size: 14px;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, PingFang SC, Hiragino Sans GB,
-    Microsoft YaHei, Helvetica Neue, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-    Segoe UI Symbol;
+  font-family: Roboto, -apple-system, BlinkMacSystemFont, PingFang SC, Hiragino Sans GB, Helvetica Neue, Helvetica, Arial, sans-serif
 }
 
 a {
