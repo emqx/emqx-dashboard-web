@@ -78,11 +78,11 @@
         <el-table :data="tableData" class="data-list">
           <el-table-column
             prop="clientid"
-            min-width="130px"
+            sortable
             :label="$t('Clients.clientId')"
           ></el-table-column>
-          <el-table-column prop="topic" :label="$t('Subs.topic')"></el-table-column>
-          <el-table-column prop="qos" label="QoS"></el-table-column>
+          <el-table-column prop="topic" :label="$t('Subs.topic')" sortable></el-table-column>
+          <el-table-column prop="qos" label="QoS" sortable></el-table-column>
         </el-table>
 
         <div class="emq-table-footer">
