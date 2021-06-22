@@ -4,16 +4,17 @@
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~element-ui/packages/theme-chalk/src/index';
 
-html *,
-body * {
-  box-sizing: border-box;
-}
-
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: normal;
   src: url(../fonts/Roboto-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: url(../fonts/Roboto-Bold.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Roboto';
@@ -26,6 +27,12 @@ body * {
   font-style: italic;
   font-weight: normal;
   src: url(../fonts/Roboto-Italic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 700;
+  src: url(../fonts/Roboto-BoldItalic.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Roboto';

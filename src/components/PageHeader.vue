@@ -32,6 +32,7 @@ export default {
     padding: 17px 15px;
     display: flex;
     align-items: center;
+    box-sizing: border-box;
   }
 
   .page-header-title-view {
@@ -54,10 +55,9 @@ export default {
     .icon {
       width: 24px;
       height: 24px;
-      line-height: 16px;
+      line-height: 24px;
       border-radius: 50%;
       border: 1px solid #34c388;
-      padding: 4px;
       text-align: center;
       margin-right: 8px;
     }

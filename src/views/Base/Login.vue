@@ -210,10 +210,11 @@ export default {
   }
 
   .login-wrapper {
-    width: 50%;
+    width: 44%;
     float: left;
-    padding: 24px;
-    height: 410px;
+    padding: 3%;
+    height: 370px;
+    overflow: hidden;
   }
 
   .login-card {
@@ -224,6 +225,7 @@ export default {
 
   .oper-wrapper {
     margin-top: 32px;
+    margin-bottom: 12px;
   }
 
   .sub-btn {
