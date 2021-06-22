@@ -13,8 +13,25 @@ body * {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: normal;
-  src: url(../fonts/Roboto-Regular.ttf) format('truetype'), url(../fonts/Roboto-Black.ttf) format('truetype'), url(../fonts/Roboto-BlackItalic.ttf) format('truetype'),
-  url(../fonts/Roboto-Italic.ttf) format('truetype');
+  src: url(../fonts/Roboto-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 900;
+  src: url(../fonts/Roboto-Black.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: normal;
+  src: url(../fonts/Roboto-Italic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 900;
+  src: url(../fonts/Roboto-BlackItalic.ttf) format('truetype');
 }
 
 body {
@@ -23,7 +40,8 @@ body {
   margin: 0;
   color: rgba(0, 0, 0, 0.65);
   font-size: 14px;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, PingFang SC, Hiragino Sans GB, Helvetica Neue, Helvetica, Arial, sans-serif
+  font-family: Roboto, -apple-system, BlinkMacSystemFont, PingFang SC, Hiragino Sans GB,
+    Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 a {
