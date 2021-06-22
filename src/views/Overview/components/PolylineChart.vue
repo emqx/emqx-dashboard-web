@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import echarts from 'echarts/lib/echarts'
+import * as echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/grid'
 import 'echarts/lib/component/tooltip'
@@ -115,7 +115,10 @@ export default {
     },
     drawChart() {
       this.setSeriesConfig()
-      this.chart = echarts.init(document.getElementById(this.chartId))
+      let Dom = document.getElementById(this.chartId)
+      if (!Dom) return
+      echarts.dispose(Dom)
+      this.chart = echarts.init(Dom)
       const option = {
         legend: {
           bottom: this.legendBottom,
@@ -146,9 +149,9 @@ export default {
           },
           axisLabel: {
             showMinLabel: false,
-            textStyle: {
-              color: this.axisColor.colorAxisLabel,
-            },
+            // textStyle: {
+            color: this.axisColor.colorAxisLabel,
+            // },
           },
         },
         yAxis: {
@@ -162,9 +165,9 @@ export default {
             show: false,
           },
           axisLabel: {
-            textStyle: {
-              color: this.axisColor.colorAxisLabel,
-            },
+            // textStyle: {
+            color: this.axisColor.colorAxisLabel,
+            // },
           },
         },
         series: this.seriesConfig,

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import echarts from 'echarts/lib/echarts'
+import * as echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/grid'
@@ -92,23 +92,21 @@ export default {
       deep: true,
       handler: 'setSeriesConfig',
     },
-    // eslint-disable-next-line
     '$store.state.leftBarCollapse': function () {
       setTimeout(this.setSeriesConfig, 500)
     },
   },
-
   mounted() {
     this.setSeriesConfig()
   },
-
-  created() {},
-
   methods: {
     setSeriesConfig() {
       const { color } = this
       const { type } = this
-      this.chart = echarts.init(this.$refs.chart)
+      let Dom = this.$refs.chart
+      if (!Dom) return
+      echarts.dispose(Dom)
+      this.chart = echarts.init(Dom)
       this.option.series = [
         {
           data: this.value.y,

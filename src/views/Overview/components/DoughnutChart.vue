@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import echarts from 'echarts/lib/echarts'
+import * as echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/pie'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
@@ -58,13 +58,16 @@ export default {
 
   methods: {
     drawChart() {
-      this.chart = echarts.init(document.getElementById(this.chartId))
+      let Dom = document.getElementById(this.chartId)
+      if (!Dom) return
+      echarts.dispose(Dom)
+      this.chart = echarts.init(Dom)
       const option = {
         title: {
           text: this.cardTitle,
-          textStyle: {
-            fontSize: 16,
-          },
+          // textStyle: {
+          fontSize: 16,
+          // },
         },
         tooltip: {
           trigger: 'item',
@@ -74,9 +77,9 @@ export default {
           orient: 'horizontal',
           itemWidth: 10,
           itemGap: 16,
-          textStyle: {
-            color: '#757575',
-          },
+          // textStyle: {
+          color: '#757575',
+          // },
           bottom: 0,
           icon: 'circle',
           data: this.legendData,
