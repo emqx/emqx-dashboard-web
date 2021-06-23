@@ -42,13 +42,13 @@ module.exports = {
   },
   css: {
     loaderOptions: {
-      less: {
-        modifyVars: {
-          'primary-color': '#34C388',
-          'link-color': '#34C388',
-        },
-        javascriptEnabled: true,
-      },
+      // less: {
+      //   modifyVars: {
+      //     'primary-color': '#34C388',
+      //     'link-color': '#34C388',
+      //   },
+      //   javascriptEnabled: true,
+      // },
     },
   },
   assetsDir: 'static',

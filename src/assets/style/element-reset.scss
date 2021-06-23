@@ -16,52 +16,12 @@
 }
 /* Button */
 .el-button {
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
   font-weight: normal;
+  border-radius: 0;
 
   &.el-button--small {
     font-size: 14px;
     line-height: 10px;
-  }
-
-  &--dashed.danger {
-    &:focus,
-    &:hover {
-      color: $--color-danger;
-      border-color: $--color-danger;
-    }
-  }
-
-  &--dashed {
-    color: rgba(0, 0, 0, 0.65);
-    background-color: #fff;
-    border-color: #d9d9d9;
-    border-style: dashed;
-
-    &:focus,
-    &:hover {
-      color: $--color-primary;
-      border-color: $--color-primary;
-      background-color: #fff;
-    }
-  }
-
-  &--danger {
-    // color: $--color-danger;
-    // background-color: #f5f5f5;
-    // border-color: #d9d9d9;
-
-    // &:hover {
-    //   background-color: $--color-danger;
-    //   color: #fff;
-    //   border-color: $--color-danger;
-    // }
-
-    // &:focus {
-    //   color: $--color-danger;
-    //   background-color: #fff;
-    //   border-color: $--color-danger;
-    // }
   }
 }
 
@@ -255,4 +215,9 @@
 .el-menu--horizontal > .el-menu-item {
   height: 50px;
   line-height: 50px;
+}
+
+.el-menu {
+  background-color: #282e38ff;
+  border: none;
 }

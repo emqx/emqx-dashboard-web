@@ -164,7 +164,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../../assets/style/variables';
+@import '~/src/assets/style/variables';
 
 .polyline-cards {
   .big-card,

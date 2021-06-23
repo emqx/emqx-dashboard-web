@@ -268,4 +268,27 @@ export default {
   flex-grow: 1;
   text-align: right;
 }
+
+.details-page {
+  .details-form {
+    &__view {
+      .el-input.is-disabled {
+        .el-input__inner {
+          background: transparent;
+          border: none;
+          cursor: text;
+          color: #303133;
+        }
+      }
+
+      .el-select .el-input .el-select__caret {
+        visibility: hidden;
+      }
+
+      .el-form-item__label {
+        color: #999;
+      }
+    }
+  }
+}
 </style>

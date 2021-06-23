@@ -5,7 +5,7 @@
       <el-aside :style="{ width: leftBarCollapse ? '80px' : '200px' }">
         <router-link to="/">
           <div :class="['logo', leftBarCollapse ? 'logo-colap' : '']">
-            <img class="logo-img" src="../assets/emq_logo.svg" alt="logo" />
+            <img class="logo-img" src="@/assets/img/logo-broker@2x.png" alt="logo" />
           </div>
         </router-link>
         <left-bar></left-bar>
@@ -104,11 +104,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../assets/style/variables.scss';
+@import '@/assets/style/variables.scss';
 // @import '../assets/style/transition.scss';
 
 .el-aside {
-  background-color: $color-theme;
+  background-color: #282e38ff;
   transition: all 0.3s;
   position: fixed;
   top: 0;
@@ -143,10 +143,10 @@ export default {
   display: flex;
   align-items: center;
   // padding: 0 20px;
-  background: #2f333e;
+  background: rgb(47, 53, 63);
 
   .logo-img {
-    width: 100px;
+    width: 156px;
     transition: all 0.6s;
   }
 
@@ -159,7 +159,8 @@ export default {
 .logo-colap {
   width: 80px;
   .logo-img {
-    width: 70px;
+    width: 195px;
+    margin-left: 165px;
   }
 }
 

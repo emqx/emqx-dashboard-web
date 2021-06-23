@@ -1,4 +1,3 @@
-@import 'variables.scss';
 @import 'element-variables';
 
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
@@ -89,10 +88,6 @@ a {
   min-width: 50px;
   background-color: #34c388;
   margin: 0 auto;
-}
-
-.trans-up {
-  @extend %trans-up-styles;
 }
 
 .emq-table-header {

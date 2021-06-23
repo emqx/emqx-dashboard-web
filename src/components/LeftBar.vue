@@ -3,7 +3,6 @@
     <el-menu
       :default-active="defaultSelectedKeys"
       :collapse="leftBarCollapse"
-      class="menu-bgColor"
       router
       :collapse-transition="false"
     >
@@ -146,13 +145,8 @@ export default {
 .left-bar {
   margin-top: 60px;
   height: calc(100vh - 60px);
-  background-color: $color-theme;
   transition: all 0.3s;
 
-  .menu-bgColor {
-    background-color: $color-theme;
-    border-right: 1px solid $color-theme;
-  }
   .el-menu--collapse {
     width: 80px;
 

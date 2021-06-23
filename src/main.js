@@ -12,7 +12,7 @@ import store from './stores'
 
 import '@/assets/style/common.scss'
 import '@/assets/style/element-reset.scss'
-import '@/assets/style/details-page.scss'
+// import '@/assets/style/details-page.scss'
 
 Vue.config.productionTip = false
 

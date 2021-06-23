@@ -125,7 +125,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../../assets/style/variables';
+// @import '../../../assets/style/variables';
 
 .percentage-cards {
   margin-top: 20px;
