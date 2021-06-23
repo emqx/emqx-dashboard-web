@@ -41,10 +41,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 body {
-  background-color: #f0f2f5;
   padding: 0;
   margin: 0;
-  color: rgba(0, 0, 0, 0.65);
+  color: $--color-black;
   font-size: 14px;
   font-family: Roboto, -apple-system, BlinkMacSystemFont, PingFang SC, Hiragino Sans GB,
     Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -71,12 +70,12 @@ a {
 
 #nprogress {
   .bar {
-    background: #34c388;
+    background: $--color-primary;
   }
 
-  .peg {
-    box-shadow: 0 0 10px #34c388, 0 0 5px #34c388;
-  }
+  // .peg {
+  //   box-shadow: 0 0 10px #34c388, 0 0 5px #34c388;
+  // }
 }
 
 .app-wrapper {

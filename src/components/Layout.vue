@@ -1,20 +1,19 @@
 <template>
-  <!-- 左侧 -->
   <div>
     <el-container>
       <el-aside :style="{ width: leftBarCollapse ? '80px' : '200px' }">
         <router-link to="/">
           <div :class="['logo', leftBarCollapse ? 'logo-colap' : '']">
-            <img class="logo-img" src="@/assets/img/logo-broker@2x.png" alt="logo" />
+            <img class="logo-img" src="@/assets/img/logo-broker@2x.png" alt="broker" v-if="false" />
+            <img class="logo-img-ent" src="@/assets/img/logo-ent@2x.png" alt="enterprise" />
           </div>
         </router-link>
         <left-bar></left-bar>
       </el-aside>
       <el-container class="layout" style="min-height: 100vh">
         <el-main style="margin: 0; padding: 0" :style="{ marginLeft: elMainStyle }">
-          <el-header class="content-header" :style="{ left: elMainStyle, height: 'auto' }">
+          <el-header :style="{ left: elMainStyle, height: 'auto' }">
             <nav-header></nav-header>
-            <!-- <nav-tabs></nav-tabs> -->
             <el-menu
               v-if="hasSubMenu"
               :default-active="defaultSubMenu"
@@ -67,18 +66,13 @@ export default {
   },
 
   data() {
-    return {
-      collapsed: false,
-    }
+    return {}
   },
 
   computed: {
     leftBarCollapse() {
       return this.$store.state.leftBarCollapse
     },
-    // elAsideWidth() {
-    //   return this.$store.state.leftBarCollapse ? '80px' : '200px'
-    // },
     elMainStyle() {
       return !this.leftBarCollapse ? '200px' : '80px'
     },
@@ -104,8 +98,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/style/variables.scss';
-// @import '../assets/style/transition.scss';
+// @import '@/assets/style/variables.scss';
 
 .el-aside {
   background-color: #282e38ff;
@@ -114,8 +107,6 @@ export default {
   top: 0;
   left: 0;
   z-index: 100;
-  // margin-top: 60px;
-  // height: calc(100vh - 60px);
   overflow-x: hidden;
 
   scrollbar-width: none;
@@ -129,7 +120,6 @@ export default {
 }
 
 .logo {
-  // text-align: center;
   width: 200px;
   height: 60px;
   line-height: 60px;
@@ -147,13 +137,17 @@ export default {
 
   .logo-img {
     width: 156px;
-    transition: all 0.6s;
+    transition: all 0.3s;
+  }
+  .logo-img-ent {
+    width: 162px;
+    transition: all 0.3s;
   }
 
-  .line {
-    margin-top: 12px;
-    width: 120px;
-  }
+  // .line {
+  //   margin-top: 12px;
+  //   width: 120px;
+  // }
 }
 
 .logo-colap {
@@ -162,16 +156,21 @@ export default {
     width: 195px;
     margin-left: 165px;
   }
+  .logo-img-ent {
+    width: 222px;
+    margin-left: 195px;
+  }
 }
 
-.content-header {
+.el-header {
   padding: 0;
   right: 0;
   position: fixed;
   z-index: 101;
   transition: all 0.3s;
-  box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
+  border-bottom: 1px solid #eeeef7ff;
 }
+
 .top-submenu {
   transition: none;
   padding: 0 10px;

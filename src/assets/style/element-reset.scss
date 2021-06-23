@@ -1,5 +1,5 @@
 /* Reset element ui style */
-@import 'variables.scss';
+// @import 'variables.scss';
 @import 'element-variables';
 
 .el-drawer {
@@ -11,9 +11,7 @@
     font-weight: 600;
   }
 }
-.el-badge {
-  height: 34px;
-}
+
 /* Button */
 .el-button {
   font-weight: normal;

@@ -1,25 +1,17 @@
 <template>
-  <div class="nav-header" :style="navHeadStyle">
+  <div class="nav-header" :style="{ left: leftBarCollapse ? '201px' : '80px' }">
     <div class="pull-left">
       <div class="func-item" @click="toggleLeftNarCollapse">
-        <i
-          :class="[
-            'iconfont',
-            $store.state.leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold',
-          ]"
-          style="font-size: 20px; line-height: 41px"
-        >
-        </i>
+        <i :class="['iconfont', leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"> </i>
       </div>
     </div>
 
-    <breadcrumb></breadcrumb>
+    <!-- <breadcrumb></breadcrumb> -->
 
     <div class="pull-right">
-      <!-- TODO: 补充使用情况 -->
       <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
         <div class="alert-info func-item">
-          <el-badge :value="alertCount" :hidden="!alertCount">
+          <el-badge :is-dot="alertCount">
             <router-link
               to="/alarm"
               tag="i"
@@ -30,15 +22,9 @@
         </div>
       </el-tooltip>
 
-      <el-dropdown
-        placement="bottom"
-        class="user-info-dropdown"
-        @command="handleLanguageDropdownCommand"
-      >
+      <el-dropdown placement="bottom" @command="handleLanguageDropdownCommand">
         <div class="user-info func-item">
-          <span>
-            <i class="iconfont icon-i18n"></i>
-          </span>
+          <i class="iconfont icon-i18n"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="en" :class="{ active: language === 'en' }"
               >English</el-dropdown-item
@@ -50,11 +36,7 @@
         </div>
       </el-dropdown>
 
-      <el-dropdown
-        placement="bottom"
-        class="user-info-dropdown"
-        @command="handleDropdownCommand"
-      >
+      <el-dropdown placement="bottom" @command="handleDropdownCommand">
         <div class="user-info func-item">
           <span>{{ username }}</span>
           <el-dropdown-menu slot="dropdown">
@@ -70,19 +52,21 @@
           </el-dropdown-menu>
         </div>
       </el-dropdown>
+
+      <el-button class="go-link" @click="gotoCloud">EMQ X Cloud ➝</el-button>
     </div>
   </div>
 </template>
 
 <script>
 import { loadAlarm } from '@/api/common'
-import Breadcrumb from './Breadcrumb'
+// import Breadcrumb from './Breadcrumb'
 
 export default {
   name: 'NavHeader',
 
   components: {
-    Breadcrumb,
+    // Breadcrumb,
   },
 
   props: {},
@@ -95,9 +79,10 @@ export default {
     alertCount() {
       return this.$store.state.alertCount
     },
-    navHeadStyle() {
-      return { left: !this.$store.state.leftBarCollapse ? '201px' : '80px' }
+    leftBarCollapse() {
+      return this.$store.state.leftBarCollapse
     },
+
     username() {
       return this.$store.state.user.username || this.$t('components.notLoggedIn')
     },
@@ -145,7 +130,7 @@ export default {
       setTimeout(() => {
         this.$message.success(this.$t('components.loggedOut'))
         this.$router.push('/login')
-      }, 300)
+      })
     },
     toggleLeftNarCollapse() {
       const collapse = !this.$store.state.leftBarCollapse
@@ -170,59 +155,67 @@ export default {
         })
         .catch(() => {})
     },
+    gotoCloud() {
+      window.open('https://cloud.emqx.cn', '_blank')
+    },
   },
 }
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/style/element-variables';
 .nav-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 50px;
+  height: 60px;
   padding: 0 20px 0 8px;
   background-color: #fff;
-  // box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-  // position: fixed;
-  // top: 0;
-  // right: 0;
+
   left: 201px;
   z-index: 100;
   transition: all 0.3s;
-  border-bottom: 1px solid #f1f1f1;
 }
 
 .pull-right {
-  color: rgba(0, 0, 0, 0.65);
   font-size: 14px;
   display: flex;
   align-items: center;
 }
 
 .func-item {
-  height: 50px;
-  line-height: 53px;
-  padding: 0 12px;
+  padding: 0 10px;
   transition: all 0.3s;
   cursor: pointer;
 
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.024);
+  .iconfont {
+    font-size: 20px;
+    color: $--color-black;
+
+    &:hover {
+      color: $--color-hover;
+    }
   }
 
-  .iconfont {
-    font-size: 18px;
-    padding: 4px;
+  span:hover {
+    color: $--color-hover;
   }
 }
 
 .el-badge {
-  line-height: 30px;
-  height: 34px;
+  &::v-deep .is-fixed.is-dot {
+    right: 5px;
+    top: 3px;
+  }
 }
 
-.el-dropdown-menu {
-  width: 130px;
-  text-align: center;
+.go-link {
+  background-color: #282e38ff;
+  color: #fff;
+  padding: 0 15px;
+  font-size: 14px;
+  height: 32px;
+  border: none;
+  margin-left: 15px;
 }
 </style>
