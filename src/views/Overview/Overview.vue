@@ -77,10 +77,10 @@
               </span>
               <el-progress
                 class="status-progress"
-                :stroke-width="20"
+                :stroke-width="24"
                 :percentage="licensePercentage"
                 :format="() => ''"
-                :color="getProgressColor(licensePercentage, '#2DC8B2')"
+                :color="getProgressColor(licensePercentage, '#2A78FFFF')"
               ></el-progress>
             </div>
           </el-card>
@@ -88,7 +88,7 @@
       </div>
     </div>
 
-    <!-- <el-card shadow="never" class="node-wrapper" :loading="pageLoading">
+    <!-- <el-card shadow="never" class="node-wrapper">
       <div class="emq-title">
         <div class="title">
           {{ $t('Overview.nodeData') }}
@@ -117,8 +117,8 @@
 
     <polyline-cards></polyline-cards>
 
-    <el-card shadow="never" class="license-card">
-      <div class="emq-title">
+    <div shadow="never" class="license-card">
+      <div class="lisence-title">
         {{ $t('Overview.license') }}
       </div>
 
@@ -129,14 +129,15 @@
         </li>
 
         <li class="item">
-          <span class="key">{{ $t('Overview.numberOfConnectionLines') }}:</span>
+          <span class="key"
+            >{{ $t('Overview.numberOfConnectionLines') }}: {{ formatConnection }}</span
+          >
           <div class="content">
             <el-progress
-              class="license-progress"
-              :stroke-width="12"
+              :stroke-width="16"
+              :format="() => ''"
               :percentage="licensePercentage"
-              :format="formatConnection"
-              :color="getProgressColor(licensePercentage, '#34c388')"
+              :color="getProgressColor(licensePercentage,'#00A890FF')"
             ></el-progress>
           </div>
         </li>
@@ -174,23 +175,16 @@
         </div>
         <div
           v-if="
-            license.type === 'trial' &&
-            license.customer_type !== evaluation &&
-            license.expiry === false
+            (license.type === 'trial' &&
+              license.customer_type !== evaluation &&
+              license.expiry === false)
           "
           class="oper"
         >
-          <el-tooltip
-            effect="dark"
-            :content="$t('Overview.forTrialEdition')"
-            placement="top"
-            :visible-arrow="false"
-          >
-            <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
-          </el-tooltip>
+          <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
         </div>
       </div>
-    </el-card>
+    </div>
 
     <el-dialog
       :visible.sync="licenseTipVisible"
@@ -318,6 +312,11 @@ export default {
       }
       return this.initCurrentNode
     },
+    formatConnection() {
+      const { connection } = this.currentMetrics
+      const { max_connections } = this.license
+      return `${this._formatNumber(connection)} / ${this._formatNumber(max_connections)}`
+    },
   },
 
   created() {
@@ -327,7 +326,7 @@ export default {
     this.timerData = setInterval(() => {
       this.loadData()
       this.loadNodes()
-      this.$refs.percentageCards.loadMetricsData()
+      // this.$refs.percentageCards.loadMetricsData()
     }, 10 * 1000)
     this.dataTypeChange()
   },
@@ -350,11 +349,7 @@ export default {
       this.nodes = await loadNodesApi()
       this.nodeName = this.nodeName || (this.nodes[0] || {}).node
     },
-    formatConnection() {
-      const { connection } = this.currentMetrics
-      const { max_connections } = this.license
-      return `${this._formatNumber(connection)} / ${this._formatNumber(max_connections)}`
-    },
+
     _formatNumber(num) {
       let number = String(parseInt(num))
       return number.replace(/(\d{1,3})(?=(\d{3})+($|\.))/g, '$1,')
@@ -401,12 +396,13 @@ export default {
         }
       })
     },
-    getProgressColor(val, primaryColor) {
-      let color = primaryColor
-      if (val === 100) {
-        color = '#f5222d'
-      } else if (val >= 85 && val < 100) {
-        color = '#faad14'
+    getProgressColor(val,primaryC) {
+      let color = primaryC
+      let num = parseInt(val)
+      if (num >= 100) {
+        color = '#E34242FF'
+      } else if (num >= 85 && num < 100) {
+        color = '#FB9237FF'
       }
       return color
     },
@@ -447,22 +443,19 @@ export default {
       margin-top: 6px;
     }
   }
+
 }
 
 .license-card {
-  margin: 10px;
+  margin: 30px 10px 10px;
 
   .license-card-footer {
     display: flex;
     margin-top: 12px;
-    align-items: center;
-    justify-content: space-between;
 
     .description {
       font-size: 12px;
       color: #b2b2b2;
-      line-height: 1.4;
-      width: 440px;
     }
 
     .oper {
@@ -498,22 +491,15 @@ export default {
     }
 
     .content {
-      margin-top: 6px;
-      width: 90%;
-    }
-
-    .el-progress {
-      .el-progress__text {
-        display: block;
-        padding-left: 0;
-        margin-top: 9px;
-      }
+      margin-top: 15px;
     }
   }
 }
 
-.emq-title {
+.lisence-title {
   margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
 }
 
 .tip-checkbox {

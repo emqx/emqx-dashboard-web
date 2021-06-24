@@ -34,7 +34,7 @@
           <div
             :style="{
               position: 'relative',
-              marginTop: hasSubMenu ? '110px' : '60px',
+              marginTop: hasSubMenu ? '120px' : '70px',
             }"
           >
             <!-- <transition name="fade-transform" mode="out-in"> -->
@@ -171,6 +171,6 @@ export default {
 
 .top-submenu {
   transition: none;
-  padding: 0 10px;
+  padding: 0 30px;
 }
 </style>

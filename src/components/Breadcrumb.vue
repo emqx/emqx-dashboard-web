@@ -24,9 +24,6 @@ export default {
 
   data() {
     return {
-      isIndex: false,
-      backPath: undefined,
-      currentTitle: '',
       oper: '',
       pathList: [],
     }
@@ -46,11 +43,10 @@ export default {
     calcPath(deep) {
       let pathLevel = deep + 1
       let path = this.pathList.slice(0, pathLevel).join('/')
-      // console.log(path)
       return path ? '/' + path : '/'
     },
     getBreadcrumb() {
-      const { path, query, name: routeName } = this.$route
+      const { path} = this.$route
       this.pathList = path.split('/').slice(1)
     },
     getAlernateKeyFromBase(oper) {

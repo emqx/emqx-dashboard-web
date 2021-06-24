@@ -236,10 +236,7 @@
   cursor: pointer;
 }
 
-.el-menu--horizontal > .el-menu-item {
-  height: 50px;
-  line-height: 50px;
-}
+
 
 .el-menu {
   background-color: #282e38ff;
@@ -267,10 +264,64 @@
       font-weight: 900;
     }
   }
+
+  &.el-menu--horizontal {
+    background-color:#fff ;
+    border:none;
+    border-top:solid 1px #eeeef7ff;
+    .el-menu-item {
+      height: 45px;
+      line-height: 45px;
+      color: #8C8C8CFF;
+
+      &.is-active{
+        background-color: inherit;
+        color:#00B173FF;
+        border-bottom: 2px solid #00B173FF;
+
+        &:hover{
+          color:#00B173FF;
+        }
+      }
+      &:not(.is-disabled,.is-active):hover{
+        &::before{
+          opacity: 0.04;
+          content:"";
+          left:0;
+          top:0;
+          right:0;
+          bottom: 0;
+          position: absolute;
+          background-color:currentColor;
+        }
+      }
+    }
+  }
 }
 
 .el-card {
   border-radius: 2px;
   border: 1px solid #ececef;
   color: inherit;
+}
+
+
+.el-progress-bar{
+  padding-right: 0;
+  &__outer{
+    border-radius: 0;
+  }
+
+  &__inner{
+    border-radius: 0;
+  }
+}
+
+.el-tag{
+  border-radius: 0;
+  &.el-tag--danger{
+    background-color: #E34242FF;
+    color: #fff;
+    border:none;
+  }
 }

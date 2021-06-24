@@ -112,29 +112,9 @@ export default {
         path: '/general',
       },
     ]
-    // this.initRouter()
   },
 
   methods: {
-    // handleClick(e) {
-    //   this.$router.push({ path: e.key })
-    // },
-    // initRouter() {
-    //   if (this.leftBarCollapse) {
-    //     return
-    //   }
-    //   const { path } = this.$route
-    //   this.menus.forEach((item) => {
-    //     if (!item.key || !item.children) {
-    //       return
-    //     }
-    //     if (item.children.find(($) => path.includes($.path) || path === $.path)) {
-    //       if (!this.defaultOpenKeys.includes(item.key)) {
-    //         this.defaultOpenKeys.push(item.key)
-    //       }
-    //     }
-    //   })
-    // },
   },
 }
 </script>

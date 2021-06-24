@@ -1,12 +1,13 @@
 <template>
   <div class="nav-header" :style="{ left: leftBarCollapse ? '201px' : '80px' }">
-    <div class="pull-left">
+    <div>
       <div class="func-item" @click="toggleLeftNarCollapse">
         <i :class="['iconfont', leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"> </i>
       </div>
     </div>
 
     <!-- <breadcrumb></breadcrumb> -->
+    <div class="header-title">{{$t(`components.${firstPath}`)}}</div>
 
     <div class="pull-right">
       <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
@@ -72,7 +73,9 @@ export default {
   props: {},
 
   data() {
-    return {}
+    return {
+      firstPath: '',
+    }
   },
 
   computed: {
@@ -97,10 +100,16 @@ export default {
       return this.$store.state.lang
     },
   },
+  watch: {
+    $route() {
+      this.setHeaderTitle()
+    },
+  },
 
   created() {
     this.loadData()
     this.setHtmlLangAttr(this.language)
+    this.setHeaderTitle()
   },
 
   mounted() {
@@ -158,6 +167,11 @@ export default {
     gotoCloud() {
       window.open('https://cloud.emqx.cn', '_blank')
     },
+    setHeaderTitle() {
+      let { path } = this.$route || []
+      let firstPath = path.split('/')[1]
+      this.firstPath = firstPath
+    },
   },
 }
 </script>
@@ -177,9 +191,17 @@ export default {
   transition: all 0.3s;
 }
 
+.header-title{
+  font-size: 32px;
+  font-weight: 900;
+  padding-left: 20px;
+}
+
 .pull-right {
   font-size: 14px;
   display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
   align-items: center;
 }
 
