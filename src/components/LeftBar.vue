@@ -140,8 +140,6 @@ export default {
 </script>
 
 <style lang="scss">
-// @import '../assets/style/variables';
-
 .left-bar {
   margin-top: 60px;
   height: calc(100vh - 60px);
@@ -152,19 +150,6 @@ export default {
 
     & i {
       margin-left: 10px;
-    }
-  }
-
-  .el-menu-item {
-    color: #ddd;
-    transition: all 0.3s;
-    & i {
-      padding-right: 20px;
-    }
-    &:hover,
-    &:focus,
-    &.is-active {
-      background-color: #00000075;
     }
   }
 }

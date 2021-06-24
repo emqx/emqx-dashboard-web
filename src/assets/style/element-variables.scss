@@ -18,7 +18,7 @@ $--color-transition-base: color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1) !defau
 -------------------------- */
 $--color-primary: #00b299 !default;
 
-$--color-hover: #59cf9a !default;
+$--color-hover: #0b7b6bff !default;
 
 $--color-white: #ffffff !default;
 
@@ -46,7 +46,7 @@ $--color-danger: #ff5252 !default;
 //$--color-danger: #F56C6C !default;
 
 /// color|1|Functional Color|1
-$--color-info: #2196f3 !default;
+$--color-info: #000000ff !default;
 
 $--color-success-light: mix($--color-white, $--color-success, 80%) !default;
 $--color-warning-light: mix($--color-white, $--color-warning, 80%) !default;

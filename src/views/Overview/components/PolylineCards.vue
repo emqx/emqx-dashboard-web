@@ -19,7 +19,7 @@
         </el-card>
       </div>
     </el-collapse-transition>
-    <el-row :gutter="20">
+    <el-row>
       <div v-for="item in dataTypeFilter" :key="item.value">
         <template v-if="item !== bigChartItem">
           <el-col :span="8">
@@ -164,23 +164,11 @@ export default {
 </script>
 
 <style lang="scss">
-@mixin trans-up-mixin($l) {
-  transition: all 0.15s cubic-bezier(0.645, 0.045, 0.355, 1);
-
-  &:hover {
-    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
-    transform: translateY($l);
-    border-color: #fff;
-  }
-}
-
 .polyline-cards {
   .big-card,
   .polyline-card {
-    @include trans-up-mixin(-1px);
-    border-radius: 8px;
-    margin-top: 20px;
     position: relative;
+    margin: 10px;
 
     .card-title {
       font-size: 16px;

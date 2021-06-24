@@ -1,115 +1,94 @@
 <template>
   <div class="overview app-wrapper">
-    <el-row class="content-wrapper" :gutter="20">
-      <el-col :span="6">
-        <el-card shadow="never" class="app-card">
-          <div class="app-card-title">
-            {{ $t('Overview.messageOut') }}
-          </div>
-
-          <div class="content">
-            <span>
-              {{ currentMetrics.sent }}
-            </span>
-            <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
-
-            <div class="flux-wrapper">
-              <simple-line
-                :value="currentMetricsLogs.sent"
-                type="bar"
-                color="#34c388"
-              ></simple-line>
-            </div>
-          </div>
-
-          <div class="app-footer">
-            <div class="footer-item">
+    <div class="basic-info">
+      <div class="basic-graph">
+        <el-col :span="12">
+          <el-card shadow="never" class="app-card">
+            <div class="app-card-title">
               {{ $t('Overview.currentMessageOutRate') }}
             </div>
-          </div>
-        </el-card>
-      </el-col>
 
-      <el-col :span="6">
-        <el-card shadow="never" class="app-card">
-          <div class="app-card-title">
-            {{ $t('Overview.messageIn') }}
-          </div>
+            <div class="content">
+              <span>
+                {{ currentMetrics.sent }}
+              </span>
+              <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
 
-          <div class="content">
-            <span>
-              {{ currentMetrics.received }}
-            </span>
-            <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
-
-            <div class="flux-wrapper">
-              <simple-line v-model="currentMetricsLogs.received" type="bar"></simple-line>
+              <div class="flux-wrapper">
+                <simple-line
+                  :value="currentMetricsLogs.sent"
+                  type="bar"
+                  color="#34c388"
+                ></simple-line>
+              </div>
             </div>
-          </div>
+          </el-card>
+        </el-col>
 
-          <div class="app-footer">
-            <div class="footer-item">
+        <el-col :span="12">
+          <el-card shadow="never" class="app-card">
+            <div class="app-card-title">
               {{ $t('Overview.currentMessageInRate') }}
             </div>
-          </div>
-        </el-card>
-      </el-col>
 
-      <el-col :span="6">
-        <el-card shadow="never" class="app-card">
-          <div class="app-card-title">
-            {{ $t('Overview.subscriptionNumber') }}
-          </div>
+            <div class="content">
+              <span>
+                {{ currentMetrics.received }}
+              </span>
+              <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
 
-          <div class="content">
-            <span>
-              {{ currentMetrics.subscription }}
-            </span>
-            <div class="flux-wrapper">
-              <simple-line
-                v-model="currentMetricsLogs.subscription"
-                color="#58afff"
-                type="bar"
-              ></simple-line>
+              <div class="flux-wrapper">
+                <simple-line v-model="currentMetricsLogs.received" type="bar"></simple-line>
+              </div>
             </div>
-          </div>
+          </el-card>
+        </el-col>
 
-          <div class="app-footer">
-            <div class="footer-item">
-              {{ $t('Overview.topicNumber') }}
+        <el-col :span="12">
+          <el-card shadow="never" class="app-card">
+            <div class="app-card-title">
+              {{ $t('Overview.subscriptionNumber') }}
             </div>
-          </div>
-        </el-card>
-      </el-col>
 
-      <el-col :span="6">
-        <el-card shadow="never" class="app-card">
-          <div class="app-card-title">
-            {{ $t('Overview.connectionNumber') }}
-          </div>
+            <div class="content">
+              <span>
+                {{ currentMetrics.subscription }}
+              </span>
+              <div class="flux-wrapper">
+                <simple-line
+                  v-model="currentMetricsLogs.subscription"
+                  color="#58afff"
+                  type="bar"
+                ></simple-line>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
 
-          <div class="content">
-            <span>
-              {{ _formatNumber(currentMetrics.connection) }}
-            </span>
-            <el-progress
-              class="status-progress"
-              :stroke-width="20"
-              :percentage="licensePercentage"
-              :format="() => ''"
-              :color="getProgressColor(licensePercentage, '#2DC8B2')"
-            ></el-progress>
-          </div>
-          <div class="app-footer">
-            <div class="footer-item">
+        <el-col :span="12">
+          <el-card shadow="never" class="app-card">
+            <div class="app-card-title">
               {{ $t('Overview.connectionsTips') }}
             </div>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row>
 
-    <el-card shadow="never" class="node-wrapper" :loading="pageLoading">
+            <div class="content">
+              <span>
+                {{ _formatNumber(currentMetrics.connection) }}
+              </span>
+              <el-progress
+                class="status-progress"
+                :stroke-width="20"
+                :percentage="licensePercentage"
+                :format="() => ''"
+                :color="getProgressColor(licensePercentage, '#2DC8B2')"
+              ></el-progress>
+            </div>
+          </el-card>
+        </el-col>
+      </div>
+    </div>
+
+    <!-- <el-card shadow="never" class="node-wrapper" :loading="pageLoading">
       <div class="emq-title">
         <div class="title">
           {{ $t('Overview.nodeData') }}
@@ -132,13 +111,13 @@
           <node-basic-card :value="currentNode"></node-basic-card>
         </el-row>
       </div>
-    </el-card>
+    </el-card> -->
 
-    <percentage-cards ref="percentageCards"></percentage-cards>
+    <!-- <percentage-cards ref="percentageCards"></percentage-cards> -->
 
     <polyline-cards></polyline-cards>
 
-    <el-card shadow="never" class="license-card" :loading="pageLoading">
+    <el-card shadow="never" class="license-card">
       <div class="emq-title">
         {{ $t('Overview.license') }}
       </div>
@@ -184,16 +163,12 @@
           v-if="license.customer_type === evaluation"
           class="description"
           v-html="$t('Overview.licenseEvaluationTip')"
-        >
-          {{ $t('Overview.licenseEvaluationTip') }}
-        </div>
+        ></div>
         <div
           v-else-if="license.expiry === true"
           class="description"
           v-html="$t('Overview.licenseExpiryTip')"
-        >
-          {{ $t('Overview.licenseExpiryTip') }}
-        </div>
+        ></div>
         <div v-else class="description">
           {{ $t('Overview.beforeTheCertificateExpires') }}
         </div>
@@ -218,28 +193,20 @@
     </el-card>
 
     <el-dialog
-      :width="`${licenseTipWidth}px`"
       :visible.sync="licenseTipVisible"
       :close-on-click-modal="false"
+      :title="$t('Base.warning')"
     >
-      <div slot="title" class="tip-title">
-        <i class="el-icon-warning"></i>
-        <span>{{ $t('Base.warning') }}</span>
-      </div>
       <div class="tip-content">
-        <p v-if="!isLicenseExpiry" v-html="$t('Overview.licenseEvaluationTip')">
-          {{ $t('Overview.licenseEvaluationTip') }}
-        </p>
-        <p v-else v-html="$t('Overview.licenseExpiryTip')">
-          {{ $t('Overview.licenseExpiryTip') }}
-        </p>
+        <span v-if="!isLicenseExpiry" v-html="$t('Overview.licenseEvaluationTip')"></span>
+        <span v-else v-html="$t('Overview.licenseExpiryTip')"></span>
       </div>
       <div v-if="!isLicenseExpiry" class="tip-checkbox">
         <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">{{
           $t('Overview.notPromptAgain')
         }}</el-checkbox>
       </div>
-      <div class="tip-button">
+      <div slot="footer">
         <el-button type="primary" size="small" @click="licenseTipVisible = false">{{
           $t('Overview.konw')
         }}</el-button>
@@ -251,18 +218,18 @@
 <script>
 import Moment from 'moment'
 import { loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo } from '@/api/overview'
-import NodeBasicCard from './components/NodeBasicCard'
+// import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
-import PercentageCards from './components/PercentageCards'
+// import PercentageCards from './components/PercentageCards'
 import PolylineCards from './components/PolylineCards'
 
 export default {
   name: 'Overview',
 
   components: {
-    NodeBasicCard,
+    // NodeBasicCard,
     SimpleLine,
-    PercentageCards,
+    // PercentageCards,
     PolylineCards,
   },
 
@@ -271,7 +238,6 @@ export default {
   data() {
     return {
       evaluation: 10,
-      pageLoading: true,
       nodeName: '',
       initCurrentNode: {
         connections: 0,
@@ -294,7 +260,6 @@ export default {
       licenseTipVisible: false,
       isLicenseExpiry: false,
       noprompt: false,
-      licenseTipWidth: 460,
       license: {
         customer: '',
         email: '',
@@ -356,7 +321,6 @@ export default {
   },
 
   created() {
-    this.pageLoading = true
     this.loadData()
     this.loadLicenseData()
     clearInterval(this.timerData)
@@ -397,27 +361,22 @@ export default {
     },
     async loadLicenseData() {
       this.license = await loadLicenseInfo()
-      setTimeout(() => {
-        // evaluation 许可证
-        if (
-          this.license.customer_type === this.evaluation &&
-          localStorage.getItem('licenseTipVisible') !== 'false'
-        ) {
-          this.licenseTipVisible = true
-          this.isLicenseExpiry = false
-          this.licenseTipWidth = 520
-        }
-        // 证书过期
-        if (this.license.expiry === true) {
-          this.licenseTipVisible = true
-          this.isLicenseExpiry = true
-          this.licenseTipWidth = 600
-        }
-      }, 1000)
+      // evaluation 许可证
+      if (
+        this.license.customer_type === this.evaluation &&
+        localStorage.getItem('licenseTipVisible') !== 'false'
+      ) {
+        this.licenseTipVisible = true
+        this.isLicenseExpiry = false
+      }
+      // 证书过期
+      if (this.license.expiry === true) {
+        this.licenseTipVisible = true
+        this.isLicenseExpiry = true
+      }
     },
     async loadData() {
       const state = await loadCurrentMetrics()
-      this.pageLoading = false
       if (!state) {
         return
       }
@@ -455,192 +414,112 @@ export default {
 }
 </script>
 
-<style lang="scss">
-// @import '../../assets/style/variables';
+<style lang="scss" scoped>
+.basic-info {
+  display: flex;
+  .basic-graph {
+    overflow: hidden;
+    width: 50%;
+    // display: inline-grid;
+  }
+}
+.app-card {
+  margin: 10px;
 
-.overview {
-  .status-count {
-    text-align: center;
+  .app-card-title {
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: rgba(0, 0, 0, 0.4);
   }
 
-  .flux-wrapper {
-    width: 100%;
-    box-sizing: border-box;
+  .content {
+    color: rgba(0, 0, 0, 0.85);
+    min-height: 90px;
+    font-size: 30px;
+    position: relative;
 
-    .simple-line {
-      box-sizing: border-box;
-      height: 32px;
+    .unit {
+      font-size: 14px;
+      margin-left: 2px;
+    }
+
+    .charts {
+      margin-top: 6px;
     }
   }
+}
 
-  .license-card,
-  .node-wrapper {
-    margin-top: 20px;
-    border-radius: 8px;
-  }
+.license-card {
+  margin: 10px;
 
-  .app-card {
-    // @include trans-up-mixin(-1px);
-    border-radius: 8px;
+  .license-card-footer {
+    display: flex;
+    margin-top: 12px;
+    align-items: center;
+    justify-content: space-between;
 
-    .app-card-title {
+    .description {
+      font-size: 12px;
+      color: #b2b2b2;
+      line-height: 1.4;
+      width: 440px;
+    }
+
+    .oper {
+      width: 100px;
+      text-align: center;
       font-size: 14px;
-      color: rgba(0, 0, 0, 0.4);
+      .el-tag {
+        display: block;
+      }
+    }
+  }
+}
+
+.license-field {
+  list-style-type: none;
+  padding-left: 0;
+
+  .item {
+    font-size: 14px;
+    color: #666;
+    padding: 6px 0;
+
+    .key {
+      margin-right: 24px;
+    }
+
+    .value {
+      color: #333;
+
+      &.broker {
+        margin-top: 6px;
+      }
     }
 
     .content {
-      color: rgba(0, 0, 0, 0.85);
-      min-height: 90px;
-      font-size: 30px;
-      padding-bottom: 8px;
-      border-bottom: 1px dashed #e8e8e8;
-      position: relative;
-
-      .unit {
-        font-size: 14px;
-        margin-left: 2px;
-      }
-
-      .charts {
-        margin-top: 6px;
-      }
+      margin-top: 6px;
+      width: 90%;
     }
 
-    .app-footer {
-      padding: 10px 0;
-
-      .footer-item {
-        color: rgba(0, 0, 0, 0.65);
-
-        .item-value {
-          color: rgba(0, 0, 0, 0.85);
-          margin-left: 12px;
-        }
+    .el-progress {
+      .el-progress__text {
+        display: block;
+        padding-left: 0;
+        margin-top: 9px;
       }
     }
   }
+}
 
-  .node-wrapper {
-    .emq-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-  }
+.emq-title {
+  margin-bottom: 20px;
+}
 
-  .license-card {
-    .license-card-footer {
-      display: flex;
-      margin-top: 12px;
-      align-items: center;
-      justify-content: space-between;
-
-      .description {
-        font-size: 12px;
-        color: #b2b2b2;
-        line-height: 1.4;
-        width: 440px;
-      }
-
-      .oper {
-        width: 100px;
-        text-align: center;
-        font-size: 14px;
-        .el-tag {
-          display: block;
-        }
-      }
-    }
-  }
-
-  .license-field {
-    list-style-type: none;
-    padding-left: 0;
-
-    .item {
-      font-size: 14px;
-      color: #666;
-      padding: 6px 0;
-
-      .key {
-        margin-right: 24px;
-      }
-
-      .value {
-        color: #333;
-
-        &.broker {
-          margin-top: 6px;
-        }
-      }
-
-      .content {
-        margin-top: 6px;
-        width: 90%;
-      }
-
-      .el-progress {
-        .el-progress__text {
-          display: block;
-          padding-left: 0;
-          margin-top: 9px;
-        }
-      }
-    }
-  }
-
-  .el-progress {
-    .el-progress-bar {
-      padding-right: 0;
-    }
-    &.status-progress {
-      .el-progress-bar__outer {
-        border-radius: 0px;
-      }
-      .el-progress-bar__inner {
-        border-radius: 0px;
-      }
-    }
-  }
-
-  .emq-title {
-    margin-bottom: 20px;
-  }
-
-  .data-list {
-    min-height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .tip-title {
-    font-size: 18px;
-    .el-icon-warning {
-      color: #e6a23c;
-    }
-    span {
-      display: inline-block;
-      margin-left: 10px;
-    }
-  }
-
-  .tip-content {
-    font-size: 16px;
-    p {
-      word-break: break-word;
-    }
-  }
-
-  .tip-checkbox {
-    margin-top: 10px;
-    .el-checkbox {
-      color: #aaa;
-    }
-  }
-
-  .tip-button {
-    text-align: right;
+.tip-checkbox {
+  margin-top: 20px;
+  .el-checkbox {
+    color: #aaa;
   }
 }
 </style>

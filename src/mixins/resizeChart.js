@@ -3,7 +3,7 @@ export default {
   mounted() {
     setTimeout(() => {
       window.addEventListener('resize', this.chart.resize)
-    }, 200)
+    }, 300)
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.chart.resize)

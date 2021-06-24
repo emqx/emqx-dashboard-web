@@ -11,7 +11,7 @@
     <div class="pull-right">
       <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
         <div class="alert-info func-item">
-          <el-badge :is-dot="alertCount">
+          <el-badge :is-dot="!!alertCount">
             <router-link
               to="/alarm"
               tag="i"
