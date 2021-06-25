@@ -137,7 +137,7 @@
               :stroke-width="16"
               :format="() => ''"
               :percentage="licensePercentage"
-              :color="getProgressColor(licensePercentage,'#00A890FF')"
+              :color="getProgressColor(licensePercentage, '#00A890FF')"
             ></el-progress>
           </div>
         </li>
@@ -175,9 +175,9 @@
         </div>
         <div
           v-if="
-            (license.type === 'trial' &&
-              license.customer_type !== evaluation &&
-              license.expiry === false)
+            license.type === 'trial' &&
+            license.customer_type !== evaluation &&
+            license.expiry === false
           "
           class="oper"
         >
@@ -396,7 +396,7 @@ export default {
         }
       })
     },
-    getProgressColor(val,primaryC) {
+    getProgressColor(val, primaryC) {
       let color = primaryC
       let num = parseInt(val)
       if (num >= 100) {
@@ -443,7 +443,6 @@ export default {
       margin-top: 6px;
     }
   }
-
 }
 
 .license-card {

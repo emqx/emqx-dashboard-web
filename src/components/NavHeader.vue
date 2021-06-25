@@ -7,7 +7,7 @@
     </div>
 
     <!-- <breadcrumb></breadcrumb> -->
-    <div class="header-title">{{$t(`components.${firstPath}`)}}</div>
+    <div class="header-title">{{ $t(`components.${firstPath}`) }}</div>
 
     <div class="pull-right">
       <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
@@ -16,7 +16,7 @@
             <router-link
               to="/alarm"
               tag="i"
-              class="iconfont icon-Notificationlisttongzhiliebiao"
+              class="iconx icon-alarm"
               @click="clearAlert"
             ></router-link>
           </el-badge>
@@ -25,7 +25,7 @@
 
       <el-dropdown placement="bottom" @command="handleLanguageDropdownCommand">
         <div class="user-info func-item">
-          <i class="iconfont icon-i18n"></i>
+          <i class="iconx icon-globe"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="en" :class="{ active: language === 'en' }"
               >English</el-dropdown-item
@@ -191,7 +191,7 @@ export default {
   transition: all 0.3s;
 }
 
-.header-title{
+.header-title {
   font-size: 32px;
   font-weight: 900;
   padding-left: 20px;

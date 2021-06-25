@@ -72,10 +72,6 @@ a {
   .bar {
     background: $--color-primary;
   }
-
-  // .peg {
-  //   box-shadow: 0 0 10px #34c388, 0 0 5px #34c388;
-  // }
 }
 
 .app-wrapper {
@@ -213,5 +209,21 @@ a {
   }
   &__right {
     text-align: right;
+  }
+}
+
+.iconx {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  font-style: normal;
+  background-image: url('~@/assets/img/iconset@2x.png');
+  background-size: 153px 159px;
+  background-repeat: no-repeat;
+  &.icon-alarm {
+    background-position: -120px -24px;
+  }
+  &.icon-globe {
+    background-position: -96px -24px;
   }
 }

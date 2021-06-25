@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 import VueI18n from 'vue-i18n'
+import CompositionAPI from '@vue/composition-api'
 import ElementLocale from 'element-ui/lib/locale'
 
 import installer from '@/common/installer'
@@ -12,7 +13,6 @@ import store from './stores'
 
 import '@/assets/style/common.scss'
 import '@/assets/style/element-reset.scss'
-// import '@/assets/style/details-page.scss'
 
 Vue.config.productionTip = false
 
@@ -20,6 +20,7 @@ Vue.use(VueI18n)
 Vue.use(installer)
 Vue.use(ElementUI)
 Vue.use(directive)
+Vue.use(CompositionAPI)
 
 const i18n = new VueI18n({
   locale: store.state.lang,

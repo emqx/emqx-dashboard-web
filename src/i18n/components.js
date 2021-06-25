@@ -15,9 +15,21 @@ export default {
     zh: '左侧',
     en: 'Left',
   },
-  monitor: {
+  monitoring: {
     zh: '监控',
-    en: 'Monitor',
+    en: 'Monitoring',
+  },
+  management: {
+    zh: '管理',
+    en: 'Management',
+  },
+  dashboard: {
+    zh: '控制台',
+    en: 'Dashboard',
+  },
+  overview: {
+    zh: '概览',
+    en: 'Overview',
   },
   connect: {
     zh: '连接',
@@ -115,9 +127,9 @@ export default {
     zh: '设置',
     en: 'Setting',
   },
-  node: {
-    zh: '节点数据',
-    en: 'Node',
+  nodes: {
+    zh: '节点',
+    en: 'Nodes',
   },
   ruleCreate: {
     zh: '创建规则',

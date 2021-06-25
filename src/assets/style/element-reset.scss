@@ -236,23 +236,33 @@
   cursor: pointer;
 }
 
-
-
 .el-menu {
   background-color: #282e38ff;
   border: none;
 
+  .el-submenu {
+    color: #bbb;
+    &__title {
+      color: inherit;
+      &:hover {
+        background-color: inherit;
+      }
+    }
+    i {
+      margin-right: 10px;
+    }
+    .el-menu-item {
+      text-indent: 15px;
+    }
+  }
   .el-menu-item {
     color: #bbb;
     height: 44px;
     line-height: 44px;
     transition: all 0.3s;
-    * {
-      vertical-align: -2px;
-    }
-    & i {
-      padding-right: 10px;
-      font-size: 20px;
+
+    i {
+      margin-right: 10px;
     }
     &:hover,
     &:focus {
@@ -266,33 +276,33 @@
   }
 
   &.el-menu--horizontal {
-    background-color:#fff ;
-    border:none;
-    border-top:solid 1px #eeeef7ff;
+    background-color: #fff;
+    border: none;
+    border-top: solid 1px #eeeef7ff;
     .el-menu-item {
       height: 45px;
       line-height: 45px;
-      color: #8C8C8CFF;
+      color: #8c8c8cff;
 
-      &.is-active{
+      &.is-active {
         background-color: inherit;
-        color:#00B173FF;
-        border-bottom: 2px solid #00B173FF;
+        color: #00b173ff;
+        border-bottom: 2px solid #00b173ff;
 
-        &:hover{
-          color:#00B173FF;
+        &:hover {
+          color: #00b173ff;
         }
       }
-      &:not(.is-disabled,.is-active):hover{
-        &::before{
+      &:not(.is-disabled, .is-active):hover {
+        &::before {
           opacity: 0.04;
-          content:"";
-          left:0;
-          top:0;
-          right:0;
+          content: '';
+          left: 0;
+          top: 0;
+          right: 0;
           bottom: 0;
           position: absolute;
-          background-color:currentColor;
+          background-color: currentColor;
         }
       }
     }
@@ -305,23 +315,22 @@
   color: inherit;
 }
 
-
-.el-progress-bar{
+.el-progress-bar {
   padding-right: 0;
-  &__outer{
+  &__outer {
     border-radius: 0;
   }
 
-  &__inner{
+  &__inner {
     border-radius: 0;
   }
 }
 
-.el-tag{
+.el-tag {
   border-radius: 0;
-  &.el-tag--danger{
-    background-color: #E34242FF;
+  &.el-tag--danger {
+    background-color: #e34242ff;
     color: #fff;
-    border:none;
+    border: none;
   }
 }

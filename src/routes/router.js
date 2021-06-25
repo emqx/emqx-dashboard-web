@@ -4,43 +4,51 @@ import SelectModules from '@/views/Modules/SelectModules'
 import ModuleDetail from '@/views/Modules/ModuleDetail'
 import RuleCreate from '@/views/RuleEngine/RuleCreate'
 import SchemasDetails from '@/views/Schemas/SchemasDetails'
-import Overview from '@/views/Overview/Overview'
 
 let routes = [
   {
     path: '/login',
     name: 'login',
     meta: {
-      hideKey: 'base',
       authRequired: false,
     },
     component: () => import('@/views/Base/Login'),
   },
   {
     path: '/',
-    redirect: '/monitor',
+    redirect: '/dashboard',
     meta: {
-      hideKey: '/',
       authRequired: true,
     },
   },
   {
-    path: '/monitor',
+    path: '/dashboard',
     component: Layout,
+    redirect: '/dashboard/overview',
     meta: {
-      hideKey: 'monitor',
       authRequired: true,
+      subMenu: true,
     },
     children: [
       {
-        path: '',
-        name: 'monitor',
-        component: Overview,
+        path: 'overview',
+        name: 'overview',
+        component: () => import('@/views/Dashboard/Overview'),
+      },
+      {
+        path: 'nodes',
+        name: 'nodes',
+        component: () => import('@/views/Dashboard/Nodes'),
+      },
+      {
+        path: 'metrics',
+        name: 'metrics',
+        component: () => import('@/views/Dashboard/Metrics'),
       },
       {
         path: '/monitor/node',
         name: 'node',
-        component: () => import('@/views/Overview/Node'),
+        component: () => import('@/views/Dashboard/Node'),
       },
     ],
   },

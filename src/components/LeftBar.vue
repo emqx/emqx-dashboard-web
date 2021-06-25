@@ -6,11 +6,24 @@
       router
       :collapse-transition="false"
     >
-      <template v-for="menu in menus">
-        <template>
-          <el-menu-item :key="menu.path" :index="menu.path">
-            <i :class="['iconfont', menu.icon]"></i>
-            <template #title>{{ menu.title }}</template>
+      <template v-for="(menu, i) in menus">
+        <template v-if="menu.c">
+          <el-submenu :key="menu.title" :index="'' + i">
+            <template #title>
+              <i :class="['iconx', menu.icon]"></i>
+              <span>{{ menu.title }}</span>
+            </template>
+            <template v-for="item in menu.c">
+              <el-menu-item :key="item.title" :index="item.path">
+                <template>{{ item.title }}</template>
+              </el-menu-item>
+            </template>
+          </el-submenu>
+        </template>
+        <template v-else>
+          <el-menu-item :key="menu.title" :index="menu.path">
+            <i :class="['iconx', menu.icon]"></i>
+            <span>{{ menu.title }}</span>
           </el-menu-item>
         </template>
       </template>
@@ -41,45 +54,49 @@ export default {
     },
   },
 
-  watch: {
-    // $route() {
-    //   this.initRouter()
-    // },
-    // leftBarCollapse(val) {
-    //   if (val) {
-    //     this.defaultOpenKeys = []
-    //   } else {
-    //     this.initRouter()
-    //   }
-    // },
-  },
+  watch: {},
 
   created() {
-    this.menus = [
+    let dashboard = [
       {
-        title: this.$t('components.monitor'),
-        path: '/monitor',
-        icon: 'icon-yibiaopan',
+        title: this.$t('components.dashboard'),
+        path: '/dashboard',
       },
-      // {
-      //   title: this.$t('components.usersAcl'),
-      //   path: '/users_and_acl',
-      //   icon: 'icon-kongjian',
-      // },
+      {
+        title: this.$t('components.alarm'),
+        path: '/alarm',
+      },
+      {
+        title: this.$t('components.tools'),
+        path: '/tools',
+      },
+    ]
+
+    let management = [
       {
         title: this.$t('components.clients'),
         path: '/clients',
-        icon: 'icon-guanlianshebei',
       },
       {
         title: this.$t('components.topics'),
         path: '/topics',
-        icon: 'icon-zuzhiqunzu',
       },
       {
         title: this.$t('components.subscriptions'),
         path: '/subscriptions',
-        icon: 'icon-shebeiguanli',
+      },
+    ]
+
+    this.menus = [
+      {
+        title: this.$t('components.monitoring'),
+        icon: 'icon-yibiaopan',
+        c: dashboard,
+      },
+      {
+        title: this.$t('components.management'),
+        icon: 'icon-yibiaopan',
+        c: management,
       },
       {
         title: this.$t('components.ruleengine'),
@@ -90,16 +107,6 @@ export default {
         title: this.$t('components.modules'),
         path: '/modules',
         icon: 'icon-changjingguanli',
-      },
-      {
-        title: this.$t('components.alarm'),
-        path: '/alarm',
-        icon: 'icon-gaojing',
-      },
-      {
-        title: this.$t('components.tools'),
-        icon: 'icon-gongju',
-        path: '/tools',
       },
       {
         title: this.$t('components.setting'),
@@ -114,8 +121,7 @@ export default {
     ]
   },
 
-  methods: {
-  },
+  methods: {},
 }
 </script>
 
