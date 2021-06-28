@@ -17,7 +17,7 @@ const model = [
   'Clients',
   'Topics',
   'General',
-  'Overview',
+  'Dashboard',
   'Plugins',
   'RuleEngine',
   'Tools',
@@ -30,7 +30,6 @@ const model = [
   'LogTrace',
 ]
 model.forEach((key) => {
-  // eslint-disable-next-line
   const value = require(`./${key}`).default
 
   Object.keys(value).forEach((k) => {

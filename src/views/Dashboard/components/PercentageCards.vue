@@ -19,7 +19,7 @@
 
 <script>
 import DoughnutChart from './DoughnutChart'
-import { loadAllMetrics } from '@/api/overview'
+import { loadAllMetrics } from '@/api/dashboard'
 
 export default {
   name: 'PercentageCards',

@@ -5,14 +5,14 @@
         <el-col :span="12">
           <el-card shadow="never" class="app-card">
             <div class="app-card-title">
-              {{ $t('Overview.currentMessageOutRate') }}
+              {{ $t('Dashboard.currentMessageOutRate') }}
             </div>
 
             <div class="content">
               <span>
                 {{ currentMetrics.sent }}
               </span>
-              <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
+              <span class="unit">{{ $t('Dashboard.strip') }}/{{ $t('Dashboard.second') }}</span>
 
               <div class="flux-wrapper">
                 <simple-line
@@ -28,14 +28,14 @@
         <el-col :span="12">
           <el-card shadow="never" class="app-card">
             <div class="app-card-title">
-              {{ $t('Overview.currentMessageInRate') }}
+              {{ $t('Dashboard.currentMessageInRate') }}
             </div>
 
             <div class="content">
               <span>
                 {{ currentMetrics.received }}
               </span>
-              <span class="unit">{{ $t('Overview.strip') }}/{{ $t('Overview.second') }}</span>
+              <span class="unit">{{ $t('Dashboard.strip') }}/{{ $t('Dashboard.second') }}</span>
 
               <div class="flux-wrapper">
                 <simple-line v-model="currentMetricsLogs.received" type="bar"></simple-line>
@@ -47,7 +47,7 @@
         <el-col :span="12">
           <el-card shadow="never" class="app-card">
             <div class="app-card-title">
-              {{ $t('Overview.subscriptionNumber') }}
+              {{ $t('Dashboard.subscriptionNumber') }}
             </div>
 
             <div class="content">
@@ -68,7 +68,7 @@
         <el-col :span="12">
           <el-card shadow="never" class="app-card">
             <div class="app-card-title">
-              {{ $t('Overview.connectionsTips') }}
+              {{ $t('Dashboard.connectionsTips') }}
             </div>
 
             <div class="content">
@@ -91,7 +91,7 @@
     <!-- <el-card shadow="never" class="node-wrapper">
       <div class="emq-title">
         <div class="title">
-          {{ $t('Overview.nodeData') }}
+          {{ $t('Dashboard.nodeData') }}
         </div>
 
         <el-dropdown @command="dataTypeChange" :style="{ cursor: 'pointer' }">
@@ -119,18 +119,18 @@
 
     <div shadow="never" class="license-card">
       <div class="lisence-title">
-        {{ $t('Overview.license') }}
+        {{ $t('Dashboard.license') }}
       </div>
 
       <ul class="license-field">
         <li v-if="license.customer_type !== evaluation" class="item">
-          <span class="key">{{ $t('Overview.customer') }}:</span>
+          <span class="key">{{ $t('Dashboard.customer') }}:</span>
           <span class="value">{{ license.customer }}</span>
         </li>
 
         <li class="item">
           <span class="key"
-            >{{ $t('Overview.numberOfConnectionLines') }}: {{ formatConnection }}</span
+            >{{ $t('Dashboard.numberOfConnectionLines') }}: {{ formatConnection }}</span
           >
           <div class="content">
             <el-progress
@@ -143,17 +143,17 @@
         </li>
         <template v-if="license.customer_type !== evaluation">
           <li class="item">
-            <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
+            <span class="key">{{ $t('Dashboard.issuanceOfEmail') }}:</span>
             <span class="value">{{ license.email }}</span>
           </li>
 
           <li class="item">
-            <span class="key">{{ $t('Overview.issuedAt') }}:</span>
+            <span class="key">{{ $t('Dashboard.issuedAt') }}:</span>
             <span class="value broker">{{ license.issued_at }}</span>
           </li>
 
           <li class="item">
-            <span class="key">{{ $t('Overview.expireAt') }}:</span>
+            <span class="key">{{ $t('Dashboard.expireAt') }}:</span>
             <span class="value broker">{{ license.expiry_at }}</span>
           </li>
         </template>
@@ -163,15 +163,15 @@
         <div
           v-if="license.customer_type === evaluation"
           class="description"
-          v-html="$t('Overview.licenseEvaluationTip')"
+          v-html="$t('Dashboard.licenseEvaluationTip')"
         ></div>
         <div
           v-else-if="license.expiry === true"
           class="description"
-          v-html="$t('Overview.licenseExpiryTip')"
+          v-html="$t('Dashboard.licenseExpiryTip')"
         ></div>
         <div v-else class="description">
-          {{ $t('Overview.beforeTheCertificateExpires') }}
+          {{ $t('Dashboard.beforeTheCertificateExpires') }}
         </div>
         <div
           v-if="
@@ -181,7 +181,7 @@
           "
           class="oper"
         >
-          <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
+          <el-tag type="danger">{{ $t('Dashboard.trialEdition') }}</el-tag>
         </div>
       </div>
     </div>
@@ -192,17 +192,17 @@
       :title="$t('Base.warning')"
     >
       <div class="tip-content">
-        <span v-if="!isLicenseExpiry" v-html="$t('Overview.licenseEvaluationTip')"></span>
-        <span v-else v-html="$t('Overview.licenseExpiryTip')"></span>
+        <span v-if="!isLicenseExpiry" v-html="$t('Dashboard.licenseEvaluationTip')"></span>
+        <span v-else v-html="$t('Dashboard.licenseExpiryTip')"></span>
       </div>
       <div v-if="!isLicenseExpiry" class="tip-checkbox">
         <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">{{
-          $t('Overview.notPromptAgain')
+          $t('Dashboard.notPromptAgain')
         }}</el-checkbox>
       </div>
       <div slot="footer">
         <el-button type="primary" size="small" @click="licenseTipVisible = false">{{
-          $t('Overview.konw')
+          $t('Dashboard.konw')
         }}</el-button>
       </div>
     </el-dialog>
@@ -211,7 +211,7 @@
 
 <script>
 import Moment from 'moment'
-import { loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo } from '@/api/overview'
+import { loadCurrentMetrics, loadLicenseInfo } from '@/api/dashboard'
 // import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
 // import PercentageCards from './components/PercentageCards'
@@ -233,22 +233,22 @@ export default {
     return {
       evaluation: 10,
       nodeName: '',
-      initCurrentNode: {
-        connections: 0,
-        load1: '',
-        load15: '',
-        load5: '',
-        max_fds: 0,
-        memory_total: '',
-        memory_used: '',
-        node: '',
-        node_status: '',
-        otp_release: '',
-        process_available: 0,
-        process_used: 0,
-        uptime: '',
-        version: '',
-      },
+      // initCurrentNode: {
+      //   connections: 0,
+      //   load1: '',
+      //   load15: '',
+      //   load5: '',
+      //   max_fds: 0,
+      //   memory_total: '',
+      //   memory_used: '',
+      //   node: '',
+      //   node_status: '',
+      //   otp_release: '',
+      //   process_available: 0,
+      //   process_used: 0,
+      //   uptime: '',
+      //   version: '',
+      // },
       timer: 0,
       nodes: [],
       licenseTipVisible: false,
@@ -301,17 +301,17 @@ export default {
       }
       return value
     },
-    currentNode() {
-      const node = this.nodes.find(($) => $.node === this.nodeName)
-      if (node) {
-        const { stats, ...withoutStats } = node
-        return {
-          ...stats,
-          ...withoutStats,
-        }
-      }
-      return this.initCurrentNode
-    },
+    // currentNode() {
+    //   const node = this.nodes.find(($) => $.node === this.nodeName)
+    //   if (node) {
+    //     const { stats, ...withoutStats } = node
+    //     return {
+    //       ...stats,
+    //       ...withoutStats,
+    //     }
+    //   }
+    //   return this.initCurrentNode
+    // },
     formatConnection() {
       const { connection } = this.currentMetrics
       const { max_connections } = this.license
@@ -325,10 +325,10 @@ export default {
     clearInterval(this.timerData)
     this.timerData = setInterval(() => {
       this.loadData()
-      this.loadNodes()
+      // this.loadNodes()
       // this.$refs.percentageCards.loadMetricsData()
     }, 10 * 1000)
-    this.dataTypeChange()
+    // this.dataTypeChange()
   },
 
   beforeDestroy() {
@@ -341,14 +341,14 @@ export default {
         localStorage.setItem('licenseTipVisible', false)
       }
     },
-    dataTypeChange(val) {
-      this.nodeName = val
-      this.loadNodes()
-    },
-    async loadNodes() {
-      this.nodes = await loadNodesApi()
-      this.nodeName = this.nodeName || (this.nodes[0] || {}).node
-    },
+    // dataTypeChange(val) {
+    //   this.nodeName = val
+    //   this.loadNodes()
+    // },
+    // async loadNodes() {
+    //   this.nodes = await loadNodesApi()
+    //   this.nodeName = this.nodeName || (this.nodes[0] || {}).node
+    // },
 
     _formatNumber(num) {
       let number = String(parseInt(num))

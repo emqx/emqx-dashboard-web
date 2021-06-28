@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { loadNodeDetail, loadListeners, loadMetrics } from '@/api/overview'
+import { loadNodeDetail, loadListeners, loadMetrics } from '@/api/dashboard'
 
 import NodeBasicCard from './components/NodeBasicCard'
 

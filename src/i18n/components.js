@@ -31,6 +31,10 @@ export default {
     zh: '概览',
     en: 'Overview',
   },
+  metrics: {
+    zh: '度量指标',
+    en: 'Metrics',
+  },
   connect: {
     zh: '连接',
     en: 'Connections',

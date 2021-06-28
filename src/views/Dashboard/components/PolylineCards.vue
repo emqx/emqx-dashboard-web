@@ -43,7 +43,7 @@
 <script>
 import PolylineChart from './PolylineChart'
 import Moment from 'moment'
-import { loadMetricsLog } from '@/api/overview'
+import { loadMetricsLog } from '@/api/dashboard'
 
 export default {
   name: 'PolylineCards',
@@ -55,12 +55,12 @@ export default {
   data() {
     return {
       dataTypeMap: {
-        dropped: this.$t('Overview.messageDrop'),
-        connection: this.$t('Overview.connection'),
-        route: this.$t('Overview.topics'),
-        subscriptions: this.$t('Overview.Subscription'),
-        sent: this.$t('Overview.messageOut'),
-        received: this.$t('Overview.messageIn'),
+        dropped: this.$t('Dashboard.messageDrop'),
+        connection: this.$t('Dashboard.connection'),
+        route: this.$t('Dashboard.topics'),
+        subscriptions: this.$t('Dashboard.Subscription'),
+        sent: this.$t('Dashboard.messageOut'),
+        received: this.$t('Dashboard.messageIn'),
       },
       metricTitles: [],
       metricLog: {

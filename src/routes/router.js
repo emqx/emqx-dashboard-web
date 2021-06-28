@@ -212,7 +212,6 @@ let routes = [
   {
     path: '/alarm',
     component: Layout,
-    // redirect: '/alerts/list',
     meta: {
       hideKey: 'alarm',
       authRequired: true,
@@ -221,7 +220,7 @@ let routes = [
       {
         path: '',
         name: 'alarm',
-        component: () => import('@/views/Alerts/Alerts'),
+        component: () => import('@/views/Alarm/Alarm'),
       },
     ],
   },
