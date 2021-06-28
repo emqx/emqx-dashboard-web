@@ -211,7 +211,7 @@
 
 <script>
 import Moment from 'moment'
-import { loadCurrentMetrics, loadLicenseInfo } from '@/api/dashboard'
+import { loadCurrentMetrics, loadLicenseInfo } from '@/api/common'
 // import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
 // import PercentageCards from './components/PercentageCards'

@@ -159,7 +159,7 @@
 
 <script>
 import { loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule } from '@/api/rules'
-import { loadTopics } from '@/api/server'
+import { listTopics as loadTopics } from '@/api/topics'
 import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck, verifyID } from '@/common/utils'
 import Monaco from '@/components/Monaco'
 // import StretchHeight from '@/components/StretchHeight'

@@ -43,7 +43,7 @@
 <script>
 import PolylineChart from './PolylineChart'
 import Moment from 'moment'
-import { loadMetricsLog } from '@/api/dashboard'
+import { loadMetricsLog } from '@/api/common'
 
 export default {
   name: 'PolylineCards',

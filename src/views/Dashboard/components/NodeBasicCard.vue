@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import { formatNumberSize } from '@/common/utils'
+// import { formatNumberSize } from '@/common/utils'
 
 export default {
   name: 'NodeBasicCard',
@@ -121,9 +121,9 @@ export default {
 
   filters: {
     formatMemory(val) {
-      if (typeof val === 'number') {
-        return formatNumberSize(val)
-      }
+      // if (typeof val === 'number') {
+      //   return formatNumberSize(val)
+      // }
       return val
     },
   },

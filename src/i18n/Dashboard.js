@@ -32,12 +32,12 @@ export default {
     en: 'Uptime',
   },
   currentConnection: {
-    zh: '连接',
+    zh: '连接数',
     en: 'Connections',
   },
-  nodeState: {
+  nodeStatus: {
     zh: '节点状态',
-    en: 'Node State',
+    en: 'Node Status',
   },
   running: {
     zh: '运行中',
@@ -74,6 +74,10 @@ export default {
   nodeData: {
     zh: '节点信息',
     en: 'Node Data',
+  },
+  nodeStatis: {
+    zh: '节点统计',
+    en: 'Node Statistics',
   },
   currentNodeInfo: {
     zh: '当前节点信息如下',
