@@ -21,6 +21,10 @@ export function loadLicenseInfo() {
   return http.get('/license_info')
 }
 
+export function loadMetrics() {
+  return http.get('/metrics')
+}
+
 export function loadCurrentMetrics() {
   return http.get('/monitor/current_metrics')
 }

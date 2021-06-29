@@ -45,11 +45,6 @@ let routes = [
         name: 'metrics',
         component: () => import('@/views/Dashboard/Metrics'),
       },
-      {
-        path: '/monitor/node',
-        name: 'node',
-        component: () => import('@/views/Dashboard/Node'),
-      },
     ],
   },
   // 认证鉴权

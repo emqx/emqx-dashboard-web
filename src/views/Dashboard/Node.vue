@@ -65,7 +65,7 @@
 
               <el-row class="stats-row" :gutter="30">
                 <el-col :span="8">
-                  <el-table :data="metricsData.client">
+                  <el-table :data="metricsData.client" stripe height="300">
                     <el-table-column
                       prop="key"
                       :label="$t('Overview.client')"
@@ -76,7 +76,7 @@
                 </el-col>
 
                 <el-col :span="8">
-                  <el-table :data="metricsData.delivery">
+                  <el-table :data="metricsData.delivery" stripe height="300">
                     <el-table-column
                       prop="key"
                       label="Delivery"
@@ -87,7 +87,7 @@
                 </el-col>
 
                 <el-col :span="8">
-                  <el-table :data="metricsData.session">
+                  <el-table :data="metricsData.session" stripe height="300">
                     <el-table-column
                       prop="key"
                       :label="$t('Overview.session')"
@@ -100,7 +100,7 @@
 
               <el-row class="stats-row" :gutter="30">
                 <el-col :span="8">
-                  <el-table :data="metricsData.packets">
+                  <el-table :data="metricsData.packets" stripe height="300">
                     <el-table-column
                       prop="key"
                       :label="$t('Overview.mqttPackages')"
@@ -111,7 +111,7 @@
                 </el-col>
 
                 <el-col :span="8">
-                  <el-table :data="metricsData.messages">
+                  <el-table :data="metricsData.messages" stripe height="300">
                     <el-table-column
                       prop="key"
                       :label="$t('Overview.messageNumber')"
@@ -122,7 +122,7 @@
                 </el-col>
 
                 <el-col :span="8">
-                  <el-table :data="metricsData.bytes">
+                  <el-table :data="metricsData.bytes" stripe height="300">
                     <el-table-column
                       prop="key"
                       :label="$t('Overview.traffic')"
