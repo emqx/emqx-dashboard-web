@@ -69,15 +69,11 @@ export default {
   components: {
     // Breadcrumb,
   },
-
-  props: {},
-
   data() {
     return {
       firstPath: '',
     }
   },
-
   computed: {
     alertCount() {
       return this.$store.state.alertCount
@@ -113,7 +109,9 @@ export default {
   },
 
   mounted() {
-    window.onfocus = this.loadData()
+    document.addEventListener('visibilitychange', () => {
+      document.visibilityState === 'visible' && this.loadData()
+    })
   },
 
   methods: {

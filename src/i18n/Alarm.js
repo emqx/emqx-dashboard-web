@@ -43,6 +43,10 @@ export default {
     zh: '结束时间',
     en: 'Deactivate At',
   },
+  activateTime: {
+    zh: '告警时间',
+    en: 'Alarm Time',
+  },
   duration: {
     zh: '持续时间',
     en: 'Duration',
@@ -94,9 +98,5 @@ export default {
   second: {
     zh: '次',
     en: 'second',
-  },
-  durationTips: {
-    zh: '日：时：分：秒',
-    en: 'Days: Hours: Minutes: Seconds',
   },
 }

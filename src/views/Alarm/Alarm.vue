@@ -1,65 +1,77 @@
 <template>
-  <div class="alerts">
-    <div class="app-wrapper">
-      <el-card class="emq-list-card" shadow="never">
-        <div class="emq-table-header">
-          <div></div>
-          <el-radio-group v-model="alertType" border size="mini" @change="loadData">
-            <el-radio-button label="present">{{ $t('Alerts.currentAlarm') }}</el-radio-button>
-            <el-radio-button label="history">{{ $t('Alerts.historyAlarm') }}</el-radio-button>
-          </el-radio-group>
-        </div>
-
-        <el-table v-bind="alertTable" :data="tableData" class="data-list">
-          <el-table-column prop="name" :label="$t('Alerts.alarmName')"></el-table-column>
-          <el-table-column prop="message" :label="$t('Alerts.alarmMsg')" min-width="140px">
-            <template slot-scope="{ row }">
-              <el-popover placement="top" trigger="hover" width="160" :open-delay="500">
-                <div v-for="(value, label) in row.details" :key="label">
-                  {{ label }}: {{ value }}
-                </div>
-                <span slot="reference" class="details">
-                  <i class="iconfont icon-bangzhu"></i>
-                </span>
-              </el-popover>
-              <span>{{ row.message }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="node" :label="$t('Alerts.triggerNode')"></el-table-column>
-          <el-table-column prop="node" :label="$t('Alerts.alarmLevel')">
-            <template>
-              {{ $t('Alerts.system') }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="activate_at" :label="$t('Alerts.activateAt')">
-            <template slot-scope="{ row }">
-              {{ dateFormat(row.activate_at) }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            v-if="alertType === 'history'"
-            prop="deactivate_at"
-            :label="$t('Alerts.deactivateAt')"
-          >
-            <template slot-scope="{ row }">
-              {{ dateFormat(row.deactivate_at) }}
-            </template>
-          </el-table-column>
-          <el-table-column v-else>
-            <span slot="header">
-              {{ $t('Alerts.duration') }}
-              <el-popover trigger="hover" placement="top">
-                {{ $t('Alerts.durationTips') }}
-                <i slot="reference" class="el-icon-question"></i>
-              </el-popover>
-            </span>
-            <template slot-scope="{ row }">
-              <span v-show="row.duration">{{ getDuration(row.duration) }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
+  <div class="alarm app-wrapper">
+    <div class="section-header">
+      {{ tl('currentAlarm') }}
     </div>
+
+    <el-table v-bind="alertTable" :data="currentAlarmData">
+      <el-table-column prop="name" :label="$t('Alarm.alarmName')" sortable></el-table-column>
+      <el-table-column prop="message" :label="$t('Alarm.alarmMsg')" sortable>
+        <template slot-scope="{ row }">
+          <el-popover placement="top" trigger="hover" width="160" :open-delay="500">
+            <div v-for="(value, label) in row.details" :key="label">{{ label }}: {{ value }}</div>
+            <span slot="reference" class="details">
+              <i class="iconfont el-icon-question"></i>
+            </span>
+          </el-popover>
+          <span>{{ row.message }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="node" :label="$t('Alarm.triggerNode')" sortable></el-table-column>
+      <el-table-column prop="node" :label="$t('Alarm.alarmLevel')" sortable>
+        <template>
+          {{ $t('Alarm.system') }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="activate_at" :label="$t('Alarm.activateAt')" sortable>
+        <template slot-scope="{ row }">
+          {{ dateFormat(row.activate_at) }}
+        </template>
+      </el-table-column>
+      <el-table-column sortable>
+        <span slot="header">
+          {{ $t('Alarm.duration') }}
+        </span>
+        <template slot-scope="{ row }">
+          <span v-show="row.duration">{{ getDuration(row.duration) }}</span>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <div class="section-header">
+      {{ tl('historyAlarm') }}
+    </div>
+
+    <el-table v-bind="alertTable" :data="historyAlarmData">
+      <el-table-column prop="name" :label="$t('Alarm.alarmName')" sortable></el-table-column>
+      <el-table-column prop="message" :label="$t('Alarm.alarmMsg')" sortable>
+        <template slot-scope="{ row }">
+          <el-popover placement="top" trigger="hover" width="160" :open-delay="500">
+            <div v-for="(value, label) in row.details" :key="label">{{ label }}: {{ value }}</div>
+            <span slot="reference" class="details">
+              <i class="iconfont el-icon-question"></i>
+            </span>
+          </el-popover>
+          <span>{{ row.message }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="node" :label="$t('Alarm.triggerNode')" sortable></el-table-column>
+      <el-table-column prop="node" :label="$t('Alarm.alarmLevel')" sortable>
+        <template>
+          {{ $t('Alarm.system') }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="activate_at" :label="$t('Alarm.activateTime')" sortable>
+        <template slot-scope="{ row }">
+          {{ dateFormat(row.activate_at) }} - {{ dateFormat(row.deactivate_at) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="deactivate_at" :label="$t('Alarm.duration')" sortable>
+        <template slot-scope="{ row }">
+          {{ getDuration(row.duration) }}
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -69,7 +81,7 @@ import { getDateDiff } from '@/common/utils'
 import moment from 'moment'
 
 export default {
-  name: 'Alerts',
+  name: 'Alarm',
 
   data() {
     return {
@@ -78,8 +90,8 @@ export default {
         'default-expand-all': true,
         'tree-props': { children: 'children', hasChildren: 'hasChildren' },
       },
-      tableData: [],
-      alertType: 'present',
+      currentAlarmData: [],
+      historyAlarmData: [],
     }
   },
 
@@ -88,30 +100,54 @@ export default {
   },
 
   methods: {
+    tl(key, collection = 'Alarm') {
+      return this.$t(collection + '.' + key)
+    },
     getDuration(duration) {
-      return getDateDiff(duration / 1000)
+      let dateDiff = getDateDiff(duration / 1000)
+      let readableDate = []
+      dateDiff.reduce((c, v, i) => {
+        if (c == 0 && v == 0) {
+        } else {
+          switch (i) {
+            case 0:
+              readableDate.push([v, this.$tc('General.day', v)])
+              break
+            case 1:
+              readableDate.push([v, this.$tc('General.hour', v)])
+              break
+            case 2:
+              readableDate.push([v, this.$tc('General.min', v)])
+              break
+            case 3:
+              readableDate.push([v, this.$tc('General.sec', v)])
+              break
+          }
+        }
+        return c + v
+      }, 0)
+
+      return readableDate
+        .map((_) => {
+          return _.join(this.$t('General.timeSep'))
+        })
+        .join(this.$t('General.timePartSep'))
     },
     dateFormat(date) {
-      if (typeof date !== 'number' && date === 'infinity') {
-        return ''
-      }
-      //return dateformat(date / 1000, 'yyyy-mm-dd HH:MM:ss')
-      return moment(date).format('YYYY-MM-DD HH:mm:ss')
+      let timestamp = Math.floor(+date / 1000)
+      return moment(timestamp).format('YYYY-MM-DD HH:mm:ss')
     },
     async loadData() {
-      if (this.alertType === 'present') {
-        this.tableData = await loadAlarm()
-        this.$store.dispatch('SET_ALERT_COUNT', (this.tableData || []).length)
-      } else {
-        this.tableData = await loadHistoryAlarm()
-      }
+      this.currentAlarmData = await loadAlarm().catch(() => {})
+      this.$store.dispatch('SET_ALERT_COUNT', this.currentAlarmData.length || 0)
+      this.historyAlarmData = await loadHistoryAlarm()
     },
 
     getStateText(state) {
       const stateMap = {
-        0: this.$t('Alerts.normal'),
+        0: this.$t('Alarm.normal'),
       }
-      return stateMap[state] || `${this.$t('Alerts.abnormal')} ${state} ${this.$t('Alerts.second')}`
+      return stateMap[state] || `${this.$t('Alarm.abnormal')} ${state} ${this.$t('Alarm.second')}`
     },
   },
 }

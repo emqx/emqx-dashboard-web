@@ -231,4 +231,28 @@ export default {
     zh: '请选择禁用属性',
     en: 'Please select property',
   },
+  day: {
+    zh: '天',
+    en: 'day|days',
+  },
+  hour: {
+    zh: '小时',
+    en: 'hour|hours',
+  },
+  min: {
+    zh: '分',
+    en: 'minute|minutes',
+  },
+  sec: {
+    zh: '秒',
+    en: 'second|seconds',
+  },
+  timePartSep: {
+    zh: '',
+    en: ', ',
+  },
+  timeSep: {
+    zh: '',
+    en: ' ',
+  },
 }

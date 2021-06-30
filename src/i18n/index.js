@@ -11,7 +11,7 @@ const lang = {
 }
 
 const model = [
-  'Alerts',
+  'Alarm',
   'Base',
   'components',
   'Clients',

@@ -14,48 +14,46 @@
         ></emq-select>
       </div>
     </div>
-    <el-card shadow="never">
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-table :data="metricsObj[currentNode] | filterMetrics('client')">
-            <el-table-column prop="m"> </el-table-column>
-            <el-table-column prop="v"> </el-table-column>
-          </el-table>
-        </el-col>
-        <el-col :span="8">
-          <el-table :data="metricsObj[currentNode] | filterMetrics('delivery')">
-            <el-table-column prop="m"> </el-table-column>
-            <el-table-column prop="v"> </el-table-column>
-          </el-table>
-        </el-col>
-        <el-col :span="8">
-          <el-table :data="metricsObj[currentNode] | filterMetrics('session')">
-            <el-table-column prop="m"> </el-table-column>
-            <el-table-column prop="v"> </el-table-column>
-          </el-table>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-table :data="metricsObj[currentNode] | filterMetrics('packets')">
-            <el-table-column prop="m"> </el-table-column>
-            <el-table-column prop="v"> </el-table-column>
-          </el-table>
-        </el-col>
-        <el-col :span="8">
-          <el-table :data="metricsObj[currentNode] | filterMetrics('messages')">
-            <el-table-column prop="m"> </el-table-column>
-            <el-table-column prop="v"> </el-table-column>
-          </el-table>
-        </el-col>
-        <el-col :span="8">
-          <el-table :data="metricsObj[currentNode] | filterMetrics('bytes')">
-            <el-table-column prop="m"> </el-table-column>
-            <el-table-column prop="v"> </el-table-column>
-          </el-table>
-        </el-col>
-      </el-row>
-    </el-card>
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <el-table :data="metricsObj[currentNode] | filterMetrics('client')" height="280">
+          <el-table-column prop="m" :label="$t('Dashboard.client')"> </el-table-column>
+          <el-table-column prop="v" sortable> </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :span="8">
+        <el-table :data="metricsObj[currentNode] | filterMetrics('delivery')" height="280">
+          <el-table-column prop="m" label="Delivery"> </el-table-column>
+          <el-table-column prop="v" sortable> </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :span="8">
+        <el-table :data="metricsObj[currentNode] | filterMetrics('session')" height="280">
+          <el-table-column prop="m" :label="$t('Dashboard.session')"> </el-table-column>
+          <el-table-column prop="v" sortable> </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <el-table :data="metricsObj[currentNode] | filterMetrics('packets')" height="280">
+          <el-table-column prop="m" :label="$t('Dashboard.mqttPackages')"> </el-table-column>
+          <el-table-column prop="v" sortable> </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :span="8">
+        <el-table :data="metricsObj[currentNode] | filterMetrics('messages')" height="280">
+          <el-table-column prop="m" :label="$t('Dashboard.messageNumber')"> </el-table-column>
+          <el-table-column prop="v" sortable> </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :span="8">
+        <el-table :data="metricsObj[currentNode] | filterMetrics('bytes')" height="280">
+          <el-table-column prop="m" :label="$t('Dashboard.traffic')"> </el-table-column>
+          <el-table-column prop="v" sortable> </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -88,7 +86,6 @@ export default defineComponent({
           metricsObj.value[v.node] = v.metrics
         })
       }
-      // console.log(metricsObj.value, metrics.value)
     }
 
     onMounted(metricsData)
@@ -114,11 +111,13 @@ export default defineComponent({
           keys.push({ m: v.split('.').slice(1).join('.'), v: data[v] })
         }
       })
-      // console.log(keys)
-
       return keys
     },
   },
 })
 </script>
-<style scoped></style>
+<style scoped>
+.el-row {
+  margin: 40px 0;
+}
+</style>

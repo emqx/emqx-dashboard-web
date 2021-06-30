@@ -438,10 +438,6 @@ export function getDateDiff(duration) {
   const seconds = dateDiff % 60
 
   return [days, hours, minutes, seconds]
-    .map((n) => {
-      return n >= 10 ? n : `0${n}`
-    })
-    .join(':')
 }
 
 export const verifyID = (rule, value, callback) => {
