@@ -85,25 +85,20 @@ a {
   margin: 0 auto;
 }
 
-.emq-table-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0px 0 24px 0;
-  .search-wrapper {
-    width: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .node-select {
-      width: 100%;
-    }
-
-    .el-button {
-      margin-left: 12px;
-    }
+.search-wrapper {
+  .el-button {
+    margin-left: 12px;
   }
+  & > .el-col {
+    margin-bottom: 20px;
+  }
+  .el-select {
+    width: 100%;
+  }
+  .el-date-editor {
+    width: 100%;
+  }
+  // }
 }
 
 .emq-table-footer {

@@ -238,6 +238,11 @@ let routes = [
           keepAlive: true,
         },
       },
+      {
+        path: 'httpapi',
+        name: 'httpapi',
+        component: () => import('@/views/Tools/Httpapi'),
+      },
     ],
   },
 

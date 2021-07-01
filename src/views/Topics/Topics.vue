@@ -1,43 +1,35 @@
 <template>
-  <div class="topics">
-    <div class="app-wrapper">
-      <el-card shadow="never" class="emq-list-card" :loading="listLoading">
-        <div class="emq-table-header">
-          <div class="search-wrapper">
-            <el-input
-              v-model="searchValue"
-              size="small"
-              :placeholder="$t('Topics.topic')"
-            ></el-input>
-            <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
-              {{ $t('Clients.search') }}
-            </el-button>
-            <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
-              {{ searchValue ? $t('Clients.reset') : $t('Clients.refresh') }}
-            </el-button>
-          </div>
-        </div>
+  <div class="app-wrapper topics">
+    <el-row class="search-wrapper">
+      <el-col :span="8">
+        <el-input v-model="searchValue" size="small" :placeholder="$t('Topics.topic')"></el-input>
+      </el-col>
+      <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
+        {{ $t('Clients.search') }}
+      </el-button>
+      <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
+        {{ searchValue ? $t('Clients.reset') : $t('Clients.refresh') }}
+      </el-button>
 
-        <el-table :data="tableData" class="data-list">
-          <el-table-column prop="topic" :label="$t('Topics.topic')" sortable></el-table-column>
-          <el-table-column prop="node" :label="$t('Clients.node')" sortable></el-table-column>
-        </el-table>
+      <el-table :data="tableData">
+        <el-table-column prop="topic" :label="$t('Topics.topic')" sortable></el-table-column>
+        <el-table-column prop="node" :label="$t('Clients.node')" sortable></el-table-column>
+      </el-table>
+    </el-row>
 
-        <div class="emq-table-footer">
-          <el-pagination
-            hide-on-single-page
-            background
-            layout="total, sizes, prev, pager, next"
-            :page-sizes="[20, 50, 100, 500]"
-            :page-size.sync="params._limit"
-            :current-page.sync="params._page"
-            :total="count"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentPageChange"
-          >
-          </el-pagination>
-        </div>
-      </el-card>
+    <div class="emq-table-footer">
+      <el-pagination
+        hide-on-single-page
+        background
+        layout="total, sizes, prev, pager, next"
+        :page-sizes="[20, 50, 100, 500]"
+        :page-size.sync="params._limit"
+        :current-page.sync="params._page"
+        :total="count"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentPageChange"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -50,7 +42,6 @@ export default {
 
   data() {
     return {
-      listLoading: true,
       tableData: [],
       searchValue: '',
       params: {
@@ -104,7 +95,6 @@ export default {
         items = [],
         meta: { count = 0 },
       } = data
-      this.listLoading = false
       this.tableData = items
       this.count = count
       this.resetIcon = 'el-icon-refresh'
@@ -112,3 +102,4 @@ export default {
   },
 }
 </script>
+<style lang="scss" scoped></style>

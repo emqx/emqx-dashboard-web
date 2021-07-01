@@ -1,190 +1,166 @@
 <template>
-  <div class="clients">
-    <page-header>
-      <div class="page-header-title-view">
-        <div class="title">{{ $t('Clients.currentConnection') }}</div>
-      </div>
-      <div class="page-header-content-view">
-        <div class="content">
-          <emq-select
-            v-model="nodeName"
-            class="node-select"
+  <div class="app-wrapper clients">
+    <el-row class="search-wrapper" :gutter="20">
+      <el-col :span="6">
+        <el-input
+          v-model="fuzzyParams._like_clientid"
+          size="small"
+          :placeholder="$t('Clients.clientId')"
+        ></el-input>
+      </el-col>
+      <el-col :span="6">
+        <el-input
+          v-model="fuzzyParams._like_username"
+          size="small"
+          :placeholder="$t('Clients.username')"
+        ></el-input>
+      </el-col>
+      <el-col :span="6">
+        <emq-select
+          v-model="nodeName"
+          class="node-select"
+          size="small"
+          :field="{ options: currentNodes }"
+          :field-name="{ label: 'name', value: 'node' }"
+          @change="handleNodeChange"
+        ></emq-select>
+      </el-col>
+      <template v-if="showMoreQuery">
+        <el-col :span="6">
+          <el-input
+            v-model="fuzzyParams.ip_address"
             size="small"
-            :field="{ options: currentNodes }"
-            :field-name="{ label: 'name', value: 'node' }"
-            @change="handleNodeChange"
-          ></emq-select>
-        </div>
-      </div>
-    </page-header>
-
-    <div class="app-wrapper">
-      <el-card shadow="never" class="emq-list-card" :loading="listLoading">
-        <div class="emq-table-header">
-          <el-row class="search-wrapper" :gutter="20">
+            :placeholder="$t('Clients.ipAddress')"
+          ></el-input>
+        </el-col>
+        <el-col :span="6">
+          <el-select
+            v-model="fuzzyParams.conn_state"
+            size="small"
+            :placeholder="$t('Clients.connectedStatus')"
+          >
+            <el-option value="connected"></el-option>
+            <el-option value="disconnected"></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="6">
+          <el-row class="form-item-row">
             <el-col :span="8">
-              <el-input
-                v-model="fuzzyParams._like_clientid"
-                size="small"
-                :placeholder="$t('Clients.clientId')"
-              ></el-input>
+              <el-select v-model="fuzzyParams.comparator" class="comparator" size="small">
+                <el-option label=">=" value="_gte"></el-option>
+                <el-option label="<=" value="_lte"></el-option>
+              </el-select>
             </el-col>
-            <el-col :span="8">
-              <el-input
-                v-model="fuzzyParams._like_username"
+            <el-col :span="16">
+              <el-date-picker
+                v-model="fuzzyParams._connected_at"
+                class="datatime"
+                type="datetime"
+                value-format="timestamp"
                 size="small"
-                :placeholder="$t('Clients.username')"
-              ></el-input>
-            </el-col>
-            <template v-if="showMoreQuery">
-              <el-col :span="8">
-                <el-input
-                  v-model="fuzzyParams.ip_address"
-                  size="small"
-                  :placeholder="$t('Clients.ipAddress')"
-                ></el-input>
-              </el-col>
-              <el-col :span="8">
-                <el-select
-                  v-model="fuzzyParams.conn_state"
-                  size="small"
-                  :placeholder="$t('Clients.connectedStatus')"
-                >
-                  <el-option value="connected"></el-option>
-                  <el-option value="disconnected"></el-option>
-                </el-select>
-              </el-col>
-              <el-col :span="8">
-                <el-row class="form-item-row">
-                  <el-col :span="8">
-                    <el-select v-model="fuzzyParams.comparator" class="comparator" size="small">
-                      <el-option label=">=" value="_gte"></el-option>
-                      <el-option label="<=" value="_lte"></el-option>
-                    </el-select>
-                  </el-col>
-                  <el-col :span="16">
-                    <el-date-picker
-                      v-model="fuzzyParams._connected_at"
-                      class="datatime"
-                      type="datetime"
-                      value-format="timestamp"
-                      size="small"
-                      :placeholder="$t('Clients.createdAt')"
-                    >
-                    </el-date-picker>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="8">
-                <el-select
-                  v-model="fuzzyParams.proto_name"
-                  size="small"
-                  :placeholder="$t('Clients.protocol')"
-                >
-                  <el-option v-for="name in protoNames" :key="name" :value="name"> </el-option>
-                </el-select>
-              </el-col>
-            </template>
-            <div class="col-oper">
-              <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
-                {{ $t('Clients.search') }}
-              </el-button>
-              <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
-                {{ $t('Clients.reset') }}
-              </el-button>
-              <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
-                {{ showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand') }}
-                <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
-              </a>
-            </div>
-          </el-row>
-        </div>
-
-        <el-table :data="tableData" class="data-list">
-          <el-table-column prop="clientid" sortable :label="$t('Clients.clientId')">
-            <template slot-scope="{ row }">
-              <router-link
-                :to="{
-                  path: '/clients/detail',
-                  query: { clientid: row.clientid },
-                }"
+                :placeholder="$t('Clients.createdAt')"
               >
-                {{ row.clientid }}
-              </router-link>
-            </template>
-          </el-table-column>
+              </el-date-picker>
+            </el-col>
+          </el-row>
+        </el-col>
+        <el-col :span="6">
+          <el-select
+            v-model="fuzzyParams.proto_name"
+            size="small"
+            :placeholder="$t('Clients.protocol')"
+          >
+            <el-option v-for="name in protoNames" :key="name" :value="name"> </el-option>
+          </el-select>
+        </el-col>
+      </template>
+      <el-col :span="6" class="col-oper">
+        <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
+          {{ $t('Clients.search') }}
+        </el-button>
+        <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
+          {{ $t('Clients.reset') }}
+        </el-button>
+        <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
+          <!-- {{ showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand') }} -->
+          <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+        </a>
+      </el-col>
+    </el-row>
 
-          <el-table-column
-            prop="username"
-            sortable
-            :label="$t('Clients.username')"
-          ></el-table-column>
-          <el-table-column prop="ipaddress" sortable :label="$t('Clients.ipAddress')">
-            <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template>
-          </el-table-column>
-          <el-table-column
-            prop="keepalive"
-            sortable
-            :label="$t('Clients.keepalive')"
-          ></el-table-column>
-          <el-table-column
-            prop="proto_name"
-            filter-placement="bottom"
-            :filters="filterOptions.protoName"
-            :filter-method="protoNameColumnFilter"
-            :label="$t('Clients.protocol')"
+    <el-table :data="tableData">
+      <el-table-column prop="clientid" sortable :label="$t('Clients.clientId')">
+        <template slot-scope="{ row }">
+          <router-link
+            :to="{
+              path: '/clients/detail',
+              query: { clientid: row.clientid },
+            }"
           >
-            <template slot-scope="{ row }">
-              <span class="">
-                {{ row.proto_name }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="connected" sortable :label="$t('Clients.connectedStatus')">
-            <template slot-scope="{ row }">
-              <el-badge is-dot :type="row.connected ? 'success' : 'danger'"> </el-badge>
-              <span>{{
-                row.connected ? $t('Clients.connected') : $t('Clients.disconnected')
-              }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="connected_at"
-            sortable
-            :label="$t('Clients.connectionAt')"
-          ></el-table-column>
-          <el-table-column prop="oper" :label="$t('Base.operation')">
-            <template slot-scope="{ row }">
-              <el-button size="mini" type="danger" plain @click="handleDisconnect(row)">
-                {{ row.connected ? $t('Clients.kickOut') : $t('Clients.cleanSession') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+            {{ row.clientid }}
+          </router-link>
+        </template>
+      </el-table-column>
 
-        <div class="emq-table-footer">
-          <el-pagination
-            v-if="count > 10"
-            background
-            layout="total, sizes, prev, pager, next"
-            :page-sizes="[20, 50, 100, 500]"
-            :page-size.sync="params._limit"
-            :current-page.sync="params._page"
-            :total="count"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentPageChange"
-          >
-          </el-pagination>
-          <custom-pagination
-            v-if="count === -1 && tableData.length"
-            :hasnext="hasnext"
-            :page="params._page"
-            @prevClick="handlePrevClick"
-            @nextClick="handleNextClick"
-          >
-          </custom-pagination>
-        </div>
-      </el-card>
+      <el-table-column prop="username" sortable :label="$t('Clients.username')"></el-table-column>
+      <el-table-column prop="ipaddress" sortable :label="$t('Clients.ipAddress')">
+        <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template>
+      </el-table-column>
+      <el-table-column prop="keepalive" sortable :label="$t('Clients.keepalive')"></el-table-column>
+      <el-table-column
+        prop="proto_name"
+        filter-placement="bottom"
+        :filters="filterOptions.protoName"
+        :filter-method="protoNameColumnFilter"
+        :label="$t('Clients.protocol')"
+      >
+        <template slot-scope="{ row }">
+          <span class="">
+            {{ row.proto_name }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="connected" sortable :label="$t('Clients.connectedStatus')">
+        <template slot-scope="{ row }">
+          <el-badge is-dot :type="row.connected ? 'success' : 'danger'"> </el-badge>
+          <span>{{ row.connected ? $t('Clients.connected') : $t('Clients.disconnected') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="connected_at"
+        sortable
+        :label="$t('Clients.connectionAt')"
+      ></el-table-column>
+      <el-table-column prop="oper" :label="$t('Base.operation')">
+        <template slot-scope="{ row }">
+          <el-button size="mini" type="danger" plain @click="handleDisconnect(row)">
+            {{ row.connected ? $t('Clients.kickOut') : $t('Clients.cleanSession') }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <div class="emq-table-footer">
+      <el-pagination
+        v-if="count > 10"
+        background
+        layout="total, sizes, prev, pager, next"
+        :page-sizes="[20, 50, 100, 500]"
+        :page-size.sync="params._limit"
+        :current-page.sync="params._page"
+        :total="count"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentPageChange"
+      >
+      </el-pagination>
+      <custom-pagination
+        v-if="count === -1 && tableData.length"
+        :hasnext="hasnext"
+        :page="params._page"
+        @prevClick="handlePrevClick"
+        @nextClick="handleNextClick"
+      >
+      </custom-pagination>
     </div>
   </div>
 </template>
@@ -203,7 +179,6 @@ export default {
 
   data() {
     return {
-      listLoading: true,
       showMoreQuery: false,
       tableData: [],
       hasnext: false,
@@ -318,7 +293,6 @@ export default {
       const data = await loadNodes()
       this.currentNodes = this.currentNodes.concat(data)
       this.nodeName = this.nodeName || (this.currentNodes[0] || {}).node
-      this.listLoading = false
       this.loadNodeClients()
     },
     async loadNodeClients(reload, params = {}) {
@@ -345,51 +319,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.clients {
-  .data-list {
-    clear: both;
-  }
-  .page-header-content-view {
-    .content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  }
-  .app-wrapper {
-    .search-wrapper {
-      display: block;
-      width: 100%;
-      .el-date-editor.el-input,
-      .el-date-editor.el-input__inner,
-      .el-select {
-        width: 100%;
-      }
-      .col-oper {
-        float: right;
-      }
-      .show-more {
-        margin-left: 12px;
-        text-decoration: none;
-      }
-      .el-col-8 {
-        margin-bottom: 20px;
-      }
-      .form-item-row {
-        margin-top: 0px;
-        .el-select.comparator .el-input__inner {
-          border-radius: 4px 0 0 4px;
-        }
-        .el-date-editor .el-input__inner {
-          border-radius: 0 4px 4px 0;
-        }
-      }
-    }
-  }
+<style lang="scss" scoped>
+.show-more {
+  margin-left: 12px;
+  text-decoration: none;
+}
 
-  .el-badge {
-    height: 20px;
-  }
+.el-badge {
+  height: 20px;
 }
 </style>

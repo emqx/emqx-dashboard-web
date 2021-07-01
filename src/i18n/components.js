@@ -107,6 +107,10 @@ export default {
     zh: 'Websocket',
     en: 'Websocket',
   },
+  httpapi: {
+    zh: 'HTTP API',
+    en: 'HTTP API',
+  },
   general: {
     zh: '通用',
     en: 'General',
