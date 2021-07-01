@@ -267,18 +267,18 @@ export default {
       searchValue: '',
       record: {
         clean_start: true,
-        clientid: 'mqttjs_ccf2ae3e',
-        conn_mod: 'emqx_channel',
-        connected_at: '2019-07-01 12:11:48',
+        clientid: '',
+        conn_mod: '',
+        connected_at: '',
         heap_size: 987,
-        ip_address: '127.0.0.1',
+        ip_address: '',
         is_bridge: false,
         keepalive: 60,
         mailbox_len: 0,
-        node: 'emqx@127.0.0.1',
-        peercert: 'nossl',
+        node: '',
+        peercert: '',
         port: 60386,
-        proto_name: 'MQTT',
+        proto_name: '',
         proto_ver: 4,
         recv_cnt: 98,
         recv_msg: 0,
@@ -290,8 +290,8 @@ export default {
         send_oct: 198,
         send_pend: 0,
         send_pkt: 98,
-        username: 'undefined',
-        zone: 'external',
+        username: '',
+        zone: '',
         connected: false,
       },
       mqttVersionMap: {
@@ -305,7 +305,7 @@ export default {
 
   computed: {
     clientId() {
-      return this.$route.query.clientid
+      return this.$route.params.clientId
     },
     connStatus() {
       return !this.record.connected ? 'danger' : 'success'
@@ -315,11 +315,11 @@ export default {
     },
   },
 
-  watch: {
-    $route() {
-      this.loadData()
-    },
-  },
+  // watch: {
+  //   $route() {
+  //     this.loadData()
+  //   },
+  // },
 
   created() {
     this.loadData()

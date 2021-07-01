@@ -16,7 +16,6 @@
 
   &.el-button--small {
     font-size: 14px;
-    // line-height: 10px;
   }
 
   &.el-button--primary:hover {
@@ -42,11 +41,12 @@
 .el-input,
 .el-textarea {
   transition: all 0.3s;
-  &__inner:focus {
-    box-shadow: 0 0 0 2px rgba(52, 195, 136, 0.2);
+  &__inner {
+    border-radius: 2px;
+    border: 1px solid #e4e4e4;
   }
   &--small {
-    font-size: 14px; //fix a bug in Chrome
+    font-size: 14px;
   }
 }
 
@@ -58,20 +58,7 @@
     }
   }
 }
-.el-form-item {
-  &.is-error {
-    .el-input__inner,
-    .el-textarea__inner {
-      box-shadow: 0 0 0 2px rgba(245, 34, 45, 0.2);
-    }
-  }
-  &.is-success {
-    .el-input__inner,
-    .el-textarea__inner {
-      border-color: $--input-border-color;
-    }
-  }
-}
+
 .el-form--label-top .el-form-item__label {
   padding: 0px;
 }
@@ -113,32 +100,21 @@
 
 /* Table */
 .el-table {
+  border: solid #eeeef7;
+  border-width: 1px 1px 0 1px;
   .el-table__header th {
-    border-bottom-color: #f7f7f7;
+    border-bottom: 1px solid #eeeef7;
+    background-color: #fff;
+    color: #8d96a2ff;
+    font-weight: 700;
   }
-  .el-table__header-wrapper {
-    border-radius: 4px;
 
-    .cell {
-      line-height: 37px;
-    }
+  .el-table__body td {
+    border-bottom: 1px solid #eeeef7;
   }
-  thead {
-    border-bottom-color: #fff;
-  }
-  .el-table__empty-block {
-    min-height: 180px;
-  }
-  &.data-list .cell {
-    .iconfont {
-      font-size: 18px;
-    }
-  }
-  .align-table-column {
-    .cell {
-      display: flex;
-      align-items: center;
-    }
+  .el-badge {
+    height: 16px;
+    margin-right: 3px;
   }
 }
 

@@ -1,39 +1,42 @@
 <template>
-  <div class="websocket">
-    <div class="app-wrapper">
-      <el-tabs
-        v-model="activeTab"
-        type="card"
-        :before-leave="handleBeforeLeave"
-        @tab-remove="handleTabEdit"
-      >
-        <el-tab-pane v-for="(item, i) in tabs" :key="i" :closable="i > 0" :name="item.name">
-          <span slot="label">
-            <el-badge
-              class="message-count"
-              :hidden="item.messageCount === 0"
-              :value="item.messageCount"
-              :max="99"
-            >
-              {{ item.label }}
-            </el-badge>
-          </span>
-        </el-tab-pane>
-        <el-tab-pane key="add" class="add-btn" name="add">
-          <span slot="label">
-            <i class="el-icon-plus"></i>
-          </span>
-        </el-tab-pane>
-      </el-tabs>
-
-      <web-socket-item
+  <div class="app-wrapper websocket">
+    <el-tabs
+      v-model="activeTab"
+      type="card"
+      :before-leave="handleBeforeLeave"
+      @tab-remove="handleTabEdit"
+    >
+      <el-tab-pane
         v-for="(item, i) in tabs"
-        v-show="item.name === activeTab"
-        :ref="item.name"
-        :key="i"
-        :message-count.sync="item.messageCount"
-      ></web-socket-item>
-    </div>
+        :key="item.name + i"
+        :closable="i > 0"
+        :name="item.name"
+      >
+        <span slot="label">
+          <el-badge
+            class="message-count"
+            :hidden="item.messageCount === 0"
+            :value="item.messageCount"
+            :max="99"
+          >
+            {{ item.label }}
+          </el-badge>
+        </span>
+      </el-tab-pane>
+      <el-tab-pane key="add" class="add-btn" name="add">
+        <span slot="label">
+          <i class="el-icon-plus"></i>
+        </span>
+      </el-tab-pane>
+    </el-tabs>
+
+    <web-socket-item
+      v-for="(item, i) in tabs"
+      v-show="item.name === activeTab"
+      :ref="item.name"
+      :key="i"
+      :message-count.sync="item.messageCount"
+    ></web-socket-item>
   </div>
 </template>
 
@@ -119,22 +122,9 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .websocket {
   position: relative;
-
-  .el-tabs--card > .el-tabs__header .el-tabs__item .el-icon-close,
-  .el-icon-plus {
-    font-weight: 600;
-    overflow: visible;
-  }
-
-  .el-tabs--top.el-tabs--border-card > .el-tabs__header .el-tabs__item:nth-child(2),
-  .el-tabs--top.el-tabs--card > .el-tabs__header .el-tabs__item:nth-child(2),
-  .el-tabs--top .el-tabs--left > .el-tabs__header .el-tabs__item:nth-child(2),
-  .el-tabs--top .el-tabs--right > .el-tabs__header .el-tabs__item:nth-child(2) {
-    padding: 0 13px;
-  }
 
   #tab-add.el-tabs__item {
     width: 43px;
@@ -147,34 +137,6 @@ export default {
     border: none;
     &.is-fixed {
       right: -14px;
-    }
-  }
-}
-
-/* padding: 0 13px; 解决hover时的字体偏移 */
-html:lang(zh) {
-  .websocket {
-    .el-tabs {
-      .el-tabs__item {
-        width: 86px;
-        padding: 0 13px;
-        &.is-active {
-          padding: 0 13px;
-        }
-      }
-    }
-  }
-}
-html:lang(en) {
-  .websocket {
-    .el-tabs {
-      .el-tabs__item {
-        width: 76px;
-        padding: 0 13px;
-        &.is-active {
-          padding: 0 13px;
-        }
-      }
     }
   }
 }

@@ -1,107 +1,102 @@
 <template>
   <div class="rules">
-    <page-header>
-      <div class="page-header-content-view">
-        <div class="content">
-          {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
-        </div>
-      </div>
-      <div class="page-header-top-start">
-        <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
-          <i class="icon el-icon-position"></i>
-          {{ $t('RuleEngine.quickStart') }}
-        </a>
-      </div>
-    </page-header>
-
     <div class="app-wrapper">
-      <el-card shadow="never" class="emq-list-card" :loading="listLoading">
-        <div class="emq-table-header">
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-plus"
-            @click="$router.push('/ruleengine/rules/create')"
-          >
-            {{ $t('Base.create') }}
-          </el-button>
+      <page-header>
+        <div class="page-header-content-view">
+          <div class="content">
+            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
+          </div>
         </div>
+        <div class="page-header-top-start">
+          <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
+            <i class="icon el-icon-position"></i>
+            {{ $t('RuleEngine.quickStart') }}
+          </a>
+        </div>
+      </page-header>
+      <div class="search-wrapper">
+        <el-button
+          type="primary"
+          size="small"
+          icon="el-icon-plus"
+          @click="$router.push('/ruleengine/rules/create')"
+        >
+          {{ $t('Base.create') }}
+        </el-button>
+      </div>
 
-        <el-table v-bind="rulesTable" :data="tableData" class="data-list">
-          <el-table-column type="index" label="No"> </el-table-column>
-          <el-table-column prop="id" label="ID" sortable>
-            <template slot-scope="{ row }">
-              <router-link
-                :to="{
-                  path: `/ruleengine/rules/detail`,
-                  query: { id: row.id },
-                }"
-                >{{ row.id }}</router-link
+      <el-table v-bind="rulesTable" :data="tableData" class="data-list">
+        <el-table-column type="index" label="No"> </el-table-column>
+        <el-table-column prop="id" label="ID" sortable>
+          <template slot-scope="{ row }">
+            <router-link
+              :to="{
+                name: 'rules-detail',
+                params: { ruleId: row.id },
+              }"
+              >{{ row.id }}</router-link
+            >
+          </template>
+        </el-table-column>
+        <el-table-column prop="for" sortable :label="$t('RuleEngine.topic')">
+          <template slot-scope="{ row }">
+            <div v-for="(item, index) in row.for" :key="index">
+              {{ item }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
+          <template slot-scope="{ row }">
+            <i
+              class="iconfont icon-tubiao-zhuzhuangtu btn btn-default"
+              @click="showMetrics(row)"
+            ></i>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="description"
+          show-overflow-tooltip
+          sortable
+          :label="$t('RuleEngine.describe')"
+        ></el-table-column>
+        <el-table-column prop="status" :label="$t('RuleEngine.status')">
+          <template slot-scope="{ row }">
+            <el-tooltip
+              :content="row.enabled ? $t('RuleEngine.ruleEnabled') : $t('RuleEngine.ruleDisabled')"
+              placement="left"
+            >
+              <el-switch
+                v-model="row.enabled"
+                active-text=""
+                inactive-text=""
+                active-color="#13ce66"
+                inactive-color="#d0d3e0"
+                @change="updateRule(row)"
               >
-            </template>
-          </el-table-column>
-          <el-table-column prop="for" sortable :label="$t('RuleEngine.topic')">
-            <template slot-scope="{ row }">
-              <div v-for="(item, index) in row.for" :key="index">
-                {{ item }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
-            <template slot-scope="{ row }">
-              <i
-                class="iconfont icon-tubiao-zhuzhuangtu btn btn-default"
-                @click="showMetrics(row)"
-              ></i>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="description"
-            show-overflow-tooltip
-            sortable
-            :label="$t('RuleEngine.describe')"
-          ></el-table-column>
-          <el-table-column prop="status" :label="$t('RuleEngine.status')">
-            <template slot-scope="{ row }">
-              <el-tooltip
-                :content="
-                  row.enabled ? $t('RuleEngine.ruleEnabled') : $t('RuleEngine.ruleDisabled')
-                "
-                placement="left"
-              >
-                <el-switch
-                  v-model="row.enabled"
-                  active-text=""
-                  inactive-text=""
-                  active-color="#13ce66"
-                  inactive-color="#d0d3e0"
-                  @change="updateRule(row)"
-                >
-                </el-switch>
-              </el-tooltip>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="actions"
-            :filters="filterOptions.actions"
-            :filter-method="actionsColumnFilter"
-            filter-placement="bottom"
-            :formatter="actionsFormatter"
-            :label="$t('RuleEngine.responseAction')"
-          >
-          </el-table-column>
-          <el-table-column width="120px" prop="id" :label="$t('Base.operation')">
-            <template slot-scope="{ row }">
-              <el-button plain type="primary" size="mini" @click="editRule(row)">
-                {{ $t('Base.edit') }}
-              </el-button>
-              <el-button type="danger" size="mini" plain @click="deleteRule(row)">
-                {{ $t('Base.delete') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
+              </el-switch>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="actions"
+          :filters="filterOptions.actions"
+          :filter-method="actionsColumnFilter"
+          filter-placement="bottom"
+          :formatter="actionsFormatter"
+          :label="$t('RuleEngine.responseAction')"
+        >
+        </el-table-column>
+        <el-table-column width="120px" prop="id" :label="$t('Base.operation')">
+          <template slot-scope="{ row }">
+            <el-button plain type="primary" size="mini" @click="editRule(row)">
+              {{ $t('Base.edit') }}
+            </el-button>
+            <el-button type="danger" size="mini" plain @click="deleteRule(row)">
+              {{ $t('Base.delete') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
 
     <el-drawer v-bind="rulesDrawer" direction="rtl" :visible.sync="metricsDrawerVisible">
@@ -201,7 +196,6 @@ export default {
         tutorial: getLink('ruleEngineTutorial'),
         docs: '',
       },
-      listLoading: false,
       metricsDrawerVisible: false,
       currentRules: {
         actions: [
@@ -365,7 +359,7 @@ export default {
         })
     },
     editRule(row) {
-      this.$router.push(`/ruleengine/rules/edit?rule=${row.id}`)
+      this.$router.push({ name: 'rules-edit', params: { ruleId: row.id } })
     },
   },
 }

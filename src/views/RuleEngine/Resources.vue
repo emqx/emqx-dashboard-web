@@ -1,81 +1,80 @@
 <template>
   <div class="resources">
     <div class="app-wrapper">
-      <el-card shadow="never" class="emq-list-card" :loading="listLoading">
-        <div class="emq-table-header">
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-plus"
-            @click="handleDialogVisible('add')"
-          >
-            {{ $t('Base.create') }}
-          </el-button>
-        </div>
+      <div class="emq-table-header">
+        <el-button
+          type="primary"
+          size="small"
+          icon="el-icon-plus"
+          @click="handleDialogVisible('add')"
+        >
+          {{ $t('Base.create') }}
+        </el-button>
+      </div>
 
-        <el-table :data="tableData" class="data-list" @expand-change="handleExpandChange">
-          <el-table-column class-name="expand-column" prop="id" type="expand" width="1px">
-            <template slot-scope="{ row }">
-              <!-- 列表展示每个节点上资源的状态 -->
-              <el-card shadow="never" class="resource-node-wrapper" :loading="row.loading">
-                <el-row :gutter="40">
-                  <el-col :span="12">
-                    <div class="emq-title h3">
-                      {{ $t('RuleEngine.resourceStatus') }}
-                      <div class="sub-title">
-                        {{ $t('RuleEngine.resourceStatusTips') }}
-                      </div>
+      <el-table :data="tableData" class="data-list">
+        <!-- <el-table-column class-name="expand-column" prop="id" type="expand" width="1px">
+          <template slot-scope="{ row }">
+            <el-card shadow="never" class="resource-node-wrapper" :loading="row.loading">
+              <el-row :gutter="40">
+                <el-col :span="12">
+                  <div class="emq-title h3">
+                    {{ $t('RuleEngine.resourceStatus') }}
+                    <div class="sub-title">
+                      {{ $t('RuleEngine.resourceStatusTips') }}
                     </div>
-                    <resource-node :value="row" @change="handleExpandChange"></resource-node>
-                  </el-col>
-                </el-row>
-              </el-card>
-            </template>
-          </el-table-column>
+                  </div>
+                  <resource-node :value="row" @change="handleExpandChange"></resource-node>
+                </el-col>
+              </el-row>
+            </el-card>
+          </template>
+        </el-table-column> -->
 
-          <el-table-column prop="id" min-width="80px" :label="$t('RuleEngine.resourceID')">
-            <template slot-scope="{ row }">
-              <span class="btn" @click="showResource(row)">{{ row.id }}</span>
-            </template>
-          </el-table-column>
-          <!-- 资源类型 -->
-          <el-table-column
-            prop="config.title"
-            show-overflow-tooltip
-            :label="$t('RuleEngine.resourceTypes')"
-            :filters="filterOptions.resourceTypes"
-            :filter-method="resourceTypesColumnFilter"
-            filter-placement="bottom"
-          ></el-table-column>
-          <el-table-column
-            min-width="100px"
-            prop="description"
-            show-overflow-tooltip
-            :label="$t('RuleEngine.resourceDes')"
-          ></el-table-column>
-          <el-table-column prop="isAvailable" :label="$t('RuleEngine.status')">
-            <template slot-scope="{ row }">
-              <el-badge :type="row.isAvailable ? 'success' : 'danger'" is-dot> </el-badge
-              ><span>{{
-                row.isAvailable ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')
-              }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column width="200px" prop="id" :label="$t('Base.operation')">
-            <template slot-scope="{ row, $index }">
-              <el-button size="mini" @click="viewResourcesStatus(row, $index)">
-                {{ $t('RuleEngine.status') }}
-              </el-button>
-              <el-button size="mini" @click="handleDialogVisible('edit', row)">
-                {{ $t('Base.edit') }}
-              </el-button>
-              <el-button type="danger" size="mini" plain @click="deleteResource(row)">
-                {{ $t('Base.delete') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
+        <el-table-column prop="id" min-width="80px" :label="$t('RuleEngine.resourceID')">
+          <template slot-scope="{ row }">
+            <router-link :to="{ name: 'resources-detail', params: { resId: row.id } }">{{
+              row.id
+            }}</router-link>
+          </template>
+        </el-table-column>
+        <!-- 资源类型 -->
+        <el-table-column
+          prop="config.title"
+          show-overflow-tooltip
+          :label="$t('RuleEngine.resourceTypes')"
+          :filters="filterOptions.resourceTypes"
+          :filter-method="resourceTypesColumnFilter"
+          filter-placement="bottom"
+        ></el-table-column>
+        <el-table-column
+          min-width="100px"
+          prop="description"
+          show-overflow-tooltip
+          :label="$t('RuleEngine.resourceDes')"
+        ></el-table-column>
+        <el-table-column prop="isAvailable" :label="$t('RuleEngine.status')">
+          <template slot-scope="{ row }">
+            <el-badge :type="row.isAvailable ? 'success' : 'danger'" is-dot> </el-badge
+            ><span>{{
+              row.isAvailable ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')
+            }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column width="200px" prop="id" :label="$t('Base.operation')">
+          <template slot-scope="{ row }">
+            <!-- <el-button size="mini" @click="viewResourcesStatus(row, $index)">
+              {{ $t('RuleEngine.status') }}
+            </el-button> -->
+            <el-button size="mini" @click="handleDialogVisible('edit', row)">
+              {{ $t('Base.edit') }}
+            </el-button>
+            <el-button type="danger" size="mini" plain @click="deleteResource(row)">
+              {{ $t('Base.delete') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
 
     <resource-dialog
@@ -88,20 +87,19 @@
 </template>
 
 <script>
-import { loadResource, loadResourceTypes, destroyResource, loadResourceDetails } from '@/api/rules'
-import ResourceNode from './components/ResourceNode'
+import { loadResource, loadResourceTypes, destroyResource } from '@/api/rules'
+// import ResourceNode from './components/ResourceNode'
 import ResourceDialog from './components/ResourceDialog.vue'
 
 export default {
   name: 'Resources',
 
-  components: { ResourceNode, ResourceDialog },
+  components: { ResourceDialog },
 
   props: {},
 
   data() {
     return {
-      listLoading: false,
       dialogVisible: false,
       tableData: [],
       filterOptions: {
@@ -113,7 +111,6 @@ export default {
   },
 
   created() {
-    this.listLoading = true
     this.initData()
     this.loadData()
   },
@@ -124,24 +121,24 @@ export default {
       this.$set(row, 'showConfig', showConfig)
     },
 
-    viewResourcesStatus(row, index) {
-      const elExpand = document.querySelectorAll('.el-table__expand-icon')[index]
-      if (elExpand) {
-        elExpand.click()
-      }
-    },
+    // viewResourcesStatus(row, index) {
+    //   const elExpand = document.querySelectorAll('.el-table__expand-icon')[index]
+    //   if (elExpand) {
+    //     elExpand.click()
+    //   }
+    // },
 
-    async handleExpandChange(row, reload = false) {
-      if (!reload && row.status.length > 0) {
-        return
-      }
-      const resource = await loadResourceDetails(row.id)
-      if (resource) {
-        this.$set(row, 'status', resource.status)
-        this.$set(row, 'typeInfo', resource.typeInfo)
-        this.$set(row, '_config', resource._config)
-      }
-    },
+    // async handleExpandChange(row, reload = false) {
+    //   if (!reload && row.status.length > 0) {
+    //     return
+    //   }
+    //   const resource = await loadResourceDetails(row.id)
+    //   if (resource) {
+    //     this.$set(row, 'status', resource.status)
+    //     this.$set(row, 'typeInfo', resource.typeInfo)
+    //     this.$set(row, '_config', resource._config)
+    //   }
+    // },
     deleteResource(row) {
       this.$msgbox
         .confirm(this.$t('RuleEngine.deleteResource'), {
@@ -165,7 +162,6 @@ export default {
     },
     async loadData() {
       try {
-        this.listLoading = true
         const tableData = await loadResource()
         this.tableData = tableData.map(($) => {
           $.isAvailable = $.status
@@ -178,7 +174,6 @@ export default {
       } catch (e) {
         console.log(e)
       } finally {
-        this.listLoading = false
       }
     },
     handleDialogVisible(oper, row) {
@@ -188,12 +183,6 @@ export default {
         this.resourceToEdit = { ...row }
       }
     },
-    showResource(row) {
-      this.$router.push({
-        path: `/ruleengine/resources/detail`,
-        query: { id: row.id },
-      })
-    },
     resourceTypesColumnFilter(value, row) {
       return row.config.name === value
     },
@@ -201,18 +190,4 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.resources {
-  .emq-title {
-    margin-bottom: 20px;
-  }
-
-  .expand-column .cell {
-    visibility: hidden;
-  }
-
-  .el-badge {
-    height: 20px;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

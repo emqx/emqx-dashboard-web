@@ -80,7 +80,7 @@ import ResourceNode from './components/ResourceNode'
 import ResourceField from './components/ResourceField'
 
 export default {
-  name: 'ResourceView',
+  name: 'ResourceDetail',
 
   components: { ResourceNode, ResourceField },
 
@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     resourceId() {
-      return this.$route.query.id
+      return this.$route.params.resId
     },
     isAlive() {
       const { status = [] } = this.record

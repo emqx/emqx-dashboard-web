@@ -135,7 +135,7 @@ import RuleMetricsTable from './components/RuleMetricsTable'
 import RuleActions from './components/RuleActions'
 
 export default {
-  name: 'RuleView',
+  name: 'RuleDetail',
 
   components: { RuleMetricsTable, CodeView, RuleActions },
 
@@ -163,7 +163,7 @@ export default {
       return this.$store.state.loading
     },
     ruleId() {
-      return this.$route.query.id
+      return this.$route.params.ruleId
     },
     configItem() {
       if (!this.record.id) {

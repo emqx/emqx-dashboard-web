@@ -93,8 +93,8 @@
         <template slot-scope="{ row }">
           <router-link
             :to="{
-              path: '/clients/detail',
-              query: { clientid: row.clientid },
+              name: 'clients-detail',
+              params: { clientId: row.clientid },
             }"
           >
             {{ row.clientid }}
@@ -323,9 +323,5 @@ export default {
 .show-more {
   margin-left: 12px;
   text-decoration: none;
-}
-
-.el-badge {
-  height: 20px;
 }
 </style>
