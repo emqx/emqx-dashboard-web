@@ -1,6 +1,6 @@
 <template>
   <div class="rule-create">
-    <page-header>
+    <!-- <page-header>
       <div class="page-header-title-view">
         <div class="title">{{ $t('RuleEngine.createRules') }}</div>
       </div>
@@ -12,7 +12,7 @@
           </p>
         </div>
       </div>
-    </page-header>
+    </page-header> -->
 
     <div class="emq-list-body rule-wrapper app-wrapper">
       <el-card shadow="never" class="emq-list-card">

@@ -1,45 +1,31 @@
 <template>
   <div class="users">
-    <page-header>
-      <div class="page-header-content-view">
-        <div class="content">
-          {{ $t('General.manageDashboardUsers') }}
-        </div>
-      </div>
-    </page-header>
-
     <div class="app-wrapper">
-      <el-card shadow="never" class="emq-list-card">
-        <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
-            {{ $t('Base.create') }}
-          </el-button>
-        </div>
+      <div class="emq-table-header">
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
+          {{ $t('Base.create') }}
+        </el-button>
+      </div>
 
-        <el-table :data="tableData" class="data-list">
-          <el-table-column
-            sortable
-            prop="username"
-            :label="$t('General.userName')"
-          ></el-table-column>
-          <el-table-column sortable prop="tags" :label="$t('General.remark')"></el-table-column>
-          <el-table-column :label="$t('Base.operation')">
-            <template slot-scope="{ row }">
-              <el-button type="primary" plain size="mini" @click="showDialog('edit', row)"
-                >{{ $t('Base.edit') }}
-              </el-button>
-              <el-button
-                :disabled="row.tags === 'administrator' || row.username === 'admin'"
-                type="danger"
-                size="mini"
-                plain
-                @click="deleteConfirm(row)"
-                >{{ $t('Base.delete') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
+      <el-table :data="tableData" class="data-list">
+        <el-table-column sortable prop="username" :label="$t('General.userName')"></el-table-column>
+        <el-table-column sortable prop="tags" :label="$t('General.remark')"></el-table-column>
+        <el-table-column :label="$t('Base.operation')">
+          <template slot-scope="{ row }">
+            <el-button type="primary" plain size="mini" @click="showDialog('edit', row)"
+              >{{ $t('Base.edit') }}
+            </el-button>
+            <el-button
+              :disabled="row.tags === 'administrator' || row.username === 'admin'"
+              type="danger"
+              size="mini"
+              plain
+              @click="deleteConfirm(row)"
+              >{{ $t('Base.delete') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
 
     <el-dialog

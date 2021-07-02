@@ -15,10 +15,6 @@ export default {
     zh: '创建时间',
     en: 'Create At',
   },
-  manageDashboardBackup: {
-    zh: 'Dashboard 数据备份管理',
-    en: 'Manage Dashboard Data Backup',
-  },
   confirmDelete: {
     zh: '确认删除该备份文件吗？',
     en: 'Confirm delete file?',

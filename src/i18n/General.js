@@ -3,10 +3,6 @@ export default {
     zh: '确认删除应用?',
     en: 'Confirm delete?',
   },
-  applicationIsCalled: {
-    zh: '应用为调用 REST API 认证凭证，通过 REST API 可查询、调整 EMQ X 集群信息，对设备进行管理操作',
-    en: 'In order to invoke the certificate of REST API, the application can query and adjust EMQ X cluster information through REST API, and manage and operate the equipment',
-  },
   appId: {
     zh: '应用 ID',
     en: 'AppID',
@@ -95,10 +91,6 @@ export default {
     zh: '用户',
     en: 'Users',
   },
-  manageDashboardUsers: {
-    zh: 'Dashboard 登录管理用户',
-    en: 'Manage Dashboard users',
-  },
   userName: {
     zh: '用户名',
     en: 'Username',
@@ -178,14 +170,6 @@ export default {
   confirmDeleteUser: {
     zh: '确认删除该用户?',
     en: 'Confirm delete?',
-  },
-  blacklistTips: {
-    zh: '通过黑名单禁止客户端建立连接，该功能适用于管理少量客户端。',
-    en: 'The blacklist prohibits clients from establishing connections. This function is suitable for managing a small number of clients.',
-  },
-  authDocs: {
-    zh: '认证文档',
-    en: 'authentication document',
   },
   blacklist: {
     zh: '黑名单',

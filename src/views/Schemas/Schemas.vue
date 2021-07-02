@@ -1,6 +1,6 @@
 <template>
   <div class="schemas">
-    <page-header>
+    <!-- <page-header>
       <div class="page-header-content-view">
         <div class="content">
           <p class="description">
@@ -14,7 +14,7 @@
           {{ $t('Schemas.quickStart') }}
         </a>
       </div>
-    </page-header>
+    </page-header> -->
 
     <div class="app-wrapper">
       <div class="emq-table-header">

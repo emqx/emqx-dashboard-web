@@ -1,62 +1,46 @@
 <template>
   <div class="blacklist">
-    <page-header :back-title="$t('General.blacklist')">
-      <div class="page-header-content-view">
-        <div class="content">
-          {{ $t('General.blacklistTips') }}
-        </div>
-      </div>
-      <div class="page-header-top-start">
-        <a :href="docs.tutorial" target="_blank" class="link-item">
-          <i class="icon el-icon-document"></i>
-          {{ $t('General.authDocs') }}
-        </a>
-      </div>
-    </page-header>
-
     <div class="app-wrapper">
-      <el-card shadow="never" class="emq-list-card">
-        <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog">
-            {{ $t('Base.create') }}
-          </el-button>
-        </div>
-        <el-table :data="tableData" class="data-list">
-          <el-table-column prop="who" :label="$t('General.who')"> </el-table-column>
-          <el-table-column prop="as" :label="$t('General.as')" sortable> </el-table-column>
-          <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')" sortable>
-          </el-table-column>
-          <el-table-column
-            prop="until"
-            :formatter="formatterUntil"
-            :label="$t('General.until')"
-            sortable
-          >
-          </el-table-column>
-          <el-table-column prop="oper" :label="$t('Base.operation')">
-            <template slot-scope="{ row }">
-              <el-button plain type="danger" size="mini" @click="deleteConfirm(row)"
-                >{{ $t('Base.delete') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+      <div class="emq-table-header">
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog">
+          {{ $t('Base.create') }}
+        </el-button>
+      </div>
+      <el-table :data="tableData" class="data-list">
+        <el-table-column prop="who" :label="$t('General.who')"> </el-table-column>
+        <el-table-column prop="as" :label="$t('General.as')" sortable> </el-table-column>
+        <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')" sortable>
+        </el-table-column>
+        <el-table-column
+          prop="until"
+          :formatter="formatterUntil"
+          :label="$t('General.until')"
+          sortable
+        >
+        </el-table-column>
+        <el-table-column prop="oper" :label="$t('Base.operation')">
+          <template slot-scope="{ row }">
+            <el-button plain type="danger" size="mini" @click="deleteConfirm(row)"
+              >{{ $t('Base.delete') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
 
-        <div class="emq-table-footer">
-          <el-pagination
-            hide-on-single-page
-            background
-            layout="total, sizes, prev, pager, next"
-            :page-sizes="[20, 50, 100, 500]"
-            :page-size.sync="params._limit"
-            :current-page.sync="params._page"
-            :total="count"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentPageChange"
-          >
-          </el-pagination>
-        </div>
-      </el-card>
+      <div class="emq-table-footer">
+        <el-pagination
+          hide-on-single-page
+          background
+          layout="total, sizes, prev, pager, next"
+          :page-sizes="[20, 50, 100, 500]"
+          :page-size.sync="params._limit"
+          :current-page.sync="params._page"
+          :total="count"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentPageChange"
+        >
+        </el-pagination>
+      </div>
     </div>
 
     <el-dialog

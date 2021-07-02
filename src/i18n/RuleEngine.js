@@ -183,10 +183,7 @@ export default {
     zh: '条件',
     en: 'Condition',
   },
-  definingRuleConditionsAndDataProcessing: {
-    zh: '使用 SQL 设定规则，对消息数据筛选、编解码、变型，灵活地将处理后的数据无缝转发至数据库、流处理、API 网关等数据目的地',
-    en: 'Use SQL to set rules to filter, encode, decode, and modify message data, and seamlessly forward processed data to data destinations such as databases, stream processing, and API gateways',
-  },
+
   triggerEvent: {
     zh: '触发事件',
     en: 'Trigger Event',
@@ -282,10 +279,6 @@ export default {
   checkForErrors: {
     zh: '请检查 SQL 语句',
     en: 'SQL is error',
-  },
-  quickStart: {
-    zh: '快速开始',
-    en: 'Quick Start',
   },
   productDocumentation: {
     zh: '产品文档',

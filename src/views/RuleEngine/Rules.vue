@@ -1,19 +1,6 @@
 <template>
   <div class="rules">
     <div class="app-wrapper">
-      <page-header>
-        <div class="page-header-content-view">
-          <div class="content">
-            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
-          </div>
-        </div>
-        <div class="page-header-top-start">
-          <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
-            <i class="icon el-icon-position"></i>
-            {{ $t('RuleEngine.quickStart') }}
-          </a>
-        </div>
-      </page-header>
       <div class="search-wrapper">
         <el-button
           type="primary"

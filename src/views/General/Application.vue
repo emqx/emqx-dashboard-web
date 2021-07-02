@@ -1,65 +1,49 @@
 <template>
   <div class="application">
-    <page-header>
-      <div class="page-header-content-view">
-        <div class="content">
-          {{ $t('General.applicationIsCalled') }}
-        </div>
-      </div>
-      <div class="page-header-top-start">
-        <a rel="noopener" :href="docs.restAPI" target="_blank" class="link-item">
-          <i class="icon el-icon-document"></i>
-          {{ $t('General.productDocumentation') }}
-        </a>
-      </div>
-    </page-header>
-
     <div class="app-wrapper">
-      <el-card shadow="never" class="emq-list-card">
-        <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
-            {{ $t('Base.create') }}
-          </el-button>
-        </div>
+      <div class="emq-table-header">
+        <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
+          {{ $t('Base.create') }}
+        </el-button>
+      </div>
 
-        <el-table :data="tableData" class="data-list">
-          <el-table-column prop="app_id" label="AppID" sortable>
-            <template slot-scope="{ row }">
-              <span class="btn" @click="showDialog('view', row)">
-                {{ row.app_id }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="name" :label="$t('General.appName')" sortable></el-table-column>
-          <el-table-column
-            prop="expired"
-            :formatter="formatterExpired"
-            :label="$t('General.expireAt')"
-          ></el-table-column>
-          <el-table-column prop="desc" :label="$t('General.remark')"></el-table-column>
-          <el-table-column :label="$t('General.isEnabled')">
-            <template slot-scope="{ row }">
-              <el-switch
-                v-model="row.status"
-                active-color="#13ce66"
-                inactive-color="#d0d3e0"
-                @change="updateApplication(row)"
-              >
-              </el-switch>
-            </template>
-          </el-table-column>
-          <el-table-column :label="$t('Base.operation')">
-            <template slot-scope="{ row }">
-              <el-button plain type="primary" size="mini" @click="showDialog('edit', row)">
-                {{ $t('Base.edit') }}
-              </el-button>
-              <el-button type="danger" size="mini" plain @click="deleteConfirm(row)">
-                {{ $t('Base.delete') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
+      <el-table :data="tableData" class="data-list">
+        <el-table-column prop="app_id" label="AppID" sortable>
+          <template slot-scope="{ row }">
+            <span class="btn" @click="showDialog('view', row)">
+              {{ row.app_id }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" :label="$t('General.appName')" sortable></el-table-column>
+        <el-table-column
+          prop="expired"
+          :formatter="formatterExpired"
+          :label="$t('General.expireAt')"
+        ></el-table-column>
+        <el-table-column prop="desc" :label="$t('General.remark')"></el-table-column>
+        <el-table-column :label="$t('General.isEnabled')">
+          <template slot-scope="{ row }">
+            <el-switch
+              v-model="row.status"
+              active-color="#13ce66"
+              inactive-color="#d0d3e0"
+              @change="updateApplication(row)"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('Base.operation')">
+          <template slot-scope="{ row }">
+            <el-button plain type="primary" size="mini" @click="showDialog('edit', row)">
+              {{ $t('Base.edit') }}
+            </el-button>
+            <el-button type="danger" size="mini" plain @click="deleteConfirm(row)">
+              {{ $t('Base.delete') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
 
     <el-dialog
