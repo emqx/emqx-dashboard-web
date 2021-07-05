@@ -1,5 +1,5 @@
 <template>
-  <div class="rule-view">
+  <div class="rule-view app-wrapper">
     <page-header>
       <div class="page-header-title-view">
         <div class="title">
@@ -14,117 +14,115 @@
       </div>
     </page-header>
 
-    <div class="emq-list-body rule-wrapper app-wrapper">
-      <!-- 运行统计 -->
-      <el-card shadow="never" class="emq-list-card" :loading="loading">
-        <div class="emq-title">
-          {{ $t('RuleEngine.runningMetrics') }}
-          <i
-            class="btn btn-default"
-            :class="reloading ? 'el-icon-loading' : 'el-icon-refresh'"
-            @click="refreshData"
-          >
-          </i>
-        </div>
+    <!-- 运行统计 -->
+    <el-card shadow="never" class="emq-list-card" :loading="loading">
+      <div class="emq-title">
+        {{ $t('RuleEngine.runningMetrics') }}
+        <i
+          class="btn btn-default"
+          :class="reloading ? 'el-icon-loading' : 'el-icon-refresh'"
+          @click="refreshData"
+        >
+        </i>
+      </div>
 
-        <el-row :gutter="40" class="metrics-wrapper">
-          <el-col class="metrics-card" :span="8">
-            <div class="card-title">
-              {{ $t('RuleEngine.numberOfHits') }}
-            </div>
-            <div class="card-value">
-              {{ record.metricsData.matched }}
-              <span class="card-unit">{{ $t('RuleEngine.times') }}</span>
-            </div>
-            <div class="card-desc">
-              {{ $t('RuleEngine.numberOfRulesExecutedAfterEnabling') }}
-            </div>
-          </el-col>
-          <el-col class="metrics-card" :span="8">
-            <div class="card-title">
-              {{ $t('RuleEngine.currentSpeed') }}
-            </div>
-            <div class="card-value">
-              {{ record.metricsData.speed }}
-              <span class="card-unit"
-                >{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span
-              >
-            </div>
-            <div class="card-desc">
-              {{ $t('RuleEngine.maximumSpeed') }}: {{ record.metricsData.speed_max }}
-              {{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}
-            </div>
-          </el-col>
+      <el-row :gutter="40" class="metrics-wrapper">
+        <el-col class="metrics-card" :span="8">
+          <div class="card-title">
+            {{ $t('RuleEngine.numberOfHits') }}
+          </div>
+          <div class="card-value">
+            {{ record.metricsData.matched }}
+            <span class="card-unit">{{ $t('RuleEngine.times') }}</span>
+          </div>
+          <div class="card-desc">
+            {{ $t('RuleEngine.numberOfRulesExecutedAfterEnabling') }}
+          </div>
+        </el-col>
+        <el-col class="metrics-card" :span="8">
+          <div class="card-title">
+            {{ $t('RuleEngine.currentSpeed') }}
+          </div>
+          <div class="card-value">
+            {{ record.metricsData.speed }}
+            <span class="card-unit"
+              >{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span
+            >
+          </div>
+          <div class="card-desc">
+            {{ $t('RuleEngine.maximumSpeed') }}: {{ record.metricsData.speed_max }}
+            {{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}
+          </div>
+        </el-col>
 
-          <el-col class="metrics-card last-child" :span="8">
-            <div class="card-title">
-              {{ $t('RuleEngine.last5MinutesSpeed') }}
-            </div>
-            <div class="card-value">
-              {{ record.metricsData.speed_last5m }}
-              <span class="card-unit"
-                >{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span
-              >
-            </div>
-            <div class="card-desc">
-              {{ $t('RuleEngine.averageExecutionSpeedInTheLast5Minutes') }}
-            </div>
-          </el-col>
+        <el-col class="metrics-card last-child" :span="8">
+          <div class="card-title">
+            {{ $t('RuleEngine.last5MinutesSpeed') }}
+          </div>
+          <div class="card-value">
+            {{ record.metricsData.speed_last5m }}
+            <span class="card-unit"
+              >{{ $t('RuleEngine.times') }}/{{ $t('RuleEngine.second') }}</span
+            >
+          </div>
+          <div class="card-desc">
+            {{ $t('RuleEngine.averageExecutionSpeedInTheLast5Minutes') }}
+          </div>
+        </el-col>
 
-          <el-col :span="24">
-            <rule-metrics-table :metrics="record.metrics"></rule-metrics-table>
-          </el-col>
-        </el-row>
-      </el-card>
+        <el-col :span="24">
+          <rule-metrics-table :metrics="record.metrics"></rule-metrics-table>
+        </el-col>
+      </el-row>
+    </el-card>
 
-      <!-- 基本信息 -->
-      <el-card shadow="never" class="emq-list-card" :loading="loading">
-        <div class="emq-title">
-          {{ $t('RuleEngine.basicInfo') }}
-        </div>
+    <!-- 基本信息 -->
+    <el-card shadow="never" class="emq-list-card" :loading="loading">
+      <div class="emq-title">
+        {{ $t('RuleEngine.basicInfo') }}
+      </div>
 
-        <ul class="field-info">
-          <li class="field-info-item">
-            <div class="field-title">{{ $t('RuleEngine.topic') }}:</div>
-            <span v-if="configItem.events" class="field-value">
-              <span v-for="(event, index) in configItem.events" :key="index">
-                {{ event.title }} ({{ event.event }})
-              </span>
+      <ul class="field-info">
+        <li class="field-info-item">
+          <div class="field-title">{{ $t('RuleEngine.topic') }}:</div>
+          <span v-if="configItem.events" class="field-value">
+            <span v-for="(event, index) in configItem.events" :key="index">
+              {{ event.title }} ({{ event.event }})
             </span>
-          </li>
-          <li class="field-info-item">
-            <div class="field-title">{{ $t('RuleEngine.resourceDes') }}:</div>
-            <span class="field-value">{{ configItem.description }}</span>
-          </li>
-          <li class="field-info-item">
-            <div class="field-title">{{ $t('RuleEngine.selectFiled') }}:</div>
-            <span class="field-value">{{ configItem.fields }}</span>
-          </li>
-          <li class="field-info-item">
-            <div class="field-title">{{ $t('RuleEngine.selectConditions') }}:</div>
-            <span class="field-value">{{ configItem.where }}</span>
-          </li>
-          <li class="field-info-item">
-            <div class="field-title">{{ $t('RuleEngine.rule') }} SQL:</div>
-            <div class="field-content">
-              <code-view v-if="record.rawsql" lang="sql" :code="record.rawsql"></code-view>
-            </div>
-          </li>
-        </ul>
-      </el-card>
-
-      <!-- 响应动作 -->
-      <el-card shadow="never" class="emq-list-card" :loading="loading">
-        <div class="emq-title">
-          {{ $t('RuleEngine.responseAction') }}
-          <span class="sub-title">
-            {{ $t('RuleEngine.messageProcessingForHitRules') }}
           </span>
-        </div>
+        </li>
+        <li class="field-info-item">
+          <div class="field-title">{{ $t('RuleEngine.resourceDes') }}:</div>
+          <span class="field-value">{{ configItem.description }}</span>
+        </li>
+        <li class="field-info-item">
+          <div class="field-title">{{ $t('RuleEngine.selectFiled') }}:</div>
+          <span class="field-value">{{ configItem.fields }}</span>
+        </li>
+        <li class="field-info-item">
+          <div class="field-title">{{ $t('RuleEngine.selectConditions') }}:</div>
+          <span class="field-value">{{ configItem.where }}</span>
+        </li>
+        <li class="field-info-item">
+          <div class="field-title">{{ $t('RuleEngine.rule') }} SQL:</div>
+          <div class="field-content">
+            <code-view v-if="record.rawsql" lang="sql" :code="record.rawsql"></code-view>
+          </div>
+        </li>
+      </ul>
+    </el-card>
 
-        <rule-actions ref="ruleActions" v-model="record.actions" disabled></rule-actions>
-      </el-card>
-    </div>
+    <!-- 响应动作 -->
+    <el-card shadow="never" class="emq-list-card" :loading="loading">
+      <div class="emq-title">
+        {{ $t('RuleEngine.responseAction') }}
+        <span class="sub-title">
+          {{ $t('RuleEngine.messageProcessingForHitRules') }}
+        </span>
+      </div>
+
+      <rule-actions ref="ruleActions" v-model="record.actions" disabled></rule-actions>
+    </el-card>
   </div>
 </template>
 
@@ -225,7 +223,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .rule-view {
   @import './style.scss';
 

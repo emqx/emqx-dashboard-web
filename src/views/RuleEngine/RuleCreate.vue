@@ -1,19 +1,5 @@
 <template>
   <div class="rule-create">
-    <!-- <page-header>
-      <div class="page-header-title-view">
-        <div class="title">{{ $t('RuleEngine.createRules') }}</div>
-      </div>
-
-      <div class="page-header-content-view">
-        <div class="content">
-          <p class="description">
-            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
-          </p>
-        </div>
-      </div>
-    </page-header> -->
-
     <div class="emq-list-body rule-wrapper app-wrapper">
       <el-card shadow="never" class="emq-list-card">
         <el-row :gutter="20">

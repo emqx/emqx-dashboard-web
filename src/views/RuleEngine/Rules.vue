@@ -48,20 +48,15 @@
         ></el-table-column>
         <el-table-column prop="status" :label="$t('RuleEngine.status')">
           <template slot-scope="{ row }">
-            <el-tooltip
-              :content="row.enabled ? $t('RuleEngine.ruleEnabled') : $t('RuleEngine.ruleDisabled')"
-              placement="left"
+            <el-switch
+              v-model="row.enabled"
+              active-text="y"
+              inactive-text="n"
+              active-color="#00B299"
+              inactive-color="#d0d3e0"
+              @change="updateRule(row)"
             >
-              <el-switch
-                v-model="row.enabled"
-                active-text=""
-                inactive-text=""
-                active-color="#13ce66"
-                inactive-color="#d0d3e0"
-                @change="updateRule(row)"
-              >
-              </el-switch>
-            </el-tooltip>
+            </el-switch>
           </template>
         </el-table-column>
         <el-table-column

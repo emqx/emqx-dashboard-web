@@ -1,5 +1,5 @@
 <template>
-  <div class="schemas-details details-page">
+  <div class="schemas-details details-page app-wrapper">
     <page-header v-if="disabled">
       <div class="page-header-title-view">
         <div class="title">
@@ -13,7 +13,7 @@
       </div>
     </page-header>
 
-    <div class="emq-list-body schemas-wrapper app-wrapper">
+    <el-card shadow="never">
       <el-row :gutter="20">
         <el-form
           ref="record"
@@ -145,7 +145,7 @@
           </template>
         </el-form>
       </el-row>
-    </div>
+    </el-card>
   </div>
 </template>
 

@@ -16,14 +16,17 @@
         ></el-input>
       </el-col>
       <el-col :span="6">
-        <emq-select
+        <!-- <emq-select
           v-model="nodeName"
           class="node-select"
           size="small"
           :field="{ options: currentNodes }"
           :field-name="{ label: 'name', value: 'node' }"
           @change="handleNodeChange"
-        ></emq-select>
+        ></emq-select> -->
+        <el-select v-model="nodeName" :placeholder="$t('Clients.node')" size="small">
+          <el-option v-for="item in currentNodes" :value="item.node" :key="item.node"></el-option>
+        </el-select>
       </el-col>
       <template v-if="showMoreQuery">
         <el-col :span="6">
@@ -88,7 +91,21 @@
       </el-col>
     </el-row>
 
-    <el-table :data="tableData">
+    <el-table
+      :data="tableData"
+      :row-class-name="getRowClass"
+      @select="clientSelect"
+      @select-all="clientSelectAll"
+    >
+      <el-table-column type="selection">
+        <!-- <template #default="{ row }">
+          <el-checkbox
+            :true-label="row.clientid + '::true'"
+            :false-label="row.clientid + '::false'"
+            @change="handleCheckClient"
+          ></el-checkbox>
+        </template> -->
+      </el-table-column>
       <el-table-column prop="clientid" sortable :label="$t('Clients.clientId')">
         <template slot-scope="{ row }">
           <router-link
@@ -107,13 +124,7 @@
         <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template>
       </el-table-column>
       <el-table-column prop="keepalive" sortable :label="$t('Clients.keepalive')"></el-table-column>
-      <el-table-column
-        prop="proto_name"
-        filter-placement="bottom"
-        :filters="filterOptions.protoName"
-        :filter-method="protoNameColumnFilter"
-        :label="$t('Clients.protocol')"
-      >
+      <el-table-column prop="proto_name" sortable :label="$t('Clients.protocol')">
         <template slot-scope="{ row }">
           <span class="">
             {{ row.proto_name }}
@@ -142,8 +153,7 @@
 
     <div class="emq-table-footer">
       <el-pagination
-        v-if="count > 10"
-        background
+        v-if="count > 0"
         layout="total, sizes, prev, pager, next"
         :page-sizes="[20, 50, 100, 500]"
         :page-size.sync="params._limit"
@@ -187,18 +197,19 @@ export default {
         _limit: 20,
       },
       count: 0,
-      filterOptions: {
-        protoName: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M', 'Stomp'].map(($) => ({
-          text: $,
-          value: $,
-        })),
-      },
+      // filterOptions: {
+      //   protoName: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M', 'Stomp'].map(($) => ({
+      //     text: $,
+      //     value: $,
+      //   })),
+      // },
       nodeName: '',
-      currentNodes: [{ name: this.$t('RuleEngine.allNodes'), node: 'all' }],
+      currentNodes: [],
       resetIcon: 'el-icon-refresh',
       fuzzyParams: {
         comparator: '_gte',
       },
+      selectedClients: [],
       protoNames: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M'],
       qulifiedKeys: [
         'awaiting_rel',
@@ -246,8 +257,20 @@ export default {
   },
 
   methods: {
-    handleNodeChange() {
-      this.loadNodeClients(true)
+    clientSelectAll(sel) {
+      this.selectedClients = sel
+      sel.length
+        ? sel.forEach((row) => (row.selection = true))
+        : this.tableData.forEach((row) => (row.selection = false))
+    },
+    clientSelect(selection, row) {
+      row.selection = selection.includes(row)
+      this.selectedClients = selection
+    },
+    getRowClass({ row, rowIndex }) {
+      if (row.selection == true) {
+        return 'row_selected'
+      }
     },
     async handleDisconnect(row) {
       let warningMsg = this.$t('Clients.willDisconnectTheConnection')
@@ -330,7 +353,7 @@ export default {
     async loadData() {
       const data = await loadNodes()
       this.currentNodes = this.currentNodes.concat(data)
-      this.nodeName = this.nodeName || (this.currentNodes[0] || {}).node
+      // this.nodeName = (this.currentNodes[0] || {}).node
       this.loadNodeClients()
     },
     async loadNodeClients(reload, params = {}) {
@@ -350,9 +373,9 @@ export default {
       this.hasnext = hasnext
       this.resetIcon = 'el-icon-refresh'
     },
-    protoNameColumnFilter(value, row) {
-      return value === row.proto_name
-    },
+    // protoNameColumnFilter(value, row) {
+    //   return value === row.proto_name
+    // },
   },
 }
 </script>

@@ -15,10 +15,9 @@ export default {
 <style lang="scss">
 .page-header {
   width: auto;
-  background-color: #fff;
+  background-color: #f1f3f7ff;
   box-sizing: border-box;
   position: relative;
-  margin: 24px 24px 0 24px;
 
   .page-header-top-start {
     white-space: nowrap;
@@ -29,7 +28,7 @@ export default {
     height: 100%;
     min-height: 100%;
     transition: 0.3s;
-    padding: 17px 15px;
+    padding: 14px 25px;
     display: flex;
     align-items: center;
     box-sizing: border-box;

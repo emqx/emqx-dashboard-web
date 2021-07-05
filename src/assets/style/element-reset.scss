@@ -116,6 +116,24 @@
     height: 16px;
     margin-right: 3px;
   }
+
+  .row_selected {
+    background-color: #f1f3f7;
+    &:hover {
+      background-color: #f1f3f7;
+      & > td {
+        background-color: unset !important;
+      }
+    }
+  }
+}
+
+.el-pagination {
+  .el-select .el-input {
+    .el-input__inner {
+      border-radius: 2px;
+    }
+  }
 }
 
 /* Dialog */

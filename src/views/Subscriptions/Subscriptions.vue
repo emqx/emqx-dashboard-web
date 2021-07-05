@@ -2,14 +2,17 @@
   <div class="app-wrapper subscriptions">
     <el-row class="search-wrapper" :gutter="20">
       <el-col :span="6">
-        <emq-select
+        <!-- <emq-select
           v-model="nodeName"
           class="node-select"
           size="small"
           :field="{ options: currentNodes }"
           :field-name="{ label: 'name', value: 'node' }"
           @change="handleNodeChange"
-        ></emq-select>
+        ></emq-select> -->
+        <el-select v-model="nodeName" :placeholder="$t('Clients.node')" size="small">
+          <el-option v-for="item in currentNodes" :value="item.node" :key="item.node"></el-option>
+        </el-select>
       </el-col>
       <el-col :span="6">
         <el-input
@@ -72,7 +75,7 @@
 
     <div class="emq-table-footer">
       <el-pagination
-        v-if="count > 10"
+        v-if="count > 0"
         background
         layout="total, sizes, prev, pager, next"
         :page-sizes="[20, 50, 100, 500]"
@@ -118,7 +121,7 @@ export default {
       },
       count: 0,
       nodeName: '',
-      currentNodes: [{ name: this.$t('RuleEngine.allNodes'), node: 'all' }],
+      currentNodes: [],
       resetIcon: 'el-icon-refresh',
       fuzzyParams: {
         match: '_match_topic',
@@ -131,9 +134,9 @@ export default {
   },
 
   methods: {
-    handleNodeChange() {
-      this.loadNodeSubscriptions(true)
-    },
+    // handleNodeChange() {
+    //   this.loadNodeSubscriptions(true)
+    // },
     resetSearch() {
       this.resetIcon = 'el-icon-loading'
       this.fuzzyParams = {
@@ -184,7 +187,7 @@ export default {
     async loadData() {
       const data = await loadNodes()
       this.currentNodes = this.currentNodes.concat(data)
-      this.nodeName = this.nodeName || (this.currentNodes[0] || {}).node
+      // this.nodeName = this.nodeName || (this.currentNodes[0] || {}).node
       this.loadNodeSubscriptions()
     },
     async loadNodeSubscriptions(reload, params = {}) {
