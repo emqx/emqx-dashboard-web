@@ -65,7 +65,7 @@ Object.assign(axios.defaults, {
     'Content-Type': 'application/json',
     'Cache-Control': 'no-cache',
   },
-  baseURL: store.state.config.baseURL,
+  baseURL: '/emqx/api/v4',
   timeout: store.state.httpTimeout,
   auth: {},
 })
@@ -77,10 +77,10 @@ axios.interceptors.request.use(
     const {
       params: { _t: tokenRequired = true },
     } = config
-    if (!user.username && tokenRequired) {
-      toLogin()
-      throw new Error(httpMap['-1'])
-    }
+    // if (!user.username && tokenRequired) {
+    //   toLogin()
+    //   throw new Error(httpMap['-1'])
+    // }
     config.auth.username = user.username
     config.auth.password = user.password
 
