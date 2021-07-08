@@ -20,10 +20,10 @@
           <el-col :span="4">
             <el-radio-group v-model="displayType" size="small" border>
               <el-radio-button label="cards">
-                <i class="iconfont icon-qiapianmoshi_kuai"></i>
+                <i class="iconx icon-cards"></i>
               </el-radio-button>
               <el-radio-button label="list">
-                <i class="iconfont icon-qiapianmoshi_kuai"></i>
+                <i class="iconx icon-lists"></i>
               </el-radio-button>
             </el-radio-group>
           </el-col>
@@ -180,12 +180,7 @@
       </el-card>
     </div>
 
-    <el-dialog
-      title="标题"
-      width="520px"
-      :visible.sync="moduleTipVisible"
-      :close-on-click-modal="false"
-    >
+    <el-dialog width="520px" :visible.sync="moduleTipVisible" :close-on-click-modal="false">
       <div slot="title" class="tip-title">
         <i class="el-icon-warning"></i>
         <span>{{ $t('Base.tips') }}</span>
@@ -197,12 +192,12 @@
       </div>
       <div class="tip-checkbox">
         <el-checkbox v-model="noprompt" @change="useModuleTipShowChange">
-          {{ $t('Overview.notPromptAgain') }}
+          {{ $t('Dashboard.notPromptAgain') }}
         </el-checkbox>
       </div>
       <div class="tip-button">
         <el-button type="primary" size="small" @click="moduleTipVisible = false">{{
-          $t('Overview.konw')
+          $t('Dashboard.konw')
         }}</el-button>
       </div>
     </el-dialog>
@@ -497,7 +492,9 @@ export default {
   .search-wrapper {
     margin-bottom: 30px;
     .el-radio-button--small .el-radio-button__inner {
-      font-size: 13px;
+      padding: 3px 10px;
+      line-height: 24px;
+      // height: 24px;
     }
     .search-input {
       .el-icon-search,

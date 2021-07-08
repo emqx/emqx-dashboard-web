@@ -136,6 +136,18 @@
   }
 }
 
+.el-switch {
+  &.is-checked {
+    & .el-switch__core {
+      background-color: #00b29955;
+      border-color: #00b29911;
+      &::after {
+        background-color: #00b299;
+      }
+    }
+  }
+}
+
 /* Dialog */
 .el-dialog {
   background: #ffffff;

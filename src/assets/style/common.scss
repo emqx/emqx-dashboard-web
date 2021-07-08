@@ -215,11 +215,21 @@ a {
   background-image: url('~@/assets/img/iconset@2x.png');
   background-size: 153px 159px;
   background-repeat: no-repeat;
+  vertical-align: middle;
   &.icon-alarm {
     background-position: -120px -24px;
   }
   &.icon-globe {
     background-position: -96px -24px;
+  }
+  &.icon-monitor {
+    background-position: -24px -72px;
+  }
+  &.icon-cards {
+    background-position: -120px -48px;
+  }
+  &.icon-lists {
+    background-position: 0 -72px;
   }
 }
 

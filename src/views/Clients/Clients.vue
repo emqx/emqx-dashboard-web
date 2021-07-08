@@ -16,14 +16,6 @@
         ></el-input>
       </el-col>
       <el-col :span="6">
-        <!-- <emq-select
-          v-model="nodeName"
-          class="node-select"
-          size="small"
-          :field="{ options: currentNodes }"
-          :field-name="{ label: 'name', value: 'node' }"
-          @change="handleNodeChange"
-        ></emq-select> -->
         <el-select v-model="nodeName" :placeholder="$t('Clients.node')" size="small">
           <el-option v-for="item in currentNodes" :value="item.node" :key="item.node"></el-option>
         </el-select>
@@ -96,16 +88,10 @@
       :row-class-name="getRowClass"
       @select="clientSelect"
       @select-all="clientSelectAll"
+      @row-click="handleRowClick"
+      ref="clientsTable"
     >
-      <el-table-column type="selection">
-        <!-- <template #default="{ row }">
-          <el-checkbox
-            :true-label="row.clientid + '::true'"
-            :false-label="row.clientid + '::false'"
-            @change="handleCheckClient"
-          ></el-checkbox>
-        </template> -->
-      </el-table-column>
+      <el-table-column type="selection"> </el-table-column>
       <el-table-column prop="clientid" sortable :label="$t('Clients.clientId')">
         <template slot-scope="{ row }">
           <router-link
@@ -257,6 +243,22 @@ export default {
   },
 
   methods: {
+    handleRowClick(row, column, event) {
+      console.log(row, event)
+      //shiftkey+mouse select all rows before the selected one
+      if (event.shiftKey) {
+        let rowIndex = this.tableData.findIndex((e) => e == row)
+        for (let x = rowIndex, y = 0; x > y; x--) {
+          if (this.tableData[x].selection) break
+          this.$refs.clientsTable.toggleRowSelection(this.tableData[x], true)
+          this.tableData[x].selection = true
+        }
+      }
+      // else {
+      //   this.$refs.clientsTable.toggleRowSelection(row, !row.selection)
+      //   row.selection = !row.selection
+      // }
+    },
     clientSelectAll(sel) {
       this.selectedClients = sel
       sel.length

@@ -12,16 +12,26 @@
 
       <el-collapse-transition>
         <el-table v-if="showTable" :data="metrics">
-          <el-table-column prop="node" :label="$t('RuleEngine.node')"></el-table-column>
-          <el-table-column prop="matched" :label="$t('RuleEngine.numberOfHits')"></el-table-column>
-          <el-table-column prop="speed" :label="$t('RuleEngine.currentSpeed')"></el-table-column>
+          <el-table-column prop="node" :label="$t('RuleEngine.node')" sortable></el-table-column>
+          <el-table-column
+            prop="matched"
+            :label="$t('RuleEngine.numberOfHits')"
+            sortable
+          ></el-table-column>
+          <el-table-column
+            prop="speed"
+            :label="$t('RuleEngine.currentSpeed')"
+            sortable
+          ></el-table-column>
           <el-table-column
             prop="speed_max"
             :label="$t('RuleEngine.maximumSpeed')"
+            sortable
           ></el-table-column>
           <el-table-column
             prop="speed_last5m"
             :label="$t('RuleEngine.last5MinutesSpeed')"
+            sortable
           ></el-table-column>
         </el-table>
       </el-collapse-transition>
