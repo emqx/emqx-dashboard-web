@@ -25,7 +25,6 @@
               <el-form-item prop="port" :label="$t('Tools.port')">
                 <el-input
                   v-model.number="connection.port"
-                  type="number"
                   placeholder="8083/8084"
                   :readonly="client.connected"
                 ></el-input>
@@ -60,7 +59,11 @@
             </el-col>
             <el-col :span="8">
               <el-form-item prop="password" label="Password">
-                <el-input v-model="connection.password" :readonly="client.connected"></el-input>
+                <el-input
+                  v-model="connection.password"
+                  :readonly="client.connected"
+                  show-password
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -68,7 +71,6 @@
                 <el-input
                   v-model.number="connection.keepalive"
                   :readonly="client.connected"
-                  type="number"
                   placeholder="60"
                 ></el-input>
               </el-form-item>
@@ -127,7 +129,7 @@
       </div>
 
       <el-row :gutter="20">
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form
             ref="subForm"
             hide-required-asterisk
@@ -157,17 +159,17 @@
           </el-form>
         </el-col>
 
-        <el-col :span="12">
+        <el-col :span="16">
           <el-table :data="subscriptions" max-height="400px" style="margin-top: 10px">
             <el-table-column
               show-overflow-tooltip
               prop="topic"
               label="Topic"
-              min-width="180px"
+              sortable
             ></el-table-column>
-            <el-table-column prop="qos" label="QoS" width="80px"></el-table-column>
-            <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
-            <el-table-column width="80px">
+            <el-table-column prop="qos" label="QoS" sortable></el-table-column>
+            <el-table-column prop="createAt" :label="$t('Tools.time')" sortable></el-table-column>
+            <el-table-column :label="$t('Base.operation')">
               <template slot-scope="{ row }">
                 <a class="btn" @click="_doUnSubscribe(row)">{{ $t('Base.cancel') }}</a>
               </template>
@@ -240,29 +242,25 @@
             {{ $t('Tools.received') }}
             <i class="icon el-icon-refresh" :title="$t('Tools.clear')" @click="messageIn = []"></i>
           </div>
-          <el-table
-            class="list-table"
-            :data="messageIn"
-            max-height="400px"
-            style="margin-top: 10px"
-          >
+          <el-table class="list-table" :data="messageIn" max-height="400px">
             <el-table-column
               show-overflow-tooltip
               prop="topic"
               label="Topic"
               min-width="120px"
+              sortable
             ></el-table-column>
-            <el-table-column prop="qos" label="QoS" width="80px">
+            <el-table-column prop="qos" label="QoS" sortable>
               <template slot-scope="{ row }">
                 {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
               </template>
             </el-table-column>
-            <el-table-column show-overflow-tooltip prop="payload" label="Payload" min-width="180px">
+            <el-table-column show-overflow-tooltip prop="payload" label="Payload" sortable>
               <template slot-scope="{ row }">
                 <code>{{ row.payload }}</code>
               </template>
             </el-table-column>
-            <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
+            <el-table-column prop="createAt" :label="$t('Tools.time')" sortable></el-table-column>
           </el-table>
         </el-col>
 
@@ -271,29 +269,28 @@
             {{ $t('Tools.published') }}
             <i class="icon el-icon-refresh" :title="$t('Tools.clear')" @click="messageOut = []"></i>
           </div>
-          <el-table
-            class="list-table"
-            :data="messageOut"
-            max-height="400px"
-            style="margin-top: 10px"
-          >
+          <el-table class="list-table" :data="messageOut" max-height="400px">
             <el-table-column
               show-overflow-tooltip
               prop="topic"
               label="Topic"
-              min-width="120px"
+              sortable
             ></el-table-column>
-            <el-table-column prop="qos" label="QoS" width="80px">
+            <el-table-column prop="qos" label="QoS" sortable>
               <template slot-scope="{ row }">
                 {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
               </template>
             </el-table-column>
-            <el-table-column show-overflow-tooltip prop="payload" label="Payload" min-width="180px">
+            <el-table-column show-overflow-tooltip prop="payload" label="Payload" sortable>
               <template slot-scope="{ row }">
                 <code>{{ row.payload }}</code>
               </template>
             </el-table-column>
-            <el-table-column prop="createAt" :label="$t('Tools.time')"></el-table-column>
+            <el-table-column
+              prop="createAt"
+              :label="$t('Tools.time')"
+              sortable=""
+            ></el-table-column>
           </el-table>
         </el-col>
       </el-row>

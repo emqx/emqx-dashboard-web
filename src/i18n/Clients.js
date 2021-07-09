@@ -99,11 +99,11 @@ export default {
     zh: '连接加密',
     en: 'SSL',
   },
-  connectionAt: {
+  connectedAt: {
     zh: '连接时间',
-    en: 'Connection At',
+    en: 'Connected At',
   },
-  disConnectionAt: {
+  disconnectedAt: {
     zh: '断开连接时间',
     en: 'Disconnected At',
   },
@@ -163,7 +163,7 @@ export default {
     zh: '会话信息',
     en: 'Session Info',
   },
-  bridge: {
+  isBridge: {
     zh: '桥接设备',
     en: 'Bridge',
   },
@@ -231,35 +231,35 @@ export default {
     zh: '允许同时等待 PUBREL 的 QoS2 消息的最大数量',
     en: 'Maximum number of QoS2 messages allowed to wait for PUBREL at the same time',
   },
-  recv_cnt_desc: {
+  recvCnt: {
     zh: '接收的 TCP 报文数量',
     en: 'Number of received TCP messages',
   },
-  recv_msg_desc: {
+  recvMsg: {
     zh: '接收的 PUBLISH 报文数量',
     en: 'Number of received PUBLISH messages',
   },
-  recv_oct_desc: {
+  recvOct: {
     zh: '接收字节数',
     en: 'Number of bytes received',
   },
-  recv_pkt_desc: {
+  recvPkt: {
     zh: '接收的 MQTT 报文数量',
     en: 'Number of received MQTT messages',
   },
-  send_cnt_desc: {
+  sendCnt: {
     zh: '发送的 TCP 报文数量',
     en: 'Number of TCP messages sent',
   },
-  send_msg_desc: {
+  sendMsg: {
     zh: '发送的 PUBLISH 报文数量',
     en: 'Number of PUBLISH messages sent',
   },
-  send_oct_desc: {
+  sendOct: {
     zh: '发送字节数',
     en: 'Number of bytes sent',
   },
-  send_pkt_desc: {
+  sendPkt: {
     zh: '发送的 MQTT 报文数量',
     en: 'Number of MQTT messages sent',
   },
@@ -267,11 +267,11 @@ export default {
     zh: '踢除',
     en: 'Kick Out',
   },
-  awaiting_rel: {
+  awaitingRel: {
     zh: '未确认的 PUBREC 数据包计数',
     en: 'Unconfirmed PUBREC Packets Count',
   },
-  max_awaiting_rel: {
+  maxAwaitingRel: {
     zh: '最大未确认的 PUBREC 数据包计数',
     en: 'Maximum Unconfirmed PUBREC Packets Count',
   },

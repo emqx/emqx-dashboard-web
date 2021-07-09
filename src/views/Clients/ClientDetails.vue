@@ -1,201 +1,106 @@
 <template>
   <div class="client-details app-wrapper">
-    <page-header>
-      <div class="page-header-title-view">
-        <span class="title">
-          {{ clientId }}
-        </span>
+    <div class="section-header">
+      <div>
+        <span>{{ clientId }}</span>
+        <el-tag type="info" size="mini">
+          <span v-if="record.connected == true"
+            ><i class="el-icon-success iconfont suc"></i>{{ $t('Clients.connected') }}</span
+          >
+          <span v-else
+            ><i class="el-icon-error iconfont fail"></i>{{ $t('Clients.disconnected') }}</span
+          >
+        </el-tag>
+        <el-tag type="info" size="mini" v-if="record.proto_name">
+          <span>{{ record.proto_name }}</span
+          >&nbsp;
+          <span v-if="record.proto_name === 'MQTT'">{{ mqttVersion[record.proto_ver] }}</span
+          ><span v-else>{{ record.proto_ver }}</span>
+        </el-tag>
       </div>
-
-      <div class="page-header-top-start btn">
-        <el-button v-if="record.connected" type="danger" size="small" @click="handleDisconnect">
+      <div>
+        <el-button
+          v-if="record.connected"
+          type="danger"
+          plain
+          size="small"
+          @click="handleDisconnect"
+        >
           {{ $t('Clients.kickOut') }}
         </el-button>
-        <el-button v-else type="danger" size="small" @click="handleDisconnect">
+        <el-button v-else type="danger" size="small" plain @click="handleDisconnect">
           {{ $t('Clients.cleanSession') }}
         </el-button>
       </div>
-    </page-header>
+    </div>
 
     <el-card shadow="never">
-      <el-row :gutter="40">
-        <el-col :span="12">
-          <div class="emq-title">
-            {{ $t('Clients.connectionInfo') }}
-          </div>
-
-          <ul class="field-info connection">
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.accessNode') }}:</div>
-              <span class="field-value">{{ record.node }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.clientid') }}:</div>
-              <span class="field-value">{{ record.clientid }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.username') }}:</div>
-              <span class="field-value">{{ record.username }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.protocolType') }}:</div>
-              <template v-if="record.proto_name === 'MQTT'">
-                <span class="field-value"
-                  >{{ record.proto_name }} {{ mqttVersionMap[record.proto_ver] }}</span
-                >
-              </template>
-              <template v-else>
-                <span class="field-value"
-                  >{{ record.proto_name }}
-                  <span v-if="record.proto_ver"> v{{ record.proto_ver }}</span>
-                </span>
-              </template>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.ipAddress') }}:</div>
-              <span class="field-value">{{ record.ip_address }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.port') }}:</div>
-              <span class="field-value">{{ record.port }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.keepalive') }}:</div>
-              <span class="field-value">{{ record.keepalive }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.bridge') }}:</div>
-              <span class="field-value">{{ record.is_bridge }}</span>
-            </li>
-            <li v-if="record.connected" class="field-info-item">
-              <div class="field-title">{{ $t('Clients.connectionAt') }}:</div>
-              <span class="field-value">{{ record.connected_at }}</span>
-            </li>
-            <li v-else class="field-info-item">
-              <div class="field-title">{{ $t('Clients.disConnectionAt') }}:</div>
-              <span class="field-value">{{ record.disconnected_at }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.zone') }}:</div>
-              <span class="field-value">{{ record.zone }}</span>
-            </li>
-          </ul>
-        </el-col>
-        <el-col :span="12">
-          <div class="emq-title">
-            {{ $t('Clients.sessionInfo') }}
-          </div>
-
-          <ul class="field-info session">
-            <li class="field-info-item">
-              <div class="field-title">
-                {{ record.proto_ver === 5 ? 'Clean Start' : 'Clean Session' }}:
-              </div>
-              <span class="field-value">{{ record.clean_start }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.expiryInterval') }}:</div>
-              <span class="field-value">{{ record.expiry_interval }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.createdAt') }}:</div>
-              <span class="field-value">{{ record.created_at }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.subscription') }}:</div>
-              <span>
-                {{ record.subscriptions_cnt }} /
-                {{ record.max_subscriptions | transToUnlimit }}
-              </span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.mqueue') }}:</div>
-              <span>{{ record.mqueue_len }} / {{ record.max_mqueue }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.inflight') }}:</div>
-              <span> {{ record.inflight }} / {{ record.max_inflight }} </span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.heapSize') }}:</div>
-              <span>{{ record.heap_size }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.reductions') }}:</div>
-              <span>{{ record.reductions }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.awaiting_rel') }}:</div>
-              <span>{{ record.awaiting_rel }}</span>
-            </li>
-            <li class="field-info-item">
-              <div class="field-title">{{ $t('Clients.max_awaiting_rel') }}:</div>
-              <span>{{ record.max_awaiting_rel }}</span>
-            </li>
-          </ul>
-        </el-col>
-      </el-row>
-
-      <div class="view-more">
-        <a href="javascript:;" @click="showMore = !showMore">
-          {{ showMore ? $t('Base.collapse') : $t('Base.viewMore') }}
-          <i :class="showMore ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
-        </a>
-      </div>
-
-      <el-collapse-transition>
-        <el-row v-if="showMore" :gutter="40">
-          <el-col :span="12">
-            <ul class="field-info more-info">
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Clients.recv_cnt_desc') }}:</div>
-                <span>{{ record.recv_cnt }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Clients.recv_msg_desc') }}:</div>
-                <span>{{ record.recv_msg }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Clients.recv_oct_desc') }}:</div>
-                <span>{{ record.recv_oct }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Clients.recv_pkt_desc') }}:</div>
-                <span>{{ record.recv_pkt }}</span>
-              </li>
-            </ul>
-          </el-col>
-          <el-col :span="12">
-            <ul class="field-info more-info">
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Clients.send_cnt_desc') }}:</div>
-                <span>{{ record.send_cnt }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Clients.send_msg_desc') }}:</div>
-                <span>{{ record.send_msg }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Clients.send_oct_desc') }}:</div>
-                <span>{{ record.send_oct }}</span>
-              </li>
-              <li class="field-info-item">
-                <div class="field-title">{{ $t('Clients.send_pkt_desc') }}:</div>
-                <span>{{ record.send_pkt }}</span>
-              </li>
-            </ul>
+      <el-row>
+        <div class="part-header">
+          {{ $t('Clients.connectionInfo') }}
+        </div>
+        <el-row>
+          <el-col v-for="item in clientsOrganizied.connection" :key="item" :span="8">
+            <div v-if="item == 'protocol_type'" class="detail-item">
+              <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
+              <span v-if="record.proto_name === 'MQTT'"
+                >{{ record.proto_name }} {{ mqttVersion[record.proto_ver] }}</span
+              >
+              <span v-else>{{ record.proto_name }} {{ record.proto_ver }}</span>
+            </div>
+            <div v-else class="detail-item">
+              <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
+              <span>{{ record[item] }}</span>
+            </div>
           </el-col>
         </el-row>
-      </el-collapse-transition>
-    </el-card>
 
-    <div class="emq-title">
-      {{ $t('Clients.currentSubscription') }}
-      <div class="subscriptions-header">
-        <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">
+        <div class="part-header">
+          {{ $t('Clients.sessionInfo') }}
+        </div>
+        <el-row>
+          <el-col v-for="item in clientsOrganizied.session" :key="item" :span="8">
+            <div v-if="item == 'subscriptions_cnt'" class="detail-item">
+              <span :title="tl('subscription')">{{ tl('subscription') }}:</span>
+              <span>
+                {{
+                  record.subscriptions_cnt +
+                  '/' +
+                  (record.max_subscriptions === 0 ? 'Unlimited' : record.max_subscriptions)
+                }}
+              </span>
+            </div>
+            <div v-else-if="item == 'clean_start'" class="detail-item">
+              <span :title="record.proto_ver === 5 ? 'Clean Start' : 'Clean Session'"
+                >{{ record.proto_ver === 5 ? 'Clean Start' : 'Clean Session' }}:</span
+              >
+              <span>{{ record[item] }}</span>
+            </div>
+            <div v-else-if="item == 'max_mqueue'" class="detail-item">
+              <span :title="tl('mqueue')">{{ tl('mqueue') }}:</span>
+              <span>{{ record.mqueue_len + '/' + record.max_mqueue }}</span>
+            </div>
+            <div v-else-if="item == 'max_inflight'" class="detail-item">
+              <span :title="tl('inflight')">{{ tl('inflight') }}:</span>
+              <span> {{ record.inflight + '/' + record.max_inflight }} </span>
+            </div>
+            <div v-else class="detail-item">
+              <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
+              <span>{{ record[item] }}</span>
+            </div>
+          </el-col>
+        </el-row>
+      </el-row>
+    </el-card>
+    <div class="section-header">
+      <div>
+        {{ $t('Clients.currentSubscription') }}
+      </div>
+      <div>
+        <!-- <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">
           {{ $t('Clients.refresh') }}
-        </el-button>
-        <el-button plain size="mini" icon="el-icon-plus" @click="handlePreAdd">
+        </el-button> -->
+        <el-button size="small" type="primary" icon="el-icon-plus" @click="handlePreAdd">
           {{ $t('Clients.addASubscription') }}
         </el-button>
       </div>
@@ -233,53 +138,50 @@ import CreateSubscribe from './components/CreateSubscribe'
 
 export default {
   name: 'ClientDetails',
-
   components: { CreateSubscribe },
-
-  filters: {
-    transToUnlimit(val) {
-      return val === 0 ? 'Unlimited' : val
-    },
-  },
-
-  props: {},
 
   data() {
     return {
       dialogVisible: false,
-      showMore: false,
       activeName: 'detail',
       searchValue: '',
-      record: {
-        clean_start: true,
-        clientid: '',
-        conn_mod: '',
-        connected_at: '',
-        heap_size: 987,
-        ip_address: '',
-        is_bridge: false,
-        keepalive: 60,
-        mailbox_len: 0,
-        node: '',
-        peercert: '',
-        port: 60386,
-        proto_name: '',
-        proto_ver: 4,
-        recv_cnt: 98,
-        recv_msg: 0,
-        recv_oct: 223,
-        recv_pkt: 98,
-        reductions: 153061,
-        send_cnt: 98,
-        send_msg: 0,
-        send_oct: 198,
-        send_pend: 0,
-        send_pkt: 98,
-        username: '',
-        zone: '',
-        connected: false,
+      record: {},
+      clientsOrganizied: {
+        connection: [
+          'node',
+          'clientid',
+          'username',
+          'protocol_type',
+          'ip_address',
+          'port',
+          'keepalive',
+          'is_bridge',
+          'connected_at',
+          'disconnected_at',
+          'zone',
+          'recv_cnt',
+          'recv_msg',
+          'recv_oct',
+          'recv_pkt',
+        ],
+        session: [
+          'clean_start',
+          'expiry_interval',
+          'created_at',
+          'subscriptions_cnt',
+          'max_mqueue',
+          'max_inflight',
+          'heap_size',
+          'reductions',
+          'awaiting_rel',
+          'max_awaiting_rel',
+          'send_cnt',
+          'send_msg',
+          'send_oct',
+          'send_pkt',
+        ],
       },
-      mqttVersionMap: {
+      mqttVersion: {
         3: 'v3.1',
         4: 'v3.1.1',
         5: 'v5.0',
@@ -299,6 +201,12 @@ export default {
   },
 
   methods: {
+    snake2pascal(s) {
+      return String(s).replace(/(_[a-z])/g, (m) => m.substring(1).toUpperCase())
+    },
+    tl(key, collection = 'Clients') {
+      return this.$t(collection + '.' + key)
+    },
     async handleDisconnect() {
       let warningMsg = this.$t('Clients.willDisconnectTheConnection')
       let successMsg = this.$t('Clients.successfulDisconnection')
@@ -333,9 +241,6 @@ export default {
       const { node } = this.record
       this.subscriptions = await loadSubscriptions(node, this.clientId)
     },
-    handleTabClick() {
-      this.loadData()
-    },
     handleUnSubscription(row) {
       const title = this.$t('Clients.unsubscribeTitle')
       this.$msgbox
@@ -355,38 +260,37 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .client-details {
-  .connection .field-title {
-    min-width: 120px;
-  }
-  .session .field-title {
-    min-width: 160px;
+  .el-tag {
+    margin-left: 10px;
+
+    & i.suc {
+      color: #00b299ff;
+    }
+    & i.fail {
+      color: #e34242ff;
+    }
   }
 
-  .emq-title {
-    margin-bottom: 28px;
-  }
+  .detail-item {
+    margin-top: 10px;
+    color: #1d1d1dff;
 
-  .field-info-item {
-    margin-bottom: 5px;
-  }
-
-  .data-list {
-    clear: both;
-  }
-
-  .view-more {
-    margin: 20px 0 0 0;
-  }
-
-  .more-info {
-    margin-top: 20px;
-  }
-
-  .btn {
-    flex-grow: 1;
-    text-align: end;
+    & span:first-child {
+      color: #8d96a2ff;
+      display: inline-block;
+      width: 45%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    & span:last-child {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }
 </style>

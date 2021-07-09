@@ -126,7 +126,7 @@
       <el-table-column
         prop="connected_at"
         sortable
-        :label="$t('Clients.connectionAt')"
+        :label="$t('Clients.connectedAt')"
       ></el-table-column>
       <el-table-column prop="oper" :label="$t('Base.operation')">
         <template slot-scope="{ row }">

@@ -154,10 +154,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-tag {
-  margin-left: 10px;
-}
-
 .details {
   margin-right: 5px;
   color: #a7a7a7;

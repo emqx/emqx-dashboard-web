@@ -35,6 +35,19 @@
       background-color: unset;
     }
   }
+
+  &.el-button--danger {
+    &.is-plain {
+      background-color: #fff;
+      border-color: #e34242ff;
+      color: #e34242ff;
+
+      &:hover {
+        color: #ff5252;
+        border-color: #ff5252;
+      }
+    }
+  }
 }
 
 /* Input */
@@ -334,9 +347,15 @@
 
 .el-tag {
   border-radius: 0;
+  font-weight: normal;
   &.el-tag--danger {
     background-color: #e34242ff;
     color: #fff;
+    border: none;
+  }
+  &.el-tag--info {
+    background-color: #eff3fe;
+    color: #8d96a2ff;
     border: none;
   }
 }
