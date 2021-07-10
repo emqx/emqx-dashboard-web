@@ -43,14 +43,18 @@
           <el-col v-for="item in clientsOrganizied.connection" :key="item" :span="8">
             <div v-if="item == 'protocol_type'" class="detail-item">
               <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
-              <span v-if="record.proto_name === 'MQTT'"
+              <span
+                v-if="record.proto_name === 'MQTT'"
+                :title="record.proto_name + '&nbsp;' + mqttVersion[record.proto_ver]"
                 >{{ record.proto_name }} {{ mqttVersion[record.proto_ver] }}</span
               >
-              <span v-else>{{ record.proto_name }} {{ record.proto_ver }}</span>
+              <span v-else :title="record.proto_name + '&nbsp;' + record.proto_ver"
+                >{{ record.proto_name }} {{ record.proto_ver }}</span
+              >
             </div>
             <div v-else class="detail-item">
               <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
-              <span>{{ record[item] }}</span>
+              <span :title="record[item]">{{ record[item] }}</span>
             </div>
           </el-col>
         </el-row>
@@ -62,7 +66,13 @@
           <el-col v-for="item in clientsOrganizied.session" :key="item" :span="8">
             <div v-if="item == 'subscriptions_cnt'" class="detail-item">
               <span :title="tl('subscription')">{{ tl('subscription') }}:</span>
-              <span>
+              <span
+                :title="
+                  record.subscriptions_cnt +
+                  '/' +
+                  (record.max_subscriptions === 0 ? 'Unlimited' : record.max_subscriptions)
+                "
+              >
                 {{
                   record.subscriptions_cnt +
                   '/' +
@@ -74,19 +84,23 @@
               <span :title="record.proto_ver === 5 ? 'Clean Start' : 'Clean Session'"
                 >{{ record.proto_ver === 5 ? 'Clean Start' : 'Clean Session' }}:</span
               >
-              <span>{{ record[item] }}</span>
+              <span :title="record[item]">{{ record[item] }}</span>
             </div>
             <div v-else-if="item == 'max_mqueue'" class="detail-item">
               <span :title="tl('mqueue')">{{ tl('mqueue') }}:</span>
-              <span>{{ record.mqueue_len + '/' + record.max_mqueue }}</span>
+              <span :title="record.mqueue_len + '/' + record.max_mqueue">{{
+                record.mqueue_len + '/' + record.max_mqueue
+              }}</span>
             </div>
             <div v-else-if="item == 'max_inflight'" class="detail-item">
               <span :title="tl('inflight')">{{ tl('inflight') }}:</span>
-              <span> {{ record.inflight + '/' + record.max_inflight }} </span>
+              <span :title="record.inflight + '/' + record.max_inflight">
+                {{ record.inflight + '/' + record.max_inflight }}
+              </span>
             </div>
             <div v-else class="detail-item">
               <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
-              <span>{{ record[item] }}</span>
+              <span :title="record[item]">{{ record[item] }}</span>
             </div>
           </el-col>
         </el-row>
@@ -265,6 +279,12 @@ export default {
   .el-tag {
     margin-left: 10px;
 
+    & i {
+      font-size: 14px;
+      margin-right: 3px;
+      vertical-align: -1px;
+    }
+
     & i.suc {
       color: #00b299ff;
     }
@@ -280,13 +300,16 @@ export default {
     & span:first-child {
       color: #8d96a2ff;
       display: inline-block;
-      width: 45%;
+      width: 40%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      vertical-align: middle;
     }
     & span:last-child {
       display: inline-block;
+      vertical-align: middle;
+      width: 55%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;

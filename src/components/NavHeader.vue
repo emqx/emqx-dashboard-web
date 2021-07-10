@@ -229,13 +229,19 @@ export default {
   }
 }
 
-.go-link {
+.el-button.go-link {
   background-color: #282e38ff;
   color: #fff;
   padding: 0 15px;
   font-size: 14px;
   height: 32px;
-  border: none;
+  border: 1px solid #282e38ff;
   margin-left: 15px;
+
+  &:hover {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #282e38ff;
+  }
 }
 </style>

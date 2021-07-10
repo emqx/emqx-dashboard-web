@@ -18,10 +18,20 @@
     font-size: 14px;
   }
 
-  &.el-button--primary:hover {
-    background-color: #0b7b6bff;
-    border: 1px solid #0b7b6bff;
-    // color: #fff;
+  &.el-button--primary {
+    &:hover {
+      background-color: #0b7b6bff;
+      border-color: #0b7b6bff;
+      color: #ffffff;
+    }
+
+    &.is-disabled {
+      &,
+      &:hover {
+        background-color: #9edcd3ff;
+        border-color: #9edcd3ff;
+      }
+    }
   }
 
   /*customized button class of secondary*/
@@ -31,21 +41,40 @@
 
     &:hover {
       color: #0b7b6bff;
-      border: 1px solid #0b7b6b;
+      border-color: #0b7b6b;
       background-color: unset;
     }
   }
 
   &.el-button--danger {
     &.is-plain {
+      color: #ff5252;
+      border-color: #ff5252;
       background-color: #fff;
-      border-color: #e34242ff;
-      color: #e34242ff;
-
       &:hover {
-        color: #ff5252;
-        border-color: #ff5252;
+        border-color: #a41e1eff;
+        color: #a41e1eff;
       }
+    }
+
+    &.is-disabled {
+      &,
+      &:hover {
+        color: #f8b2b2ff;
+        border-color: #f8b2b2ff;
+        background-color: #ffffff;
+      }
+    }
+  }
+
+  &.el-button--default {
+    color: #1d1d1dff;
+    background-color: #ffffff;
+    border-color: #1d1d1d;
+
+    &:hover {
+      color: #000000ff;
+      border-color: #000000;
     }
   }
 }
@@ -206,48 +235,29 @@
 }
 
 /* Tabs */
-.el-tabs.el-tabs--card {
+.el-tabs--card {
   & > .el-tabs__header {
     border-bottom: 0px;
     margin-bottom: 0px;
+
     .el-tabs__nav {
       border: none;
     }
-    .el-tabs__item {
-      transition: all 0.5s;
-      background: #fafafa;
-      border-radius: 4px 4px 0 0;
-      margin-right: 3px;
-      border: 1px solid transparent;
-      border-bottom: 1px solid #fff;
-      line-height: 38px;
 
-      .el-icon-close {
-        font-size: 14px;
-        line-height: 14px;
-        top: 0px;
-        color: #909399;
-        &:hover {
-          color: #fff;
-        }
+    .el-tabs__item,
+    .is-focus {
+      outline: none;
+      border-left: none;
+      border-bottom: 1px solid #f0f0f8;
+      border-top: 2px solid #ffffff;
+
+      &.is-active {
+        border-top: 2px solid #00b299ff;
+        border-left: 1px solid #f0f0f8;
+        border-right: 1px solid #f0f0f8;
       }
-    }
-    .el-tabs__new-tab {
-      color: #34c388;
-      border-color: #34c388;
-      line-height: 17px;
-      i {
-        font-weight: 600;
-      }
-    }
-    .el-tabs__item.is-active {
-      background: #fff;
-      border: 1px solid #fff;
     }
   }
-}
-.el-tabs__item {
-  color: #909399;
 }
 
 /* Icon */
@@ -305,11 +315,11 @@
 
       &.is-active {
         background-color: inherit;
-        color: #00b173ff;
-        border-bottom: 2px solid #00b173ff;
+        color: #00b299ff;
+        border-bottom: 2px solid #00b299ff;
 
         &:hover {
-          color: #00b173ff;
+          color: #00b299ff;
         }
       }
       &:not(.is-disabled, .is-active):hover {

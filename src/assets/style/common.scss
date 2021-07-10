@@ -231,12 +231,17 @@ a {
   &.icon-lists {
     background-position: 0 -72px;
   }
+  &.icon-sweep {
+    background-position: -72px -48px;
+  }
 }
 
 .section-header {
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 20px;
+  width: 100%;
+  overflow: hidden;
   display: flex;
   &:not(:first-of-type) {
     margin-top: 40px;
@@ -249,13 +254,23 @@ a {
     margin: 5px 0;
   }
 
-  & :first-child {
+  & > :first-child {
     flex-grow: 1;
+    overflow: hidden;
+  }
+
+  & > :not(:first-child) {
+    margin-left: 10px;
+  }
+
+  span,
+  i {
+    vertical-align: middle;
   }
 }
 
-.section-addition {
-}
+// .section-addition {
+// }
 
 .part-header {
   font-size: 14px;

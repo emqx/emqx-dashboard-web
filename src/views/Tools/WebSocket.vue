@@ -17,7 +17,7 @@
             class="message-count"
             :hidden="item.messageCount === 0"
             :value="item.messageCount"
-            :max="99"
+            is-dot
           >
             {{ item.label }}
           </el-badge>
@@ -45,11 +45,7 @@ import WebSocketItem from './components/WebSocketItem'
 
 export default {
   name: 'WebSocket',
-
   components: { WebSocketItem },
-
-  props: {},
-
   data() {
     return {
       activeTab: '0',
@@ -122,22 +118,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.websocket {
-  position: relative;
-
-  #tab-add.el-tabs__item {
-    width: 43px;
-    padding: 0 13px;
-  }
-
-  .el-badge__content {
-    background: #f56c6c;
-    transform: scale(0.8);
-    border: none;
-    &.is-fixed {
-      right: -14px;
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>

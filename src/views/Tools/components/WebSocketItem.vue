@@ -1,301 +1,256 @@
 <template>
-  <div class="websocket-item">
-    <el-card class="emq-list-card">
-      <div class="websocket-config">
-        <div class="emq-title">
-          {{ $t('Tools.connectionConfiguration') }}
+  <el-card shadow="never">
+    <div class="websocket-config">
+      <div class="section-header">
+        {{ $t('Tools.connectionConfiguration') }}
+      </div>
+
+      <el-form
+        ref="configForm"
+        hide-required-asterisk
+        size="small"
+        label-position="top"
+        :model="connection"
+        :rules="connectionRules"
+        @keyup.enter.native="createConnection"
+      >
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item prop="host" :label="$t('Tools.host')">
+              <el-input v-model="connection.host" :readonly="client.connected"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="port" :label="$t('Tools.port')">
+              <el-input
+                v-model.number="connection.port"
+                placeholder="8083/8084"
+                :readonly="client.connected"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="endpoint" :label="$t('Tools.mountPoint')">
+              <el-input
+                v-model="connection.endpoint"
+                placeholder="/mqtt"
+                :readonly="client.connected"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="clientId" label="Client ID">
+              <el-input v-model="connection.clientId" :readonly="client.connected">
+                <i
+                  slot="suffix"
+                  :title="$t('Tools.randomGeneration')"
+                  :disabled="client.connected"
+                  class="el-icon-refresh el-input_icon"
+                  @click="refreshClientId"
+                ></i>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="username" label="Username">
+              <el-input v-model="connection.username" :readonly="client.connected"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="password" label="Password">
+              <el-input
+                v-model="connection.password"
+                :readonly="client.connected"
+                show-password
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="keepalive" label="Keepalive">
+              <el-input
+                v-model.number="connection.keepalive"
+                :readonly="client.connected"
+                placeholder="60"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8" class="checkbox-area">
+            <el-checkbox v-model="connection.clean" :disabled="client.connected">
+              Clean Session
+            </el-checkbox>
+
+            <el-checkbox
+              v-model="connection.ssl"
+              :disabled="client.connected"
+              @change="protocolsChange"
+            >
+              SSL
+            </el-checkbox>
+          </el-col>
+
+          <el-col :span="24" class="footer-area">
+            <el-button
+              type="primary"
+              size="small"
+              :disabled="client.connected || connecting"
+              @click="createConnection"
+            >
+              {{
+                client.connected
+                  ? $t('Tools.connected')
+                  : connecting
+                  ? $t('Tools.inConnection')
+                  : $t('Tools.connect')
+              }}
+            </el-button>
+
+            <el-button
+              type="danger"
+              size="small"
+              plain
+              :disabled="!client.connected && !connecting"
+              @click="destroyConnection"
+            >
+              {{ connecting ? $t('Tools.cancelConnection') : $t('Tools.disconnect') }}
+            </el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
+
+    <div class="section-header">
+      {{ $t('Tools.Subscription') }}
+    </div>
+
+    <el-form
+      ref="subForm"
+      hide-required-asterisk
+      :model="subscriptionsRecord"
+      :rules="subscriptionsRules"
+      size="small"
+      label-position="top"
+      @keyup.enter.native="_doSubscribe"
+      class="sub-area"
+    >
+      <el-form-item prop="topic" label="Topic">
+        <el-input v-model="subscriptionsRecord.topic"></el-input>
+      </el-form-item>
+
+      <el-form-item prop="qos" label="QoS">
+        <emq-select
+          v-model.number="subscriptionsRecord.qos"
+          :field="{ list: [0, 1, 2] }"
+        ></emq-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" size="small" @click="_doSubscribe">
+          {{ $t('Tools.Subscribe') }}
+        </el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-table :data="subscriptions" max-height="400px">
+      <el-table-column show-overflow-tooltip prop="topic" label="Topic" sortable></el-table-column>
+      <el-table-column prop="qos" label="QoS" sortable></el-table-column>
+      <el-table-column prop="createAt" :label="$t('Tools.time')" sortable></el-table-column>
+      <el-table-column :label="$t('Base.operation')">
+        <template slot-scope="{ row }">
+          <a class="btn" @click="_doUnSubscribe(row)">{{ $t('Base.cancel') }}</a>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <div class="section-header">
+      {{ $t('Tools.publish') }}
+    </div>
+
+    <el-form
+      ref="pubForm"
+      hide-required-asterisk
+      label-position="top"
+      :model="messageRecord"
+      :rules="messageRecordRules"
+      size="small"
+      @keyup.enter.native="_doPublish"
+      class="pub-area"
+    >
+      <el-form-item prop="topic" label="Topic">
+        <el-input v-model="messageRecord.topic" size="small"></el-input>
+      </el-form-item>
+
+      <el-form-item prop="payload" label="Payload">
+        <el-input v-model="messageRecord.payload" size="small"></el-input>
+      </el-form-item>
+
+      <el-form-item prop="qos" label="QoS">
+        <emq-select v-model.number="messageRecord.qos" :field="{ list: [0, 1, 2] }" size="small">
+        </emq-select>
+      </el-form-item>
+
+      <el-form-item>
+        <el-checkbox v-model="messageRecord.retain">Retain</el-checkbox>
+        <el-button type="primary" size="small" @click="_doPublish">
+          {{ $t('Tools.publish') }}
+        </el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <div class="message-btn">
+          {{ $t('Tools.received') }}
+          <i class="iconx icon-sweep" :title="$t('Tools.clear')" @click="messageIn = []"></i>
         </div>
+        <el-table class="list-table" :data="messageIn" max-height="400px">
+          <el-table-column
+            show-overflow-tooltip
+            prop="topic"
+            label="Topic"
+            min-width="120px"
+            sortable
+          ></el-table-column>
+          <el-table-column prop="qos" label="QoS" sortable>
+            <template slot-scope="{ row }">
+              {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
+            </template>
+          </el-table-column>
+          <el-table-column show-overflow-tooltip prop="payload" label="Payload" sortable>
+            <template slot-scope="{ row }">
+              <code>{{ row.payload }}</code>
+            </template>
+          </el-table-column>
+          <el-table-column prop="createAt" :label="$t('Tools.time')" sortable></el-table-column>
+        </el-table>
+      </el-col>
 
-        <el-form
-          ref="configForm"
-          hide-required-asterisk
-          size="small"
-          label-position="top"
-          :model="connection"
-          :rules="connectionRules"
-          @keyup.enter.native="createConnection"
-        >
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <el-form-item prop="host" :label="$t('Tools.host')">
-                <el-input v-model="connection.host" :readonly="client.connected"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item prop="port" :label="$t('Tools.port')">
-                <el-input
-                  v-model.number="connection.port"
-                  placeholder="8083/8084"
-                  :readonly="client.connected"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item prop="endpoint" :label="$t('Tools.mountPoint')">
-                <el-input
-                  v-model="connection.endpoint"
-                  placeholder="/mqtt"
-                  :readonly="client.connected"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item prop="clientId" label="Client ID">
-                <el-input v-model="connection.clientId" :readonly="client.connected">
-                  <i
-                    slot="suffix"
-                    :title="$t('Tools.randomGeneration')"
-                    :disabled="client.connected"
-                    class="el-icon-refresh el-input_icon"
-                    @click="refreshClientId"
-                  ></i>
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item prop="username" label="Username">
-                <el-input v-model="connection.username" :readonly="client.connected"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item prop="password" label="Password">
-                <el-input
-                  v-model="connection.password"
-                  :readonly="client.connected"
-                  show-password
-                ></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item prop="keepalive" label="Keepalive">
-                <el-input
-                  v-model.number="connection.keepalive"
-                  :readonly="client.connected"
-                  placeholder="60"
-                ></el-input>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="24" class="footer-area">
-              <el-checkbox v-model="connection.clean" :disabled="client.connected">
-                Clean Session
-              </el-checkbox>
-
-              <el-checkbox
-                v-model="connection.ssl"
-                :disabled="client.connected"
-                @change="protocolsChange"
-              >
-                SSL
-              </el-checkbox>
-            </el-col>
-
-            <el-col :span="24" class="footer-area">
-              <el-button
-                type="primary"
-                size="small"
-                class="conn-btn"
-                style="margin-right: 20px"
-                :disabled="client.connected || connecting"
-                @click="createConnection"
-              >
-                {{
-                  client.connected
-                    ? $t('Tools.connected')
-                    : connecting
-                    ? $t('Tools.inConnection')
-                    : $t('Tools.connect')
-                }}
-              </el-button>
-
-              <el-button
-                type="danger"
-                size="small"
-                class="conn-btn"
-                :disabled="!client.connected && !connecting"
-                @click="destroyConnection"
-              >
-                {{ connecting ? $t('Tools.cancelConnection') : $t('Tools.disconnect') }}
-              </el-button>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
-    </el-card>
-
-    <el-card class="emq-list-card">
-      <div class="emq-title">
-        {{ $t('Tools.Subscription') }}
-      </div>
-
-      <el-row :gutter="20">
-        <el-col :span="8">
-          <el-form
-            ref="subForm"
-            hide-required-asterisk
-            :model="subscriptionsRecord"
-            :rules="subscriptionsRules"
-            size="small"
-            label-position="top"
-            @keyup.enter.native="_doSubscribe"
-          >
-            <el-form-item prop="topic" label="Topic">
-              <el-input v-model="subscriptionsRecord.topic"></el-input>
-            </el-form-item>
-
-            <el-form-item prop="qos" label="QoS">
-              <emq-select
-                v-model.number="subscriptionsRecord.qos"
-                :field="{ list: [0, 1, 2] }"
-              ></emq-select>
-            </el-form-item>
-            <div>
-              <el-form-item>
-                <el-button type="primary" size="small" class="conn-btn" @click="_doSubscribe">
-                  {{ $t('Tools.Subscribe') }}
-                </el-button>
-              </el-form-item>
-            </div>
-          </el-form>
-        </el-col>
-
-        <el-col :span="16">
-          <el-table :data="subscriptions" max-height="400px" style="margin-top: 10px">
-            <el-table-column
-              show-overflow-tooltip
-              prop="topic"
-              label="Topic"
-              sortable
-            ></el-table-column>
-            <el-table-column prop="qos" label="QoS" sortable></el-table-column>
-            <el-table-column prop="createAt" :label="$t('Tools.time')" sortable></el-table-column>
-            <el-table-column :label="$t('Base.operation')">
-              <template slot-scope="{ row }">
-                <a class="btn" @click="_doUnSubscribe(row)">{{ $t('Base.cancel') }}</a>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-col>
-      </el-row>
-    </el-card>
-
-    <el-card class="emq-list-card">
-      <div class="emq-title">
-        {{ $t('Tools.publish') }}
-      </div>
-
-      <div class="connection-wrapper">
-        <el-form
-          ref="pubForm"
-          hide-required-asterisk
-          label-position="top"
-          :model="messageRecord"
-          :rules="messageRecordRules"
-          size="small"
-          @keyup.enter.native="_doPublish"
-        >
-          <el-row :gutter="20">
-            <el-col :span="6">
-              <el-form-item prop="topic" label="Topic">
-                <el-input v-model="messageRecord.topic" size="small"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item prop="payload" label="Payload">
-                <el-input v-model="messageRecord.payload" size="small"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item prop="qos" label="QoS">
-                <emq-select
-                  v-model.number="messageRecord.qos"
-                  :field="{ list: [0, 1, 2] }"
-                  size="small"
-                >
-                </emq-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item>
-                <span slot="label">&nbsp;</span>
-                <el-checkbox v-model="messageRecord.retain" style="margin-right: 20px"
-                  >Retain</el-checkbox
-                >
-                <el-button
-                  type="primary"
-                  size="small"
-                  class="conn-btn"
-                  style="float: right"
-                  @click="_doPublish"
-                >
-                  {{ $t('Tools.publish') }}
-                </el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
-
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <div class="message-btn">
-            {{ $t('Tools.received') }}
-            <i class="icon el-icon-refresh" :title="$t('Tools.clear')" @click="messageIn = []"></i>
-          </div>
-          <el-table class="list-table" :data="messageIn" max-height="400px">
-            <el-table-column
-              show-overflow-tooltip
-              prop="topic"
-              label="Topic"
-              min-width="120px"
-              sortable
-            ></el-table-column>
-            <el-table-column prop="qos" label="QoS" sortable>
-              <template slot-scope="{ row }">
-                {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
-              </template>
-            </el-table-column>
-            <el-table-column show-overflow-tooltip prop="payload" label="Payload" sortable>
-              <template slot-scope="{ row }">
-                <code>{{ row.payload }}</code>
-              </template>
-            </el-table-column>
-            <el-table-column prop="createAt" :label="$t('Tools.time')" sortable></el-table-column>
-          </el-table>
-        </el-col>
-
-        <el-col :span="12">
-          <div class="message-btn">
-            {{ $t('Tools.published') }}
-            <i class="icon el-icon-refresh" :title="$t('Tools.clear')" @click="messageOut = []"></i>
-          </div>
-          <el-table class="list-table" :data="messageOut" max-height="400px">
-            <el-table-column
-              show-overflow-tooltip
-              prop="topic"
-              label="Topic"
-              sortable
-            ></el-table-column>
-            <el-table-column prop="qos" label="QoS" sortable>
-              <template slot-scope="{ row }">
-                {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
-              </template>
-            </el-table-column>
-            <el-table-column show-overflow-tooltip prop="payload" label="Payload" sortable>
-              <template slot-scope="{ row }">
-                <code>{{ row.payload }}</code>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="createAt"
-              :label="$t('Tools.time')"
-              sortable=""
-            ></el-table-column>
-          </el-table>
-        </el-col>
-      </el-row>
-    </el-card>
-  </div>
+      <el-col :span="12">
+        <div class="message-btn">
+          {{ $t('Tools.published') }}
+          <i class="iconx icon-sweep" :title="$t('Tools.clear')" @click="messageOut = []"></i>
+        </div>
+        <el-table class="list-table" :data="messageOut" max-height="400px">
+          <el-table-column
+            show-overflow-tooltip
+            prop="topic"
+            label="Topic"
+            sortable
+          ></el-table-column>
+          <el-table-column prop="qos" label="QoS" sortable>
+            <template slot-scope="{ row }">
+              {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
+            </template>
+          </el-table-column>
+          <el-table-column show-overflow-tooltip prop="payload" label="Payload" sortable>
+            <template slot-scope="{ row }">
+              <code>{{ row.payload }}</code>
+            </template>
+          </el-table-column>
+          <el-table-column prop="createAt" :label="$t('Tools.time')" sortable=""></el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+  </el-card>
 </template>
 
 <script>
@@ -304,9 +259,6 @@ import moment from 'moment'
 
 export default {
   name: 'WebSocketItem',
-
-  components: {},
-
   props: {
     messageCount: {
       type: Number,
@@ -688,90 +640,42 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.websocket-item {
-  .el-form-item {
-    .el-form-item__label {
-      padding: 0;
-    }
-  }
+<style lang="scss" scoped>
+.iconx {
+  vertical-align: bottom;
+  cursor: pointer;
+}
+.sub-area .el-form-item {
+  display: inline-block;
+  width: 30%;
+  padding-right: 3%;
+}
+.pub-area .el-form-item {
+  display: inline-block;
+  width: 24%;
+  padding-right: 1%;
 
-  .el-row {
-    .el-input,
-    .emq-select {
-      width: 100%;
-    }
-  }
-
-  .emq-list-card {
-    border-radius: 2px;
-    box-shadow: none;
-    border: none;
-    .el-card__body {
-      padding: 24px 32px;
-    }
-  }
-
-  .websocket-header {
-    background-color: #fff;
-  }
-
-  .session-item {
-    margin-right: 12px;
-  }
-
-  .session-btn {
+  .el-button {
     float: right;
   }
+}
 
-  .connection-wrapper {
-    .el-form-item {
-      .el-form-item__label {
-        padding: 0;
-      }
-    }
-  }
+.line {
+  background-color: #f1f1f1;
+  margin: 24px auto;
+}
 
-  .conn-btn {
-    min-width: 90px;
-  }
+.footer-area {
+  margin-top: 20px;
+}
+.checkbox-area {
+  line-height: 80px;
+  padding-left: 30px;
+}
 
-  .el-input_icon {
-    cursor: pointer;
-  }
-
-  .emq-title {
-    margin-bottom: 24px;
-  }
-
-  .line {
-    background-color: #f1f1f1;
-    margin: 24px auto;
-  }
-
-  .emq-list-card {
-    margin-bottom: 24px;
-  }
-
-  .sub-item-wrapper {
-    max-height: 720px;
-  }
-
-  .message-item-wrapper {
-    max-height: 2048px;
-  }
-
-  .footer-area {
-    margin-top: 20px;
-  }
-
-  .message-btn {
-    margin: 10px auto;
-
-    .icon {
-      margin-left: 6px;
-      cursor: pointer;
-    }
-  }
+.message-btn {
+  margin: 10px auto;
+  font-size: 16px;
+  font-weight: 700;
 }
 </style>
