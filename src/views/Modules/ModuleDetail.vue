@@ -187,7 +187,7 @@
           </template>
           <template v-else-if="moduleData.type == 'lwm2m_protocol'">
             <el-tab-pane :label="$t('Modules.tabLwm2m')" name="lwm2m">
-              <lw-clients></lw-clients>
+              <lw-clients :type="$route.query.type" :id="$route.query.imei"></lw-clients>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'topic_metrics'">
