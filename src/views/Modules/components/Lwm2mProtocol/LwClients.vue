@@ -1,5 +1,8 @@
 <template>
-  <div class="lw-clients clients">
+  <div v-if="type == 'lwm2m' && id">
+    <lw-client-details :nodeName="nodeName"></lw-client-details>
+  </div>
+  <div v-else class="lw-clients clients">
     <page-header>
       <div class="page-header-content-view">
         <div class="content">
@@ -58,11 +61,11 @@
 </template>
 
 <script>
-import LwClientDetails from './LwClientDetails'
 import { matchSearch } from '@/common/utils'
 import { loadNodes } from '@/api/common'
 import { getLwClients } from '@/api/modules'
 import { disconnectClient } from '@/api/clients'
+import LwClientDetails from './LwClientDetails'
 
 export default {
   name: 'LwClients',
@@ -70,6 +73,7 @@ export default {
   components: {
     LwClientDetails,
   },
+  props: ['type', 'id'],
 
   data() {
     return {
@@ -85,6 +89,7 @@ export default {
 
   created() {
     this.loadData()
+    console.log(this.id)
   },
 
   methods: {
@@ -103,9 +108,9 @@ export default {
     showClientDetails(row) {
       const { imei } = row
       this.$router.push({
-        path: '/modules/manage',
+        path: '/modules/detail',
         query: {
-          type: 'lwm2m_protocol',
+          type: 'lwm2m',
           imei,
         },
       })

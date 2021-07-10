@@ -57,7 +57,7 @@
                   </el-button>
                 </el-col>
                 <el-col :span="2" :offset="resourcesOperations[item] ? 4 : 12">
-                  <el-button type="danger" size="mini" @click="handleDelete(item)" style="float: right;">
+                  <el-button type="danger" size="mini" @click="handleDelete(item)" style="float: right">
                     Delete
                   </el-button>
                 </el-col>
@@ -609,12 +609,7 @@ export default {
     },
 
     backListPage() {
-      this.$router.push({
-        path: '/modules/manage',
-        query: {
-          type: 'lwm2m_protocol',
-        },
-      })
+      this.$router.go(-1)
     },
 
     handleCreate() {
