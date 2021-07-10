@@ -1,19 +1,11 @@
 <template>
-  <div class="resources">
-    <div class="app-wrapper">
-      <div class="emq-table-header">
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-plus"
-          @click="handleDialogVisible('add')"
-        >
-          {{ $t('Base.create') }}
-        </el-button>
-      </div>
+  <div class="resources app-wrapper">
+    <el-button type="primary" size="small" icon="el-icon-plus" @click="handleDialogVisible('add')">
+      {{ $t('Base.create') }}
+    </el-button>
 
-      <el-table :data="tableData" class="data-list">
-        <!-- <el-table-column class-name="expand-column" prop="id" type="expand" width="1px">
+    <el-table :data="tableData" class="data-list">
+      <!-- <el-table-column class-name="expand-column" prop="id" type="expand" width="1px">
           <template slot-scope="{ row }">
             <el-card shadow="never" class="resource-node-wrapper" :loading="row.loading">
               <el-row :gutter="40">
@@ -31,51 +23,50 @@
           </template>
         </el-table-column> -->
 
-        <el-table-column prop="id" min-width="80px" :label="$t('RuleEngine.resourceID')">
-          <template slot-scope="{ row }">
-            <router-link :to="{ name: 'resources-detail', params: { resId: row.id } }">{{
-              row.id
-            }}</router-link>
-          </template>
-        </el-table-column>
-        <!-- 资源类型 -->
-        <el-table-column
-          prop="config.title"
-          show-overflow-tooltip
-          :label="$t('RuleEngine.resourceTypes')"
-          :filters="filterOptions.resourceTypes"
-          :filter-method="resourceTypesColumnFilter"
-          filter-placement="bottom"
-        ></el-table-column>
-        <el-table-column
-          min-width="100px"
-          prop="description"
-          show-overflow-tooltip
-          :label="$t('RuleEngine.resourceDes')"
-        ></el-table-column>
-        <el-table-column prop="isAvailable" :label="$t('RuleEngine.status')">
-          <template slot-scope="{ row }">
-            <el-badge :type="row.isAvailable ? 'success' : 'danger'" is-dot> </el-badge
-            ><span>{{
-              row.isAvailable ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')
-            }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column width="200px" prop="id" :label="$t('Base.operation')">
-          <template slot-scope="{ row }">
-            <!-- <el-button size="mini" @click="viewResourcesStatus(row, $index)">
+      <el-table-column prop="id" min-width="80px" :label="$t('RuleEngine.resourceID')">
+        <template slot-scope="{ row }">
+          <router-link :to="{ name: 'resources-detail', params: { resId: row.id } }">{{
+            row.id
+          }}</router-link>
+        </template>
+      </el-table-column>
+      <!-- 资源类型 -->
+      <el-table-column
+        prop="config.title"
+        show-overflow-tooltip
+        :label="$t('RuleEngine.resourceTypes')"
+        :filters="filterOptions.resourceTypes"
+        :filter-method="resourceTypesColumnFilter"
+        filter-placement="bottom"
+      ></el-table-column>
+      <el-table-column
+        min-width="100px"
+        prop="description"
+        show-overflow-tooltip
+        :label="$t('RuleEngine.resourceDes')"
+      ></el-table-column>
+      <el-table-column prop="isAvailable" :label="$t('RuleEngine.status')">
+        <template slot-scope="{ row }">
+          <el-badge :type="row.isAvailable ? 'success' : 'danger'" is-dot> </el-badge
+          ><span>{{
+            row.isAvailable ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')
+          }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="200px" prop="id" :label="$t('Base.operation')">
+        <template slot-scope="{ row }">
+          <!-- <el-button size="mini" @click="viewResourcesStatus(row, $index)">
               {{ $t('RuleEngine.status') }}
             </el-button> -->
-            <el-button size="mini" @click="handleDialogVisible('edit', row)">
-              {{ $t('Base.edit') }}
-            </el-button>
-            <el-button type="danger" size="mini" plain @click="deleteResource(row)">
-              {{ $t('Base.delete') }}
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+          <el-button size="mini" @click="handleDialogVisible('edit', row)">
+            {{ $t('Base.edit') }}
+          </el-button>
+          <el-button type="danger" size="mini" plain @click="deleteResource(row)">
+            {{ $t('Base.delete') }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
     <resource-dialog
       :editItem="resourceToEdit"
@@ -93,11 +84,7 @@ import ResourceDialog from './components/ResourceDialog.vue'
 
 export default {
   name: 'Resources',
-
   components: { ResourceDialog },
-
-  props: {},
-
   data() {
     return {
       dialogVisible: false,

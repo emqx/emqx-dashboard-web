@@ -7,9 +7,6 @@
       <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
         {{ $t('Clients.search') }}
       </el-button>
-      <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
-        {{ searchValue ? $t('Clients.reset') : $t('Clients.refresh') }}
-      </el-button>
 
       <el-table :data="tableData">
         <el-table-column prop="topic" :label="$t('Topics.topic')" sortable></el-table-column>
@@ -19,8 +16,7 @@
 
     <div class="emq-table-footer">
       <el-pagination
-        hide-on-single-page
-        background
+        v-if="count > 0"
         layout="total, sizes, prev, pager, next"
         :page-sizes="[20, 50, 100, 500]"
         :page-size.sync="params._limit"
@@ -49,7 +45,6 @@ export default {
         _limit: 20,
       },
       count: 0,
-      resetIcon: 'el-icon-refresh',
     }
   },
 
@@ -58,15 +53,6 @@ export default {
   },
 
   methods: {
-    resetSearch() {
-      this.resetIcon = 'el-icon-loading'
-      let reload = false
-      if (this.searchValue) {
-        reload = true
-      }
-      this.searchValue = ''
-      this.loadTopics(reload)
-    },
     async handleSearch() {
       const topic = this.searchValue.trim()
       if (!topic) {
@@ -97,7 +83,6 @@ export default {
       } = data
       this.tableData = items
       this.count = count
-      this.resetIcon = 'el-icon-refresh'
     },
   },
 }

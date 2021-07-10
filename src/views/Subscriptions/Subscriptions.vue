@@ -2,14 +2,6 @@
   <div class="app-wrapper subscriptions">
     <el-row class="search-wrapper" :gutter="20">
       <el-col :span="6">
-        <!-- <emq-select
-          v-model="nodeName"
-          class="node-select"
-          size="small"
-          :field="{ options: currentNodes }"
-          :field-name="{ label: 'name', value: 'node' }"
-          @change="handleNodeChange"
-        ></emq-select> -->
         <el-select v-model="nodeName" :placeholder="$t('Clients.node')" size="small">
           <el-option v-for="item in currentNodes" :value="item.node" :key="item.node"></el-option>
         </el-select>
@@ -57,11 +49,8 @@
         <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
           {{ $t('Clients.search') }}
         </el-button>
-        <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
-          {{ $t('Clients.reset') }}
-        </el-button>
+
         <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
-          <!-- {{ showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand') }} -->
           <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
         </a>
       </el-col>
@@ -76,7 +65,6 @@
     <div class="emq-table-footer">
       <el-pagination
         v-if="count > 0"
-        background
         layout="total, sizes, prev, pager, next"
         :page-sizes="[20, 50, 100, 500]"
         :page-size.sync="params._limit"
@@ -122,7 +110,6 @@ export default {
       count: 0,
       nodeName: '',
       currentNodes: [],
-      resetIcon: 'el-icon-refresh',
       fuzzyParams: {
         match: '_match_topic',
       },
@@ -134,16 +121,6 @@ export default {
   },
 
   methods: {
-    // handleNodeChange() {
-    //   this.loadNodeSubscriptions(true)
-    // },
-    resetSearch() {
-      this.resetIcon = 'el-icon-loading'
-      this.fuzzyParams = {
-        match: '_match_topic',
-      }
-      this.loadNodeSubscriptions(true)
-    },
     async handleSearch() {
       const params = this.genQueryParams(this.fuzzyParams)
       this.count = 0
@@ -205,7 +182,6 @@ export default {
       this.tableData = items
       this.count = count
       this.hasnext = hasnext
-      this.resetIcon = 'el-icon-refresh'
     },
   },
 }

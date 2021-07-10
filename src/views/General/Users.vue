@@ -1,32 +1,28 @@
 <template>
-  <div class="users">
-    <div class="app-wrapper">
-      <div class="emq-table-header">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
-          {{ $t('Base.create') }}
-        </el-button>
-      </div>
+  <div class="users app-wrapper">
+    <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
+      {{ $t('Base.create') }}
+    </el-button>
 
-      <el-table :data="tableData" class="data-list">
-        <el-table-column sortable prop="username" :label="$t('General.userName')"></el-table-column>
-        <el-table-column sortable prop="tags" :label="$t('General.remark')"></el-table-column>
-        <el-table-column :label="$t('Base.operation')">
-          <template slot-scope="{ row }">
-            <el-button type="primary" plain size="mini" @click="showDialog('edit', row)"
-              >{{ $t('Base.edit') }}
-            </el-button>
-            <el-button
-              :disabled="row.tags === 'administrator' || row.username === 'admin'"
-              type="danger"
-              size="mini"
-              plain
-              @click="deleteConfirm(row)"
-              >{{ $t('Base.delete') }}
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-table :data="tableData">
+      <el-table-column sortable prop="username" :label="$t('General.userName')"></el-table-column>
+      <el-table-column sortable prop="tags" :label="$t('General.remark')"></el-table-column>
+      <el-table-column :label="$t('Base.operation')">
+        <template slot-scope="{ row }">
+          <el-button plain size="mini" @click="showDialog('edit', row)"
+            >{{ $t('Base.edit') }}
+          </el-button>
+          <el-button
+            :disabled="row.tags === 'administrator' || row.username === 'admin'"
+            type="danger"
+            size="mini"
+            plain
+            @click="deleteConfirm(row)"
+            >{{ $t('Base.delete') }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
     <el-dialog
       width="520px"
@@ -76,10 +72,6 @@ import { loadUser, createUser, updateUser, destroyUser, changePassword } from '@
 
 export default {
   name: 'Users',
-
-  components: {},
-
-  props: {},
 
   data() {
     const validatePass = (rule, value, callback) => {

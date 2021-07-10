@@ -19,7 +19,7 @@
             :value="item.messageCount"
             is-dot
           >
-            {{ item.label }}
+            {{ item.label + (i > 0 ? i : '') }}
           </el-badge>
         </span>
       </el-tab-pane>

@@ -1,67 +1,47 @@
 <template>
-  <div class="schemas">
-    <!-- <page-header>
-      <div class="page-header-content-view">
-        <div class="content">
-          <p class="description">
-            {{ $t('Schemas.schemaDesc') }}
-          </p>
-        </div>
-      </div>
-      <div class="page-header-top-start">
-        <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
-          <i class="icon el-icon-position"></i>
-          {{ $t('Schemas.quickStart') }}
-        </a>
-      </div>
-    </page-header> -->
+  <div class="schemas app-wrapper">
+    <el-button
+      type="primary"
+      size="small"
+      icon="el-icon-plus"
+      @click="
+        $router.push({
+          path: '/ruleengine/schemas/create',
+        })
+      "
+    >
+      {{ $t('Base.create') }}
+    </el-button>
 
-    <div class="app-wrapper">
-      <div class="emq-table-header">
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-plus"
-          @click="
-            $router.push({
-              path: '/ruleengine/schemas/create',
-            })
-          "
-        >
-          {{ $t('Base.create') }}
-        </el-button>
-      </div>
-
-      <el-table :data="tableData" class="data-list">
-        <el-table-column prop="name" :label="$t('Schemas.name')">
-          <template slot-scope="{ row }">
-            <router-link :to="{ path: '/ruleengine/schemas/detail', query: { id: row.name } }">{{
-              row.name
-            }}</router-link>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="parser_type"
-          :label="$t('Schemas.parser_type')"
-          :filters="parserTypes"
-          :filter-method="parserTypesColumnFilter"
-          filter-placement="bottom"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="descr"
-          show-overflow-tooltip
-          :label="$t('Schemas.description')"
-        ></el-table-column>
-        <el-table-column :label="$t('Base.operation')">
-          <template slot-scope="{ row }">
-            <el-button type="danger" size="mini" plain @click="deleteData(row)">
-              {{ $t('Base.delete') }}
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-table :data="tableData" class="data-list">
+      <el-table-column prop="name" :label="$t('Schemas.name')">
+        <template slot-scope="{ row }">
+          <router-link :to="{ path: '/ruleengine/schemas/detail', query: { id: row.name } }">{{
+            row.name
+          }}</router-link>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="parser_type"
+        :label="$t('Schemas.parser_type')"
+        :filters="parserTypes"
+        :filter-method="parserTypesColumnFilter"
+        filter-placement="bottom"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="descr"
+        show-overflow-tooltip
+        :label="$t('Schemas.description')"
+      ></el-table-column>
+      <el-table-column :label="$t('Base.operation')">
+        <template slot-scope="{ row }">
+          <el-button type="danger" size="mini" plain @click="deleteData(row)">
+            {{ $t('Base.delete') }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 

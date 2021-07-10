@@ -1,50 +1,40 @@
 <template>
-  <div class="application">
-    <div class="app-wrapper">
-      <div class="emq-table-header">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
-          {{ $t('Base.create') }}
-        </el-button>
-      </div>
+  <div class="application app-wrapper">
+    <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
+      {{ $t('Base.create') }}
+    </el-button>
 
-      <el-table :data="tableData" class="data-list">
-        <el-table-column prop="app_id" label="AppID" sortable>
-          <template slot-scope="{ row }">
-            <span class="btn" @click="showDialog('view', row)">
-              {{ row.app_id }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="name" :label="$t('General.appName')" sortable></el-table-column>
-        <el-table-column
-          prop="expired"
-          :formatter="formatterExpired"
-          :label="$t('General.expireAt')"
-        ></el-table-column>
-        <el-table-column prop="desc" :label="$t('General.remark')"></el-table-column>
-        <el-table-column :label="$t('General.isEnabled')">
-          <template slot-scope="{ row }">
-            <el-switch
-              v-model="row.status"
-              active-color="#13ce66"
-              inactive-color="#d0d3e0"
-              @change="updateApplication(row)"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('Base.operation')">
-          <template slot-scope="{ row }">
-            <el-button plain type="primary" size="mini" @click="showDialog('edit', row)">
-              {{ $t('Base.edit') }}
-            </el-button>
-            <el-button type="danger" size="mini" plain @click="deleteConfirm(row)">
-              {{ $t('Base.delete') }}
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-table :data="tableData" class="data-list">
+      <el-table-column prop="app_id" label="AppID" sortable>
+        <template slot-scope="{ row }">
+          <a @click.prevent="showDialog('view', row)">
+            {{ row.app_id }}
+          </a>
+        </template>
+      </el-table-column>
+      <el-table-column prop="name" :label="$t('General.appName')" sortable></el-table-column>
+      <el-table-column
+        prop="expired"
+        :formatter="formatterExpired"
+        :label="$t('General.expireAt')"
+      ></el-table-column>
+      <el-table-column prop="desc" :label="$t('General.remark')"></el-table-column>
+      <el-table-column :label="$t('General.isEnabled')">
+        <template slot-scope="{ row }">
+          <el-switch v-model="row.status" @change="updateApplication(row)"> </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('Base.operation')">
+        <template slot-scope="{ row }">
+          <el-button plain size="mini" @click="showDialog('edit', row)">
+            {{ $t('Base.edit') }}
+          </el-button>
+          <el-button type="danger" size="mini" plain @click="deleteConfirm(row)">
+            {{ $t('Base.delete') }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
     <el-dialog
       width="600px"
@@ -137,10 +127,6 @@ import { getLink } from '@/common/utils'
 
 export default {
   name: 'Application',
-
-  components: {},
-
-  props: {},
 
   data() {
     return {
@@ -271,14 +257,12 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.application {
-  .el-select {
-    width: 100%;
-  }
+<style lang="scss" scoped>
+.el-select {
+  width: 100%;
+}
 
-  .el-date-editor {
-    width: 100%;
-  }
+.el-date-editor {
+  width: 100%;
 }
 </style>

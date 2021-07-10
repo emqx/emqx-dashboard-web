@@ -73,11 +73,8 @@
         <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
           {{ $t('Clients.search') }}
         </el-button>
-        <el-button plain size="small" :icon="resetIcon" @click="resetSearch">
-          {{ $t('Clients.reset') }}
-        </el-button>
+
         <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
-          <!-- {{ showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand') }} -->
           <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
         </a>
       </el-col>
@@ -191,7 +188,6 @@ export default {
       // },
       nodeName: '',
       currentNodes: [],
-      resetIcon: 'el-icon-refresh',
       fuzzyParams: {
         comparator: '_gte',
       },
@@ -294,13 +290,7 @@ export default {
         })
         .catch(() => {})
     },
-    resetSearch() {
-      this.resetIcon = 'el-icon-loading'
-      this.fuzzyParams = {
-        comparator: '_gte',
-      }
-      this.loadNodeClients(true)
-    },
+
     async handleSearch() {
       const params = this.genQueryParams(this.fuzzyParams)
       this.count = 0
@@ -373,11 +363,7 @@ export default {
       this.tableData = items
       this.count = count
       this.hasnext = hasnext
-      this.resetIcon = 'el-icon-refresh'
     },
-    // protoNameColumnFilter(value, row) {
-    //   return value === row.proto_name
-    // },
   },
 }
 </script>
@@ -385,6 +371,5 @@ export default {
 <style lang="scss" scoped>
 .show-more {
   margin-left: 12px;
-  text-decoration: none;
 }
 </style>

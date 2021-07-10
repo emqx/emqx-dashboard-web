@@ -1,55 +1,47 @@
 <template>
-  <div class="backup">
-    <div class="app-wrapper">
-      <div class="emq-table-header">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="handleExport">
-          {{ $t('Backup.createBackup') }}
-        </el-button>
-        <el-upload
-          ref="upload"
-          class="upload-backup"
-          action="/api/v4/data/file"
-          accept=".json"
-          :limit="1"
-          :file-list="fileList"
-          :auto-upload="false"
-          :on-change="handleChange"
-          :on-error="handleError"
-        >
-          <el-button slot="trigger" size="small" icon="el-icon-upload2">
-            {{ $t('Backup.uploadServer') }}
-          </el-button>
-        </el-upload>
-      </div>
+  <div class="backup app-wrapper">
+    <el-button type="primary" size="small" icon="el-icon-plus" @click="handleExport">
+      {{ $t('Backup.createBackup') }}
+    </el-button>
+    <el-upload
+      ref="upload"
+      class="upload"
+      action="/api/v4/data/file"
+      accept=".json"
+      :limit="1"
+      :file-list="fileList"
+      :auto-upload="false"
+      :on-change="handleChange"
+      :on-error="handleError"
+    >
+      <el-button slot="trigger" size="small" icon="el-icon-upload2">
+        {{ $t('Backup.uploadServer') }}
+      </el-button>
+    </el-upload>
 
-      <el-table :data="tableData" class="data-list">
-        <el-table-column prop="node" :label="$t('RuleEngine.node')" sortable></el-table-column>
-        <el-table-column prop="filename" :label="$t('Backup.filename')" sortable></el-table-column>
-        <el-table-column prop="size" :label="$t('Backup.size')" sortable>
-          <template slot-scope="{ row }">
-            {{ row.size | renderSize }}
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="created_at"
-          :label="$t('Backup.createAt')"
-          sortable
-        ></el-table-column>
-        <el-table-column :label="$t('Base.operation')">
-          <template slot-scope="{ row }">
-            <el-button type="primary" size="mini" @click="handleDownload(row)"
-              >{{ $t('Backup.download') }}
-            </el-button>
-            <el-button type="primary" plain size="mini" @click="handleRestore(row)"
-              >{{ $t('Backup.restore') }}
-            </el-button>
-            <el-button type="danger" plain size="mini" @click="deleteConfirm(row)"
-              >{{ $t('Base.delete') }}
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <el-table :data="tableData">
+      <el-table-column prop="node" :label="$t('RuleEngine.node')" sortable></el-table-column>
+      <el-table-column prop="filename" :label="$t('Backup.filename')" sortable></el-table-column>
+      <el-table-column prop="size" :label="$t('Backup.size')" sortable>
+        <template slot-scope="{ row }">
+          {{ row.size | renderSize }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="created_at" :label="$t('Backup.createAt')" sortable></el-table-column>
+      <el-table-column :label="$t('Base.operation')">
+        <template slot-scope="{ row }">
+          <el-button size="mini" @click="handleDownload(row)"
+            >{{ $t('Backup.download') }}
+          </el-button>
+          <el-button plain size="mini" @click="handleRestore(row)"
+            >{{ $t('Backup.restore') }}
+          </el-button>
+          <el-button type="danger" plain size="mini" @click="deleteConfirm(row)"
+            >{{ $t('Base.delete') }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -65,9 +57,6 @@ import {
 
 export default {
   name: 'Backup',
-
-  components: {},
-
   filters: {
     renderSize(val) {
       if (val === null || val === '') {
@@ -82,9 +71,6 @@ export default {
       return `${size} ${unitArr[index]}`
     },
   },
-
-  props: {},
-
   data() {
     return {
       fileList: [],
@@ -182,13 +168,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.backup {
-  .el-table {
-    margin-bottom: 40px;
-  }
-  .upload-backup {
-    text-align: right;
-  }
+<style lang="scss" scoped>
+.upload {
+  display: inline-block;
 }
 </style>
