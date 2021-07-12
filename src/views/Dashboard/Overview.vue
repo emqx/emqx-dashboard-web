@@ -88,33 +88,6 @@
       </div>
     </div>
 
-    <!-- <el-card shadow="never" class="node-wrapper">
-      <div class="emq-title">
-        <div class="title">
-          {{ $t('Dashboard.nodeData') }}
-        </div>
-
-        <el-dropdown @command="dataTypeChange" :style="{ cursor: 'pointer' }">
-          <span class="el-dropdown-link">
-            {{ this.nodeName }}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item v-for="node of nodes" :key="node.node" :command="node.node">{{
-              node.node
-            }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-
-      <div class="basic">
-        <el-row :gutter="20">
-          <node-basic-card :value="currentNode"></node-basic-card>
-        </el-row>
-      </div>
-    </el-card> -->
-
-    <!-- <percentage-cards ref="percentageCards"></percentage-cards> -->
-
     <polyline-cards></polyline-cards>
 
     <div shadow="never" class="license-card">
@@ -233,22 +206,6 @@ export default {
     return {
       evaluation: 10,
       nodeName: '',
-      // initCurrentNode: {
-      //   connections: 0,
-      //   load1: '',
-      //   load15: '',
-      //   load5: '',
-      //   max_fds: 0,
-      //   memory_total: '',
-      //   memory_used: '',
-      //   node: '',
-      //   node_status: '',
-      //   otp_release: '',
-      //   process_available: 0,
-      //   process_used: 0,
-      //   uptime: '',
-      //   version: '',
-      // },
       timer: 0,
       nodes: [],
       licenseTipVisible: false,
@@ -301,17 +258,6 @@ export default {
       }
       return value
     },
-    // currentNode() {
-    //   const node = this.nodes.find(($) => $.node === this.nodeName)
-    //   if (node) {
-    //     const { stats, ...withoutStats } = node
-    //     return {
-    //       ...stats,
-    //       ...withoutStats,
-    //     }
-    //   }
-    //   return this.initCurrentNode
-    // },
     formatConnection() {
       const { connection } = this.currentMetrics
       const { max_connections } = this.license
@@ -325,10 +271,7 @@ export default {
     clearInterval(this.timerData)
     this.timerData = setInterval(() => {
       this.loadData()
-      // this.loadNodes()
-      // this.$refs.percentageCards.loadMetricsData()
     }, 10 * 1000)
-    // this.dataTypeChange()
   },
 
   beforeDestroy() {
@@ -341,15 +284,6 @@ export default {
         localStorage.setItem('licenseTipVisible', false)
       }
     },
-    // dataTypeChange(val) {
-    //   this.nodeName = val
-    //   this.loadNodes()
-    // },
-    // async loadNodes() {
-    //   this.nodes = await loadNodesApi()
-    //   this.nodeName = this.nodeName || (this.nodes[0] || {}).node
-    // },
-
     _formatNumber(num) {
       let number = String(parseInt(num))
       return number.replace(/(\d{1,3})(?=(\d{3})+($|\.))/g, '$1,')
