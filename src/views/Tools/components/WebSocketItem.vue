@@ -1,123 +1,103 @@
 <template>
   <el-card shadow="never">
-    <div class="websocket-config">
-      <div class="section-header">
-        {{ $t('Tools.connectionConfiguration') }}
-      </div>
-
-      <el-form
-        ref="configForm"
-        hide-required-asterisk
-        size="small"
-        label-position="top"
-        :model="connection"
-        :rules="connectionRules"
-        @keyup.enter.native="createConnection"
-      >
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <el-form-item prop="host" :label="$t('Tools.host')">
-              <el-input v-model="connection.host" :readonly="client.connected"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item prop="port" :label="$t('Tools.port')">
-              <el-input
-                v-model.number="connection.port"
-                placeholder="8083/8084"
-                :readonly="client.connected"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item prop="endpoint" :label="$t('Tools.mountPoint')">
-              <el-input
-                v-model="connection.endpoint"
-                placeholder="/mqtt"
-                :readonly="client.connected"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item prop="clientId" label="Client ID">
-              <el-input v-model="connection.clientId" :readonly="client.connected">
-                <i
-                  slot="suffix"
-                  :title="$t('Tools.randomGeneration')"
-                  :disabled="client.connected"
-                  class="el-icon-refresh el-input_icon"
-                  @click="refreshClientId"
-                ></i>
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item prop="username" label="Username">
-              <el-input v-model="connection.username" :readonly="client.connected"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item prop="password" label="Password">
-              <el-input
-                v-model="connection.password"
-                :readonly="client.connected"
-                show-password
-              ></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item prop="keepalive" label="Keepalive">
-              <el-input
-                v-model.number="connection.keepalive"
-                :readonly="client.connected"
-                placeholder="60"
-              ></el-input>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="8" class="checkbox-area">
-            <el-checkbox v-model="connection.clean" :disabled="client.connected">
-              Clean Session
-            </el-checkbox>
-
-            <el-checkbox
-              v-model="connection.ssl"
-              :disabled="client.connected"
-              @change="protocolsChange"
-            >
-              SSL
-            </el-checkbox>
-          </el-col>
-
-          <el-col :span="24" class="footer-area">
-            <el-button
-              type="primary"
-              size="small"
-              :disabled="client.connected || connecting"
-              @click="createConnection"
-            >
-              {{
-                client.connected
-                  ? $t('Tools.connected')
-                  : connecting
-                  ? $t('Tools.inConnection')
-                  : $t('Tools.connect')
-              }}
-            </el-button>
-
-            <el-button
-              type="danger"
-              size="small"
-              plain
-              :disabled="!client.connected && !connecting"
-              @click="destroyConnection"
-            >
-              {{ connecting ? $t('Tools.cancelConnection') : $t('Tools.disconnect') }}
-            </el-button>
-          </el-col>
-        </el-row>
-      </el-form>
+    <div class="section-header">
+      {{ $t('Tools.connectionConfiguration') }}
     </div>
+
+    <el-form
+      ref="configForm"
+      hide-required-asterisk
+      size="small"
+      label-position="top"
+      :model="connection"
+      :rules="connectionRules"
+      @keyup.enter.native="createConnection"
+      :disabled="client.connected"
+    >
+      <el-row :gutter="20">
+        <el-col :span="8">
+          <el-form-item prop="host" :label="$t('Tools.host')">
+            <el-input v-model="connection.host"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="port" :label="$t('Tools.port')">
+            <el-input v-model.number="connection.port" placeholder="8083/8084"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="endpoint" :label="$t('Tools.mountPoint')">
+            <el-input v-model="connection.endpoint" placeholder="/mqtt"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="clientId" label="Client ID">
+            <el-input v-model="connection.clientId"> </el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="username" :label="$t('Tools.Username')">
+            <el-input v-model="connection.username"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="password" :label="$t('Tools.Password')">
+            <el-input v-model="connection.password" show-password></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="keepalive" label="Keepalive">
+            <el-input v-model.number="connection.keepalive" placeholder="60"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item prop="protocolversion" :label="$t('Tools.ProtocolVersion')">
+            <el-select v-model="connection.protocolversion">
+              <el-option
+                v-for="item in protocolVerList"
+                :key="item.name"
+                :label="`MQTT ${item.name}`"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="8" class="checkbox-area">
+          <el-checkbox v-model="connection.clean">Clean Session</el-checkbox>
+
+          <el-checkbox v-model="connection.ssl" @change="protocolsChange">SSL</el-checkbox>
+        </el-col>
+      </el-row>
+    </el-form>
+    <el-row>
+      <el-col :span="24" class="footer-area">
+        <el-button
+          type="primary"
+          size="small"
+          :disabled="client.connected || connecting"
+          @click="createConnection"
+        >
+          {{
+            client.connected
+              ? $t('Tools.connected')
+              : connecting
+              ? $t('Tools.inConnection')
+              : $t('Tools.connect')
+          }}
+        </el-button>
+
+        <el-button
+          type="danger"
+          size="small"
+          plain
+          :disabled="!client.connected && !connecting"
+          @click="destroyConnection"
+        >
+          {{ connecting ? $t('Tools.cancelConnection') : $t('Tools.disconnect') }}
+        </el-button>
+      </el-col>
+    </el-row>
 
     <div class="section-header">
       {{ $t('Tools.Subscription') }}
@@ -129,9 +109,9 @@
       :model="subscriptionsRecord"
       :rules="subscriptionsRules"
       size="small"
-      label-position="top"
       @keyup.enter.native="_doSubscribe"
       class="sub-area"
+      :disabled="!client.connected"
     >
       <el-form-item prop="topic" label="Topic">
         <el-input v-model="subscriptionsRecord.topic"></el-input>
@@ -156,7 +136,14 @@
       <el-table-column prop="createAt" :label="$t('Tools.time')" sortable></el-table-column>
       <el-table-column :label="$t('Base.operation')">
         <template slot-scope="{ row }">
-          <a class="btn" @click="_doUnSubscribe(row)">{{ $t('Base.cancel') }}</a>
+          <el-button
+            size="mini"
+            type="danger"
+            plain
+            @click="_doUnSubscribe(row)"
+            :disabled="!client.connected"
+            >{{ $t('Base.cancel') }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -174,6 +161,7 @@
       size="small"
       @keyup.enter.native="_doPublish"
       class="pub-area"
+      :disabled="!client.connected"
     >
       <el-form-item prop="topic" label="Topic">
         <el-input v-model="messageRecord.topic" size="small"></el-input>
@@ -202,7 +190,7 @@
           {{ $t('Tools.received') }}
           <i class="iconx icon-sweep" :title="$t('Tools.clear')" @click="messageIn = []"></i>
         </div>
-        <el-table class="list-table" :data="messageIn" max-height="400px">
+        <el-table :data="messageIn" max-height="400px">
           <el-table-column
             show-overflow-tooltip
             prop="topic"
@@ -229,7 +217,7 @@
           {{ $t('Tools.published') }}
           <i class="iconx icon-sweep" :title="$t('Tools.clear')" @click="messageOut = []"></i>
         </div>
-        <el-table class="list-table" :data="messageOut" max-height="400px">
+        <el-table :data="messageOut" max-height="400px">
           <el-table-column
             show-overflow-tooltip
             prop="topic"
@@ -246,7 +234,7 @@
               <code>{{ row.payload }}</code>
             </template>
           </el-table-column>
-          <el-table-column prop="createAt" :label="$t('Tools.time')" sortable=""></el-table-column>
+          <el-table-column prop="createAt" :label="$t('Tools.time')" sortable></el-table-column>
         </el-table>
       </el-col>
     </el-row>
@@ -273,16 +261,17 @@ export default {
   data() {
     return {
       times: 0,
-      maxTims: 4,
+      // maxTims: 4,
       connecting: false,
+      cStatus: 0b00000, //from last to fist bit => disconnected|connecting|connected|disconnecting|reconnecting
       messageRecordRules: {
         topic: { required: true, message: this.$t('Tools.pleaseEnter') },
       },
-      stateIcon: {
-        0: 'el-icon-message',
-        1: 'el-icon-loading',
-        3: 'el-icon-warning',
-      },
+      // stateIcon: {
+      //   0: 'el-icon-message',
+      //   1: 'el-icon-loading',
+      //   3: 'el-icon-warning',
+      // },
       connectionRules: {
         host: { required: true },
         port: [
@@ -315,7 +304,7 @@ export default {
         topic: [{ required: true, message: this.$t('Tools.pleaseEnter') }],
       },
       client: {
-        reconnecting: false,
+        // reconnecting: false,
       },
       connection: {
         host: this.getOption().host,
@@ -323,7 +312,7 @@ export default {
         protocols: this.getOption().protocols,
         clientId: this.getOption().clientId,
         ssl: this.getOption().ssl,
-
+        protocolversion: 4,
         endpoint: '/mqtt',
         username: '',
         password: '',
@@ -351,25 +340,33 @@ export default {
       },
 
       subscriptions: [],
-
       messageIn: [],
       messageOut: [],
-
-      activeIndex: '0',
-      sessions: [],
+      protocolVerList: [
+        {
+          name: '3.1.1',
+          value: 4,
+        },
+        {
+          name: '5',
+          value: 5,
+        },
+      ],
+      // activeIndex: '0',
+      // sessions: [],
     }
   },
 
   computed: {
-    btnStatusText() {
-      let text = this.$t('Tools.connect')
-      if (this.client.connected) {
-        text = this.$t('Tools.disconnect')
-      } else if (this.client.connecting) {
-        text = this.$t('Tools.inConnection')
-      }
-      return text
-    },
+    // btnStatusText() {
+    //   let text = this.$t('Tools.connect')
+    //   if (this.client.connected) {
+    //     text = this.$t('Tools.disconnect')
+    //   } else if (this.client.connecting) {
+    //     text = this.$t('Tools.inConnection')
+    //   }
+    //   return text
+    // },
     connectUrl() {
       const { host, port, ssl, endpoint } = this.connection
       const protocol = ssl ? 'wss://' : 'ws://'
@@ -390,7 +387,7 @@ export default {
       }
     },
     getNow() {
-      return moment().format('HH:mm:ss')
+      return moment().format('YYYY-MM-DD HH:mm:ss')
     },
     onMessage(topic, payload, packet = {}) {
       const message = {
@@ -405,18 +402,18 @@ export default {
       let { messageCount } = this
       this.$emit('update:messageCount', (messageCount += 1))
     },
-    handleConnect() {
-      if (this.client.connected) {
-        this.client.end()
-      } else {
-        this.createConnection()
-      }
-    },
+    // handleConnect() {
+    //   if (this.client.connected) {
+    //     this.client.end()
+    //   } else {
+    //     this.createConnection()
+    //   }
+    // },
     destroyConnection() {
       if (this.client.connected || this.connecting) {
         try {
           this.connecting = false
-          this.times = 0
+          // this.times = 0
           this.client.end()
           this.$notify({
             title: this.$t('Tools.disconnected'),
@@ -507,26 +504,26 @@ export default {
         },
       )
     },
-    _getDefaultConnection() {
-      return {
-        ...this.getOption(),
+    // _getDefaultConnection() {
+    //   return {
+    //     ...this.getOption(),
 
-        endpoint: '/mqtt',
-        username: '',
-        password: '',
-        keepalive: 60,
-        clean: true,
-        reconnectPeriod: 4000,
-        connectTimeout: 4000,
+    //     endpoint: '/mqtt',
+    //     username: '',
+    //     password: '',
+    //     keepalive: 60,
+    //     clean: true,
+    //     reconnectPeriod: 4000,
+    //     connectTimeout: 4000,
 
-        will: {
-          topic: '',
-          payload: '',
-          qos: 0,
-          retain: false,
-        },
-      }
-    },
+    //     will: {
+    //       topic: '',
+    //       payload: '',
+    //       qos: 0,
+    //       retain: false,
+    //     },
+    //   }
+    // },
     protocolsChange() {
       const { port, ssl } = this.connection
       if (!ssl && port === 8084) {
@@ -535,16 +532,16 @@ export default {
         this.connection.port = 8084
       }
     },
-    refreshClientId() {
-      if (this.client.connected) {
-        return
-      }
-      this.connection.clientId = this.getOption().clientId
-    },
+    // refreshClientId() {
+    //   if (this.client.connected) {
+    //     return
+    //   }
+    //   this.connection.clientId = this.getOption().clientId
+    // },
     createConnection() {
       if (this.client.connected) {
         this.connecting = false
-        this.times = 0
+        // this.times = 0
         return
       }
       this.$refs.configForm.validate((valid) => {
@@ -561,6 +558,7 @@ export default {
           clean,
           connectTimeout,
           will,
+          protocolversion,
         } = this.connection
 
         this.connecting = true
@@ -575,9 +573,10 @@ export default {
             keepalive,
             clean,
             connectTimeout,
+            protocolVersion: protocolversion,
             will: will.topic ? will : undefined,
           })
-          window.client = this.client
+          // window.client = this.client
           this.client.on('error', (error) => {
             this.$message.error(error.toString())
             this.connecting = false
@@ -588,7 +587,7 @@ export default {
             }
           })
           this.client.on('reconnect', () => {
-            if (this.times > this.maxTims) {
+            if (this.times > 3) {
               this.destroyConnection()
               this.$message.error(this.$t('Tools.connectionDisconnected'))
             }
@@ -623,23 +622,23 @@ export default {
         ssl: protocol === 'https:',
       }
     },
-    atSessionChange(i) {
-      this.activeIndex = i
-      const session = this.sessions[i]
-      if (!session) {
-        return
-      }
+    // atSessionChange(i) {
+    //   this.activeIndex = i
+    //   const session = this.sessions[i]
+    //   if (!session) {
+    //     return
+    //   }
 
-      this.client = session.client || {}
-      this.connection = session.connection || {}
-      this.messageRecord = session.messageRecord || {}
-      this.subscriptionsRecord = session.subscriptionsRecord || {}
+    //   this.client = session.client || {}
+    //   this.connection = session.connection || {}
+    //   this.messageRecord = session.messageRecord || {}
+    //   this.subscriptionsRecord = session.subscriptionsRecord || {}
 
-      this.subscriptions = session.subscriptions || []
-    },
-    sessionChange(i) {
-      this.activeIndex = i
-    },
+    //   this.subscriptions = session.subscriptions || []
+    // },
+    // sessionChange(i) {
+    //   this.activeIndex = i
+    // },
   },
 }
 </script>
@@ -662,11 +661,6 @@ export default {
   .el-button {
     float: right;
   }
-}
-
-.line {
-  background-color: #f1f1f1;
-  margin: 24px auto;
 }
 
 .footer-area {

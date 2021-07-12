@@ -81,8 +81,10 @@
 
 /* Input */
 .el-input,
-.el-textarea {
+.el-textarea,
+.el-select {
   transition: all 0.3s;
+  width: 100%;
   &__inner {
     border-radius: 2px;
     border: 1px solid #e4e4e4;

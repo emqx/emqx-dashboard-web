@@ -1,7 +1,23 @@
 export default {
+  Username: {
+    zh: '用户名',
+    en: 'Username',
+  },
+  Password: {
+    zh: '密码',
+    en: 'Password',
+  },
+  ProtocolVersion: {
+    zh: '协议版本',
+    en: 'ProtocolVersion',
+  },
   maxSix: {
     zh: '最大支持6个新连接',
     en: 'Maximum support for 6 new connections',
+  },
+  createNew: {
+    zh: '建立一个新连接',
+    en: 'Create a new connection',
   },
   defaultConnection: {
     zh: '默认连接',

@@ -19,7 +19,7 @@
         </span>
       </el-tab-pane>
       <el-tab-pane key="add" class="add-btn" name="add">
-        <span slot="label">
+        <span slot="label" :title="$t('Tools.createNew')">
           <i class="el-icon-plus"></i>
         </span>
       </el-tab-pane>
@@ -126,4 +126,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-tabs {
+  &::v-deep .el-badge__content.is-dot {
+    top: 7px;
+    right: 5px;
+  }
+}
+</style>
