@@ -10,7 +10,7 @@
         </router-link>
         <left-bar></left-bar>
       </el-aside>
-      <el-container class="layout" style="min-height: 100vh">
+      <el-container class="layout">
         <el-main style="margin: 0; padding: 0" :style="{ marginLeft: elMainStyle }">
           <el-header :style="{ left: elMainStyle, height: 'auto' }">
             <nav-header></nav-header>
@@ -117,6 +117,10 @@ export default {
   transition: margin-left 0.3s;
 }
 
+.el-container {
+  min-height: 100vh;
+}
+
 .logo {
   width: 200px;
   height: 60px;
@@ -141,11 +145,6 @@ export default {
     width: 162px;
     transition: all 0.3s;
   }
-
-  // .line {
-  //   margin-top: 12px;
-  //   width: 120px;
-  // }
 }
 
 .logo-colap {

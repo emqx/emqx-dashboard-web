@@ -240,7 +240,7 @@ export default {
 
   methods: {
     handleRowClick(row, column, event) {
-      console.log(row, event)
+      // console.log(row, event)
       //shiftkey+mouse select all rows before the selected one
       if (event.shiftKey) {
         let rowIndex = this.tableData.findIndex((e) => e == row)

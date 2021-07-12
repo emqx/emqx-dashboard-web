@@ -123,16 +123,12 @@
 import moment from 'moment'
 
 import { loadApp, createApp, showApp, updateApp, destroyAPP } from '@/api/function'
-import { getLink } from '@/common/utils'
 
 export default {
   name: 'Application',
 
   data() {
     return {
-      docs: {
-        restAPI: getLink('restAPI'),
-      },
       dialogVisible: false,
       tableData: [],
       accessType: '',

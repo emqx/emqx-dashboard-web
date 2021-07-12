@@ -1,75 +1,72 @@
 <template>
-  <div class="rules">
-    <div class="app-wrapper">
-      <div class="search-wrapper">
-        <el-button
-          type="primary"
-          size="small"
-          icon="el-icon-plus"
-          @click="$router.push('/ruleengine/rules/create')"
-        >
-          {{ $t('Base.create') }}
-        </el-button>
-      </div>
-
-      <el-table v-bind="rulesTable" :data="tableData" class="data-list">
-        <el-table-column type="index" label="No"> </el-table-column>
-        <el-table-column prop="id" label="ID" sortable>
-          <template slot-scope="{ row }">
-            <router-link
-              :to="{
-                name: 'rules-detail',
-                params: { ruleId: row.id },
-              }"
-              >{{ row.id }}</router-link
-            >
-          </template>
-        </el-table-column>
-        <el-table-column prop="for" sortable :label="$t('RuleEngine.topic')">
-          <template slot-scope="{ row }">
-            <div v-for="(item, index) in row.for" :key="index">
-              {{ item }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
-          <template slot-scope="{ row }">
-            <i class="iconx icon-monitor btn btn-default" @click="showMetrics(row)"></i>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="description"
-          show-overflow-tooltip
-          sortable
-          :label="$t('RuleEngine.describe')"
-        ></el-table-column>
-        <el-table-column prop="status" :label="$t('RuleEngine.status')">
-          <template slot-scope="{ row }">
-            <el-switch v-model="row.enabled" inactive-color="#d0d3e0" @change="updateRule(row)">
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="actions"
-          :filters="filterOptions.actions"
-          :filter-method="actionsColumnFilter"
-          filter-placement="bottom"
-          :formatter="actionsFormatter"
-          :label="$t('RuleEngine.responseAction')"
-        >
-        </el-table-column>
-        <el-table-column width="120px" prop="id" :label="$t('Base.operation')">
-          <template slot-scope="{ row }">
-            <el-button plain type="primary" size="mini" @click="editRule(row)">
-              {{ $t('Base.edit') }}
-            </el-button>
-            <el-button type="danger" size="mini" plain @click="deleteRule(row)">
-              {{ $t('Base.delete') }}
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+  <div class="rules app-wrapper">
+    <div class="search-wrapper">
+      <el-button
+        type="primary"
+        size="small"
+        icon="el-icon-plus"
+        @click="$router.push('/ruleengine/rules/create')"
+      >
+        {{ $t('Base.create') }}
+      </el-button>
     </div>
+
+    <el-table v-bind="rulesTable" :data="tableData" class="data-list">
+      <el-table-column type="index" label="No"> </el-table-column>
+      <el-table-column prop="id" label="ID" sortable>
+        <template slot-scope="{ row }">
+          <router-link
+            :to="{
+              name: 'rules-detail',
+              params: { ruleId: row.id },
+            }"
+            >{{ row.id }}</router-link
+          >
+        </template>
+      </el-table-column>
+      <el-table-column prop="for" sortable :label="$t('RuleEngine.topic')">
+        <template slot-scope="{ row }">
+          <div v-for="(item, index) in row.for" :key="index">
+            {{ item }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
+        <template slot-scope="{ row }">
+          <i class="iconx icon-monitor btn btn-default" @click="showMetrics(row)"></i>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="description"
+        show-overflow-tooltip
+        sortable
+        :label="$t('RuleEngine.describe')"
+      ></el-table-column>
+      <el-table-column prop="status" :label="$t('RuleEngine.status')">
+        <template slot-scope="{ row }">
+          <el-switch v-model="row.enabled" @change="updateRule(row)"> </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="actions"
+        :filters="filterOptions.actions"
+        :filter-method="actionsColumnFilter"
+        filter-placement="bottom"
+        :formatter="actionsFormatter"
+        :label="$t('RuleEngine.responseAction')"
+      >
+      </el-table-column>
+      <el-table-column width="120px" prop="id" :label="$t('Base.operation')">
+        <template slot-scope="{ row }">
+          <el-button plain size="mini" @click="editRule(row)">
+            {{ $t('Base.edit') }}
+          </el-button>
+          <el-button type="danger" size="mini" plain @click="deleteRule(row)">
+            {{ $t('Base.delete') }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
     <el-drawer v-bind="rulesDrawer" direction="rtl" :visible.sync="metricsDrawerVisible">
       <div class="rule-metrics">
@@ -155,7 +152,6 @@ import {
   loadRuleEvents,
   updateRule,
 } from '@/api/rules'
-import { getLink } from '@/common/utils'
 
 export default {
   name: 'Rules',
@@ -164,15 +160,11 @@ export default {
 
   data() {
     return {
-      docs: {
-        tutorial: getLink('ruleEngineTutorial'),
-        docs: '',
-      },
       metricsDrawerVisible: false,
       currentRules: {
         actions: [
           {
-            id: 'do_nothing_1562653876521962460',
+            id: '',
             metrics: [{ failed: 0, node: 'emqx@127.0.0.1', success: 3 }],
             name: 'do_nothing',
             params: {},
@@ -181,7 +173,7 @@ export default {
         description: '',
         enabled: true,
         for: ['client.connected'],
-        id: 'rule:33570eea',
+        id: '',
         metrics: [
           {
             matched: 3,
@@ -209,7 +201,7 @@ export default {
             'timestamp',
             'node',
           ],
-          description: '连接建立',
+          description: '',
           event: 'client.connected',
           sql_example: 'SELECT * FROM "client.connected"',
           test_columns: {
@@ -218,7 +210,7 @@ export default {
             auth_result: 'success',
             peername: '127.0.0.1:63412',
           },
-          title: '连接建立',
+          title: '',
         },
         metricsData: {
           matched: 3,

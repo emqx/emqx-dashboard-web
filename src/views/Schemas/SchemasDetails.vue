@@ -233,7 +233,7 @@ export default {
     },
 
     async viewDetails(id) {
-      const res = await viewSchema(id)
+      const res = await viewSchema(id).catch(() => {})
       if (res) {
         this.record = res
       }

@@ -91,7 +91,6 @@
 <script>
 import moment from 'moment'
 import { loadBlacklist, createBlacklist, deleteBlacklist } from '@/api/function'
-import { getLink } from '@/common/utils'
 
 export default {
   name: 'Blacklist',
@@ -99,9 +98,6 @@ export default {
   props: {},
   data() {
     return {
-      docs: {
-        tutorial: getLink('auth'),
-      },
       dialogVisible: false,
       tableData: [],
       params: {

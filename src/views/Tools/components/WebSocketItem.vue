@@ -264,6 +264,10 @@ export default {
       type: Number,
       default: 0,
     },
+    name: {
+      type: String,
+      default: 'New',
+    },
   },
 
   data() {
@@ -615,7 +619,7 @@ export default {
         host: hostname,
         protocols: protocol === 'http:' ? 'ws' : 'wss',
         port: protocol === 'http:' ? 8083 : 8084,
-        clientId: `mqttjs_${Math.random().toString(16).substr(2, 8)}`,
+        clientId: `emqx_${this.name}`,
         ssl: protocol === 'https:',
       }
     },

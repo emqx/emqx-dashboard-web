@@ -8,35 +8,25 @@ const RESOURCES = 'Resources'
 export const loadSchemas = () => http.get('/schemas')
 
 export const viewSchema = async (id) => {
-  try {
-    const data = await http.get(`/schemas/${id}`)
-    const res = data
-    const { parser_addr } = res
-    if (parser_addr) {
-      const { url, host, port } = parser_addr
-      if (url) {
-        res.third_party_type = HTTP
-      } else if (host && port) {
-        res.third_party_type = TCP
-        res.parser_addr.server = `${host}:${port}`
-      } else {
-        res.third_party_type = RESOURCES
-      }
+  const data = await http.get(`/schemas/${id}`)
+  const res = data
+  const { parser_addr } = res
+  if (parser_addr) {
+    const { url, host, port } = parser_addr
+    if (url) {
+      res.third_party_type = HTTP
+    } else if (host && port) {
+      res.third_party_type = TCP
+      res.parser_addr.server = `${host}:${port}`
+    } else {
+      res.third_party_type = RESOURCES
     }
-    return res
-  } catch (error) {
-    console.error(error)
-    return false
   }
+  return res
 }
 
 export const deleteSchema = async (id) => {
-  try {
-    return await http.delete(`/schemas/${id}`)
-  } catch (error) {
-    console.error(error)
-    return false
-  }
+  return await http.delete(`/schemas/${id}`)
 }
 
 export const createSchema = async (data) => {
@@ -60,12 +50,5 @@ export const createSchema = async (data) => {
     body.schema = data.schema
   }
 
-  try {
-    return await http.post('/schemas', body)
-  } catch (error) {
-    console.error(error)
-    return false
-  }
+  return await http.post('/schemas', body)
 }
-
-export default {}

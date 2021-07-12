@@ -75,14 +75,7 @@ a {
 }
 
 .app-wrapper {
-  padding: 24px !important;
-}
-
-.line {
-  height: 1px;
-  min-width: 50px;
-  background-color: #34c388;
-  margin: 0 auto;
+  padding: 24px;
 }
 
 .search-wrapper {
@@ -106,34 +99,11 @@ a {
   text-align: right;
 }
 
-.btn {
-  cursor: pointer;
-  user-select: none;
-
-  &:not(.btn-default) {
-    color: #34c388;
-  }
-
-  &.raw {
-    &:hover {
-      color: #34c388;
-    }
-  }
-}
-
 .emq-title {
   font-size: 16px;
   color: #333333;
   font-weight: bolder;
   margin-bottom: 40px;
-
-  &.h3 {
-    font-size: 14px;
-  }
-
-  &[size='small'] {
-    font-size: 14px;
-  }
 
   .sub-title {
     font-weight: normal;
@@ -142,34 +112,6 @@ a {
     color: #8f9297;
     margin-top: 12px;
   }
-
-  &.required-title {
-    &:before {
-      content: '*';
-      color: #f5222d;
-      margin-right: 4px;
-    }
-  }
-}
-
-.emq-option-item {
-  display: flex;
-  justify-content: space-between;
-
-  .option-value {
-    font-size: 13px;
-    padding-left: 10px;
-  }
-}
-
-.state {
-  position: relative;
-  top: -1px;
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  vertical-align: middle;
-  border-radius: 50%;
 }
 
 .emq-popover-content {

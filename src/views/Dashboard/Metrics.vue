@@ -63,11 +63,7 @@ import EmqSelect from '../../components/EmqSelect.vue'
 export default defineComponent({
   components: { EmqSelect },
   name: 'Metrics',
-  // data() {
-  //   return {
-  //     metrics: [],
-  //   }
-  // },
+
   setup() {
     let metrics = ref([])
     let metricsObj = ref({})

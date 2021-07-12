@@ -13,7 +13,7 @@
       {{ $t('Base.create') }}
     </el-button>
 
-    <el-table :data="tableData" class="data-list">
+    <el-table :data="tableData">
       <el-table-column prop="name" :label="$t('Schemas.name')">
         <template slot-scope="{ row }">
           <router-link :to="{ path: '/ruleengine/schemas/detail', query: { id: row.name } }">{{
@@ -47,16 +47,12 @@
 
 <script>
 import { loadSchemas, deleteSchema } from '@/api/schemas'
-import { getLink } from '@/common/utils'
 
 export default {
   name: 'Schemas',
 
   data() {
     return {
-      docs: {
-        tutorial: getLink('schemaTutorial'),
-      },
       tableData: [],
       parserTypes: [
         { text: 'avro', value: 'avro' },
@@ -72,7 +68,7 @@ export default {
 
   methods: {
     async loadData() {
-      const res = await loadSchemas()
+      const res = await loadSchemas().catch(() => {})
       if (res) {
         this.tableData = res
       }
@@ -83,7 +79,7 @@ export default {
         type: 'warning',
       })
         .then(async () => {
-          const res = await deleteSchema(row.name)
+          const res = await deleteSchema(row.name).catch(() => {})
           if (res) {
             this.loadData()
             this.$message.success(this.$t('Base.deleteSuccess'))

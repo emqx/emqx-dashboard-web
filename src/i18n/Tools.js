@@ -1,15 +1,15 @@
 export default {
   maxSix: {
-    zh: '最大支持 6 个连接',
-    en: 'Maximum support for 6 connection',
+    zh: '最大支持6个新连接',
+    en: 'Maximum support for 6 new connections',
   },
   defaultConnection: {
     zh: '默认连接',
     en: 'Default',
   },
   connectionName: {
-    zh: '新连接',
-    en: 'New',
+    zh: '新连接:',
+    en: 'New Connection:',
   },
   connectionConfiguration: {
     zh: '连接配置',

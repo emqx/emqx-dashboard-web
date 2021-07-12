@@ -6,12 +6,7 @@
       :before-leave="handleBeforeLeave"
       @tab-remove="handleTabEdit"
     >
-      <el-tab-pane
-        v-for="(item, i) in tabs"
-        :key="item.name + i"
-        :closable="i > 0"
-        :name="item.name"
-      >
+      <el-tab-pane v-for="(item, i) in tabs" :key="item.name" :closable="i > 0" :name="item.name">
         <span slot="label">
           <el-badge
             class="message-count"
@@ -19,7 +14,7 @@
             :value="item.messageCount"
             is-dot
           >
-            {{ item.label + (i > 0 ? i : '') }}
+            {{ item.label }}
           </el-badge>
         </span>
       </el-tab-pane>
@@ -31,10 +26,11 @@
     </el-tabs>
 
     <web-socket-item
-      v-for="(item, i) in tabs"
+      v-for="item in tabs"
       v-show="item.name === activeTab"
       :ref="item.name"
-      :key="i"
+      :key="item.name"
+      :name="item.name"
       :message-count.sync="item.messageCount"
     ></web-socket-item>
   </div>
@@ -48,14 +44,8 @@ export default {
   components: { WebSocketItem },
   data() {
     return {
-      activeTab: '0',
-      tabs: [
-        {
-          name: '0',
-          label: this.$t('Tools.defaultConnection'),
-          messageCount: 0,
-        },
-      ],
+      activeTab: '',
+      tabs: [],
     }
   },
 
@@ -72,8 +62,26 @@ export default {
       }
     },
   },
+  created() {
+    let defaultConnName = this.calcRandomName()
+    this.tabs.push({
+      name: defaultConnName,
+      label: this.$t('Tools.defaultConnection'),
+      messageCount: 0,
+    })
+    this.activeTab = defaultConnName
+  },
 
   methods: {
+    calcRandomName(len = 6) {
+      const b64 = (window && window.btoa) || (global && global.btoa)
+      const rNum = String(Math && Math.random()).split('.')[1]
+      if (b64) {
+        return b64(rNum).substring(0, len)
+      } else {
+        return String(rNum).substring(0, len)
+      }
+    },
     // 活动标签切换时触发
     handleBeforeLeave(currentName) {
       if (currentName === 'add') {
@@ -88,10 +96,10 @@ export default {
           this.$message.error(this.$t('Tools.maxSix'))
           return
         }
-        const name = this.tabs.length.toString()
+        const name = this.calcRandomName()
         this.tabs.push({
           name,
-          label: this.$t('Tools.connectionName'),
+          label: this.$t('Tools.connectionName') + name,
           messageCount: 0,
         })
         this.activeTab = name
