@@ -12,7 +12,7 @@
       :model="connection"
       :rules="connectionRules"
       @keyup.enter.native="createConnection"
-      :disabled="client.connected"
+      :disabled="compareConnStatus('MCONNECTED')"
     >
       <el-row :gutter="20">
         <el-col :span="8">
@@ -105,7 +105,7 @@
       size="small"
       @keyup.enter.native="_doSubscribe"
       class="sub-area"
-      :disabled="!client.connected"
+      :disabled="!compareConnStatus('MCONNECTED')"
     >
       <el-form-item prop="topic" label="Topic">
         <el-input v-model="subscriptionsRecord.topic"></el-input>
@@ -135,7 +135,7 @@
             type="danger"
             plain
             @click="_doUnSubscribe(row)"
-            :disabled="!client.connected"
+            :disabled="!compareConnStatus('MCONNECTED')"
             >{{ $t('Base.cancel') }}</el-button
           >
         </template>
@@ -155,7 +155,7 @@
       size="small"
       @keyup.enter.native="_doPublish"
       class="pub-area"
-      :disabled="!client.connected"
+      :disabled="!compareConnStatus('MCONNECTED')"
     >
       <el-form-item prop="topic" label="Topic">
         <el-input v-model="messageRecord.topic" size="small"></el-input>
@@ -255,7 +255,6 @@ export default {
   data() {
     return {
       times: 0,
-      // connecting: false,
       cStatus: 0b00000,
       messageRecordRules: {
         topic: { required: true, message: this.$t('Tools.pleaseEnter') },
@@ -293,11 +292,11 @@ export default {
       },
       client: {},
       connection: {
-        host: this.getOption().host,
-        port: this.getOption().port,
-        protocols: this.getOption().protocols,
-        clientId: this.getOption().clientId,
-        ssl: this.getOption().ssl,
+        host: window.location.hostname,
+        port: window.location.protocol === 'http:' ? 8083 : 8084,
+        protocols: window.location.protocol === 'http:' ? 'ws' : 'wss',
+        clientId: `emqx_${this.name}`,
+        ssl: window.location.protocol === 'https:',
         protocolversion: 4,
         endpoint: '/mqtt',
         username: '',
@@ -356,12 +355,25 @@ export default {
   },
   beforeDestroy() {
     this.destroyConnection()
+    document.removeEventListener('visibilitychange', this.visibilityChangeFn)
   },
   created() {
     this.setConnStatus('MDISCONNECTED', false)
   },
+  mounted() {
+    document.addEventListener('visibilitychange', this.visibilityChangeFn)
+  },
 
   methods: {
+    visibilityChangeFn() {
+      if (this.client?.connected) {
+        this.setConnStatus('MCONNECTED')
+      } else if (this.client?.reconnecting) {
+        this.setConnStatus('MRECONNECTING')
+      } else {
+        this.setConnStatus('MDISCONNECTED')
+      }
+    },
     compareConnStatus(destStatus) {
       let bVal = this.cStatusMap.get(destStatus)
       if (bVal) {
@@ -373,6 +385,7 @@ export default {
     setConnStatus(status, notify = true) {
       let sCode = this.cStatusMap.get(status)
       if (sCode) {
+        if (sCode === this.cStatus) return
         this.cStatus = sCode
         notify && this.setNotify(status)
         return sCode
@@ -419,15 +432,13 @@ export default {
       }
       this.setConnStatus('MDISCONNECTING')
       try {
-        this.client.end(true, () => {
-          this.setConnStatus('MDISCONNECTED')
-        })
+        this.client.end(true)
       } catch (e) {
         this.$message.error(e.toString())
       }
     },
     _doUnSubscribe(item) {
-      if (!this.client.connected) {
+      if (!this.compareConnStatus('MCONNECTED')) {
         this.$message.error(this.$t('Tools.clientNotConnected'))
         return
       }
@@ -443,7 +454,7 @@ export default {
       if (!valid) {
         return
       }
-      if (!this.client.connected) {
+      if (!this.compareConnStatus('MCONNECTED')) {
         this.$message.error(this.$t('Tools.clientNotConnected'))
         return
       }
@@ -475,7 +486,7 @@ export default {
       if (!valid) {
         return
       }
-      if (!this.client.connected) {
+      if (!this.compareConnStatus('MCONNECTED')) {
         this.$message.error(this.$t('Tools.clientNotConnected'))
         return
       }
@@ -513,7 +524,7 @@ export default {
       }
     },
     createConnection() {
-      if (this.client.connected) {
+      if (!this.compareConnStatus('DISCONNECTED')) {
         return
       }
       this.$refs.configForm.validate((valid) => {
@@ -545,35 +556,37 @@ export default {
           protocolVersion: protocolversion,
           will: will.topic ? will : undefined,
         })
-        this.client.on('error', (error) => {
-          this.$message.error(error.toString())
-          this.setConnStatus('MDISCONNECTED')
-        })
-        this.client.on('reconnect', () => {
-          if (this.times > 3) {
-            this.destroyConnection()
-            this.$message.error(this.$t('Tools.connectionDisconnected'))
-            return
-          }
-          this.setConnStatus('MRECONNECTING')
-          this.times += 1
-        })
 
-        this.client.on('connect', () => {
-          this.setConnStatus('MCONNECTED')
-        })
-        this.client.on('message', this.onMessage)
+        this.assignEvent()
       })
     },
-    getOption() {
-      const { protocol, hostname } = window.location
-      return {
-        host: hostname,
-        protocols: protocol === 'http:' ? 'ws' : 'wss',
-        port: protocol === 'http:' ? 8083 : 8084,
-        clientId: `emqx_${this.name}`,
-        ssl: protocol === 'https:',
-      }
+    assignEvent() {
+      this.client.on('error', (error) => {
+        this.$message.error(error.toString())
+        this.setConnStatus('MDISCONNECTED')
+      })
+      this.client.on('reconnect', () => {
+        if (this.times > 2) {
+          this.destroyConnection()
+          this.$message.error(this.$t('Tools.connectionDisconnected'))
+          return
+        }
+        this.setConnStatus('MRECONNECTING')
+        this.times += 1
+      })
+      this.client.on('disconnect', () => {
+        this.setConnStatus('MDISCONNECTED')
+      })
+      this.client.on('close', () => {
+        this.setConnStatus('MDISCONNECTED')
+      })
+      this.client.on('offline', () => {
+        this.setConnStatus('MDISCONNECTED')
+      })
+      this.client.on('connect', () => {
+        this.setConnStatus('MCONNECTED')
+      })
+      this.client.on('message', this.onMessage)
     },
   },
 }

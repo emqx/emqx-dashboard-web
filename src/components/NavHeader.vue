@@ -109,12 +109,16 @@ export default {
   },
 
   mounted() {
-    document.addEventListener('visibilitychange', () => {
-      document.visibilityState === 'visible' && this.loadData()
-    })
+    document.addEventListener('visibilitychange', this.visibilityChangeFunc)
+  },
+  beforeDestroy() {
+    document.removeEventListener('visibilitychange', this.visibilityChangeFunc)
   },
 
   methods: {
+    visibilityChangeFunc() {
+      return document.visibilityState === 'visible' && this.loadData()
+    },
     setHtmlLangAttr(lang) {
       document.querySelector('html').setAttribute('lang', lang)
     },
