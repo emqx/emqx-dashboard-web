@@ -128,8 +128,8 @@ export default {
     en: 'Clean Session',
   },
   willDisconnectTheConnection: {
-    zh: '此操作将踢除该连接，连接可能通过重连机制再次连接，确认继续?',
-    en: 'This operation will kick out the connection, conifrm?',
+    zh: '此操作将踢除该连接',
+    en: 'This operation will kick out the connection',
   },
   willCleanSession: {
     zh: '确认清除会话？',
@@ -137,7 +137,7 @@ export default {
   },
   successfulDisconnection: {
     zh: '断开成功',
-    en: 'Successful disconnection',
+    en: 'Successfully disconnect',
   },
   successfulCleanSession: {
     zh: '成功清除会话',

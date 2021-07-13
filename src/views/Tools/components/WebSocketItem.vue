@@ -66,7 +66,7 @@
         <el-col :span="8" class="checkbox-area">
           <el-checkbox v-model="connection.clean">Clean Session</el-checkbox>
 
-          <el-checkbox v-model="connection.ssl" @change="protocolsChange">SSL</el-checkbox>
+          <el-checkbox v-model="connection.ssl" @change="protocolsChange">TLS</el-checkbox>
         </el-col>
       </el-row>
     </el-form>
@@ -75,26 +75,20 @@
         <el-button
           type="primary"
           size="small"
-          :disabled="client.connected || connecting"
           @click="createConnection"
+          :disabled="!compareConnStatus('MDISCONNECTED')"
         >
-          {{
-            client.connected
-              ? $t('Tools.connected')
-              : connecting
-              ? $t('Tools.inConnection')
-              : $t('Tools.connect')
-          }}
+          {{ $t('Tools.connect') }}
         </el-button>
 
         <el-button
           type="danger"
           size="small"
           plain
-          :disabled="!client.connected && !connecting"
           @click="destroyConnection"
+          :disabled="compareConnStatus('MDISCONNECTING') || compareConnStatus('MDISCONNECTED')"
         >
-          {{ connecting ? $t('Tools.cancelConnection') : $t('Tools.disconnect') }}
+          {{ $t('Tools.disconnect') }}
         </el-button>
       </el-col>
     </el-row>
@@ -261,17 +255,11 @@ export default {
   data() {
     return {
       times: 0,
-      // maxTims: 4,
-      connecting: false,
-      cStatus: 0b00000, //from last to fist bit => disconnected|connecting|connected|disconnecting|reconnecting
+      // connecting: false,
+      cStatus: 0b00000,
       messageRecordRules: {
         topic: { required: true, message: this.$t('Tools.pleaseEnter') },
       },
-      // stateIcon: {
-      //   0: 'el-icon-message',
-      //   1: 'el-icon-loading',
-      //   3: 'el-icon-warning',
-      // },
       connectionRules: {
         host: { required: true },
         port: [
@@ -303,9 +291,7 @@ export default {
       subscriptionsRules: {
         topic: [{ required: true, message: this.$t('Tools.pleaseEnter') }],
       },
-      client: {
-        // reconnecting: false,
-      },
+      client: {},
       connection: {
         host: this.getOption().host,
         port: this.getOption().port,
@@ -318,8 +304,7 @@ export default {
         password: '',
         keepalive: 60,
         clean: true,
-        reconnectPeriod: 4000,
-        connectTimeout: 4000,
+        connectTimeout: 5000,
 
         will: {
           topic: '',
@@ -352,33 +337,59 @@ export default {
           value: 5,
         },
       ],
-      // activeIndex: '0',
-      // sessions: [],
+      cStatusMap: new Map([
+        ['MDISCONNECTED', 0b00001],
+        ['MCONNECTING', 0b00010],
+        ['MCONNECTED', 0b00100],
+        ['MDISCONNECTING', 0b01000],
+        ['MRECONNECTING', 0b10000],
+      ]),
     }
   },
 
   computed: {
-    // btnStatusText() {
-    //   let text = this.$t('Tools.connect')
-    //   if (this.client.connected) {
-    //     text = this.$t('Tools.disconnect')
-    //   } else if (this.client.connecting) {
-    //     text = this.$t('Tools.inConnection')
-    //   }
-    //   return text
-    // },
     connectUrl() {
       const { host, port, ssl, endpoint } = this.connection
       const protocol = ssl ? 'wss://' : 'ws://'
       return `${protocol}${host}:${port}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`
     },
   },
-
   beforeDestroy() {
     this.destroyConnection()
   },
+  created() {
+    this.setConnStatus('MDISCONNECTED', false)
+  },
 
   methods: {
+    compareConnStatus(destStatus) {
+      let bVal = this.cStatusMap.get(destStatus)
+      if (bVal) {
+        return !(bVal ^ this.cStatus)
+      } else {
+        return !!destStatus
+      }
+    },
+    setConnStatus(status, notify = true) {
+      let sCode = this.cStatusMap.get(status)
+      if (sCode) {
+        this.cStatus = sCode
+        notify && this.setNotify(status)
+        return sCode
+      } else {
+        this.cStatus = status
+        return status
+      }
+    },
+    setNotify(status, custom = false) {
+      let label = String(status).substring(1).toLowerCase()
+      this.$notify({
+        title: this.$t(`Tools.${label}`),
+        message: '',
+        duration: 6000,
+        type: 'info',
+      })
+    },
     addMessages(msg, content) {
       const messageLimit = 5000
       this[msg].unshift(content)
@@ -402,28 +413,17 @@ export default {
       let { messageCount } = this
       this.$emit('update:messageCount', (messageCount += 1))
     },
-    // handleConnect() {
-    //   if (this.client.connected) {
-    //     this.client.end()
-    //   } else {
-    //     this.createConnection()
-    //   }
-    // },
     destroyConnection() {
-      if (this.client.connected || this.connecting) {
-        try {
-          this.connecting = false
-          // this.times = 0
-          this.client.end()
-          this.$notify({
-            title: this.$t('Tools.disconnected'),
-            message: '',
-            type: 'success',
-          })
-          this.connecting = false
-        } catch (e) {
-          this.$message.error(e.toString())
-        }
+      if (!this.client?.end) {
+        return
+      }
+      this.setConnStatus('MDISCONNECTING')
+      try {
+        this.client.end(true, () => {
+          this.setConnStatus('MDISCONNECTED')
+        })
+      } catch (e) {
+        this.$message.error(e.toString())
       }
     },
     _doUnSubscribe(item) {
@@ -504,26 +504,6 @@ export default {
         },
       )
     },
-    // _getDefaultConnection() {
-    //   return {
-    //     ...this.getOption(),
-
-    //     endpoint: '/mqtt',
-    //     username: '',
-    //     password: '',
-    //     keepalive: 60,
-    //     clean: true,
-    //     reconnectPeriod: 4000,
-    //     connectTimeout: 4000,
-
-    //     will: {
-    //       topic: '',
-    //       payload: '',
-    //       qos: 0,
-    //       retain: false,
-    //     },
-    //   }
-    // },
     protocolsChange() {
       const { port, ssl } = this.connection
       if (!ssl && port === 8084) {
@@ -532,16 +512,8 @@ export default {
         this.connection.port = 8084
       }
     },
-    // refreshClientId() {
-    //   if (this.client.connected) {
-    //     return
-    //   }
-    //   this.connection.clientId = this.getOption().clientId
-    // },
     createConnection() {
       if (this.client.connected) {
-        this.connecting = false
-        // this.times = 0
         return
       }
       this.$refs.configForm.validate((valid) => {
@@ -553,7 +525,6 @@ export default {
           username,
           port,
           password,
-          reconnectPeriod,
           keepalive,
           clean,
           connectTimeout,
@@ -561,55 +532,37 @@ export default {
           protocolversion,
         } = this.connection
 
-        this.connecting = true
+        this.setConnStatus('MCONNECTING')
         this.times = 0
-        try {
-          this.client = mqtt.connect(this.connectUrl, {
-            port,
-            clientId,
-            username,
-            password,
-            reconnectPeriod,
-            keepalive,
-            clean,
-            connectTimeout,
-            protocolVersion: protocolversion,
-            will: will.topic ? will : undefined,
-          })
-          // window.client = this.client
-          this.client.on('error', (error) => {
-            this.$message.error(error.toString())
-            this.connecting = false
-            try {
-              this.client.end()
-            } catch (e) {
-              this.$message.error(e.toString())
-            }
-          })
-          this.client.on('reconnect', () => {
-            if (this.times > 3) {
-              this.destroyConnection()
-              this.$message.error(this.$t('Tools.connectionDisconnected'))
-            }
-            if (this.connecting) {
-              this.times += 1
-            }
-          })
-
-          this.client.on('connect', () => {
-            this.$notify({
-              title: this.$t('Tools.connected'),
-              message: '',
-              type: 'success',
-            })
-            this.connecting = false
-          })
-          this.client.on('message', this.onMessage)
-          this.client.on('reconnection', this.onMessage)
-        } catch (error) {
-          this.connecting = false
+        this.client = mqtt.connect(this.connectUrl, {
+          port,
+          clientId,
+          username,
+          password,
+          keepalive,
+          clean,
+          connectTimeout,
+          protocolVersion: protocolversion,
+          will: will.topic ? will : undefined,
+        })
+        this.client.on('error', (error) => {
           this.$message.error(error.toString())
-        }
+          this.setConnStatus('MDISCONNECTED')
+        })
+        this.client.on('reconnect', () => {
+          if (this.times > 3) {
+            this.destroyConnection()
+            this.$message.error(this.$t('Tools.connectionDisconnected'))
+            return
+          }
+          this.setConnStatus('MRECONNECTING')
+          this.times += 1
+        })
+
+        this.client.on('connect', () => {
+          this.setConnStatus('MCONNECTED')
+        })
+        this.client.on('message', this.onMessage)
       })
     },
     getOption() {
@@ -622,23 +575,6 @@ export default {
         ssl: protocol === 'https:',
       }
     },
-    // atSessionChange(i) {
-    //   this.activeIndex = i
-    //   const session = this.sessions[i]
-    //   if (!session) {
-    //     return
-    //   }
-
-    //   this.client = session.client || {}
-    //   this.connection = session.connection || {}
-    //   this.messageRecord = session.messageRecord || {}
-    //   this.subscriptionsRecord = session.subscriptionsRecord || {}
-
-    //   this.subscriptions = session.subscriptions || []
-    // },
-    // sessionChange(i) {
-    //   this.activeIndex = i
-    // },
   },
 }
 </script>

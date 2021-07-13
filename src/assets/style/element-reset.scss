@@ -18,7 +18,22 @@
     font-size: 14px;
   }
 
+  &.el-button--default {
+    color: #1d1d1dff;
+    background-color: #ffffff;
+    border-color: #1d1d1d;
+
+    &:hover {
+      color: #00b299ff;
+      border-color: #00b299ff;
+    }
+  }
+
   &.el-button--primary {
+    background-color: #00b299ff;
+    border-color: #00b299;
+    color: #fff;
+
     &:hover {
       background-color: #25d0b8ff;
       border-color: #25d0b8ff;
@@ -64,17 +79,6 @@
         border-color: #f8b2b2ff;
         background-color: #ffffff;
       }
-    }
-  }
-
-  &.el-button--default {
-    color: #1d1d1dff;
-    background-color: #ffffff;
-    border-color: #1d1d1d;
-
-    &:hover {
-      color: #00b299ff;
-      border-color: #00b299ff;
     }
   }
 }
@@ -380,5 +384,11 @@
     background-color: #eff3fe;
     color: #8d96a2ff;
     border: none;
+  }
+}
+
+.el-notification {
+  & .el-notification__icon {
+    color: #a0a0a0;
   }
 }

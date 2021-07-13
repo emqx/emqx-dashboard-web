@@ -55,9 +55,17 @@ export default {
     zh: '已连接',
     en: 'Connected',
   },
-  inConnection: {
+  connecting: {
     zh: '连接中',
     en: 'Connecting',
+  },
+  disconnecting: {
+    zh: '断开连接中',
+    en: 'Disonnecting',
+  },
+  reconnecting: {
+    zh: '重新连接中',
+    en: 'Reconnecting',
   },
   disconnected: {
     zh: '已断开连接',
