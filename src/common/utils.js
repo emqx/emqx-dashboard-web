@@ -33,26 +33,6 @@ export function toLogin(path) {
 }
 
 /**
- * 将函数包装为异步函数
- * @param Promise
- * @return Promise
- */
-export const awaitWrap = (promise) => promise.then((data) => data).catch((err) => null)
-
-/**
- * 安全的转化 JSON 字符串
- * @param jsonStr: 被转化的 JSON 字符串，defaultValue: 失败时返回的默认值
- * @return Object
- */
-export function safeParser(jsonStr, defaultValue = {}) {
-  try {
-    return JSON.parse(jsonStr) || defaultValue
-  } catch (e) {
-    return defaultValue
-  }
-}
-
-/**
  * 填充转化对象类型的 i18n
  * @param data 转化的数据，key 对象的 key 值，autoSearch 是否自动搜索
  * @return data: object
@@ -304,30 +284,6 @@ export const sqlExampleFormatter = (sql) => {
     }
   }
   return text.replace(/!#!/g, '\n\r')
-}
-
-/**
- * 是否隐藏页面元素
- * @param scope 查询的隐藏属性
- * @return boolean
- */
-// export const hasShow = (scope = '') => {
-//   const hide = store.state.config.hide || { routes: [], children: [] }
-//   if (!scope) {
-//     return true
-//   }
-//   return !(hide.routes.includes(scope) || hide.children.includes(scope))
-// }
-
-/**
- * 取 URL 具体的一个参数值
- * @param url 查询的 url, key 参数的名称
- * @return value string
- */
-export const getParamValue = (url, key) => {
-  const regex = new RegExp(`${key}=([^&]*)`, 'i')
-  const value = url.match(regex)[1]
-  return decodeURIComponent(value)
 }
 
 /**

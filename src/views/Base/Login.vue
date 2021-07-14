@@ -59,7 +59,7 @@
 
 <script>
 import { auth } from '@/api/common'
-import { awaitWrap, getBasicAuthInfo } from '@/common/utils'
+import { getBasicAuthInfo } from '@/common/utils'
 
 export default {
   name: 'Login',
@@ -157,10 +157,7 @@ export default {
       })
     },
     async nativeLogin() {
-      if (!(await awaitWrap(this.$refs.record.validate()))) {
-        return
-      }
-      this.login()
+      ;(await this.$refs.record.validate().catch(() => {})) && this.login()
     },
   },
 }

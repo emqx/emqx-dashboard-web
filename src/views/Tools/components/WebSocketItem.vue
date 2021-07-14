@@ -103,7 +103,7 @@
       :model="subscriptionsRecord"
       :rules="subscriptionsRules"
       size="small"
-      @keyup.enter.native="_doSubscribe"
+      @keyup.enter.native="subscribe"
       class="sub-area"
       :disabled="!compareConnStatus('MCONNECTED')"
     >
@@ -118,7 +118,7 @@
         ></emq-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size="small" @click="_doSubscribe">
+        <el-button type="primary" size="small" @click="subscribe">
           {{ $t('Tools.Subscribe') }}
         </el-button>
       </el-form-item>
@@ -134,7 +134,7 @@
             size="mini"
             type="danger"
             plain
-            @click="_doUnSubscribe(row)"
+            @click="unSubscribe(row)"
             :disabled="!compareConnStatus('MCONNECTED')"
             >{{ $t('Base.cancel') }}</el-button
           >
@@ -153,7 +153,7 @@
       :model="messageRecord"
       :rules="messageRecordRules"
       size="small"
-      @keyup.enter.native="_doPublish"
+      @keyup.enter.native="publish"
       class="pub-area"
       :disabled="!compareConnStatus('MCONNECTED')"
     >
@@ -172,7 +172,7 @@
 
       <el-form-item>
         <el-checkbox v-model="messageRecord.retain">Retain</el-checkbox>
-        <el-button type="primary" size="small" @click="_doPublish">
+        <el-button type="primary" size="small" @click="publish">
           {{ $t('Tools.publish') }}
         </el-button>
       </el-form-item>
@@ -304,7 +304,6 @@ export default {
         keepalive: 60,
         clean: true,
         connectTimeout: 5000,
-
         will: {
           topic: '',
           payload: '',
@@ -345,12 +344,10 @@ export default {
       ]),
     }
   },
-
   computed: {
     connectUrl() {
       const { host, port, ssl, endpoint } = this.connection
-      const protocol = ssl ? 'wss://' : 'ws://'
-      return `${protocol}${host}:${port}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`
+      return `${ssl ? 'wss://' : 'ws://'}${host}:${port}${endpoint}`
     },
   },
   beforeDestroy() {
@@ -437,7 +434,7 @@ export default {
         this.$message.error(e.toString())
       }
     },
-    _doUnSubscribe(item) {
+    unSubscribe(item) {
       if (!this.compareConnStatus('MCONNECTED')) {
         this.$message.error(this.$t('Tools.clientNotConnected'))
         return
@@ -449,7 +446,7 @@ export default {
         this.subscriptions = this.subscriptions.filter(($) => $.topic !== item.topic)
       })
     },
-    async _doSubscribe() {
+    async subscribe() {
       const valid = await this.$refs.subForm.validate()
       if (!valid) {
         return
@@ -481,7 +478,7 @@ export default {
         })
       })
     },
-    async _doPublish() {
+    async publish() {
       const valid = await this.$refs.pubForm.validate()
       if (!valid) {
         return
@@ -557,10 +554,10 @@ export default {
           will: will.topic ? will : undefined,
         })
 
-        this.assignEvent()
+        this.assignEvents()
       })
     },
-    assignEvent() {
+    assignEvents() {
       this.client.on('error', (error) => {
         this.$message.error(error.toString())
         this.setConnStatus('MDISCONNECTED')

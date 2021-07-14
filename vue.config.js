@@ -27,29 +27,18 @@ module.exports = {
     disableHostCheck: true,
     // before,
     proxy: {
-      '/api': {
+      '/api/v4': {
         target: process.env.HOST_URL || 'http://127.0.0.1:18083',
         changeOrigin: true,
       },
-      // '/dashboard': {
-      //   target: process.env.HOST_URL || 'http://127.0.0.1:18083/api/v4',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //     '/dashboard': '',
-      //   },
-      // },
+      '/api/v5': {
+        target: 'http://34.219.115.160:8081',
+        changeOrigin: true,
+      },
     },
   },
   css: {
-    loaderOptions: {
-      // less: {
-      //   modifyVars: {
-      //     'primary-color': '#34C388',
-      //     'link-color': '#34C388',
-      //   },
-      //   javascriptEnabled: true,
-      // },
-    },
+    loaderOptions: {},
   },
   assetsDir: 'static',
   runtimeCompiler: true,

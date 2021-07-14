@@ -61,14 +61,8 @@
 
 <script>
 import { loadAlarm } from '@/api/common'
-// import Breadcrumb from './Breadcrumb'
-
 export default {
   name: 'NavHeader',
-
-  components: {
-    // Breadcrumb,
-  },
   data() {
     return {
       firstPath: '',
@@ -130,7 +124,7 @@ export default {
       this.$store.dispatch('SET_LANGUAGE', command)
     },
     clearAlert() {
-      // this.alertCount = 0
+      this.alertCount = 0
     },
     async loadData() {
       const alert = await loadAlarm()
