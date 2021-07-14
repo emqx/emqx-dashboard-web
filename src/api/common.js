@@ -9,9 +9,9 @@ export function auth(user = {}) {
   })
 }
 
-export function loadBrokers() {
-  return http.get('/brokers')
-}
+// export function loadBrokers() {
+//   return http.get('/brokers')
+// }
 
 export function loadStats() {
   return http.get('/stats')
@@ -43,21 +43,10 @@ export function loadMetricsLog(node, type) {
 }
 
 export async function loadNodes() {
-  const brokers = await loadBrokers()
-  const brokerMap = {}
-  brokers.forEach((broker) => {
-    brokerMap[broker.node] = broker
-  })
-  const nodes = await http.get('/nodes')
-  return nodes.map(($) => {
-    const broker = brokerMap[$.name] || {}
-    return {
-      ...broker,
-      ...$,
-    }
-  })
+  return http.get('/nodes')
 }
 
+//Alarms
 export async function loadAlarm() {
   const list = await http.get('/alarms/activated')
   const data = []
@@ -84,4 +73,40 @@ export async function loadHistoryAlarm() {
   return data
 }
 
-export default {}
+//cluster
+
+export const loadCluster = async () => {
+  const res = await http.get('/cluster')
+  const { config } = res
+  if (res.type === 'mcast') {
+    res.config.ports = config.ports.join(',')
+    res.config.loop = JSON.stringify(config.loop)
+  } else if (res.type === 'etcd') {
+    res.config.node_ttl = config.node_ttl
+  }
+  return res
+}
+
+// 邀请节点加入
+export const inviteNode = async (data) => {
+  const body = {
+    node: data.config.node,
+  }
+  try {
+    return http.post('/cluster/invite_node', body)
+  } catch (error) {
+    console.error(error)
+    return false
+  }
+}
+
+// 集群移除节点
+export const forceLeaveNode = async (nodename) => {
+  try {
+    const res = await http.delete(`/cluster/force_leave/${nodename}`)
+    return res
+  } catch (error) {
+    console.error(error)
+    return false
+  }
+}

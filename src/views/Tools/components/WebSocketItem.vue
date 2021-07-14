@@ -360,6 +360,12 @@ export default {
   mounted() {
     document.addEventListener('visibilitychange', this.visibilityChangeFn)
   },
+  activated() {
+    document.addEventListener('visibilitychange', this.visibilityChangeFn)
+  },
+  deactivated() {
+    document.removeEventListener('visibilitychange', this.visibilityChangeFn)
+  },
 
   methods: {
     visibilityChangeFn() {

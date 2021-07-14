@@ -29,14 +29,14 @@
                 <span :class="['join-status', node.joined ? 'is-join' : 'not-join']" :span="14">
                   {{ node.name }}
                 </span>
-                <a
+                <!-- <a
                   v-if="node.joined"
                   class="node-oper"
                   href="javascript:;"
                   @click="toNodeDetails(node.name)"
                 >
-                  {{ $t('Overview.view') }}
-                </a>
+                  {{ $t('Dashboard.view') }}
+                </a> -->
                 <a
                   v-if="node.joined && currentNodes.length > 1 && record.type === 'manual'"
                   class="node-oper danger"
@@ -193,7 +193,7 @@
 </template>
 
 <script>
-import { loadCluster, loadNodes, inviteNode, forceLeaveNode } from '../../api/cluster'
+import { loadNodes, loadCluster, inviteNode, forceLeaveNode } from '@/api/common'
 
 export default {
   name: 'ClusterSettings',
@@ -240,14 +240,6 @@ export default {
         this.getCluster()
       }
     },
-    toNodeDetails(name) {
-      this.$router.push({
-        path: '/monitor/node',
-        query: {
-          name,
-        },
-      })
-    },
     removeNode(name) {
       this.$confirm(this.$t('Settings.removeConfirm'), this.$t('Base.warning'), {
         type: 'warning',
@@ -264,7 +256,7 @@ export default {
     // Static 判断节点是否加入
     getNodes(currentNodes, seeds) {
       if (!seeds.length) {
-        return currentNodes.map((node) => ({ name: node, joined: true }))
+        return currentNodes.map((node) => ({ name: node.node, joined: true }))
       }
       const unique = (arr) => [...new Set(arr)]
       const allNodes = [...currentNodes, ...seeds]
