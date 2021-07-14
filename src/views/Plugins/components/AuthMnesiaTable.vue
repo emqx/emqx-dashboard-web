@@ -16,23 +16,6 @@
                   @keyup.enter.native="AuthSave"
                 >
                 </el-input>
-                <el-popover
-                  v-if="!fromCloud"
-                  trigger="hover"
-                  placement="top"
-                  :content="$t('Plugins.mnesiaTip')"
-                  :tabindex="-1"
-                >
-                  <a
-                    slot="reference"
-                    class="tutorial"
-                    :href="mnesiaDoc"
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    <i class="iconfont icon-bangzhu"></i>
-                  </a>
-                </el-popover>
               </el-col>
               <el-col :span="8">
                 <el-input
@@ -243,8 +226,6 @@ import {
   addAuthMnesiaACL,
   deleteAuthMnesiaACL,
 } from '@/api/plugins'
-import { getLink } from '@/common/utils'
-import store from '@/stores'
 
 export default {
   name: 'AuthMnesiaTable',
@@ -290,16 +271,7 @@ export default {
     }
   },
 
-  computed: {
-    mnesiaDoc() {
-      return getLink('mnesia')
-    },
-  },
-
   created() {
-    // if (store.state.config.baseURL === '/dashboard') {
-    //   this.fromCloud = true
-    // }
     this.loadMnesia()
     this.loadACL()
   },

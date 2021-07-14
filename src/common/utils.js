@@ -8,11 +8,6 @@ import store from '@/stores'
 import router from '@/routes'
 import lang from '@/i18n'
 
-import Documents from '../assets/docs_links.json'
-
-const enDocsLink = Documents.en
-const zhDocsLink = Documents.zh
-
 const locale = store.state.lang
 const VueI18n = lang[locale]
 
@@ -217,17 +212,6 @@ export function renderParamsForm(params = {}, propPrefix = '') {
   form = form.sort((prev, next) => prev.order - next.order)
   // form 综合排序
   return { form, rules }
-}
-
-/**
- * 根据语言获取跳转的链接
- * @param name
- * @return link: string
- */
-export function getLink(name) {
-  const { lang = 'zh' } = store.state
-  const dictMap = lang === 'zh' ? zhDocsLink : enDocsLink
-  return dictMap[name] || '/'
 }
 
 /**

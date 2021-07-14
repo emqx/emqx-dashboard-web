@@ -35,10 +35,6 @@
             </el-form-item>
 
             <template v-if="payloadVisible">
-              <p class="jwt-payload-desc">
-                {{ $t('Plugins.payloadDesc') }}
-                <a :href="jwtDoc" target="_blank" rel="noopener">{{ $t('Plugins.jwtDoc') }}</a>
-              </p>
               <el-form-item prop="payload">
                 <div class="monaco-container" style="height: 200px">
                   <monaco id="jwt-payload" v-model="record.payload" lang="json"> </monaco>
@@ -102,7 +98,6 @@
 <script>
 import jwt from 'jsonwebtoken'
 import Monaco from '@/components/Monaco'
-import { getLink } from '@/common/utils'
 
 export default {
   name: 'JwtAuthentication',
@@ -178,12 +173,6 @@ export default {
       },
       records: [],
     }
-  },
-
-  computed: {
-    jwtDoc() {
-      return getLink('authJWT')
-    },
   },
 
   methods: {

@@ -1,131 +1,125 @@
 <template>
   <div class="plugins">
     <div class="app-wrapper">
-      <el-card shadow="never">
-        <el-row :gutter="20" class="search-row">
-          <el-col :span="8">
-            <el-radio-group v-model="status" size="small" border @change="loadData">
-              <el-radio-button label="all">
-                {{ $t('Plugins.all') }}({{ state.count }})
-              </el-radio-button>
-              <el-radio-button label="running">
-                {{ $t('Plugins.running') }}({{ state.running }})
-              </el-radio-button>
-              <el-radio-button label="stop">
-                {{ $t('Plugins.stopped') }}({{ state.stop }})
-              </el-radio-button>
-            </el-radio-group>
-          </el-col>
+      <el-row :gutter="20" class="search-row">
+        <el-col :span="8">
+          <el-radio-group v-model="status" size="small" border @change="loadData">
+            <el-radio-button label="all">
+              {{ $t('Plugins.all') }}({{ state.count }})
+            </el-radio-button>
+            <el-radio-button label="running">
+              {{ $t('Plugins.running') }}({{ state.running }})
+            </el-radio-button>
+            <el-radio-button label="stop">
+              {{ $t('Plugins.stopped') }}({{ state.stop }})
+            </el-radio-button>
+          </el-radio-group>
+        </el-col>
 
-          <el-col :span="4">
-            <el-radio-group v-model="displayType" size="small" class="change-m" border>
-              <el-radio-button label="cards">
-                <i class="iconx icon-cards"></i>
-              </el-radio-button>
-              <el-radio-button label="list">
-                <i class="iconx icon-lists"></i>
-              </el-radio-button>
-            </el-radio-group>
-          </el-col>
+        <el-col :span="4">
+          <el-radio-group v-model="displayType" size="small" class="change-m" border>
+            <el-radio-button label="cards">
+              <i class="iconx icon-cards"></i>
+            </el-radio-button>
+            <el-radio-button label="list">
+              <i class="iconx icon-lists"></i>
+            </el-radio-button>
+          </el-radio-group>
+        </el-col>
 
-          <el-col :span="5">
-            <emq-select
-              v-model="nodeName"
-              :field="{ options: nodes }"
-              :field-name="{ label: 'name', value: 'node' }"
-              size="small"
-              @change="loadData"
-            >
-            </emq-select>
-          </el-col>
+        <el-col :span="5">
+          <emq-select
+            v-model="nodeName"
+            :field="{ options: nodes }"
+            :field-name="{ label: 'name', value: 'node' }"
+            size="small"
+            @change="loadData"
+          >
+          </emq-select>
+        </el-col>
 
-          <el-col :span="7">
-            <el-input
-              v-model="searchVal"
-              type="text"
-              class="search-input"
-              size="small"
-              clearable
-              :placeholder="$t('Plugins.searchByName')"
-              @input="searchPlugin"
-            >
-            </el-input>
-          </el-col>
-        </el-row>
+        <el-col :span="7">
+          <el-input
+            v-model="searchVal"
+            type="text"
+            class="search-input"
+            size="small"
+            clearable
+            :placeholder="$t('Plugins.searchByName')"
+            @input="searchPlugin"
+          >
+          </el-input>
+        </el-col>
+      </el-row>
 
-        <!-- Cards -->
-        <el-row
-          v-if="displayType === 'cards' && listTableData.length > 0"
-          class="emq-list-card plugin-cards-wrapper"
-          :gutter="20"
-        >
-          <el-col v-for="item in listTableData" :key="item.name" :span="12">
-            <div class="plugin-item">
-              <div class="header">
-                <div class="name">
-                  <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
-                  <span>{{ item.name }}</span>
-                </div>
-                <div class="description">{{ item.description }}</div>
-                <div class="type-version">{{ item.version }} / {{ typeText(item.type) }}</div>
-              </div>
-
-              <div class="oper">
-                <div class="run-stop-btn">
-                  <el-button
-                    v-if="!primaryList.includes(item.name)"
-                    :type="item.active ? 'danger' : 'dashed'"
-                    size="small"
-                    @click="togglePlugin(item)"
-                  >
-                    {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
-                  </el-button>
-                </div>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-
-        <!-- List -->
-        <div
-          v-if="displayType === 'list' && listTableData.length > 0"
-          class="emq-list-card plugin-list-wrapper"
-        >
-          <div v-for="item in listTableData" :key="item.name" :gutter="20" class="plugin-item">
+      <!-- Cards -->
+      <el-row
+        v-if="displayType === 'cards' && listTableData.length > 0"
+        class="emq-list-card plugin-cards-wrapper"
+        :gutter="20"
+      >
+        <el-col v-for="item in listTableData" :key="item.name" :span="12">
+          <div class="plugin-item">
             <div class="header">
               <div class="name">
-                {{ item.name }}
+                <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
+                <span>{{ item.name }}</span>
               </div>
               <div class="description">{{ item.description }}</div>
-            </div>
-
-            <div class="content">
-              <div class="type">{{ typeText(item.type) }}</div>
-              <div class="version">{{ item.version }}</div>
-            </div>
-
-            <div class="state">
-              <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
-              <span>{{ item.active ? $t('Plugins.running') : $t('Plugins.stopped') }}</span>
+              <div class="type-version">{{ item.version }} / {{ typeText(item.type) }}</div>
             </div>
 
             <div class="oper">
-              <el-button
-                v-if="!primaryList.includes(item.name)"
-                :type="item.active ? 'danger' : 'dashed'"
-                size="small"
-                @click="togglePlugin(item)"
-              >
-                {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
-              </el-button>
+              <div class="run-stop-btn">
+                <el-button
+                  v-if="!primaryList.includes(item.name)"
+                  :type="item.active ? 'danger' : 'dashed'"
+                  size="small"
+                  @click="togglePlugin(item)"
+                >
+                  {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
+                </el-button>
+              </div>
             </div>
           </div>
-        </div>
-      </el-card>
+        </el-col>
+      </el-row>
 
-      <el-card shadow="never" v-if="listTableData.length === 0" class="null-plugins">
-        <p>{{ $t('Plugins.listNull') }}</p>
-      </el-card>
+      <!-- List -->
+      <div
+        v-if="displayType === 'list' && listTableData.length > 0"
+        class="emq-list-card plugin-list-wrapper"
+      >
+        <div v-for="item in listTableData" :key="item.name" :gutter="20" class="plugin-item">
+          <div class="header">
+            <div class="name">
+              {{ item.name }}
+            </div>
+            <div class="description">{{ item.description }}</div>
+          </div>
+
+          <div class="content">
+            <div class="type">{{ typeText(item.type) }}</div>
+            <div class="version">{{ item.version }}</div>
+          </div>
+
+          <div class="state">
+            <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
+            <span>{{ item.active ? $t('Plugins.running') : $t('Plugins.stopped') }}</span>
+          </div>
+
+          <div class="oper">
+            <el-button
+              v-if="!primaryList.includes(item.name)"
+              :type="item.active ? 'danger' : 'dashed'"
+              size="small"
+              @click="togglePlugin(item)"
+            >
+              {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
+            </el-button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <el-dialog width="520px" :visible.sync="moduleTipVisible" :close-on-click-modal="false">
@@ -159,9 +153,6 @@ import { matchSearch } from '@/common/utils'
 
 export default {
   name: 'Plugins',
-
-  props: {},
-
   data() {
     return {
       searchLoading: false,
@@ -314,7 +305,7 @@ export default {
 .change-m {
   .el-radio-button {
     &::v-deep .el-radio-button__inner {
-      padding: 4px !important;
+      padding: 2px !important;
     }
   }
 }
