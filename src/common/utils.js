@@ -8,7 +8,10 @@ import store from '@/stores'
 import router from '@/routes'
 import lang from '@/i18n'
 
-import { enDocsLink, zhDocsLink, pluginsZh, pluginsEn } from '@/common/link_urls'
+import Documents from '../assets/docs_links.json'
+
+const enDocsLink = Documents.en
+const zhDocsLink = Documents.zh
 
 const locale = store.state.lang
 const VueI18n = lang[locale]
@@ -225,17 +228,6 @@ export function getLink(name) {
   const { lang = 'zh' } = store.state
   const dictMap = lang === 'zh' ? zhDocsLink : enDocsLink
   return dictMap[name] || '/'
-}
-
-/**
- * 根据语言获取插件教程的跳转链接
- * @param name
- * @return link: string
- */
-export function getPluginsLink(name) {
-  const { lang = 'zh' } = store.state
-  const dictMap = lang === 'zh' ? pluginsZh : pluginsEn
-  return dictMap[name] || ''
 }
 
 /**

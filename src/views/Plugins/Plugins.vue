@@ -1,8 +1,8 @@
 <template>
   <div class="plugins">
     <div class="app-wrapper">
-      <el-card shadow="never" class="search-wrapper">
-        <el-row :gutter="20">
+      <el-card shadow="never">
+        <el-row :gutter="20" class="search-row">
           <el-col :span="8">
             <el-radio-group v-model="status" size="small" border @change="loadData">
               <el-radio-button label="all">
@@ -18,7 +18,7 @@
           </el-col>
 
           <el-col :span="4">
-            <el-radio-group v-model="displayType" size="small" border>
+            <el-radio-group v-model="displayType" size="small" class="change-m" border>
               <el-radio-button label="cards">
                 <i class="iconx icon-cards"></i>
               </el-radio-button>
@@ -49,131 +49,79 @@
               :placeholder="$t('Plugins.searchByName')"
               @input="searchPlugin"
             >
-              <i v-if="!searchLoading" slot="prefix" class="el-icon-search"></i>
-              <i v-else slot="prefix" class="el-icon-loading"></i>
             </el-input>
           </el-col>
         </el-row>
-      </el-card>
 
-      <!-- Cards -->
-      <el-row
-        v-if="displayType === 'cards' && listTableData.length > 0"
-        class="emq-list-card plugin-cards-wrapper"
-        :gutter="20"
-      >
-        <el-col v-for="item in listTableData" :key="item.name" :span="12">
-          <div class="plugin-item">
-            <img class="logo" :src="iconMap[item.name]" alt="plugin-logo" width="90" height="90" />
+        <!-- Cards -->
+        <el-row
+          v-if="displayType === 'cards' && listTableData.length > 0"
+          class="emq-list-card plugin-cards-wrapper"
+          :gutter="20"
+        >
+          <el-col v-for="item in listTableData" :key="item.name" :span="12">
+            <div class="plugin-item">
+              <div class="header">
+                <div class="name">
+                  <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
+                  <span>{{ item.name }}</span>
+                </div>
+                <div class="description">{{ item.description }}</div>
+                <div class="type-version">{{ item.version }} / {{ typeText(item.type) }}</div>
+              </div>
 
+              <div class="oper">
+                <div class="run-stop-btn">
+                  <el-button
+                    v-if="!primaryList.includes(item.name)"
+                    :type="item.active ? 'danger' : 'dashed'"
+                    size="small"
+                    @click="togglePlugin(item)"
+                  >
+                    {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+
+        <!-- List -->
+        <div
+          v-if="displayType === 'list' && listTableData.length > 0"
+          class="emq-list-card plugin-list-wrapper"
+        >
+          <div v-for="item in listTableData" :key="item.name" :gutter="20" class="plugin-item">
             <div class="header">
               <div class="name">
-                <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
-                <span>{{ item.name }}</span>
-                <el-tooltip
-                  effect="dark"
-                  :content="$t('Plugins.tutorial')"
-                  :open-delay="500"
-                  placement="top"
-                >
-                  <a
-                    v-if="!primaryList.includes(item.name) && getLinks(item.name)"
-                    class="tutorial"
-                    href="javascript:;"
-                    @click="openTutorialLink(item.name)"
-                  >
-                    <i class="iconfont icon-bangzhu"></i>
-                  </a>
-                </el-tooltip>
+                {{ item.name }}
               </div>
               <div class="description">{{ item.description }}</div>
-              <div class="type-version">{{ item.version }} / {{ typeText(item.type) }}</div>
+            </div>
+
+            <div class="content">
+              <div class="type">{{ typeText(item.type) }}</div>
+              <div class="version">{{ item.version }}</div>
+            </div>
+
+            <div class="state">
+              <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
+              <span>{{ item.active ? $t('Plugins.running') : $t('Plugins.stopped') }}</span>
             </div>
 
             <div class="oper">
-              <div class="run-stop-btn">
-                <el-button
-                  v-if="!primaryList.includes(item.name)"
-                  :type="item.active ? 'danger' : 'dashed'"
-                  size="small"
-                  @click="togglePlugin(item)"
-                >
-                  {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
-                </el-button>
-                <span v-else>--</span>
-              </div>
-              <!-- <div v-if="hasManagePage(item.name)" class="manage-btn">
-                <el-button type="dashed" :disabled="!item.active" size="small" @click="handleManage(item)">
-                  {{ $t('Base.manage') }}
-                </el-button>
-              </div> -->
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-
-      <!-- List -->
-      <div
-        v-if="displayType === 'list' && listTableData.length > 0"
-        class="emq-list-card plugin-list-wrapper"
-      >
-        <div v-for="item in listTableData" :key="item.name" :gutter="20" class="plugin-item">
-          <img class="logo" :src="iconMap[item.name]" alt="plugin-logo" width="60" height="60" />
-
-          <div class="header">
-            <div class="name">
-              {{ item.name }}
-              <el-tooltip
-                effect="dark"
-                :content="$t('Plugins.tutorial')"
-                :open-delay="500"
-                placement="top"
+              <el-button
+                v-if="!primaryList.includes(item.name)"
+                :type="item.active ? 'danger' : 'dashed'"
+                size="small"
+                @click="togglePlugin(item)"
               >
-                <a
-                  v-if="!primaryList.includes(item.name) && getLinks(item.name)"
-                  class="tutorial"
-                  href="javascript:;"
-                  @click="openTutorialLink(item.name)"
-                >
-                  <i class="iconfont icon-bangzhu"></i>
-                </a>
-              </el-tooltip>
+                {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
+              </el-button>
             </div>
-            <div class="description">{{ item.description }}</div>
-          </div>
-
-          <div class="content">
-            <div class="type">{{ typeText(item.type) }}</div>
-            <div class="version">{{ item.version }}</div>
-          </div>
-
-          <div class="state">
-            <el-badge :type="item.active ? 'success' : 'danger'" is-dot></el-badge>
-            <span>{{ item.active ? $t('Plugins.running') : $t('Plugins.stopped') }}</span>
-          </div>
-
-          <div class="oper">
-            <el-button
-              v-if="!primaryList.includes(item.name)"
-              :type="item.active ? 'danger' : 'dashed'"
-              size="small"
-              @click="togglePlugin(item)"
-            >
-              {{ item.active ? $t('Plugins.stop') : $t('Plugins.startRunning') }}
-            </el-button>
-            <span v-else>--</span>
-            <!-- <el-button
-              v-if="hasManagePage(item.name)"
-              type="dashed"
-              :disabled="!item.active"
-              size="small"
-              @click="handleManage(item)"
-            >
-              {{ $t('Base.manage') }}
-            </el-button> -->
           </div>
         </div>
-      </div>
+      </el-card>
 
       <el-card shadow="never" v-if="listTableData.length === 0" class="null-plugins">
         <p>{{ $t('Plugins.listNull') }}</p>
@@ -207,7 +155,7 @@
 <script>
 import { loadPlugins, startPlugin, stopPlugin } from '@/api/plugins'
 import { loadNodes } from '@/api/common'
-import { getPluginsLink, matchSearch } from '@/common/utils'
+import { matchSearch } from '@/common/utils'
 
 export default {
   name: 'Plugins',
@@ -235,7 +183,6 @@ export default {
         protocol: this.$t('Plugins.protocol'),
         feature: this.$t('Plugins.feature'),
       },
-      iconMap: {},
       moduleTipVisible: false,
       noprompt: false,
     }
@@ -281,19 +228,7 @@ export default {
       }
       return pluginTypes[type] || this.$t('Plugins.feature')
     },
-    loadIcon() {
-      const iconMap = {}
-      this.tableData.forEach((item) => {
-        const { name } = item
-        try {
-          // eslint-disable-next-line
-          iconMap[name] = require(`../../assets/plugin_icon/${name}.png`)
-        } catch (e) {
-          console.log(e)
-        }
-      })
-      return iconMap
-    },
+
     toConfig(item = {}) {
       const { name } = item
       const node = this.nodeName
@@ -315,7 +250,6 @@ export default {
       this.nodeName = this.nodeName || (this.nodes[0] || {}).node
       this.tableData = await loadPlugins(this.nodeName)
       this.handleFilter()
-      this.iconMap = this.loadIcon()
       this.searchVal = ''
     },
     handleFilter() {
@@ -350,23 +284,6 @@ export default {
         })
         .catch(() => {})
     },
-    getLinks(name) {
-      return getPluginsLink(name)
-    },
-    openTutorialLink(name) {
-      const url = this.getLinks(name)
-      const windowUrl = window.open(url)
-      windowUrl.opener = null
-    },
-    hasManagePage(name) {
-      const pluginsDict = {
-        emqx_auth_clientid: true,
-        emqx_auth_username: true,
-        emqx_auth_jwt: true,
-        emqx_auth_mnesia: true,
-      }
-      return pluginsDict[name]
-    },
     searchPlugin() {
       this.searchLoading = true
       if (this.searchVal === '') {
@@ -393,157 +310,166 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.plugins {
-  .plugin-item {
-    position: relative;
-    margin: 0;
-    font-size: 14px;
-    margin: 0;
-    padding: 24px 32px;
-    background: #fff;
-    display: flex;
-    .logo {
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .name {
-      color: #101010;
-      font-size: 16px;
-      line-height: 22px;
-      margin-bottom: 12px;
-    }
-    .el-tooltip.tutorial {
-      position: relative;
-      top: 1px;
-    }
-    .description {
-      color: rgba(0, 0, 0, 0.65);
-      font-size: 14px;
-      line-height: 22px;
-      max-width: 300px;
+<style lang="scss" scoped>
+.change-m {
+  .el-radio-button {
+    &::v-deep .el-radio-button__inner {
+      padding: 4px !important;
     }
   }
+}
+.search-row {
+  margin-bottom: 20px;
+}
+.plugin-item {
+  position: relative;
+  margin: 0;
+  font-size: 14px;
+  margin: 0;
+  padding: 24px 32px;
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  display: flex;
+  .logo {
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .name {
+    color: #101010;
+    font-size: 16px;
+    line-height: 22px;
+    margin-bottom: 12px;
+  }
+  .el-tooltip.tutorial {
+    position: relative;
+    top: 1px;
+  }
+  .description {
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+    line-height: 22px;
+    max-width: 300px;
+  }
+}
 
-  .plugin-cards-wrapper {
-    .plugin-item {
-      height: 140px;
-      margin-bottom: 20px;
-      .header {
-        flex: 1;
-        padding-left: 20px;
-        .type-version {
-          margin-top: 12px;
-          font-style: italic;
-        }
-        .el-tooltip.tutorial {
-          left: 5px;
-        }
+.plugin-cards-wrapper {
+  .plugin-item {
+    height: 140px;
+    margin-bottom: 20px;
+    .header {
+      flex: 1;
+      padding-left: 20px;
+      .type-version {
+        margin-top: 12px;
+        font-style: italic;
       }
+      .el-tooltip.tutorial {
+        left: 5px;
+      }
+    }
+  }
+  .oper {
+    position: relative;
+    .el-button {
+      min-width: 64px;
+      float: right;
+    }
+    .manage-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  }
+}
+
+.plugin-list-wrapper {
+  .plugin-item {
+    height: 110px;
+    border-bottom: 1px solid #f1f1f1;
+    align-items: center;
+    .header {
+      flex: 1.5;
+      padding-left: 50px;
+      .el-tooltip.tutorial {
+        left: 2px;
+      }
+    }
+    .content {
+      margin-left: 40px;
+      flex: 1;
+
+      .type,
+      .version {
+        color: rgba(0, 0, 0, 0.55);
+        margin-top: 4px;
+        margin-bottom: 0;
+        line-height: 22px;
+      }
+    }
+    .state {
+      height: 18px;
+      flex: 1;
     }
     .oper {
+      flex: 50px;
+    }
+  }
+}
+
+.search-wrapper {
+  margin-bottom: 30px;
+  .el-radio-button--small .el-radio-button__inner {
+    padding: 3px 10px;
+    line-height: 24px;
+    // height: 24px;
+  }
+  .search-input {
+    .el-icon-search,
+    .el-icon-loading {
       position: relative;
-      .el-button {
-        min-width: 64px;
-        float: right;
-      }
-      .manage-btn {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-      }
+      left: 4px;
+      top: 7px;
     }
   }
+}
 
-  .plugin-list-wrapper {
-    .plugin-item {
-      height: 110px;
-      border-bottom: 1px solid #f1f1f1;
-      align-items: center;
-      .header {
-        flex: 1.5;
-        padding-left: 50px;
-        .el-tooltip.tutorial {
-          left: 2px;
-        }
-      }
-      .content {
-        margin-left: 40px;
-        flex: 1;
+.null-plugins {
+  min-height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-        .type,
-        .version {
-          color: rgba(0, 0, 0, 0.55);
-          margin-top: 4px;
-          margin-bottom: 0;
-          line-height: 22px;
-        }
-      }
-      .state {
-        height: 18px;
-        flex: 1;
-      }
-      .oper {
-        flex: 50px;
-      }
-    }
+.tip-title {
+  font-size: 18px;
+  .el-icon-warning {
+    color: #e6a23c;
   }
-
-  .search-wrapper {
-    margin-bottom: 30px;
-    .el-radio-button--small .el-radio-button__inner {
-      padding: 3px 10px;
-      line-height: 24px;
-      // height: 24px;
-    }
-    .search-input {
-      .el-icon-search,
-      .el-icon-loading {
-        position: relative;
-        left: 4px;
-        top: 7px;
-      }
-    }
+  span {
+    display: inline-block;
+    margin-left: 10px;
   }
+}
 
-  .null-plugins {
-    min-height: 130px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.tip-content {
+  font-size: 16px;
+  p {
+    word-break: break-word;
   }
+}
 
-  .tip-title {
-    font-size: 18px;
-    .el-icon-warning {
-      color: #e6a23c;
-    }
-    span {
-      display: inline-block;
-      margin-left: 10px;
-    }
+.tip-checkbox {
+  margin-top: 10px;
+  .el-checkbox {
+    color: #aaa;
   }
+}
 
-  .tip-content {
-    font-size: 16px;
-    p {
-      word-break: break-word;
-    }
-  }
+.tip-button {
+  text-align: right;
+}
 
-  .tip-checkbox {
-    margin-top: 10px;
-    .el-checkbox {
-      color: #aaa;
-    }
-  }
-
-  .tip-button {
-    text-align: right;
-  }
-
-  .el-badge {
-    height: 16px;
-  }
+.el-badge {
+  height: 16px;
 }
 </style>

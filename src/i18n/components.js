@@ -24,7 +24,7 @@ export default {
     en: 'Management',
   },
   dashboard: {
-    zh: '控制台',
+    zh: '仪表盘',
     en: 'Dashboard',
   },
   overview: {
