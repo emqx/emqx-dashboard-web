@@ -304,6 +304,11 @@ export default {
     document.documentElement.scrollTop = 0
     document.body.scrollTop = 0
   },
+  mounted() {
+    if (this.$route.query.type == 'lwm2m' && this.$route.query.imei) {
+      this.detailTabs = 'lwm2m'
+    }
+  },
 
   methods: {
     handlelistenersChange(val) {
