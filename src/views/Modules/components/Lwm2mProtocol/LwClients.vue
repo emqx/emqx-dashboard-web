@@ -89,7 +89,7 @@ export default {
 
   created() {
     this.loadData()
-    console.log(this.id)
+    // console.log(this.id)
   },
 
   methods: {

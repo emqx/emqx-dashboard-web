@@ -272,6 +272,9 @@ export default {
       },
       deep: true,
     },
+    nodeName() {
+      this.loadObjectList()
+    },
   },
 
   created() {
@@ -309,6 +312,7 @@ export default {
     },
 
     async loadObjectList() {
+      if (!this.nodeName) return
       const data = await getLwClients(this.nodeName)
       const res = data.filter(($) => $.imei === this.currentImei)
       if (res.length < 1) {
