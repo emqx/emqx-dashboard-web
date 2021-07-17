@@ -72,14 +72,14 @@ Object.assign(axios.defaults, {
 axios.interceptors.request.use(
   (config) => {
     const user = getBasicAuthInfo()
-    config.params = config.params || {}
-    const {
-      params: { _t: tokenRequired = true },
-    } = config
-    if (!user.username && tokenRequired) {
-      toLogin()
-      // throw new Error(httpMap['-1'] + `(${JSON.stringify(config)})`)
-    }
+    // config.params = config.params || {}
+    // const {
+    //   params: { _t: tokenRequired = true },
+    // } = config
+    // if (!user.username && tokenRequired) {
+    //   toLogin()
+    //   // throw new Error(httpMap['-1'] + `(${JSON.stringify(config)})`)
+    // }
     config.auth.username = user.username
     config.auth.password = user.password
 

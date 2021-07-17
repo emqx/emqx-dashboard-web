@@ -203,7 +203,16 @@ export default {
       record: {
         config: {},
       },
-      rules: {},
+      rules: {
+        config: {
+          node: [
+            {
+              required: true,
+              message: this.$t('Settings.nodeRequired'),
+            },
+          ],
+        },
+      },
       clusterTypes: [
         { label: this.$t('Settings.manual'), value: 'manual' },
         { label: this.$t('Settings.dns'), value: 'dns' },
@@ -230,7 +239,7 @@ export default {
       this.currentNodes = this.getNodes(nodes, seeds)
     },
     async handleInviteNode() {
-      const valid = await this.$refs.record.validate()
+      const valid = await this.$refs.record.validate().catch(() => {})
       if (!valid) {
         return
       }

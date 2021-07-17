@@ -110,11 +110,7 @@
 .el-form--label-top .el-form-item__label {
   padding: 0px;
 }
-.el-form-item {
-  .emq-select {
-    width: 100%;
-  }
-}
+
 .code-editor__item.el-form-item {
   .el-form-item__content {
     line-height: 18px;
@@ -127,9 +123,9 @@
     background-color: rgba(52, 195, 136, 0.08);
   }
 }
-.el-select {
-  margin: 0 3px;
-}
+// .el-select {
+//   margin: 0 3px;
+// }
 
 /* Message */
 .el-message {

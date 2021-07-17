@@ -92,21 +92,10 @@ export const inviteNode = async (data) => {
   const body = {
     node: data.config.node,
   }
-  try {
-    return http.post('/cluster/invite_node', body)
-  } catch (error) {
-    console.error(error)
-    return false
-  }
+  return http.post('/cluster/invite_node', body).catch(() => {})
 }
 
 // 集群移除节点
 export const forceLeaveNode = async (nodename) => {
-  try {
-    const res = await http.delete(`/cluster/force_leave/${nodename}`)
-    return res
-  } catch (error) {
-    console.error(error)
-    return false
-  }
+  return http.delete(`/cluster/force_leave/${nodename}`).catch(() => {})
 }
