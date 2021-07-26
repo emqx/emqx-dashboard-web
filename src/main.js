@@ -1,31 +1,22 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
-import VueI18n from 'vue-i18n'
 import CompositionAPI from '@vue/composition-api'
-import ElementLocale from 'element-ui/lib/locale'
 
 import installer from '@/common/installer'
 import directive from '@/common/directive'
-import lang from './i18n'
-import App from './App.vue'
-import router from './routes'
-import store from './stores'
+import App from '@/App.vue'
+import router from '@/routes'
+import store from '@/stores'
+import i18n from '@/i18n'
+import ElementLocale from 'element-ui/lib/locale'
 
 import '@/assets/style/common.scss'
 import '@/assets/style/element-reset.scss'
 
-Vue.config.productionTip = false
-
-Vue.use(VueI18n)
 Vue.use(installer)
 Vue.use(ElementUI)
 Vue.use(directive)
 Vue.use(CompositionAPI)
-
-const i18n = new VueI18n({
-  locale: store.state.lang,
-  messages: lang,
-})
 
 ElementLocale.i18n((key, value) => i18n.t(key, value))
 

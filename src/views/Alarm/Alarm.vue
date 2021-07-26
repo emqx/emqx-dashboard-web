@@ -4,7 +4,7 @@
       {{ tl('currentAlarm') }}
     </div>
 
-    <el-table v-bind="alertTable" :data="currentAlarmData">
+    <el-table :data="currentAlarmData">
       <el-table-column prop="name" :label="$t('Alarm.alarmName')" sortable></el-table-column>
       <el-table-column prop="message" :label="$t('Alarm.alarmMsg')" sortable>
         <template slot-scope="{ row }">
@@ -42,7 +42,7 @@
       {{ tl('historyAlarm') }}
     </div>
 
-    <el-table v-bind="alertTable" :data="historyAlarmData">
+    <el-table :data="historyAlarmData">
       <el-table-column prop="name" :label="$t('Alarm.alarmName')" sortable></el-table-column>
       <el-table-column prop="message" :label="$t('Alarm.alarmMsg')" sortable>
         <template slot-scope="{ row }">
@@ -77,7 +77,7 @@
 
 <script>
 import { loadAlarm, loadHistoryAlarm } from '@/api/common'
-import { getDateDiff } from '@/common/utils'
+import { getDuration } from '@/common/utils'
 import moment from 'moment'
 
 export default {
@@ -85,11 +85,6 @@ export default {
 
   data() {
     return {
-      alertTable: {
-        'row-key': 'id',
-        'default-expand-all': true,
-        'tree-props': { children: 'children', hasChildren: 'hasChildren' },
-      },
       currentAlarmData: [],
       historyAlarmData: [],
     }
@@ -100,39 +95,11 @@ export default {
   },
 
   methods: {
+    getDuration: getDuration,
     tl(key, collection = 'Alarm') {
       return this.$t(collection + '.' + key)
     },
-    getDuration(duration) {
-      let dateDiff = getDateDiff(duration / 1000)
-      let readableDate = []
-      dateDiff.reduce((c, v, i) => {
-        if (c == 0 && v == 0) {
-        } else {
-          switch (i) {
-            case 0:
-              readableDate.push([v, this.$tc('General.day', v)])
-              break
-            case 1:
-              readableDate.push([v, this.$tc('General.hour', v)])
-              break
-            case 2:
-              readableDate.push([v, this.$tc('General.min', v)])
-              break
-            case 3:
-              readableDate.push([v, this.$tc('General.sec', v)])
-              break
-          }
-        }
-        return c + v
-      }, 0)
 
-      return readableDate
-        .map((_) => {
-          return _.join(this.$t('General.timeSep'))
-        })
-        .join(this.$t('General.timePartSep'))
-    },
     dateFormat(date) {
       let timestamp = Math.floor(+date / 1000)
       return moment(timestamp).format('YYYY-MM-DD HH:mm:ss')

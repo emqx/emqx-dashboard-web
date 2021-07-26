@@ -6,7 +6,8 @@ import { Message } from 'element-ui'
 
 import store from '@/stores'
 import router from '@/routes'
-import lang from '@/i18n'
+import lang from '@/i18n/index'
+import i18n from '@/i18n'
 
 const locale = store.state.lang
 const VueI18n = lang[locale]
@@ -354,10 +355,6 @@ export function ruleNewSqlParser(sql, e) {
   }
 }
 
-/**
- * @param duration (ms)
- * @return dd:hh:mm:ss
- */
 export function getDateDiff(duration) {
   // get total seconds value (s)
   const dateDiff = Math.floor(duration / 1000)
@@ -370,6 +367,37 @@ export function getDateDiff(duration) {
   const seconds = dateDiff % 60
 
   return [days, hours, minutes, seconds]
+}
+
+export function getDuration(duration) {
+  let dateDiff = getDateDiff(duration / 1000 || 0)
+  let readableDate = []
+  dateDiff.reduce((c, v, i) => {
+    if (c == 0 && v == 0 && i < 3) {
+    } else {
+      switch (i) {
+        case 0:
+          readableDate.push([v, i18n.tc('General.day', v)])
+          break
+        case 1:
+          readableDate.push([v, i18n.tc('General.hour', v)])
+          break
+        case 2:
+          readableDate.push([v, i18n.tc('General.min', v)])
+          break
+        case 3:
+          readableDate.push([v, i18n.tc('General.sec', v)])
+          break
+      }
+    }
+    return c + v
+  }, 0)
+
+  return readableDate
+    .map((_) => {
+      return _.join(i18n.t('General.timeSep'))
+    })
+    .join(i18n.t('General.timePartSep'))
 }
 
 export const verifyID = (rule, value, callback) => {

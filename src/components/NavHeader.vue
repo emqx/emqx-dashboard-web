@@ -15,7 +15,6 @@
           <el-badge :is-dot="!!alertCount">
             <router-link
               to="/alarm"
-              tag="i"
               class="iconx icon-alarm"
               @click="clearAlert"
             ></router-link>

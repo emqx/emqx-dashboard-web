@@ -19,7 +19,11 @@
         </template>
       </el-table-column>
       <el-table-column prop="version" :label="tl('version')"> </el-table-column>
-      <el-table-column prop="uptime" :label="tl('uptime')"> </el-table-column>
+      <el-table-column prop="uptime" :label="tl('uptime')">
+        <template #default="{ row }">
+          {{ getDuration(row.uptime) }}
+        </template>
+      </el-table-column>
       <el-table-column :label="`Erlang ${tl('process')}`">
         <template #default="{ row }">
           <el-tooltip
@@ -80,44 +84,48 @@
 </template>
 <script>
 import { loadNodes, loadStats } from '@/api/common'
+import { getDuration } from '@/common/utils'
+import { defineComponent, ref, reactive, onMounted } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
   name: 'Nodes',
-  computed: {},
-  data: function () {
-    return {
-      nodes: [],
-      stats: [],
-    }
-  },
-  created() {
-    this.allNodes()
-    this.allStats()
-  },
-  methods: {
-    tl(key, collection = 'Dashboard') {
+  setup() {
+    let nodes = ref([])
+    let stats = ref([])
+
+    const tl = function (key, collection = 'Dashboard') {
       return this.$t(collection + '.' + key)
-    },
-    async allNodes() {
-      let nodes = await loadNodes().catch(() => {})
-      this.nodes = nodes
-      return nodes
-    },
-    async allStats() {
-      let stats = await loadStats().catch(() => {})
-      this.stats = stats
-      return stats
-    },
-    caseInsensitiveCompare(w, k) {
+    }
+    const allNodes = async () => {
+      nodes.value = await loadNodes().catch(() => {})
+    }
+    const allStats = async () => {
+      stats.value = await loadStats().catch(() => {})
+    }
+    const caseInsensitiveCompare = (w, k) => {
       return !!String.prototype.match.call(w, new RegExp(k, 'i'))
-    },
-    calcPercentage(n1, n2) {
+    }
+    const calcPercentage = (n1, n2) => {
       let p = (+n1 / +n2) * 100
       if (p && p < 1) return 1
       if (!p) return 0
       return p
-    },
+    }
+
+    onMounted(() => {
+      allNodes()
+      allStats()
+    })
+
+    return {
+      tl,
+      caseInsensitiveCompare,
+      calcPercentage,
+      nodes,
+      stats,
+      getDuration,
+    }
   },
-}
+})
 </script>
 <style scoped></style>
