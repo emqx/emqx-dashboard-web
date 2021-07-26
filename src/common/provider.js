@@ -1,4 +1,4 @@
-import lang from '@/i18n'
+import lang from '@/i18n/index'
 import store from '@/stores'
 
 const local = store.state.lang
