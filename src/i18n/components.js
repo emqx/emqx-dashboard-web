@@ -23,6 +23,18 @@ export default {
     zh: '管理',
     en: 'Management',
   },
+  auth: {
+    zh: 'Auth',
+    en: 'Auth',
+  },
+  acl: {
+    zh: 'ACL',
+    en: 'ACL',
+  },
+  authentication: {
+    zh: '授权',
+    en: 'Authentication',
+  },
   dashboard: {
     zh: '仪表盘',
     en: 'Dashboard',
@@ -39,10 +51,10 @@ export default {
     zh: '连接',
     en: 'Connections',
   },
-  usersAcl: {
-    zh: '认证鉴权',
-    en: 'Users & ACL',
-  },
+  // usersAcl: {
+  //   zh: '认证鉴权',
+  //   en: 'Users & ACL',
+  // },
   clients: {
     zh: '客户端',
     en: 'Clients',

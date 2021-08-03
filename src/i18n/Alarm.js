@@ -79,6 +79,10 @@ export default {
     zh: '清除时间',
     en: 'Clearance time',
   },
+  clearHistory: {
+    zh: '清除历史告警',
+    en: 'Clear History Alarm',
+  },
   endingTime: {
     zh: '结束时间',
     en: 'Ending time',

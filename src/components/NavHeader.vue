@@ -53,7 +53,7 @@
         </div>
       </el-dropdown>
 
-      <el-button class="go-link" @click="gotoCloud">EMQ X Cloud ➝</el-button>
+      <el-button class="go-link" @click="gotoCloud">Try Cloud ➝</el-button>
     </div>
   </div>
 </template>

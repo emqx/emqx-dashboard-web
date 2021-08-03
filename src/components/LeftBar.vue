@@ -34,16 +34,12 @@
 <script>
 export default {
   name: 'LeftBar',
-
-  props: {},
-
   data() {
     return {
       menus: [],
       defaultOpenKeys: [],
     }
   },
-
   computed: {
     leftBarCollapse() {
       return this.$store.state.leftBarCollapse
@@ -53,9 +49,6 @@ export default {
       return `/${path.split('/')[1]}`
     },
   },
-
-  watch: {},
-
   created() {
     let dashboard = [
       {
@@ -87,6 +80,21 @@ export default {
       },
     ]
 
+    let authentication = [
+      {
+        title: this.$t('components.auth'),
+        path: '/auth',
+      },
+      {
+        title: this.$t('components.acl'),
+        path: '/acl',
+      },
+      {
+        title: this.$t('components.blacklist'),
+        path: '/blacklist',
+      },
+    ]
+
     this.menus = [
       {
         title: this.$t('components.monitoring'),
@@ -98,26 +106,31 @@ export default {
         icon: 'icon-yibiaopan',
         c: management,
       },
-      {
-        title: this.$t('components.ruleengine'),
-        icon: 'icon-guizeyinqing',
-        path: '/ruleengine',
-      },
-      {
-        title: this.$t('components.modules'),
-        path: '/modules',
-        icon: 'icon-changjingguanli',
-      },
-      {
-        title: this.$t('components.setting'),
-        path: '/setting',
-        icon: 'icon-icon_shezhi',
-      },
-      {
-        title: this.$t('components.general'),
-        icon: 'icon-fenzuguanli',
-        path: '/general',
-      },
+      // {
+      //   title: this.$t('components.authentication'),
+      //   icon: 'icon-yibiaopan',
+      //   c: authentication,
+      // },
+      // {
+      //   title: this.$t('components.ruleengine'),
+      //   icon: 'icon-guizeyinqing',
+      //   path: '/ruleengine',
+      // },
+      // {
+      //   title: this.$t('components.modules'),
+      //   path: '/modules',
+      //   icon: 'icon-changjingguanli',
+      // },
+      // {
+      //   title: this.$t('components.setting'),
+      //   path: '/setting',
+      //   icon: 'icon-icon_shezhi',
+      // },
+      // {
+      //   title: this.$t('components.general'),
+      //   icon: 'icon-fenzuguanli',
+      //   path: '/general',
+      // },
     ]
   },
 
