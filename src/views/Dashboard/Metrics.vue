@@ -15,73 +15,88 @@
       </div>
     </div>
     <el-row :gutter="20">
-      <!-- <el-col :span="8"> -->
-      <el-table :data="metricsObj[currentNode] | filterMetrics('client')">
-        <el-table-column prop="m" :label="$t('Dashboard.client')"> </el-table-column>
+      <el-table
+        :data="metricsObj[currentNode] | filterMetrics('client')"
+        v-loading.lock="lockTable"
+      >
+        <el-table-column prop="m" :label="tl('client')"> </el-table-column>
         <el-table-column prop="v" sortable> </el-table-column>
       </el-table>
-      <!-- </el-col>
-      <el-col :span="8"> -->
-      <el-table :data="metricsObj[currentNode] | filterMetrics('delivery')">
+
+      <el-table
+        :data="metricsObj[currentNode] | filterMetrics('delivery')"
+        v-loading.lock="lockTable"
+      >
         <el-table-column prop="m" label="Delivery"> </el-table-column>
         <el-table-column prop="v" sortable> </el-table-column>
       </el-table>
-      <!-- </el-col>
-      <el-col :span="8"> -->
-      <el-table :data="metricsObj[currentNode] | filterMetrics('session')">
-        <el-table-column prop="m" :label="$t('Dashboard.session')"> </el-table-column>
+
+      <el-table
+        :data="metricsObj[currentNode] | filterMetrics('session')"
+        v-loading.lock="lockTable"
+      >
+        <el-table-column prop="m" :label="tl('session')"> </el-table-column>
         <el-table-column prop="v" sortable> </el-table-column>
       </el-table>
-      <!-- </el-col> -->
-      <!-- </el-row>
-    <el-row :gutter="20">
-      <el-col :span="8"> -->
-      <el-table :data="metricsObj[currentNode] | filterMetrics('packets')">
-        <el-table-column prop="m" :label="$t('Dashboard.mqttPackages')"> </el-table-column>
+
+      <el-table
+        :data="metricsObj[currentNode] | filterMetrics('packets')"
+        v-loading.lock="lockTable"
+      >
+        <el-table-column prop="m" :label="tl('mqttPackages')"> </el-table-column>
         <el-table-column prop="v" sortable> </el-table-column>
       </el-table>
-      <!-- </el-col>
-      <el-col :span="8"> -->
-      <el-table :data="metricsObj[currentNode] | filterMetrics('messages')">
-        <el-table-column prop="m" :label="$t('Dashboard.messageNumber')"> </el-table-column>
+
+      <el-table
+        :data="metricsObj[currentNode] | filterMetrics('messages')"
+        v-loading.lock="lockTable"
+      >
+        <el-table-column prop="m" :label="tl('messageNumber')"> </el-table-column>
         <el-table-column prop="v" sortable> </el-table-column>
       </el-table>
-      <!-- </el-col>
-      <el-col :span="8"> -->
-      <el-table :data="metricsObj[currentNode] | filterMetrics('bytes')">
-        <el-table-column prop="m" :label="$t('Dashboard.traffic')"> </el-table-column>
+
+      <el-table :data="metricsObj[currentNode] | filterMetrics('bytes')" v-loading.lock="lockTable">
+        <el-table-column prop="m" :label="tl('traffic')"> </el-table-column>
         <el-table-column prop="v" sortable> </el-table-column>
       </el-table>
-      <!-- </el-col> -->
     </el-row>
   </div>
 </template>
 <script>
 import { defineComponent, onMounted, reactive, ref } from '@vue/composition-api'
 import { loadMetrics } from '@/api/common'
-import EmqSelect from '../../components/EmqSelect.vue'
+import EmqSelect from '@/components/EmqSelect.vue'
 export default defineComponent({
   components: { EmqSelect },
   name: 'Metrics',
 
   setup() {
-    let metrics = ref([])
-    let metricsObj = ref({})
+    let metrics = reactive([])
+    let metricsObj = reactive({})
     let currentNode = ref('')
     let currentNodeIndex = ref(0)
+    let lockTable = ref(true)
 
     const translate = function (key, collection = 'Dashboard') {
       return this.$t(collection + '.' + key)
     }
 
     const metricsData = async () => {
-      metrics.value = await loadMetrics().catch(() => {})
-      if (metrics.value.length) {
-        currentNode.value = metrics.value[0].node
-        metrics.value.forEach((v) => {
-          metricsObj.value[v.node] = v.metrics
+      let metricsArr = await loadMetrics().catch(() => {})
+      lockTable.value = false
+      metricsArr.forEach((v) => {
+        metrics.push(v)
+      })
+      if (metrics.length) {
+        currentNode.value = metrics[0].node
+        metrics.forEach((v) => {
+          metricsObj[v.node] = v
         })
       }
+    }
+
+    const changeNode = (n) => {
+      this.currentNode = n
     }
 
     onMounted(metricsData)
@@ -91,13 +106,10 @@ export default defineComponent({
       metrics,
       metricsObj,
       currentNode,
+      lockTable,
+      changeNode,
       currentNodeIndex,
     }
-  },
-  methods: {
-    changeNode(n) {
-      this.currentNode = n
-    },
   },
   filters: {
     filterMetrics(data, key) {

@@ -8,18 +8,18 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  scrollBehavior(to, from, savedPosition) {
-    if (to.path === '/modules/detail' || (to.meta.keepAlive && savedPosition)) {
-      return savedPosition
-    }
-    return { x: 0, y: 0 }
-  },
+  // scrollBehavior(to, from, savedPosition) {
+  //   if (to.path === '/modules/detail' || (to.meta.keepAlive && savedPosition)) {
+  //     return savedPosition
+  //   }
+  //   return { x: 0, y: 0 }
+  // },
   routes,
 })
 
 router.beforeEach((to, from, next) => {
-  const { fullPath } = to
-  const { authRequired = false } = to?.matched[0]?.meta || to.meta
+  const { fullPath, matched } = to
+  const { authRequired = false } = matched[0]?.meta || to.meta
   // const { hideLeftBar: hideLeftBarForm = false } = from?.matched[0]?.meta || from.meta
 
   if (authRequired && !getBasicAuthInfo().username) {

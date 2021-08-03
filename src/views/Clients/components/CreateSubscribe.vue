@@ -3,7 +3,7 @@
     v-bind="$attrs"
     :title="$t('Clients.addASubscription')"
     width="400px"
-    :visible.sync="rawVisible"
+    :visible.sync="visible"
     class="create-subscribe"
     v-on="$listeners"
     @close="close"
@@ -33,8 +33,6 @@ import { subscribe } from '@/api/clients'
 
 export default {
   name: 'CreateSubscribe',
-
-  components: {},
 
   inheritAttrs: false,
 
@@ -68,36 +66,29 @@ export default {
       },
     }
   },
-
-  computed: {
-    rawVisible: {
-      get() {
-        return this.visible
-      },
-      set(val) {
-        this.$emit('update:visible', val)
-      },
-    },
-  },
-
-  created() {},
-
   methods: {
     open() {
       this.record.clientid = this.clientId
     },
     async handleAdd() {
-      const valid = await this.$refs.record.validate()
+      const valid = await this.$refs.record.validate().catch(() => {})
       if (!valid) {
         return
       }
-      await subscribe(this.record)
-      this.$emit('created', true)
-      this.close()
+      let clientId = this.clientId || this.record.clientid
+
+      let subs = await subscribe(clientId, {
+        topic: this.record.topic,
+        qos: this.record.qos,
+      }).catch(() => {})
+      if (subs) {
+        this.$emit('create:subs')
+        this.close()
+      }
     },
     close() {
-      this.$refs.record.resetFields()
       this.$emit('update:visible', false)
+      this.$refs.record.resetFields()
     },
   },
 }

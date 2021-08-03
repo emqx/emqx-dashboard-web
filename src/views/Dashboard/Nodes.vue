@@ -1,7 +1,7 @@
 <template>
   <div class="nodes app-wrapper">
     <div class="section-header">{{ tl('nodeData') }}</div>
-    <el-table :data="nodes">
+    <el-table :data="nodes" v-loading.lock="nodesLockTable">
       <el-table-column prop="node" :label="tl('nodeName')" sortable> </el-table-column>
       <el-table-column :label="tl('nodeStatus')" sortable>
         <template #default="{ row }">
@@ -46,37 +46,36 @@
       </el-table-column>
       <el-table-column :label="tl('maxFds')" prop="max_fds"></el-table-column>
     </el-table>
+
     <div class="section-header">{{ tl('nodeStatis') }}</div>
-    <el-table :data="stats">
+    <el-table :data="stats" v-loading.lock="statsLockTable">
       <el-table-column prop="node" :label="tl('nodeName')"> </el-table-column>
       <el-table-column :label="tl('currentConnection')">
         <template #default="{ row }">
-          {{ row.stats['connections.count'] }}/{{ row.stats['connections.max'] }}
+          {{ row['connections.count'] }}/{{ row['connections.max'] }}
         </template>
       </el-table-column>
       <el-table-column :label="tl('topics')">
-        <template #default="{ row }">
-          {{ row.stats['topics.count'] }}/{{ row.stats['topics.max'] }}
-        </template>
+        <template #default="{ row }"> {{ row['topics.count'] }}/{{ row['topics.max'] }} </template>
       </el-table-column>
       <el-table-column :label="tl('retained')">
         <template #default="{ row }">
-          {{ row.stats['retained.count'] }}/{{ row.stats['retained.max'] }}
+          {{ row['retained.count'] }}/{{ row['retained.max'] }}
         </template>
       </el-table-column>
       <el-table-column :label="tl('session')">
         <template #default="{ row }">
-          {{ row.stats['sessions.count'] }}/{{ row.stats['sessions.max'] }}
+          {{ row['sessions.count'] }}/{{ row['sessions.max'] }}
         </template>
       </el-table-column>
       <el-table-column :label="tl('subscription')">
         <template #default="{ row }">
-          {{ row.stats['subscriptions.count'] }}/{{ row.stats['subscriptions.max'] }}
+          {{ row['subscriptions.count'] }}/{{ row['subscriptions.max'] }}
         </template>
       </el-table-column>
       <el-table-column :label="tl('shareSubscription')">
         <template #default="{ row }">
-          {{ row.stats['subscriptions.shared.count'] }}/{{ row.stats['subscriptions.shared.max'] }}
+          {{ row['subscriptions.shared.count'] }}/{{ row['subscriptions.shared.max'] }}
         </template>
       </el-table-column>
     </el-table>
@@ -92,15 +91,19 @@ export default defineComponent({
   setup() {
     let nodes = ref([])
     let stats = ref([])
+    let nodesLockTable = ref(true)
+    let statsLockTable = ref(true)
 
     const tl = function (key, collection = 'Dashboard') {
       return this.$t(collection + '.' + key)
     }
     const allNodes = async () => {
       nodes.value = await loadNodes().catch(() => {})
+      nodesLockTable.value = false
     }
     const allStats = async () => {
       stats.value = await loadStats().catch(() => {})
+      statsLockTable.value = false
     }
     const caseInsensitiveCompare = (w, k) => {
       return !!String.prototype.match.call(w, new RegExp(k, 'i'))
@@ -123,9 +126,11 @@ export default defineComponent({
       calcPercentage,
       nodes,
       stats,
+      nodesLockTable,
+      statsLockTable,
       getDuration,
     }
   },
 })
 </script>
-<style scoped></style>
+<style lang="scss" scoped></style>

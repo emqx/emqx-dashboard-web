@@ -4,7 +4,7 @@
       {{ tl('currentAlarm') }}
     </div>
 
-    <el-table :data="currentAlarmData">
+    <el-table :data="currentAlarmData" v-loading.lock="currentLockTable">
       <el-table-column prop="name" :label="$t('Alarm.alarmName')" sortable></el-table-column>
       <el-table-column prop="message" :label="$t('Alarm.alarmMsg')" sortable>
         <template slot-scope="{ row }">
@@ -39,10 +39,17 @@
     </el-table>
 
     <div class="section-header">
-      {{ tl('historyAlarm') }}
+      <div>
+        <span> {{ tl('historyAlarm') }} </span>
+      </div>
+      <div v-if="!!historyAlarmData.length">
+        <el-button type="danger" size="small" plain>
+          {{ $t('Alarm.clearHistory') }}
+        </el-button>
+      </div>
     </div>
 
-    <el-table :data="historyAlarmData">
+    <el-table :data="historyAlarmData" v-loading.lock="historyLockTable">
       <el-table-column prop="name" :label="$t('Alarm.alarmName')" sortable></el-table-column>
       <el-table-column prop="message" :label="$t('Alarm.alarmMsg')" sortable>
         <template slot-scope="{ row }">
@@ -76,24 +83,26 @@
 </template>
 
 <script>
-import { loadAlarm, loadHistoryAlarm } from '@/api/common'
+import { loadAlarm } from '@/api/common'
 import { getDuration } from '@/common/utils'
 import moment from 'moment'
 
 export default {
   name: 'Alarm',
-
   data() {
     return {
       currentAlarmData: [],
       historyAlarmData: [],
+      currentAlarmMeta: {},
+      historyAlarmMeta: {},
+      currentLockTable: true,
+      historyLockTable: true,
     }
   },
-
   created() {
     this.loadData()
+    this.loadHData()
   },
-
   methods: {
     getDuration: getDuration,
     tl(key, collection = 'Alarm') {
@@ -105,11 +114,16 @@ export default {
       return moment(timestamp).format('YYYY-MM-DD HH:mm:ss')
     },
     async loadData() {
-      this.currentAlarmData = await loadAlarm().catch(() => {})
+      let { data, meta } = await loadAlarm().catch(() => {})
+      ;(this.currentAlarmData = data), (this.currentAlarmMeta = meta)
+      this.currentLockTable = false
       this.$store.dispatch('SET_ALERT_COUNT', this.currentAlarmData.length || 0)
-      this.historyAlarmData = await loadHistoryAlarm()
     },
-
+    async loadHData() {
+      let { data: hdata, meta: hmeta } = await loadAlarm(true).catch(() => {})
+      ;(this.historyAlarmData = hdata), (this.historyAlarmMeta = hmeta)
+      this.historyLockTable = false
+    },
     getStateText(state) {
       const stateMap = {
         0: this.$t('Alarm.normal'),

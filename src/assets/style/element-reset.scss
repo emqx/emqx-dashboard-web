@@ -12,7 +12,7 @@
 
 /* Button */
 .el-button {
-  border-radius: 0;
+  border-radius: 2px;
 
   &.el-button--small {
     font-size: 14px;
@@ -169,6 +169,12 @@
         background-color: unset !important;
       }
     }
+  }
+}
+.el-loading-parent--relative{
+  border-width: 1px;
+  &::before{
+    height: 0;
   }
 }
 

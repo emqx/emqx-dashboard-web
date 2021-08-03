@@ -1,6 +1,6 @@
 <template>
   <div class="client-details app-wrapper">
-    <div class="section-header">
+    <div class="section-header" v-loading.lock="clientDetailLock">
       <div>
         <span>{{ clientId }}</span>
         <el-tag type="info" size="mini">
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <el-card shadow="never">
+    <el-card shadow="never" v-loading.lock="clientDetailLock">
       <el-row>
         <div class="part-header">
           {{ $t('Clients.connectionInfo') }}
@@ -66,18 +66,8 @@
           <el-col v-for="item in clientsOrganizied.session" :key="item" :span="8">
             <div v-if="item == 'subscriptions_cnt'" class="detail-item">
               <span :title="tl('subscription')">{{ tl('subscription') }}:</span>
-              <span
-                :title="
-                  record.subscriptions_cnt +
-                  '/' +
-                  (record.max_subscriptions === 0 ? 'Unlimited' : record.max_subscriptions)
-                "
-              >
-                {{
-                  record.subscriptions_cnt +
-                  '/' +
-                  (record.max_subscriptions === 0 ? 'Unlimited' : record.max_subscriptions)
-                }}
+              <span :title="record.subscriptions_cnt + '/' + record.subscriptions_max">
+                {{ record.subscriptions_cnt + '/' + record.subscriptions_max }}
               </span>
             </div>
             <div v-else-if="item == 'clean_start'" class="detail-item">
@@ -88,14 +78,14 @@
             </div>
             <div v-else-if="item == 'max_mqueue'" class="detail-item">
               <span :title="tl('mqueue')">{{ tl('mqueue') }}:</span>
-              <span :title="record.mqueue_len + '/' + record.max_mqueue">{{
-                record.mqueue_len + '/' + record.max_mqueue
+              <span :title="record.mqueue_len + '/' + record.mqueue_max">{{
+                record.mqueue_len + '/' + record.mqueue_max
               }}</span>
             </div>
             <div v-else-if="item == 'max_inflight'" class="detail-item">
               <span :title="tl('inflight')">{{ tl('inflight') }}:</span>
-              <span :title="record.inflight + '/' + record.max_inflight">
-                {{ record.inflight + '/' + record.max_inflight }}
+              <span :title="record.inflight_cnt + '/' + record.inflight_max">
+                {{ record.inflight_cnt + '/' + record.inflight_max }}
               </span>
             </div>
             <div v-else class="detail-item">
@@ -119,7 +109,7 @@
         </el-button>
       </div>
     </div>
-    <el-table :data="subscriptions" class="data-list">
+    <el-table :data="subscriptions" v-loading.lock="subsLockTable">
       <el-table-column prop="topic" show-overflow-tooltip label="Topic" sortable></el-table-column>
       <el-table-column prop="qos" sortable min-width="110px" label="QoS"></el-table-column>
       <el-table-column prop="node" sortable :label="$t('Clients.node')"></el-table-column>
@@ -135,20 +125,27 @@
     <create-subscribe
       :visible.sync="dialogVisible"
       :client-id="record.clientid"
-      @created="loadData"
+      @create:subs="loadSubs"
     >
     </create-subscribe>
+
+    <el-dialog
+      :visible.sync="errDialog"
+      :before-close="
+        () => {
+          this.$router.push({ path: '/clients' })
+        }
+      "
+    >
+      <span>{{ $t('Clients.clientDetailErr') }}</span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {
-  loadClientDetail,
-  loadSubscriptions,
-  unSubscription,
-  disconnectClient,
-} from '@/api/clients'
+import { loadClientDetail, loadSubscriptions, unsubscribe, disconnectClient } from '@/api/clients'
 import CreateSubscribe from './components/CreateSubscribe'
+import moment from 'moment'
 
 export default {
   name: 'ClientDetails',
@@ -159,6 +156,9 @@ export default {
       dialogVisible: false,
       activeName: 'detail',
       searchValue: '',
+      clientDetailLock: true,
+      subsLockTable: true,
+      errDialog: false,
       record: {},
       clientsOrganizied: {
         connection: [
@@ -167,7 +167,6 @@ export default {
           'username',
           'protocol_type',
           'ip_address',
-          'port',
           'keepalive',
           'is_bridge',
           'connected_at',
@@ -212,9 +211,11 @@ export default {
 
   created() {
     this.loadData()
+    this.loadSubs()
   },
 
   methods: {
+    moment: moment,
     snake2pascal(s) {
       return String(s).replace(/(_[a-z])/g, (m) => m.substring(1).toUpperCase())
     },
@@ -235,12 +236,12 @@ export default {
           type: 'warning',
         })
         .then(async () => {
-          await disconnectClient(this.record.clientid)
+          return disconnectClient(this.record.clientid)
+        })
+        .then(() => {
           this.$set(this.record, 'connected', false)
           this.$message.success(successMsg)
-          setTimeout(() => {
-            this.$router.push({ path: '/clients' })
-          }, 500)
+          this.$router.push({ path: '/clients' })
         })
         .catch(() => {})
     },
@@ -248,12 +249,15 @@ export default {
       this.dialogVisible = true
     },
     async loadData() {
-      if (!this.clientId) {
-        return
-      }
-      this.record = await loadClientDetail(this.clientId)
-      const { node } = this.record
-      this.subscriptions = await loadSubscriptions(node, this.clientId)
+      this.record = await loadClientDetail(this.clientId).catch(() => {
+        this.errDialog = true
+        return {}
+      })
+      this.clientDetailLock = false
+    },
+    async loadSubs() {
+      this.subscriptions = await loadSubscriptions(this.clientId).catch(() => [])
+      this.subsLockTable = false
     },
     handleUnSubscription(row) {
       const title = this.$t('Clients.unsubscribeTitle')
@@ -264,9 +268,11 @@ export default {
           type: 'warning',
         })
         .then(async () => {
-          const { topic, clientid } = row
-          await unSubscription({ topic, clientid })
-          this.loadData()
+          const { clientid } = row
+          return unsubscribe(clientid)
+        })
+        .then(() => {
+          this.loadSubs()
         })
         .catch(() => {})
     },
@@ -275,45 +281,47 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.client-details {
-  .el-tag {
-    margin-left: 10px;
+.el-tag {
+  margin-left: 10px;
 
-    & i {
-      font-size: 14px;
-      margin-right: 3px;
-      vertical-align: -1px;
-    }
-
-    & i.suc {
-      color: #00b299ff;
-    }
-    & i.fail {
-      color: #e34242ff;
-    }
+  & i {
+    font-size: 14px;
+    margin-right: 3px;
+    vertical-align: -1px;
   }
 
-  .detail-item {
-    margin-top: 10px;
-    color: #1d1d1dff;
-
-    & span:first-child {
-      color: #8d96a2ff;
-      display: inline-block;
-      width: 40%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      vertical-align: middle;
-    }
-    & span:last-child {
-      display: inline-block;
-      vertical-align: middle;
-      width: 55%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  & i.suc {
+    color: #00b299ff;
   }
+  & i.fail {
+    color: #e34242ff;
+  }
+}
+
+.detail-item {
+  margin-top: 10px;
+  color: #1d1d1dff;
+
+  & span:first-child {
+    color: #8d96a2ff;
+    display: inline-block;
+    width: 40%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+  }
+  & span:last-child {
+    display: inline-block;
+    vertical-align: middle;
+    width: 55%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.section-header::v-deep .el-loading-mask {
+  margin-left: 0px;
 }
 </style>

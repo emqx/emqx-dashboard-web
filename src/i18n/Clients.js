@@ -295,4 +295,8 @@ export default {
     zh: '连接成功',
     en: 'Connected',
   },
+  clientDetailErr: {
+    zh: '客户端详情获取出错',
+    en: 'There are some errors occured in retriving the client\'s detail'
+  }
 }

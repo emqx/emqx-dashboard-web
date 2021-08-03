@@ -87,6 +87,7 @@
       @select-all="clientSelectAll"
       @row-click="handleRowClick"
       ref="clientsTable"
+      v-loading.lock="lockTable"
     >
       <el-table-column type="selection"> </el-table-column>
       <el-table-column prop="clientid" sortable :label="$t('Clients.clientId')">
@@ -103,8 +104,8 @@
       </el-table-column>
 
       <el-table-column prop="username" sortable :label="$t('Clients.username')"></el-table-column>
-      <el-table-column prop="ipaddress" sortable :label="$t('Clients.ipAddress')">
-        <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template>
+      <el-table-column prop="ip_address" sortable :label="$t('Clients.ipAddress')">
+        <!-- <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template> -->
       </el-table-column>
       <el-table-column prop="keepalive" sortable :label="$t('Clients.keepalive')"></el-table-column>
       <el-table-column prop="proto_name" sortable :label="$t('Clients.protocol')">
@@ -120,11 +121,11 @@
           <span>{{ row.connected ? $t('Clients.connected') : $t('Clients.disconnected') }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="connected_at"
-        sortable
-        :label="$t('Clients.connectedAt')"
-      ></el-table-column>
+      <el-table-column prop="connected_at" sortable :label="$t('Clients.connectedAt')">
+        <template #default="{ row }">
+          {{ moment(row.connected_at).format('YYYY-MM-DD HH:mm:ss') }}
+        </template>
+      </el-table-column>
       <el-table-column prop="oper" :label="$t('Base.operation')">
         <template slot-scope="{ row }">
           <el-button size="mini" type="danger" plain @click="handleDisconnect(row)">
@@ -139,17 +140,21 @@
         v-if="count > 0"
         layout="total, sizes, prev, pager, next"
         :page-sizes="[20, 50, 100, 500]"
-        :page-size.sync="params._limit"
-        :current-page.sync="params._page"
+        :page-size.sync="params.limit"
+        :current-page.sync="params.page"
         :total="count"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentPageChange"
+        @size-change="
+          () => {
+            this.loadNodeClients(true)
+          }
+        "
+        @current-change="loadNodeClients"
       >
       </el-pagination>
       <custom-pagination
         v-if="count === -1 && tableData.length"
         :hasnext="hasnext"
-        :page="params._page"
+        :page="params.page"
         @prevClick="handlePrevClick"
         @nextClick="handleNextClick"
       >
@@ -162,6 +167,7 @@
 import CustomPagination from '@/components/CustomPagination.vue'
 import { disconnectClient, listNodeClients } from '@/api/clients'
 import { loadNodes } from '@/api/common'
+import moment from 'moment'
 
 export default {
   name: 'Clients',
@@ -169,23 +175,17 @@ export default {
   components: {
     CustomPagination,
   },
-
   data() {
     return {
       showMoreQuery: false,
       tableData: [],
+      lockTable: true,
       hasnext: false,
       params: {
-        _page: 1,
-        _limit: 20,
+        page: 1,
+        limit: 20,
       },
       count: 0,
-      // filterOptions: {
-      //   protoName: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M', 'Stomp'].map(($) => ({
-      //     text: $,
-      //     value: $,
-      //   })),
-      // },
       nodeName: '',
       currentNodes: [],
       fuzzyParams: {
@@ -239,6 +239,7 @@ export default {
   },
 
   methods: {
+    moment: moment,
     handleRowClick(row, column, event) {
       // console.log(row, event)
       //shiftkey+mouse select all rows before the selected one
@@ -320,17 +321,11 @@ export default {
       }
       return newParams
     },
-    handleSizeChange() {
-      this.loadNodeClients(true)
-    },
-    handleCurrentPageChange() {
-      this.loadNodeClients()
-    },
     handlePrevClick() {
-      if (this.params._page === 1) {
+      if (this.params.page === 1) {
         return
       }
-      this.params._page -= 1
+      this.params.page -= 1
       const params = this.genQueryParams(this.fuzzyParams)
       this.loadNodeClients(false, params)
     },
@@ -338,7 +333,7 @@ export default {
       if (!this.hasnext) {
         return
       }
-      this.params._page += 1
+      this.params.page += 1
       const params = this.genQueryParams(this.fuzzyParams)
       this.loadNodeClients(false, params)
     },
@@ -350,19 +345,21 @@ export default {
     },
     async loadNodeClients(reload, params = {}) {
       if (reload) {
-        this.params._page = 1
+        this.params.page = 1
       }
-      const data = await listNodeClients(this.nodeName, {
+      this.lockTable = true
+
+      const res = await listNodeClients(this.nodeName, {
         ...this.params,
         ...params,
-      })
-      const {
-        items = [],
-        meta: { count = 0, hasnext = false },
-      } = data
-      this.tableData = items
-      this.count = count
-      this.hasnext = hasnext
+      }).catch(() => {})
+      if (res) {
+        const { data = [], meta } = res
+        this.tableData = data
+        this.count = meta.count
+        this.hasnext = meta.hasnext
+      }
+      this.lockTable = false
     },
   },
 }

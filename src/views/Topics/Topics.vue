@@ -8,7 +8,7 @@
         {{ $t('Clients.search') }}
       </el-button>
 
-      <el-table :data="tableData">
+      <el-table :data="tableData" v-loading.lock="lockTable">
         <el-table-column prop="topic" :label="$t('Topics.topic')" sortable></el-table-column>
         <el-table-column prop="node" :label="$t('Clients.node')" sortable></el-table-column>
       </el-table>
@@ -19,11 +19,15 @@
         v-if="count > 0"
         layout="total, sizes, prev, pager, next"
         :page-sizes="[20, 50, 100, 500]"
-        :page-size.sync="params._limit"
-        :current-page.sync="params._page"
+        :page-size.sync="params.limit"
+        :current-page.sync="params.page"
         :total="count"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentPageChange"
+        @size-change="
+          () => {
+            this.loadTopics(true)
+          }
+        "
+        @current-change="loadTopics"
       >
       </el-pagination>
     </div>
@@ -31,7 +35,7 @@
 </template>
 
 <script>
-import { listTopics, searchTopics } from '@/api/topics'
+import { listTopics } from '@/api/common'
 
 export default {
   name: 'Topics',
@@ -40,16 +44,17 @@ export default {
     return {
       tableData: [],
       searchValue: '',
+      lockTable: true,
       params: {
-        _page: 1,
-        _limit: 20,
+        page: 1,
+        limit: 20,
       },
       count: 0,
     }
   },
 
   created() {
-    this.loadData()
+    this.loadTopics()
   },
 
   methods: {
@@ -59,30 +64,27 @@ export default {
         this.loadTopics()
         return
       }
-      this.params._page = 1
+      this.params.page = 1
       this.count = 0
-      this.tableData = await searchTopics(topic)
+      this.tableData = await listTopics({ topic })
     },
-    handleSizeChange() {
-      this.loadTopics(true)
-    },
-    handleCurrentPageChange() {
-      this.loadTopics()
-    },
-    async loadData() {
-      this.loadTopics()
-    },
+
     async loadTopics(reload, params = {}) {
       if (reload) {
-        this.params._page = 1
+        this.params.page = 1
       }
-      const data = await listTopics({ ...this.params, ...params })
-      const {
-        items = [],
-        meta: { count = 0 },
-      } = data
-      this.tableData = items
-      this.count = count
+      this.lockTable = true
+
+      const res = await listTopics({ ...this.params, ...params }).catch(() => {})
+      if (res) {
+        const {
+          data = [],
+          meta: { count = 0 },
+        } = res
+        this.tableData = data
+        this.count = count
+      }
+      this.lockTable = false
     },
   },
 }

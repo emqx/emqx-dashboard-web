@@ -47,22 +47,48 @@ let routes = [
       },
     ],
   },
-  // 认证鉴权
   {
-    path: '/users_and_acl',
-    component: Layout,
-    meta: {
-      hideKey: 'usersAcl',
-      authRequired: true,
+    path:'/auth',
+    component:Layout,
+    meta:{
+      hideKey: 'auth',
+      authRequired:true,
     },
     children: [
       {
-        path: '',
-        name: 'users_and_acl',
-        component: () => import('@/views/Plugins/PluginsManage'),
-      },
-    ],
+        path:'',
+        name:'auth',
+        component:()=>import('@/views/Auth/Auth')
+      }
+    ]
   },
+  {
+    path:'/acl',
+    component:Layout,
+    meta:{
+      hideKey:'acl',
+      authRequired:true,
+    },
+    children: [
+      
+    ]
+  },
+  // 认证鉴权
+  // {
+  //   path: '/users_and_acl',
+  //   component: Layout,
+  //   meta: {
+  //     hideKey: 'usersAcl',
+  //     authRequired: true,
+  //   },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'users_and_acl',
+  //       component: () => import('@/views/Plugins/PluginsManage'),
+  //     },
+  //   ],
+  // },
   // 连接
   {
     path: '/clients',
@@ -130,11 +156,11 @@ let routes = [
     children: [
       {
         path: 'rules',
-        name: 'rules',
         component: { template: `<router-view></router-view>` },
         children: [
           {
             path: '',
+            name: 'rules',
             component: () => import('@/views/RuleEngine/Rules'),
           },
           {
@@ -158,7 +184,6 @@ let routes = [
       // 资源
       {
         path: 'resources',
-        name: 'resources',
         meta: {
           hideKey: 'rules',
           authRequired: true,
@@ -167,6 +192,7 @@ let routes = [
         children: [
           {
             path: '',
+            name: 'resources',
             component: () => import('@/views/RuleEngine/Resources'),
           },
           {

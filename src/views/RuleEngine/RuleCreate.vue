@@ -145,7 +145,7 @@
 
 <script>
 import { loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule } from '@/api/rules'
-import { listTopics as loadTopics } from '@/api/topics'
+import { listTopics } from '@/api/common'
 import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck, verifyID } from '@/common/utils'
 import Monaco from '@/components/Monaco'
 // import StretchHeight from '@/components/StretchHeight'
@@ -242,7 +242,7 @@ export default {
   async created() {
     this.events = await loadRuleEvents()
     this.selectEvent = this.events[0]
-    const data = await loadTopics()
+    const data = await listTopics()
     this.topics = data.items || []
     if (this.currentRule) {
       this.isEdit = true

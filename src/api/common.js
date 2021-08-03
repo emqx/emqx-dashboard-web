@@ -2,16 +2,12 @@ import http from '@/common/http'
 
 export function auth(user = {}) {
   return http.post('/auth', user, {
-    params: {
-      _t: false,
-      _m: false,
-    },
+    // params: {
+    //   _t: false,
+    //   _m: false,
+    // },
   })
 }
-
-// export function loadBrokers() {
-//   return http.get('/brokers')
-// }
 
 export function loadStats() {
   return http.get('/stats')
@@ -29,15 +25,9 @@ export function loadCurrentMetrics() {
   return http.get('/monitor/current_metrics')
 }
 
-export function loadMetricsLog(node, type) {
-  if (!node && type && type !== 'basic') {
+export function loadMetricsLog(type) {
+  if (type !== 'basic') {
     return http.get(`/monitor/metrics/${type}`)
-  }
-  if (node && !type) {
-    return http.get(`/nodes/${node}/monitor/metrics`)
-  }
-  if (node && type && type !== 'basic') {
-    return http.get(`/nodes/${node}/monitor/metrics/${type}`)
   }
   return http.get('/monitor/metrics')
 }
@@ -47,30 +37,9 @@ export async function loadNodes() {
 }
 
 //Alarms
-export async function loadAlarm() {
-  const list = await http.get('/alarms/activated')
-  const data = []
-  list.forEach((item) => {
-    const { node, alarms } = item
-    alarms.forEach(($) => {
-      $.node = node
-      data.push($)
-    })
-  })
-  return data
-}
-
-export async function loadHistoryAlarm() {
-  const list = await http.get('/alarms/deactivated')
-  const data = []
-  list.forEach((item) => {
-    const { node, alarms } = item
-    alarms.forEach(($) => {
-      $.node = node
-      data.push($)
-    })
-  })
-  return data
+export async function loadAlarm(history = false) {
+  const list = await http.get('/alarms' + (history === null | undefined ? '' : '?activated=' + !history))
+  return list
 }
 
 //cluster
@@ -92,10 +61,15 @@ export const inviteNode = async (data) => {
   const body = {
     node: data.config.node,
   }
-  return http.post('/cluster/invite_node', body).catch(() => {})
+  return http.post('/cluster/invite_node', body).catch(() => { })
 }
 
 // 集群移除节点
 export const forceLeaveNode = async (nodename) => {
-  return http.delete(`/cluster/force_leave/${nodename}`).catch(() => {})
+  return http.delete(`/cluster/force_leave/${nodename}`).catch(() => { })
+}
+
+//topics
+export const listTopics = (params = {}) => {
+  return http.get('/routes' + (params.topic ? `/${encodeURIComponent(topic)}` : ''), { params })
 }

@@ -370,7 +370,7 @@ export function getDateDiff(duration) {
 }
 
 export function getDuration(duration) {
-  let dateDiff = getDateDiff(duration / 1000 || 0)
+  let dateDiff = getDateDiff(duration / 1000 || [])
   let readableDate = []
   dateDiff.reduce((c, v, i) => {
     if (c == 0 && v == 0 && i < 3) {

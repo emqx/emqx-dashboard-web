@@ -90,7 +90,7 @@
 
     <polyline-cards></polyline-cards>
 
-    <div shadow="never" class="license-card">
+    <div v-if="false" class="license-card">
       <div class="lisence-title">
         {{ $t('Dashboard.license') }}
       </div>
@@ -179,6 +179,9 @@
         }}</el-button>
       </div>
     </el-dialog>
+
+    <!-- <metrics-charts></metrics-charts> -->
+    <nodes-graph></nodes-graph>
   </div>
 </template>
 
@@ -189,6 +192,8 @@ import { loadCurrentMetrics, loadLicenseInfo } from '@/api/common'
 import SimpleLine from './components/SimpleLine'
 // import PercentageCards from './components/PercentageCards'
 import PolylineCards from './components/PolylineCards'
+import MetricsCharts from './components/MetricsCharts.vue'
+import NodesGraph from './components/NodesGraph.vue'
 
 export default {
   name: 'Overview',
@@ -198,6 +203,8 @@ export default {
     SimpleLine,
     // PercentageCards,
     PolylineCards,
+    // MetricsCharts,
+    NodesGraph,
   },
 
   props: {},
@@ -389,6 +396,7 @@ export default {
     .description {
       font-size: 12px;
       color: #b2b2b2;
+      max-width: 50%;
     }
 
     .oper {

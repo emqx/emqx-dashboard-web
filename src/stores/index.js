@@ -21,6 +21,7 @@ export default new Vuex.Store({
     get selectedModule() {
       return JSON.parse(localStorage.getItem('selectedModule')) || {}
     },
+    request_queue: 0,
   },
   actions: {
     UPDATE_MODULE({ commit }, selectedModule) {
@@ -51,6 +52,9 @@ export default new Vuex.Store({
       }
       commit('UPDATE_USER_INFO', logOut ? {} : userInfo)
     },
+    SET_REQ_CHANGE({ commit }, addOrDone = true) {
+      commit('SET_REQ_CHANGE', !!addOrDone)
+    },
   },
   mutations: {
     UPDATE_MODULE(state, selectedModule) {
@@ -69,5 +73,8 @@ export default new Vuex.Store({
     SET_LANGUAGE(state, lang) {
       state.lang = lang
     },
+    SET_REQ_CHANGE(state, addOrDone) {
+      addOrDone ? ++state.request_queue : --state.request_queue
+    }
   },
 })
