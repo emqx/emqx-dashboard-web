@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="154px" height="176px" viewBox="0 0 154 176" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>多边形备份 23</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#00B299" offset="0%"></stop>
+            <stop stop-color="#45E3C9" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="节点拓扑图" transform="translate(-900.000000, -590.000000)">
+            <rect fill="#FFFFFF" x="0" y="0" width="1440" height="865"></rect>
+            <rect id="矩形备份-53" stroke="#ECECEF" x="845.5" y="476.5" width="564" height="365" rx="2"></rect>
+            <g id="编组-6" transform="translate(889.000000, 590.000000)" fill="url(#linearGradient-1)">
+                <polygon id="多边形备份-23" opacity="0.12" points="88 0 164.210236 44 164.210236 132 88 176 11.7897645 132 11.7897645 44"></polygon>
+                <polygon id="多边形备份-23" opacity="0.12" points="88 22 145.157677 55 145.157677 121 88 154 30.8423234 121 30.8423234 55"></polygon>
+                <polygon id="多边形备份-23" points="88.5 47 124.440054 67.75 124.440054 109.25 88.5 130 52.5599457 109.25 52.5599457 67.75"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

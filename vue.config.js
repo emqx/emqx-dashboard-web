@@ -32,7 +32,7 @@ module.exports = {
         changeOrigin: true,
       },
       '/api/v5': {
-        target: 'http://34.219.115.160:8081',
+        target: 'http://34.219.115.160:18083/',
         changeOrigin: true,
       },
     },
@@ -47,7 +47,7 @@ module.exports = {
   configureWebpack: {
     plugins: [
       new MonacoWebpackPlugin({
-        output: 'static/',
+        publicPath: 'static/',
         languages: ['json', 'sql', 'plaintext', 'avro', 'protobuf'],
         features: ['wordHighlighter'],
       }),

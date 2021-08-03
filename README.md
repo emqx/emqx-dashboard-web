@@ -1,29 +1,28 @@
-# ee-dashboard
-
-## Project setup
+# emqx-dashboard
+## A open source frontend dashboard platform for emqx (Broker/Enterprise)
+### Project setup
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
+### Start dev server for development
 ```
 yarn run serve
 ```
 
-### Compiles and minifies for production
+### Compile for production
 ```
 yarn run build
 ```
 
-### Run your tests
+### Run tests
 ```
 yarn run test
 ```
 
-### Lints and fixes files
+### Run lints
 ```
 yarn run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### emqx-dashboard is powered by vue; EMQX is a gold sponsor of vue
