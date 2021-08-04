@@ -135,4 +135,8 @@ export default {
     zh: '连接已断开',
     en: 'connection disconnected',
   },
+  doing: {
+    zh: '{name}',
+    en: '{name} is ',
+  },
 }

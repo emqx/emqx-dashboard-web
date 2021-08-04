@@ -52,6 +52,15 @@
                 >{{ record.proto_name }} {{ record.proto_ver }}</span
               >
             </div>
+            <div
+              v-else-if="item == 'connected_at' || item == 'disconnected_at'"
+              class="detail-item"
+            >
+              <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
+              <span :title="moment(record[item]).format('YYYY-MM-DD HH:mm:ss')">
+                {{ moment(record[item]).format('YYYY-MM-DD HH:mm:ss') }}
+              </span>
+            </div>
             <div v-else class="detail-item">
               <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
               <span :title="record[item]">{{ record[item] }}</span>
@@ -64,8 +73,8 @@
         </div>
         <el-row>
           <el-col v-for="item in clientsOrganizied.session" :key="item" :span="8">
-            <div v-if="item == 'subscriptions_cnt'" class="detail-item">
-              <span :title="tl('subscription')">{{ tl('subscription') }}:</span>
+            <div v-if="item == 'subscriptions'" class="detail-item">
+              <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
               <span :title="record.subscriptions_cnt + '/' + record.subscriptions_max">
                 {{ record.subscriptions_cnt + '/' + record.subscriptions_max }}
               </span>
@@ -76,16 +85,22 @@
               >
               <span :title="record[item]">{{ record[item] }}</span>
             </div>
-            <div v-else-if="item == 'max_mqueue'" class="detail-item">
-              <span :title="tl('mqueue')">{{ tl('mqueue') }}:</span>
+            <div v-else-if="item == 'mqueue'" class="detail-item">
+              <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
               <span :title="record.mqueue_len + '/' + record.mqueue_max">{{
                 record.mqueue_len + '/' + record.mqueue_max
               }}</span>
             </div>
-            <div v-else-if="item == 'max_inflight'" class="detail-item">
-              <span :title="tl('inflight')">{{ tl('inflight') }}:</span>
+            <div v-else-if="item == 'inflight'" class="detail-item">
+              <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
               <span :title="record.inflight_cnt + '/' + record.inflight_max">
                 {{ record.inflight_cnt + '/' + record.inflight_max }}
+              </span>
+            </div>
+            <div v-else-if="item == 'created_at'" class="detail-item">
+              <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
+              <span :title="moment(record[item]).format('YYYY-MM-DD HH:mm:ss')">
+                {{ moment(record[item]).format('YYYY-MM-DD HH:mm:ss') }}
               </span>
             </div>
             <div v-else class="detail-item">
@@ -112,7 +127,6 @@
     <el-table :data="subscriptions" v-loading.lock="subsLockTable">
       <el-table-column prop="topic" show-overflow-tooltip label="Topic" sortable></el-table-column>
       <el-table-column prop="qos" sortable min-width="110px" label="QoS"></el-table-column>
-      <el-table-column prop="node" sortable :label="$t('Clients.node')"></el-table-column>
       <el-table-column prop="clientid" :label="$t('Base.operation')">
         <template slot-scope="{ row }">
           <el-button plain type="danger" size="mini" @click="handleUnSubscription(row)">
@@ -181,9 +195,9 @@ export default {
           'clean_start',
           'expiry_interval',
           'created_at',
-          'subscriptions_cnt',
-          'max_mqueue',
-          'max_inflight',
+          'subscriptions',
+          'mqueue',
+          'inflight',
           'heap_size',
           'reductions',
           'awaiting_rel',

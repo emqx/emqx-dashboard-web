@@ -342,6 +342,7 @@ export default {
         ['MDISCONNECTING', 0b01000],
         ['MRECONNECTING', 0b10000],
       ]),
+      leaveTime: 0,
     }
   },
   computed: {
@@ -356,23 +357,40 @@ export default {
   },
   created() {
     this.setConnStatus('MDISCONNECTED', false)
+    this.leaveTime = new Date().getTime()
   },
   mounted() {
     document.addEventListener('visibilitychange', this.visibilityChangeFn)
   },
   activated() {
     document.addEventListener('visibilitychange', this.visibilityChangeFn)
+    let timeNow = new Date().getTime()
+    let difference = 1000 * 60
+
+    if (timeNow - this.leaveTime > difference) {
+      this.reCheckConnStatus()
+    }
   },
   deactivated() {
     document.removeEventListener('visibilitychange', this.visibilityChangeFn)
+    this.leaveTime = new Date().getTime()
   },
 
   methods: {
     visibilityChangeFn() {
+      if (document.visibilityState == 'visible') {
+        this.reCheckConnStatus()
+      }
+    },
+    reCheckConnStatus() {
       if (this.client?.connected) {
         this.setConnStatus('MCONNECTED')
+      } else if (this.client?.disconnected) {
+        this.setConnStatus('MDISCONNECTED')
       } else if (this.client?.reconnecting) {
         this.setConnStatus('MRECONNECTING')
+      } else if (this.client?.disconnecting) {
+        this.setConnStatus('MDISCONNECTING')
       } else {
         this.setConnStatus('MDISCONNECTED')
       }
@@ -399,9 +417,10 @@ export default {
     },
     setNotify(status, custom = false) {
       let label = String(status).substring(1).toLowerCase()
+      let labelText = this.$t(`Tools.${label}`)
       this.$notify({
-        title: this.$t(`Tools.${label}`),
-        message: '',
+        title: labelText,
+        message: this.$t('Tools.doing', { name: this.connection.clientId }) + labelText,
         duration: 6000,
         type: 'info',
       })
@@ -430,6 +449,9 @@ export default {
       this.$emit('update:messageCount', (messageCount += 1))
     },
     destroyConnection() {
+      if (this.client?.disconnected || this.client?.disconnecting) {
+        return
+      }
       if (!this.client?.end) {
         return
       }
@@ -578,6 +600,7 @@ export default {
         this.times += 1
       })
       this.client.on('disconnect', () => {
+        console.log('discon')
         this.setConnStatus('MDISCONNECTED')
       })
       this.client.on('close', () => {
