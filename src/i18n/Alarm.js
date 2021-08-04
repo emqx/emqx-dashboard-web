@@ -5,11 +5,11 @@ export default {
   },
   currentAlarm: {
     zh: '当前告警',
-    en: 'Current Alarm',
+    en: 'Current Alarms',
   },
   historyAlarm: {
     zh: '历史告警',
-    en: 'History Alarm',
+    en: 'Historical Alarms',
   },
   node: {
     zh: '节点',
@@ -102,5 +102,9 @@ export default {
   second: {
     zh: '次',
     en: 'second',
+  },
+  clearSuccess: {
+    zh: '清除历史告警成功',
+    en: 'The Historical Alarms have been successfully cleared.',
   },
 }

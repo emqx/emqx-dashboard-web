@@ -15,7 +15,7 @@
     </el-row>
 
     <div class="emq-table-footer">
-      <el-pagination
+      <!-- <el-pagination
         v-if="count > 0"
         layout="total, sizes, prev, pager, next"
         :page-sizes="[20, 50, 100, 500]"
@@ -29,32 +29,36 @@
         "
         @current-change="loadTopics"
       >
-      </el-pagination>
+      </el-pagination> -->
+      <common-pagination :count="count" :reload-func="loadTopics"></common-pagination>
     </div>
   </div>
 </template>
 
 <script>
 import { listTopics } from '@/api/common'
+import CommonPagination from '../../components/commonPagination.vue'
 
 export default {
   name: 'Topics',
-
+  components: {
+    CommonPagination,
+  },
   data() {
     return {
       tableData: [],
       searchValue: '',
       lockTable: true,
       params: {
-        page: 1,
-        limit: 20,
+        // page: 1,
+        // limit: 20,
       },
       count: 0,
     }
   },
 
   created() {
-    this.loadTopics()
+    // this.loadTopics()
   },
 
   methods: {
@@ -64,25 +68,21 @@ export default {
         this.loadTopics()
         return
       }
-      this.params.page = 1
-      this.count = 0
-      this.tableData = await listTopics({ topic })
+      // this.params.page = 1
+      await this.loadTopics({ topic, page: 1 })
     },
 
-    async loadTopics(reload, params = {}) {
-      if (reload) {
-        this.params.page = 1
-      }
+    async loadTopics(params = {}) {
+      // if (reload) {
+      //   this.params.page = 1
+      // }
       this.lockTable = true
 
       const res = await listTopics({ ...this.params, ...params }).catch(() => {})
       if (res) {
-        const {
-          data = [],
-          meta: { count = 0 },
-        } = res
+        const { data = [], meta = {} } = res
         this.tableData = data
-        this.count = count
+        this.count = meta.count || this.count
       }
       this.lockTable = false
     },

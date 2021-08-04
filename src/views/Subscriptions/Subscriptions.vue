@@ -63,7 +63,7 @@
     </el-table>
 
     <div class="emq-table-footer">
-      <el-pagination
+      <!-- <el-pagination
         v-if="count > 0"
         layout="total, sizes, prev, pager, next"
         :page-sizes="[20, 50, 100, 500]"
@@ -77,15 +77,16 @@
         "
         @current-change="loadNodeSubscriptions"
       >
-      </el-pagination>
-      <custom-pagination
+      </el-pagination> -->
+      <!-- <custom-pagination
         v-if="count === -1 && tableData.length"
         :hasnext="hasnext"
         :page="params.page"
         @prevClick="handlePrevClick"
         @nextClick="handleNextClick"
       >
-      </custom-pagination>
+      </custom-pagination> -->
+      <common-pagination :count="count" :reload-func="loadNodeSubscriptions"></common-pagination>
     </div>
   </div>
 </template>
@@ -94,12 +95,14 @@
 import CustomPagination from '@/components/CustomPagination.vue'
 import { listNodeSubscriptions } from '@/api/subs'
 import { loadNodes } from '@/api/common'
+import CommonPagination from '../../components/commonPagination.vue'
 
 export default {
   name: 'Subscriptions',
 
   components: {
-    CustomPagination,
+    CommonPagination,
+    // CustomPagination,
   },
 
   data() {
@@ -108,8 +111,8 @@ export default {
       tableData: [],
       hasnext: false,
       params: {
-        page: 1,
-        limit: 20,
+        // page: 1,
+        // limit: 20,
       },
       count: 0,
       lockTable: true,
@@ -123,13 +126,13 @@ export default {
 
   created() {
     this.loadData()
+    // this.loadNodeSubscriptions()
   },
 
   methods: {
     async handleSearch() {
-      const params = this.genQueryParams(this.fuzzyParams)
-      this.count = 0
-      this.loadNodeSubscriptions(true, params)
+      this.params = this.genQueryParams(this.fuzzyParams)
+      this.loadNodeSubscriptions()
     },
     genQueryParams(params) {
       let newParams = {}
@@ -145,31 +148,27 @@ export default {
       return newParams
     },
 
-    handlePrevClick() {
-      if (this.params.page === 1) {
-        return
-      }
-      this.params.page -= 1
-      const params = this.genQueryParams(this.fuzzyParams)
-      this.loadNodeSubscriptions(false, params)
-    },
-    handleNextClick() {
-      if (!this.hasnext) {
-        return
-      }
-      this.params.page += 1
-      const params = this.genQueryParams(this.fuzzyParams)
-      this.loadNodeSubscriptions(false, params)
-    },
+    // handlePrevClick() {
+    //   if (this.params.page === 1) {
+    //     return
+    //   }
+    //   this.params.page -= 1
+    //   const params = this.genQueryParams(this.fuzzyParams)
+    //   this.loadNodeSubscriptions(false, params)
+    // },
+    // handleNextClick() {
+    //   if (!this.hasnext) {
+    //     return
+    //   }
+    //   this.params.page += 1
+    //   const params = this.genQueryParams(this.fuzzyParams)
+    //   this.loadNodeSubscriptions(false, params)
+    // },
     async loadData() {
       const res = await loadNodes().catch(() => {})
-      this.currentNodes = res
-      this.loadNodeSubscriptions()
+      if (res) this.currentNodes = res
     },
-    async loadNodeSubscriptions(reload, params = {}) {
-      if (reload) {
-        this.params.page = 1
-      }
+    async loadNodeSubscriptions(params = {}) {
       this.lockTable = true
       const res = await listNodeSubscriptions(this.nodeName, {
         ...this.params,
@@ -177,13 +176,10 @@ export default {
       }).catch(() => {})
 
       if (res) {
-        const {
-          data,
-          meta: { count = 0, hasnext = false },
-        } = res
+        const { data = [], meta = {} } = res
         this.tableData = data
-        this.count = count
-        this.hasnext = hasnext
+        this.count = meta.count || this.count
+        this.hasnext = meta.hasnext || this.hasnext
       }
 
       this.lockTable = false

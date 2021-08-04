@@ -37,13 +37,20 @@
         </template>
       </el-table-column>
     </el-table>
+    <common-pagination :count="currentAlarmCount" :reload-func="loadData"></common-pagination>
 
     <div class="section-header">
       <div>
         <span> {{ tl('historyAlarm') }} </span>
       </div>
-      <div v-if="!!historyAlarmData.length">
-        <el-button type="danger" size="small" plain>
+      <div>
+        <el-button
+          type="danger"
+          size="small"
+          plain
+          @click="clearHistoryAlarm"
+          :disabled="!historyAlarmData.length"
+        >
           {{ $t('Alarm.clearHistory') }}
         </el-button>
       </div>
@@ -79,49 +86,69 @@
         </template>
       </el-table-column>
     </el-table>
+    <common-pagination :count="historyAlarmData" :reload-func="loadHData"></common-pagination>
   </div>
 </template>
 
 <script>
-import { loadAlarm } from '@/api/common'
+import { loadAlarm, clearHistoryAlarm } from '@/api/common'
 import { getDuration } from '@/common/utils'
 import moment from 'moment'
+import commonPagination from '../../components/commonPagination.vue'
 
 export default {
+  components: { commonPagination },
   name: 'Alarm',
   data() {
     return {
       currentAlarmData: [],
       historyAlarmData: [],
-      currentAlarmMeta: {},
-      historyAlarmMeta: {},
       currentLockTable: true,
       historyLockTable: true,
+      currentAlarmCount: 0,
+      historyAlarmCount: 0,
     }
   },
-  created() {
-    this.loadData()
-    this.loadHData()
-  },
+  // created() {
+  //   this.loadData()
+  //   this.loadHData()
+  // },
   methods: {
     getDuration: getDuration,
     tl(key, collection = 'Alarm') {
       return this.$t(collection + '.' + key)
     },
-
+    async clearHistoryAlarm() {
+      let res = await clearHistoryAlarm().catch(() => {})
+      if (res) {
+        this.$message.success(this.$t('Alarm.clearSuccess'))
+        this.loadHData()
+      }
+    },
     dateFormat(date) {
       let timestamp = Math.floor(+date / 1000)
       return moment(timestamp).format('YYYY-MM-DD HH:mm:ss')
     },
-    async loadData() {
-      let { data, meta } = await loadAlarm().catch(() => {})
-      ;(this.currentAlarmData = data), (this.currentAlarmMeta = meta)
+    async loadData(params = {}) {
+      let res = await loadAlarm(false, params).catch(() => {})
+      if (res) {
+        let { data, meta } = res
+
+        this.currentAlarmData = data
+        this.currentCount = meta.count
+      }
+      // ;(this.currentAlarmData = data), (this.currentAlarmMeta = meta)
       this.currentLockTable = false
       this.$store.dispatch('SET_ALERT_COUNT', this.currentAlarmData.length || 0)
     },
-    async loadHData() {
-      let { data: hdata, meta: hmeta } = await loadAlarm(true).catch(() => {})
-      ;(this.historyAlarmData = hdata), (this.historyAlarmMeta = hmeta)
+    async loadHData(params = {}) {
+      let res = await loadAlarm(true, params).catch(() => {})
+      if (res) {
+        let { data, meta } = res
+        this.historyAlarmCount = meta.count
+        this.historyAlarmData = data
+      }
+      // ;(this.historyAlarmData = hdata), (this.historyAlarmMeta = hmeta)
       this.historyLockTable = false
     },
     getStateText(state) {

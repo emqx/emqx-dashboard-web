@@ -136,7 +136,7 @@
     </el-table>
 
     <div class="emq-table-footer">
-      <el-pagination
+      <!-- <el-pagination
         v-if="count > 0"
         layout="total, sizes, prev, pager, next"
         :page-sizes="[20, 50, 100, 500]"
@@ -150,15 +150,16 @@
         "
         @current-change="loadNodeClients"
       >
-      </el-pagination>
-      <custom-pagination
+      </el-pagination> -->
+      <common-pagination :count="count" :reload-func="loadNodeClients"></common-pagination>
+      <!-- <custom-pagination
         v-if="count === -1 && tableData.length"
         :hasnext="hasnext"
         :page="params.page"
         @prevClick="handlePrevClick"
         @nextClick="handleNextClick"
       >
-      </custom-pagination>
+      </custom-pagination> -->
     </div>
   </div>
 </template>
@@ -168,12 +169,14 @@ import CustomPagination from '@/components/CustomPagination.vue'
 import { disconnectClient, listNodeClients } from '@/api/clients'
 import { loadNodes } from '@/api/common'
 import moment from 'moment'
+import CommonPagination from '../../components/commonPagination.vue'
 
 export default {
   name: 'Clients',
 
   components: {
-    CustomPagination,
+    // CustomPagination,
+    CommonPagination,
   },
   data() {
     return {
@@ -182,8 +185,8 @@ export default {
       lockTable: true,
       hasnext: false,
       params: {
-        page: 1,
-        limit: 20,
+        //   page: 1,
+        //   limit: 20,
       },
       count: 0,
       nodeName: '',
@@ -236,6 +239,7 @@ export default {
 
   created() {
     this.loadData()
+    // this.loadNodeClients()
   },
 
   methods: {
@@ -293,9 +297,8 @@ export default {
     },
 
     async handleSearch() {
-      const params = this.genQueryParams(this.fuzzyParams)
-      this.count = 0
-      this.loadNodeClients(true, params)
+      this.params = this.genQueryParams(this.fuzzyParams)
+      this.loadNodeClients()
     },
     genQueryParams(params) {
       let newParams = {}
@@ -321,32 +324,31 @@ export default {
       }
       return newParams
     },
-    handlePrevClick() {
-      if (this.params.page === 1) {
-        return
-      }
-      this.params.page -= 1
-      const params = this.genQueryParams(this.fuzzyParams)
-      this.loadNodeClients(false, params)
-    },
-    handleNextClick() {
-      if (!this.hasnext) {
-        return
-      }
-      this.params.page += 1
-      const params = this.genQueryParams(this.fuzzyParams)
-      this.loadNodeClients(false, params)
-    },
+    // handlePrevClick() {
+    //   if (this.params.page === 1) {
+    //     return
+    //   }
+    //   this.params.page -= 1
+    //   const params = this.genQueryParams(this.fuzzyParams)
+    //   this.loadNodeClients(false, params)
+    // },
+    // handleNextClick() {
+    //   if (!this.hasnext) {
+    //     return
+    //   }
+    //   this.params.page += 1
+    //   const params = this.genQueryParams(this.fuzzyParams)
+    //   this.loadNodeClients(false, params)
+    // },
     async loadData() {
-      const data = await loadNodes()
-      this.currentNodes = this.currentNodes.concat(data)
-      // this.nodeName = (this.currentNodes[0] || {}).node
-      this.loadNodeClients()
+      const data = await loadNodes().catch(() => {})
+      if(data)
+      this.currentNodes = data
     },
-    async loadNodeClients(reload, params = {}) {
-      if (reload) {
-        this.params.page = 1
-      }
+    async loadNodeClients(params = {}) {
+      // if (reload) {
+      //   this.params.page = 1
+      // }
       this.lockTable = true
 
       const res = await listNodeClients(this.nodeName, {
@@ -354,10 +356,13 @@ export default {
         ...params,
       }).catch(() => {})
       if (res) {
-        const { data = [], meta } = res
+        const { data = [], meta = {} } = res
         this.tableData = data
-        this.count = meta.count
-        this.hasnext = meta.hasnext
+        this.count = meta.count || this.count
+        // this.hasnext = meta.hasnext || this.hasnext
+      } else {
+        this.tableData = []
+        this.count = 0
       }
       this.lockTable = false
     },

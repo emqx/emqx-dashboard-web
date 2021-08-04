@@ -37,13 +37,15 @@ export async function loadNodes() {
 }
 
 //Alarms
-export async function loadAlarm(history = false) {
-  const list = await http.get('/alarms' + (history === null | undefined ? '' : '?activated=' + !history))
-  return list
+export async function loadAlarm(history = false, params = {}) {
+  return http.get('/alarms', { params: { activated: String(!history), ...params } })
+}
+
+export async function clearHistoryAlarm() {
+  return http.delete('/alarms')
 }
 
 //cluster
-
 export const loadCluster = async () => {
   const res = await http.get('/cluster')
   const { config } = res
