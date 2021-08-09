@@ -13,9 +13,15 @@ export default new Vuex.Store({
       const localStorageLanguage = localStorage.getItem('language')
       return localStorageLanguage || browserLanguage || 'en'
     },
+    set lang(val) {
+      localStorage.setItem('language', val)
+    },
     get leftBarCollapse() {
       const collapse = localStorage.getItem('leftBarCollapse')
       return collapse === null ? false : JSON.parse(collapse)
+    },
+    set leftBarCollapse(val) {
+      localStorage.setItem('leftBarCollapse', val)
     },
     alertCount: 0,
     get selectedModule() {
@@ -33,9 +39,7 @@ export default new Vuex.Store({
       commit('SET_ALERT_COUNT', count)
     },
     SET_LANGUAGE({ commit }, lang) {
-      localStorage.setItem('language', lang)
       commit('SET_LANGUAGE', lang)
-      location.reload()
     },
     SET_LEFT_BAR_COLLAPSE({ commit }, collapse = false) {
       commit('SET_LEFT_BAR_COLLAPSE', !!collapse)
@@ -68,13 +72,13 @@ export default new Vuex.Store({
     },
     SET_LEFT_BAR_COLLAPSE(state, collapse) {
       state.leftBarCollapse = collapse
-      localStorage.setItem('leftBarCollapse', collapse)
     },
     SET_LANGUAGE(state, lang) {
       state.lang = lang
+      location.reload()
     },
     SET_REQ_CHANGE(state, addOrDone) {
       addOrDone ? ++state.request_queue : --state.request_queue
-    }
+    },
   },
 })

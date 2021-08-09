@@ -86,7 +86,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <common-pagination :count="historyAlarmData" :reload-func="loadHData"></common-pagination>
+    <common-pagination :count="historyAlarmCount" :reload-func="loadHData"></common-pagination>
   </div>
 </template>
 

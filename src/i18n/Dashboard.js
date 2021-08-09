@@ -1,4 +1,8 @@
 export default {
+  networkGraph: {
+    en: 'Network Graph',
+    zh: '拓扑图',
+  },
   shareSubscription: {
     zh: '共享订阅',
     en: 'Share Subscription',

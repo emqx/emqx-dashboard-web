@@ -141,9 +141,9 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         defaultValue =
           typeof defaultValue === 'string'
             ? {
-                file: '',
-                filename: defaultValue,
-              }
+              file: '',
+              filename: defaultValue,
+            }
             : defaultValue
         elType = 'file'
         break
@@ -355,9 +355,27 @@ export function ruleNewSqlParser(sql, e) {
   }
 }
 
+export function getProgressColor(val, primaryC) {
+  let color = primaryC
+  let num = parseInt(val)
+  if (num >= 100) {
+    color = '#E34242FF'
+  } else if (num >= 85 && num < 100) {
+    color = '#FB9237FF'
+  }
+  return color
+}
+
+export const calcPercentage = (n1, n2) => {
+  let p = (parseInt(n1) / parseInt(n2)) * 100
+  if (p && p < 1) return 1
+  if (!p) return 0
+  return p
+}
+
 export function getDateDiff(duration) {
   // get total seconds value (s)
-  const dateDiff = Math.floor(duration / 1000)
+  const dateDiff = Math.floor(duration)
   const days = Math.floor(dateDiff / (3600 * 24))
 
   const daysRemainder = dateDiff % (3600 * 24)

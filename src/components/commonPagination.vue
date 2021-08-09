@@ -20,23 +20,24 @@
   </el-pagination>
 </template>
 <script>
-import { defineComponent, onMounted } from '@vue/composition-api'
+import { defineComponent, onMounted, ref } from '@vue/composition-api'
 
 export default defineComponent({
   props: {
     count: Number,
     reloadFunc: Function,
   },
-  data: function () {
-    return {
-      page: 1,
-      limit: 20,
-    }
-  },
   setup(prop) {
+    let page = ref(1)
+    let limit = ref(20)
     onMounted(() => {
-      prop.reloadFunc({ page: 1, limit: 20 })
+      prop.reloadFunc({ page: page.value, limit: limit.value })
     })
+
+    return {
+        page,
+        limit,
+    }
   },
 })
 </script>

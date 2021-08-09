@@ -50,17 +50,17 @@ export default {
       type: String,
       default: '190px',
     },
-    gridRight: {
-      type: String,
-      default: '5%',
-    },
-    gridLeft: {
-      type: String,
-      default: '2%',
-    },
+    // gridRight: {
+    //   type: String,
+    //   default: '5%',
+    // },
+    // gridLeft: {
+    //   type: String,
+    //   default: '2%',
+    // },
     legendBottom: {
       type: String,
-      default: '-5px',
+      default: '0px',
     },
   },
 
@@ -174,11 +174,11 @@ export default {
       }
       this.chart.setOption(option)
     },
-    reDrawEchart() {
-      this.chart.dispose()
-      this.chart = undefined
-      this.drawChart()
-    },
+    // reDrawEchart() {
+    //   this.chart.dispose()
+    //   this.chart = undefined
+    //   this.drawChart()
+    // },
   },
 }
 </script>

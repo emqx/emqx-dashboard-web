@@ -1,7 +1,11 @@
 <template>
   <div class="nav-header" :style="{ left: leftBarCollapse ? '201px' : '80px' }">
     <div>
-      <div class="func-item" @click="toggleLeftNarCollapse">
+      <div
+        class="func-item"
+        @click="()=>{ $store.dispatch('SET_LEFT_BAR_COLLAPSE', !this.leftBarCollapse)
+}"
+      >
         <i :class="['iconfont', leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"> </i>
       </div>
     </div>
@@ -13,11 +17,7 @@
       <el-tooltip effect="dark" :content="alertText" placement="bottom" :visible-arrow="false">
         <div class="alert-info func-item">
           <el-badge :is-dot="!!alertCount">
-            <router-link
-              to="/alarm"
-              class="iconx icon-alarm"
-              @click="clearAlert"
-            ></router-link>
+            <router-link to="/alarm" class="iconx icon-alarm"></router-link>
           </el-badge>
         </div>
       </el-tooltip>
@@ -76,7 +76,7 @@ export default {
     },
 
     username() {
-      return this.$store.state.user.username || this.$t('components.notLoggedIn')
+      return this.$store.state.user.username
     },
     alertText() {
       return this.alertCount > 0
@@ -122,9 +122,6 @@ export default {
       this.setHtmlLangAttr(command)
       this.$store.dispatch('SET_LANGUAGE', command)
     },
-    clearAlert() {
-      this.alertCount = 0
-    },
     async loadData() {
       const alert = await loadAlarm()
       this.$store.dispatch('SET_ALERT_COUNT', (alert || []).length)
@@ -135,10 +132,6 @@ export default {
         this.$message.success(this.$t('components.loggedOut'))
         this.$router.push('/login')
       })
-    },
-    toggleLeftNarCollapse() {
-      const collapse = !this.$store.state.leftBarCollapse
-      this.$store.dispatch('SET_LEFT_BAR_COLLAPSE', collapse)
     },
     handleDropdownCommand(command) {
       if (!command) {

@@ -34,6 +34,7 @@
             <el-progress
               :stroke-width="16"
               :percentage="calcPercentage(row.process_used, row.process_available)"
+              :format="()=>{}"
             ></el-progress>
           </el-tooltip>
         </template>
@@ -83,7 +84,7 @@
 </template>
 <script>
 import { loadNodes, loadStats } from '@/api/common'
-import { getDuration } from '@/common/utils'
+import { getDuration, calcPercentage } from '@/common/utils'
 import { defineComponent, ref, reactive, onMounted } from '@vue/composition-api'
 
 export default defineComponent({
@@ -107,12 +108,6 @@ export default defineComponent({
     }
     const caseInsensitiveCompare = (w, k) => {
       return !!String.prototype.match.call(w, new RegExp(k, 'i'))
-    }
-    const calcPercentage = (n1, n2) => {
-      let p = (+n1 / +n2) * 100
-      if (p && p < 1) return 1
-      if (!p) return 0
-      return p
     }
 
     onMounted(() => {

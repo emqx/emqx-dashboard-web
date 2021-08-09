@@ -1,6 +1,6 @@
 <template>
   <div class="polyline-cards">
-    <el-collapse-transition v-if="bigChartItem.text">
+    <!-- <el-collapse-transition v-if="bigChartItem.text">
       <div class="big-chart">
         <el-card shadow="never" class="big-card">
           <div class="card-title">{{ bigChartItem.text }}</div>
@@ -18,14 +18,14 @@
           ></polyline-chart>
         </el-card>
       </div>
-    </el-collapse-transition>
+    </el-collapse-transition> -->
     <el-row>
       <div v-for="item in dataTypeFilter" :key="item.value">
         <template v-if="item !== bigChartItem">
           <el-col :span="8">
             <el-card shadow="never" class="polyline-card">
               <div class="card-title">{{ item.text }}</div>
-              <span class="enlarge-icon" @click="bigChartItem = item"></span>
+              <!-- <span class="enlarge-icon" @click="bigChartItem = item"></span> -->
               <polyline-chart
                 :chart-id="`${item.value}-polyline`"
                 :y-title="metricTitles"
@@ -116,12 +116,12 @@ export default {
       return Array.from({ length }, () => ({ xData: [], yData: [] }))
     },
     _formatTime(time) {
-      return Moment(time).utcOffset(0).format('HH:mm')
+      return Moment(time).format('HH:mm')
     },
     loadMetricsLogData() {
       try {
         this.dataTypeList.forEach(async (typeName) => {
-          const data = await loadMetricsLog(false, typeName)
+          const data = await loadMetricsLog(typeName)
           this.metricTitles = Object.keys(data)
           this.metricLog[typeName] = this.chartDataFill(this.metricTitles.length)
           const currentData = this.metricLog[typeName]
@@ -139,7 +139,7 @@ export default {
     },
     setMetricsChartRealTime() {
       this.dataTypeList.forEach(async (typeName) => {
-        const data = await loadMetricsLog(false, typeName)
+        const data = await loadMetricsLog(typeName)
         const currentData = this.metricLog[typeName]
         this.metricTitles.forEach((key, index) => {
           const nodeMetric = data[key]
@@ -188,17 +188,17 @@ export default {
     cursor: pointer;
   }
 
-  .enlarge-icon {
-    background: url('../../../assets/img/enlarge.png') no-repeat;
-    right: 10px;
-    bottom: 10px;
-  }
+  // .enlarge-icon {
+  //   background: url('../../../assets/img/enlarge.png') no-repeat;
+  //   right: 10px;
+  //   bottom: 10px;
+  // }
 
-  .shrink-icon {
-    background: url('../../../assets/img/shrink.png') no-repeat;
-    right: 15px;
-    bottom: 15px;
-  }
+  // .shrink-icon {
+  //   background: url('../../../assets/img/shrink.png') no-repeat;
+  //   right: 15px;
+  //   bottom: 15px;
+  // }
 
   .big-card {
     height: 480px;

@@ -86,9 +86,11 @@
           </el-card>
         </el-col>
       </div>
+
+      <nodes-graph class="nodes-graph"></nodes-graph>
     </div>
 
-    <polyline-cards></polyline-cards>
+    <!-- <polyline-cards></polyline-cards> -->
 
     <div v-if="false" class="license-card">
       <div class="lisence-title">
@@ -181,29 +183,25 @@
     </el-dialog>
 
     <!-- <metrics-charts></metrics-charts> -->
-    <nodes-graph></nodes-graph>
   </div>
 </template>
 
 <script>
 import Moment from 'moment'
 import { loadCurrentMetrics, loadLicenseInfo } from '@/api/common'
-// import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
 // import PercentageCards from './components/PercentageCards'
 import PolylineCards from './components/PolylineCards'
-import MetricsCharts from './components/MetricsCharts.vue'
 import NodesGraph from './components/NodesGraph.vue'
+import { calcPercentage, getProgressColor } from '@/common/utils'
 
 export default {
   name: 'Overview',
 
   components: {
-    // NodeBasicCard,
     SimpleLine,
     // PercentageCards,
-    PolylineCards,
-    // MetricsCharts,
+    // PolylineCards,
     NodesGraph,
   },
 
@@ -259,11 +257,7 @@ export default {
     licensePercentage() {
       const { connection } = this.currentMetrics
       const { max_connections } = this.license
-      const value = Math.floor((connection / max_connections) * 100)
-      if (value < 2) {
-        return 2
-      }
-      return value
+      return calcPercentage(connection, max_connections)
     },
     formatConnection() {
       const { connection } = this.currentMetrics
@@ -296,7 +290,11 @@ export default {
       return number.replace(/(\d{1,3})(?=(\d{3})+($|\.))/g, '$1,')
     },
     async loadLicenseData() {
-      this.license = await loadLicenseInfo()
+      let res = await loadLicenseInfo().catch(() => {})
+      if (!res) {
+        return
+      }
+      this.license = res
       // evaluation 许可证
       if (
         this.license.customer_type === this.evaluation &&
@@ -312,7 +310,7 @@ export default {
       }
     },
     async loadData() {
-      const state = await loadCurrentMetrics()
+      const state = await loadCurrentMetrics().catch(() => {})
       if (!state) {
         return
       }
@@ -337,16 +335,7 @@ export default {
         }
       })
     },
-    getProgressColor(val, primaryC) {
-      let color = primaryC
-      let num = parseInt(val)
-      if (num >= 100) {
-        color = '#E34242FF'
-      } else if (num >= 85 && num < 100) {
-        color = '#FB9237FF'
-      }
-      return color
-    },
+    getProgressColor: getProgressColor,
   },
 }
 </script>
@@ -354,10 +343,15 @@ export default {
 <style lang="scss" scoped>
 .basic-info {
   display: flex;
-  .basic-graph {
+  .basic-graph,
+  .nodes-graph {
     overflow: hidden;
     width: 50%;
     // display: inline-grid;
+  }
+  .nodes-graph {
+    margin: 10px;
+    border: 1px solid #ececef;
   }
 }
 .app-card {
