@@ -119,7 +119,7 @@ export default {
       nodeName: '',
       currentNodes: [],
       fuzzyParams: {
-        match: '_match_topic',
+        match: 'match_topic',
       },
     }
   },

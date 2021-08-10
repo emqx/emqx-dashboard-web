@@ -303,8 +303,8 @@ export default {
     genQueryParams(params) {
       let newParams = {}
       const {
-        _like_clientid,
-        _like_username,
+        like_clientid,
+        like_username,
         ip_address,
         conn_state,
         proto_name,
@@ -312,8 +312,8 @@ export default {
         _connected_at,
       } = params
       newParams = {
-        _like_clientid: _like_clientid || undefined,
-        _like_username: _like_username || undefined,
+        like_clientid: like_clientid || undefined,
+        like_username: like_username || undefined,
         ip_address: ip_address || undefined,
         conn_state: conn_state || undefined,
         proto_name: proto_name || undefined,
@@ -342,8 +342,7 @@ export default {
     // },
     async loadData() {
       const data = await loadNodes().catch(() => {})
-      if(data)
-      this.currentNodes = data
+      if (data) this.currentNodes = data
     },
     async loadNodeClients(params = {}) {
       // if (reload) {

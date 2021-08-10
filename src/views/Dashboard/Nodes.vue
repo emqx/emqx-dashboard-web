@@ -18,8 +18,8 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column prop="version" :label="tl('version')"> </el-table-column>
-      <el-table-column prop="uptime" :label="tl('uptime')">
+      <el-table-column prop="version" :label="tl('version')" sortable> </el-table-column>
+      <el-table-column prop="uptime" :label="tl('uptime')" sortable>
         <template #default="{ row }">
           {{ getDuration(row.uptime) }}
         </template>
@@ -34,47 +34,47 @@
             <el-progress
               :stroke-width="16"
               :percentage="calcPercentage(row.process_used, row.process_available)"
-              :format="()=>{}"
+              :format="() => {}"
             ></el-progress>
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column :label="`CPU ${tl('load')}`">
+      <el-table-column :label="`CPU ${tl('load')}`" sortable>
         <template #default="{ row }"> {{ row.load1 }}/{{ row.load5 }}/{{ row.load15 }} </template>
       </el-table-column>
-      <el-table-column :label="tl('memory')">
+      <el-table-column :label="tl('memory')" sortable>
         <template #default="{ row }"> {{ row.memory_used }}/{{ row.memory_total }} </template>
       </el-table-column>
-      <el-table-column :label="tl('maxFds')" prop="max_fds"></el-table-column>
+      <el-table-column :label="tl('maxFds')" prop="max_fds" sortable></el-table-column>
     </el-table>
 
     <div class="section-header">{{ tl('nodeStatis') }}</div>
     <el-table :data="stats" v-loading.lock="statsLockTable">
-      <el-table-column prop="node" :label="tl('nodeName')"> </el-table-column>
-      <el-table-column :label="tl('currentConnection')">
+      <el-table-column prop="node" :label="tl('nodeName')" sortable> </el-table-column>
+      <el-table-column :label="tl('currentConnection')" sortable>
         <template #default="{ row }">
           {{ row['connections.count'] }}/{{ row['connections.max'] }}
         </template>
       </el-table-column>
-      <el-table-column :label="tl('topics')">
+      <el-table-column :label="tl('topics')" sortable>
         <template #default="{ row }"> {{ row['topics.count'] }}/{{ row['topics.max'] }} </template>
       </el-table-column>
-      <el-table-column :label="tl('retained')">
+      <el-table-column :label="tl('retained')" sortable>
         <template #default="{ row }">
           {{ row['retained.count'] }}/{{ row['retained.max'] }}
         </template>
       </el-table-column>
-      <el-table-column :label="tl('session')">
+      <el-table-column :label="tl('session')" sortable>
         <template #default="{ row }">
           {{ row['sessions.count'] }}/{{ row['sessions.max'] }}
         </template>
       </el-table-column>
-      <el-table-column :label="tl('subscription')">
+      <el-table-column :label="tl('subscription')" sortable>
         <template #default="{ row }">
           {{ row['subscriptions.count'] }}/{{ row['subscriptions.max'] }}
         </template>
       </el-table-column>
-      <el-table-column :label="tl('shareSubscription')">
+      <el-table-column :label="tl('shareSubscription')" sortable>
         <template #default="{ row }">
           {{ row['subscriptions.shared.count'] }}/{{ row['subscriptions.shared.max'] }}
         </template>
