@@ -90,7 +90,7 @@
       <nodes-graph class="nodes-graph"></nodes-graph>
     </div>
 
-    <!-- <polyline-cards></polyline-cards> -->
+    <polyline-cards></polyline-cards>
 
     <div v-if="false" class="license-card">
       <div class="lisence-title">
@@ -201,12 +201,9 @@ export default {
   components: {
     SimpleLine,
     // PercentageCards,
-    // PolylineCards,
+    PolylineCards,
     NodesGraph,
   },
-
-  props: {},
-
   data() {
     return {
       evaluation: 10,
@@ -216,19 +213,7 @@ export default {
       licenseTipVisible: false,
       isLicenseExpiry: false,
       noprompt: false,
-      license: {
-        customer: '',
-        email: '',
-        plugins: '',
-        max_connections: 100000,
-        issued_at: '',
-        expiry_at: '',
-        vendor: '',
-        version: '',
-        type: 'trial',
-        expiry: false,
-        customer_type: 0,
-      },
+      license: {},
       currentMetricsLogs: {
         received: {
           x: Array(32).fill('N/A'),
@@ -268,11 +253,11 @@ export default {
 
   created() {
     this.loadData()
-    this.loadLicenseData()
-    clearInterval(this.timerData)
+    // this.loadLicenseData()
+    // clearInterval(this.timerData)
     this.timerData = setInterval(() => {
       this.loadData()
-    }, 10 * 1000)
+    }, 30 * 1000)
   },
 
   beforeDestroy() {
@@ -329,7 +314,7 @@ export default {
         const currentValue = state[key] || 0
         this.currentMetricsLogs[key].x.push(this.getNow())
         this.currentMetricsLogs[key].y.push(currentValue)
-        if (this.currentMetricsLogs[key].x.length >= 32) {
+        if (this.currentMetricsLogs[key].x.length >= 16) {
           this.currentMetricsLogs[key].x.shift()
           this.currentMetricsLogs[key].y.shift()
         }

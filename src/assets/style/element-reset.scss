@@ -176,6 +176,9 @@
   &::before{
     height: 0;
   }
+  .el-loading-mask{
+    z-index: 99;
+  }
 }
 
 .el-pagination {

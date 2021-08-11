@@ -355,6 +355,11 @@ export function ruleNewSqlParser(sql, e) {
   }
 }
 
+export function formatNumber(num) {
+  let number = String(parseInt(num))
+  return number.replace(/(\d{1,3})(?=(\d{3})+($|\.))/g, '$1,')
+}
+
 export function getProgressColor(val, primaryC) {
   let color = primaryC
   let num = parseInt(val)

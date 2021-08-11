@@ -2,7 +2,7 @@
   <div class="graph-wrapper">
     <div class="graph-title">{{ $t('Dashboard.networkGraph') }}</div>
     <div class="graph-entity" ref="graph" v-loading.lock="infoLoading">
-      <div id="graph-entity" ></div>
+      <div id="graph-entity"></div>
       <div class="node-detail" v-if="!infoLoading">
         <div class="node-info">
           <div class="node-title">{{ currentInfo[0]['node'] }}</div>
@@ -56,7 +56,15 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, onMounted, nextTick, computed } from '@vue/composition-api'
+import {
+  defineComponent,
+  ref,
+  reactive,
+  onMounted,
+  nextTick,
+  computed,
+  onUnmounted,
+} from '@vue/composition-api'
 import * as ddd from 'd3'
 import { loadNodes, loadStats } from '@/api/common'
 import { getDuration, calcPercentage, getProgressColor } from '@/common/utils'
@@ -73,11 +81,14 @@ export default defineComponent({
     let graph = ref(undefined)
     let currentInfo = ref([{}, {}])
     let infoLoading = ref(true)
+    let svg = ref({})
 
     let getNodes = async () => {
       let res = await loadNodes().catch(() => {})
       if (res) {
         nodes.value = res
+      } else {
+        return Promise.reject()
       }
     }
     let getStats = async () => {
@@ -87,6 +98,8 @@ export default defineComponent({
         res.forEach((v) => {
           nodeStat.value[v.node] = v
         })
+      } else {
+        return Promise.reject()
       }
     }
     let checkNode = (event, n) => {
@@ -116,10 +129,21 @@ export default defineComponent({
     onMounted(async () => {
       await Promise.all([getNodes(), getStats()]).catch(() => {})
       nextTick((vue) => {
-        let graphDom = graph.value && graph.value.getBoundingClientRect()
+        let graphDom = graph?.value?.getBoundingClientRect() || { width: 200, height: 100 }
         // let gMargin = 10
+        window.addEventListener('resize', resizeFn)
 
-        let svg = ddd
+        onUnmounted(() => {
+          window.removeEventListener('resize', resizeFn)
+        })
+
+        let resizeFn = () => {
+          let graphDom = graph?.value?.getBoundingClientRect() || { width: 200, height: 100 }
+          let reCalcWidth = Math.min(graphDom.width / 2, graphDom.height)
+          svg.attr('width', Math.floor(reCalcWidth)).attr('height', Math.floor(reCalcWidth))
+        }
+
+        svg = ddd
           .select('#graph-entity')
           .append('svg')
           .attr('width', Math.floor(graphDom.width / 2))
@@ -227,8 +251,9 @@ export default defineComponent({
 .graph-entity {
   flex-grow: 1;
   display: flex;
-  // padding: 5px;
+  justify-content: space-evenly;
 }
+
 .node-detail {
   width: 50%;
   display: flex;
@@ -261,7 +286,7 @@ export default defineComponent({
   }
 
   .el-progress {
-    line-height: 22px;
+    line-height: 1.8;
   }
 }
 </style>
