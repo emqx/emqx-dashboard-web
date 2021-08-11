@@ -17,7 +17,7 @@
         <el-row class="form-item-row">
           <el-col :span="8">
             <el-select v-model="fuzzyParams.match" class="match" size="small">
-              <el-option label="filter" value="_match_topic"></el-option>
+              <el-option label="filter" value="match_topic"></el-option>
               <el-option label="topic" value="topic"></el-option>
             </el-select>
           </el-col>
@@ -93,7 +93,7 @@
 
 <script>
 import CustomPagination from '@/components/CustomPagination.vue'
-import { listNodeSubscriptions } from '@/api/subs'
+import { listNodeSubscriptions } from '@/api/common'
 import { loadNodes } from '@/api/common'
 import CommonPagination from '../../components/commonPagination.vue'
 

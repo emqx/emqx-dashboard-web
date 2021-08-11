@@ -22,14 +22,11 @@ export function loadMetrics() {
 }
 
 export function loadCurrentMetrics() {
-  return http.get('/monitor/current_metrics')
+  return http.get('/monitor/current')
 }
 
 export function loadMetricsLog(type) {
-  if (type !== 'basic') {
-    return http.get(`/monitor/metrics/${type}`)
-  }
-  return http.get('/monitor/metrics')
+  return http.get('/monitor', { params: { counter: type } })
 }
 
 export async function loadNodes() {
@@ -74,4 +71,16 @@ export const forceLeaveNode = async (nodename) => {
 //topics
 export const listTopics = (params = {}) => {
   return http.get('/routes' + (params.topic ? `/${encodeURIComponent(topic)}` : ''), { params })
+}
+
+// 获取订阅
+export function listSubscriptions(params = {}) {
+  return http.get('/subscriptions', { params })
+}
+
+// 获取单个节点下的订阅
+export function listNodeSubscriptions(nodeName, params = {}) {
+  const reqUrl =
+    nodeName === 'all' || !nodeName ? '/subscriptions' : `/nodes/${nodeName}/subscriptions`
+  return http.get(reqUrl, { params })
 }
