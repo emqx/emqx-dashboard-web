@@ -4,8 +4,8 @@
       <el-aside :style="{ width: leftBarCollapse ? '80px' : '200px' }">
         <router-link to="/">
           <div :class="['logo', leftBarCollapse ? 'logo-colap' : '']">
-            <img class="logo-img" src="@/assets/img/logo-broker@2x.png" alt="broker" v-if="false" />
-            <img class="logo-img-ent" src="@/assets/img/logo-ent@2x.png" alt="enterprise" />
+            <img class="logo-img" src="@/assets/img/logo-broker@2x.png" alt="broker" />
+            <img class="logo-img-ent" src="@/assets/img/logo-ent@2x.png" alt="enterprise" v-if="false"/>
           </div>
         </router-link>
         <left-bar></left-bar>

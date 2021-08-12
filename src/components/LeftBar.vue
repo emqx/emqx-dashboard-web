@@ -95,6 +95,8 @@ export default {
       },
     ]
 
+    let system = [{ title: this.$t('components.users'), path: '/users' }]
+
     this.menus = [
       {
         title: this.$t('components.monitoring'),
@@ -105,6 +107,11 @@ export default {
         title: this.$t('components.management'),
         icon: 'icon-yibiaopan',
         c: management,
+      },
+      {
+        title: this.$t('components.system'),
+        icon: 'icon-yibiaopan',
+        c: system,
       },
       // {
       //   title: this.$t('components.authentication'),

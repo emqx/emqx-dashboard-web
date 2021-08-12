@@ -163,6 +163,10 @@ export default {
     zh: '创建用户成功',
     en: 'Create User Success',
   },
+  changePassSuccess:{
+    zh: '修改密码成功',
+    en: 'Changing Password Success',
+  },
   passwordLength: {
     zh: '密码长度为 3~32 位',
     en: 'Password length is 3~32',

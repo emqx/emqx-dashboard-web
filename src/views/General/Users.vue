@@ -1,23 +1,25 @@
 <template>
   <div class="users app-wrapper">
-    <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
-      {{ $t('Base.create') }}
-    </el-button>
+    <div class="section-header">
+      <div></div>
+      <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog()">
+        {{ $t('Base.create') }}
+      </el-button>
+    </div>
 
-    <el-table :data="tableData">
+    <el-table :data="tableData" v-loading.lock="lockTable">
       <el-table-column sortable prop="username" :label="$t('General.userName')"></el-table-column>
-      <el-table-column sortable prop="tags" :label="$t('General.remark')"></el-table-column>
+      <el-table-column sortable prop="tag" :label="$t('General.remark')"></el-table-column>
       <el-table-column :label="$t('Base.operation')">
         <template slot-scope="{ row }">
           <el-button plain size="mini" @click="showDialog('edit', row)"
             >{{ $t('Base.edit') }}
           </el-button>
-          <el-button
-            :disabled="row.tags === 'administrator' || row.username === 'admin'"
-            type="danger"
-            size="mini"
-            plain
-            @click="deleteConfirm(row)"
+          <el-button plain size="mini" @click="showDialog('chPass', row)">{{
+            $t('General.changePassword')
+          }}</el-button>
+
+          <el-button type="danger" size="mini" plain @click="deleteConfirm(row)"
             >{{ $t('Base.delete') }}
           </el-button>
         </template>
@@ -25,38 +27,41 @@
     </el-table>
 
     <el-dialog
-      width="520px"
-      :title="accessType === 'edit' ? $t('General.editorUser') : $t('General.creatingUser')"
+      :title="
+        accessType === 'edit'
+          ? $t('General.editorUser')
+          : accessType === 'chPass'
+          ? $t('General.changePassword')
+          : $t('General.creatingUser')
+      "
       :visible.sync="dialogVisible"
       @close="clearInput"
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
-        <el-form-item prop="username" :label="$t('General.userName')">
+        <el-form-item
+          v-if="accessType !== 'chPass'"
+          prop="username"
+          :label="$t('General.userName')"
+        >
           <el-input v-model="record.username" :disabled="accessType === 'edit'"></el-input>
         </el-form-item>
-        <el-form-item prop="tags" :label="$t('General.remark')">
-          <el-input v-model="record.tags"></el-input>
+        <el-form-item v-if="accessType !== 'chPass'" prop="tag" :label="$t('General.remark')">
+          <el-input v-model="record.tag"></el-input>
         </el-form-item>
-        <el-form-item
-          v-if="accessType !== 'edit' || allowChange"
-          prop="password"
-          :label="accessType === 'edit' ? $t('General.oldPassword') : $t('General.password')"
-        >
+        <el-form-item v-if="accessType !== 'edit'" prop="password" :label="$t('General.password')">
           <el-input v-model="record.password" type="password"></el-input>
         </el-form-item>
-        <el-form-item v-if="allowChange" prop="newPassword" :label="$t('General.newPassword')">
-          <el-input v-model="record.newPassword" type="password"></el-input>
-        </el-form-item>
-        <el-form-item
-          v-if="allowChange"
-          prop="repeatPassword"
-          :label="$t('General.confirmPassword')"
-        >
-          <el-input v-model="record.repeatPassword" type="password"></el-input>
-        </el-form-item>
-        <el-link v-if="accessType === 'edit'" :underline="false" @click="togglePassword">
+        <div v-if="accessType === 'chPass'">
+          <el-form-item prop="newPassword" :label="$t('General.newPassword')">
+            <el-input v-model="record.newPassword" type="password"></el-input>
+          </el-form-item>
+          <el-form-item prop="repeatPassword" :label="$t('General.confirmPassword')">
+            <el-input v-model="record.repeatPassword" type="password"></el-input>
+          </el-form-item>
+        </div>
+        <!-- <el-link v-if="accessType === 'edit'" :underline="false" @click="togglePassword">
           {{ allowChange ? $t('General.dontChangePassword') : $t('General.changePassword') }}
-        </el-link>
+        </el-link> -->
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
@@ -86,8 +91,9 @@ export default {
     return {
       dialogVisible: false,
       tableData: [],
+      lockTable: true,
       accessType: '',
-      allowChange: false,
+      // allowChange: false,
       record: {},
       rules: {
         username: [{ required: true, message: this.$t('General.enterOneUserName') }],
@@ -135,75 +141,91 @@ export default {
 
   methods: {
     clearInput() {
-      if (this.$refs.recordForm) {
-        this.$refs.recordForm.resetFields()
-      }
+      this.$refs?.recordForm?.resetFields()
     },
     async loadData() {
-      this.tableData = await loadUser()
-    },
-    showDialog(type, item) {
-      this.record = {
-        username: '',
-        tags: '',
+      let res = await loadUser().catch(() => {})
+      if (res) {
+        this.tableData = res
       }
-      this.accessType = 'create'
+      this.lockTable = false
+    },
+    showDialog(type = 'create', item = {}) {
+      this.dialogVisible = true
+
       if (type === 'edit') {
         Object.assign(this.record, item)
         this.accessType = 'edit'
+      } else if (type === 'chPass') {
+        this.accessType = 'chPass'
+        this.record = {
+          password: '',
+          newPassword: '',
+          repeatPassword: '',
+        }
+      } else {
+        this.record = {
+          username: '',
+          tags: '',
+          password: '',
+        }
+        this.accessType = 'create'
       }
-      this.dialogVisible = true
     },
     closeDialog() {
       this.dialogVisible = false
-      this.allowChange = false
+      // this.allowChange = false
     },
-    togglePassword() {
-      this.allowChange = !this.allowChange
-      // 取消修改密码，删除密码数据
-      if (!this.allowChange) {
-        this.record = {
-          tags: this.record.tags,
-          username: this.record.username,
-        }
-      }
-    },
+    // togglePassword() {
+    //   // this.allowChange = !this.allowChange
+    //   // 取消修改密码，删除密码数据
+    //   if (!this.allowChange) {
+    //     this.record = {
+    //       tags: this.record.tags,
+    //       username: this.record.username,
+    //     }
+    //   }
+    // },
     async save() {
-      /* eslint-disable */
       const vue = this
-      this.$refs.recordForm.validate(function (valid) {
-        if (!valid) {
-          return false
+      let validation = await this.$refs.recordForm.validate().catch(() => {})
+
+      if (!validation) {
+        return
+      }
+      const { username } = vue.record
+      if (vue.accessType === 'edit') {
+        updateUser(username, vue.record).then(async () => {
+          // if (vue.allowChange) {
+          //   const passwordData = {
+          //     new_pwd: vue.record.newPassword,
+          //     old_pwd: vue.record.password,
+          //   }
+          //   await changePassword(username, passwordData)
+          //   vue.$store.dispatch('UPDATE_USER_INFO', { username, password })
+          // }
+          vue.$message.success(vue.$t('Base.editSuccess'))
+          vue.dialogVisible = false
+          // vue.allowChange = false
+          // vue.accessType = ''
+          // vue.record = {}
+          vue.loadData()
+        })
+      } else if (accessType === 'chPass') {
+        let res = await changePassword(username).catch(() => {})
+        if (res) {
+          vue.$message.success(vue.$t('General.changePassSuccess'))
+          vue.dialogVisible = false
         }
-        if (vue.accessType === 'edit') {
-          const { username, password } = vue.record
-          updateUser(username, vue.record).then(async () => {
-            if (vue.allowChange) {
-              const passwordData = {
-                new_pwd: vue.record.newPassword,
-                old_pwd: vue.record.password,
-              }
-              await changePassword(username, passwordData)
-              // 更新当前用户
-              vue.$store.dispatch('UPDATE_USER_INFO', { username, password })
-            }
-            vue.$message.success(vue.$t('Base.editSuccess'))
-            vue.dialogVisible = false
-            vue.allowChange = false
-            vue.accessType = ''
-            vue.record = {}
-            vue.loadData()
-          })
-        } else {
-          createUser(vue.record).then(() => {
-            vue.$message.success(vue.$t('General.createUserSuccess'))
-            vue.dialogVisible = false
-            vue.accessType = ''
-            vue.record = {}
-            vue.loadData()
-          })
-        }
-      })
+      } else {
+        createUser(vue.record).then(() => {
+          vue.$message.success(vue.$t('General.createUserSuccess'))
+          vue.dialogVisible = false
+          vue.accessType = ''
+          vue.record = {}
+          vue.loadData()
+        })
+      }
     },
     deleteConfirm(item) {
       const vue = this

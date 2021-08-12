@@ -143,6 +143,10 @@ export default {
     zh: '用户',
     en: 'Users',
   },
+  system:{
+    zh: '系统',
+    en: 'System',
+  },
   setting: {
     zh: '设置',
     en: 'Setting',

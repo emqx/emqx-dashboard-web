@@ -12,6 +12,7 @@ import Clients from '@/views/Clients/Clients'
 import ClientDetails from '@/views/Clients/ClientDetails'
 import Topics from '@/views/Topics/Topics'
 import Subscriptions from '@/views/Subscriptions/Subscriptions'
+import Users from '@/views/General/Users'
 
 
 let routes = [
@@ -297,6 +298,22 @@ let routes = [
   //     },
   //   ],
   // },
+  // 用户
+  {
+    path: '/users',
+    component: Layout,
+    meta: {
+      hideKey: 'general',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'users',
+        component: Users
+      }
+    ]
+  },
   {
     path: '/general',
     component: Layout,
@@ -337,15 +354,7 @@ let routes = [
           authRequired: true,
         },
       },
-      // 用户
-      {
-        path: 'users',
-        component: () => import('@/views/General/Users'),
-        meta: {
-          hideKey: 'general',
-          authRequired: true,
-        },
-      },
+
       // 黑名单
       // {
       //   path: 'blacklist',

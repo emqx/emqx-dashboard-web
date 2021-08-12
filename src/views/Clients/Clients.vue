@@ -192,7 +192,7 @@ export default {
       nodeName: '',
       currentNodes: [],
       fuzzyParams: {
-        comparator: '_gte',
+        comparator: 'gte',
       },
       selectedClients: [],
       protoNames: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M'],
