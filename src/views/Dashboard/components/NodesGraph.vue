@@ -4,7 +4,7 @@
     <div class="graph-entity" ref="graph" v-loading.lock="infoLoading">
       <div id="graph-entity"></div>
       <div class="node-detail" v-if="!infoLoading">
-        <div class="node-info">
+        <div class="node-info" v-if="currentInfo">
           <div class="node-title">{{ currentInfo[0]['node'] }}</div>
           <div>
             <el-row>
@@ -126,30 +126,27 @@ export default defineComponent({
         currentInfo.value[0]['memory_total'],
       )
     })
+    let resizeFn = () => {
+      let graphDom = graph?.value?.getBoundingClientRect() || { width: 200, height: 100 }
+      let reCalcWidth = Math.min(graphDom.width / 2, graphDom.height)
+      if ('attr' in svg)
+        svg.attr('width', Math.floor(reCalcWidth)).attr('height', Math.floor(reCalcWidth))
+    }
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', resizeFn)
+    })
+
     onMounted(async () => {
       await Promise.all([getNodes(), getStats()]).catch(() => {})
       nextTick((vue) => {
-        let graphDom = graph?.value?.getBoundingClientRect() || { width: 200, height: 100 }
+        // let graphDom = graph?.value?.getBoundingClientRect() || { width: 200, height: 100 }
         // let gMargin = 10
-        window.addEventListener('resize', resizeFn)
 
-        onUnmounted(() => {
-          window.removeEventListener('resize', resizeFn)
-        })
-
-        let resizeFn = () => {
-          let graphDom = graph?.value?.getBoundingClientRect() || { width: 200, height: 100 }
-          let reCalcWidth = Math.min(graphDom.width / 2, graphDom.height)
-          svg.attr('width', Math.floor(reCalcWidth)).attr('height', Math.floor(reCalcWidth))
-        }
-
-        svg = ddd
-          .select('#graph-entity')
-          .append('svg')
-          .attr('width', Math.floor(graphDom.width / 2))
-          .attr('height', Math.floor(graphDom.height))
-          .attr('viewBox', '-100 -100 200 200')
+        svg = ddd.select('#graph-entity').append('svg').attr('viewBox', '-100 -100 200 200')
         // .attr('transform', `translate(${gMargin},${gMargin})`)
+        resizeFn()
+        window.addEventListener('resize', resizeFn)
 
         let lineGroup = svg.append('g')
         let arcGroup = svg.append('g')

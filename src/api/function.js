@@ -24,8 +24,8 @@ export function loadUser() {
   return http.get('/users')
 }
 
-export function createUser(body) {
-  return http.post('/users', body)
+export function createUser(username, body = {}) {
+  return http.post(`/users/${username}`, body)
 }
 
 export function updateUser(username, body = {}) {
@@ -33,7 +33,7 @@ export function updateUser(username, body = {}) {
 }
 
 export function changePassword(username, body = {}) {
-  return http.put(`/change_pwd/${username}`, body)
+  return http.put(`/users/${username}/change_pwd`, body)
 }
 
 export function destroyUser(username) {

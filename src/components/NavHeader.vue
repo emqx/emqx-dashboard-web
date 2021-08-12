@@ -3,8 +3,11 @@
     <div>
       <div
         class="func-item"
-        @click="()=>{ $store.dispatch('SET_LEFT_BAR_COLLAPSE', !this.leftBarCollapse)
-}"
+        @click="
+          () => {
+            $store.dispatch('SET_LEFT_BAR_COLLAPSE', !this.leftBarCollapse)
+          }
+        "
       >
         <i :class="['iconfont', leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"> </i>
       </div>
@@ -40,10 +43,10 @@
         <div class="user-info func-item">
           <span>{{ username }}</span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="general/application">{{
+            <!-- <el-dropdown-item command="general/application">{{
               $t('components.applicationManagement')
-            }}</el-dropdown-item>
-            <el-dropdown-item command="general/users">{{
+            }}</el-dropdown-item> -->
+            <el-dropdown-item command="users">{{
               $t('components.usersManagement')
             }}</el-dropdown-item>
             <el-dropdown-item divided command="login">{{
