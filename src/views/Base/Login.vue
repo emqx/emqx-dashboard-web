@@ -43,7 +43,7 @@
               ></el-input>
             </el-form-item>
 
-            <el-checkbox v-model="record.remember">{{ $t('Base.remember') }}</el-checkbox>
+            <!-- <el-checkbox v-model="record.remember">{{ $t('Base.remember') }}</el-checkbox> -->
 
             <el-form-item class="oper-wrapper" label="">
               <el-button class="sub-btn" type="primary" @click="nativeLogin" :loading="logining">{{
@@ -58,8 +58,9 @@
 </template>
 
 <script>
-import { auth } from '@/api/common'
+import { login as loginApi } from '@/api/common'
 import { getBasicAuthInfo } from '@/common/utils'
+// import sha256 from 'crypto-js/sha256'
 
 export default {
   name: 'Login',
@@ -70,7 +71,7 @@ export default {
       record: {
         username: '',
         password: '',
-        remember: false,
+        // remember: false,
       },
       logining: false,
       rules: {
@@ -122,32 +123,31 @@ export default {
         : (this.loginKeepHeight = false)
       // wWidth >lWidth?(this.loginKeepWidth=true):(this.loginKeepWidth=false)
     },
-    login(auto = false) {
-      const { username, password, remember } = (auto && getBasicAuthInfo()) || this.record
+    async login(auto = false) {
+      const { username, password } = (auto && getBasicAuthInfo()) || this.record
       auto && username && password && this.redirect()
 
       if (!auto) {
         this.logining = true
-        auth({
-          username,
-          password,
-        })
-          .then((res) => {
-            if (!res) {
-              return
-            }
-            this.$store.dispatch('UPDATE_USER_INFO', {
-              username,
-              password,
-              remember,
-            })
+        try {
+          let res = await loginApi({
+            username,
+            password,
+          })
+          if (!res) {
+            return
+          }
+          await this.$store.dispatch('UPDATE_USER_INFO', {
+            token: res.token,
+            username,
+            edition: res.license?.edition || 'community',
+          })
 
-            setTimeout(this.redirect, 200)
-          })
-          .catch((error) => {
-            this.$message({ message: error, type: 'error', duration: 6000 })
-            this.logining = false
-          })
+          this.redirect()
+        } catch (error) {
+          this.$message({ message: error, type: 'error', duration: 6000 })
+          this.logining = false
+        }
       }
     },
     redirect() {
@@ -186,7 +186,7 @@ export default {
     background-size: 100%;
     background-repeat: no-repeat;
     position: relative;
-    height: 383px;
+    height: 340px;
     border-radius: 6px 0 0 6px;
 
     .logo {
@@ -210,7 +210,7 @@ export default {
     width: 44%;
     float: left;
     padding: 3%;
-    height: 370px;
+    height: 333px;
     overflow: hidden;
   }
 

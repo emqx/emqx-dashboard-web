@@ -21,8 +21,9 @@ router.beforeEach((to, from, next) => {
   const { fullPath, matched } = to
   const { authRequired = false } = matched[0]?.meta || to.meta
   // const { hideLeftBar: hideLeftBarForm = false } = from?.matched[0]?.meta || from.meta
+  const info = getBasicAuthInfo()
 
-  if (authRequired && !getBasicAuthInfo().username) {
+  if (authRequired && !info.token) {
     toLogin(fullPath)
   }
   next()

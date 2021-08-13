@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     get user() {
-      return JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user')) || {}
+      return JSON.parse(localStorage.getItem('user')) || {}
     },
     get lang() {
       const browserLanguage = navigator.language.substring(0, 2)
@@ -45,15 +45,16 @@ export default new Vuex.Store({
       commit('SET_LEFT_BAR_COLLAPSE', !!collapse)
     },
     UPDATE_USER_INFO({ commit }, userInfo = {}) {
-      const { logOut = false, remember } = userInfo
+      const { logOut = false } = userInfo
       if (logOut) {
         localStorage.removeItem('user')
-        sessionStorage.removeItem('user')
-      } else if (remember) {
-        localStorage.setItem('user', JSON.stringify(userInfo))
-      } else {
-        sessionStorage.setItem('user', JSON.stringify(userInfo))
+        // sessionStorage.removeItem('user')
       }
+      // else if (remember) {
+      localStorage.setItem('user', JSON.stringify(userInfo))
+      // } else {
+      //   sessionStorage.setItem('user', JSON.stringify(userInfo))
+      // }
       commit('UPDATE_USER_INFO', logOut ? {} : userInfo)
     },
     SET_REQ_CHANGE({ commit }, addOrDone = true) {

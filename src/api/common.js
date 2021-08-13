@@ -1,12 +1,12 @@
 import http from '@/common/http'
 
-export function auth(user = {}) {
-  return http.post('/auth', user, {
-    // params: {
-    //   _t: false,
-    //   _m: false,
-    // },
-  })
+//account
+export function login(user = {}) {
+  return http.post('/login', user)
+}
+
+export function logout(username) {
+  return http.post('/logout', { username })
 }
 
 export function loadStats() {
@@ -26,7 +26,7 @@ export function loadCurrentMetrics() {
 }
 
 export function loadMetricsLog(type) {
-  return http.get('/monitor', { params: { counter: type } })
+  return http.get('/monitor' + (type ? '/counters/' + type : ''))
 }
 
 export async function loadNodes() {

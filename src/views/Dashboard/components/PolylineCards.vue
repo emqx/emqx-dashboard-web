@@ -28,7 +28,7 @@
               <!-- <span class="enlarge-icon" @click="bigChartItem = item"></span> -->
               <polyline-chart
                 :chart-id="`${item.value}-polyline`"
-                :y-title="metricTitles"
+                :y-title="['0']"
                 :chart-data="metricLog[item.value]"
                 :chartColors="chartColorList[item.value]"
               ></polyline-chart>
@@ -119,40 +119,40 @@ export default {
       return Moment(time).format('HH:mm')
     },
     loadMetricsLogData() {
+      let maxLen = 200
       try {
         this.dataTypeList.forEach(async (typeName) => {
           const data = await loadMetricsLog(typeName)
-          this.metricTitles = Object.keys(data)
-          this.metricLog[typeName] = this.chartDataFill(this.metricTitles.length)
-          const currentData = this.metricLog[typeName]
-          this.metricTitles.forEach((key, index) => {
-            data[key].forEach((item) => {
-              currentData[index].xData.push(this._formatTime(item[0]))
-              currentData[index].yData.push(item[1])
-            })
+          this.metricLog[typeName] = this.chartDataFill(1)
+          const currentData = this.metricLog[typeName][0]
+
+          data.forEach((item, key) => {
+            if (key > maxLen) return
+            currentData.xData.push(this._formatTime(item.timestamp))
+            currentData.yData.push(item.count)
           })
         })
-        this.timerMetrics = setInterval(this.setMetricsChartRealTime, 60000)
+        // this.timerMetrics = setInterval(this.setMetricsChartRealTime, 60000)
       } catch (e) {
         console.error(e)
       }
     },
-    setMetricsChartRealTime() {
-      this.dataTypeList.forEach(async (typeName) => {
-        const data = await loadMetricsLog(typeName)
-        const currentData = this.metricLog[typeName]
-        this.metricTitles.forEach((key, index) => {
-          const nodeMetric = data[key]
-          const lastData = nodeMetric[nodeMetric.length - 1]
-          if (currentData[index].xData.length >= 120) {
-            currentData[index].xData.shift()
-            currentData[index].yData.shift()
-          }
-          currentData[index].xData.push(this._formatTime(lastData[0]))
-          currentData[index].yData.push(lastData[1])
-        })
-      })
-    },
+    // setMetricsChartRealTime() {
+    //   this.dataTypeList.forEach(async (typeName) => {
+    //     const data = await loadMetricsLog(typeName)
+    //     const currentData = this.metricLog[typeName]
+    //     this.metricTitles.forEach((key, index) => {
+    //       const nodeMetric = data[key]
+    //       const lastData = nodeMetric[nodeMetric.length - 1]
+    //       if (currentData[index].xData.length >= 120) {
+    //         currentData[index].xData.shift()
+    //         currentData[index].yData.shift()
+    //       }
+    //       currentData[index].xData.push(this._formatTime(lastData[0]))
+    //       currentData[index].yData.push(lastData[1])
+    //     })
+    //   })
+    // },
     clearTimer() {
       if (this.timerMetrics) {
         clearInterval(this.timerMetrics)

@@ -18,20 +18,20 @@ Object.assign(axios.defaults, {
   },
   baseURL: '/api/v5',
   timeout: 5000,
-  auth: {},
+  // auth: {},
 })
 
 axios.interceptors.request.use(
   (config) => {
     const user = getBasicAuthInfo()
-
-    config.auth.username = user.username
-    config.auth.password = user.password
+    config.headers = {
+      Authorization: user.token ? 'Bearer ' + user.token : '',
+    }
 
     return config
   },
   (error) => {
-    console.log(Object.keys(error))
+    // console.log(Object.keys(error))
     Promise.reject(error)
   }
 )
@@ -50,7 +50,7 @@ axios.interceptors.response.use((response) => {
   return response.data || response.status
 }, (error) => {
   setProgressBarDone()
-  let { data, status } = error.response
+  let { data, status } = error.response || {}
   if (data?.code || data?.message)
     Message.error(status + ' ' + data?.code + ':' + data?.message)
   else
