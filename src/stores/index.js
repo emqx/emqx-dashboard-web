@@ -28,6 +28,12 @@ export default new Vuex.Store({
       return JSON.parse(localStorage.getItem('selectedModule')) || {}
     },
     request_queue: 0,
+    get edition() {
+      return localStorage.getItem('edition')
+    },
+    set edition(v) {
+      localStorage.setItem('edition', v)
+    },
   },
   actions: {
     UPDATE_MODULE({ commit }, selectedModule) {
@@ -48,13 +54,9 @@ export default new Vuex.Store({
       const { logOut = false } = userInfo
       if (logOut) {
         localStorage.removeItem('user')
-        // sessionStorage.removeItem('user')
+      } else {
+        localStorage.setItem('user', JSON.stringify(userInfo))
       }
-      // else if (remember) {
-      localStorage.setItem('user', JSON.stringify(userInfo))
-      // } else {
-      //   sessionStorage.setItem('user', JSON.stringify(userInfo))
-      // }
       commit('UPDATE_USER_INFO', logOut ? {} : userInfo)
     },
     SET_REQ_CHANGE({ commit }, addOrDone = true) {
@@ -80,6 +82,15 @@ export default new Vuex.Store({
     },
     SET_REQ_CHANGE(state, addOrDone) {
       addOrDone ? ++state.request_queue : --state.request_queue
+    },
+    UPDATE_EDITION(state, edition) {
+      state.edition = edition || 'community'
+    },
+  },
+  getters: {
+    edition: (state) => {
+      let e = String(state.edition).toLowerCase()
+      return e == 'enterprise' ? 0b01 : 0b10
     },
   },
 })

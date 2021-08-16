@@ -17,8 +17,7 @@ Object.assign(axios.defaults, {
     'Cache-Control': 'no-cache',
   },
   baseURL: '/api/v5',
-  timeout: 5000,
-  // auth: {},
+  timeout: 10000,
 })
 
 axios.interceptors.request.use(
@@ -33,7 +32,7 @@ axios.interceptors.request.use(
   (error) => {
     // console.log(Object.keys(error))
     Promise.reject(error)
-  }
+  },
 )
 
 axios.interceptors.request.use(async (config) => {
@@ -45,23 +44,28 @@ axios.interceptors.request.use(async (config) => {
   return config
 })
 
-axios.interceptors.response.use((response) => {
-  setProgressBarDone()
-  return response.data || response.status
-}, (error) => {
-  setProgressBarDone()
-  let { data, status } = error.response || {}
-  if (data?.code || data?.message)
-    Message.error(status + ' ' + data?.code + ':' + data?.message)
-  else
-    Message.error(status + ' Network error')
+axios.interceptors.response.use(
+  (response) => {
+    setProgressBarDone()
+    return response.data || response.status
+  },
+  (error) => {
+    setProgressBarDone()
+    if (error.response) {
+      let { data, status } = error.response
+      if (data?.code || data?.message)
+        Message.error(status + ' ' + data?.code + ':' + data?.message)
+      else Message.error(status + ' Network error')
 
-  if (status === 401) {
-    toLogin()
-  }
-
-  return Promise.reject(error)
-})
+      if (status === 401) {
+        toLogin()
+      }
+    } else {
+      Message.error('Some error occurred')
+    }
+    return Promise.reject(error)
+  },
+)
 
 async function setProgressBarDone() {
   await store.dispatch('SET_REQ_CHANGE', false)

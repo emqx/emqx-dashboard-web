@@ -65,9 +65,7 @@
 <script>
 import { defineComponent, onMounted, reactive, ref } from '@vue/composition-api'
 import { loadMetrics } from '@/api/common'
-import EmqSelect from '@/components/EmqSelect.vue'
 export default defineComponent({
-  components: { EmqSelect },
   name: 'Metrics',
 
   setup() {

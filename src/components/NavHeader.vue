@@ -126,7 +126,7 @@ export default {
       this.$store.dispatch('SET_LANGUAGE', command)
     },
     async loadData() {
-      const alert = await loadAlarm()
+      const alert = await loadAlarm().catch(() => {})
       this.$store.dispatch('SET_ALERT_COUNT', (alert || []).length)
     },
     logout() {

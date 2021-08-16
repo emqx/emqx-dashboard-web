@@ -42,9 +42,6 @@
                 tabindex="2"
               ></el-input>
             </el-form-item>
-
-            <!-- <el-checkbox v-model="record.remember">{{ $t('Base.remember') }}</el-checkbox> -->
-
             <el-form-item class="oper-wrapper" label="">
               <el-button class="sub-btn" type="primary" @click="nativeLogin" :loading="logining">{{
                 $t('Base.signIn')
@@ -71,7 +68,6 @@ export default {
       record: {
         username: '',
         password: '',
-        // remember: false,
       },
       logining: false,
       rules: {
@@ -94,9 +90,6 @@ export default {
       loginKeepWidth: false,
     }
   },
-
-  computed: {},
-
   created() {
     this.login(true)
   },
@@ -140,8 +133,9 @@ export default {
           await this.$store.dispatch('UPDATE_USER_INFO', {
             token: res.token,
             username,
-            edition: res.license?.edition || 'community',
+            // edition: res.license?.edition || 'community',
           })
+          this.$store.commit('UPDATE_EDITION', res.license?.edition)
 
           this.redirect()
         } catch (error) {
