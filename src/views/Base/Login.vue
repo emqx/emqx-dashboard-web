@@ -133,7 +133,6 @@ export default {
           await this.$store.dispatch('UPDATE_USER_INFO', {
             token: res.token,
             username,
-            // edition: res.license?.edition || 'community',
           })
           this.$store.commit('UPDATE_EDITION', res.license?.edition)
 

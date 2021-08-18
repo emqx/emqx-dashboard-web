@@ -15,6 +15,7 @@ export default new Vuex.Store({
     },
     set lang(val) {
       localStorage.setItem('language', val)
+      val ?? localStorage.removeItem('language')
     },
     get leftBarCollapse() {
       const collapse = localStorage.getItem('leftBarCollapse')
@@ -33,6 +34,7 @@ export default new Vuex.Store({
     },
     set edition(v) {
       localStorage.setItem('edition', v)
+      v ?? localStorage.removeItem('edition')
     },
   },
   actions: {
@@ -78,18 +80,19 @@ export default new Vuex.Store({
     },
     SET_LANGUAGE(state, lang) {
       state.lang = lang
-      location.reload()
     },
     SET_REQ_CHANGE(state, addOrDone) {
       addOrDone ? ++state.request_queue : --state.request_queue
     },
     UPDATE_EDITION(state, edition) {
-      state.edition = edition || 'community'
+      state.edition = edition
     },
   },
   getters: {
     edition: (state) => {
-      let e = String(state.edition).toLowerCase()
+      let { edition } = state
+      if (!edition) return 0b10 //default to broker
+      let e = String(edition).toLowerCase()
       return e == 'enterprise' ? 0b01 : 0b10
     },
   },

@@ -49,7 +49,7 @@
             <el-dropdown-item command="users">{{
               $t('components.usersManagement')
             }}</el-dropdown-item>
-            <el-dropdown-item divided command="login">{{
+            <el-dropdown-item divided command="logout">{{
               $t('components.logOut')
             }}</el-dropdown-item>
           </el-dropdown-menu>
@@ -124,36 +124,37 @@ export default {
       }
       this.setHtmlLangAttr(command)
       this.$store.dispatch('SET_LANGUAGE', command)
+      location.reload()
     },
     async loadData() {
       const alert = await loadAlarm().catch(() => {})
       this.$store.dispatch('SET_ALERT_COUNT', (alert || []).length)
     },
     logout() {
-      this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
-      setTimeout(() => {
-        this.$message.success(this.$t('components.loggedOut'))
-        this.$router.push('/login')
-      })
-    },
-    handleDropdownCommand(command) {
-      if (!command) {
-        return
-      }
-      if (command !== 'login') {
-        this.$router.push({ path: `/${command}` }).catch((e) => e)
-        return
-      }
       this.$msgbox
         .confirm(this.$t('components.whetherToLogOutOrNot'), {
           confirmButtonText: this.$t('components.signOut'),
           cancelButtonText: this.$t('Base.cancel'),
           type: 'warning',
         })
-        .then(() => {
-          this.logout()
+        .then(async () => {
+          await this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
+          this.$store.commit('UPDATE_EDITION', null)
+          this.$store.commit('SET_LANGUAGE', null)
+          this.$message.success(this.$t('components.loggedOut'))
+          this.$router.push('/login')
         })
-        .catch(() => {})
+        .catch((e) => {})
+    },
+    handleDropdownCommand(command) {
+      if (!command) {
+        return
+      }
+      // if (command !== 'login') {
+      //   this.$router.push({ path: `/${command}` }).catch((e) => e)
+      //   return
+      // }
+      this[command] && this[command]()
     },
     gotoCloud() {
       window.open('https://cloud.emqx.cn', '_blank')

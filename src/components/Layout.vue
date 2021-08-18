@@ -66,6 +66,7 @@
 import LeftBar from '@/components/LeftBar'
 import NavHeader from '@/components/NavHeader'
 import routes from '@/routes/router'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Layout',
@@ -76,11 +77,10 @@ export default {
   },
 
   data() {
-    return {
-      edition: this.$store.getters.edition,
-    }
+    return {}
   },
   computed: {
+    ...mapGetters(['edition']),
     leftBarCollapse() {
       return this.$store.state.leftBarCollapse
     },
