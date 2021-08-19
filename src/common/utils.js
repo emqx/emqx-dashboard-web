@@ -6,29 +6,22 @@ import { Message } from 'element-ui'
 
 import store from '@/stores'
 import router from '@/routes'
-import lang from '@/i18n/index'
+// import lang from '@/i18n/index'
 import i18n from '@/i18n'
 
-const locale = store.state.lang
-const VueI18n = lang[locale]
+// const locale = store.state.lang
+// const VueI18n = lang[locale]
 
-/**
- * 获取基础的验证信息
- * @param null
- * @return User: object
- */
 export function getBasicAuthInfo() {
   return store.state.user
 }
 
-/**
- * 跳转到登录页面
- * @param null
- * @return null
- */
-export function toLogin(path) {
-  store.dispatch('UPDATE_USER_INFO', { logOut: true })
-  router.push({ path: '/login', query: { to: path ? path : undefined } })
+//Logout and go to Login page
+export async function toLogin(path) {
+  await store.dispatch('UPDATE_USER_INFO', { logOut: true })
+  store.commit('UPDATE_EDITION', null)
+  store.commit('SET_LANGUAGE', null)
+  router.currentRoute?.path !== '/login' && router.push({ path: '/login', query: { to: path ? path : undefined } })
 }
 
 /**
@@ -191,9 +184,9 @@ export function renderParamsForm(params = {}, propPrefix = '') {
     })
     // rules 的属性
     rules[k] = []
-    const requiredInputText = locale === 'zh' ? '请输入' : 'Field required'
-    const requiredSelectText = locale === 'zh' ? '请选择' : 'Please select'
-    const requiredArrayText = locale === 'zh' ? '请添加' : 'Please Add'
+    const requiredInputText =  'Field required'
+    const requiredSelectText =  'Please select'
+    const requiredArrayText =  'Please Add'
 
     if (required) {
       if (elType === 'array') {

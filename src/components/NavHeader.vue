@@ -63,6 +63,7 @@
 
 <script>
 import { loadAlarm } from '@/api/common'
+import { toLogin } from '@/common/utils'
 export default {
   name: 'NavHeader',
   data() {
@@ -137,12 +138,13 @@ export default {
           cancelButtonText: this.$t('Base.cancel'),
           type: 'warning',
         })
-        .then(async () => {
-          await this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
-          this.$store.commit('UPDATE_EDITION', null)
-          this.$store.commit('SET_LANGUAGE', null)
+        .then(() => {
+          // await this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
+          // this.$store.commit('UPDATE_EDITION', null)
+          // this.$store.commit('SET_LANGUAGE', null)
           this.$message.success(this.$t('components.loggedOut'))
-          this.$router.push('/login')
+          toLogin()
+          // this.$router.push('/login')
         })
         .catch((e) => {})
     },
