@@ -15,9 +15,6 @@
             {{ $t('Base.signIn') }}
             <div class="sub-title">
               {{ $t('Base.loginUserAccount') }}
-              <a :href="$t('Base.userCreate')" target="_blank">
-                {{ $t('Base.forgetPassword') }}
-              </a>
             </div>
           </div>
           <el-form
@@ -61,8 +58,6 @@ import { getBasicAuthInfo } from '@/common/utils'
 
 export default {
   name: 'Login',
-  components: {},
-  props: {},
   data() {
     return {
       record: {

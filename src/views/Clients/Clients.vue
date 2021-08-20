@@ -42,8 +42,8 @@
           <el-row class="form-item-row">
             <el-col :span="8">
               <el-select v-model="fuzzyParams.comparator" class="comparator" size="small">
-                <el-option label=">=" value="_gte"></el-option>
-                <el-option label="<=" value="_lte"></el-option>
+                <el-option label=">=" value="gte"></el-option>
+                <el-option label="<=" value="lte"></el-option>
               </el-select>
             </el-col>
             <el-col :span="16">

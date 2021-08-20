@@ -15,16 +15,13 @@
       </div>
     </div>
     <el-row :gutter="20">
-      <el-table
-        :data="metricsObj[currentNode] | filterMetrics('client')"
-        v-loading.lock="lockTable"
-      >
+      <el-table :data="filterMetrics(metricsObj[currentNode], 'client')" v-loading.lock="lockTable">
         <el-table-column prop="m" :label="tl('client')"> </el-table-column>
         <el-table-column prop="v" sortable> </el-table-column>
       </el-table>
 
       <el-table
-        :data="metricsObj[currentNode] | filterMetrics('delivery')"
+        :data="filterMetrics(metricsObj[currentNode], 'delivery')"
         v-loading.lock="lockTable"
       >
         <el-table-column prop="m" label="Delivery"> </el-table-column>
@@ -32,7 +29,7 @@
       </el-table>
 
       <el-table
-        :data="metricsObj[currentNode] | filterMetrics('session')"
+        :data="filterMetrics(metricsObj[currentNode], 'session')"
         v-loading.lock="lockTable"
       >
         <el-table-column prop="m" :label="tl('session')"> </el-table-column>
@@ -40,7 +37,7 @@
       </el-table>
 
       <el-table
-        :data="metricsObj[currentNode] | filterMetrics('packets')"
+        :data="filterMetrics(metricsObj[currentNode], 'packets')"
         v-loading.lock="lockTable"
       >
         <el-table-column prop="m" :label="tl('mqttPackages')"> </el-table-column>
@@ -48,14 +45,14 @@
       </el-table>
 
       <el-table
-        :data="metricsObj[currentNode] | filterMetrics('messages')"
+        :data="filterMetrics(metricsObj[currentNode], 'messages')"
         v-loading.lock="lockTable"
       >
         <el-table-column prop="m" :label="tl('messageNumber')"> </el-table-column>
         <el-table-column prop="v" sortable> </el-table-column>
       </el-table>
 
-      <el-table :data="metricsObj[currentNode] | filterMetrics('bytes')" v-loading.lock="lockTable">
+      <el-table :data="filterMetrics(metricsObj[currentNode], 'bytes')" v-loading.lock="lockTable">
         <el-table-column prop="m" :label="tl('traffic')"> </el-table-column>
         <el-table-column prop="v" sortable> </el-table-column>
       </el-table>
@@ -93,6 +90,16 @@ export default defineComponent({
       }
     }
 
+    function filterMetrics(data, key) {
+      let keys = []
+      Object.keys(data || []).forEach((v) => {
+        if (v.startsWith(key)) {
+          keys.push({ m: v.split('.').slice(1).join('.'), v: data[v] })
+        }
+      })
+      return keys
+    }
+
     const changeNode = (n) => {
       this.currentNode = n
     }
@@ -107,18 +114,8 @@ export default defineComponent({
       lockTable,
       changeNode,
       currentNodeIndex,
+      filterMetrics,
     }
-  },
-  filters: {
-    filterMetrics(data, key) {
-      let keys = []
-      Object.keys(data || {}).forEach((v) => {
-        if (v.startsWith(key)) {
-          keys.push({ m: v.split('.').slice(1).join('.'), v: data[v] })
-        }
-      })
-      return keys
-    },
   },
 })
 </script>

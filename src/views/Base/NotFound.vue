@@ -8,18 +8,6 @@
 <script>
 export default {
   name: 'NotFound',
-
-  components: {},
-
-  props: {},
-
-  data() {
-    return {}
-  },
-
-  created() {},
-
-  methods: {},
 }
 </script>
 
