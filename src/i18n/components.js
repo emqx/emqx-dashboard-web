@@ -143,9 +143,17 @@ export default {
     zh: '用户',
     en: 'Users',
   },
-  system:{
+  system: {
     zh: '系统',
     en: 'System',
+  },
+  configuration: {
+    zh: '配置',
+    en: 'Configuration',
+  },
+  advanced: {
+    zh: 'MQTT高级特性',
+    en: 'MQTT Advanced Feat.',
   },
   setting: {
     zh: '设置',

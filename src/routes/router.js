@@ -13,6 +13,7 @@ import ClientDetails from '@/views/Clients/ClientDetails'
 import Topics from '@/views/Topics/Topics'
 import Subscriptions from '@/views/Subscriptions/Subscriptions'
 import Users from '@/views/General/Users'
+import Advanced from '@/views/Advanced/Advanced'
 
 
 let routes = [
@@ -255,6 +256,21 @@ let routes = [
       },
     ],
   },
+  {
+    path:'/advanced',
+    component:Layout,
+    meta:{
+      hideKey:'advanced',
+      authRequired:true,
+    },
+    children:[
+      {
+        path:'',
+        name:'advanced',
+        component:Advanced
+      }
+    ]
+  },
   // 工具
   {
     path: '/tools',
@@ -346,15 +362,14 @@ let routes = [
       //   ],
       // },
       // 应用
-      {
-        path: 'application',
-        component: () => import('@/views/General/Application'),
-        meta: {
-          hideKey: 'general',
-          authRequired: true,
-        },
-      },
-
+      // {
+      //   path: 'application',
+      //   component: () => import('@/views/General/Application'),
+      //   meta: {
+      //     hideKey: 'general',
+      //     authRequired: true,
+      //   },
+      // },
       // 黑名单
       // {
       //   path: 'blacklist',

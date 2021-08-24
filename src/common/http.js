@@ -4,12 +4,10 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { getBasicAuthInfo, toLogin } from '@/common/utils'
 import store from '@/stores'
-// import router from '@/routes'
-// let timer = 0
+import _ from 'lodash'
 
 NProgress.configure({ showSpinner: false, trickleSpeed: 200 })
-// const { lang } = store.state
-// const pluginPages = ['schemas', 'rules', 'resources', 'setting']
+let respSet = new Set()
 
 Object.assign(axios.defaults, {
   headers: {
@@ -51,18 +49,33 @@ axios.interceptors.response.use(
   },
   (error) => {
     setProgressBarDone()
+
+    //throttle concurrent responses with unique status code
     if (error.response) {
       let { data, status } = error.response
-      if (data?.code || data?.message)
-        Message.error(status + ' ' + data?.code + ':' + data?.message)
-      else Message.error(status + ' Network error')
 
-      if (status === 401) {
-        toLogin()
+      if (!respSet.has(status)) {
+        respSet.add(status)
+        if (data?.code || data?.message)
+          Message.error(status + ' ' + data?.code + ':' + data?.message)
+        else Message.error(status + ' Network error')
+
+        if (status === 401) {
+          toLogin()
+        }
       }
     } else {
-      Message.error('Some error occurred')
+      if (!respSet.has(0)) {
+        Message.error('Some error occurred')
+        respSet.add(0)
+      }
     }
+
+    if (store.state.request_queue === 0) respSet = new Set()
+    _.throttle(() => {
+      respSet = new Set()
+    }, 2000, { trailing: false })
+
     return Promise.reject(error)
   },
 )

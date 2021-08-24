@@ -1,0 +1,145 @@
+export default {
+    retainer: {
+        zh: 'MQTT Retainer',
+        en: 'MQTT Retainer',
+    },
+    rewrite: {
+        zh: '主题重写',
+        en: 'Topic Rewrite',
+    },
+    subscribe: {
+        zh: '代理订阅',
+        en: 'Auto Subscribe',
+    },
+    postpone: {
+        zh: '延迟发布',
+        en: 'Delayed Publish',
+    },
+    message: {
+        zh: '时间消息',
+        en: 'Event Message',
+    },
+    storage: {
+        en: 'Storage',
+    },
+    policy: {
+        en: 'Policy',
+        zh: '策略设置',
+    },
+    flowControl: {
+        en: 'Flow Control',
+        zh: '流控',
+    },
+    readNumber: {
+        en: 'Max Read Number',
+        zh: '单次加载数量',
+    },
+    deliverQuota: {
+        en: 'Msg Deliver Quota',
+        zh: '单次发布数量',
+    },
+    expire: {
+        en: 'Expire',
+        zh: '有效期',
+    },
+    intervalClean: {
+        en: 'Clean',
+        zh: '定时清理',
+    },
+    storageType: {
+        zh: '存储类型',
+        en: 'Storage Type',
+    },
+    enable: {
+        zh: '启用',
+        en: 'Enable',
+    },
+    enableDesc: {
+        zh: '停用Retainer功能不会清除已保存的数据',
+        en: 'The retain message is no longer stored and published, but the data in the database will not be deleted',
+    },
+    enableDescDelay: {
+        zh: '启用延迟发布功能，停用将终止延迟列表',
+        en: 'Enable the delayed publish and disable it to delete the delayed list',
+    },
+    createDate: {
+        zh: '发布时间',
+        en: 'Created Date',
+    },
+    unlimited: {
+        zh: '不限',
+        en: 'Unlimited',
+    },
+    custom: {
+        zh: '自定义',
+        en: 'Custom',
+    },
+    sTopic: {
+        zh: '源Topic',
+        en: 'Source Topic',
+    },
+    dTopic: {
+        zh: '目标Topic',
+        en: 'Dest. Topic',
+    },
+    delayedTime: {
+        zh: '延迟时间',
+        en: 'Delay',
+    },
+    remainTime: {
+        zh: '剩余时间',
+        en: 'Remaining',
+    },
+    eventTitleDesc: {
+        zh: '将设备生命周期事件通过事件主题以 MQTT 消息的形式发布',
+        en: 'Publish client life cycle events through events topic',
+    },
+    configMsg: {
+        zh: '配置需要启用的事件消息',
+        en: 'Configure event messages that need to be enabled',
+    },
+    internalExp: {
+        zh: '内置表达式',
+        en: 'Auto subscribe using pattern',
+    },
+    client_connected: {
+        en: 'Clients have already connected',
+        zh: '客户端连接完成',
+    },
+    client_disconnected: {
+        en: 'Clients have already disconnected',
+        zh: '客户端断开连接',
+    },
+    client_subscribed: {
+        en: 'Clients have already subscribed',
+        zh: '客户端完成订阅',
+    },
+    client_unsubscribed: {
+        en: 'Clients have already unsubscribed',
+        zh: '客户端取消订阅',
+    },
+    message_delivered: {
+        en: 'Messages have already delivered',
+        zh: '消息已投递',
+    },
+    message_dropped: {
+        en: 'Messages have already dropped',
+        zh: '消息已丢弃'
+    },
+    message_acked: {
+        en: 'Messages have already acknowledged',
+        zh: '消息已确认',
+    },
+    setting: {
+        zh: '设置',
+        en: 'Setting',
+    },
+    dataManage: {
+        zh: '数据管理',
+        en: 'Manage Data'
+    },
+    maxDelayedMsg:{
+        zh:'最多消息延时数',
+        en:'Max Delayed Messages',
+    }
+}

@@ -1,8 +1,4 @@
 export default {
-  userCreate: {
-    zh: 'https://docs.emqx.cn/cn/broker/latest/advanced/cli.html#admins-%E5%91%BD%E4%BB%A4',
-    en: 'https://docs.emqx.io/en/broker/latest/advanced/cli.html#admins-command',
-  },
   loginUserAccount: {
     zh: '使用 Dashboard 用户登录',
     en: 'Login using Dashboard accounts',
@@ -82,6 +78,10 @@ export default {
   add: {
     zh: '添加',
     en: 'Add',
+  },
+  update:{
+    zh:'更新',
+    en:'Update'
   },
   delete: {
     zh: '删除',
