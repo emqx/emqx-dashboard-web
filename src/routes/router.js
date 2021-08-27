@@ -15,7 +15,6 @@ import Subscriptions from '@/views/Subscriptions/Subscriptions'
 import Users from '@/views/General/Users'
 import Advanced from '@/views/Advanced/Advanced'
 
-
 let routes = [
   {
     path: '/login',
@@ -27,7 +26,7 @@ let routes = [
   },
   {
     path: '/',
-    redirect: '/dashboard',
+    redirect: '/login',
     meta: {
       authRequired: true,
     },
@@ -257,19 +256,19 @@ let routes = [
     ],
   },
   {
-    path:'/advanced',
-    component:Layout,
-    meta:{
-      hideKey:'advanced',
-      authRequired:true,
+    path: '/advanced',
+    component: Layout,
+    meta: {
+      hideKey: 'advanced',
+      authRequired: true,
     },
-    children:[
+    children: [
       {
-        path:'',
-        name:'advanced',
-        component:Advanced
-      }
-    ]
+        path: '',
+        name: 'advanced',
+        component: Advanced,
+      },
+    ],
   },
   // 工具
   {
@@ -326,9 +325,9 @@ let routes = [
       {
         path: '',
         name: 'users',
-        component: Users
-      }
-    ]
+        component: Users,
+      },
+    ],
   },
   {
     path: '/general',

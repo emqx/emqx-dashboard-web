@@ -112,8 +112,8 @@ export default {
       // wWidth >lWidth?(this.loginKeepWidth=true):(this.loginKeepWidth=false)
     },
     async login(auto = false) {
-      const { username, password } = (auto && getBasicAuthInfo()) || this.record
-      auto && username && password && this.redirect()
+      const { username, token, password } = (auto && getBasicAuthInfo()) || this.record
+      auto && username && token && this.redirect()
 
       if (!auto) {
         this.logining = true
@@ -139,7 +139,7 @@ export default {
       }
     },
     redirect() {
-      const { to = '/' } = this.$route.query
+      const { to = '/dashboard' } = this.$route.query
       this.$router.replace({
         path: to,
       })
