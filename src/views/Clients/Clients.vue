@@ -136,21 +136,6 @@
     </el-table>
 
     <div class="emq-table-footer">
-      <!-- <el-pagination
-        v-if="count > 0"
-        layout="total, sizes, prev, pager, next"
-        :page-sizes="[20, 50, 100, 500]"
-        :page-size.sync="params.limit"
-        :current-page.sync="params.page"
-        :total="count"
-        @size-change="
-          () => {
-            this.loadNodeClients(true)
-          }
-        "
-        @current-change="loadNodeClients"
-      >
-      </el-pagination> -->
       <common-pagination :count="count" :reload-func="loadNodeClients"></common-pagination>
       <!-- <custom-pagination
         v-if="count === -1 && tableData.length"
@@ -165,7 +150,7 @@
 </template>
 
 <script>
-import CustomPagination from '@/components/CustomPagination.vue'
+// import CustomPagination from '@/components/CustomPagination.vue'
 import { disconnectClient, listNodeClients } from '@/api/clients'
 import { loadNodes } from '@/api/common'
 import moment from 'moment'

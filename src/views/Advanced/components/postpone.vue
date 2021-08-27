@@ -11,7 +11,7 @@
           >
             <el-col :span="10">
               <el-form-item :label="tl('maxDelayedMsg')" prop="max_delayed_messages">
-                <el-input v-model="delayedConfig.max_delayed_messages">
+                <el-input v-model.number="delayedConfig.max_delayed_messages">
                   <el-select slot="append" v-model="delayedOption">
                     <el-option value="unlimited" :label="tl('unlimited')"></el-option>
                     <el-option value="custom" :label="tl('custom')"></el-option>
@@ -65,6 +65,9 @@
             </template>
           </el-table-column>
         </el-table>
+        <div class="emq-table-footer">
+          <common-pagination :count="tbCount" :reload-func="loadDelayedList"></common-pagination>
+        </div>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -79,11 +82,14 @@ import {
   getDelayedInfo,
   delDelayedInfo,
 } from '@/api/advanced'
+import CommonPagination from '@/components/commonPagination.vue'
 
 export default defineComponent({
   name: 'Postpone',
   props: ['translate'],
-
+  components: {
+    CommonPagination,
+  },
   setup(props) {
     let delayedConfig = reactive({
       enable: false,
@@ -93,6 +99,7 @@ export default defineComponent({
     let configPending = ref(true)
     let tbLoading = ref(false)
     let configEnable = ref(false)
+    let tbCount = ref(0)
 
     let delayedOption = ref('custom')
     let delayedForm = ref(null)
@@ -136,6 +143,7 @@ export default defineComponent({
       let res = await getDelayedList().catch(() => {})
       if (res) {
         delayedTbData.value = res.data
+        tbCount.value = res.meta?.count
       }
       tbLoading.value = false
     }
@@ -194,6 +202,8 @@ export default defineComponent({
       delayedForm,
       delayedRules,
       configEnable,
+      tbCount,
+      loadDelayedList,
     }
   },
 })
