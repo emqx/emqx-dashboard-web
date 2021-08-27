@@ -16,7 +16,7 @@ export default {
     en: 'Delayed Publish',
   },
   message: {
-    zh: '时间消息',
+    zh: '事件消息',
     en: 'Event Message',
   },
   storage: {
