@@ -5,13 +5,17 @@
       <div>{{ translate('configMsg') }}</div>
     </div>
     <div>
-      <el-row v-for="item in eventType" :key="item">
+      <el-row v-for="(item, key) in eventMsg" :key="key">
         <el-col :span="15">
-          <div class="item-title">{{ `$events/${item}` }}</div>
-          <div class="item-desc">{{ translate(item) }}</div>
+          <div class="item-title">{{ `$events/${key}` }}</div>
+          <div class="item-desc">{{ translate(key) }}</div>
         </el-col>
         <el-col :span="5" class="item-switch">
-          <el-switch></el-switch>
+          <el-switch
+            v-model="eventMsg[key]"
+            v-loading="operationPending"
+            @change="updateEventMsg()"
+          ></el-switch>
         </el-col>
       </el-row>
     </div>
@@ -19,24 +23,67 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, onMounted, reactive, ref } from '@vue/composition-api'
+import { getEventMsg, editEventMsg } from '@/api/advanced'
 
 export default defineComponent({
   name: 'Message',
   props: ['translate'],
   setup() {
-    let eventType = ref([
-      'client_connected',
-      'client_disconnected',
-      'client_subscribed',
-      'client_unsubscribed',
-      'message_delivered',
-      'message_dropped',
-      'message_acked',
-    ])
+    let eventMsg = reactive({
+      client_connected: false,
+      client_disconnected: false,
+      client_subscribed: false,
+      client_unsubscribed: false,
+      message_delivered: false,
+      message_dropped: false,
+      message_acked: false,
+    })
+    let operationPending = ref(true)
+
+    const loadData = async function () {
+      operationPending.value = true
+
+      let res = await getEventMsg().catch(() => {})
+      if (res) {
+        Object.keys(res).forEach((k) => {
+          let alignKey = k.match(/\$event\/(\w+)/)[1]
+          eventMsg[alignKey] = res[k]
+        })
+      } else {
+      }
+      operationPending.value = false
+    }
+
+    const updateEventMsg = async function () {
+      operationPending.value = true
+      let pendingEventMsg = {}
+      Object.keys(eventMsg).forEach((key) => {
+        pendingEventMsg['$event/' + key] = eventMsg[key]
+      })
+      let res = editEventMsg(pendingEventMsg).catch(() => {})
+      if (res) {
+        this.$message({
+          type: 'success',
+          message: this.$t('Base.editSuccess'),
+        })
+      } else {
+        loadData()
+      }
+      operationPending.value = false
+    }
+
+    onMounted(loadData)
+
+    const reloading = () => {
+      loadData()
+    }
 
     return {
-      eventType,
+      eventMsg,
+      operationPending,
+      updateEventMsg,
+      reloading,
     }
   },
 })

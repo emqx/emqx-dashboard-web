@@ -1,8 +1,8 @@
 <template>
   <div class="">
-    <el-tabs tab-position="left">
+    <el-tabs tab-position="left" @tab-click="clickTab">
       <template v-for="pane in panes">
-        <el-tab-pane :label="$t(`Advanced.${pane}`)" :key="pane" lazy="true">
+        <el-tab-pane :label="$t(`Advanced.${pane}`)" :key="pane" :lazy="true">
           <div class="sec-header-title">{{ $t(`Advanced.${pane}`) }}</div>
           <component :is="pane" class="item-page" :translate="tl"></component>
         </el-tab-pane>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, reactive, ref } from '@vue/composition-api'
 import Retainer from './components/retainer.vue'
 import Rewrite from './components/rewrite.vue'
 import Subscribe from './components/subscribe.vue'
@@ -34,9 +34,14 @@ export default defineComponent({
       return this.$t(collection + '.' + key)
     }
 
+    const clickTab = async function (tab) {
+      tab.$children[0]?.reloading && tab.$children[0].reloading()
+    }
+
     return {
       panes,
       tl,
+      clickTab,
     }
   },
 })

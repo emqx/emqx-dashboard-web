@@ -79,9 +79,9 @@ export default {
     zh: '添加',
     en: 'Add',
   },
-  update:{
-    zh:'更新',
-    en:'Update'
+  update: {
+    zh: '更新',
+    en: 'Update',
   },
   delete: {
     zh: '删除',
@@ -170,5 +170,9 @@ export default {
   logining: {
     zh: '登录中,请稍候...',
     en: 'Logining.Please wait...',
+  },
+  opErr: {
+    zh: '操作失败',
+    en: 'Operation failed',
   },
 }
