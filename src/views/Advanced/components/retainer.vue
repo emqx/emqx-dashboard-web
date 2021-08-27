@@ -3,7 +3,12 @@
     <el-tabs>
       <el-tab-pane :label="tl('setting')" v-loading="configLoading">
         <div class="part-header">{{ tl('storage') }}</div>
-        <el-form :disabled="!configEnable">
+        <el-form
+          :disabled="!configEnable"
+          ref="retainerForm"
+          :rules="retainerRules"
+          :model="retainerConfig"
+        >
           <el-row>
             <el-col :span="16">
               <el-form-item :label="tl('storageType')">
@@ -25,8 +30,8 @@
           <div class="part-header">{{ tl('policy') }}</div>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="Max Retained Messages">
-                <el-input v-model="retainerConfig.config.max_retained_messages">
+              <el-form-item label="Max Retained Messages" prop="config.max_retained_messages">
+                <el-input v-model.number="retainerConfig.config.max_retained_messages">
                   <el-select slot="append" v-model="selOptions.retained">
                     <el-option value="unlimited" :label="tl('unlimited')"></el-option>
                     <el-option value="custom" :label="tl('custom')"></el-option>
@@ -35,8 +40,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="Max Payload Size">
-                <el-input v-model="retainerConfig.max_payload_size[0]">
+              <el-form-item label="Max Payload Size" prop="max_payload_size[0]">
+                <el-input v-model.number="retainerConfig.max_payload_size[0]">
                   <el-select slot="append" v-model="selOptions.payload">
                     <el-option value="KB" label="KB"></el-option>
                     <el-option value="MB" label="MB"></el-option>
@@ -47,8 +52,8 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item :label="tl('expire')">
-                <el-input v-model="retainerConfig.msg_expiry_interval[0]">
+              <el-form-item :label="tl('expire')" prop="msg_expiry_interval[0]">
+                <el-input v-model.number="retainerConfig.msg_expiry_interval[0]">
                   <el-select slot="append" v-model="selOptions.expiry">
                     <el-option value="0s" :label="tl('noExp')"></el-option>
                     <el-option value="s" :label="tl('sec')"></el-option>
@@ -59,8 +64,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item :label="tl('intervalClean')">
-                <el-input v-model="retainerConfig.msg_clear_interval[0]">
+              <el-form-item :label="tl('intervalClean')" prop="msg_clear_interval[0]">
+                <el-input v-model.number="retainerConfig.msg_clear_interval[0]">
                   <el-select slot="append" v-model="selOptions.clean">
                     <el-option value="0s" :label="tl('disable')"></el-option>
                     <el-option value="s" :label="tl('sec')"></el-option>
@@ -74,8 +79,8 @@
           <div class="part-header">{{ tl('flowControl') }}</div>
           <el-row>
             <el-col :span="8">
-              <el-form-item :label="tl('readNumber')">
-                <el-input v-model="retainerConfig.flow_control.max_read_number">
+              <el-form-item :label="tl('readNumber')" prop="flow_control.max_read_number">
+                <el-input v-model.number="retainerConfig.flow_control.max_read_number">
                   <el-select slot="append" v-model="selOptions.read">
                     <el-option value="unlimited" :label="tl('unlimited')"></el-option>
                     <el-option value="custom" :label="tl('custom')"></el-option>
@@ -84,8 +89,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item :label="tl('deliverQuota')">
-                <el-input v-model="retainerConfig.flow_control.msg_deliver_quota">
+              <el-form-item :label="tl('deliverQuota')" prop="flow_control.msg_deliver_quota">
+                <el-input v-model.number="retainerConfig.flow_control.msg_deliver_quota">
                   <el-select slot="append" v-model="selOptions.deliver">
                     <el-option value="unlimited" :label="tl('unlimited')"></el-option>
                     <el-option value="custom" :label="tl('custom')"></el-option>
@@ -96,8 +101,11 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item :label="tl('releaseInterval')">
-                <el-input v-model="retainerConfig.flow_control.quota_release_interval[0]">
+              <el-form-item
+                :label="tl('releaseInterval')"
+                prop="flow_control.quota_release_interval[0]"
+              >
+                <el-input v-model.number="retainerConfig.flow_control.quota_release_interval[0]">
                   <el-select slot="append" v-model="selOptions.release">
                     <el-option value="s" :label="tl('sec')"></el-option>
                     <el-option value="m" :label="tl('min')"></el-option>
@@ -200,9 +208,38 @@ export default defineComponent({
     let payloadDialog = ref(false)
     let payloadDetail = ref('')
     let payloadLoading = ref(false)
+    let retainerForm = ref(null)
+
+    let validatorRules = [
+      { required: true, message: props.translate('required'), trigger: 'blur' },
+      { type: 'number', message: props.translate('needNumber'), trigger: 'blur' },
+    ]
+
+    const retainerRules = ref({
+      config: {
+        max_retained_messages: validatorRules,
+      },
+      max_payload_size: {
+        0: validatorRules,
+      },
+      msg_expiry_interval: {
+        0: validatorRules,
+      },
+      msg_clear_interval: {
+        0: validatorRules,
+      },
+      flow_control: {
+        max_read_number: validatorRules,
+        msg_deliver_quota: validatorRules,
+        quota_release_interval: {
+          0: validatorRules,
+        },
+      },
+    })
 
     const loadConfigData = async () => {
       configLoading.value = true
+      retainerForm.value?.resetFields()
       let res = await getRetainer().catch(() => {})
       if (res) {
         Object.assign(retainerConfig, res)
@@ -307,6 +344,9 @@ export default defineComponent({
     }
 
     const updateConfigData = async function () {
+      let valid = await this.$refs.retainerForm.validate().catch(() => {})
+      if (!valid) return
+
       configLoading.value = true
       composeConfigFromForm(retainerConfig)
       let res = await updateRetainer(retainerConfig).catch(() => {})
@@ -384,6 +424,8 @@ export default defineComponent({
       checkPayload,
       payloadDetail,
       payloadLoading,
+      retainerRules,
+      retainerForm,
     }
   },
 })

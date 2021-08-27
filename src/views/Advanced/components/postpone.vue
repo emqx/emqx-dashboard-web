@@ -3,9 +3,9 @@
     <el-tabs>
       <el-tab-pane :label="tl('setting')" v-loading="configPending">
         <el-row>
-          <el-form>
+          <el-form ref="delayedForm" :rules="delayedRules" :model="delayedConfig">
             <el-col :span="10">
-              <el-form-item :label="tl('maxDelayedMsg')">
+              <el-form-item :label="tl('maxDelayedMsg')" prop="max_delayed_messages">
                 <el-input v-model="delayedConfig.max_delayed_messages">
                   <el-select slot="append" v-model="delayedOption">
                     <el-option value="unlimited" :label="tl('unlimited')"></el-option>
@@ -35,11 +35,13 @@
           <el-table-column :label="'Topic'" prop="topic"></el-table-column>
           <el-table-column :label="'QoS'" prop="qos"></el-table-column>
           <el-table-column :label="'Payload'">
-            <template></template>
+            <template #default="{ row }">
+              <el-button size="mini" @click="checkPayload(row)">{{ tl('openPayload') }}</el-button>
+            </template>
           </el-table-column>
           <el-table-column :label="'From ClientID'" prop="from_clientid"></el-table-column>
-          <el-table-column :label="tl('delayedTime')" prop=""></el-table-column>
-          <el-table-column :label="tl('remainTime')"></el-table-column>
+          <el-table-column :label="tl('delayedTime')" prop="delayed_interval"></el-table-column>
+          <el-table-column :label="tl('remainTime')" prop="delayed_remaining"></el-table-column>
           <el-table-column :label="tl('publishTime')" prop="publish_at"></el-table-column>
 
           <el-table-column :label="$t('Base.operation')">
@@ -79,6 +81,13 @@ export default defineComponent({
     let tbLoading = ref(false)
 
     let delayedOption = ref('custom')
+    let delayedForm = ref(null)
+    let delayedRules = {
+      max_delayed_messages: [
+        { required: true, message: props.translate('required'), trigger: 'blur' },
+        { type: 'number', message: props.translate('needNumber'), trigger: 'blur' },
+      ],
+    }
 
     const getDelayedOption = () => {
       if (delayedConfig?.max_delayed_messages == 0) {
@@ -90,6 +99,8 @@ export default defineComponent({
 
     const loadDelayedConfig = async () => {
       configPending.value = true
+      delayedForm.value?.resetFields()
+
       let res = await getDelayedConfig().catch(() => {})
       if (res) {
         Object.assign(delayedConfig, res)
@@ -126,6 +137,8 @@ export default defineComponent({
     }
 
     const updateDelayedConfig = async function () {
+      let valid = await delayedForm.value?.validate().catch(() => {})
+      if (!valid) return
       configPending.value = true
       let res = await editDelayedConfig(delayedConfig).catch(() => {})
       if (res) {
@@ -153,6 +166,8 @@ export default defineComponent({
       delayedOption,
       reloading,
       tbLoading,
+      delayedForm,
+      delayedRules,
     }
   },
 })

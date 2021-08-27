@@ -26,8 +26,8 @@
       :visible.sync="opRewrite"
       :title="(isEdit ? $t('Base.edit') : $t('Base.add')) + ' ' + tl('rewrite')"
     >
-      <el-form>
-        <el-form-item :label="'Action'">
+      <el-form ref="rewriteForm" :model="rewriteInput" :rules="rewriteRules">
+        <el-form-item :label="'Action'" prop="action">
           <el-select v-model="rewriteInput.action">
             <el-option
               v-for="item in actionOptions"
@@ -37,13 +37,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="tl('sTopic')">
+        <el-form-item :label="tl('sTopic')" prop="source_topic">
           <el-input v-model="rewriteInput.source_topic"></el-input>
         </el-form-item>
-        <el-form-item :label="'Re'">
+        <el-form-item :label="'Re'" prop="re">
           <el-input v-model="rewriteInput.re"></el-input>
         </el-form-item>
-        <el-form-item :label="tl('dTopic')">
+        <el-form-item :label="tl('dTopic')" prop="dest_topic">
           <el-input v-model="rewriteInput.dest_topic"></el-input>
         </el-form-item>
       </el-form>
@@ -64,7 +64,7 @@
 <script>
 import { defineComponent, onMounted, reactive, ref } from '@vue/composition-api'
 import { getTopicRewrite, editTopicRewrite } from '@/api/advanced'
-import i18n from '@/i18n'
+// import i18n from '@/i18n'
 
 export default defineComponent({
   name: 'Rewrite',
@@ -83,8 +83,21 @@ export default defineComponent({
     let editPos = ref(undefined)
     let submitLoading = ref(false)
     let tbDataLoading = ref(true)
+    let rewriteForm = ref(null)
+
+    let validatorRules = [
+      { required: true, message: props.translate('required'), trigger: ['blur', 'change'] },
+    ]
+    let rewriteRules = {
+      action: validatorRules,
+      source_topic: validatorRules,
+      re: validatorRules,
+      dest_topic: validatorRules,
+    }
+
     const openOpDialog = (edit = false, originData) => {
       opRewrite.value = true
+      rewriteForm.value?.resetFields()
       isEdit.value = !!edit
       Object.keys(rewriteInput).forEach((k) => {
         rewriteInput[k] = edit && originData[k] ? originData[k] : ''
@@ -93,6 +106,9 @@ export default defineComponent({
     }
 
     const submitRewrite = async function (edit = false) {
+      let valid = await rewriteForm.value?.validate().catch(() => {})
+      if (!valid) return
+
       let pendingTbData = [...rewriteTbData.value]
 
       if (!edit) {
@@ -175,6 +191,8 @@ export default defineComponent({
       submitLoading,
       tbDataLoading,
       reloading,
+      rewriteForm,
+      rewriteRules,
     }
   },
 })

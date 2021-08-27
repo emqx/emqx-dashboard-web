@@ -1,7 +1,7 @@
 export default {
   retainer: {
-    zh: 'MQTT Retainer',
-    en: 'MQTT Retainer',
+    zh: '消息保留',
+    en: 'Retainer',
   },
   rewrite: {
     zh: '主题重写',
@@ -21,6 +21,7 @@ export default {
   },
   storage: {
     en: 'Storage',
+    zh: 'Storage',
   },
   policy: {
     en: 'Policy',
@@ -55,7 +56,7 @@ export default {
     en: 'Enable',
   },
   enableDesc: {
-    zh: '停用Retainer功能不会清除已保存的数据',
+    zh: '停用功能不会清除已保存的数据',
     en: 'The retain message is no longer stored and published, but the data in the database will not be deleted',
   },
   enableDescDelay: {
@@ -89,6 +90,10 @@ export default {
   remainTime: {
     zh: '剩余时间',
     en: 'Remaining',
+  },
+  publishTime: {
+    zh: '发布时间',
+    en: 'publish Time',
   },
   eventTitleDesc: {
     zh: '将设备生命周期事件通过事件主题以 MQTT 消息的形式发布',
@@ -173,5 +178,13 @@ export default {
   openPayload: {
     en: 'details',
     zh: '查看',
+  },
+  required: {
+    en: 'It is required',
+    zh: '请填写',
+  },
+  needNumber: {
+    en: 'It needs to be a number',
+    zh: '请填写数字',
   },
 }

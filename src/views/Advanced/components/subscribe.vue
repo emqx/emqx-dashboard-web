@@ -29,8 +29,8 @@
       :visible.sync="opSubs"
       :title="(isEdit ? $t('Base.edit') : $t('Base.add')) + ' ' + tl('subscribe')"
     >
-      <el-form>
-        <el-form-item :label="'Topic'">
+      <el-form :rules="subsRules" :model="subsInput" ref="subsForm">
+        <el-form-item :label="'Topic'" prop="topic">
           <el-input v-model="subsInput.topic"></el-input>
         </el-form-item>
         <el-form-item :label="'QoS'">
@@ -92,11 +92,15 @@ export default defineComponent({
     let editPos = ref(undefined)
     let submitLoading = ref(false)
     let tbLoading = ref(false)
+    let subsForm = ref(null)
+    let subsRules = {
+      topic: [{ required: true, message: props.translate('required'), trigger: ['blur'] }],
+    }
 
     let openOpDialog = (edit = false, origin) => {
       opSubs.value = true
       isEdit.value = !!edit
-
+      subsForm.value?.resetFields()
       subsInput.topic = edit && origin.topic ? origin.topic : ''
       subsInput.qos = edit && origin.qos ? origin.qos : 0
 
@@ -115,6 +119,9 @@ export default defineComponent({
     }
 
     const submitSubs = async function (edit = false) {
+      let valid = await subsForm.value?.validate().catch(() => {})
+      if (!valid) return
+
       let tempOpStore = {}
       let pendingTbData = Object.assign([], subTbData.value)
 
@@ -206,6 +213,8 @@ export default defineComponent({
       submitLoading,
       reloading,
       tbLoading,
+      subsForm,
+      subsRules,
     }
   },
 })

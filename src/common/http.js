@@ -21,10 +21,11 @@ Object.assign(axios.defaults, {
 axios.interceptors.request.use(
   (config) => {
     const user = getBasicAuthInfo()
-    config.headers = {
-      Authorization: user.token ? 'Bearer ' + user.token : '',
+    if (user.token) {
+      config.headers = {
+        Authorization: 'Bearer ' + user.token,
+      }
     }
-
     return config
   },
   (error) => {
@@ -72,9 +73,13 @@ axios.interceptors.response.use(
     }
 
     if (store.state.request_queue === 0) respSet = new Set()
-    _.throttle(() => {
-      respSet = new Set()
-    }, 2000, { trailing: false })
+    _.throttle(
+      () => {
+        respSet = new Set()
+      },
+      2000,
+      { trailing: false },
+    )
 
     return Promise.reject(error)
   },
