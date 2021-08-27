@@ -8,10 +8,10 @@
     </div>
 
     <el-table :data="rewriteTbData" v-loading="tbDataLoading">
-      <el-table-column :label="'Action'" prop="action"></el-table-column>
-      <el-table-column :label="tl('sTopic')" prop="source_topic"></el-table-column>
-      <el-table-column :label="'Re'" prop="re"></el-table-column>
-      <el-table-column :label="tl('dTopic')" prop="dest_topic"></el-table-column>
+      <el-table-column :label="'Action'" prop="action" sortable></el-table-column>
+      <el-table-column :label="tl('sTopic')" prop="source_topic" sortable></el-table-column>
+      <el-table-column :label="'Re'" prop="re" sortable></el-table-column>
+      <el-table-column :label="tl('dTopic')" prop="dest_topic" sortable></el-table-column>
       <el-table-column :label="$t('Base.operation')">
         <template #default="{ row }">
           <el-button size="mini" @click="openOpDialog(true, row)">{{ $t('Base.edit') }}</el-button>

@@ -130,15 +130,15 @@
       </el-tab-pane>
       <el-tab-pane :label="tl('dataManage')">
         <el-table :data="tbData" v-loading="tbLoading">
-          <el-table-column :label="'Topic'" prop="topic"></el-table-column>
-          <el-table-column :label="'QoS'" prop="qos"></el-table-column>
+          <el-table-column :label="'Topic'" prop="topic" sortable></el-table-column>
+          <el-table-column :label="'QoS'" prop="qos" sortable></el-table-column>
           <el-table-column :label="'Payload'">
             <template #default="{ row }">
               <el-button size="mini" @click="checkPayload(row)">{{ tl('openPayload') }}</el-button>
             </template>
           </el-table-column>
-          <el-table-column :label="'From ClientID'" prop="from_clientid"></el-table-column>
-          <el-table-column :label="tl('createDate')" prop="publish_at"></el-table-column>
+          <el-table-column :label="'From ClientID'" prop="from_clientid" sortable></el-table-column>
+          <el-table-column :label="tl('createDate')" prop="publish_at" sortable></el-table-column>
           <el-table-column :label="$t('Base.operation')">
             <template #default="{ row }">
               <el-button size="mini" type="danger" plain @click="deleteRetainerTopic(row)">{{
@@ -351,10 +351,10 @@ export default defineComponent({
       composeConfigFromForm(retainerConfig)
       let res = await updateRetainer(retainerConfig).catch(() => {})
       if (res) {
+        getConfigFormEnable()
       } else {
         loadConfigData()
       }
-      getConfigFormEnable()
       configLoading.value = false
     }
 

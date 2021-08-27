@@ -3,7 +3,12 @@
     <el-tabs>
       <el-tab-pane :label="tl('setting')" v-loading="configPending">
         <el-row>
-          <el-form ref="delayedForm" :rules="delayedRules" :model="delayedConfig">
+          <el-form
+            ref="delayedForm"
+            :rules="delayedRules"
+            :model="delayedConfig"
+            :disabled="!configEnable"
+          >
             <el-col :span="10">
               <el-form-item :label="tl('maxDelayedMsg')" prop="max_delayed_messages">
                 <el-input v-model="delayedConfig.max_delayed_messages">
@@ -32,17 +37,25 @@
       </el-tab-pane>
       <el-tab-pane :label="tl('dataManage')" v-loading="tbLoading">
         <el-table :data="delayedTbData">
-          <el-table-column :label="'Topic'" prop="topic"></el-table-column>
-          <el-table-column :label="'QoS'" prop="qos"></el-table-column>
+          <el-table-column :label="'Topic'" prop="topic" sortable></el-table-column>
+          <el-table-column :label="'QoS'" prop="qos" sortable></el-table-column>
           <el-table-column :label="'Payload'">
             <template #default="{ row }">
               <el-button size="mini" @click="checkPayload(row)">{{ tl('openPayload') }}</el-button>
             </template>
           </el-table-column>
-          <el-table-column :label="'From ClientID'" prop="from_clientid"></el-table-column>
-          <el-table-column :label="tl('delayedTime')" prop="delayed_interval"></el-table-column>
-          <el-table-column :label="tl('remainTime')" prop="delayed_remaining"></el-table-column>
-          <el-table-column :label="tl('publishTime')" prop="publish_at"></el-table-column>
+          <el-table-column :label="'From ClientID'" prop="from_clientid" sortable></el-table-column>
+          <el-table-column
+            :label="tl('delayedTime')"
+            prop="delayed_interval"
+            sortable
+          ></el-table-column>
+          <el-table-column
+            :label="tl('remainTime')"
+            prop="delayed_remaining"
+            sortable
+          ></el-table-column>
+          <el-table-column :label="tl('publishTime')" prop="publish_at" sortable></el-table-column>
 
           <el-table-column :label="$t('Base.operation')">
             <template #default="{ row }">
@@ -79,6 +92,7 @@ export default defineComponent({
     let delayedTbData = ref([])
     let configPending = ref(true)
     let tbLoading = ref(false)
+    let configEnable = ref(false)
 
     let delayedOption = ref('custom')
     let delayedForm = ref(null)
@@ -96,6 +110,13 @@ export default defineComponent({
         return 'custom'
       }
     }
+    const getConfigFormEnable = () => {
+      if (delayedConfig?.enable === true) {
+        configEnable.value = true
+      } else {
+        configEnable.value = false
+      }
+    }
 
     const loadDelayedConfig = async () => {
       configPending.value = true
@@ -104,6 +125,7 @@ export default defineComponent({
       let res = await getDelayedConfig().catch(() => {})
       if (res) {
         Object.assign(delayedConfig, res)
+        getConfigFormEnable()
         delayedOption.value = getDelayedOption()
       }
       configPending.value = false
@@ -142,11 +164,13 @@ export default defineComponent({
       configPending.value = true
       let res = await editDelayedConfig(delayedConfig).catch(() => {})
       if (res) {
+        getConfigFormEnable()
       } else {
         loadDelayedConfig()
       }
       configPending.value = false
     }
+
     onMounted(() => {
       loadDelayedConfig()
       loadDelayedList()
@@ -156,6 +180,7 @@ export default defineComponent({
       loadDelayedList()
       loadDelayedConfig()
     }
+
     return {
       tl: props.translate,
       delayedTbData,
@@ -168,6 +193,7 @@ export default defineComponent({
       tbLoading,
       delayedForm,
       delayedRules,
+      configEnable,
     }
   },
 })
