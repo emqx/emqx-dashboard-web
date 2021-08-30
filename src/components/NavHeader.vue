@@ -159,7 +159,7 @@ export default {
       this[command] && this[command]()
     },
     gotoCloud() {
-      window.open('https://cloud.emqx.cn', '_blank')
+      window.open('https://www.emqx.com/cloud', '_blank')
     },
     setHeaderTitle() {
       let { path } = this.$route || []
