@@ -16,7 +16,7 @@ export function loadStats() {
 export function loadLicenseInfo() {
   return http.get('/license_info')
 }
-
+//metrics
 export function loadMetrics() {
   return http.get('/metrics')
 }
@@ -27,6 +27,22 @@ export function loadCurrentMetrics() {
 
 export function loadMetricsLog(type) {
   return http.get('/monitor' + (type ? '/counters/' + type : ''))
+}
+//metrics integration
+export function getStatsd() {
+  return http.get('/statsd')
+}
+
+export function setStatsd(body) {
+  return http.put('/statsd', body)
+}
+
+export function getPrometheus() {
+  return http.get('/prometheus')
+}
+
+export function setPrometheus(body) {
+  return http.put('/prometheus', body)
 }
 
 export async function loadNodes() {
@@ -60,12 +76,12 @@ export const inviteNode = async (data) => {
   const body = {
     node: data.config.node,
   }
-  return http.post('/cluster/invite_node', body).catch(() => { })
+  return http.post('/cluster/invite_node', body).catch(() => {})
 }
 
 // 集群移除节点
 export const forceLeaveNode = async (nodename) => {
-  return http.delete(`/cluster/force_leave/${nodename}`).catch(() => { })
+  return http.delete(`/cluster/force_leave/${nodename}`).catch(() => {})
 }
 
 //topics

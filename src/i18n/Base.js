@@ -99,6 +99,10 @@ export default {
     zh: '删除成功',
     en: 'Delete Success',
   },
+  updateSuccess: {
+    zh: '更新成功',
+    en: 'Update Success',
+  },
   viewMore: {
     zh: '查看更多',
     en: 'View More',

@@ -98,6 +98,12 @@
   }
 }
 
+.el-checkbox {
+  &.is-bordered.el-checkbox--small {
+    line-height: 20px;
+  }
+}
+
 /* Form */
 .el-form {
   &.el-form--label-left {
@@ -171,12 +177,12 @@
     }
   }
 }
-.el-loading-parent--relative{
+.el-loading-parent--relative {
   border-width: 1px;
-  &::before{
+  &::before {
     height: 0;
   }
-  .el-loading-mask{
+  .el-loading-mask {
     z-index: 99;
   }
 }

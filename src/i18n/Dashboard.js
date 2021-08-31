@@ -327,4 +327,20 @@ export default {
     zh: '消息丢弃',
     en: 'Dropped',
   },
+  integration: {
+    zh: 'Metrics Integration',
+    en: 'Metrics Integration',
+  },
+  integrationDesc: {
+    zh: '集成外部指标监控与告警管理',
+    en: 'Integrated monitoring and alerting toolkit',
+  },
+  promDesc: {
+    zh: '集成外部指标监控与告警管理',
+    en: 'Integrated monitoring and alerting toolkit',
+  },
+  statsdDesc: {
+    zh: '使用 StatsD 采集指标数据',
+    en: 'Integration with StatsD',
+  },
 }
