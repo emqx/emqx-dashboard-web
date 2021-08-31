@@ -14,12 +14,13 @@ export function getRetainerList() {
 }
 
 export function getRetainerTopic(topic) {
+  if (null == topic) return
   return http.get('/mqtt/retainer/message/' + encodeURIComponent(topic))
 }
 
 export function delRetainerTopic(topic) {
-  if (!topic) return
-  return http.delete('/mqtt/retainer/messages/' + topic)
+  if (null == topic) return
+  return http.delete('/mqtt/retainer/messages/' + encodeURIComponent(topic))
 }
 
 export function getTopicRewrite() {
@@ -54,12 +55,13 @@ export function getDelayedList() {
 }
 
 export function getDelayedInfo(id) {
-  return http.get('/mqtt/delayed/messages/' + id)
+  if (id == null) return
+  return http.get('/mqtt/delayed/messages/' + encodeURIComponent(id))
 }
 
 export function delDelayedInfo(id) {
-  if (!id) return
-  return http.delete('/mqtt/delayed/messages/' + id)
+  if (null == id) return
+  return http.delete('/mqtt/delayed/messages/' + encodeURIComponent(id))
 }
 
 export function getEventMsg() {
@@ -69,4 +71,24 @@ export function getEventMsg() {
 export function editEventMsg(body) {
   let data = typeof body === 'object' && body !== null ? body : {}
   return http.put('/mqtt/event_message', data)
+}
+
+//topic metrics
+export function getTopicMetrics() {
+  return http.get('/mqtt/topic_metrics')
+}
+
+export function addTopicMetrics(topic) {
+  let data = { topic: topic }
+  return http.post('/mqtt/topic_metrics', data)
+}
+
+export function deleteTopicMetrics(topic) {
+  if (topic == null) return
+  return http.delete('/mqtt/topic_rewrite/' + encodeURIComponent(topic))
+}
+
+export function resetTopicMetrics(topic) {
+  if (topic == null) return
+  return http.put(`/mqtt/topic_metrics/${encodeURIComponent(topic)}/reset`)
 }

@@ -70,6 +70,14 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+    <el-dialog :visible.sync="payloadDialog" :title="'Payload'">
+      <el-row v-loading="payloadLoading">
+        <textarea v-model="payloadDetail" class="payload-text"></textarea>
+      </el-row>
+      <template #footer>
+        <el-button size="small">{{ $t('Base.copy') }}</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -109,6 +117,9 @@ export default defineComponent({
         { type: 'number', message: props.translate('needNumber'), trigger: 'blur' },
       ],
     }
+    let payloadDialog = ref(false)
+    let payloadLoading = ref(false)
+    let payloadDetail = ref('')
 
     const getDelayedOption = () => {
       if (delayedConfig?.max_delayed_messages == 0) {
@@ -149,7 +160,7 @@ export default defineComponent({
     }
 
     const deleteDelayedInfo = async function (row) {
-      this.$confirm(this.$t('General.confirmDeleteUser'), {
+      this.$confirm(this.$t('General.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
@@ -166,6 +177,19 @@ export default defineComponent({
         .catch(() => {})
     }
 
+    const checkPayload = async function (row) {
+      payloadDialog.value = true
+      payloadLoading.value = true
+      payloadDetail.value = ''
+      const { topic } = row
+      let res = await getDelayedInfo(topic).catch(() => {})
+      if (res) {
+        payloadDetail.value = res?.payload
+      } else {
+      }
+      payloadLoading.value = false
+    }
+
     const updateDelayedConfig = async function () {
       let valid = await delayedForm.value?.validate().catch(() => {})
       if (!valid) return
@@ -173,6 +197,10 @@ export default defineComponent({
       let res = await editDelayedConfig(delayedConfig).catch(() => {})
       if (res) {
         getConfigFormEnable()
+        this.$message({
+          type: 'success',
+          message: this.$t('Base.updateSuccess'),
+        })
       } else {
         loadDelayedConfig()
       }
@@ -204,6 +232,10 @@ export default defineComponent({
       configEnable,
       tbCount,
       loadDelayedList,
+      checkPayload,
+      payloadDialog,
+      payloadLoading,
+      payloadDetail,
     }
   },
 })
@@ -219,5 +251,13 @@ export default defineComponent({
   .el-select {
     margin: -10px 0;
   }
+}
+
+.payload-text {
+  width: 100%;
+  height: 220px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  padding: 5px;
 }
 </style>

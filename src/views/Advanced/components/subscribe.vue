@@ -160,7 +160,7 @@ export default defineComponent({
     }
 
     const deleteSubs = async function (origin) {
-      this.$confirm(this.$t('General.confirmDeleteUser'), {
+      this.$confirm(this.$t('General.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',

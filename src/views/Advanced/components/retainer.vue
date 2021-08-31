@@ -268,17 +268,17 @@ export default defineComponent({
       if (config?.max_payload_size) {
         let matching = config.max_payload_size.match(/(\d+)(\w{2,})/)
         selOptions.payload = matching[2]
-        config.max_payload_size = [matching[1], matching[2]]
+        config.max_payload_size = [+matching[1], matching[2]]
       }
       if (config?.msg_expiry_interval) {
         let matching = config.msg_expiry_interval.match(/(\d+)(\w)/)
         selOptions.expiry = matching[1] === '0' ? config.msg_expiry_interval : matching[2]
-        config.msg_expiry_interval = [matching[1], matching[2]]
+        config.msg_expiry_interval = [+matching[1], matching[2]]
       }
       if (config?.msg_clear_interval) {
         let matching = config.msg_clear_interval.match(/(\d+)(\w)/)
         selOptions.clean = matching[1] === '0' ? config.msg_clear_interval : matching[2]
-        config.msg_clear_interval = [matching[1], matching[2]]
+        config.msg_clear_interval = [+matching[1], matching[2]]
       }
       if (config?.flow_control?.max_read_number === 0) {
         selOptions.read = 'unlimited'
@@ -293,7 +293,7 @@ export default defineComponent({
       if (config?.flow_control?.quota_release_interval) {
         let matching = config.flow_control.quota_release_interval.match(/(\d+)(\w)/)
         selOptions.release = matching[2]
-        config.flow_control.quota_release_interval = [matching[1], matching[2]]
+        config.flow_control.quota_release_interval = [+matching[1], matching[2]]
       }
     }
 
@@ -306,13 +306,15 @@ export default defineComponent({
       function combineData(data) {
         if (typeof data == 'object' && data !== null) {
           Object.keys(data).forEach((k) => {
-            if (typeof data[k] == 'object' && data[k] !== null) {
+            if (data[k] instanceof Array) {
+              setProperDataFromForm(k, data[k])
+
+              data[k] = data[k].join('')
+            } else if (typeof data[k] == 'object' && data[k] !== null) {
               combineData(data[k])
               return
-            }
-            setProperDataFromForm(k, data[k])
-            if (data[k] instanceof Array) {
-              data[k] = data[k].join('')
+            } else {
+              setProperDataFromForm(k, data[k])
             }
           })
         }
@@ -349,9 +351,14 @@ export default defineComponent({
 
       configLoading.value = true
       composeConfigFromForm(retainerConfig)
+
       let res = await updateRetainer(retainerConfig).catch(() => {})
       if (res) {
         getConfigFormEnable()
+        this.$message({
+          type: 'success',
+          message: this.$t('Base.updateSuccess'),
+        })
       } else {
         loadConfigData()
       }
@@ -359,7 +366,7 @@ export default defineComponent({
     }
 
     const deleteRetainerTopic = async function (row) {
-      this.$confirm(this.$t('General.confirmDeleteUser'), {
+      this.$confirm(this.$t('General.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',

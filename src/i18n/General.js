@@ -163,7 +163,7 @@ export default {
     zh: '创建用户成功',
     en: 'Create User Success',
   },
-  changePassSuccess:{
+  changePassSuccess: {
     zh: '修改密码成功',
     en: 'Changing Password Success',
   },
@@ -173,6 +173,10 @@ export default {
   },
   confirmDeleteUser: {
     zh: '确认删除该用户?',
+    en: 'Confirm delete?',
+  },
+  confirmDelete: {
+    zh: '确认删除?',
     en: 'Confirm delete?',
   },
   blacklist: {

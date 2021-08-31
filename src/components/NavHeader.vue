@@ -148,7 +148,8 @@ export default {
       if (!command) {
         return
       }
-      ;(this[command] && this[command]()) || this.$router.push({ name: command })
+      ;(this[command] && this[command]()) ||
+        (this.$router.currentRoute?.name !== command && this.$router.push({ name: command }))
     },
     gotoCloud() {
       window.open('https://www.emqx.com/cloud', '_blank')
