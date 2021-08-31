@@ -139,12 +139,8 @@ export default {
           type: 'warning',
         })
         .then(() => {
-          // await this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
-          // this.$store.commit('UPDATE_EDITION', null)
-          // this.$store.commit('SET_LANGUAGE', null)
           this.$message.success(this.$t('components.loggedOut'))
           toLogin()
-          // this.$router.push('/login')
         })
         .catch((e) => {})
     },
@@ -152,11 +148,7 @@ export default {
       if (!command) {
         return
       }
-      // if (command !== 'login') {
-      //   this.$router.push({ path: `/${command}` }).catch((e) => e)
-      //   return
-      // }
-      this[command] && this[command]()
+      ;(this[command] && this[command]()) || this.$router.push({ name: command })
     },
     gotoCloud() {
       window.open('https://www.emqx.com/cloud', '_blank')

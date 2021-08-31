@@ -25,4 +25,4 @@ yarn run test
 yarn run lint
 ```
 
-### emqx-dashboard is powered by vue; EMQX is a gold sponsor of vue
+### This Project is powered by VUE; EMQX is a corporation which is a gold sponsor of VUE

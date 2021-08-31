@@ -35,7 +35,7 @@
                 <el-menu-item
                   :key="topLvRoute.path + '/' + route.path"
                   :index="topLvRoute.path + '/' + route.path"
-                  >{{ $t(`components.${route.path}`) }}</el-menu-item
+                  >{{ $t(`components.${kebab2pascal(route.path)}`) }}</el-menu-item
                 >
               </template>
             </el-menu>
@@ -78,6 +78,11 @@ export default {
 
   data() {
     return {}
+  },
+  methods: {
+    kebab2pascal(s) {
+      return String(s).replace(/-([a-z])/g, (s, m1) => m1.toUpperCase())
+    },
   },
   computed: {
     ...mapGetters(['edition']),
