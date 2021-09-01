@@ -58,9 +58,15 @@
 
     <el-table :data="historyAlarmData" v-loading.lock="historyLockTable">
       <el-table-column prop="name" :label="$t('Alarm.alarmName')" sortable></el-table-column>
-      <el-table-column prop="message" :label="$t('Alarm.alarmMsg')" sortable>
+      <el-table-column :label="$t('Alarm.alarmMsg')" sortable>
         <template slot-scope="{ row }">
-          <el-popover placement="top" trigger="hover" width="160" :open-delay="500">
+          <el-popover
+            placement="top"
+            trigger="hover"
+            width="160"
+            :open-delay="500"
+            v-if="Object.keys(row.details).length"
+          >
             <div v-for="(value, label) in row.details" :key="label">{{ label }}: {{ value }}</div>
             <span slot="reference" class="details">
               <i class="iconfont el-icon-question"></i>

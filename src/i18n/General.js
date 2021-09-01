@@ -173,11 +173,15 @@ export default {
   },
   confirmDeleteUser: {
     zh: '确认删除该用户?',
-    en: 'Confirm delete?',
+    en: 'Confirm to delete the user?',
   },
   confirmDelete: {
     zh: '确认删除?',
-    en: 'Confirm delete?',
+    en: 'Confirm to delete?',
+  },
+  confirmReset: {
+    zh: '确认重置?',
+    en: 'Confirm to reset',
   },
   blacklist: {
     zh: '黑名单',

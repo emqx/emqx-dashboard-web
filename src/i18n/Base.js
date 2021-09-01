@@ -87,21 +87,29 @@ export default {
     zh: '删除',
     en: 'Delete',
   },
+  reset: {
+    zh: '重置',
+    en: 'Reset',
+  },
   applySuccess: {
     zh: '应用成功',
-    en: 'Apply Success',
+    en: 'Apply Successfully',
   },
   createSuccess: {
     zh: '创建成功',
-    en: 'Create Success',
+    en: 'Create Successfully',
   },
   deleteSuccess: {
     zh: '删除成功',
-    en: 'Delete Success',
+    en: 'Delete Successfully',
   },
   updateSuccess: {
     zh: '更新成功',
-    en: 'Update Success',
+    en: 'Update Successfully',
+  },
+  resetSuccess: {
+    zh: '更新成功',
+    en: 'Reset Successfully',
   },
   viewMore: {
     zh: '查看更多',
@@ -121,7 +129,7 @@ export default {
   },
   editSuccess: {
     zh: '编辑成功',
-    en: 'Edit Success',
+    en: 'Edit Successfully',
   },
   day: {
     zh: '天',
@@ -133,11 +141,11 @@ export default {
   },
   enableSuccess: {
     zh: '启用成功',
-    en: 'Enable Success',
+    en: 'Enable Successfully',
   },
   disabledSuccess: {
     zh: '停用成功',
-    en: 'Disable Success',
+    en: 'Disable Successfully',
   },
   select: {
     zh: '选择',
@@ -153,11 +161,15 @@ export default {
   },
   operateSuccess: {
     zh: '操作成功',
-    en: 'Successful operation',
+    en: 'Operate Successfully',
   },
   detail: {
     zh: '详情',
     en: 'Details',
+  },
+  all: {
+    zh: '全部',
+    en: 'All',
   },
   unameRequired: {
     zh: '请填写用户名',

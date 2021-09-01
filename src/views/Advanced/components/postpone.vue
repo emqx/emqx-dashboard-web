@@ -76,7 +76,7 @@
     </el-tabs>
     <el-dialog :visible.sync="payloadDialog" :title="'Payload'">
       <el-row v-loading="payloadLoading">
-        <textarea v-model="payloadDetail" class="payload-text"></textarea>
+        <textarea v-model="payloadDetail" class="payload-text" readonly></textarea>
       </el-row>
       <template #footer>
         <span v-if="isCopyShow" class="payload-copied">{{ $t('Base.copied') }}</span>

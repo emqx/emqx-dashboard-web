@@ -155,6 +155,10 @@ export default {
     zh: 'MQTT高级特性',
     en: 'MQTT Advanced Feat.',
   },
+  topicMetrics: {
+    zh: 'Topic Metrics',
+    en: 'Topic Metrics',
+  },
   setting: {
     zh: '设置',
     en: 'Setting',

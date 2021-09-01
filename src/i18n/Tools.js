@@ -139,4 +139,28 @@ export default {
     zh: '{name}',
     en: '{name} is ',
   },
+  addTopic: {
+    zh: '添加Topic',
+    en: 'Add Topic',
+  },
+  msgIn: {
+    en: 'Message In',
+    zh: '消息流入',
+  },
+  msgOut: {
+    en: 'Message Out',
+    zh: '消息流出',
+  },
+  msgDrop: {
+    en: 'Message Dropped',
+    zh: '消息丢弃',
+  },
+  startTime: {
+    en: 'Start At',
+    zh: '起始时间',
+  },
+  rate: {
+    zh: '条/秒',
+    en: 'massage(s)/s',
+  },
 }

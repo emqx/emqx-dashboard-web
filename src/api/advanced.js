@@ -85,10 +85,10 @@ export function addTopicMetrics(topic) {
 
 export function deleteTopicMetrics(topic) {
   if (topic == null) return
-  return http.delete('/mqtt/topic_rewrite/' + encodeURIComponent(topic))
+  return http.delete('/mqtt/topic_metrics/' + encodeURIComponent(topic))
 }
 
 export function resetTopicMetrics(topic) {
   if (topic == null) return
-  return http.put(`/mqtt/topic_metrics/${encodeURIComponent(topic)}/reset`)
+  return http.put(`/mqtt/topic_metrics`, { action: 'reset', topic })
 }

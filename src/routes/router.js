@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Layout from '@/components/Layout'
 import NotFound from '@/views/Base/NotFound'
 // import SelectModules from '@/views/Modules/SelectModules'
@@ -14,6 +13,8 @@ import Topics from '@/views/Topics/Topics'
 import Subscriptions from '@/views/Subscriptions/Subscriptions'
 import Users from '@/views/General/Users'
 import Advanced from '@/views/Advanced/Advanced'
+import TopicMetrics from '@/views/Tools/TopicMetrics'
+import Login from '@/views/Base/Login'
 
 let routes = [
   {
@@ -22,7 +23,7 @@ let routes = [
     meta: {
       authRequired: false,
     },
-    component: () => import('@/views/Base/Login'),
+    component: Login,
   },
   {
     path: '/',
@@ -288,6 +289,11 @@ let routes = [
         meta: {
           keepAlive: true,
         },
+      },
+      {
+        path: 'topic-metrics',
+        name: 'topic-metrics',
+        component: TopicMetrics,
       },
       // {
       //   path: 'httpapi',

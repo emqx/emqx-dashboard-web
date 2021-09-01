@@ -8,6 +8,7 @@ import store from '@/stores'
 import router from '@/routes'
 // import lang from '@/i18n/index'
 import i18n from '@/i18n'
+import moment from 'moment'
 
 // const locale = store.state.lang
 // const VueI18n = lang[locale]
@@ -16,12 +17,17 @@ export function getBasicAuthInfo() {
   return store.state.user
 }
 
+export const dateFormat = (date) => {
+  return moment(date).format('YYYY-MM-DD HH:mm:ss')
+}
+
 //Logout and go to Login page
 export async function toLogin(path) {
   await store.dispatch('UPDATE_USER_INFO', { logOut: true })
   store.commit('UPDATE_EDITION', null)
   store.commit('SET_LANGUAGE', null)
-  router.currentRoute?.path !== '/login' && router.push({ path: '/login', query: { to: path ? path : undefined } })
+  router.currentRoute?.path !== '/login' &&
+    router.push({ path: '/login', query: { to: path ? path : undefined } })
 }
 
 /**
@@ -134,9 +140,9 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         defaultValue =
           typeof defaultValue === 'string'
             ? {
-              file: '',
-              filename: defaultValue,
-            }
+                file: '',
+                filename: defaultValue,
+              }
             : defaultValue
         elType = 'file'
         break
@@ -184,9 +190,9 @@ export function renderParamsForm(params = {}, propPrefix = '') {
     })
     // rules 的属性
     rules[k] = []
-    const requiredInputText =  'Field required'
-    const requiredSelectText =  'Please select'
-    const requiredArrayText =  'Please Add'
+    const requiredInputText = 'Field required'
+    const requiredSelectText = 'Please select'
+    const requiredArrayText = 'Please Add'
 
     if (required) {
       if (elType === 'array') {
