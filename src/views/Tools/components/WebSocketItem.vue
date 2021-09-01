@@ -64,9 +64,9 @@
         </el-col>
 
         <el-col :span="8" class="checkbox-area">
-          <el-checkbox v-model="connection.clean">Clean Session</el-checkbox>
+          <el-checkbox v-model="connection.clean"> Clean Session </el-checkbox>
 
-          <el-checkbox v-model="connection.ssl" @change="protocolsChange">TLS</el-checkbox>
+          <el-checkbox v-model="connection.ssl" @change="protocolsChange"> TLS </el-checkbox>
         </el-col>
       </el-row>
     </el-form>
@@ -136,8 +136,9 @@
             plain
             @click="unSubscribe(row)"
             :disabled="!compareConnStatus('MCONNECTED')"
-            >{{ $t('Base.cancel') }}</el-button
           >
+            {{ $t('Base.cancel') }}
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -171,7 +172,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-checkbox v-model="messageRecord.retain">Retain</el-checkbox>
+        <el-checkbox v-model="messageRecord.retain"> Retain </el-checkbox>
         <el-button type="primary" size="small" @click="publish">
           {{ $t('Tools.publish') }}
         </el-button>
@@ -189,15 +190,25 @@
             show-overflow-tooltip
             prop="topic"
             label="Topic"
-            min-width="120px"
             sortable
           ></el-table-column>
-          <el-table-column prop="qos" label="QoS" sortable>
+          <el-table-column prop="qos" label="QoS" sortable min-width="50">
             <template slot-scope="{ row }">
-              {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
+              {{ row.qos }}
             </template>
           </el-table-column>
-          <el-table-column show-overflow-tooltip prop="payload" label="Payload" sortable>
+          <el-table-column min-width="60">
+            <template slot-scope="{ row }">
+              {{ row.retain ? ' Retain' : '' }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            show-overflow-tooltip
+            prop="payload"
+            label="Payload"
+            sortable
+            min-width="120"
+          >
             <template slot-scope="{ row }">
               <code>{{ row.payload }}</code>
             </template>
@@ -218,12 +229,23 @@
             label="Topic"
             sortable
           ></el-table-column>
-          <el-table-column prop="qos" label="QoS" sortable>
+          <el-table-column prop="qos" label="QoS" sortable min-width="50">
             <template slot-scope="{ row }">
-              {{ row.qos }} {{ row.retain ? ' Retain' : '' }}
+              {{ row.qos }}
             </template>
           </el-table-column>
-          <el-table-column show-overflow-tooltip prop="payload" label="Payload" sortable>
+          <el-table-column min-width="60">
+            <template slot-scope="{ row }">
+              {{ row.retain ? ' Retain' : '' }}
+            </template>
+          </el-table-column>
+          <el-table-column
+            show-overflow-tooltip
+            prop="payload"
+            label="Payload"
+            sortable
+            min-width="120"
+          >
             <template slot-scope="{ row }">
               <code>{{ row.payload }}</code>
             </template>
