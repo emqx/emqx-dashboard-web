@@ -215,21 +215,24 @@ export default defineComponent({
 
     const loadIntegration = async function () {
       integrationLoading.value = true
-      let res = await Promise.allSettled([getStatsd(), getPrometheus()]).catch(() => {})
-      if (res) {
-        if (res[0].status == 'fulfilled') {
-          integrationData.statsd = transformIntegrationData(res[0].value)
-        } else {
-        }
+      let [statsRes, prometheusRes] = await Promise.allSettled([
+        getStatsd(),
+        getPrometheus(),
+      ]).catch(() => {})
 
-        if (res[1].status == 'fulfilled') {
-          integrationData.prometheus = transformIntegrationData(res[1].value)
-        } else {
-        }
+      if (statsRes?.status == 'fulfilled') {
+        integrationData.statsd = transformIntegrationData(statsRes.value)
+        prometheusLoading.value = false
+      } else {
       }
+
+      if (prometheusRes?.status == 'fulfilled') {
+        integrationData.prometheus = transformIntegrationData(prometheusRes.value)
+        statsdLoading.value = false
+      } else {
+      }
+
       integrationLoading.value = false
-      prometheusLoading.value = false
-      statsdLoading.value = false
     }
 
     const transformIntegrationData = (data) => {

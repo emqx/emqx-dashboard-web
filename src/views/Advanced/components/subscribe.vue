@@ -140,7 +140,7 @@ export default defineComponent({
       }
       submitLoading.value = true
 
-      let res = await editSubscribe(subjectSubData).catch(() => {})
+      let res = await editSubscribe(pendingTbData).catch(() => {})
       if (res) {
         this.$message({
           type: 'success',

@@ -55,7 +55,11 @@
             prop="delayed_remaining"
             sortable
           ></el-table-column>
-          <el-table-column :label="tl('publishTime')" prop="publish_at" sortable></el-table-column>
+          <el-table-column :label="tl('publishTime')" sortable>
+            <template #default="{ row }">
+              {{ row.publish_at && dateFormat(row.publish_at) }}
+            </template>
+          </el-table-column>
 
           <el-table-column :label="$t('Base.operation')">
             <template #default="{ row }">
@@ -75,7 +79,14 @@
         <textarea v-model="payloadDetail" class="payload-text"></textarea>
       </el-row>
       <template #footer>
-        <el-button size="small">{{ $t('Base.copy') }}</el-button>
+        <span v-if="isCopyShow" class="payload-copied">{{ $t('Base.copied') }}</span>
+
+        <el-button
+          size="small"
+          v-clipboard:copy="payloadDetail"
+          v-clipboard:success="copySuccess"
+          >{{ $t('Base.copy') }}</el-button
+        >
       </template>
     </el-dialog>
   </div>
@@ -91,6 +102,7 @@ import {
   delDelayedInfo,
 } from '@/api/advanced'
 import CommonPagination from '@/components/commonPagination.vue'
+import moment from 'moment'
 
 export default defineComponent({
   name: 'Postpone',
@@ -120,6 +132,7 @@ export default defineComponent({
     let payloadDialog = ref(false)
     let payloadLoading = ref(false)
     let payloadDetail = ref('')
+    let isCopyShow = ref(false)
 
     const getDelayedOption = () => {
       if (delayedConfig?.max_delayed_messages == 0) {
@@ -177,6 +190,10 @@ export default defineComponent({
         .catch(() => {})
     }
 
+    const dateFormat = (date) => {
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
+    }
+
     const checkPayload = async function (row) {
       payloadDialog.value = true
       payloadLoading.value = true
@@ -217,6 +234,15 @@ export default defineComponent({
       loadDelayedConfig()
     }
 
+    let copyShowTimeout = ref(null)
+    const copySuccess = () => {
+      isCopyShow.value = true
+      clearTimeout(copyShowTimeout)
+      copyShowTimeout = setTimeout(() => {
+        isCopyShow.value = false
+      }, 2000)
+    }
+
     return {
       tl: props.translate,
       delayedTbData,
@@ -236,6 +262,9 @@ export default defineComponent({
       payloadDialog,
       payloadLoading,
       payloadDetail,
+      dateFormat,
+      isCopyShow,
+      copySuccess,
     }
   },
 })
@@ -259,5 +288,9 @@ export default defineComponent({
   border: 1px solid #ddd;
   box-sizing: border-box;
   padding: 5px;
+}
+
+.payload-copied {
+  padding-right: 10px;
 }
 </style>

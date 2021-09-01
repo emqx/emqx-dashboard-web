@@ -23,6 +23,8 @@
               <el-form-item :label="tl('storage')">
                 <el-select v-model="retainerConfig.config.storage_type">
                   <el-option value="ram"></el-option>
+                  <el-option value="disc"></el-option>
+                  <el-option value="disc_only"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -138,7 +140,11 @@
             </template>
           </el-table-column>
           <el-table-column :label="'From ClientID'" prop="from_clientid" sortable></el-table-column>
-          <el-table-column :label="tl('createDate')" prop="publish_at" sortable></el-table-column>
+          <el-table-column :label="tl('createDate')" sortable>
+            <template #default="{ row }">
+              {{ row.publish_at && dateFormat(row.publish_at) }}
+            </template>
+          </el-table-column>
           <el-table-column :label="$t('Base.operation')">
             <template #default="{ row }">
               <el-button size="mini" type="danger" plain @click="deleteRetainerTopic(row)">{{
@@ -151,10 +157,16 @@
     </el-tabs>
     <el-dialog :visible.sync="payloadDialog" :title="'Payload'">
       <el-row v-loading="payloadLoading">
-        <textarea v-model="payloadDetail" class="payload-text"></textarea>
+        <textarea v-model="payloadDetail" class="payload-text" readonly></textarea>
       </el-row>
       <template #footer>
-        <el-button size="small">{{ $t('Base.copy') }}</el-button>
+        <span v-if="isCopyShow" class="payload-copied">{{ $t('Base.copied') }}</span>
+        <el-button
+          size="small"
+          v-clipboard:copy="payloadDetail"
+          v-clipboard:success="copySuccess"
+          >{{ $t('Base.copy') }}</el-button
+        >
       </template>
     </el-dialog>
   </div>
@@ -169,6 +181,7 @@ import {
   getRetainerTopic,
   delRetainerTopic,
 } from '@/api/advanced'
+import moment from 'moment'
 
 export default defineComponent({
   name: 'Retainer',
@@ -209,6 +222,7 @@ export default defineComponent({
     let payloadDetail = ref('')
     let payloadLoading = ref(false)
     let retainerForm = ref(null)
+    let isCopyShow = ref(false)
 
     let validatorRules = [
       { required: true, message: props.translate('required'), trigger: 'blur' },
@@ -299,6 +313,10 @@ export default defineComponent({
 
     const changeSelType1 = async (event, e) => {
       console.log(event)
+    }
+
+    const dateFormat = (date) => {
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
     }
 
     const composeConfigFromForm = (config) => {
@@ -415,6 +433,15 @@ export default defineComponent({
       loadTbData()
     }
 
+    let copyShowTimeout = ref(null)
+    const copySuccess = () => {
+      isCopyShow.value = true
+      clearTimeout(copyShowTimeout)
+      copyShowTimeout = setTimeout(() => {
+        isCopyShow.value = false
+      }, 2000)
+    }
+
     return {
       tl: props.translate,
       retainerConfig,
@@ -433,6 +460,9 @@ export default defineComponent({
       payloadLoading,
       retainerRules,
       retainerForm,
+      dateFormat,
+      copySuccess,
+      isCopyShow,
     }
   },
 })
@@ -459,5 +489,8 @@ export default defineComponent({
   border: 1px solid #ddd;
   box-sizing: border-box;
   padding: 5px;
+}
+.payload-copied {
+  padding-right: 10px;
 }
 </style>

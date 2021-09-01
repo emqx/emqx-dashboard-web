@@ -25,7 +25,7 @@
       </el-table-column>
       <el-table-column prop="activate_at" :label="$t('Alarm.activateAt')" sortable>
         <template slot-scope="{ row }">
-          {{ dateFormat(row.activate_at) }}
+          {{ (row.activate_at && dateFormat(row.activate_at)) || '' }}
         </template>
       </el-table-column>
       <el-table-column sortable>
@@ -77,7 +77,12 @@
       </el-table-column>
       <el-table-column prop="activate_at" :label="$t('Alarm.activateTime')" sortable>
         <template slot-scope="{ row }">
-          {{ dateFormat(row.activate_at) }} - {{ dateFormat(row.deactivate_at) }}
+          {{
+            (row.activate_at &&
+              row.deactivate_at &&
+              dateFormat(row.activate_at) + ' - ' + dateFormat(row.deactivate_at)) ||
+            ''
+          }}
         </template>
       </el-table-column>
       <el-table-column prop="deactivate_at" :label="$t('Alarm.duration')" sortable>
@@ -86,7 +91,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <common-pagination :count="historyAlarmCount" :reload-func="loadHData"></common-pagination>
+    <div class="emq-table-footer">
+      <common-pagination :count="historyAlarmCount" :reload-func="loadHData"></common-pagination>
+    </div>
   </div>
 </template>
 
@@ -126,8 +133,8 @@ export default {
       }
     },
     dateFormat(date) {
-      let timestamp = Math.floor(+date / 1000)
-      return moment(timestamp).format('YYYY-MM-DD HH:mm:ss')
+      // let timestamp = Math.floor(+date / 1000)
+      return moment(date).format('YYYY-MM-DD HH:mm:ss')
     },
     async loadData(params = {}) {
       let res = await loadAlarm(false, params).catch(() => {})
