@@ -33,7 +33,10 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="Max Retained Messages" prop="config.max_retained_messages">
-                <el-input v-model.number="retainerConfig.config.max_retained_messages">
+                <el-input
+                  v-model.number="retainerConfig.config.max_retained_messages"
+                  :readonly="selOptions.retained == 'unlimited'"
+                >
                   <el-select slot="append" v-model="selOptions.retained">
                     <el-option value="unlimited" :label="tl('unlimited')"></el-option>
                     <el-option value="custom" :label="tl('custom')"></el-option>
@@ -55,7 +58,10 @@
           <el-row>
             <el-col :span="8">
               <el-form-item :label="tl('expire')" prop="msg_expiry_interval[0]">
-                <el-input v-model.number="retainerConfig.msg_expiry_interval[0]">
+                <el-input
+                  v-model.number="retainerConfig.msg_expiry_interval[0]"
+                  :readonly="selOptions.expiry == '0s'"
+                >
                   <el-select slot="append" v-model="selOptions.expiry">
                     <el-option value="0s" :label="tl('noExp')"></el-option>
                     <el-option value="s" :label="tl('sec')"></el-option>
@@ -67,7 +73,10 @@
             </el-col>
             <el-col :span="8">
               <el-form-item :label="tl('intervalClean')" prop="msg_clear_interval[0]">
-                <el-input v-model.number="retainerConfig.msg_clear_interval[0]">
+                <el-input
+                  v-model.number="retainerConfig.msg_clear_interval[0]"
+                  :readonly="selOptions.clean == '0s'"
+                >
                   <el-select slot="append" v-model="selOptions.clean">
                     <el-option value="0s" :label="tl('disable')"></el-option>
                     <el-option value="s" :label="tl('sec')"></el-option>
@@ -82,7 +91,10 @@
           <el-row>
             <el-col :span="8">
               <el-form-item :label="tl('readNumber')" prop="flow_control.max_read_number">
-                <el-input v-model.number="retainerConfig.flow_control.max_read_number">
+                <el-input
+                  v-model.number="retainerConfig.flow_control.max_read_number"
+                  :readonly="selOptions.read == 'unlimited'"
+                >
                   <el-select slot="append" v-model="selOptions.read">
                     <el-option value="unlimited" :label="tl('unlimited')"></el-option>
                     <el-option value="custom" :label="tl('custom')"></el-option>
@@ -92,7 +104,10 @@
             </el-col>
             <el-col :span="8">
               <el-form-item :label="tl('deliverQuota')" prop="flow_control.msg_deliver_quota">
-                <el-input v-model.number="retainerConfig.flow_control.msg_deliver_quota">
+                <el-input
+                  v-model.number="retainerConfig.flow_control.msg_deliver_quota"
+                  :readonly="selOptions.deliver == 'unlimited'"
+                >
                   <el-select slot="append" v-model="selOptions.deliver">
                     <el-option value="unlimited" :label="tl('unlimited')"></el-option>
                     <el-option value="custom" :label="tl('custom')"></el-option>
@@ -173,7 +188,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, ref } from '@vue/composition-api'
+import { defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
 import {
   getRetainer,
   getRetainerList,
@@ -251,6 +266,39 @@ export default defineComponent({
       },
     })
 
+    watch(
+      () => ({ ...selOptions }),
+      (newV, oldV) => {
+        if (newV.retained == 'unlimited') {
+          retainerConfig.config.max_retained_messages = 0
+        }
+        if (newV.read == 'unlimited') {
+          retainerConfig.flow_control.max_read_number = 0
+        }
+        if (newV.deliver == 'unlimited') {
+          retainerConfig.flow_control.msg_deliver_quota = 0
+        }
+
+        if (newV.expiry == '0s') {
+          retainerConfig.msg_expiry_interval = [0, 's']
+        } else {
+          retainerConfig.msg_expiry_interval[1] = newV.expiry
+        }
+        if (newV.clean == '0s') {
+          retainerConfig.msg_clear_interval = [0, 's']
+        } else {
+          retainerConfig.msg_clear_interval[1] = newV.clean
+        }
+
+        if (newV.payload != oldV.payload) {
+          retainerConfig.max_payload_size[1] = newV.payload
+        }
+        if (newV.release != oldV.release) {
+          retainerConfig.quota_release_interval[1] = newV.release
+        }
+      },
+    )
+
     const loadConfigData = async () => {
       configLoading.value = true
       retainerForm.value?.resetFields()
@@ -311,9 +359,9 @@ export default defineComponent({
       }
     }
 
-    const changeSelType1 = async (event, e) => {
-      console.log(event)
-    }
+    // const changeSelType1 = async (event, e) => {
+    //   console.log(event)
+    // }
 
     const dateFormat = (date) => {
       return moment(date).format('YYYY-MM-DD HH:mm:ss')
@@ -325,41 +373,13 @@ export default defineComponent({
         if (typeof data == 'object' && data !== null) {
           Object.keys(data).forEach((k) => {
             if (data[k] instanceof Array) {
-              setProperDataFromForm(k, data[k])
-
               data[k] = data[k].join('')
             } else if (typeof data[k] == 'object' && data[k] !== null) {
               combineData(data[k])
               return
-            } else {
-              setProperDataFromForm(k, data[k])
             }
           })
         }
-      }
-    }
-
-    const setProperDataFromForm = (key, data) => {
-      if (key === 'max_retained_messages') {
-        return selOptions.retained == 'unlimited' ? 0 : data
-      }
-      if (key === 'max_payload_size') {
-        return [data[0], selOptions.payload]
-      }
-      if (key === 'msg_expiry_interval') {
-        return selOptions.expiry === '0s' ? '0s' : [data[0], selOptions, expiry]
-      }
-      if (key === 'msg_clear_interval') {
-        return selOptions.clean === '0s' ? '0s' : [data[0], selOptions.clean]
-      }
-      if (key === 'max_read_number') {
-        return selOptions.read === 'unlimited' ? 0 : data
-      }
-      if (key === 'msg_deliver_quota') {
-        return selOptions.deliver === 'unlimited' ? 0 : data
-      }
-      if (key === 'quota_release_interval') {
-        return [data[0], selOptions.release]
       }
     }
 
@@ -450,7 +470,6 @@ export default defineComponent({
       tbData,
       updateConfigData,
       selOptions,
-      changeSelType1,
       configEnable,
       deleteRetainerTopic,
       reloading,

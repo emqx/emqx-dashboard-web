@@ -11,7 +11,10 @@
           >
             <el-col :span="10">
               <el-form-item :label="tl('maxDelayedMsg')" prop="max_delayed_messages">
-                <el-input v-model.number="delayedConfig.max_delayed_messages">
+                <el-input
+                  v-model.number="delayedConfig.max_delayed_messages"
+                  :readonly="delayedOption == 'unlimited'"
+                >
                   <el-select slot="append" v-model="delayedOption">
                     <el-option value="unlimited" :label="tl('unlimited')"></el-option>
                     <el-option value="custom" :label="tl('custom')"></el-option>
@@ -93,7 +96,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, reactive, ref } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
 import {
   getDelayedConfig,
   editDelayedConfig,
@@ -133,6 +136,12 @@ export default defineComponent({
     let payloadLoading = ref(false)
     let payloadDetail = ref('')
     let isCopyShow = ref(false)
+
+    watch(delayedOption, (newOption) => {
+      if (newOption == 'unlimited') {
+        delayedConfig.max_delayed_messages = 0
+      }
+    })
 
     const getDelayedOption = () => {
       if (delayedConfig?.max_delayed_messages == 0) {
