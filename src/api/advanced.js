@@ -74,8 +74,11 @@ export function editEventMsg(body) {
 }
 
 //topic metrics
-export function getTopicMetrics() {
-  return http.get('/mqtt/topic_metrics')
+export function getTopicMetrics(topic = null) {
+  if (null == topic) {
+    return http.get('/mqtt/topic_metrics')
+  }
+  return http.get('/mqtt/topic_metrics/' + encodeURIComponent(topic))
 }
 
 export function addTopicMetrics(topic) {

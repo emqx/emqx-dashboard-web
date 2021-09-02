@@ -7,63 +7,71 @@
       }}</el-button>
     </div>
 
-    <el-table :data="topicMetricsTb" v-loading="tbLoading">
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <div class="expand-header">
-            {{ $t('Base.details') }}
-            <el-radio-group v-model="topicQos" :prop="props" class="topic-qos-radio" size="mini">
-              <el-radio-button label="all">{{ $t('Base.all') }}</el-radio-button>
-              <el-radio-button label="qos0">QoS 0</el-radio-button>
-              <el-radio-button label="qos1">QoS 1</el-radio-button>
-              <el-radio-button label="qos2">QoS 2</el-radio-button>
-            </el-radio-group>
-          </div>
-          <el-row class="expand-body" :gutter="20">
-            <el-col :span="8">
-              <div class="message-card in">
-                <div>
-                  {{ tl('msgIn') }}
-                  <span class="message-rate">
-                    {{ getCurrentTopicData('in', 'rate') + ' ' + tl('rate') }}
-                  </span>
+    <el-table :data="topicMetricsTb" v-loading="tbLoading" ref="tbRef">
+      <el-table-column type="expand" width="1">
+        <template slot-scope="{ row }">
+          <div v-loading="row._loading">
+            <el-row class="topic-detail-header">
+              <div>{{ $t('Base.detail') }}</div>
+              <el-radio-group v-model="topicQos" size="mini">
+                <el-radio-button label="all">{{ $t('Base.all') }}</el-radio-button>
+                <el-radio-button label="qos0">QoS 0</el-radio-button>
+                <el-radio-button label="qos1">QoS 1</el-radio-button>
+                <el-radio-button label="qos2">QoS 2</el-radio-button>
+              </el-radio-group>
+            </el-row>
+            <el-row :gutter="20">
+              <el-col :span="8">
+                <div class="message-card in">
+                  <div>
+                    {{ tl('msgIn') }}
+                    <span class="message-rate">
+                      {{
+                        row._detail[`messages.${topicQos == 'all' ? '' : topicQos + '.'}in.rate`] +
+                        ' ' +
+                        tl('rate')
+                      }}
+                    </span>
+                  </div>
+                  <div class="message-card--body">
+                    {{ row._detail[`messages.${topicQos == 'all' ? '' : topicQos + '.'}in.count`] }}
+                  </div>
                 </div>
-                <div class="message-card--body">
-                  {{ getCurrentTopicData('in', 'count') }}
-                </div>
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="message-card out">
-                <div>
-                  {{ tl('msgOut') }}
-                  <span class="message-rate">
-                    {{ getCurrentTopicData('out', 'rate') + ' ' + tl('rate') }}
-                  </span>
-                </div>
-                <div class="message-card--body">
-                  {{ getCurrentTopicData('out', 'count') }}
-                </div>
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="message-card drop">
-                <div>
-                  {{ tl('msgDrop') }}
-                  <span class="message-rate">
+              </el-col>
+              <el-col :span="8">
+                <div class="message-card out">
+                  <div>
+                    {{ tl('msgOut') }}
+                    <span class="message-rate">
+                      {{
+                        row._detail[`messages.${topicQos == 'all' ? '' : topicQos + '.'}out.rate`] +
+                        ' ' +
+                        tl('rate')
+                      }}
+                    </span>
+                  </div>
+                  <div class="message-card--body">
                     {{
-                      getCurrentTopicDropRate(currentTopic['messages.dropped.rate']) +
-                      ' ' +
-                      tl('rate')
+                      row._detail[`messages.${topicQos == 'all' ? '' : topicQos + '.'}out.count`]
                     }}
-                  </span>
+                  </div>
                 </div>
-                <div class="message-card--body">
-                  {{ currentTopic['messages.dropped.count'] }}
+              </el-col>
+              <el-col :span="8">
+                <div class="message-card drop">
+                  <div>
+                    {{ tl('msgDrop') }}
+                    <span class="message-rate">
+                      {{ row._detail[`messages.dropped.rate`] + ' ' + tl('rate') }}
+                    </span>
+                  </div>
+                  <div class="message-card--body">
+                    {{ row._detail[`messages.dropped.count`] }}
+                  </div>
                 </div>
-              </div>
-            </el-col>
-          </el-row>
+              </el-col>
+            </el-row>
+          </div>
         </template>
       </el-table-column>
       <el-table-column :label="'Topic'" prop="topic" sortable></el-table-column>
@@ -88,8 +96,10 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('Base.operation')">
-        <template #default="{ row }">
-          <el-button size="mini">{{ $t('Base.view') }}</el-button>
+        <template #default="{ row, $index }">
+          <el-button size="mini" @click="loadMetricsFromTopic(row, $index)">{{
+            $t('Base.view')
+          }}</el-button>
           <el-button size="mini" @click="resetTopic(row)">{{ $t('Base.reset') }}</el-button>
           <el-button size="mini" type="danger" plain @click="deleteTopic(row)">
             {{ $t('Base.delete') }}
@@ -135,6 +145,8 @@ export default defineComponent({
     let record = ref(null)
     let topicMetricsTb = ref([])
     let tbLoading = ref(false)
+    let tbRef = ref(null)
+    let topicQos = ref('all')
 
     const translate = function (key, collection = 'Tools') {
       return this.$t(collection + '.' + key)
@@ -148,7 +160,10 @@ export default defineComponent({
       tbLoading.value = true
       let res = await getTopicMetrics().catch(() => {})
       if (res) {
-        topicMetricsTb.value = res
+        const reconRes = Array.prototype.map.call(res, (v) => {
+          return Object.assign(v, { _detail: {}, _loading: false })
+        })
+        topicMetricsTb.value = reconRes
       }
       tbLoading.value = false
     }
@@ -204,6 +219,18 @@ export default defineComponent({
       }
     }
 
+    const loadMetricsFromTopic = async function (row, index) {
+      const { topic } = row
+      row._loading = true
+      tbRef.value.toggleRowExpansion(row, true)
+
+      let res = await getTopicMetrics(topic).catch(() => {})
+      if (res && row) {
+        row._detail = res.metrics
+      }
+      row._loading = false
+    }
+
     onMounted(loadTopicMetrics)
 
     return {
@@ -218,6 +245,9 @@ export default defineComponent({
       tbLoading,
       deleteTopic,
       resetTopic,
+      tbRef,
+      topicQos,
+      loadMetricsFromTopic,
     }
   },
 })
@@ -246,6 +276,23 @@ export default defineComponent({
   }
   .message-rate {
     float: right;
+  }
+}
+
+.el-table::v-deep .el-table__expand-icon {
+  display: none;
+}
+
+.topic-detail-header {
+  padding-bottom: 20px;
+  display: flex;
+  & > :first-child {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  & > :last-child {
+    flex-grow: 1;
+    text-align: right;
   }
 }
 </style>

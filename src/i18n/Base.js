@@ -165,7 +165,7 @@ export default {
   },
   detail: {
     zh: '详情',
-    en: 'Details',
+    en: 'Detail',
   },
   all: {
     zh: '全部',

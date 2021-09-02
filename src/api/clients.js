@@ -4,12 +4,6 @@ export function listClients(params = {}) {
   return http.get('/clients', { params })
 }
 
-// 获取单个节点下的连接
-export function listNodeClients(nodeName, params = {}) {
-  const reqUrl = nodeName === 'all' || !nodeName ? '/clients' : `/nodes/${nodeName}/clients`
-  return http.get(reqUrl, { params })
-}
-
 export function searchClients(clientId) {
   return http.get(`/clients/${encodeURIComponent(clientId)}`)
 }
