@@ -2,7 +2,12 @@
   <div class="app-wrapper subscriptions">
     <el-row class="search-wrapper" :gutter="20">
       <el-col :span="6">
-        <el-select v-model="nodeName" :placeholder="$t('Clients.node')" size="small">
+        <el-select
+          v-model="fuzzyParams.node"
+          :placeholder="$t('Clients.node')"
+          size="small"
+          clearable
+        >
           <el-option v-for="item in currentNodes" :value="item.node" :key="item.node"></el-option>
         </el-select>
       </el-col>
@@ -11,6 +16,7 @@
           v-model="fuzzyParams.clientid"
           size="small"
           :placeholder="$t('Clients.clientId')"
+          clearable
         ></el-input>
       </el-col>
       <el-col :span="6" class="form-item-col">
@@ -22,7 +28,7 @@
             </el-select>
           </el-col>
           <el-col :span="16">
-            <el-input v-model="fuzzyParams.topic" type="text" size="small"> </el-input>
+            <el-input v-model="fuzzyParams.topic" type="text" size="small" clearable> </el-input>
           </el-col>
         </el-row>
       </el-col>
@@ -37,10 +43,11 @@
         </el-col>
         <el-col :span="6">
           <el-input
-            v-model="fuzzyParams.share"
+            v-model="fuzzyParams.share_group"
             type="text"
             size="small"
             :placeholder="$t('Subs.share')"
+            clearable
           >
           </el-input>
         </el-col>
@@ -92,9 +99,8 @@
 </template>
 
 <script>
-import CustomPagination from '@/components/CustomPagination.vue'
-import { listNodeSubscriptions } from '@/api/common'
-import { loadNodes } from '@/api/common'
+// import CustomPagination from '@/components/CustomPagination.vue'
+import { listSubscriptions, loadNodes } from '@/api/common'
 import CommonPagination from '../../components/commonPagination.vue'
 
 export default {
@@ -116,10 +122,14 @@ export default {
       },
       count: 0,
       lockTable: true,
-      nodeName: '',
       currentNodes: [],
       fuzzyParams: {
         match: 'match_topic',
+        node: '',
+        topic: '',
+        clientid: '',
+        share_group: '',
+        qos: '',
       },
     }
   },
@@ -135,16 +145,17 @@ export default {
       this.loadNodeSubscriptions()
     },
     genQueryParams(params) {
-      let newParams = {}
-      const { clientid, topic, qos, share, match } = params
-      newParams = {
+      const { clientid, qos, share, node, topic, match } = params
+      let newParams = {
         clientid: clientid || undefined,
         qos: qos === '' ? undefined : qos,
         share: share || undefined,
+        node: node || undefined,
       }
       if (topic) {
         newParams[match] = topic
       }
+
       return newParams
     },
 
@@ -170,7 +181,8 @@ export default {
     },
     async loadNodeSubscriptions(params = {}) {
       this.lockTable = true
-      const res = await listNodeSubscriptions(this.nodeName, {
+      console.log(this.params)
+      const res = await listSubscriptions({
         ...this.params,
         ...params,
       }).catch(() => {})

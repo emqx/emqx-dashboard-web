@@ -35,7 +35,6 @@
           : $t('General.creatingUser')
       "
       :visible.sync="dialogVisible"
-      @close="clearInput"
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
         <el-form-item
@@ -59,9 +58,6 @@
             <el-input v-model="record.repeatPassword" type="password"></el-input>
           </el-form-item>
         </div>
-        <!-- <el-link v-if="accessType === 'edit'" :underline="false" @click="togglePassword">
-          {{ allowChange ? $t('General.dontChangePassword') : $t('General.changePassword') }}
-        </el-link> -->
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
@@ -93,7 +89,6 @@ export default {
       tableData: [],
       lockTable: true,
       accessType: '',
-      // allowChange: false,
       record: {},
       rules: {
         username: [{ required: true, message: this.$t('General.enterOneUserName') }],
@@ -152,6 +147,7 @@ export default {
     },
     showDialog(type = 'create', item = {}) {
       this.dialogVisible = true
+      this.clearInput()
 
       if (type === 'edit') {
         Object.assign(this.record, item)
@@ -174,18 +170,8 @@ export default {
     },
     closeDialog() {
       this.dialogVisible = false
-      // this.allowChange = false
     },
-    // togglePassword() {
-    //   // this.allowChange = !this.allowChange
-    //   // 取消修改密码，删除密码数据
-    //   if (!this.allowChange) {
-    //     this.record = {
-    //       tags: this.record.tags,
-    //       username: this.record.username,
-    //     }
-    //   }
-    // },
+
     async save() {
       const vue = this
       let validation = await this.$refs.recordForm.validate().catch(() => {})
@@ -196,19 +182,8 @@ export default {
       const { username } = vue.record
       if (vue.accessType === 'edit') {
         updateUser(username, vue.record).then(async () => {
-          // if (vue.allowChange) {
-          //   const passwordData = {
-          //     new_pwd: vue.record.newPassword,
-          //     old_pwd: vue.record.password,
-          //   }
-          //   await changePassword(username, passwordData)
-          //   vue.$store.dispatch('UPDATE_USER_INFO', { username, password })
-          // }
           vue.$message.success(vue.$t('Base.editSuccess'))
           vue.dialogVisible = false
-          // vue.allowChange = false
-          // vue.accessType = ''
-          // vue.record = {}
           vue.loadData()
         })
       } else if (accessType === 'chPass') {

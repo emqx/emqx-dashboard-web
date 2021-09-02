@@ -3,20 +3,27 @@
     <el-row class="search-wrapper" :gutter="20">
       <el-col :span="6">
         <el-input
-          v-model="fuzzyParams._like_clientid"
+          v-model="fuzzyParams.like_clientid"
           size="small"
           :placeholder="$t('Clients.clientId')"
+          clearable
         ></el-input>
       </el-col>
       <el-col :span="6">
         <el-input
-          v-model="fuzzyParams._like_username"
+          v-model="fuzzyParams.like_username"
           size="small"
           :placeholder="$t('Clients.username')"
+          clearable
         ></el-input>
       </el-col>
       <el-col :span="6">
-        <el-select v-model="nodeName" :placeholder="$t('Clients.node')" size="small">
+        <el-select
+          v-model="fuzzyParams.node"
+          :placeholder="$t('Clients.node')"
+          size="small"
+          clearable
+        >
           <el-option v-for="item in currentNodes" :value="item.node" :key="item.node"></el-option>
         </el-select>
       </el-col>
@@ -26,6 +33,7 @@
             v-model="fuzzyParams.ip_address"
             size="small"
             :placeholder="$t('Clients.ipAddress')"
+            clearable
           ></el-input>
         </el-col>
         <el-col :span="6">
@@ -33,6 +41,7 @@
             v-model="fuzzyParams.conn_state"
             size="small"
             :placeholder="$t('Clients.connectedStatus')"
+            clearable
           >
             <el-option value="connected"></el-option>
             <el-option value="disconnected"></el-option>
@@ -48,12 +57,13 @@
             </el-col>
             <el-col :span="16">
               <el-date-picker
-                v-model="fuzzyParams._connected_at"
+                v-model="fuzzyParams.connected_at"
                 class="datatime"
                 type="datetime"
                 value-format="timestamp"
                 size="small"
                 :placeholder="$t('Clients.createdAt')"
+                clearable
               >
               </el-date-picker>
             </el-col>
@@ -64,6 +74,7 @@
             v-model="fuzzyParams.proto_name"
             size="small"
             :placeholder="$t('Clients.protocol')"
+            clearable
           >
             <el-option v-for="name in protoNames" :key="name" :value="name"> </el-option>
           </el-select>
@@ -83,13 +94,11 @@
     <el-table
       :data="tableData"
       :row-class-name="getRowClass"
-      @select="clientSelect"
-      @select-all="clientSelectAll"
       @row-click="handleRowClick"
       ref="clientsTable"
       v-loading.lock="lockTable"
     >
-      <el-table-column type="selection"> </el-table-column>
+      <!-- <el-table-column type="selection"> </el-table-column> -->
       <el-table-column prop="clientid" sortable :label="$t('Clients.clientId')">
         <template slot-scope="{ row }">
           <router-link
@@ -151,7 +160,7 @@
 
 <script>
 // import CustomPagination from '@/components/CustomPagination.vue'
-import { disconnectClient, listNodeClients } from '@/api/clients'
+import { disconnectClient, listClients } from '@/api/clients'
 import { loadNodes } from '@/api/common'
 import moment from 'moment'
 import CommonPagination from '../../components/commonPagination.vue'
@@ -174,7 +183,7 @@ export default {
         //   limit: 20,
       },
       count: 0,
-      nodeName: '',
+      // nodeName: '',
       currentNodes: [],
       fuzzyParams: {
         comparator: 'gte',
@@ -245,16 +254,16 @@ export default {
       //   row.selection = !row.selection
       // }
     },
-    clientSelectAll(sel) {
-      this.selectedClients = sel
-      sel.length
-        ? sel.forEach((row) => (row.selection = true))
-        : this.tableData.forEach((row) => (row.selection = false))
-    },
-    clientSelect(selection, row) {
-      row.selection = selection.includes(row)
-      this.selectedClients = selection
-    },
+    // clientSelectAll(sel) {
+    //   this.selectedClients = sel
+    //   sel.length
+    //     ? sel.forEach((row) => (row.selection = true))
+    //     : this.tableData.forEach((row) => (row.selection = false))
+    // },
+    // clientSelect(selection, row) {
+    //   row.selection = selection.includes(row)
+    //   this.selectedClients = selection
+    // },
     getRowClass({ row, rowIndex }) {
       if (row.selection == true) {
         return 'row_selected'
@@ -294,7 +303,8 @@ export default {
         conn_state,
         proto_name,
         comparator,
-        _connected_at,
+        connected_at,
+        node,
       } = params
       newParams = {
         like_clientid: like_clientid || undefined,
@@ -302,8 +312,9 @@ export default {
         ip_address: ip_address || undefined,
         conn_state: conn_state || undefined,
         proto_name: proto_name || undefined,
+        node: node || undefined,
       }
-      if (_connected_at) {
+      if (connected_at) {
         const connectedAtKey = `${comparator}_connected_at`
         newParams[connectedAtKey] = Math.floor(_connected_at / 1000)
       }
@@ -335,7 +346,7 @@ export default {
       // }
       this.lockTable = true
 
-      const res = await listNodeClients(this.nodeName, {
+      const res = await listClients({
         ...this.params,
         ...params,
       }).catch(() => {})
