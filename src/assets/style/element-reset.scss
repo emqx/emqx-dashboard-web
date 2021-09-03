@@ -403,3 +403,9 @@
     color: #a0a0a0;
   }
 }
+
+.el-date-editor {
+  &.el-input {
+    width: 100%;
+  }
+}

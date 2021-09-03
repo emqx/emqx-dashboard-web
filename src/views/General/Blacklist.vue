@@ -35,22 +35,20 @@
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item prop="as" :label="$t('General.as')">
-              <emq-select v-model="record.as" :field="{ options: asOptions }"> </emq-select>
+            <el-form-item :label="$t('General.banObject')" prop="who">
+              <el-input v-model="record.who">
+                <el-select slot="append" v-model="record.as">
+                  <el-option
+                    v-for="item in asOptions"
+                    :key="item.value"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item prop="who" :label="$t('General.who')">
-              <el-input v-model="record.who"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item prop="reason" :label="$t('General.reason')">
-              <el-input v-model="record.reason"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item prop="until" :label="$t('General.until')">
+            <el-form-item :label="$t('General.until')" prop="until">
               <el-date-picker
                 v-model="record.until"
                 type="datetime"
@@ -60,6 +58,17 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
+          <el-form-item prop="reason" :label="$t('General.reason')">
+            <el-input
+              v-model="record.reason"
+              type="textarea"
+              :rows="3"
+              :placeholder="$t('General.reason')"
+              resize="none"
+            ></el-input>
+          </el-form-item>
         </el-row>
       </el-form>
 
@@ -72,7 +81,7 @@
 </template>
 
 <script>
-import moment from 'moment'
+import { dateFormat } from '@/common/utils'
 import { loadBlacklist, createBlacklist, deleteBlacklist } from '@/api/function'
 import CommonPagination from '../../components/commonPagination.vue'
 
@@ -88,17 +97,12 @@ export default {
         // _limit: 20,
       },
       count: 0,
-      asOptions: [
-        { label: 'clientid', value: 'clientid' },
-        { label: 'username', value: 'username' },
-        { label: 'peerhost', value: 'peerhost' },
-      ],
-      record: {
-        reason: '',
-      },
+      asOptions: [{ value: 'clientid' }, { value: 'username' }, { value: 'peerhost' }],
+      record: {},
       rules: {
         as: [{ required: true, message: this.$t('General.enterAs') }],
         who: [{ required: true, message: this.$t('General.enterWho') }],
+        until: [{ required: true, message: this.$t('General.enterUntil') }],
       },
       tbLoading: false,
     }
@@ -111,10 +115,7 @@ export default {
       this.tbLoading = true
       const res = await loadBlacklist({ ...this.params, ...params }).catch(() => {})
       if (res) {
-        const {
-          data = [],
-          meta: {},
-        } = res
+        const { data = [], meta = {} } = res
         this.tableData = data
         this.count = meta.count
       }
@@ -127,6 +128,8 @@ export default {
     showDialog() {
       this.record = {
         reason: '',
+        who: '',
+        as: 'clientid',
       }
       this.clearInput()
       this.dialogVisible = true
@@ -157,7 +160,7 @@ export default {
     },
     deleteConfirm(item) {
       this.$msgbox
-        .confirm(this.$t('General.determineToDeleteTheBlacklist'), {
+        .confirm(this.$t('General.confirmDelete'), {
           confirmButtonText: this.$t('Base.confirm'),
           cancelButtonText: this.$t('Base.cancel'),
           type: 'warning',
@@ -173,13 +176,25 @@ export default {
         .catch(() => {})
     },
     formatterUntil({ until }) {
-      if (!until || typeof until !== 'number') {
+      if (!until) {
         return this.$t('General.neverExpire')
       }
-      return moment(until * 1000).format('YYYY-MM-DD HH:mm:ss')
+      return dateFormat(until)
     },
   },
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-form-item ::v-deep .el-form-item__content {
+  margin-right: 10px;
+}
+.el-input-group--append ::v-deep .el-input-group__append {
+  width: 90px;
+  padding: 0;
+
+  .el-select {
+    margin: -10px 0;
+  }
+}
+</style>

@@ -211,21 +211,29 @@ export default {
     zh: '原因',
     en: 'Reason',
   },
+  banObject: {
+    zh: '禁用对象',
+    en: 'Banned Object',
+  },
   desc: {
     zh: '描述',
     en: 'Description',
   },
   until: {
     zh: '到期时间',
-    en: 'Until',
+    en: 'Expire At',
   },
   enterWho: {
     zh: '请输入禁用值',
-    en: 'Please enter value',
+    en: 'Please enter Banned value',
   },
   enterAs: {
     zh: '请选择禁用属性',
     en: 'Please select property',
+  },
+  enterUntil: {
+    zh: '请填写过期时间',
+    en: 'Please enter the expire time',
   },
   day: {
     zh: '天',

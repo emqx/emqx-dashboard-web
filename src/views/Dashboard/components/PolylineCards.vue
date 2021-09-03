@@ -84,6 +84,7 @@ export default {
 
   created() {
     this.loadMetricsLogData()
+    this.timerMetrics = setInterval(this.loadMetricsLogData, 60000)
   },
 
   beforeDestroy() {
@@ -99,28 +100,20 @@ export default {
     },
     loadMetricsLogData() {
       let maxLen = 200
-      try {
-        this.dataTypeList.forEach(async (typeName) => {
-          const data = await loadMetricsLog(typeName)
-          this.metricLog[typeName] = this.chartDataFill(1)
-          const currentData = this.metricLog[typeName][0]
+      this.dataTypeList.forEach(async (typeName) => {
+        const data = await loadMetricsLog(typeName).catch(() => {})
+        this.metricLog[typeName] = this.chartDataFill(1)
+        const currentData = this.metricLog[typeName][0]
 
-          data.forEach((item, key) => {
-            if (key > maxLen) return
-            currentData.xData.push(this._formatTime(item.timestamp))
-            currentData.yData.push(item.count)
-          })
+        data.forEach((item, key) => {
+          if (key > maxLen) return
+          currentData.xData.push(this._formatTime(item.timestamp))
+          currentData.yData.push(item.count)
         })
-        this.timerMetrics = setTimeout(this.loadMetricsLogData, 60000)
-      } catch (e) {
-        console.error(e)
-      }
+      })
     },
     clearTimer() {
-      if (this.timerMetrics) {
-        clearInterval(this.timerMetrics)
-        this.timerMetrics = null
-      }
+      this.timerMetrics && clearInterval(this.timerMetrics)
     },
   },
 }
