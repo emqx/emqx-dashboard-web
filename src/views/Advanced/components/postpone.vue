@@ -105,7 +105,7 @@ import {
   delDelayedInfo,
 } from '@/api/advanced'
 import CommonPagination from '@/components/commonPagination.vue'
-import moment from 'moment'
+import { dateFormat } from '@/common/utils'
 
 export default defineComponent({
   name: 'Postpone',
@@ -199,9 +199,9 @@ export default defineComponent({
         .catch(() => {})
     }
 
-    const dateFormat = (date) => {
-      return moment(date).format('YYYY-MM-DD HH:mm:ss')
-    }
+    // const dateFormat = (date) => {
+    //   return moment(date).format('YYYY-MM-DD HH:mm:ss')
+    // }
 
     const checkPayload = async function (row) {
       payloadDialog.value = true
@@ -283,7 +283,7 @@ export default defineComponent({
   margin-right: 10px;
 }
 .el-input-group--append ::v-deep .el-input-group__append {
-  width: 120px;
+  width: 90px;
   padding: 0;
 
   .el-select {

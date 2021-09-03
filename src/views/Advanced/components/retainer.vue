@@ -196,7 +196,7 @@ import {
   getRetainerTopic,
   delRetainerTopic,
 } from '@/api/advanced'
-import moment from 'moment'
+import { dateFormat } from '@/common/utils'
 
 export default defineComponent({
   name: 'Retainer',
@@ -363,9 +363,9 @@ export default defineComponent({
     //   console.log(event)
     // }
 
-    const dateFormat = (date) => {
-      return moment(date).format('YYYY-MM-DD HH:mm:ss')
-    }
+    // const dateFormat = (date) => {
+    //   return moment(date).format('YYYY-MM-DD HH:mm:ss')
+    // }
 
     const composeConfigFromForm = (config) => {
       combineData(config)
@@ -494,7 +494,7 @@ export default defineComponent({
   margin-right: 10px;
 }
 .el-input-group--append ::v-deep .el-input-group__append {
-  width: 120px;
+  width: 90px;
   padding: 0;
 
   .el-select {

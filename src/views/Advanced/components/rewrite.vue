@@ -117,8 +117,9 @@ export default defineComponent({
         if (editPos.value === undefined) {
           return
         }
-        pendingTbData.splice(editPos, 1, { ...rewriteInput })
+        pendingTbData.splice(editPos.value, 1, { ...rewriteInput })
       }
+
       submitLoading.value = true
       let res = await editTopicRewrite(pendingTbData).catch(() => {})
       if (res) {
@@ -126,7 +127,7 @@ export default defineComponent({
           type: 'success',
           message: edit ? this.$t('Base.editSuccess') : this.$t('Base.createSuccess'),
         })
-        rewriteTbData.value = pendingTbData
+        loadData()
       } else {
         this.$message({
           type: 'error',
