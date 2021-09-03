@@ -82,16 +82,12 @@ export default {
 
     let authentication = [
       {
-        title: 'auth',
-        path: '/auth',
+        title: 'authentication',
+        path: '/authentication',
       },
       {
-        title: 'acl',
-        path: '/acl',
-      },
-      {
-        title: 'blacklist',
-        path: '/blacklist',
+        title: 'authorization',
+        path: '/authorization',
       },
     ]
 
@@ -131,11 +127,11 @@ export default {
         icon: 'icon-yibiaopan',
         c: config,
       },
-      // {
-      //   title: 'authentication',
-      //   icon: 'icon-yibiaopan',
-      //   c: authentication,
-      // },
+      {
+        title: 'auth',
+        icon: 'icon-yibiaopan',
+        c: authentication,
+      },
       // {
       //   title: 'ruleengine',
       //   icon: 'icon-guizeyinqing',

@@ -59,48 +59,6 @@ let routes = [
       },
     ],
   },
-  // {
-  //   path:'/auth',
-  //   component:Layout,
-  //   meta:{
-  //     hideKey: 'auth',
-  //     authRequired:true,
-  //   },
-  //   children: [
-  //     {
-  //       path:'',
-  //       name:'auth',
-  //       component:()=>import('@/views/Auth/Auth')
-  //     }
-  //   ]
-  // },
-  // {
-  //   path:'/acl',
-  //   component:Layout,
-  //   meta:{
-  //     hideKey:'acl',
-  //     authRequired:true,
-  //   },
-  //   children: [
-
-  //   ]
-  // },
-  // 认证鉴权
-  // {
-  //   path: '/users_and_acl',
-  //   component: Layout,
-  //   meta: {
-  //     hideKey: 'usersAcl',
-  //     authRequired: true,
-  //   },
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'users_and_acl',
-  //       component: () => import('@/views/Plugins/PluginsManage'),
-  //     },
-  //   ],
-  // },
   // 连接
   {
     path: '/clients',
@@ -403,7 +361,27 @@ let routes = [
       // },
     ],
   },
-
+  // Auth
+  {
+    path: '/authentication',
+    component: Layout,
+    meta: {
+      hideKey: 'authentication',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'authentication',
+        component: () => import('@/views/Auth/Authn'),
+      },
+      {
+        path: 'create',
+        name: 'authenticationCreate',
+        component: () => import('@/views/Auth/AuthnCreate'),
+      },
+    ],
+  },
   // // 设置
   // {
   //   path: '/setting',

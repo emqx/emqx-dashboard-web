@@ -191,4 +191,20 @@ export default {
     zh: '操作失败',
     en: 'Operation failed',
   },
+  nextStep: {
+    zh: '下一步',
+    en: 'Next',
+  },
+  backStep: {
+    zh: '上一步',
+    en: 'Back',
+  },
+  other: {
+    zh: '其它',
+    en: 'Other',
+  },
+  test: {
+    zh: '测试',
+    en: 'Test',
+  },
 }

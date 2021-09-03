@@ -3,7 +3,9 @@
     <el-tabs tab-position="left" @tab-click="clickTab">
       <template v-for="pane in panes">
         <el-tab-pane :label="tl(`${pane}`)" :key="pane" :lazy="true">
-          <div class="sec-header-title">{{ tl(`${pane}`) }}</div>
+          <div class="sec-header-title">
+            {{ tl(`${pane}`) }}
+          </div>
           <component :is="pane" class="item-page" :translate="tl"></component>
         </el-tab-pane>
       </template>
