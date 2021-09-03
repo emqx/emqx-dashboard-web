@@ -11,11 +11,11 @@
           <el-submenu :key="menu.title" :index="'' + i">
             <template #title>
               <i :class="['iconx', menu.icon]"></i>
-              <span>{{ menu.title }}</span>
+              <span>{{ $t(`components.${menu.title}`) }}</span>
             </template>
             <template v-for="item in menu.c">
               <el-menu-item :key="item.title" :index="item.path">
-                <template>{{ item.title }}</template>
+                <template>{{ $t(`components.${item.title}`) }}</template>
               </el-menu-item>
             </template>
           </el-submenu>
@@ -23,7 +23,7 @@
         <template v-else>
           <el-menu-item :key="menu.title" :index="menu.path">
             <i :class="['iconx', menu.icon]"></i>
-            <span>{{ menu.title }}</span>
+            <span>{{ $t(`components.${menu.title}`) }}</span>
           </el-menu-item>
         </template>
       </template>
@@ -52,108 +52,112 @@ export default {
   created() {
     let dashboard = [
       {
-        title: this.$t('components.dashboard'),
+        title: 'dashboard',
         path: '/dashboard',
       },
       {
-        title: this.$t('components.alarm'),
+        title: 'alarm',
         path: '/alarm',
       },
       {
-        title: this.$t('components.tools'),
+        title: 'tools',
         path: '/tools',
       },
     ]
 
     let management = [
       {
-        title: this.$t('components.clients'),
+        title: 'clients',
         path: '/clients',
       },
       {
-        title: this.$t('components.topics'),
+        title: 'topics',
         path: '/topics',
       },
       {
-        title: this.$t('components.subscriptions'),
+        title: 'subscriptions',
         path: '/subscriptions',
       },
     ]
 
     let authentication = [
       {
-        title: this.$t('components.auth'),
+        title: 'auth',
         path: '/auth',
       },
       {
-        title: this.$t('components.acl'),
+        title: 'acl',
         path: '/acl',
       },
       {
-        title: this.$t('components.blacklist'),
+        title: 'blacklist',
         path: '/blacklist',
       },
     ]
 
-    let system = [{ title: this.$t('components.users'), path: '/users' }]
+    let system = [
+      { title: 'users', path: '/users' },
+      {
+        title: 'blacklist',
+        path: '/blacklist',
+      },
+    ]
 
     let config = [
       {
-        title: this.$t('components.advanced'),
+        title: 'advanced',
         path: '/advanced',
       },
     ]
 
     this.menus = [
       {
-        title: this.$t('components.monitoring'),
+        title: 'monitoring',
         icon: 'icon-yibiaopan',
         c: dashboard,
       },
       {
-        title: this.$t('components.management'),
+        title: 'management',
         icon: 'icon-yibiaopan',
         c: management,
       },
       {
-        title: this.$t('components.system'),
+        title: 'system',
         icon: 'icon-yibiaopan',
         c: system,
       },
       {
-        title: this.$t('components.configuration'),
+        title: 'configuration',
         icon: 'icon-yibiaopan',
         c: config,
       },
       // {
-      //   title: this.$t('components.authentication'),
+      //   title: 'authentication',
       //   icon: 'icon-yibiaopan',
       //   c: authentication,
       // },
       // {
-      //   title: this.$t('components.ruleengine'),
+      //   title: 'ruleengine',
       //   icon: 'icon-guizeyinqing',
       //   path: '/ruleengine',
       // },
       // {
-      //   title: this.$t('components.modules'),
+      //   title: 'modules',
       //   path: '/modules',
       //   icon: 'icon-changjingguanli',
       // },
       // {
-      //   title: this.$t('components.setting'),
+      //   title: 'setting',
       //   path: '/setting',
       //   icon: 'icon-icon_shezhi',
       // },
       // {
-      //   title: this.$t('components.general'),
+      //   title: 'general',
       //   icon: 'icon-fenzuguanli',
       //   path: '/general',
       // },
     ]
   },
-
-  methods: {},
 }
 </script>
 

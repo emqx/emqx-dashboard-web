@@ -1,34 +1,14 @@
 <template>
   <div class="polyline-cards">
-    <!-- <el-collapse-transition v-if="bigChartItem.text">
-      <div class="big-chart">
-        <el-card shadow="never" class="big-card">
-          <div class="card-title">{{ bigChartItem.text }}</div>
-          <span class="shrink-icon" @click="bigChartItem = {}"></span>
-          <polyline-chart
-            ref="bigChart"
-            chart-id="big-polyline"
-            :y-title="metricTitles"
-            :chart-data="metricLog[bigChartItem.value]"
-            :chartColors="chartColorList[bigChartItem.value]"
-            height="420px"
-            gridRight="1.5%"
-            gridLeft="1%"
-            legendBottom="10px"
-          ></polyline-chart>
-        </el-card>
-      </div>
-    </el-collapse-transition> -->
     <el-row>
       <div v-for="item in dataTypeFilter" :key="item.value">
-        <template v-if="item !== bigChartItem">
+        <template>
           <el-col :span="8">
             <el-card shadow="never" class="polyline-card">
               <div class="card-title">{{ item.text }}</div>
-              <!-- <span class="enlarge-icon" @click="bigChartItem = item"></span> -->
               <polyline-chart
                 :chart-id="`${item.value}-polyline`"
-                :y-title="['0']"
+                :y-title="[item.text]"
                 :chart-data="metricLog[item.value]"
                 :chartColors="chartColorList[item.value]"
               ></polyline-chart>
@@ -73,7 +53,6 @@ export default {
       },
       dataTypeList: ['dropped', 'connection', 'route', 'subscriptions', 'sent', 'received'],
       timerMetrics: null,
-      bigChartItem: {},
     }
   },
 
@@ -132,27 +111,11 @@ export default {
             currentData.yData.push(item.count)
           })
         })
-        // this.timerMetrics = setInterval(this.setMetricsChartRealTime, 60000)
+        this.timerMetrics = setTimeout(this.loadMetricsLogData, 60000)
       } catch (e) {
         console.error(e)
       }
     },
-    // setMetricsChartRealTime() {
-    //   this.dataTypeList.forEach(async (typeName) => {
-    //     const data = await loadMetricsLog(typeName)
-    //     const currentData = this.metricLog[typeName]
-    //     this.metricTitles.forEach((key, index) => {
-    //       const nodeMetric = data[key]
-    //       const lastData = nodeMetric[nodeMetric.length - 1]
-    //       if (currentData[index].xData.length >= 120) {
-    //         currentData[index].xData.shift()
-    //         currentData[index].yData.shift()
-    //       }
-    //       currentData[index].xData.push(this._formatTime(lastData[0]))
-    //       currentData[index].yData.push(lastData[1])
-    //     })
-    //   })
-    // },
     clearTimer() {
       if (this.timerMetrics) {
         clearInterval(this.timerMetrics)
@@ -178,54 +141,8 @@ export default {
     }
   }
 
-  .shrink-icon,
-  .enlarge-icon {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    background-size: 100% 100%;
-    z-index: 1;
-    cursor: pointer;
-  }
-
-  // .enlarge-icon {
-  //   background: url('../../../assets/img/enlarge.png') no-repeat;
-  //   right: 10px;
-  //   bottom: 10px;
-  // }
-
-  // .shrink-icon {
-  //   background: url('../../../assets/img/shrink.png') no-repeat;
-  //   right: 15px;
-  //   bottom: 15px;
-  // }
-
-  .big-card {
-    height: 480px;
-
-    .shrink-icon {
-      visibility: hidden;
-    }
-
-    &:hover {
-      .shrink-icon {
-        visibility: visible;
-      }
-    }
-  }
-
   .polyline-card {
     height: 255px;
-
-    .enlarge-icon {
-      visibility: hidden;
-    }
-
-    &:hover {
-      .enlarge-icon {
-        visibility: visible;
-      }
-    }
   }
 }
 </style>

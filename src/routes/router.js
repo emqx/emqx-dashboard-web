@@ -15,6 +15,7 @@ import Users from '@/views/General/Users'
 import Advanced from '@/views/Advanced/Advanced'
 import TopicMetrics from '@/views/Tools/TopicMetrics'
 import Login from '@/views/Base/Login'
+import Blacklist from '@/views/General/Blacklist'
 
 let routes = [
   {
@@ -319,12 +320,28 @@ let routes = [
   //     },
   //   ],
   // },
+  // 黑名单
+  {
+    path: '/blacklist',
+    meta: {
+      hideKey: 'blacklist',
+      authRequired: true,
+    },
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'blacklist',
+        component: Blacklist,
+      },
+    ],
+  },
   // 用户
   {
     path: '/users',
     component: Layout,
     meta: {
-      hideKey: 'general',
+      hideKey: 'users',
       authRequired: true,
     },
     children: [
@@ -370,15 +387,6 @@ let routes = [
       // {
       //   path: 'application',
       //   component: () => import('@/views/General/Application'),
-      //   meta: {
-      //     hideKey: 'general',
-      //     authRequired: true,
-      //   },
-      // },
-      // 黑名单
-      // {
-      //   path: 'blacklist',
-      //   component: () => import('@/views/General/Blacklist'),
       //   meta: {
       //     hideKey: 'general',
       //     authRequired: true,

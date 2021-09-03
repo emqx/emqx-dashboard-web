@@ -1,54 +1,37 @@
 <template>
-  <div class="blacklist">
-    <div class="app-wrapper">
-      <div class="emq-table-header">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog">
-          {{ $t('Base.create') }}
-        </el-button>
-      </div>
-      <el-table :data="tableData" class="data-list">
-        <el-table-column prop="who" :label="$t('General.who')"> </el-table-column>
-        <el-table-column prop="as" :label="$t('General.as')" sortable> </el-table-column>
-        <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')" sortable>
-        </el-table-column>
-        <el-table-column
-          prop="until"
-          :formatter="formatterUntil"
-          :label="$t('General.until')"
-          sortable
-        >
-        </el-table-column>
-        <el-table-column prop="oper" :label="$t('Base.operation')">
-          <template slot-scope="{ row }">
-            <el-button plain type="danger" size="mini" @click="deleteConfirm(row)"
-              >{{ $t('Base.delete') }}
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+  <div class="blacklist app-wrapper">
+    <div class="section-header">
+      <div></div>
+      <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog">
+        {{ $t('Base.create') }}
+      </el-button>
+    </div>
+    <el-table :data="tableData" v-loading="tbLoading">
+      <el-table-column prop="who" :label="$t('General.who')" sortable> </el-table-column>
+      <el-table-column prop="as" :label="$t('General.as')" sortable> </el-table-column>
+      <el-table-column prop="reason" min-width="120px" :label="$t('General.reason')" sortable>
+      </el-table-column>
+      <el-table-column
+        prop="until"
+        :formatter="formatterUntil"
+        :label="$t('General.until')"
+        sortable
+      >
+      </el-table-column>
+      <el-table-column prop="oper" :label="$t('Base.operation')">
+        <template slot-scope="{ row }">
+          <el-button plain type="danger" size="mini" @click="deleteConfirm(row)"
+            >{{ $t('Base.delete') }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-      <div class="emq-table-footer">
-        <el-pagination
-          hide-on-single-page
-          background
-          layout="total, sizes, prev, pager, next"
-          :page-sizes="[20, 50, 100, 500]"
-          :page-size.sync="params._limit"
-          :current-page.sync="params._page"
-          :total="count"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentPageChange"
-        >
-        </el-pagination>
-      </div>
+    <div class="emq-table-footer">
+      <common-pagination :count="count" :reload-func="listBlackList"></common-pagination>
     </div>
 
-    <el-dialog
-      width="520px"
-      :title="$t('General.createBlacklist')"
-      :visible.sync="dialogVisible"
-      @close="clearInput"
-    >
+    <el-dialog :title="$t('General.createBlacklist')" :visible.sync="dialogVisible">
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
         <el-row :gutter="20">
           <el-col :span="12">
@@ -91,18 +74,18 @@
 <script>
 import moment from 'moment'
 import { loadBlacklist, createBlacklist, deleteBlacklist } from '@/api/function'
+import CommonPagination from '../../components/commonPagination.vue'
 
 export default {
   name: 'Blacklist',
-  components: {},
-  props: {},
+  components: { CommonPagination },
   data() {
     return {
       dialogVisible: false,
       tableData: [],
       params: {
-        _page: 1,
-        _limit: 20,
+        // _page: 1,
+        // _limit: 20,
       },
       count: 0,
       asOptions: [
@@ -117,42 +100,35 @@ export default {
         as: [{ required: true, message: this.$t('General.enterAs') }],
         who: [{ required: true, message: this.$t('General.enterWho') }],
       },
+      tbLoading: false,
     }
   },
   created() {
-    this.loadData()
+    // this.listBlackList()
   },
   methods: {
-    loadData() {
-      this.listBlackList()
-    },
-    async listBlackList(reload, params = {}) {
-      if (reload) {
-        this.params._page = 1
+    async listBlackList(params = {}) {
+      this.tbLoading = true
+      const res = await loadBlacklist({ ...this.params, ...params }).catch(() => {})
+      if (res) {
+        const {
+          data = [],
+          meta: {},
+        } = res
+        this.tableData = data
+        this.count = meta.count
       }
-      const data = await loadBlacklist({ ...this.params, ...params })
-      const {
-        items = [],
-        meta: { count = 0 },
-      } = data
-      this.tableData = items
-      this.count = count
+      this.tbLoading = false
     },
-    handleSizeChange() {
-      this.listBlackList(true)
-    },
-    handleCurrentPageChange() {
-      this.listBlackList()
-    },
+
     clearInput() {
-      if (this.$refs.recordForm) {
-        this.$refs.recordForm.resetFields()
-      }
+      this.$refs?.recordForm?.resetFields()
     },
     showDialog() {
       this.record = {
         reason: '',
       }
+      this.clearInput()
       this.dialogVisible = true
     },
     closeDialog() {
@@ -171,7 +147,7 @@ export default {
             record.until = null
           }
         }
-        const res = await createBlacklist(record)
+        const res = await createBlacklist(record).catch(() => {})
         if (res) {
           this.$message.success(this.$t('General.createBlacklistSuccess'))
           this.closeDialog()
@@ -188,10 +164,10 @@ export default {
         })
         .then(async () => {
           const { who, as } = item
-          const res = await deleteBlacklist({ who, as })
+          const res = await deleteBlacklist({ who, as }).catch(() => {})
           if (res) {
             this.$message.success(this.$t('Base.deleteSuccess'))
-            this.listBlackList(true)
+            this.listBlackList()
           }
         })
         .catch(() => {})
@@ -206,7 +182,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.blacklist {
-}
-</style>
+<style lang="scss" scoped></style>

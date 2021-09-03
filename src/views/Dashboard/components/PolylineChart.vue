@@ -116,8 +116,8 @@ export default {
     drawChart() {
       this.setSeriesConfig()
       let Dom = document.getElementById(this.chartId)
-      if (!Dom) return
-      echarts.dispose(Dom)
+
+      // echarts.dispose(Dom)
       this.chart = echarts.init(Dom)
       const option = {
         legend: {
@@ -174,11 +174,12 @@ export default {
       }
       this.chart.setOption(option)
     },
-    // reDrawEchart() {
-    //   this.chart.dispose()
-    //   this.chart = undefined
-    //   this.drawChart()
-    // },
+    reDrawEchart() {
+      // this.chart.dispose()
+      echarts.dispose(this.chart)
+      // this.chart = undefined
+      this.drawChart()
+    },
   },
 }
 </script>
