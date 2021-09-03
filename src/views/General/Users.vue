@@ -44,7 +44,7 @@
         >
           <el-input v-model="record.username" :disabled="accessType === 'edit'"></el-input>
         </el-form-item>
-        <el-form-item v-if="accessType !== 'chPass'" prop="tag" :label="$t('General.remark')">
+        <el-form-item v-if="accessType !== 'chPass'" :label="$t('General.remark')">
           <el-input v-model="record.tag"></el-input>
         </el-form-item>
         <el-form-item v-if="accessType !== 'edit'" prop="password" :label="$t('General.password')">
@@ -62,7 +62,10 @@
 
       <div slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
+
+        <el-button type="primary" size="small" @click="save" :loading="submitLoading">{{
+          $t('Base.confirm')
+        }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -87,12 +90,12 @@ export default {
     return {
       dialogVisible: false,
       tableData: [],
-      lockTable: true,
+      lockTable: false,
       accessType: '',
       record: {},
+      submitLoading: false,
       rules: {
         username: [{ required: true, message: this.$t('General.enterOneUserName') }],
-        tags: [{ required: true, message: this.$t('General.pleaseEnterNotes') }],
         password: [
           {
             required: true,
@@ -135,10 +138,8 @@ export default {
   },
 
   methods: {
-    clearInput() {
-      this.$refs?.recordForm?.resetFields()
-    },
     async loadData() {
+      this.lockTable = true
       let res = await loadUser().catch(() => {})
       if (res) {
         this.tableData = res
@@ -147,10 +148,10 @@ export default {
     },
     showDialog(type = 'create', item = {}) {
       this.dialogVisible = true
-      this.clearInput()
+      this.$refs?.recordForm?.resetFields()
 
       if (type === 'edit') {
-        Object.assign(this.record, item)
+        this.record = Object.assign({}, item)
         this.accessType = 'edit'
       } else if (type === 'chPass') {
         this.accessType = 'chPass'
@@ -179,27 +180,37 @@ export default {
       if (!validation) {
         return
       }
+      this.submitLoading = true
       const { username } = vue.record
       if (vue.accessType === 'edit') {
-        updateUser(username, vue.record).then(async () => {
-          vue.$message.success(vue.$t('Base.editSuccess'))
-          vue.dialogVisible = false
-          vue.loadData()
-        })
-      } else if (accessType === 'chPass') {
+        updateUser(username, vue.record)
+          .then(async () => {
+            vue.$message.success(vue.$t('Base.editSuccess'))
+            vue.dialogVisible = false
+            vue.loadData()
+          })
+          .finally(() => {
+            this.submitLoading = false
+          })
+      } else if (vue.accessType === 'chPass') {
         let res = await changePassword(username).catch(() => {})
         if (res) {
           vue.$message.success(vue.$t('General.changePassSuccess'))
           vue.dialogVisible = false
         }
+        this.submitLoading = false
       } else {
-        createUser(vue.record).then(() => {
-          vue.$message.success(vue.$t('General.createUserSuccess'))
-          vue.dialogVisible = false
-          vue.accessType = ''
-          vue.record = {}
-          vue.loadData()
-        })
+        createUser(vue.record)
+          .then(() => {
+            vue.$message.success(vue.$t('General.createUserSuccess'))
+            vue.dialogVisible = false
+            vue.accessType = ''
+            vue.record = {}
+            vue.loadData()
+          })
+          .finally(() => {
+            this.submitLoading = false
+          })
       }
     },
     deleteConfirm(item) {

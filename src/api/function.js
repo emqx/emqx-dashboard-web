@@ -24,8 +24,8 @@ export function loadUser() {
   return http.get('/users')
 }
 
-export function createUser(username, body = {}) {
-  return http.post(`/users/${username}`, body)
+export function createUser(body = {}) {
+  return http.post(`/users`, body)
 }
 
 export function updateUser(username, body = {}) {

@@ -74,7 +74,9 @@
 
       <div slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
+        <el-button type="primary" size="small" @click="save" :loading="submitLoading">{{
+          $t('Base.confirm')
+        }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -97,6 +99,7 @@ export default {
         // _limit: 20,
       },
       count: 0,
+      submitLoading: false,
       asOptions: [{ value: 'clientid' }, { value: 'username' }, { value: 'peerhost' }],
       record: {},
       rules: {
@@ -143,19 +146,18 @@ export default {
           return
         }
         const record = { ...this.record }
-        if (record.until && typeof record.until === 'number') {
-          try {
-            record.until = Math.floor(record.until / 1000)
-          } catch (e) {
-            record.until = null
-          }
+        if (typeof record.until === 'number') {
+          record.until = Math.floor(record.until / 1000)
         }
+
+        this.submitLoading = true
         const res = await createBlacklist(record).catch(() => {})
         if (res) {
           this.$message.success(this.$t('General.createBlacklistSuccess'))
           this.closeDialog()
           this.listBlackList()
         }
+        this.submitLoading = false
       })
     },
     deleteConfirm(item) {

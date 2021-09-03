@@ -26,7 +26,7 @@ export function loadSubscriptions(clientId) {
 }
 
 export function unsubscribe(clientId) {
-  return http.delete(`/clients/${encodeURIComponent(clientId)}/subscribe`)
+  return http.post(`/clients/${encodeURIComponent(clientId)}/unsubscribe`)
 }
 
 export function subscribe(clientId, { qos, topic }) {

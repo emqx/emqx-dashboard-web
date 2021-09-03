@@ -61,7 +61,7 @@ export default defineComponent({
       Object.keys(eventMsg).forEach((key) => {
         pendingEventMsg['$event/' + key] = eventMsg[key]
       })
-      let res = editEventMsg(pendingEventMsg).catch(() => {})
+      let res = await editEventMsg(pendingEventMsg).catch(() => {})
       if (res) {
         this.$message({
           type: 'success',
