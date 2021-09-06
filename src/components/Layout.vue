@@ -38,7 +38,6 @@
                 >
                   {{ $t(`components.${kebab2pascal(route.path)}`) }}
                 </el-menu-item>
-                {{ $t(`components.${route.path}`) }}
               </template>
             </el-menu>
           </el-header>

@@ -79,9 +79,7 @@ export default {
 
   data() {
     const validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(this.$t('General.pleaseEnterYourPasswordAgain')))
-      } else if (value !== this.record.newPassword) {
+      if (value !== this.record.newPassword) {
         callback(new Error(this.$t('General.confirmNotMatch')))
       } else {
         callback()

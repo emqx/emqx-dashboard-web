@@ -79,7 +79,14 @@
     </el-tabs>
     <el-dialog :visible.sync="payloadDialog" :title="'Payload'">
       <el-row v-loading="payloadLoading">
-        <textarea v-model="payloadDetail" class="payload-text" readonly></textarea>
+        <el-input
+          type="textarea"
+          :rows="10"
+          resize="none"
+          placeholder="Payload"
+          v-model="payloadDetail"
+          readonly
+        ></el-input>
       </el-row>
       <template #footer>
         <span v-if="isCopyShow" class="payload-copied">{{ $t('Base.copied') }}</span>
@@ -289,14 +296,6 @@ export default defineComponent({
   .el-select {
     margin: -10px 0;
   }
-}
-
-.payload-text {
-  width: 100%;
-  height: 220px;
-  border: 1px solid #ddd;
-  box-sizing: border-box;
-  padding: 5px;
 }
 
 .payload-copied {

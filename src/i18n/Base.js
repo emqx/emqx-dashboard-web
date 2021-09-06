@@ -33,7 +33,7 @@ export default {
   },
   copied: {
     zh: '复制成功！',
-    en: 'Copied!',
+    en: 'Copied Successfully!',
   },
   copy: {
     zh: '复制',
