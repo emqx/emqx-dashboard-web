@@ -64,7 +64,7 @@
         <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
 
         <el-button type="primary" size="small" @click="save" :loading="submitLoading">{{
-          $t('Base.confirm')
+          accessType == 'create' ? $t('Base.create') : $t('Base.confirm')
         }}</el-button>
       </div>
     </el-dialog>

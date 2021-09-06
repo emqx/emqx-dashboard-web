@@ -109,7 +109,13 @@
     </el-table>
 
     <el-dialog :title="tl('addTopic')" :visible.sync="addVisible">
-      <el-form ref="record" :model="topicInput" size="small" label-position="top">
+      <el-form
+        ref="record"
+        :model="topicInput"
+        size="small"
+        label-position="top"
+        :rules="topicRules"
+      >
         <el-form-item prop="topic" :label="'topic'">
           <el-input v-model="topicInput.topic"></el-input>
         </el-form-item>
@@ -137,6 +143,13 @@ import { dateFormat } from '@/common/utils'
 
 export default defineComponent({
   name: 'TopicMetrics',
+  data: function () {
+    return {
+      topicRules: {
+        topic: [{ required: true, message: this.$t('Advanced.required'), trigger: 'blur' }],
+      },
+    }
+  },
   setup() {
     let addVisible = ref(false)
     let topicInput = reactive({
@@ -154,6 +167,7 @@ export default defineComponent({
 
     const openAdd = () => {
       addVisible.value = true
+      record.value?.resetFields()
     }
 
     const loadTopicMetrics = async function () {
@@ -169,6 +183,8 @@ export default defineComponent({
     }
 
     const addTopic = async function () {
+      let validate = await record.value?.validate().catch(() => {})
+      if (!validate) return
       let { topic } = topicInput
       let res = await addTopicMetrics(topic).catch(() => {})
       if (res) {

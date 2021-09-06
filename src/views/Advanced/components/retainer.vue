@@ -494,7 +494,7 @@ export default defineComponent({
   margin-right: 10px;
 }
 .el-input-group--append ::v-deep .el-input-group__append {
-  width: 90px;
+  width: 120px;
   padding: 0;
 
   .el-select {

@@ -75,7 +75,7 @@
       <div slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
         <el-button type="primary" size="small" @click="save" :loading="submitLoading">{{
-          $t('Base.confirm')
+          $t('Base.create')
         }}</el-button>
       </div>
     </el-dialog>
