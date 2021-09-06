@@ -40,13 +40,15 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
   src: url(../fonts/Roboto-BlackItalic.ttf) format('truetype');
 }
 
+$font: Roboto, -apple-system, BlinkMacSystemFont, PingFang SC, Hiragino Sans GB, Helvetica Neue,
+  Helvetica, Arial, sans-serif;
+
 body {
   padding: 0;
   margin: 0;
   color: $--color-black;
   font-size: 14px;
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, PingFang SC, Hiragino Sans GB,
-    Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family: $font;
 }
 
 a {
@@ -61,6 +63,11 @@ a {
   &:hover {
     color: $--color-hover;
   }
+}
+
+textarea,
+code {
+  font-family: $font;
 }
 
 #app {

@@ -85,10 +85,10 @@ export default {
         title: 'authentication',
         path: '/authentication',
       },
-      {
-        title: 'authorization',
-        path: '/authorization',
-      },
+      // {
+      //   title: 'authorization',
+      //   path: '/authorization',
+      // },
     ]
 
     let system = [
