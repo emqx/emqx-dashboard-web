@@ -97,12 +97,18 @@
       </div>
       <!-- Config -->
       <div v-else-if="step === 2">
+        <database-config v-show="['mysql', 'postgresql'].includes(backend)"></database-config>
+        <!-- Result -->
+        <div :class="['create-form', 'result-block', isWork ? 'success' : 'error']">
+          <div class="result-title">
+            {{ isWork ? $t('Auth.testSuccess') : $t('Auth.testFaild') }}
+          </div>
+        </div>
         <div class="step-btn">
-          <div class="create-form-title"></div>
           <el-button type="primary" @click="handleNext">
             {{ $t('Base.create') }}
           </el-button>
-          <el-button>
+          <el-button @click="handleTest">
             {{ $t('Base.test') }}
           </el-button>
           <el-button @click="handleBack">
@@ -115,15 +121,17 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, reactive, ref } from '@vue/composition-api'
 import BackButton from '@/components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
+import DatabaseConfig from './components/DatabaseConfig.vue'
 
 export default defineComponent({
   name: 'AuthnCreate',
   components: {
     BackButton,
     GuideBar,
+    DatabaseConfig,
   },
   setup() {
     const activeGuidesIndex = ref([0])
@@ -132,6 +140,7 @@ export default defineComponent({
     const backend = ref('')
     const databases = ref([])
     const others = ref([])
+    const isWork = ref(false)
     const supportBackendMap = {
       'password-based': {
         mysql: 'MySQL',
@@ -184,6 +193,9 @@ export default defineComponent({
       step.value -= 1
       activeGuidesIndex.value.pop()
     }
+    const handleTest = function () {
+      isWork.value = true
+    }
     return {
       activeGuidesIndex,
       mechanism,
@@ -191,16 +203,18 @@ export default defineComponent({
       backend,
       databases,
       others,
+      isWork,
       getGuideList,
       handleCancel,
       handleNext,
       handleBack,
+      handleTest,
     }
   },
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .authn-create {
   .create-form-title {
     font-size: 16px;
@@ -214,6 +228,21 @@ export default defineComponent({
   }
   .create-form {
     width: 80%;
+    .el-form-item {
+      border: 1px solid #e4e4e4;
+      .el-form-item__label {
+        padding-top: 12px;
+        padding-left: 15px;
+        line-height: inherit;
+        font-size: 12px;
+        color: #4d4d4d;
+      }
+    }
+    .el-input .el-input__inner,
+    .el-textarea__inner,
+    .el-select__inner {
+      border: none;
+    }
     .el-radio.is-bordered {
       text-align: center;
       &.mechanism {
@@ -229,6 +258,19 @@ export default defineComponent({
   }
   .step-btn {
     margin-top: 32px;
+  }
+  .result-block {
+    .result-title {
+      font-size: 16px;
+      color: #fff;
+      padding: 24px;
+    }
+    &.error {
+      background: #e34242;
+    }
+    &.success {
+      background: #00b299;
+    }
   }
 }
 </style>

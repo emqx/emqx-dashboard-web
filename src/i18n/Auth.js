@@ -5,7 +5,7 @@ export default {
   },
   dataSource: {
     zh: '数据源',
-    en: 'Data Source',
+    en: 'Backend',
   },
   status: {
     zh: '状态',
@@ -21,7 +21,7 @@ export default {
   },
   config: {
     zh: '配置参数',
-    en: 'Config',
+    en: 'Configuration',
   },
   selectMechanism: {
     zh: '选择认证方式',
@@ -45,7 +45,7 @@ export default {
   },
   selectDataSource: {
     zh: '选择数据源',
-    en: 'Select Data Source',
+    en: 'Select Backend',
   },
   dataSourceDesc: {
     zh: '选择存储 ACL 数据的数据库或提供 ACL 功能的 HTTP 服务器',
@@ -57,6 +57,38 @@ export default {
   },
   jwtDataSourceDesc: {
     zh: 'JWT 认证无需选择数据源，请继续下一步配置参数',
-    en: 'JWT authentication does not need to select a data source, please continue to the next step to configure the parameters',
+    en: 'JWT authentication does not need to select a backend, please continue to the next step to configure the parameters',
+  },
+  connect: {
+    zh: '连接',
+    en: 'Connect',
+  },
+  TLSCerts: {
+    zh: 'TLS 证书信息',
+    en: 'TLS Certification',
+  },
+  connectConfig: {
+    zh: '连接配置',
+    en: 'Connection Configuration',
+  },
+  reconnect: {
+    zh: '自动重连',
+    en: 'Reconnect',
+  },
+  authConfig: {
+    zh: '认证配置',
+    en: 'Authentication configuration',
+  },
+  testSuccess: {
+    zh: '测试通过，您的配置可以正常使用',
+    en: 'Test success, your configuration works fine',
+  },
+  testFaild: {
+    zh: '测试失败',
+    en: 'Test failed',
+  },
+  sqlHelpContent: {
+    zh: '使用默认的 ACL SQL 请在数据库中创建如下表结构：',
+    en: 'Using the default ACL SQL please create the following table structure in the database:',
   },
 }

@@ -207,4 +207,8 @@ export default {
     zh: '测试',
     en: 'Test',
   },
+  help: {
+    zh: '帮助',
+    en: 'Help',
+  },
 }
