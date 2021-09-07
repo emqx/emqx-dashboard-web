@@ -121,7 +121,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 import BackButton from '@/components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'

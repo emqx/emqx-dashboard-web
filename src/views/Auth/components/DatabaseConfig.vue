@@ -127,14 +127,14 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, reactive, ref } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
 
 export default defineComponent({
   name: 'DatabaseConfig',
   components: { CodeView },
   setup() {
-    const databaseConfig = ref({
+    const databaseConfig = reactive({
       host: '127.0.0.1',
       port: 3306,
       username: '',
