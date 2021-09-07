@@ -50,8 +50,8 @@ export function editDelayedConfig(body) {
   return http.put('/mqtt/delayed', data)
 }
 
-export function getDelayedList() {
-  return http.get('/mqtt/delayed/messages')
+export function getDelayedList(params) {
+  return http.get('/mqtt/delayed/messages', { params: params })
 }
 
 export function getDelayedInfo(id) {

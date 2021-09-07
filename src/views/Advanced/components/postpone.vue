@@ -73,7 +73,7 @@
           </el-table-column>
         </el-table>
         <div class="emq-table-footer">
-          <common-pagination :count="tbCount" :reload-func="loadDelayedList"></common-pagination>
+          <common-pagination ref="p" :reload-func="loadDelayedList"></common-pagination>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
+import { defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
 import {
   getDelayedConfig,
   editDelayedConfig,
@@ -129,8 +129,6 @@ export default defineComponent({
     let configPending = ref(true)
     let tbLoading = ref(false)
     let configEnable = ref(false)
-    let tbCount = ref(0)
-
     let delayedOption = ref('custom')
     let delayedForm = ref(null)
     let delayedRules = {
@@ -143,6 +141,7 @@ export default defineComponent({
     let payloadLoading = ref(false)
     let payloadDetail = ref('')
     let isCopyShow = ref(false)
+    let p = ref(null)
 
     watch(delayedOption, (newOption) => {
       if (newOption == 'unlimited') {
@@ -178,14 +177,18 @@ export default defineComponent({
       configPending.value = false
     }
 
-    const loadDelayedList = async () => {
+    const loadDelayedList = async (params = {}) => {
       tbLoading.value = true
-      let res = await getDelayedList().catch(() => {})
+      let res = await getDelayedList(params).catch(() => {})
       if (res) {
         delayedTbData.value = res.data
-        tbCount.value = res.meta?.count
+        tbLoading.value = false
+        return res.meta
+      } else {
+        tbLoading.value = false
+        delayedTbData.value = []
+        return {}
       }
-      tbLoading.value = false
     }
 
     const deleteDelayedInfo = async function (row) {
@@ -199,7 +202,7 @@ export default defineComponent({
           if (!msgid) return
           let res = await delDelayedInfo(id).catch(() => {})
           if (res) {
-            loadDelayedList()
+            p.value.$emit('loadPage')
           } else {
           }
         })
@@ -240,15 +243,13 @@ export default defineComponent({
       configPending.value = false
     }
 
-    onMounted(() => {
+    const reloading = function () {
+      // loadDelayedList()
       loadDelayedConfig()
-      loadDelayedList()
-    })
-
-    const reloading = () => {
-      loadDelayedList()
-      loadDelayedConfig()
+      p.value.$emit('loadPage')
     }
+
+    onMounted(reloading)
 
     let copyShowTimeout = ref(null)
     const copySuccess = () => {
@@ -272,7 +273,6 @@ export default defineComponent({
       delayedForm,
       delayedRules,
       configEnable,
-      tbCount,
       loadDelayedList,
       checkPayload,
       payloadDialog,
@@ -281,6 +281,7 @@ export default defineComponent({
       dateFormat,
       isCopyShow,
       copySuccess,
+      p,
     }
   },
 })

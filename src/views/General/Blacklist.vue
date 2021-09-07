@@ -28,7 +28,7 @@
     </el-table>
 
     <div class="emq-table-footer">
-      <common-pagination :count="count" :reload-func="listBlackList"></common-pagination>
+      <common-pagination ref="p" :reload-func="listBlackList"></common-pagination>
     </div>
 
     <el-dialog :title="$t('General.createBlacklist')" :visible.sync="dialogVisible">
@@ -94,11 +94,7 @@ export default {
     return {
       dialogVisible: false,
       tableData: [],
-      params: {
-        // _page: 1,
-        // _limit: 20,
-      },
-      count: 0,
+      params: {},
       submitLoading: false,
       asOptions: [{ value: 'clientid' }, { value: 'username' }, { value: 'peerhost' }],
       record: {},
@@ -110,8 +106,8 @@ export default {
       tbLoading: false,
     }
   },
-  created() {
-    // this.listBlackList()
+  mounted() {
+    this.$refs.p.$emit('loadPage')
   },
   methods: {
     async listBlackList(params = {}) {
@@ -120,9 +116,13 @@ export default {
       if (res) {
         const { data = [], meta = {} } = res
         this.tableData = data
-        this.count = meta.count
+        this.tbLoading = false
+        return meta
+      } else {
+        this.tbLoading = false
+        this.tableData = []
+        return {}
       }
-      this.tbLoading = false
     },
 
     clearInput() {
