@@ -1,19 +1,18 @@
 <template>
-  <div class="authn app-wrapper">
+  <div class="authz app-wrapper">
     <div class="section-header">
       <div></div>
       <el-button
         type="primary"
         size="small"
         icon="el-icon-plus"
-        @click="$router.push({ name: 'authenticationCreate' })"
+        @click="$router.push({ name: 'authorizationCreate' })"
       >
         {{ $t('Base.create') }}
       </el-button>
     </div>
-    <el-table class="auth-table" :data="authnList" v-loading.lock="lockTable">
-      <el-table-column prop="mechanism" :label="$t('Auth.mechanism')"></el-table-column>
-      <el-table-column prop="backend" :label="$t('Auth.dataSource')"></el-table-column>
+    <el-table class="auth-table" :data="authzList" v-loading.lock="lockTable">
+      <el-table-column prop="type" :label="$t('Auth.dataSource')"></el-table-column>
       <el-table-column prop="enable" :label="$t('Auth.status')">
         <template slot-scope="{ row }">
           <span :class="['status', row.enable ? 'enable' : 'error']">
@@ -23,7 +22,7 @@
       </el-table-column>
       <el-table-column prop="oper" :label="$t('Base.operation')">
         <template slot-scope="{ row }">
-          <table-dropdown :row-data="row" :table-data-len="authnList.length"></table-dropdown>
+          <table-dropdown :row-data="row" :table-data-len="authzList.length"></table-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -33,26 +32,26 @@
 <script>
 import { defineComponent, ref } from '@vue/composition-api'
 import TableDropdown from './components/TableDropdown.vue'
-import { listAuthn } from '@/api/auth'
+import { listAuthz } from '@/api/auth'
 
 export default defineComponent({
-  name: 'Authn',
+  name: 'Authz',
   components: {
     TableDropdown,
   },
   setup() {
-    const authnList = ref([])
+    const authzList = ref([])
     const lockTable = ref(false)
     const loadData = async () => {
       lockTable.value = true
-      const res = await listAuthn()
-      console.log(res)
+      const res = await listAuthz()
+      authzList.value = res.sources
       lockTable.value = false
     }
     loadData()
     return {
       lockTable,
-      authnList,
+      authzList,
     }
   },
 })

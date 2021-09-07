@@ -382,6 +382,26 @@ let routes = [
       },
     ],
   },
+  {
+    path: '/authorization',
+    component: Layout,
+    meta: {
+      hideKey: 'authorization',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'authorization',
+        component: () => import('@/views/Auth/Authz'),
+      },
+      {
+        path: 'create',
+        name: 'authorizationCreate',
+        component: () => import('@/views/Auth/AuthzCreate'),
+      },
+    ],
+  },
   // // 设置
   // {
   //   path: '/setting',

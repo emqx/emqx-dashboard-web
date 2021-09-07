@@ -1,7 +1,7 @@
 <template>
-  <div class="authn-create app-wrapper">
+  <div class="auth authn-create app-wrapper">
     <back-button back-url="/authentication">
-      {{ $t('Auth.backAuthList') }}
+      {{ $t('Auth.backAuthnList') }}
     </back-button>
     <div class="page-header-title">
       {{ $t('Auth.createAuth') }}
@@ -36,12 +36,12 @@
           <el-button type="primary" @click="handleNext">
             {{ $t('Base.nextStep') }}
           </el-button>
-          <el-button @click="handleCancel">
+          <el-button @click="$router.push('/authentication')">
             {{ $t('Base.cancel') }}
           </el-button>
         </div>
       </div>
-      <!-- Data Source -->
+      <!-- Backend -->
       <div v-if="step === 1" class="create-form">
         <div class="create-form-title">
           {{ $t('Auth.selectDataSource') }}
@@ -125,6 +125,7 @@ import { defineComponent, ref } from '@vue/composition-api'
 import BackButton from '@/components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
+import useGuide from '@/hooks/useGuide'
 
 export default defineComponent({
   name: 'AuthnCreate',
@@ -134,9 +135,7 @@ export default defineComponent({
     DatabaseConfig,
   },
   setup() {
-    const activeGuidesIndex = ref([0])
     const mechanism = ref('password-based')
-    const step = ref(0)
     const backend = ref('')
     const databases = ref([])
     const others = ref([])
@@ -158,9 +157,6 @@ export default defineComponent({
     const getGuideList = function () {
       return [this.$t('Auth.mechanism'), this.$t('Auth.dataSource'), this.$t('Auth.config')]
     }
-    const handleCancel = function () {
-      this.$router.push('/authentication')
-    }
     const getSupportBackend = function () {
       const supportData = supportBackendMap[mechanism.value]
       Object.keys(supportData).forEach((key) => {
@@ -180,19 +176,14 @@ export default defineComponent({
         backend.value = databases.value[0].value
       }
     }
-    const handleNext = function () {
+    const beforeNext = function () {
       if (step.value === 0) {
         databases.value = []
         others.value = []
         getSupportBackend()
       }
-      step.value += 1
-      activeGuidesIndex.value.push(step.value)
     }
-    const handleBack = function () {
-      step.value -= 1
-      activeGuidesIndex.value.pop()
-    }
+    const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(beforeNext)
     const handleTest = function () {
       isWork.value = true
     }
@@ -205,7 +196,6 @@ export default defineComponent({
       others,
       isWork,
       getGuideList,
-      handleCancel,
       handleNext,
       handleBack,
       handleTest,
@@ -215,62 +205,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.authn-create {
-  .create-form-title {
-    font-size: 16px;
-    color: #1d1d1d;
-    font-weight: 600;
-  }
-  .item-description {
-    color: #5b5b5b;
-    font-size: 12px;
-    margin-bottom: 32px;
-  }
-  .create-form {
-    width: 80%;
-    .el-form-item {
-      border: 1px solid #e4e4e4;
-      .el-form-item__label {
-        padding-top: 12px;
-        padding-left: 15px;
-        line-height: inherit;
-        font-size: 12px;
-        color: #4d4d4d;
-      }
-    }
-    .el-input .el-input__inner,
-    .el-textarea__inner,
-    .el-select__inner {
-      border: none;
-    }
-    .el-radio.is-bordered {
-      text-align: center;
-      &.mechanism {
-        width: 240px;
-      }
-      &.backend {
-        width: 160px;
-      }
-    }
-    .select-database {
-      margin-bottom: 32px;
-    }
-  }
-  .step-btn {
-    margin-top: 32px;
-  }
-  .result-block {
-    .result-title {
-      font-size: 16px;
-      color: #fff;
-      padding: 24px;
-    }
-    &.error {
-      background: #e34242;
-    }
-    &.success {
-      background: #00b299;
-    }
-  }
-}
+@import './style/auth.scss';
 </style>
