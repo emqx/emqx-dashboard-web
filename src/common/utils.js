@@ -26,8 +26,9 @@ export async function toLogin(path) {
   await store.dispatch('UPDATE_USER_INFO', { logOut: true })
   store.commit('UPDATE_EDITION', null)
   store.commit('SET_LANGUAGE', null)
-  router.currentRoute?.path !== '/login' &&
-    router.push({ path: '/login', query: { to: path ? path : undefined } })
+  const currentPath = router.currentRoute?.path
+  currentPath !== '/login' &&
+    router.push({ path: '/login', query: { to: path ? path : currentPath ?? undefined } })
 }
 
 /**

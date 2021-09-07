@@ -1,95 +1,97 @@
 <template>
   <div class="app-wrapper clients">
-    <el-row class="search-wrapper" :gutter="20">
-      <el-col :span="6">
-        <el-input
-          v-model="fuzzyParams.like_clientid"
-          size="small"
-          :placeholder="$t('Clients.clientId')"
-          clearable
-        ></el-input>
-      </el-col>
-      <el-col :span="6">
-        <el-input
-          v-model="fuzzyParams.like_username"
-          size="small"
-          :placeholder="$t('Clients.username')"
-          clearable
-        ></el-input>
-      </el-col>
-      <el-col :span="6">
-        <el-select
-          v-model="fuzzyParams.node"
-          :placeholder="$t('Clients.node')"
-          size="small"
-          clearable
-        >
-          <el-option v-for="item in currentNodes" :value="item.node" :key="item.node"></el-option>
-        </el-select>
-      </el-col>
-      <template v-if="showMoreQuery">
+    <el-form @keyup.enter.native="handleSearch">
+      <el-row class="search-wrapper" :gutter="20">
         <el-col :span="6">
           <el-input
-            v-model="fuzzyParams.ip_address"
+            v-model="fuzzyParams.like_clientid"
             size="small"
-            :placeholder="$t('Clients.ipAddress')"
+            :placeholder="$t('Clients.clientId')"
+            clearable
+          ></el-input>
+        </el-col>
+        <el-col :span="6">
+          <el-input
+            v-model="fuzzyParams.like_username"
+            size="small"
+            :placeholder="$t('Clients.username')"
             clearable
           ></el-input>
         </el-col>
         <el-col :span="6">
           <el-select
-            v-model="fuzzyParams.conn_state"
+            v-model="fuzzyParams.node"
+            :placeholder="$t('Clients.node')"
             size="small"
-            :placeholder="$t('Clients.connectedStatus')"
             clearable
           >
-            <el-option value="connected"></el-option>
-            <el-option value="disconnected"></el-option>
+            <el-option v-for="item in currentNodes" :value="item.node" :key="item.node"></el-option>
           </el-select>
         </el-col>
-        <el-col :span="6">
-          <el-row class="form-item-row">
-            <el-col :span="8">
-              <el-select v-model="fuzzyParams.comparator" class="comparator" size="small">
-                <el-option label=">=" value="gte"></el-option>
-                <el-option label="<=" value="lte"></el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="16">
-              <el-date-picker
-                v-model="fuzzyParams.connected_at"
-                class="datatime"
-                type="datetime"
-                value-format="timestamp"
-                size="small"
-                :placeholder="$t('Clients.createdAt')"
-                clearable
-              >
-              </el-date-picker>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :span="6">
-          <el-select
-            v-model="fuzzyParams.proto_name"
-            size="small"
-            :placeholder="$t('Clients.protocol')"
-            clearable
-          >
-            <el-option v-for="name in protoNames" :key="name" :value="name"> </el-option>
-          </el-select>
-        </el-col>
-      </template>
-      <el-col :span="6" class="col-oper">
-        <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
-          {{ $t('Clients.search') }}
-        </el-button>
+        <template v-if="showMoreQuery">
+          <el-col :span="6">
+            <el-input
+              v-model="fuzzyParams.ip_address"
+              size="small"
+              :placeholder="$t('Clients.ipAddress')"
+              clearable
+            ></el-input>
+          </el-col>
+          <el-col :span="6">
+            <el-select
+              v-model="fuzzyParams.conn_state"
+              size="small"
+              :placeholder="$t('Clients.connectedStatus')"
+              clearable
+            >
+              <el-option value="connected"></el-option>
+              <el-option value="disconnected"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            <el-row class="form-item-row">
+              <el-col :span="8">
+                <el-select v-model="fuzzyParams.comparator" class="comparator" size="small">
+                  <el-option label=">=" value="gte"></el-option>
+                  <el-option label="<=" value="lte"></el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="16">
+                <el-date-picker
+                  v-model="fuzzyParams.connected_at"
+                  class="datatime"
+                  type="datetime"
+                  value-format="timestamp"
+                  size="small"
+                  :placeholder="$t('Clients.createdAt')"
+                  clearable
+                >
+                </el-date-picker>
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :span="6">
+            <el-select
+              v-model="fuzzyParams.proto_name"
+              size="small"
+              :placeholder="$t('Clients.protocol')"
+              clearable
+            >
+              <el-option v-for="name in protoNames" :key="name" :value="name"> </el-option>
+            </el-select>
+          </el-col>
+        </template>
+        <el-col :span="6" class="col-oper">
+          <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
+            {{ $t('Clients.search') }}
+          </el-button>
 
-        <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
-          <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
-        </a>
-      </el-col>
-    </el-row>
+          <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
+            <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+          </a>
+        </el-col>
+      </el-row>
+    </el-form>
 
     <el-table
       :data="tableData"
@@ -114,7 +116,6 @@
 
       <el-table-column prop="username" sortable :label="$t('Clients.username')"></el-table-column>
       <el-table-column prop="ip_address" sortable :label="$t('Clients.ipAddress')">
-        <!-- <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template> -->
       </el-table-column>
       <el-table-column prop="keepalive" sortable :label="$t('Clients.keepalive')"></el-table-column>
       <el-table-column prop="proto_name" sortable :label="$t('Clients.protocol')">
@@ -145,7 +146,7 @@
     </el-table>
 
     <div class="emq-table-footer">
-      <common-pagination :count="count" :reload-func="loadNodeClients"></common-pagination>
+      <common-pagination ref="p" :reload-func="loadNodeClients"></common-pagination>
       <!-- <custom-pagination
         v-if="count === -1 && tableData.length"
         :hasnext="hasnext"
@@ -178,17 +179,12 @@ export default {
       tableData: [],
       lockTable: true,
       hasnext: false,
-      params: {
-        //   page: 1,
-        //   limit: 20,
-      },
-      count: 0,
-      // nodeName: '',
+      params: {},
       currentNodes: [],
       fuzzyParams: {
         comparator: 'gte',
       },
-      selectedClients: [],
+      // selectedClients: [],
       protoNames: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M'],
       qulifiedKeys: [
         'awaiting_rel',
@@ -231,9 +227,9 @@ export default {
     }
   },
 
-  created() {
+  mounted() {
     this.loadData()
-    // this.loadNodeClients()
+    this.$refs.p.$emit('loadPage')
   },
 
   methods: {
@@ -292,7 +288,7 @@ export default {
 
     async handleSearch() {
       this.params = this.genQueryParams(this.fuzzyParams)
-      this.loadNodeClients()
+      this.$refs.p.$emit('loadPage')
     },
     genQueryParams(params) {
       let newParams = {}
@@ -341,9 +337,6 @@ export default {
       if (data) this.currentNodes = data
     },
     async loadNodeClients(params = {}) {
-      // if (reload) {
-      //   this.params.page = 1
-      // }
       this.lockTable = true
 
       const res = await listClients({
@@ -353,13 +346,14 @@ export default {
       if (res) {
         const { data = [], meta = {} } = res
         this.tableData = data
-        this.count = meta.count || this.count
+        this.lockTable = false
+        return meta
         // this.hasnext = meta.hasnext || this.hasnext
       } else {
         this.tableData = []
-        this.count = 0
+        this.lockTable = false
+        return {}
       }
-      this.lockTable = false
     },
   },
 }

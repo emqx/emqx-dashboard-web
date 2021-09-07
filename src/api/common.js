@@ -86,7 +86,8 @@ export const forceLeaveNode = async (nodename) => {
 
 //topics
 export const listTopics = (params = {}) => {
-  return http.get('/routes' + (params.topic ? `/${encodeURIComponent(topic)}` : ''), { params })
+  params.topic = params.topic || undefined
+  return http.get('/routes', { params })
 }
 
 // 获取订阅

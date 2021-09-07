@@ -1,67 +1,69 @@
 <template>
   <div class="app-wrapper subscriptions">
-    <el-row class="search-wrapper" :gutter="20">
-      <el-col :span="6">
-        <el-select
-          v-model="fuzzyParams.node"
-          :placeholder="$t('Clients.node')"
-          size="small"
-          clearable
-        >
-          <el-option v-for="item in currentNodes" :value="item.node" :key="item.node"></el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="6">
-        <el-input
-          v-model="fuzzyParams.clientid"
-          size="small"
-          :placeholder="$t('Clients.clientId')"
-          clearable
-        ></el-input>
-      </el-col>
-      <el-col :span="6" class="form-item-col">
-        <el-row class="form-item-row">
-          <el-col :span="8">
-            <el-select v-model="fuzzyParams.match" class="match" size="small">
-              <el-option label="filter" value="match_topic"></el-option>
-              <el-option label="topic" value="topic"></el-option>
-            </el-select>
-          </el-col>
-          <el-col :span="16">
-            <el-input v-model="fuzzyParams.topic" type="text" size="small" clearable> </el-input>
-          </el-col>
-        </el-row>
-      </el-col>
-
-      <template v-if="showMoreQuery">
+    <el-form @keyup.enter.native="handleSearch">
+      <el-row class="search-wrapper" :gutter="20">
         <el-col :span="6">
-          <el-select v-model="fuzzyParams.qos" clearable size="small" placeholder="QoS">
-            <el-option :value="0"></el-option>
-            <el-option :value="1"></el-option>
-            <el-option :value="2"></el-option>
+          <el-select
+            v-model="fuzzyParams.node"
+            :placeholder="$t('Clients.node')"
+            size="small"
+            clearable
+          >
+            <el-option v-for="item in currentNodes" :value="item.node" :key="item.node"></el-option>
           </el-select>
         </el-col>
         <el-col :span="6">
           <el-input
-            v-model="fuzzyParams.share_group"
-            type="text"
+            v-model="fuzzyParams.clientid"
             size="small"
-            :placeholder="$t('Subs.share')"
+            :placeholder="$t('Clients.clientId')"
             clearable
-          >
-          </el-input>
+          ></el-input>
         </el-col>
-      </template>
-      <el-col class="col-oper" :span="6">
-        <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
-          {{ $t('Clients.search') }}
-        </el-button>
+        <el-col :span="6" class="form-item-col">
+          <el-row class="form-item-row">
+            <el-col :span="8">
+              <el-select v-model="fuzzyParams.match" class="match" size="small">
+                <el-option label="filter" value="match_topic"></el-option>
+                <el-option label="topic" value="topic"></el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="16">
+              <el-input v-model="fuzzyParams.topic" type="text" size="small" clearable> </el-input>
+            </el-col>
+          </el-row>
+        </el-col>
 
-        <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
-          <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
-        </a>
-      </el-col>
-    </el-row>
+        <template v-if="showMoreQuery">
+          <el-col :span="6">
+            <el-select v-model="fuzzyParams.qos" clearable size="small" placeholder="QoS">
+              <el-option :value="0"></el-option>
+              <el-option :value="1"></el-option>
+              <el-option :value="2"></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="6">
+            <el-input
+              v-model="fuzzyParams.share_group"
+              type="text"
+              size="small"
+              :placeholder="$t('Subs.share')"
+              clearable
+            >
+            </el-input>
+          </el-col>
+        </template>
+        <el-col class="col-oper" :span="6">
+          <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
+            {{ $t('Clients.search') }}
+          </el-button>
+
+          <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
+            <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+          </a>
+        </el-col>
+      </el-row>
+    </el-form>
 
     <el-table :data="tableData" v-loading.lock="lockTable">
       <el-table-column prop="clientid" sortable :label="$t('Clients.clientId')"></el-table-column>
@@ -70,21 +72,6 @@
     </el-table>
 
     <div class="emq-table-footer">
-      <!-- <el-pagination
-        v-if="count > 0"
-        layout="total, sizes, prev, pager, next"
-        :page-sizes="[20, 50, 100, 500]"
-        :page-size.sync="params.limit"
-        :current-page.sync="params.page"
-        :total="count"
-        @size-change="
-          () => {
-            this.loadNodeSubscriptions(true)
-          }
-        "
-        @current-change="loadNodeSubscriptions"
-      >
-      </el-pagination> -->
       <!-- <custom-pagination
         v-if="count === -1 && tableData.length"
         :hasnext="hasnext"
@@ -93,7 +80,7 @@
         @nextClick="handleNextClick"
       >
       </custom-pagination> -->
-      <common-pagination :count="count" :reload-func="loadNodeSubscriptions"></common-pagination>
+      <common-pagination ref="p" :reload-func="loadNodeSubscriptions"></common-pagination>
     </div>
   </div>
 </template>
@@ -115,12 +102,8 @@ export default {
     return {
       showMoreQuery: false,
       tableData: [],
-      hasnext: false,
-      params: {
-        // page: 1,
-        // limit: 20,
-      },
-      count: 0,
+      // hasnext: false,
+      params: {},
       lockTable: true,
       currentNodes: [],
       fuzzyParams: {
@@ -134,22 +117,22 @@ export default {
     }
   },
 
-  created() {
+  mounted() {
     this.loadData()
-    // this.loadNodeSubscriptions()
+    this.$refs.p.$emit('loadPage')
   },
 
   methods: {
     async handleSearch() {
       this.params = this.genQueryParams(this.fuzzyParams)
-      this.loadNodeSubscriptions()
+      this.$refs.p.$emit('loadPage', 1)
     },
     genQueryParams(params) {
-      const { clientid, qos, share, node, topic, match } = params
+      const { clientid, qos, share_group, node, topic, match } = params
       let newParams = {
-        clientid: clientid || undefined,
+        clientid: clientid === '' ? undefined : clientid ?? undefined,
         qos: qos === '' ? undefined : qos,
-        share: share || undefined,
+        share_group: share_group || undefined,
         node: node || undefined,
       }
       if (topic) {
@@ -181,7 +164,6 @@ export default {
     },
     async loadNodeSubscriptions(params = {}) {
       this.lockTable = true
-      console.log(this.params)
       const res = await listSubscriptions({
         ...this.params,
         ...params,
@@ -190,11 +172,14 @@ export default {
       if (res) {
         const { data = [], meta = {} } = res
         this.tableData = data
-        this.count = meta.count || this.count
-        this.hasnext = meta.hasnext || this.hasnext
+        this.lockTable = false
+        return meta
+        // this.hasnext = meta.hasnext || this.hasnext
+      } else {
+        this.tableData = []
+        this.lockTable = false
+        return {}
       }
-
-      this.lockTable = false
     },
   },
 }

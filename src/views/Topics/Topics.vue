@@ -1,36 +1,23 @@
 <template>
   <div class="app-wrapper topics">
-    <el-row class="search-wrapper">
-      <el-col :span="8">
-        <el-input v-model="searchValue" size="small" :placeholder="$t('Topics.topic')"></el-input>
-      </el-col>
-      <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
-        {{ $t('Clients.search') }}
-      </el-button>
+    <el-form @keyup.enter.native="handleSearch">
+      <el-row class="search-wrapper">
+        <el-col :span="8">
+          <el-input v-model="searchValue" size="small" :placeholder="$t('Topics.topic')"></el-input>
+        </el-col>
+        <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
+          {{ $t('Clients.search') }}
+        </el-button>
+      </el-row>
+    </el-form>
 
-      <el-table :data="tableData" v-loading.lock="lockTable">
-        <el-table-column prop="topic" :label="$t('Topics.topic')" sortable></el-table-column>
-        <el-table-column prop="node" :label="$t('Clients.node')" sortable></el-table-column>
-      </el-table>
-    </el-row>
+    <el-table :data="tableData" v-loading.lock="lockTable">
+      <el-table-column prop="topic" :label="$t('Topics.topic')" sortable></el-table-column>
+      <el-table-column prop="node" :label="$t('Clients.node')" sortable></el-table-column>
+    </el-table>
 
     <div class="emq-table-footer">
-      <!-- <el-pagination
-        v-if="count > 0"
-        layout="total, sizes, prev, pager, next"
-        :page-sizes="[20, 50, 100, 500]"
-        :page-size.sync="params.limit"
-        :current-page.sync="params.page"
-        :total="count"
-        @size-change="
-          () => {
-            this.loadTopics(true)
-          }
-        "
-        @current-change="loadTopics"
-      >
-      </el-pagination> -->
-      <common-pagination :count="count" :reload-func="loadTopics"></common-pagination>
+      <common-pagination :reload-func="loadTopics" ref="p"></common-pagination>
     </div>
   </div>
 </template>
@@ -49,44 +36,35 @@ export default {
       tableData: [],
       searchValue: '',
       lockTable: true,
-      params: {
-        // page: 1,
-        // limit: 20,
-      },
-      count: 0,
+      params: {},
     }
   },
-
-  created() {
-    // this.loadTopics()
+  mounted: function () {
+    this.$refs.p.$emit('loadPage')
   },
-
   methods: {
     async handleSearch() {
       const topic = this.searchValue.trim()
-      if (!topic) {
-        this.loadTopics()
-        return
-      }
-      // this.params.page = 1
-      await this.loadTopics({ topic, page: 1 })
+      this.params.topic = topic
+
+      this.$refs.p.$emit('loadPage', 1)
     },
 
     async loadTopics(params = {}) {
-      // if (reload) {
-      //   this.params.page = 1
-      // }
       this.lockTable = true
-
       const res = await listTopics({ ...this.params, ...params }).catch(() => {})
       if (res) {
         const { data = [], meta = {} } = res
         this.tableData = data
-        this.count = meta.count || this.count
+        this.lockTable = false
+
+        return meta
+      } else {
+        this.tableData = []
+        this.lockTable = false
+        return {}
       }
-      this.lockTable = false
     },
   },
 }
 </script>
-<style lang="scss" scoped></style>
