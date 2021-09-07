@@ -89,7 +89,7 @@
     </el-row>
     <div class="create-form-title">
       {{ $t('Auth.authConfig') }}
-      <el-button class="help-btn" size="mini" @click="needHelp = true">
+      <el-button class="help-btn" size="mini" @click="needHelp = !needHelp">
         {{ $t('Base.help') }}
       </el-button>
     </div>

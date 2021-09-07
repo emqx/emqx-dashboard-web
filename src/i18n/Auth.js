@@ -11,13 +11,21 @@ export default {
     zh: '状态',
     en: 'Status',
   },
-  backAuthList: {
+  backAuthnList: {
     zh: '返回认证列表',
     en: 'Back to Authentication List',
   },
+  backAuthzList: {
+    zh: '返回权限列表',
+    en: 'Back to Authorization List',
+  },
   createAuth: {
-    zh: '创建 Authentication',
+    zh: '创建认证',
     en: 'Create Authentication',
+  },
+  createAuthz: {
+    zh: '创建权限',
+    en: 'Create Authorization',
   },
   config: {
     zh: '配置参数',
@@ -90,5 +98,25 @@ export default {
   sqlHelpContent: {
     zh: '使用默认的 ACL SQL 请在数据库中创建如下表结构：',
     en: 'Using the default ACL SQL please create the following table structure in the database:',
+  },
+  setting: {
+    zh: '设置',
+    en: 'Setting',
+  },
+  moveUp: {
+    zh: '上移',
+    en: 'Move up',
+  },
+  moveDown: {
+    zh: '下移',
+    en: 'Move down',
+  },
+  enable: {
+    zh: '启用',
+    en: 'Enable',
+  },
+  disable: {
+    zh: '停用',
+    en: 'Disable',
   },
 }
