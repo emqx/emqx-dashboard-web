@@ -211,4 +211,8 @@ export default {
     zh: '帮助',
     en: 'Help',
   },
+  selectFile: {
+    zh: '选择文件',
+    en: 'Select file',
+  },
 }
