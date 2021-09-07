@@ -48,11 +48,21 @@
         <el-col :span="24">
           <el-form-item label="TLS Cert">
             <el-input type="textarea" :rows="4" v-model="databaseConfig.cert"></el-input>
+            <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
+              <el-button slot="trigger" size="mini">
+                {{ $t('Base.selectFile') }}
+              </el-button>
+            </el-upload>
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="TLS Key">
             <el-input type="textarea" :rows="4" v-model="databaseConfig.key"></el-input>
+            <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
+              <el-button slot="trigger" size="mini">
+                {{ $t('Base.selectFile') }}
+              </el-button>
+            </el-upload>
           </el-form-item>
         </el-col>
       </el-form>
@@ -79,9 +89,9 @@
     </el-row>
     <div class="create-form-title">
       {{ $t('Auth.authConfig') }}
-      <el-button class="help-btn" size="mini" @click="needHelp = true">{{
-        $t('Base.help')
-      }}</el-button>
+      <el-button class="help-btn" size="mini" @click="needHelp = true">
+        {{ $t('Base.help') }}
+      </el-button>
     </div>
     <el-row :gutter="20">
       <el-form class="create-form">
@@ -92,9 +102,13 @@
         </el-col>
         <el-col v-if="needHelp" :span="24">
           <div class="help-block">
-            <div class="create-form-title">{{ $t('Auth.sqlHelpContent') }}</div>
+            <div class="create-form-title">
+              {{ $t('Auth.sqlHelpContent') }}
+            </div>
             <code-view lang="sql" :code="helpSqlContent"></code-view>
-            <el-button size="small">{{ $t('Base.copy') }}</el-button>
+            <el-button size="small">
+              {{ $t('Base.copy') }}
+            </el-button>
           </div>
         </el-col>
         <el-col :span="12">
@@ -162,6 +176,17 @@ export default defineComponent({
 .database-config {
   .create-form {
     margin-top: 16px;
+    .el-form-item {
+      position: relative;
+    }
+    .bottom-btn {
+      position: absolute;
+      bottom: 0;
+      right: 10px;
+    }
+    .el-upload-list {
+      display: none;
+    }
   }
   .help-btn {
     margin-left: 10px;
