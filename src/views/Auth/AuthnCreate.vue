@@ -101,6 +101,7 @@
           v-show="['mysql', 'postgresql'].includes(backend)"
           :database="backend"
         ></database-config>
+        <built-in-config v-show="backend === 'built-in-database'"></built-in-config>
         <!-- Result -->
         <div v-if="testRes" :class="['create-form', 'result-block', isWork ? 'success' : 'error']">
           <div class="result-title">
@@ -128,6 +129,7 @@ import { defineComponent, ref } from '@vue/composition-api'
 import BackButton from '@/components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
+import BuiltInConfig from './components/BuiltInConfig.vue'
 import useGuide from '@/hooks/useGuide'
 
 export default defineComponent({
@@ -136,6 +138,7 @@ export default defineComponent({
     BackButton,
     GuideBar,
     DatabaseConfig,
+    BuiltInConfig,
   },
   setup() {
     const mechanism = ref('password-based')

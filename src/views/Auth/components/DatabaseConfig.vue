@@ -133,12 +133,7 @@
           </el-form-item>
           <el-form-item :label="$t('Auth.passwordHash')">
             <el-select v-model="databaseConfig.password_hash_algorithm">
-              <el-option value="plain"></el-option>
-              <el-option value="md5"></el-option>
-              <el-option value="sha"></el-option>
-              <el-option value="sha256"></el-option>
-              <el-option value="sha512"></el-option>
-              <el-option value="bcrypt"></el-option>
+              <el-option v-for="item in HashOptions" :key="item" :value="item"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -158,6 +153,7 @@
 <script>
 import { defineComponent, reactive, ref } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
+import usePassword from '@/hooks/usePassword'
 
 export default defineComponent({
   name: 'DatabaseConfig',
@@ -222,6 +218,7 @@ export default defineComponent({
         needHelp.value = false
       }, 500)
     }
+    const { HashOptions } = usePassword()
     return {
       needHelp,
       helpSqlContent,
@@ -229,6 +226,7 @@ export default defineComponent({
       isTls,
       setDefaultSQL,
       copySuccess,
+      HashOptions,
     }
   },
 })
