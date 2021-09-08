@@ -48,9 +48,19 @@ export default defineComponent({
     },
   },
   setup() {
-    const handleCommand = (row, command) => {
-      console.log(row)
-      console.log(command)
+    const handleCommand = function (row, command) {
+      switch (command) {
+        case 'disable':
+          row.enable = false
+          this.$emit('update', row)
+          break
+        case 'enable':
+          row.enable = true
+          this.$emit('update', row)
+          break
+        default:
+          break
+      }
     }
     return {
       handleCommand,

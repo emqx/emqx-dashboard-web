@@ -17,7 +17,7 @@
       <el-table-column prop="enable" :label="$t('Auth.status')">
         <template slot-scope="{ row }">
           <span :class="['status', row.enable ? 'enable' : 'error']">
-            {{ row.enable ? 'Enable' : 'Error' }}
+            {{ row.enable ? 'Enable' : 'Disabled' }}
           </span>
         </template>
       </el-table-column>
