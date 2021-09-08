@@ -111,6 +111,16 @@
       margin-left: -10px;
     }
   }
+  .form-group-title {
+    font-size: 16px;
+    color: #1d1d1d;
+    font-weight: 600;
+    margin-bottom: 12px;
+    margin-top: 32px;
+    &:first-child {
+      margin-top: 0px;
+    }
+  }
 }
 
 .el-form--label-top .el-form-item__label {
