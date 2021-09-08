@@ -159,4 +159,8 @@ export default {
     zh: '查询超时',
     en: 'Query Timeout',
   },
+  userIdType: {
+    zh: '账号类型',
+    en: 'UserID Type',
+  },
 }
