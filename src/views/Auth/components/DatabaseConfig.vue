@@ -1,72 +1,100 @@
 <template>
   <div class="database-config">
+    <!-- Basic -->
     <div class="create-form-title">
       {{ $t('Auth.connect') }}
     </div>
     <el-row :gutter="20">
       <el-form class="create-form">
         <el-col :span="12">
-          <el-form-item label="Host">
-            <el-input v-model="databaseConfig.host"></el-input>
+          <el-form-item :label="$t('Auth.server')">
+            <el-input v-model="databaseConfig.server"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="Port">
-            <el-input v-model="databaseConfig.port"></el-input>
+          <el-form-item :label="$t('Auth.database')">
+            <el-input v-model="databaseConfig.database"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="Username">
+          <el-form-item :label="$t('Base.userName')">
             <el-input v-model="databaseConfig.username"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="Password">
+          <el-form-item :label="$t('Base.password')">
             <el-input v-model="databaseConfig.password" type="password"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="Dashboard">
-            <el-input v-model="databaseConfig.dashboard"></el-input>
           </el-form-item>
         </el-col>
       </el-form>
     </el-row>
     <div class="create-form-title">TLS</div>
-    <el-radio-group v-model="isTls" class="select-tls">
-      <el-radio class="mechanism" label="enable" border>
-        {{ $t('Advanced.enable') }}
-      </el-radio>
-      <el-radio class="mechanism" label="ca" border> CA </el-radio>
-      <el-radio class="mechanism" label="tls" border> TLS Verify </el-radio>
-    </el-radio-group>
-    <div class="create-form-title">
-      {{ $t('Auth.TLSCerts') }}
-    </div>
-    <el-row :gutter="20">
-      <el-form class="create-form">
-        <el-col :span="24">
-          <el-form-item label="TLS Cert">
-            <el-input type="textarea" :rows="4" v-model="databaseConfig.cert"></el-input>
-            <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
-              <el-button slot="trigger" size="mini">
-                {{ $t('Base.selectFile') }}
-              </el-button>
-            </el-upload>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="TLS Key">
-            <el-input type="textarea" :rows="4" v-model="databaseConfig.key"></el-input>
-            <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
-              <el-button slot="trigger" size="mini">
-                {{ $t('Base.selectFile') }}
-              </el-button>
-            </el-upload>
-          </el-form-item>
-        </el-col>
-      </el-form>
-    </el-row>
+    <el-checkbox
+      v-model="databaseConfig.ssl.enable"
+      :label="$t('Auth.enableTLS')"
+      border
+    ></el-checkbox>
+    <el-checkbox
+      v-model="databaseConfig.ssl.verify"
+      :label="$t('Auth.tlsVerify')"
+      border
+    ></el-checkbox>
+    <el-collapse-transition>
+      <div v-if="databaseConfig.ssl.enable">
+        <div class="create-form-title">
+          {{ $t('Auth.TLSCerts') }}
+        </div>
+        <el-row :gutter="20">
+          <el-form class="create-form">
+            <el-col :span="24">
+              <el-form-item label="TLS Cert">
+                <el-input
+                  type="textarea"
+                  :rows="4"
+                  v-model="databaseConfig.ssl.certfile"
+                  placeholder="Begins with -----BEGIN CERTIFICATE-----"
+                ></el-input>
+                <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
+                  <el-button slot="trigger" size="mini">
+                    {{ $t('Base.selectFile') }}
+                  </el-button>
+                </el-upload>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="TLS Key">
+                <el-input
+                  type="textarea"
+                  :rows="4"
+                  v-model="databaseConfig.ssl.keyfile"
+                  placeholder="Begins with -----BEGIN RSA PRIVATE KEY-----"
+                ></el-input>
+                <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
+                  <el-button slot="trigger" size="mini">
+                    {{ $t('Base.selectFile') }}
+                  </el-button>
+                </el-upload>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="CA Cert">
+                <el-input
+                  type="textarea"
+                  :rows="4"
+                  v-model="databaseConfig.ssl.cacertfile"
+                  placeholder="Begins with -----BEGIN RSA PRIVATE KEY-----"
+                ></el-input>
+                <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
+                  <el-button slot="trigger" size="mini">
+                    {{ $t('Base.selectFile') }}
+                  </el-button>
+                </el-upload>
+              </el-form-item>
+            </el-col>
+          </el-form>
+        </el-row>
+      </div>
+    </el-collapse-transition>
     <div class="create-form-title">
       {{ $t('Auth.connectConfig') }}
     </div>
@@ -79,7 +107,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="$t('Auth.reconnect')">
-            <el-select v-model="databaseConfig.reconnect">
+            <el-select v-model="databaseConfig.auto_reconnect">
               <el-option :value="true" label="True"></el-option>
               <el-option :value="false" label="False"></el-option>
             </el-select>
@@ -151,9 +179,10 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
 import usePassword from '@/hooks/usePassword'
+import useDatabaseConfig from '@/hooks/useDatabaseConfig'
 
 export default defineComponent({
   name: 'DatabaseConfig',
@@ -165,48 +194,8 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const defaultSQL = "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1"
-    const databaseConfig = reactive({
-      host: '127.0.0.1',
-      port: 3306,
-      username: '',
-      password: '',
-      dashboard: 'emqx',
-      cert: 'Begins with -----BEGIN CERTIFICATE-----',
-      key: 'Begins with -----BEGIN RSA PRIVATE KEY-----',
-      poolsize: 8,
-      reconnect: true,
-      query: defaultSQL,
-      query_timeout: 5000,
-      query_timeout_unit: 'ms',
-      password_hash_algorithm: 'sha256',
-      salt_position: 'prefix',
-    })
-    const helpSqlContent = ref(`
-      CREATE TABLE IF NOT EXISTS 'mqtt_user' (
-        'id' int(11) unsigned NOT NULL AUTO_INCREMENT,
-        'username' varchar(100) DEFAULT NULL,
-        'password' varchar(100) DEFAULT NULL,
-        'salt' varchar(35) DEFAULT NULL,
-        'is_superuser' tinyint(1) DEFAULT 0,
-        'created' datetime DEFAULT NULL,
-        PRIMARY KEY ('id'),
-        UNIQUE KEY 'mqtt_username' ('username')
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    `)
-    if (props.type === 'postgresql') {
-      helpSqlContent.value = `
-        CREATE TABLE mqtt_user (
-          id SERIAL primary key,
-          is_superuser boolean,
-          username character varying(100),
-          password_hash character varying(100),
-          salt character varying(40)
-        )
-      `
-    }
+    const { databaseConfig, defaultSQL, helpSqlContent } = useDatabaseConfig(props.database)
     const needHelp = ref(false)
-    const isTls = ref('')
     const setDefaultSQL = () => {
       databaseConfig.query = defaultSQL
     }
@@ -223,7 +212,6 @@ export default defineComponent({
       needHelp,
       helpSqlContent,
       databaseConfig,
-      isTls,
       setDefaultSQL,
       copySuccess,
       HashOptions,

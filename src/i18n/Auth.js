@@ -163,4 +163,20 @@ export default {
     zh: '账号类型',
     en: 'UserID Type',
   },
+  database: {
+    zh: '数据库',
+    en: 'Database',
+  },
+  server: {
+    zh: '服务',
+    en: 'Server',
+  },
+  enableTLS: {
+    zh: '启用 TLS',
+    en: 'Enable TLS',
+  },
+  tlsVerify: {
+    zh: '验证服务器证书',
+    en: 'TLS Verify',
+  },
 }
