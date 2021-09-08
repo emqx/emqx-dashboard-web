@@ -23,4 +23,8 @@ export function updateAuthzSetting(body) {
   return http.put('/authorization/settings', data)
 }
 
+export function updateAuthz(type, body) {
+  return http.put(`/authorization/sources/${type}`, body)
+}
+
 export default {}

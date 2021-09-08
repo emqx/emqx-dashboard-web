@@ -23,13 +23,17 @@
       <el-table-column prop="enable" :label="$t('Auth.status')">
         <template slot-scope="{ row }">
           <span :class="['status', row.enable ? 'enable' : 'error']">
-            {{ row.enable ? 'Enable' : 'Error' }}
+            {{ row.enable ? 'Enable' : 'Disabled' }}
           </span>
         </template>
       </el-table-column>
       <el-table-column prop="oper" :label="$t('Base.operation')">
         <template slot-scope="{ row }">
-          <table-dropdown :row-data="row" :table-data-len="authzList.length"></table-dropdown>
+          <table-dropdown
+            :row-data="row"
+            :table-data-len="authzList.length"
+            @update="handleUpdate"
+          ></table-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -39,7 +43,7 @@
 <script>
 import { defineComponent, ref } from '@vue/composition-api'
 import TableDropdown from './components/TableDropdown.vue'
-import { listAuthz } from '@/api/auth'
+import { listAuthz, updateAuthz } from '@/api/auth'
 
 export default defineComponent({
   name: 'Authz',
@@ -56,9 +60,14 @@ export default defineComponent({
       lockTable.value = false
     }
     loadData()
+    const handleUpdate = async (row) => {
+      await updateAuthz(row.type, row)
+      loadData()
+    }
     return {
       lockTable,
       authzList,
+      handleUpdate,
     }
   },
 })
