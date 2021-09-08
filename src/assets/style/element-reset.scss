@@ -98,7 +98,20 @@
   }
 }
 
+/* Checkbox */
 .el-checkbox {
+  &.is-bordered + &.is-bordered {
+    margin-left: 0px;
+  }
+  &.is-bordered {
+    border-radius: 0px;
+    width: 160px;
+    text-align: center;
+    line-height: 40px;
+    padding: 0px;
+    margin-top: 16px;
+    margin-bottom: 22px;
+  }
   &.is-bordered.el-checkbox--small {
     line-height: 20px;
   }
