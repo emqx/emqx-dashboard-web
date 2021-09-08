@@ -97,9 +97,12 @@
       </div>
       <!-- Config -->
       <div v-else-if="step === 2">
-        <database-config v-show="['mysql', 'postgresql'].includes(backend)"></database-config>
+        <database-config
+          v-show="['mysql', 'postgresql'].includes(backend)"
+          :database="backend"
+        ></database-config>
         <!-- Result -->
-        <div :class="['create-form', 'result-block', isWork ? 'success' : 'error']">
+        <div v-if="testRes" :class="['create-form', 'result-block', isWork ? 'success' : 'error']">
           <div class="result-title">
             {{ isWork ? $t('Auth.testSuccess') : $t('Auth.testFaild') }}
           </div>
@@ -140,6 +143,7 @@ export default defineComponent({
     const databases = ref([])
     const others = ref([])
     const isWork = ref(false)
+    const testRes = ref(null)
     const supportBackendMap = {
       'password-based': {
         mysql: 'MySQL',
@@ -185,6 +189,7 @@ export default defineComponent({
     }
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(beforeNext)
     const handleTest = function () {
+      testRes.value = {}
       isWork.value = true
     }
     return {
@@ -195,6 +200,7 @@ export default defineComponent({
       databases,
       others,
       isWork,
+      testRes,
       getGuideList,
       handleNext,
       handleBack,

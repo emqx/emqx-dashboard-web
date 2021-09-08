@@ -50,7 +50,7 @@ export default {
 
   methods: {
     render() {
-      hljs.highlightBlock(this.$refs.codeView)
+      hljs.highlightElement(this.$refs.codeView)
     },
   },
 }
