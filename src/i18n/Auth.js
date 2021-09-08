@@ -97,7 +97,7 @@ export default {
   },
   sqlHelpContent: {
     zh: '使用默认的 ACL SQL 请在数据库中创建如下表结构：',
-    en: 'Using the default ACL SQL please create the following table structure in the database:',
+    en: ' To use the default SQL. Please create this table in the database:',
   },
   setting: {
     zh: '设置',
@@ -142,5 +142,21 @@ export default {
   authzCache: {
     zh: 'Authorization 缓存',
     en: 'Authorization Cache',
+  },
+  defaultSql: {
+    zh: '默认 SQL',
+    en: 'Default SQL',
+  },
+  passwordHash: {
+    zh: '密码加密方式',
+    en: 'Password Hash',
+  },
+  saltPosition: {
+    zh: '加盐方式',
+    en: 'Salt Position',
+  },
+  queryTimeout: {
+    zh: '查询超时',
+    en: 'Query Timeout',
   },
 }

@@ -96,29 +96,58 @@
     <el-row :gutter="20">
       <el-form class="create-form">
         <el-col :span="24">
-          <el-form-item label="Auth SQL">
-            <el-input v-model="databaseConfig.sql" type="textarea" :rows="6"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col v-if="needHelp" :span="24">
-          <div class="help-block">
-            <div class="create-form-title">
-              {{ $t('Auth.sqlHelpContent') }}
-            </div>
-            <code-view lang="sql" :code="helpSqlContent"></code-view>
-            <el-button size="small">
-              {{ $t('Base.copy') }}
+          <el-form-item label="SQL">
+            <el-input v-model="databaseConfig.query" type="textarea" :rows="6"></el-input>
+            <el-button class="bottom-btn" size="mini" @click="setDefaultSQL">
+              {{ $t('Auth.defaultSql') }}
             </el-button>
-          </div>
+          </el-form-item>
         </el-col>
+        <el-collapse-transition>
+          <el-col v-if="needHelp" :span="24">
+            <div class="help-block">
+              <div class="create-form-title">
+                {{ $t('Auth.sqlHelpContent') }}
+              </div>
+              <code-view lang="sql" :code="helpSqlContent"></code-view>
+              <el-button
+                size="small"
+                v-clipboard:copy="helpSqlContent"
+                v-clipboard:success="copySuccess"
+              >
+                {{ $t('Base.copy') }}
+              </el-button>
+            </div>
+          </el-col>
+        </el-collapse-transition>
         <el-col :span="12">
-          <el-form-item label="Password Hash">
-            <el-input v-model="databaseConfig.passwordHash"></el-input>
+          <el-form-item :label="$t('Auth.queryTimeout')">
+            <el-input v-model="databaseConfig.query_timeout">
+              <template slot="append">
+                <el-select v-model="databaseConfig.query_timeout_unit">
+                  <el-option value="ms"></el-option>
+                  <el-option value="s"></el-option>
+                </el-select>
+              </template>
+            </el-input>
+          </el-form-item>
+          <el-form-item :label="$t('Auth.passwordHash')">
+            <el-select v-model="databaseConfig.password_hash_algorithm">
+              <el-option value="plain"></el-option>
+              <el-option value="md5"></el-option>
+              <el-option value="sha"></el-option>
+              <el-option value="sha256"></el-option>
+              <el-option value="sha512"></el-option>
+              <el-option value="bcrypt"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="Password Salt">
-            <el-input v-model="databaseConfig.passwordSalt"></el-input>
+          <el-form-item :label="$t('Auth.saltPosition')">
+            <el-select v-model="databaseConfig.salt_position">
+              <el-option value="prefix"></el-option>
+              <el-option value="suffix"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-form>
@@ -133,7 +162,14 @@ import CodeView from '@/components/CodeView'
 export default defineComponent({
   name: 'DatabaseConfig',
   components: { CodeView },
-  setup() {
+  props: {
+    database: {
+      required: true,
+      type: String,
+    },
+  },
+  setup(props) {
+    const defaultSQL = "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1"
     const databaseConfig = reactive({
       host: '127.0.0.1',
       port: 3306,
@@ -144,9 +180,11 @@ export default defineComponent({
       key: 'Begins with -----BEGIN RSA PRIVATE KEY-----',
       poolsize: 8,
       reconnect: true,
-      sql: 'SELECT username, pssword FROM emqx_user',
-      passwordHash: 'sha256',
-      passwordSalt: 'none',
+      query: defaultSQL,
+      query_timeout: 5000,
+      query_timeout_unit: 'ms',
+      password_hash_algorithm: 'sha256',
+      salt_position: 'prefix',
     })
     const helpSqlContent = ref(`
       CREATE TABLE IF NOT EXISTS 'mqtt_user' (
@@ -160,13 +198,37 @@ export default defineComponent({
         UNIQUE KEY 'mqtt_username' ('username')
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `)
+    if (props.type === 'postgresql') {
+      helpSqlContent.value = `
+        CREATE TABLE mqtt_user (
+          id SERIAL primary key,
+          is_superuser boolean,
+          username character varying(100),
+          password_hash character varying(100),
+          salt character varying(40)
+        )
+      `
+    }
     const needHelp = ref(false)
     const isTls = ref('')
+    const setDefaultSQL = () => {
+      databaseConfig.query = defaultSQL
+    }
+    let copyShowTimeout = ref(null)
+    const copySuccess = function () {
+      this.$message.success(this.$t('Base.copied'))
+      clearTimeout(copyShowTimeout)
+      copyShowTimeout = setTimeout(() => {
+        needHelp.value = false
+      }, 500)
+    }
     return {
       needHelp,
       helpSqlContent,
       databaseConfig,
       isTls,
+      setDefaultSQL,
+      copySuccess,
     }
   },
 })
@@ -181,8 +243,9 @@ export default defineComponent({
     }
     .bottom-btn {
       position: absolute;
-      bottom: 0;
+      bottom: 8px;
       right: 10px;
+      line-height: 1;
     }
     .el-upload-list {
       display: none;

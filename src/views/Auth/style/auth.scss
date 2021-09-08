@@ -21,6 +21,15 @@
         color: #4d4d4d;
       }
     }
+    .el-input-group__append {
+      background: transparent;
+      border: none;
+      color: #606266;
+      .el-select {
+        width: 80px;
+        border: none;
+      }
+    }
     .el-input .el-input__inner,
     .el-textarea__inner,
     .el-select__inner {
