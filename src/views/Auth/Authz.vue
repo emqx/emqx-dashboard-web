@@ -3,6 +3,13 @@
     <div class="section-header">
       <div></div>
       <el-button
+        size="small"
+        icon="el-icon-setting"
+        @click="$router.push({ name: 'authorizationSetting' })"
+      >
+        {{ $t('Auth.setting') }}
+      </el-button>
+      <el-button
         type="primary"
         size="small"
         icon="el-icon-plus"

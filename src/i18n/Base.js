@@ -215,4 +215,24 @@ export default {
     zh: '选择文件',
     en: 'Select file',
   },
+  yes: {
+    zh: '是',
+    en: 'Yes',
+  },
+  no: {
+    zh: '否',
+    en: 'No',
+  },
+  second: {
+    zh: '秒',
+    en: 'second',
+  },
+  minute: {
+    zh: '分钟',
+    en: 'minute',
+  },
+  hour: {
+    zh: '小时',
+    en: 'Hour',
+  },
 }

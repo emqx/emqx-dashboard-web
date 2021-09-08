@@ -119,4 +119,28 @@ export default {
     zh: '停用',
     en: 'Disable',
   },
+  authzSetting: {
+    zh: '权限设置',
+    en: 'Authorization Setting',
+  },
+  enableCache: {
+    zh: '启用缓存',
+    en: 'Enable Cache',
+  },
+  maxSize: {
+    zh: '单客户端缓存条数',
+    en: 'Max number of cache per client',
+  },
+  ttl: {
+    zh: '缓存 TTL',
+    en: 'TTL',
+  },
+  basicSettings: {
+    zh: '基础设置',
+    en: 'Basic Settings',
+  },
+  authzCache: {
+    zh: 'Authorization 缓存',
+    en: 'Authorization Cache',
+  },
 }

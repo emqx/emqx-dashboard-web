@@ -400,6 +400,11 @@ let routes = [
         name: 'authorizationCreate',
         component: () => import('@/views/Auth/AuthzCreate'),
       },
+      {
+        path: 'settings',
+        name: 'authorizationSetting',
+        component: () => import('@/views/Auth/AuthzSetting'),
+      },
     ],
   },
   // // 设置
