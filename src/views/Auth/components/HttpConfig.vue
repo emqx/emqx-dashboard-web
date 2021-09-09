@@ -56,65 +56,7 @@
       </el-form>
     </el-row>
     <!-- TLS -->
-    <div class="create-form-title">TLS</div>
-    <el-checkbox v-model="httpConfig.ssl.enable" :label="$t('Auth.enableTLS')" border></el-checkbox>
-    <el-checkbox v-model="httpConfig.ssl.verify" :label="$t('Auth.tlsVerify')" border></el-checkbox>
-    <el-collapse-transition>
-      <div v-if="httpConfig.ssl.enable">
-        <div class="create-form-title">
-          {{ $t('Auth.TLSCerts') }}
-        </div>
-        <el-row :gutter="20">
-          <el-form class="create-form">
-            <el-col :span="24">
-              <el-form-item label="TLS Cert">
-                <el-input
-                  type="textarea"
-                  :rows="4"
-                  v-model="httpConfig.ssl.certfile"
-                  placeholder="Begins with -----BEGIN CERTIFICATE-----"
-                ></el-input>
-                <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
-                  <el-button slot="trigger" size="mini">
-                    {{ $t('Base.selectFile') }}
-                  </el-button>
-                </el-upload>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="TLS Key">
-                <el-input
-                  type="textarea"
-                  :rows="4"
-                  v-model="httpConfig.ssl.keyfile"
-                  placeholder="Begins with -----BEGIN RSA PRIVATE KEY-----"
-                ></el-input>
-                <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
-                  <el-button slot="trigger" size="mini">
-                    {{ $t('Base.selectFile') }}
-                  </el-button>
-                </el-upload>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="CA Cert">
-                <el-input
-                  type="textarea"
-                  :rows="4"
-                  v-model="httpConfig.ssl.cacertfile"
-                  placeholder="Begins with -----BEGIN RSA PRIVATE KEY-----"
-                ></el-input>
-                <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
-                  <el-button slot="trigger" size="mini">
-                    {{ $t('Base.selectFile') }}
-                  </el-button>
-                </el-upload>
-              </el-form-item>
-            </el-col>
-          </el-form>
-        </el-row>
-      </div>
-    </el-collapse-transition>
+    <TLS-config v-model="httpConfig.ssl"></TLS-config>
     <div class="create-form-title">
       {{ $t('Auth.authConfig') }}
       <el-button class="help-btn" size="mini" @click="needHelp = !needHelp">
@@ -168,12 +110,13 @@
 <script>
 import { defineComponent, reactive, ref } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
+import TLSConfig from './TLSConfig.vue'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor.vue'
 import useCopy from '@/hooks/useCopy'
 
 export default defineComponent({
   name: 'HttpConfig',
-  components: { KeyAndValueEditor, CodeView },
+  components: { KeyAndValueEditor, CodeView, TLSConfig },
   setup() {
     const defaultContent = JSON.stringify(
       {
