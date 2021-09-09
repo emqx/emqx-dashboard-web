@@ -6,7 +6,15 @@
     </div>
     <el-row :gutter="20">
       <el-form class="create-form">
-        <!-- MongoDB -->
+        <el-col v-if="isRedis" :span="12">
+          <el-form-item :label="$t('Auth.redisType')">
+            <el-select v-model="databaseConfig.redis_type">
+              <el-option value="single" :label="$t('Auth.single')"></el-option>
+              <el-option value="sentinel" label="Sentinel"></el-option>
+              <el-option value="cluster" label="Cluster"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
         <el-col v-if="isMongoDB" :span="12">
           <el-form-item :label="$t('Auth.mongoType')">
             <el-select v-model="databaseConfig.mongo_type">
@@ -16,7 +24,13 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col v-if="(isMongoDB || isRedis) && databaseConfig.mongo_type !== 'single'" :span="12">
+        <el-col
+          v-if="
+            (isMongoDB && databaseConfig.mongo_type !== 'single') ||
+            (isRedis && databaseConfig.redis_type !== 'single')
+          "
+          :span="12"
+        >
           <el-form-item :label="$t('Auth.servers')">
             <el-input v-model="databaseConfig.servers"></el-input>
           </el-form-item>
@@ -31,13 +45,19 @@
             <el-input v-model="databaseConfig.replica_set_name"></el-input>
           </el-form-item>
         </el-col>
+        <!-- Redis -->
+        <el-col v-if="isRedis && databaseConfig.redis_type !== 'single'" :span="12">
+          <el-form-item :label="$t('Auth.sentinel')">
+            <el-input v-model="databaseConfig.sentinel"></el-input>
+          </el-form-item>
+        </el-col>
         <!-- Basic -->
         <el-col :span="12">
           <el-form-item :label="$t('Auth.database')">
             <el-input v-model="databaseConfig.database"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col v-if="!isRedis" :span="12">
           <el-form-item :label="$t('Base.userName')">
             <el-input v-model="databaseConfig.username"></el-input>
           </el-form-item>
@@ -135,7 +155,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col v-if="isMongoDB" :span="12">
           <el-form-item :label="$t('Auth.topologyTimeout')">
             <el-input v-model.number="databaseConfig.topology.connect_timeout_ms"></el-input>
           </el-form-item>
@@ -148,16 +168,15 @@
         {{ $t('Base.help') }}
       </el-button>
     </div>
-    <!-- SQL -->
     <el-row :gutter="20">
       <el-form class="create-form">
         <!-- MySQL & PgSQL -->
-        <template v-if="isMySQL || isPgSQL">
+        <template v-if="isMySQL || isPgSQL || isRedis">
           <el-col :span="24">
             <el-form-item label="SQL">
               <el-input v-model="databaseConfig.query" type="textarea" :rows="6"></el-input>
               <el-button class="bottom-btn" size="mini" @click="setDefaultContent('query')">
-                {{ $t('Auth.defaultSql') }}
+                {{ $t('Auth.setDefault') }}
               </el-button>
             </el-form-item>
           </el-col>
@@ -173,7 +192,7 @@
             <el-form-item :label="$t('Auth.selector')">
               <el-input v-model="databaseConfig.selector" type="textarea" :rows="6"></el-input>
               <el-button class="bottom-btn" size="mini" @click="setDefaultContent('selector')">
-                {{ $t('Auth.defaultSelector') }}
+                {{ $t('Auth.setDefault') }}
               </el-button>
             </el-form-item>
           </el-col>
@@ -182,9 +201,18 @@
           <el-col v-if="needHelp" :span="24">
             <div class="help-block">
               <div class="create-form-title">
-                {{ isMongoDB ? $t('Auth.exampleDataStructures') : $t('Auth.sqlHelpContent') }}
+                {{
+                  isMongoDB
+                    ? $t('Auth.exampleDataStructures')
+                    : isRedis
+                    ? $t('Auth.exampleDataCmd')
+                    : $t('Auth.sqlHelpContent')
+                }}
               </div>
-              <code-view :lang="isMongoDB ? 'javascript' : 'sql'" :code="helpContent"></code-view>
+              <code-view
+                :lang="isMongoDB ? 'javascript' : isRedis ? 'bash' : 'sql'"
+                :code="helpContent"
+              ></code-view>
               <el-button
                 size="small"
                 v-clipboard:copy="helpContent"
