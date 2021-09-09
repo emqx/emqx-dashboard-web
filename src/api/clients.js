@@ -25,8 +25,9 @@ export function loadSubscriptions(clientId) {
   return http.get(`/clients/${encodeURIComponent(clientId)}/subscriptions`)
 }
 
-export function unsubscribe(clientId) {
-  return http.post(`/clients/${encodeURIComponent(clientId)}/unsubscribe`)
+export function unsubscribe(clientId, topic) {
+  if (null == topic) return
+  return http.post(`/clients/${encodeURIComponent(clientId)}/unsubscribe`, { topic })
 }
 
 export function subscribe(clientId, { qos, topic }) {

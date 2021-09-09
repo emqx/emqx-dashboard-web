@@ -161,11 +161,11 @@ export default {
   },
   createUserSuccess: {
     zh: '创建用户成功',
-    en: 'Create User Success',
+    en: 'Create User Successfully',
   },
   changePassSuccess: {
     zh: '修改密码成功',
-    en: 'Changing Password Success',
+    en: 'Changing Password Successully',
   },
   passwordLength: {
     zh: '密码长度为 3~32 位',
@@ -197,7 +197,7 @@ export default {
   },
   createBlacklistSuccess: {
     zh: '创建黑名单成功',
-    en: 'Create Blacklist Success',
+    en: 'Create Blacklist Successfully',
   },
   who: {
     zh: '禁用值',

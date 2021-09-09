@@ -154,6 +154,7 @@ export default {
       } else if (type === 'chPass') {
         this.accessType = 'chPass'
         this.record = {
+          username: item.username,
           password: '',
           newPassword: '',
           repeatPassword: '',
@@ -161,7 +162,7 @@ export default {
       } else {
         this.record = {
           username: '',
-          tags: '',
+          tag: '',
           password: '',
         }
         this.accessType = 'create'
@@ -191,7 +192,8 @@ export default {
             this.submitLoading = false
           })
       } else if (vue.accessType === 'chPass') {
-        let res = await changePassword(username).catch(() => {})
+        let pass = { new_pwd: this.record.newPassword, old_pwd: this.record.password }
+        let res = await changePassword(username, pass).catch(() => {})
         if (res) {
           vue.$message.success(vue.$t('General.changePassSuccess'))
           vue.dialogVisible = false

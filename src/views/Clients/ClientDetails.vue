@@ -270,7 +270,13 @@ export default {
       this.clientDetailLock = false
     },
     async loadSubs() {
-      this.subscriptions = await loadSubscriptions(this.clientId).catch(() => [])
+      this.subsLockTable = true
+      let res = await loadSubscriptions(this.clientId).catch(() => [])
+      if (res) {
+        this.subscriptions = res
+      } else {
+        this.subscriptions = []
+      }
       this.subsLockTable = false
     },
     handleUnSubscription(row) {
@@ -282,8 +288,8 @@ export default {
           type: 'warning',
         })
         .then(async () => {
-          const { clientid } = row
-          return unsubscribe(clientid)
+          const { clientid, topic } = row
+          return unsubscribe(clientid, topic)
         })
         .then(() => {
           this.loadSubs()
