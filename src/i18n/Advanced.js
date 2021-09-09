@@ -93,7 +93,7 @@ export default {
   },
   publishTime: {
     zh: '发布时间',
-    en: 'publish Time',
+    en: 'Publish Time',
   },
   eventTitleDesc: {
     zh: '将设备生命周期事件通过事件主题以 MQTT 消息的形式发布',

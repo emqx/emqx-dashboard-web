@@ -49,12 +49,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('General.until')" prop="until">
-              <el-date-picker
-                v-model="record.until"
-                type="datetime"
-                format="yyyy-MM-dd HH:mm:ss"
-                value-format="timestamp"
-              >
+              <el-date-picker v-model="record.until" type="datetime" format="yyyy-MM-dd HH:mm:ss">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -145,17 +140,17 @@ export default {
         if (!valid) {
           return
         }
-        const record = { ...this.record }
-        if (typeof record.until === 'number') {
-          record.until = Math.floor(record.until / 1000)
-        }
+        const record = { ...this.record, until: new Date(this.record.until).toISOString() }
+        // if (typeof record.until === 'number') {
+        //   record.until = Math.floor(record.until / 1000)
+        // }
 
         this.submitLoading = true
         const res = await createBlacklist(record).catch(() => {})
         if (res) {
           this.$message.success(this.$t('General.createBlacklistSuccess'))
           this.closeDialog()
-          this.listBlackList()
+          this.$refs.p.$emit('loadPage')
         }
         this.submitLoading = false
       })
@@ -172,7 +167,7 @@ export default {
           const res = await deleteBlacklist({ who, as }).catch(() => {})
           if (res) {
             this.$message.success(this.$t('Base.deleteSuccess'))
-            this.listBlackList()
+            this.$refs.p.$emit('loadPage')
           }
         })
         .catch(() => {})

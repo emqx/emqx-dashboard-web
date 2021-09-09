@@ -115,8 +115,8 @@ export default {
     return {
       currentAlarmData: [],
       historyAlarmData: [],
-      currentLockTable: true,
-      historyLockTable: true,
+      currentLockTable: false,
+      historyLockTable: false,
     }
   },
   mounted() {
@@ -132,11 +132,13 @@ export default {
       let res = await clearHistoryAlarm().catch(() => {})
       if (res) {
         this.$message.success(this.$t('Alarm.clearSuccess'))
-        this.loadHData()
       }
+      this.$refs.p2.$emit('loadPage')
     },
     dateFormat: dateFormat,
     async loadData(params = {}) {
+      this.currentLockTable = true
+
       let res = await loadAlarm(false, params).catch(() => {})
       if (res) {
         let { data, meta = {} } = res
@@ -153,6 +155,8 @@ export default {
       }
     },
     async loadHData(params = {}) {
+      this.historyLockTable = true
+
       let res = await loadAlarm(true, params).catch(() => {})
       if (res) {
         let { data, meta = {} } = res

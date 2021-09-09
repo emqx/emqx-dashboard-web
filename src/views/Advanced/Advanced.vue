@@ -66,7 +66,7 @@ $mid-menu-width: 160px;
   }
   .el-tabs__content {
     margin-left: $mid-menu-width;
-    padding: 10px;
+    padding: 20px;
   }
 }
 .item-page ::v-deep {

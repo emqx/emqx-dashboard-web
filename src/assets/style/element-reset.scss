@@ -344,6 +344,7 @@
       text-indent: 15px;
     }
   }
+
   .el-menu-item {
     color: #bbb;
     height: 44px;
@@ -361,6 +362,16 @@
       background-color: #00b29915;
       color: #00b299ff;
       font-weight: 900;
+    }
+  }
+
+  &.el-menu--collapse {
+    .el-submenu {
+      &:hover,
+      &.is-opened,
+      &.is-active {
+        background-color: #00b29915;
+      }
     }
   }
 
