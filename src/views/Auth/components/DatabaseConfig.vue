@@ -249,7 +249,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, onBeforeUnmount, ref } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
 import usePassword from '@/hooks/usePassword'
 import useDatabaseConfig from '@/hooks/useDatabaseConfig'
@@ -281,6 +281,9 @@ export default defineComponent({
         needHelp.value = false
       }, 500)
     }
+    onBeforeUnmount(() => {
+      clearTimeout(copyShowTimeout)
+    })
     const { HashOptions } = usePassword()
     return {
       isMongoDB,
