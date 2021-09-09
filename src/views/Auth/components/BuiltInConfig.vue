@@ -1,5 +1,5 @@
 <template>
-  <div class="built-in-config">
+  <div class="built-in-config config">
     <div class="create-form-title">Build-in-Database</div>
     <el-row :gutter="20">
       <el-form class="create-form">
@@ -43,8 +43,6 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
-.create-form-title {
-  margin-bottom: 16px;
-}
+<style lang="scss">
+@import '../style/authConfig.scss';
 </style>

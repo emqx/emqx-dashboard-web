@@ -102,6 +102,7 @@
           :database="backend"
         ></database-config>
         <built-in-config v-show="backend === 'built-in-database'"></built-in-config>
+        <http-config v-show="backend === 'http-server'"></http-config>
         <!-- Result -->
         <div v-if="testRes" :class="['create-form', 'result-block', isWork ? 'success' : 'error']">
           <div class="result-title">
@@ -130,6 +131,7 @@ import BackButton from '@/components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import BuiltInConfig from './components/BuiltInConfig.vue'
+import HttpConfig from './components/HttpConfig.vue'
 import useGuide from '@/hooks/useGuide'
 
 export default defineComponent({
@@ -139,6 +141,7 @@ export default defineComponent({
     GuideBar,
     DatabaseConfig,
     BuiltInConfig,
+    HttpConfig,
   },
   setup() {
     const mechanism = ref('password-based')

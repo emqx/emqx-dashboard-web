@@ -1,5 +1,5 @@
 <template>
-  <div class="database-config">
+  <div class="database-config config">
     <!-- Connect -->
     <div class="create-form-title">
       {{ $t('Auth.connect') }}
@@ -156,7 +156,7 @@
           </el-form-item>
         </el-col>
         <el-col v-if="isMongoDB" :span="12">
-          <el-form-item :label="$t('Auth.topologyTimeout')">
+          <el-form-item :label="$t('Auth.connectTimeout')">
             <el-input v-model.number="databaseConfig.topology.connect_timeout_ms"></el-input>
           </el-form-item>
         </el-col>
@@ -281,6 +281,7 @@ import { computed, defineComponent, onBeforeUnmount, ref } from '@vue/compositio
 import CodeView from '@/components/CodeView'
 import usePassword from '@/hooks/usePassword'
 import useDatabaseConfig from '@/hooks/useDatabaseConfig'
+import useCopy from '@/hooks/useCopy'
 
 export default defineComponent({
   name: 'DatabaseConfig',
@@ -301,16 +302,8 @@ export default defineComponent({
     const isRedis = computed(() => props.database === 'redis')
     const isMySQL = computed(() => props.database === 'mysql')
     const isPgSQL = computed(() => props.database === 'postgresql')
-    let copyShowTimeout = null
-    const copySuccess = function () {
-      this.$message.success(this.$t('Base.copied'))
-      clearTimeout(copyShowTimeout)
-      copyShowTimeout = setTimeout(() => {
-        needHelp.value = false
-      }, 500)
-    }
-    onBeforeUnmount(() => {
-      clearTimeout(copyShowTimeout)
+    const { copySuccess } = useCopy(() => {
+      needHelp.value = false
     })
     const { HashOptions } = usePassword()
     return {
@@ -330,39 +323,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.database-config {
-  .create-form {
-    margin-top: 16px;
-    .el-form-item {
-      position: relative;
-    }
-    .bottom-btn {
-      position: absolute;
-      bottom: 8px;
-      right: 10px;
-      line-height: 1;
-    }
-    .el-upload-list {
-      display: none;
-    }
-  }
-  .help-btn {
-    margin-left: 10px;
-  }
-  .help-block {
-    padding: 24px;
-    background: #f1f3f7;
-    margin-bottom: 22px;
-    .help-bock__code {
-      background: #1c2a28;
-      color: #fff;
-      padding: 24px;
-      margin: 16px 0;
-    }
-  }
-  .el-radio.is-bordered {
-    width: 120px;
-    margin-bottom: 32px;
-  }
-}
+@import '../style/authConfig.scss';
 </style>
