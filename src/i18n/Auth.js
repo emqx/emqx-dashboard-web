@@ -143,9 +143,9 @@ export default {
     zh: 'Authorization 缓存',
     en: 'Authorization Cache',
   },
-  defaultSql: {
-    zh: '默认 SQL',
-    en: 'Default SQL',
+  setDefault: {
+    zh: '设置默认',
+    en: 'Set default',
   },
   passwordHash: {
     zh: '密码加密方式',
@@ -203,13 +203,13 @@ export default {
     zh: '查询 Selector',
     en: 'Selector',
   },
-  defaultSelector: {
-    zh: '默认查询',
-    en: 'Default Selector',
-  },
   exampleDataStructures: {
     zh: '示例数据结构和查询',
     en: 'Example data structures and selector',
+  },
+  exampleDataCmd: {
+    zh: '示例数据结构和命令',
+    en: 'Example data structures and command',
   },
   passwordHashField: {
     zh: 'password_hash 字段名',
@@ -222,5 +222,9 @@ export default {
   superuserField: {
     zh: 'is_superuser 字段名',
     en: 'is_superuser Field',
+  },
+  sentinel: {
+    zh: 'Sentinel 名字',
+    en: 'Sentinel Name',
   },
 }

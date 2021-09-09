@@ -6,8 +6,10 @@ export default function useDatabaseConfig(database) {
   )
   const databaseConfig = reactive({
     server: '',
+    servers: '',
     username: 'root',
     password: '',
+    database: '',
     poolsize: 8,
     auto_reconnect: true,
     ssl: {
@@ -29,10 +31,12 @@ export default function useDatabaseConfig(database) {
       connect_timeout_ms: 0,
     },
     collection: '',
-    selector: `{"username":"\${username}"}`,
+    selector: '',
     password_hash_field: '',
     salt_field: '',
     is_superuser_field: '',
+    // Redis
+    redis_type: '',
   })
   const helpContent = ref('')
   const setMySql = () => {
@@ -67,6 +71,7 @@ export default function useDatabaseConfig(database) {
     databaseConfig.server = '127.0.0.1:27017'
     databaseConfig.topology.connect_timeout_ms = 20000
     databaseConfig.collection = 'mqtt_user'
+    databaseConfig.selector = `{"username":"\${username}"}`
     defaultContent.value = databaseConfig.selector
     helpContent.value = `
       {
@@ -80,6 +85,33 @@ export default function useDatabaseConfig(database) {
       db.mqtt_user.findOne({"username": "emqx_user"})
     `
   }
+  const setRedis = () => {
+    databaseConfig.redis_type = 'single'
+    databaseConfig.server = 'localhost:6379'
+    databaseConfig.sentinel = 'mysentinel'
+    databaseConfig.database = 0
+    defaultContent.value = `HMGET mqtt_user:\${username} password_hash`
+    databaseConfig.query = defaultContent.value
+    helpContent.value = `
+      # sample data
+      HMSET mqtt_user:emqx_u password_hash *** salt foo+bar is_superuser 1
+
+      # sample cmd
+      # HMGET mqtt_user:\${username}
+
+      ## only password
+      HMGET mqtt_user:emqx_u password_hash
+
+      ## password + salt
+      HMGET mqtt_user:emqx_u password_hash salt
+
+      ## password + salt, enable superuser
+      HMGET mqtt_user:emqx_u password_hash salt is_superuser
+
+      ## only password, enable superuser
+      HMGET mqtt_user:emqx_u password_hash is_superuser
+    `
+  }
   switch (database) {
     case 'mysql':
       setMySql()
@@ -89,6 +121,8 @@ export default function useDatabaseConfig(database) {
       break
     case 'mongodb':
       setMongoDB()
+    case 'redis':
+      setRedis()
   }
   return {
     defaultContent,
