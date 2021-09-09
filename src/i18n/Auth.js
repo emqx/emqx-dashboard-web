@@ -171,6 +171,10 @@ export default {
     zh: '服务',
     en: 'Server',
   },
+  servers: {
+    zh: '服务列表',
+    en: 'Servers',
+  },
   enableTLS: {
     zh: '启用 TLS',
     en: 'Enable TLS',
@@ -178,5 +182,45 @@ export default {
   tlsVerify: {
     zh: '验证服务器证书',
     en: 'TLS Verify',
+  },
+  mongoType: {
+    zh: '部署模式',
+    en: 'MongoDB Mode',
+  },
+  redisType: {
+    zh: '部署模式',
+    en: 'Redis Mode',
+  },
+  single: {
+    zh: '单节点',
+    en: 'Single',
+  },
+  topologyTimeout: {
+    zh: '连接超时（毫秒）',
+    en: 'Connect Timeout(ms)',
+  },
+  selector: {
+    zh: '查询 Selector',
+    en: 'Selector',
+  },
+  defaultSelector: {
+    zh: '默认查询',
+    en: 'Default Selector',
+  },
+  exampleDataStructures: {
+    zh: '示例数据结构和查询',
+    en: 'Example data structures and selector',
+  },
+  passwordHashField: {
+    zh: 'password_hash 字段名',
+    en: 'Password_hash Field',
+  },
+  saltField: {
+    zh: 'Salt 字段名',
+    en: 'Salt Field',
+  },
+  superuserField: {
+    zh: 'is_superuser 字段名',
+    en: 'is_superuser Field',
   },
 }

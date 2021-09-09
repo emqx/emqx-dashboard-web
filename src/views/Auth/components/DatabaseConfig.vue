@@ -1,16 +1,37 @@
 <template>
   <div class="database-config">
-    <!-- Basic -->
+    <!-- Connect -->
     <div class="create-form-title">
       {{ $t('Auth.connect') }}
     </div>
     <el-row :gutter="20">
       <el-form class="create-form">
-        <el-col :span="12">
+        <!-- MongoDB -->
+        <el-col v-if="isMongoDB" :span="12">
+          <el-form-item :label="$t('Auth.mongoType')">
+            <el-select v-model="databaseConfig.mongo_type">
+              <el-option value="single" :label="$t('Auth.single')"></el-option>
+              <el-option value="sentinel" label="Sentinel"></el-option>
+              <el-option value="cluster" label="Cluster"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col v-if="(isMongoDB || isRedis) && databaseConfig.mongo_type !== 'single'" :span="12">
+          <el-form-item :label="$t('Auth.servers')">
+            <el-input v-model="databaseConfig.servers"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col v-else :span="12">
           <el-form-item :label="$t('Auth.server')">
             <el-input v-model="databaseConfig.server"></el-input>
           </el-form-item>
         </el-col>
+        <el-col v-if="isMongoDB && databaseConfig.mongo_type !== 'single'" :span="12">
+          <el-form-item label="Replica Set Name">
+            <el-input v-model="databaseConfig.replica_set_name"></el-input>
+          </el-form-item>
+        </el-col>
+        <!-- Basic -->
         <el-col :span="12">
           <el-form-item :label="$t('Auth.database')">
             <el-input v-model="databaseConfig.database"></el-input>
@@ -28,6 +49,7 @@
         </el-col>
       </el-form>
     </el-row>
+    <!-- TLS -->
     <div class="create-form-title">TLS</div>
     <el-checkbox
       v-model="databaseConfig.ssl.enable"
@@ -113,6 +135,11 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('Auth.topologyTimeout')">
+            <el-input v-model.number="databaseConfig.topology.connect_timeout_ms"></el-input>
+          </el-form-item>
+        </el-col>
       </el-form>
     </el-row>
     <div class="create-form-title">
@@ -121,26 +148,46 @@
         {{ $t('Base.help') }}
       </el-button>
     </div>
+    <!-- SQL -->
     <el-row :gutter="20">
       <el-form class="create-form">
-        <el-col :span="24">
-          <el-form-item label="SQL">
-            <el-input v-model="databaseConfig.query" type="textarea" :rows="6"></el-input>
-            <el-button class="bottom-btn" size="mini" @click="setDefaultSQL">
-              {{ $t('Auth.defaultSql') }}
-            </el-button>
-          </el-form-item>
-        </el-col>
+        <!-- MySQL & PgSQL -->
+        <template v-if="isMySQL || isPgSQL">
+          <el-col :span="24">
+            <el-form-item label="SQL">
+              <el-input v-model="databaseConfig.query" type="textarea" :rows="6"></el-input>
+              <el-button class="bottom-btn" size="mini" @click="setDefaultContent">
+                {{ $t('Auth.defaultSql') }}
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </template>
+        <!-- Mongodb -->
+        <template v-if="isMongoDB">
+          <el-col :span="24">
+            <el-form-item label="Collection">
+              <el-input v-model="databaseConfig.collection"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item :label="$t('Auth.selector')">
+              <el-input v-model="databaseConfig.selector" type="textarea" :rows="6"></el-input>
+              <el-button class="bottom-btn" size="mini" @click="setDefaultContent">
+                {{ $t('Auth.defaultSelector') }}
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </template>
         <el-collapse-transition>
           <el-col v-if="needHelp" :span="24">
             <div class="help-block">
               <div class="create-form-title">
-                {{ $t('Auth.sqlHelpContent') }}
+                {{ isMongoDB ? $t('Auth.exampleDataStructures') : $t('Auth.sqlHelpContent') }}
               </div>
-              <code-view lang="sql" :code="helpSqlContent"></code-view>
+              <code-view :lang="isMongoDB ? 'javascript' : 'sql'" :code="helpContent"></code-view>
               <el-button
                 size="small"
-                v-clipboard:copy="helpSqlContent"
+                v-clipboard:copy="helpContent"
                 v-clipboard:success="copySuccess"
               >
                 {{ $t('Base.copy') }}
@@ -148,7 +195,7 @@
             </div>
           </el-col>
         </el-collapse-transition>
-        <el-col :span="12">
+        <el-col v-if="isMySQL || isPgSQL" :span="12">
           <el-form-item :label="$t('Auth.queryTimeout')">
             <el-input v-model="databaseConfig.query_timeout">
               <template slot="append">
@@ -159,10 +206,25 @@
               </template>
             </el-input>
           </el-form-item>
+        </el-col>
+        <el-col v-if="isMongoDB" :span="12">
+          <el-form-item :label="$t('Auth.passwordHashField')">
+            <el-input
+              v-model="databaseConfig.password_hash_field"
+              placeholder="password_hash"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
           <el-form-item :label="$t('Auth.passwordHash')">
             <el-select v-model="databaseConfig.password_hash_algorithm">
               <el-option v-for="item in HashOptions" :key="item" :value="item"></el-option>
             </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col v-if="isMongoDB" :span="12">
+          <el-form-item :label="$t('Auth.saltField')">
+            <el-input v-model="databaseConfig.salt_field" placeholder="salt"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -173,13 +235,21 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col v-if="isMongoDB" :span="12">
+          <el-form-item :label="$t('Auth.superuserField')">
+            <el-input
+              v-model="databaseConfig.is_superuser_field"
+              placeholder="is_superuser"
+            ></el-input>
+          </el-form-item>
+        </el-col>
       </el-form>
     </el-row>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
 import usePassword from '@/hooks/usePassword'
 import useDatabaseConfig from '@/hooks/useDatabaseConfig'
@@ -194,12 +264,16 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { databaseConfig, defaultSQL, helpSqlContent } = useDatabaseConfig(props.database)
+    const { databaseConfig, defaultContent, helpContent } = useDatabaseConfig(props.database)
     const needHelp = ref(false)
-    const setDefaultSQL = () => {
-      databaseConfig.query = defaultSQL
+    const setDefaultContent = () => {
+      databaseConfig.query = defaultContent
     }
-    let copyShowTimeout = ref(null)
+    const isMongoDB = computed(() => props.database === 'mongodb')
+    const isRedis = computed(() => props.database === 'redis')
+    const isMySQL = computed(() => props.database === 'mysql')
+    const isPgSQL = computed(() => props.database === 'postgresql')
+    let copyShowTimeout = null
     const copySuccess = function () {
       this.$message.success(this.$t('Base.copied'))
       clearTimeout(copyShowTimeout)
@@ -209,10 +283,14 @@ export default defineComponent({
     }
     const { HashOptions } = usePassword()
     return {
+      isMongoDB,
+      isRedis,
+      isMySQL,
+      isPgSQL,
       needHelp,
-      helpSqlContent,
+      helpContent,
       databaseConfig,
-      setDefaultSQL,
+      setDefaultContent,
       copySuccess,
       HashOptions,
     }

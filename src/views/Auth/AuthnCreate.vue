@@ -98,7 +98,7 @@
       <!-- Config -->
       <div v-else-if="step === 2">
         <database-config
-          v-show="['mysql', 'postgresql'].includes(backend)"
+          v-show="['mysql', 'postgresql', 'mongodb'].includes(backend)"
           :database="backend"
         ></database-config>
         <built-in-config v-show="backend === 'built-in-database'"></built-in-config>
