@@ -175,6 +175,7 @@ code {
   background-size: 153px 159px;
   background-repeat: no-repeat;
   vertical-align: middle;
+  //24*24 each
   &.icon-alarm {
     background-position: -120px -24px;
   }
@@ -192,6 +193,21 @@ code {
   }
   &.icon-sweep {
     background-position: -72px -48px;
+  }
+  &.icon-monitoring {
+    background-position: 0 0;
+  }
+  &.icon-management {
+    background-position: -24px 0;
+  }
+  &.icon-authentication {
+    background-position: -48px 0;
+  }
+  &.icon-configuration {
+    background-position: 0 -24px;
+  }
+  &.icon-system {
+    background-position: -24px -24px;
   }
 }
 

@@ -109,27 +109,32 @@ export default {
     this.menus = [
       {
         title: 'monitoring',
-        icon: 'icon-yibiaopan',
+        icon: 'icon-monitoring',
         c: dashboard,
       },
       {
         title: 'management',
-        icon: 'icon-yibiaopan',
+        icon: 'icon-management',
         c: management,
       },
+      // {
+      //   title: 'gateway',
+      //   icon: 'icon-gateway',
+      //   path: '/gateway',
+      // },
       {
         title: 'system',
-        icon: 'icon-yibiaopan',
+        icon: 'icon-system',
         c: system,
       },
       {
         title: 'configuration',
-        icon: 'icon-yibiaopan',
+        icon: 'icon-configuration',
         c: config,
       },
       {
         title: 'auth',
-        icon: 'icon-yibiaopan',
+        icon: 'icon-authentication',
         c: authentication,
       },
       // {
