@@ -156,7 +156,7 @@
           <el-col :span="24">
             <el-form-item label="SQL">
               <el-input v-model="databaseConfig.query" type="textarea" :rows="6"></el-input>
-              <el-button class="bottom-btn" size="mini" @click="setDefaultContent">
+              <el-button class="bottom-btn" size="mini" @click="setDefaultContent('query')">
                 {{ $t('Auth.defaultSql') }}
               </el-button>
             </el-form-item>
@@ -172,7 +172,7 @@
           <el-col :span="24">
             <el-form-item :label="$t('Auth.selector')">
               <el-input v-model="databaseConfig.selector" type="textarea" :rows="6"></el-input>
-              <el-button class="bottom-btn" size="mini" @click="setDefaultContent">
+              <el-button class="bottom-btn" size="mini" @click="setDefaultContent('selector')">
                 {{ $t('Auth.defaultSelector') }}
               </el-button>
             </el-form-item>
@@ -266,8 +266,8 @@ export default defineComponent({
   setup(props) {
     const { databaseConfig, defaultContent, helpContent } = useDatabaseConfig(props.database)
     const needHelp = ref(false)
-    const setDefaultContent = () => {
-      databaseConfig.query = defaultContent
+    const setDefaultContent = (dataKey) => {
+      databaseConfig[dataKey] = defaultContent.value
     }
     const isMongoDB = computed(() => props.database === 'mongodb')
     const isRedis = computed(() => props.database === 'redis')

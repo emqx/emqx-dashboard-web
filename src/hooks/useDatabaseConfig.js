@@ -17,7 +17,7 @@ export default function useDatabaseConfig(database) {
       keyfile: '',
       cacertfile: '',
     },
-    query: defaultContent,
+    query: defaultContent.value,
     query_timeout: 5000,
     query_timeout_unit: 'ms',
     password_hash_algorithm: 'sha256',
