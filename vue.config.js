@@ -32,7 +32,7 @@ module.exports = {
         changeOrigin: true,
       },
       '/api/v5': {
-        target: 'http://34.219.115.160:18083/',
+        target: 'http://34.223.40.33:18083/',
         changeOrigin: true,
       },
     },

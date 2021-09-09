@@ -98,7 +98,7 @@
       <!-- Config -->
       <div v-else-if="step === 2">
         <database-config
-          v-show="['mysql', 'postgresql', 'mongodb'].includes(backend)"
+          v-show="['mysql', 'postgresql', 'mongodb', 'redis'].includes(backend)"
           :database="backend"
         ></database-config>
         <built-in-config v-show="backend === 'built-in-database'"></built-in-config>
@@ -109,7 +109,7 @@
           </div>
         </div>
         <div class="step-btn">
-          <el-button type="primary" @click="handleNext">
+          <el-button type="primary">
             {{ $t('Base.create') }}
           </el-button>
           <el-button @click="handleTest">
