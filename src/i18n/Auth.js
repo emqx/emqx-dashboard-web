@@ -195,9 +195,13 @@ export default {
     zh: '单节点',
     en: 'Single',
   },
-  topologyTimeout: {
+  connectTimeout: {
     zh: '连接超时（毫秒）',
     en: 'Connect Timeout(ms)',
+  },
+  requestTimeout: {
+    zh: '请求超时',
+    en: 'Request Timeout',
   },
   selector: {
     zh: '查询 Selector',
@@ -226,5 +230,13 @@ export default {
   sentinel: {
     zh: 'Sentinel 名字',
     en: 'Sentinel Name',
+  },
+  method: {
+    zh: '请求方式',
+    en: 'Method',
+  },
+  enablePipelining: {
+    zh: '启用 Pipelining',
+    en: 'Enable Pipelining',
   },
 }
