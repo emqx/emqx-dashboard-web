@@ -1,7 +1,7 @@
 import { reactive, ref } from '@vue/composition-api'
 
 export default function useDatabaseConfig(database) {
-  const defaultSQL = ref(
+  const defaultContent = ref(
     "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1",
   )
   const databaseConfig = reactive({
@@ -17,16 +17,27 @@ export default function useDatabaseConfig(database) {
       keyfile: '',
       cacertfile: '',
     },
-    query: defaultSQL,
+    query: defaultContent,
     query_timeout: 5000,
     query_timeout_unit: 'ms',
     password_hash_algorithm: 'sha256',
     salt_position: 'prefix',
+    // Mongodb
+    mongo_type: '',
+    replica_set_name: '',
+    topology: {
+      connect_timeout_ms: 0,
+    },
+    collection: '',
+    selector: `{"username":"\${username}"}`,
+    password_hash_field: '',
+    salt_field: '',
+    is_superuser_field: '',
   })
-  const helpSqlContent = ref('')
+  const helpContent = ref('')
   const setMySql = () => {
     databaseConfig.server = 'localhost:3306'
-    helpSqlContent.value = `
+    helpContent.value = `
       CREATE TABLE IF NOT EXISTS 'mqtt_user' (
         'id' int(11) unsigned NOT NULL AUTO_INCREMENT,
         'username' varchar(100) DEFAULT NULL,
@@ -41,7 +52,7 @@ export default function useDatabaseConfig(database) {
   }
   const setPgSql = () => {
     databaseConfig.server = 'localhost:5432'
-    helpSqlContent.value = `
+    helpContent.value = `
       CREATE TABLE mqtt_user (
         id SERIAL primary key,
         is_superuser boolean,
@@ -51,6 +62,24 @@ export default function useDatabaseConfig(database) {
       )
     `
   }
+  const setMongoDB = () => {
+    databaseConfig.mongo_type = 'single'
+    databaseConfig.server = '127.0.0.1:27017'
+    databaseConfig.topology.connect_timeout_ms = 20000
+    databaseConfig.collection = 'mqtt_user'
+    defaultContent.value = databaseConfig.selector
+    helpContent.value = `
+      {
+        username: "emqx_user",
+        password_hash: "******",
+        salt: "foo+bar",
+        is_superuser: false,
+        created: "2021-01-01 12:00:01"
+      }
+
+      db.mqtt_user.findOne({"username": "emqx_user"})
+    `
+  }
   switch (database) {
     case 'mysql':
       setMySql()
@@ -58,10 +87,12 @@ export default function useDatabaseConfig(database) {
     case 'postgresql':
       setPgSql()
       break
+    case 'mongodb':
+      setMongoDB()
   }
   return {
-    defaultSQL,
-    helpSqlContent,
+    defaultContent,
+    helpContent,
     databaseConfig,
   }
 }
