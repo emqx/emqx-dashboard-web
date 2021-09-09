@@ -1,9 +1,7 @@
 .auth-table {
   .status {
-    &.enable {
-      color: #00b299;
-    }
-    &.error {
+    color: #00b299;
+    &.disabled {
       color: #e34242;
     }
   }

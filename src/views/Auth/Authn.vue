@@ -16,7 +16,7 @@
       <el-table-column prop="backend" :label="$t('Auth.dataSource')"></el-table-column>
       <el-table-column prop="enable" :label="$t('Auth.status')">
         <template slot-scope="{ row }">
-          <span :class="['status', row.enable ? 'enable' : 'error']">
+          <span :class="['status', { disabled: !row.enable }]">
             {{ row.enable ? 'Enable' : 'Disabled' }}
           </span>
         </template>
