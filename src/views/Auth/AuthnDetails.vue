@@ -7,6 +7,14 @@
       <div>
         <span>{{ titleMap[currBackend] }}</span>
       </div>
+      <div>
+        <el-button type="danger" plain size="small" @click="handleDelete">
+          {{ $t('Base.delete') }}
+        </el-button>
+        <el-button size="small" plain @click="handleUpdate(configData.enable)">
+          {{ configData.enable ? $t('Auth.disable') : $t('Auth.enable') }}
+        </el-button>
+      </div>
     </div>
     <el-card shadow="never" v-loading.lock="authnDetailLock">
       <template v-if="!authnDetailLock">
@@ -36,7 +44,7 @@ import { loadAuthn } from '@/api/auth'
 import BackButton from '@/components/BackButton.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import HttpConfig from './components/HttpConfig.vue'
-import { updateAuthn } from '@/api/auth'
+import { updateAuthn, deleteAuthn } from '@/api/auth'
 import useAuthnCreate from '@/hooks/useAuthnCreate'
 
 export default defineComponent({
@@ -71,15 +79,31 @@ export default defineComponent({
       'http-server': 'HTTP Server',
     }
     loadData()
-    const handleUpdate = async function () {
+    const handleUpdate = async function (isEnable) {
       const { id } = configData.value
       if (currBackend.value === 'http-server') {
         const { processHttpConfig } = useAuthnCreate()
         configData.value = processHttpConfig({}, { ...configData.value })
       }
+      if (isEnable !== undefined) {
+        configData.value.enable = !isEnable
+      }
       await updateAuthn(id, configData.value)
       this.$message.success(this.$t('Base.updateSuccess'))
       this.$router.push({ name: 'authentication' })
+    }
+    const handleDelete = async function (id) {
+      this.$confirm(this.$t('General.confirmDelete'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
+        .then(async () => {
+          await deleteAuthn(configData.value.id)
+          this.$t('Base.deleteSuccess')
+          this.$router.push({ name: 'authentication' })
+        })
+        .catch(() => {})
     }
     return {
       currBackend,
@@ -87,6 +111,7 @@ export default defineComponent({
       configData,
       authnDetailLock,
       handleUpdate,
+      handleDelete,
     }
   },
 })
