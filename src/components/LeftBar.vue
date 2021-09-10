@@ -85,10 +85,10 @@ export default {
         title: 'authentication',
         path: '/authentication',
       },
-      {
-        title: 'authorization',
-        path: '/authorization',
-      },
+      // {
+      //   title: 'authorization',
+      //   path: '/authorization',
+      // },
     ]
 
     let system = [
@@ -117,6 +117,11 @@ export default {
         icon: 'icon-management',
         c: management,
       },
+      {
+        title: 'auth',
+        icon: 'icon-authentication',
+        c: authentication,
+      },
       // {
       //   title: 'gateway',
       //   icon: 'icon-gateway',
@@ -131,11 +136,6 @@ export default {
         title: 'configuration',
         icon: 'icon-configuration',
         c: config,
-      },
-      {
-        title: 'auth',
-        icon: 'icon-authentication',
-        c: authentication,
       },
       // {
       //   title: 'ruleengine',

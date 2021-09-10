@@ -78,7 +78,7 @@
       <el-form class="create-form">
         <el-col :span="12">
           <el-form-item label="Pool size">
-            <el-input v-model.number="databaseConfig.poolsize"></el-input>
+            <el-input v-model.number="databaseConfig.pool_size"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -159,14 +159,7 @@
         </el-collapse-transition>
         <el-col v-if="isMySQL || isPgSQL" :span="12">
           <el-form-item :label="$t('Auth.queryTimeout')">
-            <el-input v-model="databaseConfig.query_timeout">
-              <template slot="append">
-                <el-select v-model="databaseConfig.query_timeout_unit">
-                  <el-option value="ms"></el-option>
-                  <el-option value="s"></el-option>
-                </el-select>
-              </template>
-            </el-input>
+            <el-input v-model.number="databaseConfig.query_timeout"></el-input>
           </el-form-item>
         </el-col>
         <el-col v-if="isMongoDB" :span="12">
@@ -211,7 +204,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, onBeforeUnmount, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
 import TLSConfig from './TLSConfig.vue'
 import usePassword from '@/hooks/usePassword'
@@ -221,14 +214,22 @@ import useCopy from '@/hooks/useCopy'
 export default defineComponent({
   name: 'DatabaseConfig',
   components: { CodeView, TLSConfig },
+  model: {
+    prop: 'value',
+    event: 'update',
+  },
   props: {
     database: {
       required: true,
       type: String,
     },
+    value: {
+      required: true,
+      type: Object,
+    },
   },
-  setup(props) {
-    const { databaseConfig, defaultContent, helpContent } = useDatabaseConfig(props.database)
+  setup(props, ctx) {
+    const { databaseConfig, defaultContent, helpContent } = useDatabaseConfig(props, ctx)
     const needHelp = ref(false)
     const setDefaultContent = (dataKey) => {
       databaseConfig[dataKey] = defaultContent.value

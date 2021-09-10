@@ -27,4 +27,17 @@ export function updateAuthz(type, body) {
   return http.put(`/authorization/sources/${type}`, body)
 }
 
+export function createAuthn(body) {
+  return http.post('/authentication', body)
+}
+
+export function updateAuthn(id, body) {
+  delete body.id
+  return http.put(`/authentication/${id}`, body)
+}
+
+export function deleteAuthn(id) {
+  return http.delete(`/authentication/${id}`)
+}
+
 export default {}

@@ -1,46 +1,17 @@
-import { reactive, ref } from '@vue/composition-api'
+import { watch, reactive, ref } from '@vue/composition-api'
 
-export default function useDatabaseConfig(database) {
+export default function useDatabaseConfig({ database, value }, { emit }) {
   const defaultContent = ref(
     "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1",
   )
-  const databaseConfig = reactive({
-    server: '',
-    servers: '',
-    username: 'root',
-    password: '',
-    database: '',
-    poolsize: 8,
-    auto_reconnect: true,
-    ssl: {
-      enable: false,
-      verify: false,
-      certfile: '',
-      keyfile: '',
-      cacertfile: '',
-    },
-    query: defaultContent.value,
-    query_timeout: 5000,
-    query_timeout_unit: 'ms',
-    password_hash_algorithm: 'sha256',
-    salt_position: 'prefix',
-    // Mongodb
-    mongo_type: '',
-    replica_set_name: '',
-    topology: {
-      connect_timeout_ms: 0,
-    },
-    collection: '',
-    selector: '',
-    password_hash_field: '',
-    salt_field: '',
-    is_superuser_field: '',
-    // Redis
-    redis_type: '',
+  const databaseConfig = reactive(value)
+  watch(databaseConfig, (value) => {
+    emit('update', value)
   })
   const helpContent = ref('')
   const setMySql = () => {
-    databaseConfig.server = 'localhost:3306'
+    databaseConfig.server = '127.0.0.1:3306'
+    databaseConfig.query = defaultContent.value
     helpContent.value = `
       CREATE TABLE IF NOT EXISTS 'mqtt_user' (
         'id' int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -55,7 +26,8 @@ export default function useDatabaseConfig(database) {
     `
   }
   const setPgSql = () => {
-    databaseConfig.server = 'localhost:5432'
+    databaseConfig.server = '127.0.0.1:5432'
+    databaseConfig.query = defaultContent.value
     helpContent.value = `
       CREATE TABLE mqtt_user (
         id SERIAL primary key,
@@ -87,7 +59,7 @@ export default function useDatabaseConfig(database) {
   }
   const setRedis = () => {
     databaseConfig.redis_type = 'single'
-    databaseConfig.server = 'localhost:6379'
+    databaseConfig.server = '127.0.0.1:6379'
     databaseConfig.sentinel = 'mysentinel'
     databaseConfig.database = 0
     defaultContent.value = `HMGET mqtt_user:\${username} password_hash`

@@ -23,7 +23,12 @@
       </el-table-column>
       <el-table-column prop="oper" :label="$t('Base.operation')">
         <template slot-scope="{ row }">
-          <table-dropdown :row-data="row" :table-data-len="authnList.length"></table-dropdown>
+          <table-dropdown
+            :row-data="row"
+            :table-data-len="authnList.length"
+            @update="handleUpdate"
+            @delete="handleDelete"
+          ></table-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -33,7 +38,7 @@
 <script>
 import { defineComponent, ref } from '@vue/composition-api'
 import TableDropdown from './components/TableDropdown.vue'
-import { listAuthn } from '@/api/auth'
+import { listAuthn, updateAuthn, deleteAuthn } from '@/api/auth'
 
 export default defineComponent({
   name: 'Authn',
@@ -46,13 +51,31 @@ export default defineComponent({
     const loadData = async () => {
       lockTable.value = true
       const res = await listAuthn()
-      console.log(res)
+      authnList.value = res
       lockTable.value = false
     }
     loadData()
+    const handleUpdate = async (row) => {
+      await updateAuthn(row.id, row)
+      loadData()
+    }
+    const handleDelete = async function (id) {
+      this.$confirm(this.$t('General.confirmDelete'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
+        .then(async () => {
+          await deleteAuthn(id).catch(() => {})
+          loadData()
+        })
+        .catch(() => {})
+    }
     return {
       lockTable,
       authnList,
+      handleUpdate,
+      handleDelete,
     }
   },
 })

@@ -32,8 +32,8 @@ export default {
     en: 'ACL',
   },
   auth: {
-    zh: '授权',
-    en: 'Authentication',
+    zh: '认证鉴权',
+    en: 'Access Control',
   },
   authentication: {
     zh: '认证',

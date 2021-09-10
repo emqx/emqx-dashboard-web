@@ -18,10 +18,10 @@
         </div>
         <el-radio-group v-model="mechanism">
           <el-radio class="mechanism" label="password-based" border> Password-Based </el-radio>
-          <el-radio class="mechanism" label="jwt" border> JWT </el-radio>
+          <!-- <el-radio class="mechanism" label="jwt" border> JWT </el-radio>
           <el-radio class="mechanism" label="scram" border>
             {{ this.$t('Auth.scram') }}
-          </el-radio>
+          </el-radio> -->
         </el-radio-group>
         <p v-if="mechanism === 'password-based'" class="item-description">
           {{ $t('Auth.passwordBasedDesc') }}
@@ -99,10 +99,14 @@
       <div v-else-if="step === 2">
         <database-config
           v-show="['mysql', 'postgresql', 'mongodb', 'redis'].includes(backend)"
+          v-model="databaseConfig"
           :database="backend"
         ></database-config>
-        <built-in-config v-show="backend === 'built-in-database'"></built-in-config>
-        <http-config v-show="backend === 'http-server'"></http-config>
+        <built-in-config
+          v-show="backend === 'built-in-database'"
+          v-model="builtConfig"
+        ></built-in-config>
+        <http-config v-show="backend === 'http-server'" v-model="httpConfig"></http-config>
         <!-- Result -->
         <div v-if="testRes" :class="['create-form', 'result-block', isWork ? 'success' : 'error']">
           <div class="result-title">
@@ -110,12 +114,12 @@
           </div>
         </div>
         <div class="step-btn">
-          <el-button type="primary">
+          <el-button type="primary" @click="handleCreate">
             {{ $t('Base.create') }}
           </el-button>
-          <el-button @click="handleTest">
+          <!-- <el-button @click="handleTest">
             {{ $t('Base.test') }}
-          </el-button>
+          </el-button> -->
           <el-button @click="handleBack">
             {{ $t('Base.backStep') }}
           </el-button>
@@ -133,6 +137,8 @@ import DatabaseConfig from './components/DatabaseConfig.vue'
 import BuiltInConfig from './components/BuiltInConfig.vue'
 import HttpConfig from './components/HttpConfig.vue'
 import useGuide from '@/hooks/useGuide'
+import { createAuthn } from '@/api/auth'
+import useAuthnCreate from '@/hooks/useAuthnCreate'
 
 export default defineComponent({
   name: 'AuthnCreate',
@@ -150,19 +156,20 @@ export default defineComponent({
     const others = ref([])
     const isWork = ref(false)
     const testRes = ref(null)
+    const { builtConfig, httpConfig, databaseConfig, processHttpConfig } = useAuthnCreate()
     const supportBackendMap = {
       'password-based': {
         mysql: 'MySQL',
-        redis: 'Redis',
-        postgresql: 'PostgreSQL',
-        mongodb: 'MongoDB',
-        'built-in-database': 'Built-in database',
+        // redis: 'Redis',
+        // postgresql: 'PostgreSQL',
+        // mongodb: 'MongoDB',
+        // 'built-in-database': 'Built-in database',
         'http-server': 'HTTP',
       },
-      jwt: {},
-      scram: {
-        'built-in-database': 'Built-in database',
-      },
+      // jwt: {},
+      // scram: {
+      //   'built-in-database': 'Built-in database',
+      // },
     }
     const getGuideList = function () {
       return [this.$t('Auth.mechanism'), this.$t('Auth.dataSource'), this.$t('Auth.config')]
@@ -173,7 +180,7 @@ export default defineComponent({
         const res = {
           label: supportData[key],
           value: key,
-          img: require(`../../assets/img/${key}.png`),
+          img: require(`@/assets/img/${key}.png`),
         }
         const otherKeys = ['http-server']
         if (otherKeys.includes(key)) {
@@ -194,9 +201,23 @@ export default defineComponent({
       }
     }
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(beforeNext)
-    const handleTest = function () {
-      testRes.value = {}
-      isWork.value = true
+    const handleCreate = async function () {
+      const basicData = {
+        backend: backend.value,
+        mechanism: mechanism.value,
+      }
+      let data = {}
+      if (backend.value === 'http-server') {
+        data = processHttpConfig(basicData, httpConfig)
+      } else if (backend.value === 'mysql') {
+        data = {
+          ...basicData,
+          ...databaseConfig,
+        }
+      }
+      await createAuthn(data)
+      this.$message.success(this.$t('Base.createSuccess'))
+      this.$router.push({ name: 'authentication' })
     }
     return {
       activeGuidesIndex,
@@ -207,10 +228,13 @@ export default defineComponent({
       others,
       isWork,
       testRes,
+      builtConfig,
+      httpConfig,
+      databaseConfig,
       getGuideList,
       handleNext,
       handleBack,
-      handleTest,
+      handleCreate,
     }
   },
 })
