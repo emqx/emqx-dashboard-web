@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
+import { defineComponent, onMounted, onUnmounted, reactive, ref, watch } from '@vue/composition-api'
 import {
   getDelayedConfig,
   editDelayedConfig,
@@ -209,10 +209,6 @@ export default defineComponent({
         .catch(() => {})
     }
 
-    // const dateFormat = (date) => {
-    //   return moment(date).format('YYYY-MM-DD HH:mm:ss')
-    // }
-
     const checkPayload = async function (row) {
       payloadDialog.value = true
       payloadLoading.value = true
@@ -244,7 +240,6 @@ export default defineComponent({
     }
 
     const reloading = function () {
-      // loadDelayedList()
       loadDelayedConfig()
       p.value.$emit('loadPage')
     }
@@ -254,11 +249,15 @@ export default defineComponent({
     let copyShowTimeout = ref(null)
     const copySuccess = () => {
       isCopyShow.value = true
-      clearTimeout(copyShowTimeout)
-      copyShowTimeout = setTimeout(() => {
+      clearTimeout(copyShowTimeout.value)
+      copyShowTimeout.value = setTimeout(() => {
         isCopyShow.value = false
       }, 2000)
     }
+
+    onUnmounted(() => {
+      copyShowTimeout.value && clearTimeout(copyShowTimeout.value)
+    })
 
     return {
       tl: props.translate,

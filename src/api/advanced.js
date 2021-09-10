@@ -20,7 +20,7 @@ export function getRetainerTopic(topic) {
 
 export function delRetainerTopic(topic) {
   if (null == topic) return
-  return http.delete('/mqtt/retainer/messages/' + encodeURIComponent(topic))
+  return http.delete('/mqtt/retainer/message/' + encodeURIComponent(topic))
 }
 
 export function getTopicRewrite() {

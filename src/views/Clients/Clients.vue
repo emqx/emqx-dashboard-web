@@ -312,7 +312,7 @@ export default {
       }
       if (connected_at) {
         const connectedAtKey = `${comparator}_connected_at`
-        newParams[connectedAtKey] = Math.floor(_connected_at / 1000)
+        newParams[connectedAtKey] = new Date(connected_at).toISOString()
       }
       return newParams
     },

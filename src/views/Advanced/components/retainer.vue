@@ -195,7 +195,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
+import { defineComponent, onMounted, onUnmounted, reactive, ref, watch } from '@vue/composition-api'
 import {
   getRetainer,
   getRetainerList,
@@ -464,11 +464,15 @@ export default defineComponent({
     let copyShowTimeout = ref(null)
     const copySuccess = () => {
       isCopyShow.value = true
-      clearTimeout(copyShowTimeout)
-      copyShowTimeout = setTimeout(() => {
+      clearTimeout(copyShowTimeout.value)
+      copyShowTimeout.value = setTimeout(() => {
         isCopyShow.value = false
       }, 2000)
     }
+
+    onUnmounted(() => {
+      copyShowTimeout.value && clearTimeout(copyShowTimeout.value)
+    })
 
     return {
       tl: props.translate,
