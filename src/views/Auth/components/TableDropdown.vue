@@ -4,10 +4,10 @@
       <i class="el-icon-more"></i>
     </el-button>
     <el-dropdown-menu slot="dropdown">
-      <!-- <el-dropdown-item command="setting">
+      <el-dropdown-item command="setting">
         <i class="el-icon-setting"></i>
         {{ $t('Auth.setting') }}
-      </el-dropdown-item> -->
+      </el-dropdown-item>
       <!-- <el-dropdown-item :disabled="tableDataLen === 1" command="moveUp">
         <i class="el-icon-top"></i>
         {{ $t('Auth.moveUp') }}
@@ -50,6 +50,9 @@ export default defineComponent({
   setup() {
     const handleCommand = function (row, command) {
       switch (command) {
+        case 'setting':
+          this.$emit('setting', row.id)
+          break
         case 'disable':
           row.enable = false
           this.$emit('update', row)

@@ -24,7 +24,7 @@ export function updateAuthzSetting(body) {
 }
 
 export function updateAuthz(type, body) {
-  return http.put(`/authorization/sources/${type}`, body)
+  return http.put(`/authorization/sources/${encodeURIComponent(type)}`, body)
 }
 
 export function createAuthn(body) {
@@ -33,11 +33,15 @@ export function createAuthn(body) {
 
 export function updateAuthn(id, body) {
   delete body.id
-  return http.put(`/authentication/${id}`, body)
+  return http.put(`/authentication/${encodeURIComponent(id)}`, body)
 }
 
 export function deleteAuthn(id) {
-  return http.delete(`/authentication/${id}`)
+  return http.delete(`/authentication/${encodeURIComponent(id)}`)
+}
+
+export function loadAuthn(id) {
+  return http.get(`/authentication/${encodeURIComponent(id)}`)
 }
 
 export default {}

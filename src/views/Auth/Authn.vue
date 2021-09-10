@@ -28,6 +28,7 @@
             :table-data-len="authnList.length"
             @update="handleUpdate"
             @delete="handleDelete"
+            @setting="handleSetting"
           ></table-dropdown>
         </template>
       </el-table-column>
@@ -71,11 +72,15 @@ export default defineComponent({
         })
         .catch(() => {})
     }
+    const handleSetting = function (id) {
+      this.$router.push({ path: `/authentication/detail/${id}` })
+    }
     return {
       lockTable,
       authnList,
       handleUpdate,
       handleDelete,
+      handleSetting,
     }
   },
 })
