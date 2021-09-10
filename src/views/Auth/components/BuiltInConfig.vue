@@ -13,9 +13,14 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="$t('Auth.passwordHash')">
-            <el-select v-model="builtConfig.password_hash_algorithm">
+            <el-select v-model="builtConfig.password_hash_algorithm.name">
               <el-option v-for="item in HashOptions" :key="item" :value="item"></el-option>
             </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="Salt Rounds">
+            <el-input v-model="builtConfig.password_hash_algorithm.salt_rounds"></el-input>
           </el-form-item>
         </el-col>
       </el-form>
@@ -24,15 +29,25 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, reactive, watch } from '@vue/composition-api'
 import usePassword from '@/hooks/usePassword'
 
 export default defineComponent({
   name: 'BuiltInConfig',
-  setup() {
-    const builtConfig = reactive({
-      user_id_type: 'username',
-      password_hash_algorithm: 'sha256',
+  model: {
+    prop: 'value',
+    event: 'update',
+  },
+  props: {
+    value: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(props, ctx) {
+    const builtConfig = reactive(props.value)
+    watch(builtConfig, (value) => {
+      ctx.emit('update', value)
     })
     const { HashOptions } = usePassword()
     return {

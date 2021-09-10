@@ -197,11 +197,11 @@ export default {
   },
   connectTimeout: {
     zh: '连接超时（毫秒）',
-    en: 'Connect Timeout(ms)',
+    en: 'Connect Timeout (ms)',
   },
   requestTimeout: {
-    zh: '请求超时',
-    en: 'Request Timeout',
+    zh: '请求超时（毫秒）',
+    en: 'Request Timeout (ms)',
   },
   selector: {
     zh: '查询 Selector',

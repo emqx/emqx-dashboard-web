@@ -30,19 +30,12 @@
       <el-form class="create-form">
         <el-col :span="12">
           <el-form-item label="Pool size">
-            <el-input v-model.number="httpConfig.poolsize"></el-input>
+            <el-input v-model.number="httpConfig.pool_size"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="$t('Auth.connectTimeout')">
-            <el-input v-model="httpConfig.connect_timeout">
-              <template slot="append">
-                <el-select v-model="httpConfig.connect_timeout_unit">
-                  <el-option value="ms"></el-option>
-                  <el-option value="s"></el-option>
-                </el-select>
-              </template>
-            </el-input>
+            <el-input v-model.number="httpConfig.connect_timeout"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -92,14 +85,7 @@
         </el-collapse-transition>
         <el-col :span="12">
           <el-form-item :label="$t('Auth.requestTimeout')">
-            <el-input v-model="httpConfig.request_timeout">
-              <template slot="append">
-                <el-select v-model="httpConfig.request_timeout_unit">
-                  <el-option value="ms"></el-option>
-                  <el-option value="s"></el-option>
-                </el-select>
-              </template>
-            </el-input>
+            <el-input v-model.number="httpConfig.request_timeout"></el-input>
           </el-form-item>
         </el-col>
       </el-form>
@@ -108,7 +94,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from '@vue/composition-api'
+import { defineComponent, reactive, ref, watch } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
 import TLSConfig from './TLSConfig.vue'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor.vue'
@@ -117,7 +103,17 @@ import useCopy from '@/hooks/useCopy'
 export default defineComponent({
   name: 'HttpConfig',
   components: { KeyAndValueEditor, CodeView, TLSConfig },
-  setup() {
+  model: {
+    prop: 'value',
+    event: 'update',
+  },
+  props: {
+    value: {
+      type: Object,
+      required: true,
+    },
+  },
+  setup(props, ctx) {
     const defaultContent = JSON.stringify(
       {
         username: '${username}',
@@ -126,26 +122,9 @@ export default defineComponent({
       null,
       2,
     )
-    const httpConfig = reactive({
-      method: 'post',
-      url: 'http://localhost:8080',
-      headers: {
-        'content-type': 'application/json',
-      },
-      poolsize: 8,
-      connect_timeout: 5000,
-      connect_timeout_unit: 'ms',
-      request_timeout: 5000,
-      request_timeout_unit: 'ms',
-      enable_pipelining: true,
-      ssl: {
-        enable: false,
-        verify: false,
-        certfile: '',
-        keyfile: '',
-        cacertfile: '',
-      },
-      body: defaultContent,
+    const httpConfig = reactive(props.value)
+    watch(httpConfig, (value) => {
+      ctx.emit('update', value)
     })
     const needHelp = ref(false)
     const helpContent = `
@@ -179,7 +158,7 @@ export default defineComponent({
       needHelp.value = false
     })
     const setDefaultContent = () => {
-      httpConfig.body = defaultContent
+      httpConfig.form_data = defaultContent
     }
     return {
       helpContent,

@@ -19,9 +19,9 @@
                   placeholder="Begins with -----BEGIN CERTIFICATE-----"
                 ></el-input>
                 <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
-                  <el-button slot="trigger" size="mini">
+                  <!-- <el-button slot="trigger" size="mini">
                     {{ $t('Base.selectFile') }}
-                  </el-button>
+                  </el-button> -->
                 </el-upload>
               </el-form-item>
             </el-col>
@@ -34,9 +34,9 @@
                   placeholder="Begins with -----BEGIN RSA PRIVATE KEY-----"
                 ></el-input>
                 <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
-                  <el-button slot="trigger" size="mini">
+                  <!-- <el-button slot="trigger" size="mini">
                     {{ $t('Base.selectFile') }}
-                  </el-button>
+                  </el-button> -->
                 </el-upload>
               </el-form-item>
             </el-col>
@@ -49,9 +49,9 @@
                   placeholder="Begins with -----BEGIN RSA PRIVATE KEY-----"
                 ></el-input>
                 <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
-                  <el-button slot="trigger" size="mini">
+                  <!-- <el-button slot="trigger" size="mini">
                     {{ $t('Base.selectFile') }}
-                  </el-button>
+                  </el-button> -->
                 </el-upload>
               </el-form-item>
             </el-col>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'TLSConfig',
@@ -78,7 +78,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const record = ref(props.value)
+    const record = computed(() => props.value)
     return {
       record,
     }
