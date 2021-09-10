@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, watch } from '@vue/composition-api'
+import { computed, defineComponent, reactive, ref, watch } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
 import TLSConfig from './TLSConfig.vue'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor.vue'
@@ -154,6 +154,13 @@ export default defineComponent({
         res.json(data)
       })
     `
+    const id = computed(function () {
+      return this.$route.params.id
+    })
+    if (id.value) {
+      const { body } = httpConfig
+      httpConfig.body = JSON.stringify(body, null, 2)
+    }
     const { copySuccess } = useCopy(() => {
       needHelp.value = false
     })

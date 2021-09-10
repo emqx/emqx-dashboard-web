@@ -1,4 +1,4 @@
-import { watch, reactive, ref } from '@vue/composition-api'
+import { watch, reactive, ref, computed } from '@vue/composition-api'
 
 export default function useDatabaseConfig({ database, value }, { emit }) {
   const defaultContent = ref(
@@ -8,10 +8,11 @@ export default function useDatabaseConfig({ database, value }, { emit }) {
   watch(databaseConfig, (value) => {
     emit('update', value)
   })
+  const id = computed(function () {
+    return this.$route.params.id
+  })
   const helpContent = ref('')
   const setMySql = () => {
-    databaseConfig.server = '127.0.0.1:3306'
-    databaseConfig.query = defaultContent.value
     helpContent.value = `
       CREATE TABLE IF NOT EXISTS 'mqtt_user' (
         'id' int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -24,6 +25,11 @@ export default function useDatabaseConfig({ database, value }, { emit }) {
         UNIQUE KEY 'mqtt_username' ('username')
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `
+    if (id.value) {
+      return
+    }
+    databaseConfig.server = '127.0.0.1:3306'
+    databaseConfig.query = defaultContent.value
   }
   const setPgSql = () => {
     databaseConfig.server = '127.0.0.1:5432'

@@ -380,6 +380,11 @@ let routes = [
         name: 'authenticationCreate',
         component: () => import('@/views/Auth/AuthnCreate'),
       },
+      {
+        path: 'detail/:id',
+        name: 'authenticationDetail',
+        component: () => import('@/views/Auth/AuthnDetails'),
+      },
     ],
   },
   {
