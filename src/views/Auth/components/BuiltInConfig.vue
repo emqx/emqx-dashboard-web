@@ -18,7 +18,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col v-if="builtConfig.password_hash_algorithm.name === 'bcrypt'" :span="12">
           <el-form-item label="Salt Rounds">
             <el-input v-model="builtConfig.password_hash_algorithm.salt_rounds"></el-input>
           </el-form-item>
