@@ -163,7 +163,7 @@ export default defineComponent({
         // redis: 'Redis',
         // postgresql: 'PostgreSQL',
         // mongodb: 'MongoDB',
-        // 'built-in-database': 'Built-in database',
+        'built-in-database': 'Built-in database',
         'http-server': 'HTTP',
       },
       // jwt: {},
@@ -213,6 +213,11 @@ export default defineComponent({
         data = {
           ...basicData,
           ...databaseConfig,
+        }
+      } else if (backend.value === 'built-in-database') {
+        data = {
+          ...basicData,
+          ...builtConfig,
         }
       }
       await createAuthn(data)

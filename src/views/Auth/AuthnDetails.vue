@@ -4,8 +4,18 @@
       {{ $t('Auth.backAuthnList') }}
     </back-button>
     <div class="section-header" v-loading.lock="authnDetailLock">
-      <div>
-        <span>{{ titleMap[currBackend] }}</span>
+      <div class="section-header__block">
+        <div>
+          <img :src="currImg" width="56px" />
+        </div>
+        <div>
+          <div class="section-header__title">
+            {{ titleMap[currBackend] }}
+          </div>
+          <el-tag type="info" size="mini">
+            {{ configData.mechanism }}
+          </el-tag>
+        </div>
       </div>
       <div>
         <el-button type="danger" plain size="small" @click="handleDelete">
@@ -16,25 +26,36 @@
         </el-button>
       </div>
     </div>
-    <el-card shadow="never" v-loading.lock="authnDetailLock">
-      <template v-if="!authnDetailLock">
-        <database-config
-          v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(currBackend)"
-          :database="currBackend"
-          v-model="configData"
-        ></database-config>
-        <http-config v-if="currBackend === 'http-server'" v-model="configData"></http-config>
-      </template>
-      <el-button type="primary" @click="handleUpdate">
-        {{ $t('Base.update') }}
-      </el-button>
-      <!-- <el-button @click="handleTest">
-        {{ $t('Base.test') }}
-      </el-button> -->
-      <el-button @click="$router.push('/authentication')">
-        {{ $t('Base.cancel') }}
-      </el-button>
-    </el-card>
+    <el-tabs>
+      <el-tab-pane label="配置参数" :lazy="true">
+        <el-card shadow="never" v-loading.lock="authnDetailLock">
+          <template v-if="!authnDetailLock">
+            <database-config
+              v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(currBackend)"
+              :database="currBackend"
+              v-model="configData"
+            ></database-config>
+            <http-config
+              v-else-if="currBackend === 'http-server'"
+              v-model="configData"
+            ></http-config>
+            <built-in-config
+              v-else-if="currBackend === 'built-in-database'"
+              v-model="configData"
+            ></built-in-config>
+          </template>
+          <el-button type="primary" @click="handleUpdate">
+            {{ $t('Base.update') }}
+          </el-button>
+          <!-- <el-button @click="handleTest">
+          {{ $t('Base.test') }}
+        </el-button> -->
+          <el-button @click="$router.push('/authentication')">
+            {{ $t('Base.cancel') }}
+          </el-button>
+        </el-card>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -44,6 +65,7 @@ import { loadAuthn } from '@/api/auth'
 import BackButton from '@/components/BackButton.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import HttpConfig from './components/HttpConfig.vue'
+import BuiltInConfig from './components/BuiltInConfig.vue'
 import { updateAuthn, deleteAuthn } from '@/api/auth'
 import useAuthnCreate from '@/hooks/useAuthnCreate'
 
@@ -53,6 +75,7 @@ export default defineComponent({
     DatabaseConfig,
     BackButton,
     HttpConfig,
+    BuiltInConfig,
   },
   setup() {
     const authnDetailLock = ref(false)
@@ -63,6 +86,12 @@ export default defineComponent({
       ssl: { enable: false },
     })
     const currBackend = ref('')
+    const currImg = computed(() => {
+      if (currBackend.value) {
+        return require(`@/assets/img/${currBackend.value}.png`)
+      }
+      return ''
+    })
     const loadData = async function () {
       authnDetailLock.value = true
       const res = await loadAuthn(id.value).catch(() => {
@@ -77,6 +106,7 @@ export default defineComponent({
     const titleMap = {
       mysql: 'MySQL',
       'http-server': 'HTTP Server',
+      'built-in-database': 'Built in Database',
     }
     loadData()
     const handleUpdate = async function (isEnable) {
@@ -92,7 +122,7 @@ export default defineComponent({
       this.$message.success(this.$t('Base.updateSuccess'))
       this.$router.push({ name: 'authentication' })
     }
-    const handleDelete = async function (id) {
+    const handleDelete = async function () {
       this.$confirm(this.$t('General.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
@@ -107,6 +137,7 @@ export default defineComponent({
     }
     return {
       currBackend,
+      currImg,
       titleMap,
       configData,
       authnDetailLock,
@@ -119,4 +150,20 @@ export default defineComponent({
 
 <style lang="scss">
 @import './style/auth.scss';
+.authn-details {
+  .section-header__block {
+    display: flex;
+    & > div {
+      margin-right: 20px;
+    }
+  }
+  .section-header__title {
+    margin-bottom: 8px;
+  }
+  .el-tabs {
+    .el-tabs__header {
+      margin-bottom: 24px;
+    }
+  }
+}
 </style>

@@ -6,7 +6,6 @@ export default function useAuthnCreate(defaultContent) {
     user_id_type: 'username',
     password_hash_algorithm: {
       name: 'sha256',
-      salt_rounds: 100,
     },
   })
   const httpConfig = reactive({
