@@ -34,7 +34,7 @@
       >
         <data-manager v-model="dataManager" :field="configData.user_id_type"></data-manager>
       </el-tab-pane>
-      <el-tab-pane :label="$t('Auth.authConfig')" :lazy="true">
+      <el-tab-pane :label="$t('Auth.config')" :lazy="true">
         <el-card shadow="never" v-loading.lock="authnDetailLock">
           <template v-if="!authnDetailLock">
             <database-config
