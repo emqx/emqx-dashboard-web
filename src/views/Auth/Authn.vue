@@ -29,6 +29,7 @@
             @update="handleUpdate"
             @delete="handleDelete"
             @setting="handleSetting"
+            @move="handleMove"
           ></table-dropdown>
         </template>
       </el-table-column>
@@ -39,7 +40,7 @@
 <script>
 import { defineComponent, ref } from '@vue/composition-api'
 import TableDropdown from './components/TableDropdown.vue'
-import { listAuthn, updateAuthn, deleteAuthn } from '@/api/auth'
+import { listAuthn, updateAuthn, deleteAuthn, moveAuthn } from '@/api/auth'
 
 export default defineComponent({
   name: 'Authn',
@@ -75,12 +76,20 @@ export default defineComponent({
     const handleSetting = function (id) {
       this.$router.push({ path: `/authentication/detail/${id}` })
     }
+    const handleMove = async function (id, position) {
+      const data = {
+        position,
+      }
+      await moveAuthn(id, data)
+      loadData()
+    }
     return {
       lockTable,
       authnList,
       handleUpdate,
       handleDelete,
       handleSetting,
+      handleMove,
     }
   },
 })

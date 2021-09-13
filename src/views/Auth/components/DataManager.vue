@@ -121,5 +121,8 @@ export default defineComponent({
     margin: 0;
     width: 100%;
   }
+  .dropdown-btn {
+    padding: 1px 6px;
+  }
 }
 </style>
