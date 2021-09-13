@@ -33,6 +33,7 @@
             :row-data="row"
             :table-data-len="authzList.length"
             @update="handleUpdate"
+            @delete="handleDelete"
           ></table-dropdown>
         </template>
       </el-table-column>
@@ -43,7 +44,7 @@
 <script>
 import { defineComponent, ref } from '@vue/composition-api'
 import TableDropdown from './components/TableDropdown.vue'
-import { listAuthz, updateAuthz } from '@/api/auth'
+import { listAuthz, updateAuthz, deleteAuthz } from '@/api/auth'
 
 export default defineComponent({
   name: 'Authz',
@@ -55,8 +56,12 @@ export default defineComponent({
     const lockTable = ref(false)
     const loadData = async () => {
       lockTable.value = true
-      const res = await listAuthz()
-      authzList.value = res.sources
+      const res = await listAuthz().catch(() => {
+        lockTable.value = false
+      })
+      if (res) {
+        authzList.value = res.sources
+      }
       lockTable.value = false
     }
     loadData()
@@ -64,10 +69,23 @@ export default defineComponent({
       await updateAuthz(row.type, row)
       loadData()
     }
+    const handleDelete = async function ({ type }) {
+      this.$confirm(this.$t('General.confirmDelete'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
+        .then(async () => {
+          await deleteAuthz(type).catch(() => {})
+          loadData()
+        })
+        .catch(() => {})
+    }
     return {
       lockTable,
       authzList,
       handleUpdate,
+      handleDelete,
     }
   },
 })

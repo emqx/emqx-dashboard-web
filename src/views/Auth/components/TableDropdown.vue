@@ -51,8 +51,7 @@ export default defineComponent({
     const handleCommand = function (row, command) {
       switch (command) {
         case 'setting':
-          console.log(row)
-          this.$emit('setting', row.id)
+          this.$emit('setting', row)
           break
         case 'disable':
           row.enable = false
@@ -63,13 +62,13 @@ export default defineComponent({
           this.$emit('update', row)
           break
         case 'delete':
-          this.$emit('delete', row.id)
+          this.$emit('delete', row)
           break
         case 'moveUp':
-          this.$emit('move', row.id, 'top')
+          this.$emit('move', row, 'top')
           break
         case 'moveDown':
-          this.$emit('move', row.id, 'bottom')
+          this.$emit('move', row, 'bottom')
           break
         default:
           break

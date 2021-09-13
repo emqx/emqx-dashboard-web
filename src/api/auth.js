@@ -27,6 +27,14 @@ export function updateAuthz(type, body) {
   return http.put(`/authorization/sources/${encodeURIComponent(type)}`, body)
 }
 
+export function createAuthz(body) {
+  return http.post('/authorization/sources', body)
+}
+
+export function deleteAuthz(type) {
+  return http.delete(`/authentication/${encodeURIComponent(type)}`)
+}
+
 export function createAuthn(body) {
   return http.post('/authentication', body)
 }
