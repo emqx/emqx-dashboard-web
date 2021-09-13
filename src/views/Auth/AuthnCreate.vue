@@ -202,24 +202,20 @@ export default defineComponent({
     }
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(beforeNext)
     const handleCreate = async function () {
-      const basicData = {
-        backend: backend.value,
-        mechanism: mechanism.value,
-      }
       let data = {}
       if (backend.value === 'http-server') {
+        const basicData = {
+          backend: backend.value,
+          mechanism: mechanism.value,
+        }
         data = processHttpConfig(basicData, httpConfig)
       } else if (backend.value === 'mysql') {
-        data = {
-          ...basicData,
-          ...databaseConfig,
-        }
+        data = databaseConfig
       } else if (backend.value === 'built-in-database') {
-        data = {
-          ...basicData,
-          ...builtConfig,
-        }
+        data = builtConfig
       }
+      data.backend = backend.value
+      data.mechanism = mechanism.value
       await createAuthn(data)
       this.$message.success(this.$t('Base.createSuccess'))
       this.$router.push({ name: 'authentication' })

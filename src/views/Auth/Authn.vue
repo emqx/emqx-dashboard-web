@@ -62,10 +62,8 @@ export default defineComponent({
       })
       if (res) {
         authnList.value = res.map((item) => ({
-          mechanism: item.mechanism,
-          backend: item.backend,
+          ...item,
           img: require(`@/assets/img/${item.backend}.png`),
-          enable: item.enable,
         }))
       }
       lockTable.value = false
@@ -75,7 +73,7 @@ export default defineComponent({
       await updateAuthn(row.id, row)
       loadData()
     }
-    const handleDelete = async function (id) {
+    const handleDelete = async function ({ id }) {
       this.$confirm(this.$t('General.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
@@ -87,11 +85,10 @@ export default defineComponent({
         })
         .catch(() => {})
     }
-    const handleSetting = function (id) {
-      console.log(id)
+    const handleSetting = function ({ id }) {
       this.$router.push({ path: `/authentication/detail/${id}` })
     }
-    const handleMove = async function (id, position) {
+    const handleMove = async function ({ id }, position) {
       const data = {
         position,
       }
