@@ -58,4 +58,8 @@ export function deleteAuthnUser(id, userId) {
   )
 }
 
+export function moveAuthn(id, body) {
+  return http.post(`/authentication/${encodeURIComponent(id)}/move`, body)
+}
+
 export default {}
