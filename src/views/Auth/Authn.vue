@@ -13,7 +13,12 @@
     </div>
     <el-table class="auth-table" :data="authnList" v-loading.lock="lockTable">
       <el-table-column prop="mechanism" :label="$t('Auth.mechanism')"></el-table-column>
-      <el-table-column prop="backend" :label="$t('Auth.dataSource')"></el-table-column>
+      <el-table-column prop="backend" :label="$t('Auth.dataSource')">
+        <template slot-scope="{ row }">
+          <img :src="row.img" width="48" />
+          <span>{{ row.backend }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="enable" :label="$t('Auth.status')">
         <template slot-scope="{ row }">
           <span :class="['status', { disabled: !row.enable }]">
@@ -52,8 +57,17 @@ export default defineComponent({
     const lockTable = ref(false)
     const loadData = async () => {
       lockTable.value = true
-      const res = await listAuthn()
-      authnList.value = res
+      const res = await listAuthn().catch(() => {
+        lockTable.value = false
+      })
+      if (res) {
+        authnList.value = res.map((item) => ({
+          mechanism: item.mechanism,
+          backend: item.backend,
+          img: require(`@/assets/img/${item.backend}.png`),
+          enable: item.enable,
+        }))
+      }
       lockTable.value = false
     }
     loadData()
@@ -74,6 +88,7 @@ export default defineComponent({
         .catch(() => {})
     }
     const handleSetting = function (id) {
+      console.log(id)
       this.$router.push({ path: `/authentication/detail/${id}` })
     }
     const handleMove = async function (id, position) {
@@ -95,6 +110,6 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './style/authTable.scss';
 </style>

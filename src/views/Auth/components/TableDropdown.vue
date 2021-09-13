@@ -51,6 +51,7 @@ export default defineComponent({
     const handleCommand = function (row, command) {
       switch (command) {
         case 'setting':
+          console.log(row)
           this.$emit('setting', row.id)
           break
         case 'disable':
