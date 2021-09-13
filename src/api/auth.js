@@ -44,4 +44,18 @@ export function loadAuthn(id) {
   return http.get(`/authentication/${encodeURIComponent(id)}`)
 }
 
+export function createAuthnUsers(id, body) {
+  return http.post(`/authentication/${encodeURIComponent(id)}/users`, body)
+}
+
+export function loadAuthnUsers(id) {
+  return http.get(`/authentication/${encodeURIComponent(id)}/users`)
+}
+
+export function deleteAuthnUser(id, userId) {
+  return http.delete(
+    `/authentication/${encodeURIComponent(id)}/users/${encodeURIComponent(userId)}`,
+  )
+}
+
 export default {}
