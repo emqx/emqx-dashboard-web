@@ -87,6 +87,10 @@ export default {
     zh: '认证配置',
     en: 'Authentication configuration',
   },
+  dataConfig: {
+    zh: '数据管理',
+    en: 'Data Management',
+  },
   testSuccess: {
     zh: '测试通过，您的配置可以正常使用',
     en: 'Test success, your configuration works fine',

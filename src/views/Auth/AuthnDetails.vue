@@ -26,8 +26,15 @@
         </el-button>
       </div>
     </div>
-    <el-tabs>
-      <el-tab-pane label="配置参数" :lazy="true">
+    <el-tabs v-if="currBackend">
+      <el-tab-pane
+        v-if="currBackend === 'built-in-database'"
+        :label="$t('Auth.dataConfig')"
+        :lazy="true"
+      >
+        <data-manager v-model="dataManager" :field="configData.user_id_type"></data-manager>
+      </el-tab-pane>
+      <el-tab-pane :label="$t('Auth.authConfig')" :lazy="true">
         <el-card shadow="never" v-loading.lock="authnDetailLock">
           <template v-if="!authnDetailLock">
             <database-config
@@ -60,12 +67,13 @@
 </template>
 
 <script>
-import { computed, defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, reactive, ref } from '@vue/composition-api'
 import { loadAuthn } from '@/api/auth'
 import BackButton from '@/components/BackButton.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import HttpConfig from './components/HttpConfig.vue'
 import BuiltInConfig from './components/BuiltInConfig.vue'
+import DataManager from './components/DataManager.vue'
 import { updateAuthn, deleteAuthn } from '@/api/auth'
 import useAuthnCreate from '@/hooks/useAuthnCreate'
 
@@ -76,6 +84,7 @@ export default defineComponent({
     BackButton,
     HttpConfig,
     BuiltInConfig,
+    DataManager,
   },
   setup() {
     const authnDetailLock = ref(false)
@@ -91,6 +100,11 @@ export default defineComponent({
         return require(`@/assets/img/${currBackend.value}.png`)
       }
       return ''
+    })
+    const dataManager = reactive({
+      user_id: '',
+      password: '',
+      is_superuser: false,
     })
     const loadData = async function () {
       authnDetailLock.value = true
@@ -140,6 +154,7 @@ export default defineComponent({
       currImg,
       titleMap,
       configData,
+      dataManager,
       authnDetailLock,
       handleUpdate,
       handleDelete,
