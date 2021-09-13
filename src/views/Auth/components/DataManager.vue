@@ -12,7 +12,7 @@
             <el-input
               v-model="dataManager.password"
               type="password"
-              placeholder="password"
+              :placeholder="$t('General.password')"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -40,6 +40,10 @@
               <i class="el-icon-more"></i>
             </el-button>
             <el-dropdown-menu>
+              <el-dropdown-item command="edit">
+                <i class="el-icon-edit-outline"></i>
+                {{ $t('Base.edit') }}
+              </el-dropdown-item>
               <el-dropdown-item command="delete">
                 <i class="el-icon-delete"></i>
                 {{ $t('Base.delete') }}
@@ -49,12 +53,38 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog :title="$t('Base.edit')" :visible.sync="dialogVisible">
+      <el-form ref="recordForm" :model="record" :rules="getRules()">
+        <el-form-item prop="username" :label="field">
+          <el-input v-model="record.user_id" disabled></el-input>
+        </el-form-item>
+        <el-form-item prop="password" :label="$t('General.password')">
+          <el-input v-model="record.password" type="password"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <div>
+            <el-checkbox v-model="record.is_superuser" label="is_superuser" border></el-checkbox>
+          </div>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-align-footer">
+        <el-button plain size="small" @click="dialogVisible = false">
+          {{ $t('Base.cancel') }}
+        </el-button>
+
+        <el-button type="primary" size="small" @click="handleUpdate">
+          {{ $t('Base.update') }}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { computed, defineComponent, reactive, ref } from '@vue/composition-api'
-import { loadAuthnUsers, createAuthnUsers, deleteAuthnUser } from '@/api/auth'
+import { loadAuthnUsers, createAuthnUsers, deleteAuthnUser, updateAuthnUser } from '@/api/auth'
 
 export default defineComponent({
   name: 'DataManager',
@@ -70,19 +100,33 @@ export default defineComponent({
       password: '',
       is_superuser: false,
     })
+    let record = ref({})
     const tableData = ref([])
     const lockTable = ref(false)
+    const dialogVisible = ref(false)
     const id = computed(function () {
       return this.$route.params.id
     })
     const loadData = async (id) => {
       lockTable.value = true
-      const res = await loadAuthnUsers(id)
-      tableData.value = res
+      const res = await loadAuthnUsers(id).catch(() => {
+        lockTable.value = false
+      })
+      if (res) {
+        tableData.value = res
+      }
       lockTable.value = false
     }
     loadData(id.value)
+    const getRules = function () {
+      return {
+        password: [{ required: true, message: this.$t('General.pleaseEnterPassword') }],
+      }
+    }
     const handleAdd = async function () {
+      if (dataManager.user_id === '' || dataManager.password === '') {
+        return
+      }
       await createAuthnUsers(id.value, dataManager)
       this.$message.success(this.$t('Base.createSuccess'))
       dataManager.user_id = ''
@@ -102,14 +146,40 @@ export default defineComponent({
             loadData(id.value)
           })
           .catch(() => {})
+      } else if (command === 'edit') {
+        dialogVisible.value = true
+        record.value = {
+          user_id: row.user_id,
+          is_superuser: row.is_superuser,
+          password: '',
+        }
       }
     }
+    const handleUpdate = async function () {
+      let validation = await this.$refs.recordForm.validate().catch(() => {})
+      if (!validation) {
+        return
+      }
+      const { password, is_superuser, user_id } = record.value
+      const data = {
+        password: password,
+        is_superuser: is_superuser,
+      }
+      await updateAuthnUser(id.value, user_id, data)
+      dialogVisible.value = false
+      this.$message.success(this.$t('Base.updateSuccess'))
+      loadData(id.value)
+    }
     return {
+      dialogVisible,
       tableData,
       lockTable,
       dataManager,
+      record,
+      handleUpdate,
       handleAdd,
       handleCommand,
+      getRules,
     }
   },
 })

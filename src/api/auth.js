@@ -58,6 +58,13 @@ export function deleteAuthnUser(id, userId) {
   )
 }
 
+export function updateAuthnUser(id, userId, body) {
+  return http.put(
+    `/authentication/${encodeURIComponent(id)}/users/${encodeURIComponent(userId)}`,
+    body,
+  )
+}
+
 export function moveAuthn(id, body) {
   return http.post(`/authentication/${encodeURIComponent(id)}/move`, body)
 }
