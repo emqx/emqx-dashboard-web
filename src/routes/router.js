@@ -16,6 +16,8 @@ import Advanced from '@/views/Advanced/Advanced'
 import TopicMetrics from '@/views/Tools/TopicMetrics'
 import Login from '@/views/Base/Login'
 import Blacklist from '@/views/General/Blacklist'
+import Gateway from '@/views/Gateway/Gateway'
+import GatewayDetail from '@/views/Gateway/GatewayDetail'
 
 let routes = [
   {
@@ -230,6 +232,7 @@ let routes = [
       },
     ],
   },
+
   // 工具
   {
     path: '/tools',
@@ -278,6 +281,7 @@ let routes = [
   //     },
   //   ],
   // },
+
   // 黑名单
   {
     path: '/blacklist',
@@ -310,55 +314,77 @@ let routes = [
       },
     ],
   },
+  // {
+  //   path: '/general',
+  //   component: Layout,
+  //   redirect: '/general/application',
+  //   meta: {
+  //     hideKey: 'general',
+  //     authRequired: true,
+  //     subMenu: true,
+  //   },
+  //   children: [
+  // 插件
+  // {
+  //   path: 'plugins',
+  //   component: { template: `<router-view></router-view>` },
+  //   meta: {
+  //     hideKey: 'plugins',
+  //     authRequired: true,
+  //   },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'plugins',
+  //       component: () => import('@/views/Plugins/Plugins'),
+  //     },
+  //     {
+  //       path: 'plugins/:pluginName',
+  //       name: 'pluginsName',
+  //       component: () => import('@/views/Plugins/PluginsManage'),
+  //     },
+  //   ],
+  // },
+  // 应用
+  // {
+  //   path: 'application',
+  //   component: () => import('@/views/General/Application'),
+  //   meta: {
+  //     hideKey: 'general',
+  //     authRequired: true,
+  //   },
+  // },
+  // // 备份
+  // {
+  //   path: 'backup',
+  //   component: () => import('@/views/General/Backup'),
+  //   meta: {
+  //     hideKey: 'general',
+  //     authRequired: true,
+  //   },
+  // },
+  //   ],
+  // },
+
+  //gateway
   {
-    path: '/general',
+    path: '/gateway',
     component: Layout,
-    redirect: '/general/application',
     meta: {
-      hideKey: 'general',
+      hideKey: 'gateway',
       authRequired: true,
-      subMenu: true,
     },
     children: [
-      // 插件
-      // {
-      //   path: 'plugins',
-      //   component: { template: `<router-view></router-view>` },
-      //   meta: {
-      //     hideKey: 'plugins',
-      //     authRequired: true,
-      //   },
-      //   children: [
-      //     {
-      //       path: '',
-      //       name: 'plugins',
-      //       component: () => import('@/views/Plugins/Plugins'),
-      //     },
-      //     {
-      //       path: 'plugins/:pluginName',
-      //       name: 'pluginsName',
-      //       component: () => import('@/views/Plugins/PluginsManage'),
-      //     },
-      //   ],
-      // },
-      // 应用
-      // {
-      //   path: 'application',
-      //   component: () => import('@/views/General/Application'),
-      //   meta: {
-      //     hideKey: 'general',
-      //     authRequired: true,
-      //   },
-      // },
-      // // 备份
-      // {
-      //   path: 'backup',
-      //   component: () => import('@/views/General/Backup'),
-      //   meta: {
-      //     hideKey: 'general',
-      //     authRequired: true,
-      //   },
-      // },
+      {
+        path: '',
+        name: 'gateway',
+        component: Gateway,
+      },
+      {
+        path: 'detail/:name',
+        name: 'gateway-detail',
+        component: GatewayDetail,
+      },
     ],
   },
   // Auth

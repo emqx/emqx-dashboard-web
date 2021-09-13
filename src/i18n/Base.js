@@ -87,6 +87,10 @@ export default {
     zh: '删除',
     en: 'Delete',
   },
+  stop: {
+    zh: '停用',
+    en: 'Stop',
+  },
   reset: {
     zh: '重置',
     en: 'Reset',

@@ -211,6 +211,22 @@ code {
   }
 }
 
+.g-coap::before {
+  background-image: url('~@/assets/gateway/coap.png');
+}
+.g-lwm2m::before {
+  background-image: url('~@/assets/gateway/lwm2m.png');
+}
+.g-mqttsn::before {
+  background-image: url('~@/assets/gateway/mqttsn.png');
+}
+.g-stomp::before {
+  background-image: url('~@/assets/gateway/stomp.png');
+}
+.g-tcp::before {
+  background-image: url('~@/assets/gateway/tcp.png');
+}
+
 .section-header {
   font-size: 24px;
   font-weight: 700;
@@ -253,5 +269,11 @@ code {
 
   &:not(:first-of-type) {
     margin-top: 30px;
+  }
+}
+
+.no-dropdown-arrow {
+  .popper__arrow {
+    display: none;
   }
 }

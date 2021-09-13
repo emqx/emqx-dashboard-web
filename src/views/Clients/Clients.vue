@@ -164,7 +164,7 @@
 import { disconnectClient, listClients } from '@/api/clients'
 import { loadNodes } from '@/api/common'
 import moment from 'moment'
-import CommonPagination from '../../components/commonPagination.vue'
+import CommonPagination from '@/components/commonPagination.vue'
 
 export default {
   name: 'Clients',
@@ -178,7 +178,7 @@ export default {
       showMoreQuery: false,
       tableData: [],
       lockTable: true,
-      hasnext: false,
+      // hasnext: false,
       params: {},
       currentNodes: [],
       fuzzyParams: {
@@ -186,44 +186,44 @@ export default {
       },
       // selectedClients: [],
       protoNames: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M'],
-      qulifiedKeys: [
-        'awaiting_rel',
-        'clean_start',
-        'clientid',
-        'connected',
-        'connected_at',
-        'created_at',
-        'expiry_interval',
-        'heap_size',
-        'inflight',
-        'ip_address',
-        'is_bridge',
-        'keepalive',
-        'mailbox_len',
-        'max_awaiting_rel',
-        'max_inflight',
-        'max_mqueue',
-        'max_subscriptions',
-        'mountpoint',
-        'mqueue_dropped',
-        'mqueue_len',
-        'node',
-        'port',
-        'proto_name',
-        'proto_ver',
-        'recv_cnt',
-        'recv_msg',
-        'recv_oct',
-        'recv_pkt',
-        'reductions',
-        'send_cnt',
-        'send_msg',
-        'send_oct',
-        'send_pkt',
-        'subscriptions_cnt',
-        'username',
-        'zone',
-      ],
+      // qulifiedKeys: [
+      //   'awaiting_rel',
+      //   'clean_start',
+      //   'clientid',
+      //   'connected',
+      //   'connected_at',
+      //   'created_at',
+      //   'expiry_interval',
+      //   'heap_size',
+      //   'inflight',
+      //   'ip_address',
+      //   'is_bridge',
+      //   'keepalive',
+      //   'mailbox_len',
+      //   'max_awaiting_rel',
+      //   'max_inflight',
+      //   'max_mqueue',
+      //   'max_subscriptions',
+      //   'mountpoint',
+      //   'mqueue_dropped',
+      //   'mqueue_len',
+      //   'node',
+      //   'port',
+      //   'proto_name',
+      //   'proto_ver',
+      //   'recv_cnt',
+      //   'recv_msg',
+      //   'recv_oct',
+      //   'recv_pkt',
+      //   'reductions',
+      //   'send_cnt',
+      //   'send_msg',
+      //   'send_oct',
+      //   'send_pkt',
+      //   'subscriptions_cnt',
+      //   'username',
+      //   'zone',
+      // ],
     }
   },
 
@@ -311,8 +311,7 @@ export default {
         node: node || undefined,
       }
       if (connected_at) {
-        const connectedAtKey = `${comparator}_connected_at`
-        newParams[connectedAtKey] = new Date(connected_at).toISOString()
+        newParams[`${comparator}_connected_at`] = new Date(connected_at).toISOString()
       }
       return newParams
     },

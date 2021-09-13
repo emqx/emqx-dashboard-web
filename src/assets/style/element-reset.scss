@@ -81,6 +81,10 @@
       }
     }
   }
+
+  & + .el-dropdown {
+    margin-left: 10px;
+  }
 }
 
 /* Input */
@@ -279,6 +283,7 @@
 .el-dropdown-menu {
   box-shadow: 0px 2px 2px 0px rgba(43, 56, 95, 0.09);
   border: 1px solid rgba(231, 229, 238, 0.31);
+  border-radius: 2px;
 }
 .el-dropdown-menu__item {
   &.active {

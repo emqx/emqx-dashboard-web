@@ -17,6 +17,10 @@ export function getBasicAuthInfo() {
   return store.state.user
 }
 
+export const caseInsensitiveCompare = (w, k) => {
+  return !!String.prototype.match.call(w, new RegExp(k, 'i'))
+}
+
 export const dateFormat = (date) => {
   return moment(date).format('YYYY-MM-DD HH:mm:ss')
 }
@@ -373,8 +377,8 @@ export function getProgressColor(val, primaryC) {
 
 export const calcPercentage = (n1, n2) => {
   let p = (parseInt(n1) / parseInt(n2)) * 100
-  if (p && p < 1) return 1
-  if (!p) return 0
+  if (p < 1) return 1
+  if (null == p) return 0
   return p
 }
 

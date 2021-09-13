@@ -139,6 +139,10 @@ export default {
     zh: '应用',
     en: 'Application',
   },
+  gateway: {
+    zh: 'Gateway',
+    en: 'Gateway',
+  },
   blacklist: {
     zh: '黑名单',
     en: 'Blacklist',
