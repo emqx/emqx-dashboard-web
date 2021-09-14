@@ -76,4 +76,21 @@
       margin-bottom: 22px;
     }
   }
+  &.auth-details {
+    .section-header__block {
+      display: flex;
+      align-items: center;
+      & > div {
+        margin-right: 20px;
+      }
+    }
+    .section-header__title {
+      margin-bottom: 8px;
+    }
+    .el-tabs {
+      .el-tabs__header {
+        margin-bottom: 24px;
+      }
+    }
+  }
 }

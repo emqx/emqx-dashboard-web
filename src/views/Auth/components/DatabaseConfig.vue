@@ -195,7 +195,7 @@
             <el-form-item :label="$t('Auth.superuserField')">
               <el-input
                 v-model="databaseConfig.is_superuser_field"
-                placeholder="is_superuser"
+                :placeholder="$t('Auth.isSuperuser')"
               ></el-input>
             </el-form-item>
           </el-col>

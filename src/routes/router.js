@@ -436,6 +436,11 @@ let routes = [
         name: 'authorizationSetting',
         component: () => import('@/views/Auth/AuthzSetting'),
       },
+      {
+        path: 'detail/:type',
+        name: 'authorizationDetail',
+        component: () => import('@/views/Auth/AuthzDetails'),
+      },
     ],
   },
   // // 设置

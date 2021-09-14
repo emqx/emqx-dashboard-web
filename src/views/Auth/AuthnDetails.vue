@@ -1,5 +1,5 @@
 <template>
-  <div class="auth authn-details app-wrapper">
+  <div class="auth auth-details app-wrapper">
     <back-button back-url="/authentication">
       {{ $t('Auth.backAuthnList') }}
     </back-button>
@@ -21,7 +21,7 @@
         <el-button type="danger" plain size="small" @click="handleDelete">
           {{ $t('Base.delete') }}
         </el-button>
-        <el-button size="small" plain @click="handleUpdate(configData.enable)">
+        <el-button size="small" plain @click="handleUpdate(configData)">
           {{ configData.enable ? $t('Auth.disable') : $t('Auth.enable') }}
         </el-button>
       </div>
@@ -92,7 +92,7 @@ export default defineComponent({
     const id = computed(function () {
       return this.$route.params.id
     })
-    let configData = ref({
+    const configData = ref({
       ssl: { enable: false },
     })
     const currBackend = ref('')
@@ -124,14 +124,14 @@ export default defineComponent({
       'built-in-database': 'Built in Database',
     }
     loadData()
-    const handleUpdate = async function (isEnable) {
+    const handleUpdate = async function ({ enable }) {
       const { id } = configData.value
       if (currBackend.value === 'http-server') {
         const { processHttpConfig } = useAuthnCreate()
         configData.value = processHttpConfig({}, { ...configData.value })
       }
-      if (isEnable !== undefined) {
-        configData.value.enable = !isEnable
+      if (enable !== undefined) {
+        configData.value.enable = !enable
       }
       await updateAuthn(id, configData.value)
       this.$message.success(this.$t('Base.updateSuccess'))
