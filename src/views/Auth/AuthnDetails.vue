@@ -120,6 +120,7 @@ export default defineComponent({
     }
     const titleMap = {
       mysql: 'MySQL',
+      postgresql: 'PostgreSQL',
       'http-server': 'HTTP Server',
       'built-in-database': 'Built in Database',
     }

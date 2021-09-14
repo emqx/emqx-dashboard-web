@@ -158,7 +158,7 @@
           </el-col>
         </el-collapse-transition>
         <template v-if="authType === 'authn'">
-          <el-col v-if="isMySQL || isPgSQL" :span="12">
+          <el-col v-if="isMySQL" :span="12">
             <el-form-item :label="$t('Auth.queryTimeout')">
               <el-input v-model.number="databaseConfig.query_timeout"></el-input>
             </el-form-item>

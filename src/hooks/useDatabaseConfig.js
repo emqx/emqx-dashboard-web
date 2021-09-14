@@ -48,9 +48,9 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
     databaseConfig.query = defaultContent.value
   }
   const setPgSql = () => {
-    databaseConfig.server = '127.0.0.1:5432'
-    databaseConfig.query = defaultContent.value
     if (authType === 'authn') {
+      defaultContent.value =
+        "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1"
       helpContent.value = `
         CREATE TABLE mqtt_user (
           id SERIAL primary key,
@@ -61,6 +61,8 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
         )
       `
     } else {
+      defaultContent.value =
+        "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1"
       helpContent.value = `
         CREATE TYPE ACTION AS ENUM('publish','subscribe','all');
         CREATE TYPE PERMISSION AS ENUM('allow','deny');
@@ -76,6 +78,9 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
         );
       `
     }
+    databaseConfig.server = '127.0.0.1:5432'
+    databaseConfig.query = defaultContent.value
+    delete databaseConfig.query_timeout
   }
   const setMongoDB = () => {
     databaseConfig.mongo_type = 'single'
