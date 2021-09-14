@@ -243,4 +243,8 @@ export default {
     zh: '启用 Pipelining',
     en: 'Enable Pipelining',
   },
+  isSuperuser: {
+    zh: '是否为超级用户',
+    en: 'is superuser',
+  },
 }

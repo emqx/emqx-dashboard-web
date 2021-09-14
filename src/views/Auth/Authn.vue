@@ -70,7 +70,8 @@ export default defineComponent({
     }
     loadData()
     const handleUpdate = async (row) => {
-      await updateAuthn(row.id, row)
+      const { img, ...data } = row
+      await updateAuthn(row.id, data)
       loadData()
     }
     const handleDelete = async function ({ id }) {

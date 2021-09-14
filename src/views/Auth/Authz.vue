@@ -40,6 +40,7 @@
             @update="handleUpdate"
             @delete="handleDelete"
             @move="handleMove"
+            @setting="handleSetting"
           ></table-dropdown>
         </template>
       </el-table-column>
@@ -75,7 +76,8 @@ export default defineComponent({
     }
     loadData()
     const handleUpdate = async (row) => {
-      await updateAuthz(row.type, row)
+      const { img, ...data } = row
+      await updateAuthz(row.type, data)
       loadData()
     }
     const handleDelete = async function ({ type }) {
@@ -97,12 +99,16 @@ export default defineComponent({
       await moveAuthz(type, data)
       loadData()
     }
+    const handleSetting = function ({ type }) {
+      this.$router.push({ path: `/authorization/detail/${type}` })
+    }
     return {
       lockTable,
       authzList,
       handleUpdate,
       handleDelete,
       handleMove,
+      handleSetting,
     }
   },
 })

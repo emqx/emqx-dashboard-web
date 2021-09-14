@@ -17,7 +17,11 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-checkbox v-model="dataManager.is_superuser" label="is_superuser" border></el-checkbox>
+          <el-checkbox
+            v-model="dataManager.is_superuser"
+            :label="$t('Auth.isSuperuser')"
+            border
+          ></el-checkbox>
         </el-col>
         <el-col :span="2">
           <el-button type="primary" icon="el-icon-plus" @click="handleAdd">
@@ -28,7 +32,7 @@
     </el-row>
     <el-table :data="tableData" v-loading.lock="lockTable">
       <el-table-column prop="user_id" :label="field"></el-table-column>
-      <el-table-column prop="is_superuser" label="is_superuser">
+      <el-table-column prop="is_superuser" :label="$t('Auth.isSuperuser')">
         <template slot-scope="{ row }">
           {{ row.is_superuser ? $t('Base.yes') : $t('Base.no') }}
         </template>
@@ -64,7 +68,11 @@
         </el-form-item>
         <el-form-item>
           <div>
-            <el-checkbox v-model="record.is_superuser" label="is_superuser" border></el-checkbox>
+            <el-checkbox
+              v-model="record.is_superuser"
+              :label="$t('Auth.isSuperuser')"
+              border
+            ></el-checkbox>
           </div>
         </el-form-item>
       </el-form>
