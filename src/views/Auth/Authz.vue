@@ -19,7 +19,12 @@
       </el-button>
     </div>
     <el-table class="auth-table" :data="authzList" v-loading.lock="lockTable">
-      <el-table-column prop="type" :label="$t('Auth.dataSource')"></el-table-column>
+      <el-table-column prop="type" :label="$t('Auth.dataSource')">
+        <template slot-scope="{ row }">
+          <img :src="row.img" width="48" />
+          <span>{{ row.type }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="enable" :label="$t('Auth.status')">
         <template slot-scope="{ row }">
           <span :class="['status', { disabled: !row.enable }]">
@@ -60,7 +65,10 @@ export default defineComponent({
         lockTable.value = false
       })
       if (res) {
-        authzList.value = res.sources
+        authzList.value = res.sources.map((item) => ({
+          ...item,
+          img: require(`@/assets/img/${item.type}.png`),
+        }))
       }
       lockTable.value = false
     }
@@ -91,6 +99,6 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './style/authTable.scss';
 </style>

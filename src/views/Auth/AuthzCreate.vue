@@ -38,6 +38,11 @@
       </div>
       <div v-if="step === 1" class="create-form">
         <file-config v-if="type === 'file'" v-model="fileConfig"></file-config>
+        <database-config
+          v-if="['mysql'].includes(type)"
+          v-model="databaseConfig"
+          :database="type"
+        ></database-config>
         <div class="step-btn">
           <el-button type="primary" @click="handleCreate">
             {{ $t('Base.create') }}
@@ -54,6 +59,7 @@
 <script>
 import { defineComponent, reactive, ref } from '@vue/composition-api'
 import FileConfig from './components/FileConfig.vue'
+import DatabaseConfig from './components/DatabaseConfig.vue'
 import BackButton from '@/components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import useGuide from '@/hooks/useGuide'
@@ -65,6 +71,7 @@ export default defineComponent({
     BackButton,
     GuideBar,
     FileConfig,
+    DatabaseConfig,
   },
   setup() {
     const getGuideList = function () {
@@ -72,12 +79,26 @@ export default defineComponent({
     }
     const type = ref('file')
     const fileConfig = reactive({
-      rules: `{allow, {user, "dashboard"}, subscribe, ["$SYS/#"]}.
+      rules: `{allow, {username, "dashboard"}, subscribe, ["$SYS/#"]}.
 {allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
-{deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
-{allow, all}.`,
+{deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.`,
     })
-    const typeList = ref([{ label: 'File', value: 'file', img: require('@/assets/img/file.png') }])
+    const databaseConfig = reactive({
+      server: '',
+      username: 'root',
+      password: '',
+      database: '',
+      pool_size: 8,
+      auto_reconnect: true,
+      ssl: {
+        enable: false,
+      },
+      sql: '',
+    })
+    const typeList = ref([
+      { label: 'File', value: 'file', img: require('@/assets/img/file.png') },
+      { label: 'MySQL', value: 'mysql', img: require('@/assets/img/mysql.png') },
+    ])
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide()
     const handleCreate = async function () {
       let data = {}
@@ -94,6 +115,7 @@ export default defineComponent({
       type,
       typeList,
       fileConfig,
+      databaseConfig,
       activeGuidesIndex,
       handleNext,
       handleBack,
