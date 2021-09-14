@@ -162,7 +162,7 @@ export default defineComponent({
       'password-based': {
         mysql: 'MySQL',
         // redis: 'Redis',
-        // postgresql: 'PostgreSQL',
+        postgresql: 'PostgreSQL',
         // mongodb: 'MongoDB',
         'built-in-database': 'Built-in database',
         'http-server': 'HTTP',
@@ -210,7 +210,7 @@ export default defineComponent({
           mechanism: mechanism.value,
         }
         data = processHttpConfig(basicData, httpConfig)
-      } else if (backend.value === 'mysql') {
+      } else if (['mysql', 'postgresql'].includes(backend.value)) {
         data = databaseConfig
       } else if (backend.value === 'built-in-database') {
         data = builtConfig
