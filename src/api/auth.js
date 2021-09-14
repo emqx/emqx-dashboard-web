@@ -35,6 +35,10 @@ export function deleteAuthz(type) {
   return http.delete(`/authorization/sources/${encodeURIComponent(type)}`)
 }
 
+export function moveAuthz(type, body) {
+  return http.post(`/authorization/sources/${encodeURIComponent(type)}/move`, body)
+}
+
 export function createAuthn(body) {
   return http.post('/authentication', body)
 }

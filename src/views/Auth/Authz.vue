@@ -39,6 +39,7 @@
             :table-data-len="authzList.length"
             @update="handleUpdate"
             @delete="handleDelete"
+            @move="handleMove"
           ></table-dropdown>
         </template>
       </el-table-column>
@@ -49,7 +50,7 @@
 <script>
 import { defineComponent, ref } from '@vue/composition-api'
 import TableDropdown from './components/TableDropdown.vue'
-import { listAuthz, updateAuthz, deleteAuthz } from '@/api/auth'
+import { listAuthz, updateAuthz, deleteAuthz, moveAuthz } from '@/api/auth'
 
 export default defineComponent({
   name: 'Authz',
@@ -89,11 +90,19 @@ export default defineComponent({
         })
         .catch(() => {})
     }
+    const handleMove = async function ({ type }, position) {
+      const data = {
+        position,
+      }
+      await moveAuthz(type, data)
+      loadData()
+    }
     return {
       lockTable,
       authzList,
       handleUpdate,
       handleDelete,
+      handleMove,
     }
   },
 })
