@@ -41,6 +41,7 @@
               v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(currBackend)"
               :database="currBackend"
               v-model="configData"
+              auth-type="authn"
             ></database-config>
             <http-config
               v-else-if="currBackend === 'http-server'"

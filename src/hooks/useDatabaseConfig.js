@@ -1,9 +1,7 @@
 import { watch, reactive, ref, computed } from '@vue/composition-api'
 
-export default function useDatabaseConfig({ database, value }, { emit }) {
-  const defaultContent = ref(
-    "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1",
-  )
+export default function useDatabaseConfig({ database, value, authType }, { emit }) {
+  const defaultContent = ref('')
   const databaseConfig = reactive(value)
   watch(databaseConfig, (value) => {
     emit('update', value)
@@ -13,18 +11,36 @@ export default function useDatabaseConfig({ database, value }, { emit }) {
   })
   const helpContent = ref('')
   const setMySql = () => {
-    helpContent.value = `
-      CREATE TABLE IF NOT EXISTS 'mqtt_user' (
-        'id' int(11) unsigned NOT NULL AUTO_INCREMENT,
-        'username' varchar(100) DEFAULT NULL,
-        'password' varchar(100) DEFAULT NULL,
-        'salt' varchar(35) DEFAULT NULL,
-        'is_superuser' tinyint(1) DEFAULT 0,
-        'created' datetime DEFAULT NULL,
-        PRIMARY KEY ('id'),
-        UNIQUE KEY 'mqtt_username' ('username')
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-    `
+    if (authType === 'authn') {
+      defaultContent.value =
+        "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1"
+      helpContent.value = `
+        CREATE TABLE IF NOT EXISTS 'mqtt_user' (
+          'id' int(11) unsigned NOT NULL AUTO_INCREMENT,
+          'username' varchar(100) DEFAULT NULL,
+          'password' varchar(100) DEFAULT NULL,
+          'salt' varchar(35) DEFAULT NULL,
+          'is_superuser' tinyint(1) DEFAULT 0,
+          'created' datetime DEFAULT NULL,
+          PRIMARY KEY ('id'),
+          UNIQUE KEY 'mqtt_username' ('username')
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      `
+    } else {
+      defaultContent.value = `SELECT action, permission, topic FROM mqtt_acl where username = '\${username}'`
+      helpContent.value = `
+        CREATE TABLE 'mqtt_acl' (
+          'id' int(11) unsigned NOT NULL AUTO_INCREMENT,
+          'ipaddress' VARCHAR(60) NOT NULL DEFAULT '',
+          'username' VARCHAR(255) NOT NULL DEFAULT '',
+          'clientid' VARCHAR(255) NOT NULL DEFAULT '',
+          'action' ENUM('publish', 'subscribe', 'all') NOT NULL,
+          'permission' ENUM('allow', 'deny') NOT NULL,
+          'topic' VARCHAR(255) NOT NULL DEFAULT '',
+          PRIMARY KEY ('id')
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      `
+    }
     if (id.value) {
       return
     }
@@ -34,15 +50,32 @@ export default function useDatabaseConfig({ database, value }, { emit }) {
   const setPgSql = () => {
     databaseConfig.server = '127.0.0.1:5432'
     databaseConfig.query = defaultContent.value
-    helpContent.value = `
-      CREATE TABLE mqtt_user (
-        id SERIAL primary key,
-        is_superuser boolean,
-        username character varying(100),
-        password_hash character varying(100),
-        salt character varying(40)
-      )
-    `
+    if (authType === 'authn') {
+      helpContent.value = `
+        CREATE TABLE mqtt_user (
+          id SERIAL primary key,
+          is_superuser boolean,
+          username character varying(100),
+          password_hash character varying(100),
+          salt character varying(40)
+        )
+      `
+    } else {
+      helpContent.value = `
+        CREATE TYPE ACTION AS ENUM('publish','subscribe','all');
+        CREATE TYPE PERMISSION AS ENUM('allow','deny');
+
+        CREATE TABLE mqtt_acl (
+          id SERIAL PRIMARY KEY,
+          ipaddress CHARACTER VARYING(60) NOT NULL DEFAULT '',
+          username CHARACTER VARYING(255) NOT NULL DEFAULT '',
+          clientid CHARACTER VARYING(255) NOT NULL DEFAULT '',
+          action ACTION,
+          permission PERMISSION,
+          topic CHARACTER VARYING(255) NOT NULL
+        );
+      `
+    }
   }
   const setMongoDB = () => {
     databaseConfig.mongo_type = 'single'

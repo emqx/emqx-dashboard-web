@@ -42,6 +42,7 @@
           v-if="['mysql'].includes(type)"
           v-model="databaseConfig"
           :database="type"
+          auth-type="authz"
         ></database-config>
         <div class="step-btn">
           <el-button type="primary" @click="handleCreate">
@@ -93,7 +94,7 @@ export default defineComponent({
       ssl: {
         enable: false,
       },
-      sql: '',
+      query: '',
     })
     const typeList = ref([
       { label: 'File', value: 'file', img: require('@/assets/img/file.png') },
@@ -104,6 +105,8 @@ export default defineComponent({
       let data = {}
       if (type.value === 'file') {
         data = fileConfig
+      } else if (type.value === 'mysql') {
+        data = databaseConfig
       }
       data.type = type.value
       await createAuthz(data)

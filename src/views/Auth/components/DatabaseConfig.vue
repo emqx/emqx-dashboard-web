@@ -157,47 +157,49 @@
             </div>
           </el-col>
         </el-collapse-transition>
-        <el-col v-if="isMySQL || isPgSQL" :span="12">
-          <el-form-item :label="$t('Auth.queryTimeout')">
-            <el-input v-model.number="databaseConfig.query_timeout"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col v-if="isMongoDB" :span="12">
-          <el-form-item :label="$t('Auth.passwordHashField')">
-            <el-input
-              v-model="databaseConfig.password_hash_field"
-              placeholder="password_hash"
-            ></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('Auth.passwordHash')">
-            <el-select v-model="databaseConfig.password_hash_algorithm">
-              <el-option v-for="item in HashOptions" :key="item" :value="item"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col v-if="isMongoDB" :span="12">
-          <el-form-item :label="$t('Auth.saltField')">
-            <el-input v-model="databaseConfig.salt_field" placeholder="salt"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('Auth.saltPosition')">
-            <el-select v-model="databaseConfig.salt_position">
-              <el-option value="prefix"></el-option>
-              <el-option value="suffix"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col v-if="isMongoDB" :span="12">
-          <el-form-item :label="$t('Auth.superuserField')">
-            <el-input
-              v-model="databaseConfig.is_superuser_field"
-              placeholder="is_superuser"
-            ></el-input>
-          </el-form-item>
-        </el-col>
+        <template v-if="authType === 'authn'">
+          <el-col v-if="isMySQL || isPgSQL" :span="12">
+            <el-form-item :label="$t('Auth.queryTimeout')">
+              <el-input v-model.number="databaseConfig.query_timeout"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="isMongoDB" :span="12">
+            <el-form-item :label="$t('Auth.passwordHashField')">
+              <el-input
+                v-model="databaseConfig.password_hash_field"
+                placeholder="password_hash"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Auth.passwordHash')">
+              <el-select v-model="databaseConfig.password_hash_algorithm">
+                <el-option v-for="item in HashOptions" :key="item" :value="item"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="isMongoDB" :span="12">
+            <el-form-item :label="$t('Auth.saltField')">
+              <el-input v-model="databaseConfig.salt_field" placeholder="salt"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('Auth.saltPosition')">
+              <el-select v-model="databaseConfig.salt_position">
+                <el-option value="prefix"></el-option>
+                <el-option value="suffix"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-if="isMongoDB" :span="12">
+            <el-form-item :label="$t('Auth.superuserField')">
+              <el-input
+                v-model="databaseConfig.is_superuser_field"
+                placeholder="is_superuser"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </template>
       </el-form>
     </el-row>
   </div>
@@ -226,6 +228,10 @@ export default defineComponent({
     value: {
       required: true,
       type: Object,
+    },
+    authType: {
+      required: true,
+      type: String,
     },
   },
   setup(props, ctx) {
