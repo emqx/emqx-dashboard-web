@@ -375,10 +375,13 @@ export function getProgressColor(val, primaryC) {
   return color
 }
 
-export const calcPercentage = (n1, n2) => {
+export const calcPercentage = (n1, n2, transZero = true) => {
   let p = (parseInt(n1) / parseInt(n2)) * 100
-  if (p < 1) return 1
-  if (null == p) return 0
+  //[0,1)
+  if (p < 1) return transZero ? 1 : Math.round(p)
+  // NaN
+  if (!p) return 0
+  if (p > 100) return 100
   return p
 }
 

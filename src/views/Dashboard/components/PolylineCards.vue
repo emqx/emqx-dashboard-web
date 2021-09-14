@@ -105,11 +105,13 @@ export default {
         this.metricLog[typeName] = this.chartDataFill(1)
         const currentData = this.metricLog[typeName][0]
 
-        data.forEach((item, key) => {
-          if (key > maxLen) return
-          currentData.xData.push(this._formatTime(item.timestamp))
-          currentData.yData.push(item.count)
-        })
+        if (data) {
+          data.forEach((item, key) => {
+            if (key > maxLen) return
+            currentData.xData.push(this._formatTime(item.timestamp))
+            currentData.yData.push(item.count)
+          })
+        }
       })
     },
     clearTimer() {

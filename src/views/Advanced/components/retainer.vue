@@ -301,7 +301,7 @@ export default defineComponent({
           retainerConfig.max_payload_size[1] = newV.payload
         }
         if (newV.release != oldV.release) {
-          retainerConfig.quota_release_interval[1] = newV.release
+          retainerConfig.flow_control.quota_release_interval[1] = newV.release
         }
       },
     )
