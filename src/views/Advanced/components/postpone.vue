@@ -286,9 +286,6 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-.el-form-item ::v-deep .el-form-item__content {
-  margin-right: 10px;
-}
 .el-input-group--append ::v-deep .el-input-group__append {
   width: 110px;
   padding: 0;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="no-tab-wrapper">
     <div class="title-desc">{{ translate('eventTitleDesc') }}</div>
     <div class="section-header">
       <div>{{ translate('configMsg') }}</div>

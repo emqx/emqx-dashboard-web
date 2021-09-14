@@ -499,9 +499,6 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-.el-tab-pane {
-  margin: 10px;
-}
 .el-form-item ::v-deep .el-form-item__content {
   margin-right: 10px;
 }

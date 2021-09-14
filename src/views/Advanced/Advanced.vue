@@ -54,7 +54,7 @@ $mid-menu-width: 160px;
 .sec-header-title {
   font-size: 24px;
   font-weight: 700;
-  padding-bottom: 20px;
+  padding: 0 20px 15px;
 }
 .el-tabs--left ::v-deep {
   .el-tabs__header.is-left {
@@ -66,9 +66,10 @@ $mid-menu-width: 160px;
   }
   .el-tabs__content {
     margin-left: $mid-menu-width;
-    padding: 20px;
+    // padding: 20px;
   }
 }
+
 .item-page ::v-deep {
   .el-tabs__content {
     margin-left: 0;
@@ -84,5 +85,12 @@ $mid-menu-width: 160px;
     font-size: 16px;
     margin-bottom: 10px;
   }
+
+  .el-tab-pane {
+    margin: 20px;
+  }
+}
+.no-tab-wrapper {
+  margin: 20px;
 }
 </style>

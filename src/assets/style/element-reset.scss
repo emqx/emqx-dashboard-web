@@ -324,6 +324,27 @@
     }
   }
 }
+.el-tabs__active-bar {
+  transition-property: all;
+}
+
+.el-tabs.el-tabs--top:not(.el-tabs--card) {
+  .el-tabs__item {
+    &.is-top {
+      padding: 0 0 0 20px;
+    }
+  }
+
+  & .is-top .el-tabs__nav-wrap::after {
+    height: 1px;
+  }
+}
+
+.el-tabs.el-tabs--left:not(.el-tabs--card) {
+  & .is-left .el-tabs__nav-wrap::after {
+    width: 1px;
+  }
+}
 
 /* Icon */
 .el-icon-question {
