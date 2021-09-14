@@ -101,6 +101,7 @@
           v-show="['mysql', 'postgresql', 'mongodb', 'redis'].includes(backend)"
           v-model="databaseConfig"
           :database="backend"
+          auth-type="authn"
         ></database-config>
         <built-in-config
           v-show="backend === 'built-in-database'"
