@@ -32,7 +32,7 @@ export function createAuthz(body) {
 }
 
 export function deleteAuthz(type) {
-  return http.delete(`/authentication/${encodeURIComponent(type)}`)
+  return http.delete(`/authorization/sources/${encodeURIComponent(type)}`)
 }
 
 export function createAuthn(body) {
