@@ -1,5 +1,5 @@
 import { reactive } from '@vue/composition-api'
-import _ from 'lodash'
+import _, { split } from 'lodash'
 
 export default function useAuthCreate() {
   const builtConfig = reactive({
@@ -66,14 +66,41 @@ export default function useAuthCreate() {
     }
     return data
   }
-  const processHttpConfig = (basic, data) => {
+  const getRedisConfig = () => {
+    return {
+      server: '127.0.0.1:6379',
+      servers: '127.0.0.1:6379,127.0.0.2:6379,127.0.0.3:6379',
+      sentinel: 'mysentinel',
+      salt_position: 'prefix',
+      redis_type: 'single',
+      database: 0,
+      auto_reconnect: true,
+      password: '',
+      password_hash_algorithm: 'sha256',
+      pool_size: 8,
+      query: '',
+      ssl: {
+        enable: false,
+      },
+    }
+  }
+  const processHttpConfig = (data) => {
     const tempData = _.cloneDeep(data)
     const { body } = data
     tempData.body = JSON.parse(body)
-    return {
-      ...basic,
-      ...tempData,
+    return tempData
+  }
+  const processRedisConfig = (data) => {
+    const tempData = _.cloneDeep(data)
+    const { redis_type, servers } = data
+    if (redis_type !== 'single') {
+      delete tempData.server
+      tempData.servers = servers.split(',')
+    } else {
+      delete tempData.sentinel
+      delete tempData.servers
     }
+    return tempData
   }
   const factory = (mechanism, backend) => {
     switch (mechanism) {
@@ -84,6 +111,8 @@ export default function useAuthCreate() {
           return getBuiltInConfig('password-based')
         } else if (backend === 'mysql' || backend === 'postgresql') {
           return getDatabaseConfig(backend)
+        } else if (backend === 'redis') {
+          return getRedisConfig()
         }
         break
       case 'scram':
@@ -95,6 +124,7 @@ export default function useAuthCreate() {
   }
   return {
     processHttpConfig,
+    processRedisConfig,
     factory,
   }
 }

@@ -159,11 +159,11 @@ export default defineComponent({
     const isWork = ref(false)
     const testRes = ref(null)
     const configData = ref({})
-    const { processHttpConfig, factory } = useAuthCreate()
+    const { processHttpConfig, processRedisConfig, factory } = useAuthCreate()
     const supportBackendMap = {
       'password-based': {
         mysql: 'MySQL',
-        // redis: 'Redis',
+        redis: 'Redis',
         postgresql: 'PostgreSQL',
         // mongodb: 'MongoDB',
         'built-in-database': 'Built-in database',
@@ -210,11 +210,9 @@ export default defineComponent({
     const handleCreate = async function () {
       let data = {}
       if (backend.value === 'http-server') {
-        const basicData = {
-          backend: backend.value,
-          mechanism: mechanism.value,
-        }
-        data = processHttpConfig(basicData, configData.value)
+        data = processHttpConfig(configData.value)
+      } else if (backend.value === 'redis') {
+        data = processRedisConfig(configData.value)
       } else {
         data = configData.value
       }

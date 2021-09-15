@@ -78,6 +78,9 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
         );
       `
     }
+    if (id.value) {
+      return
+    }
     databaseConfig.server = '127.0.0.1:5432'
     databaseConfig.query = defaultContent.value
   }
@@ -101,12 +104,7 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
     `
   }
   const setRedis = () => {
-    databaseConfig.redis_type = 'single'
-    databaseConfig.server = '127.0.0.1:6379'
-    databaseConfig.sentinel = 'mysentinel'
-    databaseConfig.database = 0
     defaultContent.value = `HMGET mqtt_user:\${username} password_hash`
-    databaseConfig.query = defaultContent.value
     helpContent.value = `
       # sample data
       HMSET mqtt_user:emqx_u password_hash *** salt foo+bar is_superuser 1
@@ -126,6 +124,18 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
       ## only password, enable superuser
       HMGET mqtt_user:emqx_u password_hash is_superuser
     `
+    if (id.value) {
+      const { redis_type, servers } = databaseConfig
+      if (redis_type !== 'single') {
+        databaseConfig.servers = servers.join(',')
+      }
+      return
+    }
+    databaseConfig.redis_type = 'single'
+    databaseConfig.server = '127.0.0.1:6379'
+    databaseConfig.sentinel = 'mysentinel'
+    databaseConfig.database = 0
+    databaseConfig.query = defaultContent.value
   }
   switch (database) {
     case 'mysql':
