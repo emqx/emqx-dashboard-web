@@ -32,7 +32,7 @@
           :span="12"
         >
           <el-form-item :label="$t('Auth.servers')">
-            <el-input v-model="databaseConfig.servers"></el-input>
+            <el-input v-model="databaseConfig.servers" type="textarea"></el-input>
           </el-form-item>
         </el-col>
         <el-col v-else :span="12">

@@ -128,13 +128,16 @@ export default defineComponent({
     }
     loadData()
     const handleUpdate = async function ({ enable }) {
+      const { processHttpConfig, processRedisConfig } = useAuthCreate()
       const { id } = configData.value
+      let data = {}
       if (currBackend.value === 'http-server') {
-        const { processHttpConfig } = useAuthCreate()
-        configData.value = processHttpConfig({}, { ...configData.value })
+        data = processHttpConfig({}, { ...configData.value })
+      } else if (currBackend.value === 'redis') {
+        data = processRedisConfig(configData.value)
       }
       if (enable !== undefined) {
-        configData.value.enable = !enable
+        data.enable = !enable
       }
       await updateAuthn(id, configData.value)
       this.$message.success(this.$t('Base.updateSuccess'))
