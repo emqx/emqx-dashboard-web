@@ -85,12 +85,13 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
     databaseConfig.query = defaultContent.value
   }
   const setMongoDB = () => {
-    databaseConfig.mongo_type = 'single'
-    databaseConfig.server = '127.0.0.1:27017'
-    databaseConfig.topology.connect_timeout_ms = 20000
-    databaseConfig.collection = 'mqtt_user'
-    databaseConfig.selector = `{"username":"\${username}"}`
-    defaultContent.value = databaseConfig.selector
+    defaultContent.value = JSON.stringify(
+      {
+        username: '${mqtt-username}',
+      },
+      null,
+      2,
+    )
     helpContent.value = `
       {
         username: "emqx_user",
@@ -102,6 +103,15 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
 
       db.mqtt_user.findOne({"username": "emqx_user"})
     `
+    if (id.value) {
+      const { mongo_type, servers, selector } = databaseConfig
+      if (mongo_type !== 'single') {
+        databaseConfig.servers = servers.join(',')
+      }
+      databaseConfig.selector = JSON.stringify(selector)
+      return
+    }
+    databaseConfig.selector = defaultContent.value
   }
   const setRedis = () => {
     defaultContent.value = `HMGET mqtt_user:\${username} password_hash`
@@ -131,10 +141,6 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
       }
       return
     }
-    databaseConfig.redis_type = 'single'
-    databaseConfig.server = '127.0.0.1:6379'
-    databaseConfig.sentinel = 'mysentinel'
-    databaseConfig.database = 0
     databaseConfig.query = defaultContent.value
   }
   switch (database) {
@@ -146,8 +152,10 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
       break
     case 'mongodb':
       setMongoDB()
+      break
     case 'redis':
       setRedis()
+      break
   }
   return {
     defaultContent,

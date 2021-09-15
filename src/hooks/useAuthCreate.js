@@ -1,13 +1,6 @@
-import { reactive } from '@vue/composition-api'
-import _, { split } from 'lodash'
+import _ from 'lodash'
 
 export default function useAuthCreate() {
-  const builtConfig = reactive({
-    user_id_type: 'username',
-    password_hash_algorithm: {
-      name: 'sha256',
-    },
-  })
   const getBuiltInConfig = (type) => {
     if (type === 'password-based') {
       return {
@@ -84,6 +77,27 @@ export default function useAuthCreate() {
       },
     }
   }
+  const getMongodbConfig = () => {
+    return {
+      mongo_type: 'single',
+      server: '127.0.0.1:27017',
+      servers: '127.0.0.1:27017,127.0.0.2:27017',
+      database: 'mqtt',
+      collection: 'users',
+      selector: '',
+      password_hash_field: 'password_hash',
+      salt_field: 'salt',
+      password_hash_algorithm: 'sha256',
+      salt_position: 'prefix',
+      pool_size: 8,
+      ssl: {
+        enable: false,
+      },
+      topology: {
+        connect_timeout_ms: 20000,
+      },
+    }
+  }
   const processHttpConfig = (data) => {
     const tempData = _.cloneDeep(data)
     const { body } = data
@@ -102,6 +116,19 @@ export default function useAuthCreate() {
     }
     return tempData
   }
+  const processMongoDBConfig = (data) => {
+    const tempData = _.cloneDeep(data)
+    const { mongo_type, servers, selector } = data
+    if (mongo_type !== 'single') {
+      delete tempData.server
+      tempData.servers = servers.split(',')
+    } else {
+      delete tempData.replica_set_name
+      delete tempData.servers
+    }
+    tempData.selector = JSON.parse(selector)
+    return tempData
+  }
   const factory = (mechanism, backend) => {
     switch (mechanism) {
       case 'password-based':
@@ -113,6 +140,8 @@ export default function useAuthCreate() {
           return getDatabaseConfig(backend)
         } else if (backend === 'redis') {
           return getRedisConfig()
+        } else if (backend === 'mongodb') {
+          return getMongodbConfig()
         }
         break
       case 'scram':
@@ -125,6 +154,7 @@ export default function useAuthCreate() {
   return {
     processHttpConfig,
     processRedisConfig,
+    processMongoDBConfig,
     factory,
   }
 }

@@ -128,18 +128,20 @@ export default defineComponent({
     }
     loadData()
     const handleUpdate = async function ({ enable }) {
-      const { processHttpConfig, processRedisConfig } = useAuthCreate()
+      const { processHttpConfig, processRedisConfig, processMongoDBConfig } = useAuthCreate()
       const { id } = configData.value
       let data = {}
       if (currBackend.value === 'http-server') {
         data = processHttpConfig({}, { ...configData.value })
       } else if (currBackend.value === 'redis') {
         data = processRedisConfig(configData.value)
+      } else if (currBackend.value === 'mongodb') {
+        data = processMongoDBConfig(configData.value)
       }
       if (enable !== undefined) {
         data.enable = !enable
       }
-      await updateAuthn(id, configData.value)
+      await updateAuthn(id, data)
       this.$message.success(this.$t('Base.updateSuccess'))
       this.$router.push({ name: 'authentication' })
     }
