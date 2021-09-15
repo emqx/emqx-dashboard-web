@@ -165,7 +165,7 @@ export default defineComponent({
       needHelp.value = false
     })
     const setDefaultContent = () => {
-      httpConfig.form_data = defaultContent
+      httpConfig.body = defaultContent
     }
     return {
       helpContent,

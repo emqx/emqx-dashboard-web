@@ -80,7 +80,6 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
     }
     databaseConfig.server = '127.0.0.1:5432'
     databaseConfig.query = defaultContent.value
-    delete databaseConfig.query_timeout
   }
   const setMongoDB = () => {
     databaseConfig.mongo_type = 'single'

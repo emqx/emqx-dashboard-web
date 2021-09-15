@@ -42,13 +42,14 @@
           </el-button>
         </el-card>
       </el-tab-pane>
+      <el-tab-pane class="empty-tab"></el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
 import { computed, defineComponent, ref } from '@vue/composition-api'
-import BackButton from '@/components/BackButton.vue'
+import BackButton from './components/BackButton.vue'
 import { loadAuthz, deleteAuthz, updateAuthz } from '@/api/auth'
 import FileConfig from './components/FileConfig.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
