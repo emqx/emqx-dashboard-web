@@ -100,6 +100,7 @@ export default defineComponent({
     field: {
       type: String,
       required: true,
+      default: 'username',
     },
   },
   setup() {
