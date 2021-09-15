@@ -57,6 +57,11 @@
             <el-input v-model="databaseConfig.database"></el-input>
           </el-form-item>
         </el-col>
+        <el-col v-if="isMongoDB" :span="12">
+          <el-form-item label="Collection">
+            <el-input v-model="databaseConfig.collection"></el-input>
+          </el-form-item>
+        </el-col>
         <el-col v-if="!isRedis" :span="12">
           <el-form-item :label="$t('Base.userName')">
             <el-input v-model="databaseConfig.username"></el-input>
@@ -81,7 +86,7 @@
             <el-input v-model.number="databaseConfig.pool_size"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col v-if="!isMongoDB" :span="12">
           <el-form-item :label="$t('Auth.reconnect')">
             <el-select v-model="databaseConfig.auto_reconnect">
               <el-option :value="true" label="True"></el-option>
@@ -117,11 +122,6 @@
         </template>
         <!-- Mongodb -->
         <template v-if="isMongoDB">
-          <el-col :span="24">
-            <el-form-item label="Collection">
-              <el-input v-model="databaseConfig.collection"></el-input>
-            </el-form-item>
-          </el-col>
           <el-col :span="24">
             <el-form-item :label="$t('Auth.selector')">
               <el-input v-model="databaseConfig.selector" type="textarea" :rows="6"></el-input>
