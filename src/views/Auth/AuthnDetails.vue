@@ -49,6 +49,7 @@
             ></http-config>
             <built-in-config
               v-else-if="currBackend === 'built-in-database'"
+              :type="configData.mechanism"
               v-model="configData"
             ></built-in-config>
           </template>
@@ -63,6 +64,7 @@
           </el-button>
         </el-card>
       </el-tab-pane>
+      <el-tab-pane></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -70,13 +72,13 @@
 <script>
 import { computed, defineComponent, reactive, ref } from '@vue/composition-api'
 import { loadAuthn } from '@/api/auth'
-import BackButton from '@/components/BackButton.vue'
+import BackButton from './components/BackButton.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import HttpConfig from './components/HttpConfig.vue'
 import BuiltInConfig from './components/BuiltInConfig.vue'
 import DataManager from './components/DataManager.vue'
 import { updateAuthn, deleteAuthn } from '@/api/auth'
-import useAuthnCreate from '@/hooks/useAuthnCreate'
+import useAuthCreate from '@/hooks/useAuthCreate'
 
 export default defineComponent({
   name: 'AuthnDetails',
@@ -128,7 +130,7 @@ export default defineComponent({
     const handleUpdate = async function ({ enable }) {
       const { id } = configData.value
       if (currBackend.value === 'http-server') {
-        const { processHttpConfig } = useAuthnCreate()
+        const { processHttpConfig } = useAuthCreate()
         configData.value = processHttpConfig({}, { ...configData.value })
       }
       if (enable !== undefined) {
@@ -167,20 +169,4 @@ export default defineComponent({
 
 <style lang="scss">
 @import './style/auth.scss';
-.authn-details {
-  .section-header__block {
-    display: flex;
-    & > div {
-      margin-right: 20px;
-    }
-  }
-  .section-header__title {
-    margin-bottom: 8px;
-  }
-  .el-tabs {
-    .el-tabs__header {
-      margin-bottom: 24px;
-    }
-  }
-}
 </style>

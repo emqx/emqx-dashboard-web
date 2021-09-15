@@ -18,10 +18,10 @@
         </div>
         <el-radio-group v-model="mechanism">
           <el-radio class="mechanism" label="password-based" border> Password-Based </el-radio>
-          <!-- <el-radio class="mechanism" label="jwt" border> JWT </el-radio>
+          <!-- <el-radio class="mechanism" label="jwt" border> JWT </el-radio> -->
           <el-radio class="mechanism" label="scram" border>
             {{ this.$t('Auth.scram') }}
-          </el-radio> -->
+          </el-radio>
         </el-radio-group>
         <p v-if="mechanism === 'password-based'" class="item-description">
           {{ $t('Auth.passwordBasedDesc') }}
@@ -98,16 +98,17 @@
       <!-- Config -->
       <div v-else-if="step === 2">
         <database-config
-          v-show="['mysql', 'postgresql', 'mongodb', 'redis'].includes(backend)"
-          v-model="databaseConfig"
+          v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(backend)"
+          v-model="configData"
           :database="backend"
           auth-type="authn"
         ></database-config>
         <built-in-config
-          v-show="backend === 'built-in-database'"
-          v-model="builtConfig"
+          v-if="backend === 'built-in-database'"
+          v-model="configData"
+          :type="mechanism"
         ></built-in-config>
-        <http-config v-show="backend === 'http-server'" v-model="httpConfig"></http-config>
+        <http-config v-if="backend === 'http-server'" v-model="configData"></http-config>
         <!-- Result -->
         <div v-if="testRes" :class="['create-form', 'result-block', isWork ? 'success' : 'error']">
           <div class="result-title">
@@ -132,14 +133,14 @@
 
 <script>
 import { defineComponent, ref } from '@vue/composition-api'
-import BackButton from '@/components/BackButton.vue'
+import BackButton from './components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import BuiltInConfig from './components/BuiltInConfig.vue'
 import HttpConfig from './components/HttpConfig.vue'
 import useGuide from '@/hooks/useGuide'
 import { createAuthn } from '@/api/auth'
-import useAuthnCreate from '@/hooks/useAuthnCreate'
+import useAuthCreate from '@/hooks/useAuthCreate'
 
 export default defineComponent({
   name: 'AuthnCreate',
@@ -157,7 +158,8 @@ export default defineComponent({
     const others = ref([])
     const isWork = ref(false)
     const testRes = ref(null)
-    const { builtConfig, httpConfig, databaseConfig, processHttpConfig } = useAuthnCreate()
+    const configData = ref({})
+    const { processHttpConfig, factory } = useAuthCreate()
     const supportBackendMap = {
       'password-based': {
         mysql: 'MySQL',
@@ -168,9 +170,9 @@ export default defineComponent({
         'http-server': 'HTTP',
       },
       // jwt: {},
-      // scram: {
-      //   'built-in-database': 'Built-in database',
-      // },
+      scram: {
+        'built-in-database': 'Built-in database',
+      },
     }
     const getGuideList = function () {
       return [this.$t('Auth.mechanism'), this.$t('Auth.dataSource'), this.$t('Auth.config')]
@@ -199,6 +201,9 @@ export default defineComponent({
         databases.value = []
         others.value = []
         getSupportBackend()
+      } else if (step.value === 1) {
+        const data = factory(mechanism.value, backend.value)
+        configData.value = data
       }
     }
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(beforeNext)
@@ -209,11 +214,9 @@ export default defineComponent({
           backend: backend.value,
           mechanism: mechanism.value,
         }
-        data = processHttpConfig(basicData, httpConfig)
-      } else if (['mysql', 'postgresql'].includes(backend.value)) {
-        data = databaseConfig
-      } else if (backend.value === 'built-in-database') {
-        data = builtConfig
+        data = processHttpConfig(basicData, configData.value)
+      } else {
+        data = configData.value
       }
       data.backend = backend.value
       data.mechanism = mechanism.value
@@ -230,9 +233,7 @@ export default defineComponent({
       others,
       isWork,
       testRes,
-      builtConfig,
-      httpConfig,
-      databaseConfig,
+      configData,
       getGuideList,
       handleNext,
       handleBack,

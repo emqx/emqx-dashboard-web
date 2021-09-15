@@ -61,7 +61,7 @@
 import { defineComponent, reactive, ref } from '@vue/composition-api'
 import FileConfig from './components/FileConfig.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
-import BackButton from '@/components/BackButton.vue'
+import BackButton from './components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import useGuide from '@/hooks/useGuide'
 import { createAuthz } from '@/api/auth'

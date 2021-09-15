@@ -57,7 +57,7 @@
 
 <script>
 import { defineComponent, ref } from '@vue/composition-api'
-import BackButton from '@/components/BackButton.vue'
+import BackButton from './components/BackButton.vue'
 import { listAuthzSetting, updateAuthzSetting } from '@/api/auth'
 
 export default defineComponent({
