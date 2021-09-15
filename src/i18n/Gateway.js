@@ -11,7 +11,7 @@ export default {
     zh: '连接',
     en: 'Connections',
   },
-  listener: {
+  listeners: {
     zh: '监听器',
     en: 'Listeners',
   },

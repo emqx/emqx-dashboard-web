@@ -182,7 +182,7 @@ export default {
   position: fixed;
   z-index: 101;
   transition: all 0.3s;
-  border-bottom: 1px solid #eeeef7ff;
+  // border-bottom: 1px solid #eeeef7ff;
 }
 
 .top-submenu {

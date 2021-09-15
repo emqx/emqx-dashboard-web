@@ -9,7 +9,7 @@
       </el-table-column>
       <el-table-column :label="tl('status')">
         <template #default="{ row }">
-          <span>{{ row.status == 'running' ? tl('running') : tl('stopped') }}</span>
+          <span>{{ isRunning(row.status) ? tl('running') : tl('stopped') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="tl('connection')">
@@ -27,19 +27,38 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column :label="tl('listener')" width="80">
+      <el-table-column :label="tl('listeners')" width="80">
         <template #default="{ row }">
           {{ row.listeners.length || 0 }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('Base.operation')">
         <template slot-scope="scope">
-          <el-button size="mini">{{ tl('setting') }}</el-button>
-          <el-button size="mini">{{ tl('auth') }}</el-button>
+          <el-button
+            size="mini"
+            @click="
+              $router.push({
+                name: 'gateway-detail-basic',
+                params: { name: scope.row.name },
+              })
+            "
+            >{{ tl('setting') }}</el-button
+          >
+          <el-button
+            size="mini"
+            @click="
+              $router.push({
+                name: 'gateway-detail-auth',
+                params: { name: scope.row.name },
+              })
+            "
+            >{{ tl('auth') }}</el-button
+          >
           <el-dropdown
             size="small"
             placement="bottom-start"
             @visible-change="dropdownVChange(scope.row)"
+            @command="dropdownHandler"
           >
             <el-button size="mini"
               >{{ tl('more')
@@ -51,8 +70,14 @@
               ></i
             ></el-button>
             <el-dropdown-menu slot="dropdown" class="no-dropdown-arrow">
-              <el-dropdown-item>{{ tl('clients') }}</el-dropdown-item>
-              <el-dropdown-item>{{
+              <el-dropdown-item
+                :command="{
+                  name: 'gateway-detail-clients',
+                  params: { name: scope.row.name },
+                }"
+                >{{ tl('clients') }}</el-dropdown-item
+              >
+              <el-dropdown-item :command="{ name: 'gateway-enable', data: scope.row }">{{
                 isRunning(scope.row.status) ? tl('disable') : tl('enable')
               }}</el-dropdown-item>
             </el-dropdown-menu>
@@ -102,6 +127,20 @@ export default defineComponent({
       return Object.assign(row, { [dropdownExclusiveKey]: !row[dropdownExclusiveKey] })
     }
 
+    const dropdownHandler = function (command) {
+      if (!command) return
+      if (typeof command == 'object') {
+        if (command.name.match(/gateway-detail-.*/i)) {
+          this.$router.push(command)
+          return
+        } else {
+          switch (command.name) {
+            case 'gateway-enable':
+              break
+          }
+        }
+      }
+    }
     onMounted(loadGateway)
 
     return {
@@ -112,6 +151,7 @@ export default defineComponent({
       isRunning,
       dropdownVChange,
       dropdownExclusiveKey,
+      dropdownHandler,
     }
   },
 })
@@ -128,8 +168,5 @@ export default defineComponent({
 .g-title {
   vertical-align: 23px;
   padding: 0 5px;
-}
-::v-deep .el-popper .popper_arrow {
-  display: none;
 }
 </style>

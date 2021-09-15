@@ -181,6 +181,7 @@ export default {
   left: 201px;
   z-index: 100;
   transition: all 0.3s;
+  border-bottom: 1px solid #eeeef7ff;
 }
 
 .header-title {

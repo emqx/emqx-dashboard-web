@@ -97,6 +97,10 @@ export default {
         title: 'blacklist',
         path: '/blacklist',
       },
+      {
+        title: 'gateway',
+        path: '/gateway',
+      },
     ]
 
     let config = [
@@ -122,11 +126,7 @@ export default {
         icon: 'icon-authentication',
         c: authentication,
       },
-      {
-        title: 'gateway',
-        icon: 'icon-gateway',
-        path: '/gateway',
-      },
+
       {
         title: 'system',
         icon: 'icon-system',

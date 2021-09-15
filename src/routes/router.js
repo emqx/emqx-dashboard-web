@@ -18,6 +18,10 @@ import Login from '@/views/Base/Login'
 import Blacklist from '@/views/General/Blacklist'
 import Gateway from '@/views/Gateway/Gateway'
 import GatewayDetail from '@/views/Gateway/GatewayDetail'
+import GatewayDetailBasic from '@/views/Gateway/components/basic'
+import GatewayDetailListener from '@/views/Gateway/components/listeners'
+import GatewayDetailAuth from '@/views/Gateway/components/auth'
+import GatewayDetailClients from '@/views/Gateway/components/clients'
 
 let routes = [
   {
@@ -384,6 +388,28 @@ let routes = [
         path: 'detail/:name',
         name: 'gateway-detail',
         component: GatewayDetail,
+        children: [
+          {
+            path: 'basic',
+            name: 'gateway-detail-basic',
+            component: GatewayDetailBasic,
+          },
+          {
+            path: 'listeners',
+            name: 'gateway-detail-listeners',
+            component: GatewayDetailListener,
+          },
+          {
+            path: 'auth',
+            name: 'gateway-detail-auth',
+            component: GatewayDetailAuth,
+          },
+          {
+            path: 'clients',
+            name: 'gateway-detail-clients',
+            component: GatewayDetailClients,
+          },
+        ],
       },
     ],
   },
