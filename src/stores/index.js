@@ -13,17 +13,17 @@ export default new Vuex.Store({
       const localStorageLanguage = localStorage.getItem('language')
       return localStorageLanguage || browserLanguage || 'en'
     },
-    set lang(val) {
-      localStorage.setItem('language', val)
-      val ?? localStorage.removeItem('language')
-    },
+    // set lang(val) {
+    //   localStorage.setItem('language', val)
+    //   val ?? localStorage.removeItem('language')
+    // },
     get leftBarCollapse() {
       const collapse = localStorage.getItem('leftBarCollapse')
       return collapse === null ? false : JSON.parse(collapse)
     },
-    set leftBarCollapse(val) {
-      localStorage.setItem('leftBarCollapse', val)
-    },
+    // set leftBarCollapse(val) {
+    //   localStorage.setItem('leftBarCollapse', val)
+    // },
     alertCount: 0,
     get selectedModule() {
       return JSON.parse(localStorage.getItem('selectedModule')) || {}
@@ -32,10 +32,10 @@ export default new Vuex.Store({
     get edition() {
       return localStorage.getItem('edition')
     },
-    set edition(v) {
-      localStorage.setItem('edition', v)
-      v ?? localStorage.removeItem('edition')
-    },
+    // set edition(v) {
+    //   localStorage.setItem('edition', v)
+    //   v ?? localStorage.removeItem('edition')
+    // },
   },
   actions: {
     UPDATE_MODULE({ commit }, selectedModule) {
@@ -76,15 +76,20 @@ export default new Vuex.Store({
       state.user = userInfo
     },
     SET_LEFT_BAR_COLLAPSE(state, collapse) {
-      state.leftBarCollapse = collapse
+      localStorage.setItem('leftBarCollapse', !!collapse)
+      state.leftBarCollapse = !!collapse
     },
     SET_LANGUAGE(state, lang) {
+      localStorage.setItem('language', lang)
+      lang ?? localStorage.removeItem('language')
       state.lang = lang
     },
     SET_REQ_CHANGE(state, addOrDone) {
       addOrDone ? ++state.request_queue : --state.request_queue
     },
     UPDATE_EDITION(state, edition) {
+      localStorage.setItem('edition', edition)
+      edition ?? localStorage.removeItem('edition')
       state.edition = edition
     },
   },

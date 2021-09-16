@@ -258,6 +258,10 @@ code {
   i {
     vertical-align: middle;
   }
+
+  & + .el-menu {
+    margin: -20px 0 20px;
+  }
 }
 
 // .section-addition {

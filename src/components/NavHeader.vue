@@ -12,8 +12,6 @@
         <i :class="['iconfont', leftBarCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold']"> </i>
       </div>
     </div>
-
-    <!-- <breadcrumb></breadcrumb> -->
     <div class="header-title">
       {{ $t(`components.${firstPath}`) }}
     </div>
@@ -65,7 +63,7 @@
 
 <script>
 import { loadAlarm } from '@/api/common'
-import { toLogin } from '@/common/utils'
+import { toLogin, setLanguage } from '@/common/utils'
 export default {
   name: 'NavHeader',
   data() {
@@ -103,7 +101,6 @@ export default {
 
   created() {
     this.loadData()
-    this.setHtmlLangAttr(this.language)
     this.setHeaderTitle()
   },
 
@@ -118,15 +115,12 @@ export default {
     visibilityChangeFunc() {
       return document.visibilityState === 'visible' && this.loadData()
     },
-    setHtmlLangAttr(lang) {
-      document.querySelector('html').setAttribute('lang', lang)
-    },
+
     handleLanguageDropdownCommand(command) {
       if (this.language === command) {
         return
       }
-      this.setHtmlLangAttr(command)
-      this.$store.dispatch('SET_LANGUAGE', command)
+      setLanguage(command)
       location.reload()
     },
     async loadData() {

@@ -1,4 +1,3 @@
-/* eslint-disable */
 import Clipboard from 'clipboard'
 import sqlFormatter from 'sql-formatter'
 import parser from 'js-sql-parser'
@@ -6,12 +5,17 @@ import { Message } from 'element-ui'
 
 import store from '@/stores'
 import router from '@/routes'
-// import lang from '@/i18n/index'
 import i18n from '@/i18n'
 import moment from 'moment'
 
-// const locale = store.state.lang
-// const VueI18n = lang[locale]
+export function setLanguage(lang = false) {
+  let language = lang ?? null
+  if (language === false) {
+    language = store.state.lang
+  }
+  store.commit('SET_LANGUAGE', language)
+  document.querySelector('html').setAttribute('lang', language)
+}
 
 export function getBasicAuthInfo() {
   return store.state.user
@@ -64,10 +68,10 @@ export function fillI18n(data = [], keys = [], autoSearch = false) {
   const { lang = 'zh' } = store.state
   const dataIsArray = Array.isArray(data)
 
-  if (typeof keys === 'boolean') {
-    autoSearch = keys
-    keys = []
-  }
+  // if (typeof keys === 'boolean') {
+  //   autoSearch = keys
+  //   keys = []
+  // }
 
   if (dataIsArray) {
     data.forEach((item) => {
