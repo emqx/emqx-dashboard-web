@@ -53,7 +53,7 @@
 
 <script>
 import { login as loginApi } from '@/api/common'
-import { getBasicAuthInfo, setLanguage } from '@/common/utils'
+import { setLanguage } from '@/common/utils'
 // import sha256 from 'crypto-js/sha256'
 
 export default {
@@ -112,10 +112,12 @@ export default {
       // wWidth >lWidth?(this.loginKeepWidth=true):(this.loginKeepWidth=false)
     },
     async login(auto = false) {
-      const { username, token, password } = (auto && getBasicAuthInfo()) || this.record
+      const { username, token, password } = (auto && this.$store.state.user) || this.record
       auto && username && token && this.redirect()
 
       if (!auto) {
+        setLanguage()
+
         this.logining = true
         try {
           let res = await loginApi({

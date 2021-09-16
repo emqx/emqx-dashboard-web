@@ -6,25 +6,17 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: JSON.parse(localStorage.getItem('user')) || {},
-    lang: localStorage.getItem('language') || navigator.language.substring(0, 2) || 'en',
-
-    get leftBarCollapse() {
-      const collapse = localStorage.getItem('leftBarCollapse')
-      return collapse === null ? false : JSON.parse(collapse)
-    },
+    lang: localStorage.getItem('language') || 'en',
+    leftBarCollapse: JSON.parse(localStorage.getItem('leftBarCollapse')) || false,
     alertCount: 0,
-    get selectedModule() {
-      return JSON.parse(localStorage.getItem('selectedModule')) || {}
-    },
+    selectedModule: JSON.parse(localStorage.getItem('selectedModule')) || {},
     request_queue: 0,
     edition: localStorage.getItem('edition'),
   },
   actions: {
     UPDATE_MODULE({ commit }, selectedModule) {
-      localStorage.setItem('selectedModule', JSON.stringify(selectedModule))
       commit('UPDATE_MODULE', selectedModule)
     },
-
     SET_ALERT_COUNT({ commit }, count = 0) {
       commit('SET_ALERT_COUNT', count)
     },
@@ -35,13 +27,7 @@ export default new Vuex.Store({
       commit('SET_LEFT_BAR_COLLAPSE', !!collapse)
     },
     UPDATE_USER_INFO({ commit }, userInfo = {}) {
-      const { logOut = false } = userInfo
-      if (logOut) {
-        localStorage.removeItem('user')
-      } else {
-        localStorage.setItem('user', JSON.stringify(userInfo))
-      }
-      commit('UPDATE_USER_INFO', logOut ? {} : userInfo)
+      commit('UPDATE_USER_INFO', userInfo)
     },
     SET_REQ_CHANGE({ commit }, addOrDone = true) {
       commit('SET_REQ_CHANGE', !!addOrDone)
@@ -49,12 +35,19 @@ export default new Vuex.Store({
   },
   mutations: {
     UPDATE_MODULE(state, selectedModule) {
+      localStorage.setItem('selectedModule', JSON.stringify(selectedModule))
       state.selectedModule = selectedModule
     },
     SET_ALERT_COUNT(state, count) {
       state.alertCount = count
     },
     UPDATE_USER_INFO(state, userInfo) {
+      const { logOut = false } = userInfo
+      if (logOut) {
+        localStorage.removeItem('user')
+      } else {
+        localStorage.setItem('user', JSON.stringify(userInfo))
+      }
       state.user = userInfo
     },
     SET_LEFT_BAR_COLLAPSE(state, collapse) {
@@ -81,11 +74,6 @@ export default new Vuex.Store({
       if (!edition) return 0b10 //default to broker
       let e = String(edition).toLowerCase()
       return e == 'enterprise' ? 0b01 : 0b10
-    },
-    language: (state) => {
-      let { lang } = state
-      const browserLanguage = navigator.language.substring(0, 2)
-      return lang || browserLanguage || 'en'
     },
   },
 })

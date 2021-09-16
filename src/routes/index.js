@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import routes from './router'
-import { toLogin, getBasicAuthInfo } from '../common/utils'
+import store from '@/stores'
+import { toLogin } from '../common/utils'
 
 Vue.use(Router)
 
@@ -15,7 +16,7 @@ router.beforeEach((to, from, next) => {
   const { fullPath, matched } = to
   const { authRequired = false } = matched[0]?.meta || to.meta
   // const { hideLeftBar: hideLeftBarForm = false } = from?.matched[0]?.meta || from.meta
-  const info = getBasicAuthInfo()
+  const info = store.state.user
 
   if (authRequired && !info.token) {
     toLogin(fullPath)

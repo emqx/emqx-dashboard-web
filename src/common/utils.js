@@ -10,16 +10,12 @@ import moment from 'moment'
 
 export function setLanguage(lang = false) {
   let language = lang ?? null
-  if (language === false) {
-    language = store.state.lang
+  if (!language) {
+    language = navigator.language.substring(0, 2)
   }
   store.commit('SET_LANGUAGE', language)
   i18n.locale = language
   document.documentElement.setAttribute('lang', language)
-}
-
-export function getBasicAuthInfo() {
-  return store.state.user
 }
 
 export const caseInsensitiveCompare = (w, k) => {

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { getBasicAuthInfo, toLogin } from '@/common/utils'
+import { toLogin } from '@/common/utils'
 import store from '@/stores'
 import _ from 'lodash'
 
@@ -10,17 +10,13 @@ NProgress.configure({ showSpinner: false, trickleSpeed: 200 })
 let respSet = new Set()
 
 Object.assign(axios.defaults, {
-  headers: {
-    'Content-Type': 'application/json',
-    'Cache-Control': 'no-cache',
-  },
   baseURL: '/api/v5',
-  timeout: 10000,
+  timeout: 20000,
 })
 
 axios.interceptors.request.use(
   (config) => {
-    const user = getBasicAuthInfo()
+    const { user } = store.state
     if (user.token) {
       config.headers = {
         Authorization: 'Bearer ' + user.token,
