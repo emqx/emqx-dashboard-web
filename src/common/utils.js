@@ -14,7 +14,8 @@ export function setLanguage(lang = false) {
     language = store.state.lang
   }
   store.commit('SET_LANGUAGE', language)
-  document.querySelector('html').setAttribute('lang', language)
+  i18n.locale = language
+  document.documentElement.setAttribute('lang', language)
 }
 
 export function getBasicAuthInfo() {

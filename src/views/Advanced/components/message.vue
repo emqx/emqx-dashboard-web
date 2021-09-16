@@ -7,7 +7,7 @@
     <div>
       <el-row v-for="(item, key) in eventMsg" :key="key">
         <el-col :span="15">
-          <div class="item-title">{{ `$events/${key}` }}</div>
+          <div class="item-title">{{ `$event/${key}` }}</div>
           <div class="item-desc">{{ translate(key) }}</div>
         </el-col>
         <el-col :span="5" class="item-switch">

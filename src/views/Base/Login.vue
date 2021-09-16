@@ -112,7 +112,6 @@ export default {
       // wWidth >lWidth?(this.loginKeepWidth=true):(this.loginKeepWidth=false)
     },
     async login(auto = false) {
-      setLanguage(this.$store.state.lang)
       const { username, token, password } = (auto && getBasicAuthInfo()) || this.record
       auto && username && token && this.redirect()
 

@@ -5,37 +5,19 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    get user() {
-      return JSON.parse(localStorage.getItem('user')) || {}
-    },
-    get lang() {
-      const browserLanguage = navigator.language.substring(0, 2)
-      const localStorageLanguage = localStorage.getItem('language')
-      return localStorageLanguage || browserLanguage || 'en'
-    },
-    // set lang(val) {
-    //   localStorage.setItem('language', val)
-    //   val ?? localStorage.removeItem('language')
-    // },
+    user: JSON.parse(localStorage.getItem('user')) || {},
+    lang: localStorage.getItem('language') || navigator.language.substring(0, 2) || 'en',
+
     get leftBarCollapse() {
       const collapse = localStorage.getItem('leftBarCollapse')
       return collapse === null ? false : JSON.parse(collapse)
     },
-    // set leftBarCollapse(val) {
-    //   localStorage.setItem('leftBarCollapse', val)
-    // },
     alertCount: 0,
     get selectedModule() {
       return JSON.parse(localStorage.getItem('selectedModule')) || {}
     },
     request_queue: 0,
-    get edition() {
-      return localStorage.getItem('edition')
-    },
-    // set edition(v) {
-    //   localStorage.setItem('edition', v)
-    //   v ?? localStorage.removeItem('edition')
-    // },
+    edition: localStorage.getItem('edition'),
   },
   actions: {
     UPDATE_MODULE({ commit }, selectedModule) {
@@ -99,6 +81,11 @@ export default new Vuex.Store({
       if (!edition) return 0b10 //default to broker
       let e = String(edition).toLowerCase()
       return e == 'enterprise' ? 0b01 : 0b10
+    },
+    language: (state) => {
+      let { lang } = state
+      const browserLanguage = navigator.language.substring(0, 2)
+      return lang || browserLanguage || 'en'
     },
   },
 })

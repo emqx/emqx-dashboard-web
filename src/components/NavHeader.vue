@@ -29,10 +29,10 @@
         <div class="user-info func-item">
           <i class="iconx icon-globe"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="en" :class="{ active: language === 'en' }">
+            <el-dropdown-item command="en" :class="{ active: lang === 'en' }">
               English
             </el-dropdown-item>
-            <el-dropdown-item command="zh" :class="{ active: language === 'zh' }">
+            <el-dropdown-item command="zh" :class="{ active: lang === 'zh' }">
               中文
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -41,7 +41,7 @@
 
       <el-dropdown placement="bottom" @command="handleDropdownCommand">
         <div class="user-info func-item">
-          <span>{{ username }}</span>
+          <span>{{ user.username }}</span>
           <el-dropdown-menu slot="dropdown">
             <!-- <el-dropdown-item command="general/application">{{
               $t('components.applicationManagement')
@@ -64,6 +64,8 @@
 <script>
 import { loadAlarm } from '@/api/common'
 import { toLogin, setLanguage } from '@/common/utils'
+import { mapState } from 'vuex'
+
 export default {
   name: 'NavHeader',
   data() {
@@ -72,25 +74,14 @@ export default {
     }
   },
   computed: {
-    alertCount() {
-      return this.$store.state.alertCount
-    },
-    leftBarCollapse() {
-      return this.$store.state.leftBarCollapse
-    },
+    ...mapState(['alertCount', 'leftBarCollapse', 'user', 'lang']),
 
-    username() {
-      return this.$store.state.user.username
-    },
     alertText() {
       return this.alertCount > 0
         ? `${this.$t('components.theSystemHas')} ${this.alertCount} ${this.$t(
             'components.noteAlertClickView',
           )}`
         : this.$t('components.noWarning')
-    },
-    language() {
-      return this.$store.state.lang
     },
   },
   watch: {
@@ -102,6 +93,7 @@ export default {
   created() {
     this.loadData()
     this.setHeaderTitle()
+    setLanguage(this.lang)
   },
 
   mounted() {
@@ -121,7 +113,6 @@ export default {
         return
       }
       setLanguage(command)
-      location.reload()
     },
     async loadData() {
       const alert = await loadAlarm().catch(() => {})
