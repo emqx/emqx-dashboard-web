@@ -61,10 +61,12 @@ export default defineComponent({
         lockTable.value = false
       })
       if (res) {
-        authnList.value = res.map((item) => ({
-          ...item,
-          img: require(`@/assets/img/${item.backend}.png`),
-        }))
+        authnList.value = res.map((item) => {
+          if (item.mechanism !== 'jwt') {
+            item.img = require(`@/assets/img/${item.backend}.png`)
+          }
+          return item
+        })
       }
       lockTable.value = false
     }

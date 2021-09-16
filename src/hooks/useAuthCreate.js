@@ -98,6 +98,17 @@ export default function useAuthCreate() {
       },
     }
   }
+  const getJwtConfig = () => {
+    return {
+      use_jwks: false,
+      algorithm: 'hmac-based',
+      secret: 'emqxsecret',
+      secret_base64_encoded: false,
+      endpoint: 'http://127.0.0.1:8080',
+      refresh_interval: 300,
+      verify_claims: {},
+    }
+  }
   const processHttpConfig = (data) => {
     const tempData = _.cloneDeep(data)
     const { body } = data
@@ -129,6 +140,35 @@ export default function useAuthCreate() {
     tempData.selector = JSON.parse(selector)
     return tempData
   }
+  const processJwtConfig = (data) => {
+    const {
+      use_jwks,
+      algorithm,
+      secret,
+      secret_base64_encoded,
+      certificate,
+      endpoint,
+      refresh_interval,
+      verify_claims,
+    } = data
+    const tempData = {
+      use_jwks,
+      verify_claims,
+    }
+    if (use_jwks) {
+      tempData.endpoint = endpoint
+      tempData.refresh_interval = refresh_interval
+    } else {
+      tempData.algorithm = algorithm
+      if (algorithm === 'hmac-based') {
+        tempData.secret = secret
+        tempData.secret_base64_encoded = secret_base64_encoded
+      } else if (algorithm === 'public-key') {
+        tempData.certificate = certificate
+      }
+    }
+    return tempData
+  }
   const factory = (mechanism, backend) => {
     switch (mechanism) {
       case 'password-based':
@@ -149,12 +189,40 @@ export default function useAuthCreate() {
           return getBuiltInConfig('scram')
         }
         break
+      case 'jwt':
+        return getJwtConfig()
     }
+  }
+  const create = (config, backend, mechanism) => {
+    let data = {}
+    if (mechanism === 'jwt') {
+      data = processJwtConfig(config)
+    } else {
+      switch (backend) {
+        case 'http-server':
+          data = processHttpConfig(config)
+          break
+        case 'redis':
+          data = processRedisConfig(config)
+          break
+        case 'mongodb':
+          data = processMongoDBConfig(config)
+          break
+        default:
+          data = _.cloneDeep(config)
+          break
+      }
+      data.backend = backend
+    }
+    data.mechanism = mechanism
+    return data
   }
   return {
     processHttpConfig,
     processRedisConfig,
     processMongoDBConfig,
+    processJwtConfig,
     factory,
+    create,
   }
 }

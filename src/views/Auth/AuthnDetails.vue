@@ -6,11 +6,11 @@
     <div class="section-header" v-loading.lock="authnDetailLock">
       <div class="section-header__block">
         <div>
-          <img :src="currImg" width="56px" />
+          <img v-if="configData.mechanism !== 'jwt'" :src="currImg" width="56px" />
         </div>
         <div>
           <div class="section-header__title">
-            {{ titleMap[currBackend] }}
+            {{ titleMap[currBackend] || 'JWT' }}
           </div>
           <el-tag type="info" size="mini">
             {{ configData.mechanism }}
@@ -26,7 +26,7 @@
         </el-button>
       </div>
     </div>
-    <el-tabs v-if="currBackend">
+    <el-tabs v-if="!authnDetailLock">
       <el-tab-pane
         v-if="currBackend === 'built-in-database'"
         :label="$t('Auth.dataConfig')"
@@ -35,23 +35,26 @@
         <data-manager v-model="dataManager" :field="configData.user_id_type"></data-manager>
       </el-tab-pane>
       <el-tab-pane :label="$t('Auth.config')" :lazy="true">
-        <el-card shadow="never" v-loading.lock="authnDetailLock">
+        <el-card shadow="never">
           <template v-if="!authnDetailLock">
-            <database-config
-              v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(currBackend)"
-              :database="currBackend"
-              v-model="configData"
-              auth-type="authn"
-            ></database-config>
-            <http-config
-              v-else-if="currBackend === 'http-server'"
-              v-model="configData"
-            ></http-config>
-            <built-in-config
-              v-else-if="currBackend === 'built-in-database'"
-              :type="configData.mechanism"
-              v-model="configData"
-            ></built-in-config>
+            <template v-if="configData.mechanism !== 'jwt'">
+              <database-config
+                v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(currBackend)"
+                :database="currBackend"
+                v-model="configData"
+                auth-type="authn"
+              ></database-config>
+              <http-config
+                v-else-if="currBackend === 'http-server'"
+                v-model="configData"
+              ></http-config>
+              <built-in-config
+                v-else-if="currBackend === 'built-in-database'"
+                :type="configData.mechanism"
+                v-model="configData"
+              ></built-in-config>
+            </template>
+            <jwt-config v-else v-model="configData"></jwt-config>
           </template>
           <el-button type="primary" @click="handleUpdate">
             {{ $t('Base.update') }}
@@ -76,6 +79,7 @@ import BackButton from './components/BackButton.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import HttpConfig from './components/HttpConfig.vue'
 import BuiltInConfig from './components/BuiltInConfig.vue'
+import JwtConfig from './components/JwtConfig.vue'
 import DataManager from './components/DataManager.vue'
 import { updateAuthn, deleteAuthn } from '@/api/auth'
 import useAuthCreate from '@/hooks/useAuthCreate'
@@ -88,6 +92,7 @@ export default defineComponent({
     HttpConfig,
     BuiltInConfig,
     DataManager,
+    JwtConfig,
   },
   setup() {
     const authnDetailLock = ref(false)
@@ -128,16 +133,9 @@ export default defineComponent({
     }
     loadData()
     const handleUpdate = async function ({ enable }) {
-      const { processHttpConfig, processRedisConfig, processMongoDBConfig } = useAuthCreate()
+      const { create } = useAuthCreate()
       const { id } = configData.value
-      let data = {}
-      if (currBackend.value === 'http-server') {
-        data = processHttpConfig({}, { ...configData.value })
-      } else if (currBackend.value === 'redis') {
-        data = processRedisConfig(configData.value)
-      } else if (currBackend.value === 'mongodb') {
-        data = processMongoDBConfig(configData.value)
-      }
+      const data = create(configData.value, configData.value.backend, configData.value.mechanism)
       if (enable !== undefined) {
         data.enable = !enable
       }

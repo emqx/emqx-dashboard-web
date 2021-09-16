@@ -247,4 +247,16 @@ export default {
     zh: '是否为超级用户',
     en: 'is superuser',
   },
+  validMethod: {
+    zh: '验证方式',
+    en: 'JWT or JWKS',
+  },
+  algorithm: {
+    zh: '加密方式',
+    en: 'Algorithm',
+  },
+  refreshInterval: {
+    zh: 'JWKS 刷新间隔（毫秒）',
+    en: 'JWKS Refresh Interval (ms)',
+  },
 }

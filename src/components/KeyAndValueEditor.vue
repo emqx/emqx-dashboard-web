@@ -1,7 +1,7 @@
 <template>
   <!-- eslint-disable -->
   <el-table class="key-and-value-editor" :data="tableData" size="mini">
-    <el-table-column prop="key" :label="$t('components.key')" min-width="80px">
+    <el-table-column prop="key" :label="keyValueLabel.key" min-width="80px">
       <template slot-scope="{ row }">
         <el-input
           v-model="row.key"
@@ -12,19 +12,19 @@
         ></el-input>
       </template>
     </el-table-column>
-    <el-table-column prop="value" :label="$t('components.value')" min-width="150px">
+    <el-table-column prop="value" :label="keyValueLabel.value" min-width="150px">
       <template slot-scope="{ row }">
         <el-input v-model="row.value" @input="atInputChange"></el-input>
       </template>
     </el-table-column>
     <el-table-column width="60px">
-      <span slot="header" class="btn" @click="addColumn">
+      <a href="javascript:;" slot="header" class="btn" @click="addColumn">
         {{ $t('Base.add') }}
-      </span>
+      </a>
       <template slot-scope="{ row }">
-        <span class="btn" @click="deleteItem(row)">
+        <a href="javascript:;" class="btn" @click="deleteItem(row)">
           {{ $t('Base.delete') }}
-        </span>
+        </a>
       </template>
     </el-table-column>
   </el-table>
@@ -50,6 +50,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    customLabel: {
+      type: Object,
+      default: null,
+    },
   },
 
   data() {
@@ -63,7 +67,17 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+    keyValueLabel() {
+      if (this.customLabel === null) {
+        return {
+          key: this.$t('components.key'),
+          value: this.$t('components.value'),
+        }
+      }
+      return this.customLabel
+    },
+  },
 
   created() {
     const list = []
