@@ -18,7 +18,7 @@
         </div>
         <el-radio-group v-model="mechanism">
           <el-radio class="mechanism" label="password-based" border> Password-Based </el-radio>
-          <!-- <el-radio class="mechanism" label="jwt" border> JWT </el-radio> -->
+          <el-radio class="mechanism" label="jwt" border> JWT </el-radio>
           <el-radio class="mechanism" label="scram" border>
             {{ this.$t('Auth.scram') }}
           </el-radio>
@@ -97,18 +97,21 @@
       </div>
       <!-- Config -->
       <div v-else-if="step === 2">
-        <database-config
-          v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(backend)"
-          v-model="configData"
-          :database="backend"
-          auth-type="authn"
-        ></database-config>
-        <built-in-config
-          v-if="backend === 'built-in-database'"
-          v-model="configData"
-          :type="mechanism"
-        ></built-in-config>
-        <http-config v-if="backend === 'http-server'" v-model="configData"></http-config>
+        <template v-if="mechanism !== 'jwt'">
+          <database-config
+            v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(backend)"
+            v-model="configData"
+            :database="backend"
+            auth-type="authn"
+          ></database-config>
+          <built-in-config
+            v-else-if="backend === 'built-in-database'"
+            v-model="configData"
+            :type="mechanism"
+          ></built-in-config>
+          <http-config v-else-if="backend === 'http-server'" v-model="configData"></http-config>
+        </template>
+        <jwt-config v-else v-model="configData"></jwt-config>
         <!-- Result -->
         <div v-if="testRes" :class="['create-form', 'result-block', isWork ? 'success' : 'error']">
           <div class="result-title">
@@ -138,6 +141,7 @@ import GuideBar from '@/components/GuideBar.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import BuiltInConfig from './components/BuiltInConfig.vue'
 import HttpConfig from './components/HttpConfig.vue'
+import JwtConfig from './components/JwtConfig.vue'
 import useGuide from '@/hooks/useGuide'
 import { createAuthn } from '@/api/auth'
 import useAuthCreate from '@/hooks/useAuthCreate'
@@ -150,6 +154,7 @@ export default defineComponent({
     DatabaseConfig,
     BuiltInConfig,
     HttpConfig,
+    JwtConfig,
   },
   setup() {
     const mechanism = ref('password-based')
@@ -159,7 +164,7 @@ export default defineComponent({
     const isWork = ref(false)
     const testRes = ref(null)
     const configData = ref({})
-    const { processHttpConfig, processRedisConfig, processMongoDBConfig, factory } = useAuthCreate()
+    const { factory, create } = useAuthCreate()
     const supportBackendMap = {
       'password-based': {
         mysql: 'MySQL',
@@ -169,7 +174,7 @@ export default defineComponent({
         'built-in-database': 'Built-in database',
         'http-server': 'HTTP',
       },
-      // jwt: {},
+      jwt: {},
       scram: {
         'built-in-database': 'Built-in database',
       },
@@ -208,18 +213,7 @@ export default defineComponent({
     }
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(beforeNext)
     const handleCreate = async function () {
-      let data = {}
-      if (backend.value === 'http-server') {
-        data = processHttpConfig(configData.value)
-      } else if (backend.value === 'redis') {
-        data = processRedisConfig(configData.value)
-      } else if (backend.value === 'mongodb') {
-        data = processMongoDBConfig(configData.value)
-      } else {
-        data = configData.value
-      }
-      data.backend = backend.value
-      data.mechanism = mechanism.value
+      const data = create(configData.value, backend.value, mechanism.value)
       await createAuthn(data)
       this.$message.success(this.$t('Base.createSuccess'))
       this.$router.push({ name: 'authentication' })
