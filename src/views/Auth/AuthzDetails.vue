@@ -53,6 +53,7 @@ import BackButton from './components/BackButton.vue'
 import { loadAuthz, deleteAuthz, updateAuthz } from '@/api/auth'
 import FileConfig from './components/FileConfig.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
+import useAuthzCreate from '../../hooks/useAuthzCreate'
 
 export default defineComponent({
   name: 'AuthzDetails',
@@ -90,10 +91,12 @@ export default defineComponent({
       }
     }
     const handleUpdate = async function ({ enable }) {
+      const { create } = useAuthzCreate()
+      const data = create(configData.value, type.value)
       if (enable !== undefined) {
-        configData.value.enable = !enable
+        data.enable = !enable
       }
-      await updateAuthz(type.value, configData.value)
+      await updateAuthz(type.value, data)
       this.$message.success(this.$t('Base.updateSuccess'))
       this.$router.push({ name: 'authorization' })
     }
