@@ -37,10 +37,10 @@
         </div>
       </div>
       <div v-if="step === 1" class="create-form">
-        <file-config v-if="type === 'file'" v-model="fileConfig"></file-config>
+        <file-config v-if="type === 'file'" v-model="configData"></file-config>
         <database-config
           v-if="['mysql', 'postgresql'].includes(type)"
-          v-model="databaseConfig"
+          v-model="configData"
           :database="type"
           auth-type="authz"
         ></database-config>
@@ -58,13 +58,14 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref } from '@vue/composition-api'
+import { defineComponent, ref } from '@vue/composition-api'
 import FileConfig from './components/FileConfig.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import BackButton from './components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import useGuide from '@/hooks/useGuide'
 import { createAuthz } from '@/api/auth'
+import useAuthzCreate from '@/hooks/useAuthzCreate'
 
 export default defineComponent({
   name: 'AuthzCreate',
@@ -79,47 +80,30 @@ export default defineComponent({
       return [this.$t('Auth.dataSource'), this.$t('Auth.config')]
     }
     const type = ref('file')
-    const fileConfig = reactive({
-      rules: `{allow, {username, "dashboard"}, subscribe, ["$SYS/#"]}.
-{allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
-{deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.`,
-    })
-    const databaseConfig = reactive({
-      server: '',
-      username: 'root',
-      password: '',
-      database: '',
-      pool_size: 8,
-      auto_reconnect: true,
-      ssl: {
-        enable: false,
-      },
-      query: '',
-    })
+    const configData = ref({})
+    const { factory, create } = useAuthzCreate()
     const typeList = ref([
       { label: 'File', value: 'file', img: require('@/assets/img/file.png') },
       { label: 'MySQL', value: 'mysql', img: require('@/assets/img/mysql.png') },
       { label: 'PostgreSQL', value: 'postgresql', img: require('@/assets/img/postgresql.png') },
     ])
-    const { step, activeGuidesIndex, handleNext, handleBack } = useGuide()
-    const handleCreate = async function () {
-      let data = {}
-      if (type.value === 'file') {
-        data = fileConfig
-      } else {
-        data = databaseConfig
+    const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(() => {
+      if (step.value === 0) {
+        const data = factory(type.value)
+        configData.value = data
       }
-      data.type = type.value
+    })
+    const handleCreate = async function () {
+      const data = create(configData.value, type.value)
       await createAuthz(data)
       this.$message.success(this.$t('Base.createSuccess'))
       this.$router.push({ name: 'authorization' })
     }
     return {
+      configData,
       step,
       type,
       typeList,
-      fileConfig,
-      databaseConfig,
       activeGuidesIndex,
       handleNext,
       handleBack,
