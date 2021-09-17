@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-export default function useAuthCreate() {
+export default function useAuthnCreate() {
   const getBuiltInConfig = (type) => {
     if (type === 'password-based') {
       return {

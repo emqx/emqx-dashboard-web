@@ -82,7 +82,7 @@ import BuiltInConfig from './components/BuiltInConfig.vue'
 import JwtConfig from './components/JwtConfig.vue'
 import DataManager from './components/DataManager.vue'
 import { updateAuthn, deleteAuthn } from '@/api/auth'
-import useAuthCreate from '@/hooks/useAuthCreate'
+import useAuthnCreate from '@/hooks/useAuthnCreate'
 
 export default defineComponent({
   name: 'AuthnDetails',
@@ -133,7 +133,7 @@ export default defineComponent({
     }
     loadData()
     const handleUpdate = async function ({ enable }) {
-      const { create } = useAuthCreate()
+      const { create } = useAuthnCreate()
       const { id } = configData.value
       const data = create(configData.value, configData.value.backend, configData.value.mechanism)
       if (enable !== undefined) {

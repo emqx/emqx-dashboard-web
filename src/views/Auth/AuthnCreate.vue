@@ -144,7 +144,7 @@ import HttpConfig from './components/HttpConfig.vue'
 import JwtConfig from './components/JwtConfig.vue'
 import useGuide from '@/hooks/useGuide'
 import { createAuthn } from '@/api/auth'
-import useAuthCreate from '@/hooks/useAuthCreate'
+import useAuthnCreate from '@/hooks/useAuthnCreate'
 
 export default defineComponent({
   name: 'AuthnCreate',
@@ -164,7 +164,7 @@ export default defineComponent({
     const isWork = ref(false)
     const testRes = ref(null)
     const configData = ref({})
-    const { factory, create } = useAuthCreate()
+    const { factory, create } = useAuthnCreate()
     const supportBackendMap = {
       'password-based': {
         mysql: 'MySQL',
