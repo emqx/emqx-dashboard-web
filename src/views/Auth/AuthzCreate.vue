@@ -39,7 +39,7 @@
       <div v-if="step === 1" class="create-form">
         <file-config v-if="type === 'file'" v-model="fileConfig"></file-config>
         <database-config
-          v-if="['mysql'].includes(type)"
+          v-if="['mysql', 'postgresql'].includes(type)"
           v-model="databaseConfig"
           :database="type"
           auth-type="authz"
@@ -99,13 +99,14 @@ export default defineComponent({
     const typeList = ref([
       { label: 'File', value: 'file', img: require('@/assets/img/file.png') },
       { label: 'MySQL', value: 'mysql', img: require('@/assets/img/mysql.png') },
+      { label: 'PostgreSQL', value: 'postgresql', img: require('@/assets/img/postgresql.png') },
     ])
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide()
     const handleCreate = async function () {
       let data = {}
       if (type.value === 'file') {
         data = fileConfig
-      } else if (type.value === 'mysql') {
+      } else {
         data = databaseConfig
       }
       data.type = type.value
