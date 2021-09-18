@@ -44,6 +44,7 @@
           :database="type"
           auth-type="authz"
         ></database-config>
+        <http-config v-else-if="type === 'http-server'" v-model="configData"></http-config>
         <div class="step-btn">
           <el-button type="primary" @click="handleCreate">
             {{ $t('Base.create') }}
@@ -61,6 +62,7 @@
 import { defineComponent, ref } from '@vue/composition-api'
 import FileConfig from './components/FileConfig.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
+import HttpConfig from './components/HttpConfig.vue'
 import BackButton from './components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import useGuide from '@/hooks/useGuide'
@@ -74,6 +76,7 @@ export default defineComponent({
     GuideBar,
     FileConfig,
     DatabaseConfig,
+    HttpConfig,
   },
   setup() {
     const getGuideList = function () {
@@ -86,6 +89,7 @@ export default defineComponent({
       { label: 'File', value: 'file', img: require('@/assets/img/file.png') },
       { label: 'MySQL', value: 'mysql', img: require('@/assets/img/mysql.png') },
       { label: 'PostgreSQL', value: 'postgresql', img: require('@/assets/img/postgresql.png') },
+      { label: 'HTTP Server', value: 'http-server', img: require('@/assets/img/http-server.png') },
     ])
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(() => {
       if (step.value === 0) {
