@@ -22,6 +22,30 @@ export default function useAuthzCreate() {
       query: '',
     }
   }
+  const getHttpConfig = () => {
+    return {
+      method: 'post',
+      url: 'http://127.0.0.1:8080',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify(
+        {
+          username: '${username}',
+          password: '${password}',
+        },
+        '',
+        2,
+      ),
+      pool_size: 8,
+      connect_timeout: 5000,
+      request_timeout: 5000,
+      enable_pipelining: true,
+      ssl: {
+        enable: false,
+      },
+    }
+  }
   const factory = (type) => {
     switch (type) {
       case 'file':
@@ -30,11 +54,22 @@ export default function useAuthzCreate() {
         return getDatabaseConfig()
       case 'postgresql':
         return getDatabaseConfig()
+      case 'http-server':
+        return getHttpConfig()
     }
+  }
+  const processHttpConfig = (data) => {
+    const tempData = _.cloneDeep(data)
+    const { body } = data
+    tempData.body = JSON.parse(body)
+    return tempData
   }
   const create = (config, type) => {
     let data = {}
     switch (type) {
+      case 'http-server':
+        data = processHttpConfig(config)
+        break
       default:
         data = _.cloneDeep(config)
         break
