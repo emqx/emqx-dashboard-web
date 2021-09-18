@@ -53,7 +53,7 @@ import BackButton from './components/BackButton.vue'
 import { loadAuthz, deleteAuthz, updateAuthz } from '@/api/auth'
 import FileConfig from './components/FileConfig.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
-import useAuthzCreate from '../../hooks/useAuthzCreate'
+import useAuthzCreate from '@/hooks/Auth/useAuthzCreate'
 
 export default defineComponent({
   name: 'AuthzDetails',

@@ -144,7 +144,7 @@ import HttpConfig from './components/HttpConfig.vue'
 import JwtConfig from './components/JwtConfig.vue'
 import useGuide from '@/hooks/useGuide'
 import { createAuthn } from '@/api/auth'
-import useAuthnCreate from '@/hooks/useAuthnCreate'
+import useAuthnCreate from '@/hooks/Auth/useAuthnCreate'
 
 export default defineComponent({
   name: 'AuthnCreate',
