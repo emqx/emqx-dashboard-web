@@ -79,7 +79,7 @@ import BuiltInConfig from './components/BuiltInConfig.vue'
 import JwtConfig from './components/JwtConfig.vue'
 import DataManager from './components/DataManager.vue'
 import { updateAuthn, deleteAuthn } from '@/api/auth'
-import useAuthnCreate from '@/hooks/useAuthnCreate'
+import useAuthnCreate from '@/hooks/Auth/useAuthnCreate'
 
 export default defineComponent({
   name: 'AuthnDetails',

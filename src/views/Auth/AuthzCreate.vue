@@ -67,7 +67,7 @@ import BackButton from './components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import useGuide from '@/hooks/useGuide'
 import { createAuthz } from '@/api/auth'
-import useAuthzCreate from '@/hooks/useAuthzCreate'
+import useAuthzCreate from '@/hooks/Auth/useAuthzCreate'
 
 export default defineComponent({
   name: 'AuthzCreate',

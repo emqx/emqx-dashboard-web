@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import useProcessAuthData from './useProcessAuthData'
 
 export default function useAuthzCreate() {
   const getFileConfig = () => {
@@ -46,6 +47,27 @@ export default function useAuthzCreate() {
       },
     }
   }
+  const getMongodbConfig = () => {
+    return {
+      mongo_type: 'single',
+      server: '127.0.0.1:27017',
+      servers: '127.0.0.1:27017,127.0.0.2:27017',
+      database: 'mqtt',
+      collection: 'users',
+      selector: '',
+      password_hash_field: 'password_hash',
+      salt_field: 'salt',
+      password_hash_algorithm: 'sha256',
+      salt_position: 'prefix',
+      pool_size: 8,
+      ssl: {
+        enable: false,
+      },
+      topology: {
+        connect_timeout_ms: 20000,
+      },
+    }
+  }
   const factory = (type) => {
     switch (type) {
       case 'file':
@@ -56,14 +78,11 @@ export default function useAuthzCreate() {
         return getDatabaseConfig()
       case 'http':
         return getHttpConfig()
+      case 'mongodb':
+        return getMongodbConfig()
     }
   }
-  const processHttpConfig = (data) => {
-    const tempData = _.cloneDeep(data)
-    const { body } = data
-    tempData.body = JSON.parse(body)
-    return tempData
-  }
+  const { processHttpConfig } = useProcessAuthData()
   const create = (config, type) => {
     let data = {}
     switch (type) {

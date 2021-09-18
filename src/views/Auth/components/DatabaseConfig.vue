@@ -210,7 +210,7 @@ import { computed, defineComponent, ref } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
 import TLSConfig from './TLSConfig.vue'
 import usePassword from '@/hooks/usePassword'
-import useDatabaseConfig from '@/hooks/useDatabaseConfig'
+import useDatabaseConfig from '@/hooks/Auth/useDatabaseConfig'
 import useCopy from '@/hooks/useCopy'
 
 export default defineComponent({
