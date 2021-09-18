@@ -44,7 +44,7 @@
           :database="type"
           auth-type="authz"
         ></database-config>
-        <http-config v-else-if="type === 'http-server'" v-model="configData"></http-config>
+        <http-config v-else-if="type === 'http'" v-model="configData"></http-config>
         <div class="step-btn">
           <el-button type="primary" @click="handleCreate">
             {{ $t('Base.create') }}
@@ -89,7 +89,8 @@ export default defineComponent({
       { label: 'File', value: 'file', img: require('@/assets/img/file.png') },
       { label: 'MySQL', value: 'mysql', img: require('@/assets/img/mysql.png') },
       { label: 'PostgreSQL', value: 'postgresql', img: require('@/assets/img/postgresql.png') },
-      { label: 'HTTP Server', value: 'http-server', img: require('@/assets/img/http-server.png') },
+      { label: 'HTTP Server', value: 'http', img: require('@/assets/img/http.png') },
+      { label: 'MongoDB', value: 'mongodb', img: require('@/assets/img/mongodb.png') },
     ])
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(() => {
       if (step.value === 0) {
