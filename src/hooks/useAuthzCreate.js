@@ -54,7 +54,7 @@ export default function useAuthzCreate() {
         return getDatabaseConfig()
       case 'postgresql':
         return getDatabaseConfig()
-      case 'http-server':
+      case 'http':
         return getHttpConfig()
     }
   }
@@ -67,7 +67,7 @@ export default function useAuthzCreate() {
   const create = (config, type) => {
     let data = {}
     switch (type) {
-      case 'http-server':
+      case 'http':
         data = processHttpConfig(config)
         break
       default:

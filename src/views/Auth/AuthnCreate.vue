@@ -109,7 +109,7 @@
             v-model="configData"
             :type="mechanism"
           ></built-in-config>
-          <http-config v-else-if="backend === 'http-server'" v-model="configData"></http-config>
+          <http-config v-else-if="backend === 'http'" v-model="configData"></http-config>
         </template>
         <jwt-config v-else v-model="configData"></jwt-config>
         <!-- Result -->
@@ -172,7 +172,7 @@ export default defineComponent({
         postgresql: 'PostgreSQL',
         mongodb: 'MongoDB',
         'built-in-database': 'Built-in database',
-        'http-server': 'HTTP',
+        http: 'HTTP',
       },
       jwt: {},
       scram: {
@@ -190,7 +190,7 @@ export default defineComponent({
           value: key,
           img: require(`@/assets/img/${key}.png`),
         }
-        const otherKeys = ['http-server']
+        const otherKeys = ['http']
         if (otherKeys.includes(key)) {
           others.value.push(res)
         } else {

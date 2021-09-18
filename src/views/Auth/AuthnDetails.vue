@@ -44,10 +44,7 @@
                 v-model="configData"
                 auth-type="authn"
               ></database-config>
-              <http-config
-                v-else-if="currBackend === 'http-server'"
-                v-model="configData"
-              ></http-config>
+              <http-config v-else-if="currBackend === 'http'" v-model="configData"></http-config>
               <built-in-config
                 v-else-if="currBackend === 'built-in-database'"
                 :type="configData.mechanism"
@@ -128,7 +125,7 @@ export default defineComponent({
     const titleMap = {
       mysql: 'MySQL',
       postgresql: 'PostgreSQL',
-      'http-server': 'HTTP Server',
+      http: 'HTTP Server',
       'built-in-database': 'Built in Database',
     }
     loadData()

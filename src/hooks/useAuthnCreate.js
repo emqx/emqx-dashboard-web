@@ -172,7 +172,7 @@ export default function useAuthnCreate() {
   const factory = (mechanism, backend) => {
     switch (mechanism) {
       case 'password-based':
-        if (backend === 'http-server') {
+        if (backend === 'http') {
           return getHttpConfig()
         } else if (backend === 'built-in-database') {
           return getBuiltInConfig('password-based')
@@ -199,7 +199,7 @@ export default function useAuthnCreate() {
       data = processJwtConfig(config)
     } else {
       switch (backend) {
-        case 'http-server':
+        case 'http':
           data = processHttpConfig(config)
           break
         case 'redis':
