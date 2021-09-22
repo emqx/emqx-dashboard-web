@@ -36,10 +36,11 @@
           </el-button>
         </div>
       </div>
-      <div v-if="step === 1" class="create-form">
+      <!-- Config -->
+      <div v-if="step === 1">
         <file-config v-if="type === 'file'" v-model="configData"></file-config>
         <database-config
-          v-if="['mysql', 'postgresql'].includes(type)"
+          v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(type)"
           v-model="configData"
           :database="type"
           auth-type="authz"
@@ -91,6 +92,7 @@ export default defineComponent({
       { label: 'PostgreSQL', value: 'postgresql', img: require('@/assets/img/postgresql.png') },
       { label: 'HTTP Server', value: 'http', img: require('@/assets/img/http.png') },
       { label: 'MongoDB', value: 'mongodb', img: require('@/assets/img/mongodb.png') },
+      { label: 'Redis', value: 'redis', img: require('@/assets/img/redis.png') },
     ])
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(() => {
       if (step.value === 0) {

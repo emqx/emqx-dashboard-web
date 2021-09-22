@@ -72,7 +72,7 @@ export default function useAuthnCreate() {
       password: '',
       password_hash_algorithm: 'sha256',
       pool_size: 8,
-      query: '',
+      cmd: '',
       ssl: {
         enable: false,
       },
@@ -161,10 +161,6 @@ export default function useAuthnCreate() {
     return data
   }
   return {
-    processHttpConfig,
-    processRedisConfig,
-    processMongoDBConfig,
-    processJwtConfig,
     factory,
     create,
   }

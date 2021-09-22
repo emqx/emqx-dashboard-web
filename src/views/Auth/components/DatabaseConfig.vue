@@ -110,7 +110,7 @@
     <el-row :gutter="20">
       <el-form class="create-form">
         <!-- MySQL & PgSQL -->
-        <template v-if="isMySQL || isPgSQL || isRedis">
+        <template v-if="isMySQL || isPgSQL">
           <el-col :span="24">
             <el-form-item label="SQL">
               <el-input v-model="databaseConfig.query" type="textarea" :rows="6"></el-input>
@@ -121,11 +121,21 @@
           </el-col>
         </template>
         <!-- Mongodb -->
-        <template v-if="isMongoDB">
+        <template v-else-if="isMongoDB">
           <el-col :span="24">
             <el-form-item :label="$t('Auth.selector')">
               <el-input v-model="databaseConfig.selector" type="textarea" :rows="6"></el-input>
               <el-button class="bottom-btn" size="mini" @click="setDefaultContent('selector')">
+                {{ $t('Auth.setDefault') }}
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </template>
+        <template v-else-if="isRedis">
+          <el-col :span="24">
+            <el-form-item :label="$t('Auth.cmd')">
+              <el-input v-model="databaseConfig.cmd" type="textarea" :rows="6"></el-input>
+              <el-button class="bottom-btn" size="mini" @click="setDefaultContent('cmd')">
                 {{ $t('Auth.setDefault') }}
               </el-button>
             </el-form-item>
