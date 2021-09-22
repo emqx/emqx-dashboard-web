@@ -9,7 +9,7 @@
           :rules="retainerRules"
           :model="retainerConfig"
         >
-          <el-row>
+          <el-row gutter="30">
             <el-col :span="16">
               <el-form-item :label="tl('storageType')">
                 <el-select v-model="retainerConfig.config.type">
@@ -18,7 +18,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row gutter="30">
             <el-col :span="16">
               <el-form-item :label="tl('storage')">
                 <el-select v-model="retainerConfig.config.storage_type">
@@ -30,7 +30,7 @@
             </el-col>
           </el-row>
           <div class="part-header">{{ tl('policy') }}</div>
-          <el-row>
+          <el-row gutter="30">
             <el-col :span="8">
               <el-form-item label="Max Retained Messages" prop="config.max_retained_messages">
                 <el-input
@@ -55,7 +55,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row :gutter="30">
             <el-col :span="8">
               <el-form-item :label="tl('expire')" prop="msg_expiry_interval[0]">
                 <el-input
@@ -88,7 +88,7 @@
             </el-col>
           </el-row>
           <div class="part-header">{{ tl('flowControl') }}</div>
-          <el-row>
+          <el-row gutter="30">
             <el-col :span="8">
               <el-form-item :label="tl('readNumber')" prop="flow_control.max_read_number">
                 <el-input
@@ -116,7 +116,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row :gutter="30">
             <el-col :span="8">
               <el-form-item
                 :label="tl('releaseInterval')"
@@ -308,6 +308,7 @@ export default defineComponent({
 
     const loadConfigData = async () => {
       configLoading.value = true
+      configEnable.value = true
       retainerForm.value?.resetFields()
       let res = await getRetainer().catch(() => {})
       if (res) {
@@ -499,18 +500,6 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-.el-form-item ::v-deep .el-form-item__content {
-  margin-right: 10px;
-}
-.el-input-group--append ::v-deep .el-input-group__append {
-  width: 120px;
-  padding: 0;
-
-  .el-select {
-    margin: -10px 0;
-  }
-}
-
 .payload-copied {
   padding-right: 10px;
 }

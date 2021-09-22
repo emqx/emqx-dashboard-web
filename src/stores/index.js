@@ -63,8 +63,7 @@ export default new Vuex.Store({
       addOrDone ? ++state.request_queue : --state.request_queue
     },
     UPDATE_EDITION(state, edition) {
-      localStorage.setItem('edition', edition)
-      edition ?? localStorage.removeItem('edition')
+      edition ? localStorage.setItem('edition', edition) : localStorage.removeItem('edition')
       state.edition = edition
     },
   },

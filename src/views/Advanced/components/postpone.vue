@@ -286,15 +286,6 @@ export default defineComponent({
 })
 </script>
 <style lang="scss" scoped>
-.el-input-group--append ::v-deep .el-input-group__append {
-  width: 110px;
-  padding: 0;
-
-  .el-select {
-    margin: -10px 0;
-  }
-}
-
 .payload-copied {
   padding-right: 10px;
 }

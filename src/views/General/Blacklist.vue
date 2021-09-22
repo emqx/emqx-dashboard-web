@@ -183,15 +183,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-form-item ::v-deep .el-form-item__content {
-  margin-right: 10px;
-}
 .el-input-group--append ::v-deep .el-input-group__append {
   width: 90px;
-  padding: 0;
-
-  .el-select {
-    margin: -10px 0;
-  }
 }
 </style>

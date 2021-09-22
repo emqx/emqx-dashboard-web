@@ -262,6 +262,11 @@ code {
   & + .el-menu {
     margin: -20px 0 20px;
   }
+
+  .title-n-status {
+    display: inline-flex;
+    flex-direction: column;
+  }
 }
 
 // .section-addition {
@@ -279,5 +284,15 @@ code {
 .no-dropdown-arrow {
   .popper__arrow {
     display: none;
+  }
+}
+
+//common styling for input-select group
+.el-input-group--append .el-input-group__append {
+  width: 120px;
+  padding: 0;
+
+  .el-select {
+    margin: -10px 0;
   }
 }

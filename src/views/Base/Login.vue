@@ -53,7 +53,7 @@
 
 <script>
 import { login as loginApi } from '@/api/common'
-import { setLanguage } from '@/common/utils'
+import { setLanguage, toLogin } from '@/common/utils'
 // import sha256 from 'crypto-js/sha256'
 
 export default {
@@ -113,11 +113,10 @@ export default {
     },
     async login(auto = false) {
       const { username, token, password } = (auto && this.$store.state.user) || this.record
-      auto && username && token && this.redirect()
+      if (auto && username && token) this.redirect()
+      else await toLogin(), setLanguage()
 
       if (!auto) {
-        setLanguage()
-
         this.logining = true
         try {
           let res = await loginApi({
