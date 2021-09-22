@@ -55,16 +55,28 @@ export default function useAuthzCreate() {
       database: 'mqtt',
       collection: 'users',
       selector: '',
-      password_hash_field: 'password_hash',
-      salt_field: 'salt',
-      password_hash_algorithm: 'sha256',
-      salt_position: 'prefix',
       pool_size: 8,
       ssl: {
         enable: false,
       },
       topology: {
         connect_timeout_ms: 20000,
+      },
+    }
+  }
+  const getRedisConfig = () => {
+    return {
+      server: '127.0.0.1:6379',
+      servers: '127.0.0.1:6379,127.0.0.2:6379,127.0.0.3:6379',
+      sentinel: 'mysentinel',
+      redis_type: 'single',
+      database: 0,
+      auto_reconnect: true,
+      password: '',
+      pool_size: 8,
+      cmd: '',
+      ssl: {
+        enable: false,
       },
     }
   }
@@ -80,14 +92,22 @@ export default function useAuthzCreate() {
         return getHttpConfig()
       case 'mongodb':
         return getMongodbConfig()
+      case 'redis':
+        return getRedisConfig()
     }
   }
-  const { processHttpConfig } = useProcessAuthData()
+  const { processHttpConfig, processMongoDBConfig, processRedisConfig } = useProcessAuthData()
   const create = (config, type) => {
     let data = {}
     switch (type) {
       case 'http':
         data = processHttpConfig(config)
+        break
+      case 'mongodb':
+        data = processMongoDBConfig(config)
+        break
+      case 'redis':
+        data = processRedisConfig(config)
         break
       default:
         data = _.cloneDeep(config)

@@ -87,22 +87,37 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
   const setMongoDB = () => {
     defaultContent.value = JSON.stringify(
       {
-        username: '${mqtt-username}',
+        username: '${username}',
       },
       null,
       2,
     )
-    helpContent.value = `
-      {
-        username: "emqx_user",
-        password_hash: "******",
-        salt: "foo+bar",
-        is_superuser: false,
-        created: "2021-01-01 12:00:01"
-      }
+    if (authType === 'authn') {
+      helpContent.value = `
+        {
+          username: "emqx_user",
+          password_hash: "******",
+          salt: "foo+bar",
+          is_superuser: false,
+          created: "2021-01-01 12:00:01"
+        }
 
-      db.mqtt_user.findOne({"username": "emqx_user"})
-    `
+        db.mqtt_user.findOne({"username": "emqx_user"})
+      `
+    } else {
+      helpContent.value = `
+        {
+          username: "emqx_u",
+          clientid: "emqx_c",
+          ipaddress: "127.0.0.1",
+          permission: "allow",
+          action: "all",
+          topics: ["#"]
+        }
+
+        db.mqtt_acl.findOne({"username": "emqx_user"})
+      `
+    }
     if (id.value) {
       const { mongo_type, servers, selector } = databaseConfig
       if (mongo_type !== 'single') {
@@ -114,26 +129,37 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
     databaseConfig.selector = defaultContent.value
   }
   const setRedis = () => {
-    defaultContent.value = `HMGET mqtt_user:\${username} password_hash`
-    helpContent.value = `
-      # sample data
-      HMSET mqtt_user:emqx_u password_hash *** salt foo+bar is_superuser 1
+    if (authType === 'authn') {
+      defaultContent.value = `HMGET mqtt_user:\${username} password_hash`
+      helpContent.value = `
+        # sample data
+        HMSET mqtt_user:emqx_u password_hash *** salt foo+bar is_superuser 1
 
-      # sample cmd
-      # HMGET mqtt_user:\${username}
+        # sample cmd
+        # HMGET mqtt_user:\${username}
 
-      ## only password
-      HMGET mqtt_user:emqx_u password_hash
+        ## only password
+        HMGET mqtt_user:emqx_u password_hash
 
-      ## password + salt
-      HMGET mqtt_user:emqx_u password_hash salt
+        ## password + salt
+        HMGET mqtt_user:emqx_u password_hash salt
 
-      ## password + salt, enable superuser
-      HMGET mqtt_user:emqx_u password_hash salt is_superuser
+        ## password + salt, enable superuser
+        HMGET mqtt_user:emqx_u password_hash salt is_superuser
 
-      ## only password, enable superuser
-      HMGET mqtt_user:emqx_u password_hash is_superuser
-    `
+        ## only password, enable superuser
+        HMGET mqtt_user:emqx_u password_hash is_superuser
+      `
+    } else {
+      defaultContent.value = `HGETALL mqtt_acl:\${username}`
+      helpContent.value = `
+        # sample data
+        HSET mqtt_acl:emqx_u 't/#' subscribe
+
+        # sample cmd
+        HGETALL mqtt_acl:\${username}
+      `
+    }
     if (id.value) {
       const { redis_type, servers } = databaseConfig
       if (redis_type !== 'single') {
@@ -141,7 +167,7 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
       }
       return
     }
-    databaseConfig.query = defaultContent.value
+    databaseConfig.cmd = defaultContent.value
   }
   switch (database) {
     case 'mysql':

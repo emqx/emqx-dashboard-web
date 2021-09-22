@@ -219,6 +219,10 @@ export default {
     zh: '示例数据结构和命令',
     en: 'Example data structures and command',
   },
+  cmd: {
+    zh: '命令',
+    en: 'CMD',
+  },
   passwordHashField: {
     zh: 'password_hash 字段名',
     en: 'Password_hash Field',
