@@ -36,6 +36,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
+            :disabled="isUnload(scope.row.status)"
             @click="
               $router.push({
                 name: 'gateway-detail-basic',
@@ -46,6 +47,7 @@
           >
           <el-button
             size="mini"
+            :disabled="isUnload(scope.row.status)"
             @click="
               $router.push({
                 name: 'gateway-detail-auth',
@@ -71,6 +73,7 @@
             ></el-button>
             <el-dropdown-menu slot="dropdown" class="no-dropdown-arrow">
               <el-dropdown-item
+                :disabled="!isRunning(scope.row.status)"
                 :command="{
                   name: 'gateway-detail-clients',
                   params: { name: scope.row.name },
@@ -106,6 +109,10 @@ export default defineComponent({
 
     const isRunning = (status) => {
       return caseInsensitiveCompare(status, 'running')
+    }
+
+    const isUnload = (status) => {
+      return caseInsensitiveCompare(status, 'unload')
     }
 
     const loadGateway = async () => {
@@ -149,6 +156,7 @@ export default defineComponent({
       tbData,
       calcPercentage,
       isRunning,
+      isUnload,
       dropdownVChange,
       dropdownExclusiveKey,
       dropdownHandler,

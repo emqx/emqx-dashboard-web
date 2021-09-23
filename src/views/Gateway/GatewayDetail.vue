@@ -3,6 +3,12 @@
     <div class="section-header">
       <div>
         <span :class="['g-icon', `g-${gname}`]"></span>
+        <span class="title-n-status">
+          <span class="section-title">{{ gname }}</span>
+          <el-tag type="info" class="section-status">
+            <span><i class="g-status"></i></span>
+          </el-tag>
+        </span>
       </div>
       <div>
         <el-button type="danger" plain size="small">{{ $t('Base.delete') }}</el-button>
@@ -74,5 +80,21 @@ export default defineComponent({
   content: '';
   display: inline-block;
   background-size: contain;
+}
+
+.title-n-status {
+  height: 45px;
+}
+// .section-header > span {
+//   display: inline-block;
+// }
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  flex-grow: 1;
+}
+.section-status {
+  height: 18px;
+  border-radius: 6px;
 }
 </style>

@@ -9,7 +9,7 @@
           :rules="retainerRules"
           :model="retainerConfig"
         >
-          <el-row gutter="30">
+          <el-row :gutter="30">
             <el-col :span="16">
               <el-form-item :label="tl('storageType')">
                 <el-select v-model="retainerConfig.config.type">
@@ -18,7 +18,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row gutter="30">
+          <el-row :gutter="30">
             <el-col :span="16">
               <el-form-item :label="tl('storage')">
                 <el-select v-model="retainerConfig.config.storage_type">
@@ -30,7 +30,7 @@
             </el-col>
           </el-row>
           <div class="part-header">{{ tl('policy') }}</div>
-          <el-row gutter="30">
+          <el-row :gutter="30">
             <el-col :span="8">
               <el-form-item label="Max Retained Messages" prop="config.max_retained_messages">
                 <el-input
@@ -88,7 +88,7 @@
             </el-col>
           </el-row>
           <div class="part-header">{{ tl('flowControl') }}</div>
-          <el-row gutter="30">
+          <el-row :gutter="30">
             <el-col :span="8">
               <el-form-item :label="tl('readNumber')" prop="flow_control.max_read_number">
                 <el-input

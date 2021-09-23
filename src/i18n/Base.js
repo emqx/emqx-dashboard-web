@@ -155,6 +155,10 @@ export default {
     zh: '选择',
     en: 'Select',
   },
+  search: {
+    zh: '搜索',
+    en: 'Search',
+  },
   manage: {
     zh: '管理',
     en: 'Manage',
@@ -206,6 +210,10 @@ export default {
   other: {
     zh: '其它',
     en: 'Other',
+  },
+  enable: {
+    zh: '启用',
+    en: 'Enable',
   },
   test: {
     zh: '测试',

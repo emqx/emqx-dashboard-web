@@ -22,6 +22,7 @@ import GatewayDetailBasic from '@/views/Gateway/components/basic'
 import GatewayDetailListener from '@/views/Gateway/components/listeners'
 import GatewayDetailAuth from '@/views/Gateway/components/auth'
 import GatewayDetailClients from '@/views/Gateway/components/clients'
+import GatewayCreate from '@/views/Gateway/GatewayCreate'
 
 let routes = [
   {
@@ -383,6 +384,11 @@ let routes = [
         path: '',
         name: 'gateway',
         component: Gateway,
+      },
+      {
+        path: 'create/:name',
+        name: 'gateway-create',
+        component: GatewayCreate,
       },
       {
         path: 'detail/:name',
