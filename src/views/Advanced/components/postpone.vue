@@ -198,9 +198,9 @@ export default defineComponent({
         type: 'warning',
       })
         .then(async () => {
-          const { id } = row
-          if (!id) return
-          let res = await delDelayedInfo(id).catch(() => {})
+          const { msgid } = row
+          if (!msgid) return
+          let res = await delDelayedInfo(msgid).catch(() => {})
           if (res) {
             p.value.$emit('loadPage')
           } else {
@@ -213,8 +213,8 @@ export default defineComponent({
       payloadDialog.value = true
       payloadLoading.value = true
       payloadDetail.value = ''
-      const { id } = row
-      let res = await getDelayedInfo(id).catch(() => {})
+      const { msgid } = row
+      let res = await getDelayedInfo(msgid).catch(() => {})
       if (res) {
         payloadDetail.value = res?.payload
       } else {

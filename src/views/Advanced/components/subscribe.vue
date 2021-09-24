@@ -136,7 +136,7 @@ export default defineComponent({
         if (editPos.value === undefined) {
           return
         }
-        pendingTbData.splice(editPos, 1, subjectSubData)
+        pendingTbData.splice(editPos.value, 1, subjectSubData)
       }
       submitLoading.value = true
 
