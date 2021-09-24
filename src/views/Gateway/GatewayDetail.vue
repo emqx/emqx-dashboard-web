@@ -11,7 +11,7 @@
         </span>
       </div>
       <div>
-        <el-button type="danger" plain size="small">{{ $t('Base.delete') }}</el-button>
+        <!-- <el-button type="danger" plain size="small">{{ $t('Base.delete') }}</el-button> -->
         <el-button size="small"> {{ $t('Base.stop') }}</el-button>
       </div>
     </div>
@@ -20,33 +20,14 @@
         <el-menu-item :index="`${item}`" :key="item">{{ tl(item) }}</el-menu-item>
       </template>
     </el-menu>
-    <!-- <el-tabs v-model="type">
-      <el-tab-pane :label="tl('basic')" name="basic">
-        <basic></basic>
-      </el-tab-pane>
-      <el-tab-pane :label="tl('listener')" name="listener">
-        <listeners></listeners>
-      </el-tab-pane>
-      <el-tab-pane :label="tl('auth')" name="auth">
-        <auth></auth>
-      </el-tab-pane>
-      <el-tab-pane :label="tl('clients')" name="clients">
-        <clients></clients>
-      </el-tab-pane>
-    </el-tabs> -->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 import { defineComponent, onMounted } from '@vue/composition-api'
-// import Auth from './components/auth.vue'
-// import basic from './components/basic.vue'
-// import Clients from './components/clients.vue'
-// import Listeners from './components/listeners.vue'
 
 export default defineComponent({
-  // components: { basic, Listeners, Auth, Clients },
   name: 'GatewayDetail',
   data: function () {
     return {
@@ -56,9 +37,12 @@ export default defineComponent({
   },
   computed: {
     matchedUrl: function () {
-      return this.types.find((v) => {
-        return this.$router.currentRoute?.path?.match(v)
-      })
+      let currentPath = this.$route.path || ''
+      return (
+        this.types.find((v) => {
+          return currentPath.match(v)
+        }) || this.types[0]
+      )
     },
   },
   setup(p) {

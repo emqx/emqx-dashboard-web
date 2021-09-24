@@ -17,7 +17,15 @@
         <template v-if="name === 'STOMP'">
           <stomp-basic :value.sync="stompData" />
         </template>
+        <template v-else-if="name === 'MQTTSN'">
+          <mqttsn-basic></mqttsn-basic>
+        </template>
+        <template v-else-if="name === 'COAP'"> <coap-basic></coap-basic> </template>
+        <template v-else-if="name === 'LWM2M'">
+          <lwm2m-basic></lwm2m-basic>
+        </template>
       </div>
+
       <div v-else-if="stepActive === 1">
         <listeners :integration="true"></listeners>
       </div>
@@ -40,7 +48,9 @@
       <el-button size="small" @click="--stepActive" v-if="stepActive > 0">{{
         $t('Base.backStep')
       }}</el-button>
-      <el-button size="small" v-if="stepActive === 0">{{ $t('Base.cancel') }}</el-button>
+      <el-button size="small" v-if="stepActive === 0" @click="cancel">{{
+        $t('Base.cancel')
+      }}</el-button>
     </el-row>
   </div>
 </template>
@@ -48,10 +58,12 @@
 <script>
 import { defineComponent, ref, watch } from '@vue/composition-api'
 import Listeners from './components/listeners.vue'
+import Lwm2mBasic from './components/lwm2mBasic.vue'
+import MqttsnBasic from './components/mqttsnBasic.vue'
 import stompBasic from './components/stompBasic.vue'
 
 export default defineComponent({
-  components: { stompBasic, Listeners },
+  components: { stompBasic, Listeners, MqttsnBasic, Lwm2mBasic },
   name: 'GatewayCreate',
   data: function () {
     return {
@@ -67,10 +79,15 @@ export default defineComponent({
 
     watch(stompData, (v) => {})
 
+    const cancel = function () {
+      this.$router.push({ name: 'gateway' })
+    }
+
     return {
       tl,
       stepActive,
       stompData,
+      cancel,
     }
   },
 })

@@ -16,12 +16,12 @@ export default {
     en: 'Listeners',
   },
   running: {
-    zh: '运行中',
+    zh: 'Enabled',
     en: 'Enabled',
   },
   stopped: {
-    zh: '已停止',
-    en: 'Stopped',
+    zh: 'Disabled',
+    en: 'Disabled',
   },
   basic: {
     zh: '基本信息',
@@ -138,5 +138,17 @@ export default {
   clientAuthDesc: {
     zh: '您可以在启用网关之后，进入详情页面进行配置。配置并启用客户端认证后未通过认证的客户端无法连接到集群中。',
     en: 'You can configure authentication after enable the gateway.When client authentication is enabled, clients that fail to pass authentication cannot connect to the cluster.',
+  },
+  predefinedTopic: {
+    zh: '预设Topic列表',
+    en: 'Predefined Topic List',
+  },
+  broadcast: {
+    zh: '开启广播',
+    en: 'Enable Broadcast',
+  },
+  qos3: {
+    zh: '启用QoS3',
+    en: 'Enable QoS3',
   },
 }

@@ -79,7 +79,7 @@
 
 <script>
 import { defineComponent, onMounted, ref } from '@vue/composition-api'
-import { getGatewayListener } from '@/api/gateway'
+import { getGatewayListeners } from '@/api/gateway'
 
 export default defineComponent({
   props: {
@@ -107,7 +107,7 @@ export default defineComponent({
     }
 
     const loadListenerData = async function () {
-      let res = await getGatewayListener(props.name).catch(() => {})
+      let res = await getGatewayListeners(props.name).catch(() => {})
       if (res) {
         listenerTable.value = res
       }

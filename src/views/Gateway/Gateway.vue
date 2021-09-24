@@ -17,7 +17,7 @@
           <el-tooltip
             placement="top"
             effect="dark"
-            :content="`${row.current_connections}/${row.max_connections}`"
+            :content="`${row.current_connections || 0}/${row.max_connections || 0}`"
           >
             <el-progress
               :stroke-width="16"
@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column :label="tl('listeners')" width="80">
         <template #default="{ row }">
-          {{ row.listeners.length || 0 }}
+          {{ (row.listeners && row.listeners.length) || 0 }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('Base.operation')">
@@ -93,8 +93,11 @@
 
 <script>
 import { defineComponent, onMounted, ref } from '@vue/composition-api'
-import { getGatewayList } from '@/api/gateway'
+import { getGatewayList, updateGateway } from '@/api/gateway'
 import { calcPercentage, caseInsensitiveCompare } from '@/common/utils'
+import i18n from '@/i18n'
+import router from '@/routes'
+import { Message as M } from 'element-ui'
 
 export default defineComponent({
   name: 'Gateway',
@@ -102,17 +105,20 @@ export default defineComponent({
     let tbData = ref([])
     let tbLoading = ref(false)
     let dropdownExclusiveKey = '_drop'
+    const enableStr = 'running'
+    const disableStr = 'stopped'
+    const unloadStr = 'unload'
 
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
 
     const isRunning = (status) => {
-      return caseInsensitiveCompare(status, 'running')
+      return caseInsensitiveCompare(status, enableStr)
     }
 
     const isUnload = (status) => {
-      return caseInsensitiveCompare(status, 'unload')
+      return caseInsensitiveCompare(status, unloadStr)
     }
 
     const loadGateway = async () => {
@@ -138,16 +144,45 @@ export default defineComponent({
       if (!command) return
       if (typeof command == 'object') {
         if (command.name.match(/gateway-detail-.*/i)) {
-          this.$router.push(command)
+          router.push(command)
           return
         } else {
           switch (command.name) {
             case 'gateway-enable':
+              gatewayStartStop(command.data)
               break
           }
         }
       }
     }
+
+    const gatewayStartStop = async function (instance) {
+      const { name } = instance
+      if (isUnload(instance.status)) {
+        router.push({ name: 'gateway-create', params: { name: name } })
+      } else if (isRunning(instance.status)) {
+        let body = { enable: false }
+        let res = await updateGateway(name, body).catch(() => {})
+        if (res) {
+          M({
+            type: 'success',
+            message: i18n.t('Base.disabledSuccess'),
+          })
+          instance.status = disableStr
+        }
+      } else {
+        let body = { enable: true }
+        let res = await updateGateway(name, body).catch(() => {})
+        if (res) {
+          M({
+            type: 'success',
+            message: i18n.t('Base.enableSuccess'),
+          })
+          instance.status = enableStr
+        }
+      }
+    }
+
     onMounted(loadGateway)
 
     return {
