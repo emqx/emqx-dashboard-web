@@ -19,8 +19,8 @@
           <el-form-item :label="$t('Auth.mongoType')">
             <el-select v-model="databaseConfig.mongo_type">
               <el-option value="single" :label="$t('Auth.single')"></el-option>
-              <el-option value="sentinel" label="Sentinel"></el-option>
-              <el-option value="cluster" label="Cluster"></el-option>
+              <el-option value="rs" label="Replica Set"></el-option>
+              <el-option value="sharded" label="Sharding"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
