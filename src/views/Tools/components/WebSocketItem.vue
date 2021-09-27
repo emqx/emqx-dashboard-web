@@ -312,7 +312,7 @@ export default {
       subscriptionsRules: {
         topic: [{ required: true, message: this.$t('Tools.pleaseEnter') }],
       },
-      client: {},
+      client: null,
       connection: {
         host: window.location.hostname,
         port: window.location.protocol === 'http:' ? 8083 : 8084,
@@ -440,11 +440,13 @@ export default {
     setNotify(status, custom = false) {
       let label = String(status).substring(1).toLowerCase()
       let labelText = this.$t(`Tools.${label}`)
-      this.$notify({
-        title: labelText,
-        message: this.$t('Tools.doing', { name: this.connection.clientId }) + labelText,
-        duration: 6000,
-        type: 'info',
+      setTimeout(() => {
+        this.$notify({
+          title: labelText,
+          message: this.$t('Tools.doing', { name: this.connection.clientId }) + labelText,
+          duration: 6000,
+          type: 'info',
+        })
       })
     },
     addMessages(msg, content) {
@@ -602,6 +604,7 @@ export default {
           connectTimeout,
           protocolVersion: protocolversion,
           will: will.topic ? will : undefined,
+          reconnectPeriod: 0,
         })
 
         this.assignEvents()
@@ -613,23 +616,24 @@ export default {
         this.setConnStatus('MDISCONNECTED')
       })
       this.client.on('reconnect', () => {
-        if (this.times > 2) {
-          this.destroyConnection()
-          this.$message.error(this.$t('Tools.connectionDisconnected'))
-          return
-        }
+        // this.times += 1
+        // console.log('reconn', this.times)
+        // if (this.times > 2) {
+        //   this.destroyConnection()
+        //   this.$message.error(this.$t('Tools.connectionDisconnected'))
         this.setConnStatus('MRECONNECTING')
-        this.times += 1
       })
       this.client.on('disconnect', () => {
-        console.log('discon')
+        // console.log('discon')
         this.setConnStatus('MDISCONNECTED')
       })
       this.client.on('close', () => {
+        // console.log('close')
         this.setConnStatus('MDISCONNECTED')
       })
       this.client.on('offline', () => {
         this.setConnStatus('MDISCONNECTED')
+        // console.log('offline')
       })
       this.client.on('connect', () => {
         this.setConnStatus('MCONNECTED')
