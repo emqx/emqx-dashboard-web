@@ -7,30 +7,39 @@
       <el-row :gutter="30">
         <el-col :span="12">
           <el-form-item :label="'Gateway ID'">
-            <el-input></el-input>
+            <el-input
+              :placeholder="mValueDefault.gateway_id"
+              v-model="mValue.gateway_id"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('broadcast')">
-            <el-select></el-select>
+            <el-select v-model="mValue.broadcast">
+              <el-option value="true"></el-option>
+              <el-option value="false"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('qos3')">
-            <el-select></el-select>
+            <el-select v-model="mValue.enable_qos3">
+              <el-option value="true"></el-option>
+              <el-option value="false"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('idleTime')">
-            <el-input>
-              <el-select slot="append">
+            <el-input :placeholder="mValueDefault.idle_timeout[0]" v-model="mValue.idle_timeout[0]">
+              <el-select slot="append" v-model="mValue.idle_timeout[1]">
                 <el-option value="s"></el-option>
               </el-select>
             </el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
           <el-form-item :label="tl('useLog')">
-            <el-select>
+            <el-select v-model="mValue.enable_stats">
               <el-option value="true"></el-option>
               <el-option value="false"></el-option>
             </el-select> </el-form-item
@@ -39,12 +48,15 @@
       <div class="part-header">
         {{ tl('predefinedTopic') }}
       </div>
-      <topic-edit-list :list.sync="topicList"></topic-edit-list>
+      <topic-edit-list :list.sync="mValue.predefined" :passed.sync="formPassed"></topic-edit-list>
       <div class="part-header">{{ tl('mountSetting') }}</div>
       <el-row :gutter="30">
         <el-col :span="12">
           <el-form-item :label="tl('mountPoint')">
-            <el-input></el-input>
+            <el-input
+              :placeholder="mValueDefault.mountpoint"
+              v-model="mValue.mountpoint"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -53,21 +65,49 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { defineComponent, reactive, ref, watch } from '@vue/composition-api'
 import topicEditList from './topicEditList.vue'
+import _ from 'lodash'
 
 export default defineComponent({
   components: { topicEditList },
   name: 'MqttsnBasic',
-  setup() {
-    let topicList = ref([])
+  props: {
+    value: {
+      type: Object,
+      required: false,
+      default: () => ({}),
+    },
+  },
+  setup(props, context) {
+    let mValueDefault = {
+      idle_timeout: [30, 's'],
+      gateway_id: 1,
+      broadcast: true,
+      enable_qos3: true,
+      enable_stats: true,
+      predefined: [],
+      mountpoint: '',
+    }
+    let mValue = reactive({ ...mValueDefault, ...props.value })
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
+    let formPassed = ref(false)
+
+    watch(
+      () => _.cloneDeep(mValue),
+      (v) => {
+        context.emit('update:value', v)
+        // console.log(v)
+      },
+    )
 
     return {
       tl,
-      topicList,
+      mValueDefault,
+      mValue,
+      formPassed,
     }
   },
 })

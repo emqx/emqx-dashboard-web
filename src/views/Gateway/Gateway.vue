@@ -7,7 +7,7 @@
           <span class="g-title">{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="tl('status')">
+      <el-table-column :label="tl('status')" sortable>
         <template #default="{ row }">
           <span>{{ isRunning(row.status) ? tl('running') : tl('stopped') }}</span>
         </template>
@@ -27,7 +27,7 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column :label="tl('listeners')" width="80">
+      <el-table-column :label="tl('listeners')" width="120" sortable>
         <template #default="{ row }">
           {{ (row.listeners && row.listeners.length) || 0 }}
         </template>

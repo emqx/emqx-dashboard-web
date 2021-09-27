@@ -15,12 +15,14 @@
     <el-row class="config-main">
       <div v-if="stepActive === 0" class="config-basic">
         <template v-if="name === 'STOMP'">
-          <stomp-basic :value.sync="stompData" />
+          <stomp-basic :value.sync="basicData" />
         </template>
         <template v-else-if="name === 'MQTTSN'">
-          <mqttsn-basic></mqttsn-basic>
+          <mqttsn-basic :value.sync="basicData"></mqttsn-basic>
         </template>
-        <template v-else-if="name === 'COAP'"> <coap-basic></coap-basic> </template>
+        <template v-else-if="name === 'COAP'">
+          <coap-basic :value.sync="basicData"></coap-basic>
+        </template>
         <template v-else-if="name === 'LWM2M'">
           <lwm2m-basic></lwm2m-basic>
         </template>
@@ -57,13 +59,14 @@
 
 <script>
 import { defineComponent, ref, watch } from '@vue/composition-api'
+import CoapBasic from './components/coapBasic.vue'
 import Listeners from './components/listeners.vue'
 import Lwm2mBasic from './components/lwm2mBasic.vue'
 import MqttsnBasic from './components/mqttsnBasic.vue'
 import stompBasic from './components/stompBasic.vue'
 
 export default defineComponent({
-  components: { stompBasic, Listeners, MqttsnBasic, Lwm2mBasic },
+  components: { stompBasic, Listeners, MqttsnBasic, Lwm2mBasic, CoapBasic },
   name: 'GatewayCreate',
   data: function () {
     return {
@@ -72,12 +75,17 @@ export default defineComponent({
   },
   setup(props) {
     let stepActive = ref(0)
-    let stompData = ref({})
+    let basicData = ref({})
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
 
-    watch(stompData, (v) => {})
+    watch(
+      () => ({ ...basicData }),
+      (v) => {
+        console.log(v)
+      },
+    )
 
     const cancel = function () {
       this.$router.push({ name: 'gateway' })
@@ -86,7 +94,7 @@ export default defineComponent({
     return {
       tl,
       stepActive,
-      stompData,
+      basicData,
       cancel,
     }
   },

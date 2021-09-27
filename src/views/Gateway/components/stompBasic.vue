@@ -85,7 +85,7 @@ export default defineComponent({
     }
     watch(
       () => ({ ...sValue }),
-      (v, oldV) => {
+      (v) => {
         context.emit('update:value', v)
       },
     )

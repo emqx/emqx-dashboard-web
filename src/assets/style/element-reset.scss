@@ -200,6 +200,16 @@
       }
     }
   }
+
+  .el-table__row {
+    .el-form-item__content {
+      line-height: unset;
+    }
+    .el-form-item__error {
+      position: relative;
+      padding-top: 0;
+    }
+  }
 }
 .el-loading-parent--relative {
   border-width: 1px;

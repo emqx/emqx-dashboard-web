@@ -151,4 +151,68 @@ export default {
     zh: '启用QoS3',
     en: 'Enable QoS3',
   },
+  connectionRequire: {
+    zh: '连接模式',
+    en: 'Connection Required',
+  },
+  heartbeat: {
+    zh: '心跳间隔',
+    en: 'Heartbeat',
+  },
+  notifyType: {
+    zh: 'Notification Message Type',
+    en: 'Notification Message Type',
+  },
+  subQos: {
+    zh: 'Subscribe QoS',
+    en: 'Subscribe QoS',
+  },
+  pubQos: {
+    zh: 'Publish QoS',
+    en: 'Publish QoS',
+  },
+  resDirectory: {
+    en: 'Resource Defination Files Directory',
+    zh: '资源定义文件目录',
+  },
+  qmodewindow: {
+    zh: 'QMode Time Window',
+    en: 'QMode Time Window',
+  },
+  minLifetime: {
+    en: 'Minimum Lifetime',
+    zh: '最小心跳时间',
+  },
+  maxLifetime: {
+    en: 'Maximum Lifetime',
+    zh: '最大心跳时间',
+  },
+  aObserve: {
+    zh: 'Auto Observe',
+    en: 'Auto Observe',
+  },
+  updateStrategy: {
+    zh: 'Update Message Strategy',
+    en: 'Update Message Strategy',
+  },
+  trCommand: {
+    zh: '下行命令',
+    en: 'Command',
+  },
+  trResponse: {
+    zh: '应答消息',
+    en: 'Response',
+  },
+  trNotify: {
+    zh: '通知消息',
+    en: 'Notify',
+  },
+  trRegister: {
+    zh: '注册事件',
+    en: 'Register',
+  },
+  trUpdate: {
+    zh: '更新事件',
+    en: 'Update',
+  },
 }
