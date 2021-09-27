@@ -15,31 +15,31 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
       defaultContent.value =
         "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1"
       helpContent.value = `
-        CREATE TABLE IF NOT EXISTS 'mqtt_user' (
-          'id' int(11) unsigned NOT NULL AUTO_INCREMENT,
-          'username' varchar(100) DEFAULT NULL,
-          'password' varchar(100) DEFAULT NULL,
-          'salt' varchar(35) DEFAULT NULL,
-          'is_superuser' tinyint(1) DEFAULT 0,
-          'created' datetime DEFAULT NULL,
-          PRIMARY KEY ('id'),
-          UNIQUE KEY 'mqtt_username' ('username')
+        CREATE TABLE IF NOT EXISTS \`mqtt_user\` (
+          \`id\` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          \`username\` varchar(100) DEFAULT NULL,
+          \`password\` varchar(100) DEFAULT NULL,
+          \`salt\` varchar(35) DEFAULT NULL,
+          \`is_superuser\` tinyint(1) DEFAULT 0,
+          \`created\` datetime DEFAULT NULL,
+          PRIMARY KEY (\`id\`),
+          UNIQUE KEY \`mqtt_username\` (\`username\`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
       `
       databaseConfig.database = 'mqtt_user'
     } else {
       defaultContent.value = `SELECT action, permission, topic FROM mqtt_acl where username = '\${username}'`
       helpContent.value = `
-        CREATE TABLE 'mqtt_acl' (
-          'id' int(11) unsigned NOT NULL AUTO_INCREMENT,
-          'ipaddress' VARCHAR(60) NOT NULL DEFAULT '',
-          'username' VARCHAR(255) NOT NULL DEFAULT '',
-          'clientid' VARCHAR(255) NOT NULL DEFAULT '',
-          'action' ENUM('publish', 'subscribe', 'all') NOT NULL,
-          'permission' ENUM('allow', 'deny') NOT NULL,
-          'topic' VARCHAR(255) NOT NULL DEFAULT '',
-          PRIMARY KEY ('id')
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+       CREATE TABLE \`mqtt_acl\` (
+        \`id\` int(11) unsigned NOT NULL AUTO_INCREMENT,
+        \`ipaddress\` VARCHAR(60) NOT NULL DEFAULT '',
+        \`username\` VARCHAR(255) NOT NULL DEFAULT '',
+        \`clientid\` VARCHAR(255) NOT NULL DEFAULT '',
+        \`action\` ENUM('publish', 'subscribe', 'all') NOT NULL,
+        \`permission\` ENUM('allow', 'deny') NOT NULL,
+        \`topic\` VARCHAR(255) NOT NULL DEFAULT '',
+        PRIMARY KEY (\`id\`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
       `
       databaseConfig.database = 'mqtt_acl'
     }
