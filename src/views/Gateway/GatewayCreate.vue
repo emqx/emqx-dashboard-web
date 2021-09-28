@@ -24,7 +24,7 @@
           <coap-basic :value.sync="basicData"></coap-basic>
         </template>
         <template v-else-if="name === 'LWM2M'">
-          <lwm2m-basic></lwm2m-basic>
+          <lwm2m-basic :value.sync="basicData"></lwm2m-basic>
         </template>
       </div>
 
@@ -64,6 +64,7 @@ import Listeners from './components/listeners.vue'
 import Lwm2mBasic from './components/lwm2mBasic.vue'
 import MqttsnBasic from './components/mqttsnBasic.vue'
 import stompBasic from './components/stompBasic.vue'
+import _ from 'lodash'
 
 export default defineComponent({
   components: { stompBasic, Listeners, MqttsnBasic, Lwm2mBasic, CoapBasic },
@@ -81,7 +82,7 @@ export default defineComponent({
     }
 
     watch(
-      () => ({ ...basicData }),
+      () => _.cloneDeep(basicData),
       (v) => {
         console.log(v)
       },

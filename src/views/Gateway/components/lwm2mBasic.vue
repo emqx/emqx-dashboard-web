@@ -7,13 +7,16 @@
       <el-row :gutter="30">
         <el-col :span="12">
           <el-form-item :label="tl('resDirectory')">
-            <el-input></el-input>
+            <el-input v-model="lValue.xml_dir" :placeholder="lValueDefault.xml_dir"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('qmodewindow')">
-            <el-input>
-              <el-select slot="append">
+            <el-input
+              :placeholder="lValueDefault.qmode_time_window[0]"
+              v-model="lValue.qmode_time_window[0]"
+            >
+              <el-select slot="append" v-model="lValue.qmode_time_window[1]">
                 <el-option value="s"></el-option>
               </el-select>
             </el-input>
@@ -21,30 +24,36 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('minLifetime')">
-            <el-input>
-              <el-select slot="append">
+            <el-input :placeholder="lValueDefault.lifetime_min[0]" v-model="lValue.lifetime_min[0]">
+              <el-select slot="append" v-model="lValue.lifetime_min[1]">
                 <el-option value="s"></el-option>
+                <el-option value="m"></el-option>
+                <el-option value="h"></el-option>
+                <el-option value="d"></el-option>
               </el-select>
             </el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('maxLifetime')">
-            <el-input>
-              <el-select slot="append">
+            <el-input :placeholder="lValueDefault.lifetime_max[0]" v-model="lValue.lifetime_max[0]">
+              <el-select slot="append" v-model="lValue.lifetime_max[1]">
                 <el-option value="s"></el-option>
+                <el-option value="m"></el-option>
+                <el-option value="h"></el-option>
+                <el-option value="d"></el-option>
               </el-select> </el-input
           ></el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('aObserve')">
-            <el-select>
+            <el-select v-model="lValue.auto_observe">
               <el-option value="true"></el-option>
               <el-option value="false"></el-option> </el-select
           ></el-form-item> </el-col
         ><el-col :span="12">
           <el-form-item :label="tl('updateStrategy')">
-            <el-select>
+            <el-select v-model="lValue.update_msg_publish_condition">
               <el-option value="always"></el-option>
               <el-option value="contains_object_list"></el-option>
             </el-select>
@@ -52,14 +61,14 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('useLog')">
-            <el-select>
+            <el-select v-model="lValue.enable_stats">
               <el-option value="true"></el-option>
               <el-option value="false"></el-option>
             </el-select> </el-form-item></el-col
         ><el-col :span="12">
           <el-form-item :label="tl('idleTime')">
-            <el-input>
-              <el-select slot="append">
+            <el-input v-model="lValue.idle_timeout[0]" :placeholder="lValueDefault.idle_timeout[0]">
+              <el-select slot="append" v-model="lValue.idle_timeout[1]">
                 <el-option value="s"></el-option>
               </el-select>
             </el-input>
@@ -70,19 +79,47 @@
       <el-row :gutter="30">
         <el-col :span="12">
           <el-form-item :label="tl('mountPoint')">
-            <el-input></el-input>
+            <el-input
+              v-model="lValue.mountpoint"
+              :placeholder="lValueDefault.mountpoint"
+            ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="tl('trCommand')"> <el-input></el-input></el-form-item> </el-col
+          <el-form-item :label="tl('trCommand')">
+            <el-input
+              :placeholder="lValueDefault['translators.command'].topic"
+              v-model="lValue['translators.command'].topic"
+            ></el-input
+          ></el-form-item> </el-col
         ><el-col :span="12">
-          <el-form-item :label="tl('trResponse')"><el-input></el-input></el-form-item> </el-col
+          <el-form-item :label="tl('trResponse')"
+            ><el-input
+              :placeholder="lValueDefault['translators.response'].topic"
+              v-model="lValue['translators.response'].topic"
+            ></el-input
+          ></el-form-item> </el-col
         ><el-col :span="12">
-          <el-form-item :label="tl('trNotify')"><el-input></el-input></el-form-item> </el-col
+          <el-form-item :label="tl('trNotify')"
+            ><el-input
+              :placeholder="lValueDefault['translators.notify'].topic"
+              v-model="lValue['translators.notify'].topic"
+            ></el-input
+          ></el-form-item> </el-col
         ><el-col :span="12">
-          <el-form-item :label="tl('trRegister')"><el-input></el-input></el-form-item> </el-col
+          <el-form-item :label="tl('trRegister')"
+            ><el-input
+              :placeholder="lValueDefault['translators.register'].topic"
+              v-model="lValue['translators.register'].topic"
+            ></el-input
+          ></el-form-item> </el-col
         ><el-col :span="12">
-          <el-form-item :label="tl('trUpdate')"><el-input></el-input></el-form-item>
+          <el-form-item :label="tl('trUpdate')"
+            ><el-input
+              :placeholder="lValueDefault['translators.update'].topic"
+              v-model="lValue['translators.update'].topic"
+            ></el-input
+          ></el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -90,7 +127,8 @@
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, onMounted, reactive, watch } from '@vue/composition-api'
+import _ from 'lodash'
 
 export default defineComponent({
   name: 'Lwm2mBasic',
@@ -100,12 +138,42 @@ export default defineComponent({
     default: () => ({}),
   },
   setup(props, context) {
+    let lValueDefault = {
+      idle_timeout: [30, 's'],
+      xml_dir: 'etc/lwm2m_xmls/',
+      qmode_time_window: [22, 's'],
+      lifetime_min: [1, 's'],
+      lifetime_max: [86400, 's'],
+      auto_observe: true,
+      enable_stats: true,
+      update_msg_publish_condition: 'contains_object_list',
+      'translators.command': { topic: 'dn/#', qos: 0 },
+      'translators.response': { topic: 'up/resp', qos: 0 },
+      'translators.notify': { topic: 'up/notify', qos: 0 },
+      'translators.register': { topic: 'up/resp', qos: 0 },
+      'translators.update': { topic: 'up/update', qos: 0 },
+    }
+
+    let lValue = reactive({ ..._.cloneDeep(lValueDefault), ..._.cloneDeep(props.value) })
+
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
 
+    watch(
+      () => _.cloneDeep(lValue),
+      (v) => {
+        context.emit('update:value', v)
+      },
+    )
+    onMounted(() => {
+      context.emit('update:value', lValue)
+    })
+
     return {
       tl,
+      lValueDefault,
+      lValue,
     }
   },
 })

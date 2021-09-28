@@ -118,25 +118,23 @@ export default {
 
       if (!auto) {
         this.logining = true
-        try {
-          let res = await loginApi({
-            username,
-            password,
-          })
-          if (!res) {
-            return
-          }
-          await this.$store.dispatch('UPDATE_USER_INFO', {
-            token: res.token,
-            username,
-          })
-          this.$store.commit('UPDATE_EDITION', res.license?.edition)
+        let res = await loginApi({
+          username,
+          password,
+        }).catch(() => {})
 
-          this.redirect()
-        } catch (error) {
-          this.$message({ message: error, type: 'error', duration: 6000 })
+        if (!res) {
           this.logining = false
+          return
         }
+
+        this.$store.commit('UPDATE_USER_INFO', {
+          token: res.token,
+          username,
+        })
+        this.$store.commit('UPDATE_EDITION', res.license?.edition)
+
+        this.redirect()
       }
     },
     redirect() {

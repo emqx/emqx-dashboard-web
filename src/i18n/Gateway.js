@@ -121,7 +121,7 @@ export default {
   },
   lAddress: {
     zh: '监听地址',
-    en: ' Listener Address',
+    en: 'Bind',
   },
   lMaxConn: {
     zh: '最大连接数',
@@ -214,5 +214,33 @@ export default {
   trUpdate: {
     zh: '更新事件',
     en: 'Update',
+  },
+  maxConnRate: {
+    zh: '最大连接速率',
+    en: 'Max Connection Rate',
+  },
+  maxConn: {
+    zh: '最大连接数',
+    en: 'Max Connections',
+  },
+  configSetting: {
+    zh: '参数配置',
+    en: 'Settings',
+  },
+  sendTimeout: {
+    zh: '发送超时时间',
+    en: 'Send Timeout',
+  },
+  sendTimeoutClose: {
+    zh: '关闭发送超时连接',
+    en: 'Send Timeout Close',
+  },
+  sslversion: {
+    zh: 'SSL版本',
+    en: 'SSL Versions',
+  },
+  dtlsversion: {
+    zh: 'DTLS 版本',
+    en: 'DTLS Versions',
   },
 }

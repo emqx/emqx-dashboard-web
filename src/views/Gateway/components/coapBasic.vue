@@ -63,7 +63,10 @@
       <el-row :gutter="30">
         <el-col :span="12">
           <el-form-item :label="tl('mountPoint')">
-            <el-input></el-input>
+            <el-input
+              v-model="cValue.mountpoint"
+              :placeholder="cValueDefault.mountpoint"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -72,7 +75,8 @@
 </template>
 
 <script>
-import { defineComponent, reactive, watch } from '@vue/composition-api'
+import { defineComponent, onMounted, reactive, watch } from '@vue/composition-api'
+import _ from 'lodash'
 
 export default defineComponent({
   name: 'CoapBasic',
@@ -94,17 +98,20 @@ export default defineComponent({
       publish_qos: 'coap',
       mountpoint: '',
     }
-    let cValue = reactive({ ...cValueDefault, ...props.value })
+    let cValue = reactive({ ..._.cloneDeep(cValueDefault), ..._.cloneDeep(props.value) })
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
 
     watch(
-      () => ({ ...cValue }),
+      () => _.cloneDeep(cValue),
       (v) => {
         context.emit('update:value', v)
       },
     )
+    onMounted(() => {
+      context.emit('update:value', cValue)
+    })
 
     return {
       tl,

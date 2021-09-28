@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, ref, watch } from '@vue/composition-api'
+import { defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
 import topicEditList from './topicEditList.vue'
 import _ from 'lodash'
 
@@ -89,7 +89,10 @@ export default defineComponent({
       predefined: [],
       mountpoint: '',
     }
-    let mValue = reactive({ ...mValueDefault, ...props.value })
+    let mValue = reactive({
+      ..._.cloneDeep(mValueDefault),
+      ..._.cloneDeep(props.value),
+    })
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
@@ -102,6 +105,9 @@ export default defineComponent({
         // console.log(v)
       },
     )
+    onMounted(() => {
+      context.emit('update:value', mValue)
+    })
 
     return {
       tl,

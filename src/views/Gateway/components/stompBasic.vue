@@ -59,7 +59,8 @@
 </template>
 
 <script>
-import { defineComponent, reactive, watch } from '@vue/composition-api'
+import { defineComponent, onMounted, reactive, watch } from '@vue/composition-api'
+import _ from 'lodash'
 
 export default defineComponent({
   name: 'StompBasic',
@@ -79,19 +80,21 @@ export default defineComponent({
       enable_stats: true,
       mountpoint: '',
     }
-    let sValue = reactive(Object.assign({}, sValueDefault, props.value))
+    let sValue = reactive({ ..._.cloneDeep(sValueDefault), ..._.cloneDeep(props.value) })
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
     watch(
-      () => ({ ...sValue }),
+      () => _.cloneDeep(sValue),
       (v) => {
         context.emit('update:value', v)
       },
     )
+    onMounted(() => {
+      context.emit('update:value', sValue)
+    })
     return {
       tl,
-      idleTimeUnit: 's',
       sValue,
       sValueDefault,
     }
