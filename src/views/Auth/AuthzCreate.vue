@@ -39,13 +39,16 @@
       <!-- Config -->
       <div v-if="step === 1">
         <file-config v-if="type === 'file'" v-model="configData"></file-config>
+        <http-config v-else-if="type === 'http'" v-model="configData"></http-config>
+        <p v-else-if="type === 'built-in-database'" class="item-description">
+          {{ $t('Auth.builtInDatabaseDesc') }}
+        </p>
         <database-config
-          v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(type)"
+          v-else-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(type)"
           v-model="configData"
           :database="type"
           auth-type="authz"
         ></database-config>
-        <http-config v-else-if="type === 'http'" v-model="configData"></http-config>
         <div class="step-btn">
           <el-button type="primary" @click="handleCreate">
             {{ $t('Base.create') }}
@@ -93,6 +96,11 @@ export default defineComponent({
       { label: 'HTTP Server', value: 'http', img: require('@/assets/img/http.png') },
       { label: 'MongoDB', value: 'mongodb', img: require('@/assets/img/mongodb.png') },
       { label: 'Redis', value: 'redis', img: require('@/assets/img/redis.png') },
+      {
+        label: 'Built-in database',
+        value: 'built-in-database',
+        img: require('@/assets/img/built-in-database.png'),
+      },
     ])
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(() => {
       if (step.value === 0) {

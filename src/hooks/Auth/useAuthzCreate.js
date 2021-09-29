@@ -94,6 +94,8 @@ export default function useAuthzCreate() {
         return getMongodbConfig()
       case 'redis':
         return getRedisConfig()
+      case 'built-in-database':
+        return {}
     }
   }
   const { processHttpConfig, processMongoDBConfig, processRedisConfig } = useProcessAuthData()
