@@ -85,4 +85,27 @@ export function moveAuthn(id, body) {
   return http.post(`/authentication/${encodeURIComponent(id)}/move`, body)
 }
 
+export function loadBuiltInDatabaseData(type) {
+  return http.get(`/authorization/sources/built-in-database/${type}`)
+}
+
+export function createBuiltInDatabaseData(type, body) {
+  return http.post(`/authorization/sources/built-in-database/${type}`, body)
+}
+
+export function deleteBuiltInDatabaseData(type, key) {
+  return http.delete(`/authorization/sources/built-in-database/${type}/${encodeURIComponent(key)}`)
+}
+
+export function updateBuiltInDatabaseData(type, key, body) {
+  return http.put(
+    `/authorization/sources/built-in-database/${type}/${encodeURIComponent(key)}`,
+    body,
+  )
+}
+
+export function updateAllBuiltInDatabaseData(body) {
+  return http.put('/authorization/sources/built-in-database/all', body)
+}
+
 export default {}

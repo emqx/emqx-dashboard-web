@@ -263,4 +263,32 @@ export default {
     zh: 'JWKS 刷新间隔（毫秒）',
     en: 'JWKS Refresh Interval (ms)',
   },
+  builtInDatabaseDesc: {
+    zh: 'Built-in database 权限无需配置参数，请点击创建按钮完成操作',
+    en: 'Built-in database authorization does not require configuration parameters, please click the Create button to complete the operation',
+  },
+  permissionCount: {
+    zh: '权限条数',
+    en: 'Number of permissions',
+  },
+  pleaseEnterClientID: {
+    zh: '请输入 Client ID',
+    en: 'Please enter Client ID',
+  },
+  pleaseEnterUsername: {
+    zh: '请输入 Username',
+    en: 'Please enter Username',
+  },
+  pleaseSelectPermission: {
+    zh: '请选择 permission',
+    en: 'Please select permission',
+  },
+  pleaseSelectAction: {
+    zh: '请选择 Action',
+    en: 'Please select action',
+  },
+  pleaseEnterTopic: {
+    zh: '请输入 Topic',
+    en: 'Please enter topic',
+  },
 }

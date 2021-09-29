@@ -22,7 +22,10 @@
       </div>
     </div>
     <el-tabs v-if="!authzDetailLock">
-      <el-tab-pane :label="$t('Auth.config')" :lazy="true">
+      <el-tab-pane v-if="type === 'built-in-database'" :label="$t('Auth.dataConfig')" :lazy="true">
+        <built-in-manager></built-in-manager>
+      </el-tab-pane>
+      <el-tab-pane v-else :label="$t('Auth.config')" :lazy="true">
         <el-card shadow="never">
           <database-config
             v-if="['mysql', 'postgresql', 'mongodb', 'redis'].includes(type)"
@@ -54,6 +57,7 @@ import { loadAuthz, deleteAuthz, updateAuthz } from '@/api/auth'
 import FileConfig from './components/FileConfig.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import useAuthzCreate from '@/hooks/Auth/useAuthzCreate'
+import BuiltInManager from './components/BuiltInManager.vue'
 
 export default defineComponent({
   name: 'AuthzDetails',
@@ -61,12 +65,18 @@ export default defineComponent({
     BackButton,
     FileConfig,
     DatabaseConfig,
+    BuiltInManager,
   },
   setup() {
     const authzDetailLock = ref(false)
     const titleMap = {
       mysql: 'MySQL',
       file: 'File',
+      postgresql: 'PostgreSQL',
+      http: 'HTTP Server',
+      mongodb: 'MongoDB',
+      redis: 'Redis',
+      'built-in-database': 'Built-in database',
     }
     const configData = ref({
       ssl: { enable: false },
