@@ -99,8 +99,8 @@
             <el-input v-model="record.username"></el-input>
           </el-form-item>
           <el-form-item label="Permissions">
-            <el-table :data="rulesData" size="mini">
-              <el-table-column prop="permission" label="Permission" min-width="80px">
+            <el-table class="form-table" :data="rulesData" size="mini">
+              <el-table-column prop="permission" label="Permission">
                 <template slot-scope="{ row }">
                   <el-select v-model="row.permission">
                     <el-option value="allow" label="Allow"></el-option>
@@ -108,7 +108,7 @@
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column prop="action" label="Action" min-width="80px">
+              <el-table-column prop="action" label="Action">
                 <template slot-scope="{ row }">
                   <el-select v-model="row.action">
                     <el-option value="publish" label="Publish"></el-option>
@@ -122,11 +122,17 @@
                   <el-input v-model="row.topic"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column width="60px">
+              <el-table-column align="right" max-width="160px">
                 <a href="javascript:;" slot="header" class="btn" @click="addColumn">
                   {{ $t('Base.add') }}
                 </a>
                 <template slot-scope="{ row, $index }">
+                  <a href="javascript:;" class="btn" @click="handleUp(row, $index)">
+                    {{ $t('Base.up') }}
+                  </a>
+                  <a href="javascript:;" class="btn" @click="handleDown(row, $index)">
+                    {{ $t('Base.down') }}
+                  </a>
                   <a href="javascript:;" class="btn" @click="deleteItem(row, $index)">
                     {{ $t('Base.delete') }}
                   </a>
@@ -258,7 +264,7 @@ export default defineComponent({
     const deleteItem = (row, index) => {
       rulesData.value.splice(index, 1)
     }
-    const handleSubmit = async function (index) {
+    const handleSubmit = async function () {
       const key = type.value
       const data = {}
       if (key !== 'all') {
@@ -323,6 +329,22 @@ export default defineComponent({
         record.topic = row.topic
       }
     }
+    const swapArray = (arr, fromIndex, toIndex) => {
+      arr[toIndex] = arr.splice(fromIndex, 1, arr[toIndex])[0]
+      return arr
+    }
+    const handleUp = (row, index) => {
+      if (index === 0) {
+        return
+      }
+      swapArray(rulesData.value, index, index - 1)
+    }
+    const handleDown = (row, index) => {
+      if (index === rulesData.value.length - 1) {
+        return
+      }
+      swapArray(rulesData.value, index, index + 1)
+    }
     return {
       type,
       typeList,
@@ -340,6 +362,8 @@ export default defineComponent({
       handleSubmit,
       handleDelete,
       handleEdit,
+      handleUp,
+      handleDown,
     }
   },
 })
@@ -355,6 +379,13 @@ export default defineComponent({
     padding: 24px 48px;
     .el-table {
       border: 0px;
+    }
+  }
+  .form-table {
+    .cell {
+      .btn + .btn {
+        margin-left: 5px;
+      }
     }
   }
 }
