@@ -247,4 +247,12 @@ export default {
     zh: '小时',
     en: 'Hour',
   },
+  up: {
+    zh: '上移',
+    en: 'Up',
+  },
+  down: {
+    zh: '下移',
+    en: 'Down',
+  },
 }
