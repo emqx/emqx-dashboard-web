@@ -306,7 +306,7 @@ export default {
   },
   konw: {
     zh: '知道了',
-    en: 'I knew',
+    en: 'Acknowledge',
   },
   expired: {
     zh: '过期',
