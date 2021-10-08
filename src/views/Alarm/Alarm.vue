@@ -37,7 +37,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <common-pagination ref="p1" :reload-func="loadData"></common-pagination>
+    <div class="emq-table-footer">
+      <common-pagination ref="p1" :reload-func="loadData"></common-pagination>
+    </div>
 
     <div class="section-header">
       <div>
