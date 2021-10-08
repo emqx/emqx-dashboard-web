@@ -37,6 +37,7 @@
           <table-dropdown
             :row-data="row"
             :table-data-len="authzList.length"
+            :position="findIndex(row)"
             @update="handleUpdate"
             @delete="handleDelete"
             @move="handleMove"
@@ -102,6 +103,9 @@ export default defineComponent({
     const handleSetting = function ({ type }) {
       this.$router.push({ path: `/authorization/detail/${type}` })
     }
+    const findIndex = (row) => {
+      return authzList.value.findIndex((item) => item.type === row.type)
+    }
     return {
       lockTable,
       authzList,
@@ -109,6 +113,7 @@ export default defineComponent({
       handleDelete,
       handleMove,
       handleSetting,
+      findIndex,
     }
   },
 })

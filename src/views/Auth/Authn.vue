@@ -31,6 +31,7 @@
           <table-dropdown
             :row-data="row"
             :table-data-len="authnList.length"
+            :position="findIndex(row)"
             @update="handleUpdate"
             @delete="handleDelete"
             @setting="handleSetting"
@@ -98,6 +99,12 @@ export default defineComponent({
       await moveAuthn(id, data)
       loadData()
     }
+    const findIndex = (row) => {
+      return authnList.value.findIndex((item) => {
+        const id = `${item.mechanism}_${item.backend}`
+        return id === `${row.mechanism}_${row.backend}`
+      })
+    }
     return {
       lockTable,
       authnList,
@@ -105,6 +112,7 @@ export default defineComponent({
       handleDelete,
       handleSetting,
       handleMove,
+      findIndex,
     }
   },
 })
