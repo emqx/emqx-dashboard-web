@@ -8,14 +8,16 @@
         <i class="el-icon-setting"></i>
         {{ $t('Auth.setting') }}
       </el-dropdown-item>
-      <el-dropdown-item :disabled="tableDataLen === 1" command="moveUp">
-        <i class="el-icon-top"></i>
-        {{ $t('Auth.moveUp') }}
-      </el-dropdown-item>
-      <el-dropdown-item :disabled="tableDataLen === 1" command="moveDown">
-        <i class="el-icon-bottom"></i>
-        {{ $t('Auth.moveDown') }}
-      </el-dropdown-item>
+      <template v-if="tableDataLen !== 1">
+        <el-dropdown-item command="moveUp" :disabled="position === 0">
+          <i class="el-icon-top"></i>
+          {{ $t('Auth.moveUp') }}
+        </el-dropdown-item>
+        <el-dropdown-item command="moveDown" :disabled="position === tableDataLen - 1">
+          <i class="el-icon-bottom"></i>
+          {{ $t('Auth.moveDown') }}
+        </el-dropdown-item>
+      </template>
       <el-dropdown-item v-if="rowData.enable" class="danger" command="disable">
         <i class="el-icon-switch-button"></i>
         {{ $t('Auth.disable') }}
@@ -45,6 +47,10 @@ export default defineComponent({
     rowData: {
       required: true,
       type: Object,
+    },
+    position: {
+      required: true,
+      type: Number,
     },
   },
   setup() {

@@ -167,12 +167,12 @@ export default defineComponent({
     const { factory, create } = useAuthnCreate()
     const supportBackendMap = {
       'password-based': {
-        mysql: 'MySQL',
-        redis: 'Redis',
-        postgresql: 'PostgreSQL',
-        mongodb: 'MongoDB',
         'built-in-database': 'Built-in database',
-        http: 'HTTP',
+        mysql: 'MySQL',
+        mongodb: 'MongoDB',
+        postgresql: 'PostgreSQL',
+        http: 'HTTP Server',
+        redis: 'Redis',
       },
       jwt: {},
       scram: {
