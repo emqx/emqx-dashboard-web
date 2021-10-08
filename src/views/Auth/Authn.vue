@@ -68,6 +68,13 @@ export default defineComponent({
           }
           return item
         })
+        const addedAuthn = authnList.value.map((authn) => {
+          if (authn.backend === undefined) {
+            return `${authn.mechanism}`
+          }
+          return `${authn.mechanism}_${authn.backend}`
+        })
+        sessionStorage.setItem('addedAuthn', JSON.stringify(addedAuthn))
       }
       lockTable.value = false
     }

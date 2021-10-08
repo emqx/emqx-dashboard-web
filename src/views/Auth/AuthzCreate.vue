@@ -16,16 +16,24 @@
           {{ $t('Auth.selectDataSource') }}
         </div>
         <el-radio-group v-model="type" class="select-type">
-          <el-radio
+          <el-badge
             v-for="item in typeList"
             :key="item.value"
-            :label="item.value"
-            class="backend"
-            border
+            :value="$t('Modules.added')"
+            class="item"
+            :hidden="!addedAuthz.includes(item.value)"
           >
-            <img height="32" width="32" :src="item.img" :alt="item.label" />
-            <span>{{ item.label }}</span>
-          </el-radio>
+            <el-radio
+              :key="item.value"
+              :label="item.value"
+              class="backend"
+              border
+              :disabled="addedAuthz.includes(item.value)"
+            >
+              <img height="32" width="32" :src="item.img" :alt="item.label" />
+              <span>{{ item.label }}</span>
+            </el-radio>
+          </el-badge>
         </el-radio-group>
         <div class="step-btn">
           <el-button type="primary" @click="handleNext">
@@ -63,7 +71,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
 import FileConfig from './components/FileConfig.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import HttpConfig from './components/HttpConfig.vue'
@@ -91,22 +99,25 @@ export default defineComponent({
     const { factory, create } = useAuthzCreate()
     const typeList = ref([
       { label: 'File', value: 'file', img: require('@/assets/img/file.png') },
-      { label: 'MySQL', value: 'mysql', img: require('@/assets/img/mysql.png') },
-      { label: 'PostgreSQL', value: 'postgresql', img: require('@/assets/img/postgresql.png') },
-      { label: 'HTTP Server', value: 'http', img: require('@/assets/img/http.png') },
-      { label: 'MongoDB', value: 'mongodb', img: require('@/assets/img/mongodb.png') },
-      { label: 'Redis', value: 'redis', img: require('@/assets/img/redis.png') },
       {
         label: 'Built-in database',
         value: 'built-in-database',
         img: require('@/assets/img/built-in-database.png'),
       },
+      { label: 'MySQL', value: 'mysql', img: require('@/assets/img/mysql.png') },
+      { label: 'MongoDB', value: 'mongodb', img: require('@/assets/img/mongodb.png') },
+      { label: 'PostgreSQL', value: 'postgresql', img: require('@/assets/img/postgresql.png') },
+      { label: 'HTTP Server', value: 'http', img: require('@/assets/img/http.png') },
+      { label: 'Redis', value: 'redis', img: require('@/assets/img/redis.png') },
     ])
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(() => {
       if (step.value === 0) {
         const data = factory(type.value)
         configData.value = data
       }
+    })
+    const addedAuthz = computed(() => {
+      return JSON.parse(sessionStorage.getItem('addedAuthz')) || []
     })
     const handleCreate = async function () {
       const data = create(configData.value, type.value)
@@ -120,6 +131,7 @@ export default defineComponent({
       type,
       typeList,
       activeGuidesIndex,
+      addedAuthz,
       handleNext,
       handleBack,
       handleCreate,

@@ -18,7 +18,11 @@
         </div>
         <el-radio-group v-model="mechanism">
           <el-radio class="mechanism" label="password-based" border> Password-Based </el-radio>
-          <el-radio class="mechanism" label="jwt" border> JWT </el-radio>
+          <el-badge :value="$t('Modules.added')" :hidden="!addedAuthn.includes('jwt')" class="item">
+            <el-radio class="mechanism" label="jwt" border :disabled="addedAuthn.includes('jwt')">
+              JWT
+            </el-radio>
+          </el-badge>
           <el-radio class="mechanism" label="scram" border>
             {{ this.$t('Auth.scram') }}
           </el-radio>
@@ -54,32 +58,47 @@
             {{ $t('Auth.database') }}
           </div>
           <el-radio-group v-model="backend" class="select-database">
-            <el-radio
+            <el-badge
               v-for="item in databases"
               :key="item.value"
-              :label="item.value"
-              class="backend"
-              border
+              :value="$t('Modules.added')"
+              class="item"
+              :hidden="!addedAuthn.includes(`${mechanism}_${item.value}`)"
             >
-              <img height="32" width="32" :src="item.img" :alt="item.key" />
-              <span>{{ item.label }}</span>
-            </el-radio>
+              <el-radio
+                :label="item.value"
+                class="backend"
+                border
+                :disabled="addedAuthn.includes(`${mechanism}_${item.value}`)"
+              >
+                <img height="32" width="32" :src="item.img" :alt="item.key" />
+                <span>{{ item.label }}</span>
+              </el-radio>
+            </el-badge>
           </el-radio-group>
           <template v-if="others.length !== 0">
             <div class="create-form-title">
               {{ $t('Base.other') }}
             </div>
             <el-radio-group v-model="backend">
-              <el-radio
+              <el-badge
                 v-for="item in others"
                 :key="item.value"
-                :label="item.value"
-                class="backend"
-                border
+                :value="$t('Modules.added')"
+                :hidden="!addedAuthn.includes(`${mechanism}_${item.value}`)"
+                class="item"
               >
-                <img height="32" width="32" :src="item.img" :alt="item.key" />
-                <span>{{ item.label }}</span>
-              </el-radio>
+                <el-radio
+                  :key="item.value"
+                  :label="item.value"
+                  class="backend"
+                  border
+                  :disabled="addedAuthn.includes(`${mechanism}_${item.value}`)"
+                >
+                  <img height="32" width="32" :src="item.img" :alt="item.key" />
+                  <span>{{ item.label }}</span>
+                </el-radio>
+              </el-badge>
             </el-radio-group>
           </template>
         </template>
@@ -135,7 +154,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
 import BackButton from './components/BackButton.vue'
 import GuideBar from '@/components/GuideBar.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
@@ -179,6 +198,9 @@ export default defineComponent({
         'built-in-database': 'Built-in database',
       },
     }
+    const addedAuthn = computed(() => {
+      return JSON.parse(sessionStorage.getItem('addedAuthn')) || []
+    })
     const getGuideList = function () {
       return [this.$t('Auth.mechanism'), this.$t('Auth.dataSource'), this.$t('Auth.config')]
     }
@@ -228,6 +250,7 @@ export default defineComponent({
       isWork,
       testRes,
       configData,
+      addedAuthn,
       getGuideList,
       handleNext,
       handleBack,
