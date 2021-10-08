@@ -64,8 +64,8 @@ export default {
     en: 'Database',
   },
   jwtDataSourceDesc: {
-    zh: 'JWT 认证无需选择数据源，请继续下一步配置参数',
-    en: 'JWT authentication does not need to select a backend, please continue to the next step to configure the parameters',
+    zh: 'JWT 认证无需选择数据源，请继续下一步配置',
+    en: 'JWT authentication does not need to select a backend, please continue to the next step of the configuration',
   },
   connect: {
     zh: '连接',

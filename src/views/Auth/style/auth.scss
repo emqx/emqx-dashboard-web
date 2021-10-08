@@ -98,4 +98,16 @@
       }
     }
   }
+  .el-badge {
+    display: inherit;
+    vertical-align: initial;
+  }
+  .el-badge__content.is-fixed {
+    top: 15px;
+    right: 52px;
+  }
+  .el-badge__content {
+    background-color: #c7c7c7;
+    color: #fff;
+  }
 }
