@@ -10,7 +10,7 @@
     <el-table :data="topicMetricsTb" v-loading="tbLoading" ref="tbRef">
       <el-table-column type="expand" width="1">
         <template slot-scope="{ row }">
-          <div v-loading="row._loading">
+          <div v-loading="row._loading" class="topic-detail">
             <el-row class="topic-detail-header">
               <div>{{ $t('Base.detail') }}</div>
               <el-radio-group v-model="topicQos" size="mini">
@@ -238,13 +238,16 @@ export default defineComponent({
     const loadMetricsFromTopic = async function (row, index) {
       const { topic } = row
       row._loading = true
-      tbRef.value.toggleRowExpansion(row, true)
+      row._expand = !(row._expand ?? false)
+      tbRef.value.toggleRowExpansion(row, row._expand)
 
-      let res = await getTopicMetrics(topic).catch(() => {})
-      if (res && row) {
-        row._detail = res.metrics
+      if (row._expand) {
+        let res = await getTopicMetrics(topic).catch(() => {})
+        if (res && row) {
+          row._detail = res.metrics
+        }
+        row._loading = false
       }
-      row._loading = false
     }
 
     onMounted(loadTopicMetrics)
@@ -310,5 +313,9 @@ export default defineComponent({
     flex-grow: 1;
     text-align: right;
   }
+}
+
+.topic-detail {
+  margin: 0 10px;
 }
 </style>
