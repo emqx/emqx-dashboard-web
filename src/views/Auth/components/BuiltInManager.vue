@@ -264,35 +264,40 @@ export default defineComponent({
     const deleteItem = (row, index) => {
       rulesData.value.splice(index, 1)
     }
-    const handleSubmit = async function () {
-      const key = type.value
-      const data = {}
-      if (key !== 'all') {
-        data[key] = record[key]
-        data.rules = rulesData.value
-        if (!isEdit.value) {
-          await createBuiltInDatabaseData(type.value, [data])
-          this.$message.success(this.$t('Base.createSuccess'))
-        } else {
-          await updateBuiltInDatabaseData(type.value, data[type.value], data)
-          this.$message.success(this.$t('Base.updateSuccess'))
+    const handleSubmit = function () {
+      this.$refs.recordForm.validate(async (valid) => {
+        if (!valid) {
+          return
         }
-      } else {
-        data.permission = record.permission
-        data.action = record.action
-        data.topic = record.topic
-        const rules = _.cloneDeep(allTableData.value)
-        if (!isEdit.value) {
-          rules.push(data)
+        const key = type.value
+        const data = {}
+        if (key !== 'all') {
+          data[key] = record[key]
+          data.rules = rulesData.value
+          if (!isEdit.value) {
+            await createBuiltInDatabaseData(type.value, [data])
+            this.$message.success(this.$t('Base.createSuccess'))
+          } else {
+            await updateBuiltInDatabaseData(type.value, data[type.value], data)
+            this.$message.success(this.$t('Base.updateSuccess'))
+          }
         } else {
-          rules.splice(editIndex.value, 1, data)
+          data.permission = record.permission
+          data.action = record.action
+          data.topic = record.topic
+          const rules = _.cloneDeep(allTableData.value)
+          if (!isEdit.value) {
+            rules.push(data)
+          } else {
+            rules.splice(editIndex.value, 1, data)
+          }
+          await updateAllBuiltInDatabaseData({
+            rules,
+          })
         }
-        await updateAllBuiltInDatabaseData({
-          rules,
-        })
-      }
-      dialogVisible.value = false
-      loadData()
+        dialogVisible.value = false
+        loadData()
+      })
     }
     const handleDelete = function (row, index) {
       this.$confirm(this.$t('General.confirmDelete'), {
