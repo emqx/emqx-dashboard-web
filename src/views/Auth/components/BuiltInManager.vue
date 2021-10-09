@@ -96,7 +96,7 @@
             <el-input v-model="record.clientid" :disabled="isEdit"></el-input>
           </el-form-item>
           <el-form-item v-else-if="type === 'username'" prop="username" label="Username">
-            <el-input v-model="record.username"></el-input>
+            <el-input v-model="record.username" :disabled="isEdit"></el-input>
           </el-form-item>
           <el-form-item label="Permissions">
             <el-table class="form-table" :data="rulesData" size="mini">
