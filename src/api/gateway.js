@@ -17,3 +17,12 @@ export async function updateGateway(name, body) {
   if (!name) return Promise.reject()
   return http.put('/gateway/' + name, body)
 }
+
+export async function postGateway(body) {
+  return http.post('/gateway', body)
+}
+
+export async function getGateway(name) {
+  if (!name) return Promise.reject()
+  return http.get('/gateway/' + name)
+}

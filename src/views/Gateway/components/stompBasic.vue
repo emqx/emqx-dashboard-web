@@ -8,28 +8,31 @@
         <el-col :span="12">
           <el-form-item :label="tl('maxHeader')">
             <el-input
-              v-model="sValue.max_headers"
-              :placeholder="sValueDefault.max_headers"
+              v-model="sValue.frame.max_headers"
+              :placeholder="sValueDefault.frame.max_headers"
             ></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('maxHeaderLen')">
             <el-input
-              v-model="sValue.max_headers_length"
-              :placeholder="sValueDefault.max_headers_length"
+              v-model="sValue.frame.max_headers_length"
+              :placeholder="sValueDefault.frame.max_headers_length"
             ></el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
           <el-form-item :label="tl('maxBodyLen')">
             <el-input
-              v-model="sValue.max_body_length"
-              :placeholder="sValueDefault.max_body_length"
+              v-model="sValue.frame.max_body_length"
+              :placeholder="sValueDefault.frame.max_body_length"
             ></el-input> </el-form-item
         ></el-col>
         <el-col :span="12">
           <el-form-item :label="tl('idleTime')">
-            <el-input v-model="sValue.idle_timeout[0]" :placeholder="sValueDefault.idle_timeout[0]">
+            <el-input
+              v-model.number="sValue.idle_timeout[0]"
+              :placeholder="sValueDefault.idle_timeout[0]"
+            >
               <el-select slot="append" v-model="sValueDefault.idle_timeout[1]">
                 <el-option value="s"></el-option>
               </el-select>
@@ -61,6 +64,7 @@
 <script>
 import { defineComponent, onMounted, reactive, watch } from '@vue/composition-api'
 import _ from 'lodash'
+import { transformUnitArrayToStr, transformStrToUnitArray } from '@/common/utils'
 
 export default defineComponent({
   name: 'StompBasic',
@@ -73,25 +77,28 @@ export default defineComponent({
   },
   setup(props, context) {
     let sValueDefault = {
-      max_headers: 10,
-      max_headers_length: 1024,
-      max_body_length: 8192,
+      frame: {
+        max_headers: 10,
+        max_headers_length: 1024,
+        max_body_length: 8192,
+      },
       idle_timeout: [30, 's'],
       enable_stats: true,
       mountpoint: '',
     }
-    let sValue = reactive({ ..._.cloneDeep(sValueDefault), ..._.cloneDeep(props.value) })
+    let normalizeProps = transformStrToUnitArray(_.cloneDeep(props.value), ['idle_timeout'])
+    let sValue = reactive({ ..._.cloneDeep(sValueDefault), ...normalizeProps })
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
     watch(
       () => _.cloneDeep(sValue),
       (v) => {
-        context.emit('update:value', v)
+        context.emit('update:value', transformUnitArrayToStr(v))
       },
     )
     onMounted(() => {
-      context.emit('update:value', sValue)
+      context.emit('update:value', transformUnitArrayToStr(sValue))
     })
     return {
       tl,

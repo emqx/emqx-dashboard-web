@@ -31,7 +31,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('idleTime')">
-            <el-input :placeholder="mValueDefault.idle_timeout[0]" v-model="mValue.idle_timeout[0]">
+            <el-input
+              :placeholder="mValueDefault.idle_timeout[0]"
+              v-model.number="mValue.idle_timeout[0]"
+            >
               <el-select slot="append" v-model="mValue.idle_timeout[1]">
                 <el-option value="s"></el-option>
               </el-select>
@@ -68,6 +71,7 @@
 import { defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
 import topicEditList from './topicEditList.vue'
 import _ from 'lodash'
+import { transformUnitArrayToStr, transformStrToUnitArray } from '@/common/utils'
 
 export default defineComponent({
   components: { topicEditList },
@@ -89,9 +93,11 @@ export default defineComponent({
       predefined: [],
       mountpoint: '',
     }
+    let normalizeProps = transformStrToUnitArray(_.cloneDeep(props.value), ['idle_timeout'])
+
     let mValue = reactive({
       ..._.cloneDeep(mValueDefault),
-      ..._.cloneDeep(props.value),
+      ...normalizeProps,
     })
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
@@ -101,12 +107,12 @@ export default defineComponent({
     watch(
       () => _.cloneDeep(mValue),
       (v) => {
-        context.emit('update:value', v)
-        // console.log(v)
+        context.emit('update:value', transformUnitArrayToStr(v))
+        console.log(v)
       },
     )
     onMounted(() => {
-      context.emit('update:value', mValue)
+      context.emit('update:value', transformUnitArrayToStr(mValue))
     })
 
     return {

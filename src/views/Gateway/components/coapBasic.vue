@@ -24,7 +24,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('heartbeat')">
-            <el-input v-model="cValue.heartbeat[0]" :placeholder="cValueDefault.heartbeat[0]">
+            <el-input
+              v-model.number="cValue.heartbeat[0]"
+              :placeholder="cValueDefault.heartbeat[0]"
+            >
               <el-select slot="append" v-model="cValue.heartbeat[1]">
                 <el-option value="s"></el-option>
               </el-select>
@@ -77,6 +80,7 @@
 <script>
 import { defineComponent, onMounted, reactive, watch } from '@vue/composition-api'
 import _ from 'lodash'
+import { transformUnitArrayToStr, transformStrToUnitArray } from '@/common/utils'
 
 export default defineComponent({
   name: 'CoapBasic',
@@ -98,7 +102,10 @@ export default defineComponent({
       publish_qos: 'coap',
       mountpoint: '',
     }
-    let cValue = reactive({ ..._.cloneDeep(cValueDefault), ..._.cloneDeep(props.value) })
+    let normalizeProps = transformStrToUnitArray(_.cloneDeep(props.value), ['heartbeat'])
+
+    let cValue = reactive({ ..._.cloneDeep(cValueDefault), ...normalizeProps })
+
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
@@ -106,11 +113,11 @@ export default defineComponent({
     watch(
       () => _.cloneDeep(cValue),
       (v) => {
-        context.emit('update:value', v)
+        context.emit('update:value', transformUnitArrayToStr(v))
       },
     )
     onMounted(() => {
-      context.emit('update:value', cValue)
+      context.emit('update:value', transformUnitArrayToStr(cValue))
     })
 
     return {

@@ -29,7 +29,7 @@
       </div>
 
       <div v-else-if="stepActive === 1">
-        <listeners :integration="true"></listeners>
+        <listeners :integration="true" :gateway-name="name" :list.sync="listenerList"></listeners>
       </div>
       <div v-else-if="stepActive === 2">
         <div class="part-header">
@@ -41,16 +41,30 @@
       </div>
     </el-row>
     <el-row class="config-op">
-      <el-button size="small" type="primary" v-if="stepActive === 2">{{
-        $t('Base.enable')
-      }}</el-button>
-      <el-button type="primary" size="small" @click="++stepActive" v-if="stepActive < 2">{{
-        $t('Base.nextStep')
-      }}</el-button>
-      <el-button size="small" @click="--stepActive" v-if="stepActive > 0">{{
-        $t('Base.backStep')
-      }}</el-button>
-      <el-button size="small" v-if="stepActive === 0" @click="cancel">{{
+      <el-button
+        size="small"
+        type="primary"
+        v-if="stepActive === 2"
+        :loading="submitLoading"
+        @click="createGateway()"
+        >{{ $t('Base.enable') }}</el-button
+      >
+      <el-button
+        type="primary"
+        size="small"
+        @click="++stepActive"
+        v-if="stepActive < 2"
+        :disabled="submitLoading"
+        >{{ $t('Base.nextStep') }}</el-button
+      >
+      <el-button
+        size="small"
+        @click="--stepActive"
+        v-if="stepActive > 0"
+        :disabled="submitLoading"
+        >{{ $t('Base.backStep') }}</el-button
+      >
+      <el-button size="small" v-if="stepActive === 0" @click="gotoList">{{
         $t('Base.cancel')
       }}</el-button>
     </el-row>
@@ -58,13 +72,14 @@
 </template>
 
 <script>
-import { defineComponent, ref, watch } from '@vue/composition-api'
+import { defineComponent, onMounted, ref, watch, getCurrentInstance } from '@vue/composition-api'
 import CoapBasic from './components/coapBasic.vue'
 import Listeners from './components/listeners.vue'
 import Lwm2mBasic from './components/lwm2mBasic.vue'
 import MqttsnBasic from './components/mqttsnBasic.vue'
 import stompBasic from './components/stompBasic.vue'
 import _ from 'lodash'
+import { postGateway, getGateway } from '@/api/gateway'
 
 export default defineComponent({
   components: { stompBasic, Listeners, MqttsnBasic, Lwm2mBasic, CoapBasic },
@@ -77,26 +92,69 @@ export default defineComponent({
   setup(props) {
     let stepActive = ref(0)
     let basicData = ref({})
+    let listenerList = ref([])
+    let submitLoading = ref(false)
+
+    let vm = getCurrentInstance()
+
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
 
     watch(
-      () => _.cloneDeep(basicData),
+      () => [_.cloneDeep(basicData), _.cloneDeep(listenerList)],
       (v) => {
         console.log(v)
       },
     )
 
-    const cancel = function () {
+    const gotoList = function () {
       this.$router.push({ name: 'gateway' })
     }
+
+    const createGateway = async function () {
+      submitLoading.value = true
+      if (!this.name) return
+      let data = {
+        ...basicData.value,
+        listeners: [...listenerList.value],
+        name: String(this.name).toLowerCase(),
+      }
+      let res = await postGateway(data).catch(() => {})
+      if (res) {
+        this.$message({
+          type: 'success',
+          message: this.$t('Base.createSuccess'),
+        })
+        gotoList.bind(this)
+      } else {
+      }
+    }
+
+    const gatewayStatus = async function () {
+      let { name } = vm.data
+
+      if (!name) {
+        gotoList()
+      }
+      let res = await getGateway(name).catch(() => {})
+      if (res) {
+        let { enable, status } = res
+      }
+    }
+
+    onMounted(function () {
+      gatewayStatus()
+    })
 
     return {
       tl,
       stepActive,
       basicData,
-      cancel,
+      gotoList,
+      listenerList,
+      submitLoading,
+      createGateway,
     }
   },
 })

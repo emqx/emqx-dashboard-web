@@ -160,25 +160,17 @@ export default defineComponent({
       const { name } = instance
       if (isUnload(instance.status)) {
         router.push({ name: 'gateway-create', params: { name: name } })
-      } else if (isRunning(instance.status)) {
-        let body = { enable: false }
-        let res = await updateGateway(name, body).catch(() => {})
-        if (res) {
-          M({
-            type: 'success',
-            message: i18n.t('Base.disabledSuccess'),
-          })
-          instance.status = disableStr
-        }
       } else {
-        let body = { enable: true }
+        let body = { enable: !isRunning(instance.status) }
         let res = await updateGateway(name, body).catch(() => {})
         if (res) {
           M({
             type: 'success',
-            message: i18n.t('Base.enableSuccess'),
+            message: isRunning(instance.status)
+              ? i18n.t('Base.disabledSuccess')
+              : i18n.t('Base.enableSuccess'),
           })
-          instance.status = enableStr
+          instance.status = isRunning(instance.status) ? disableStr : enableStr
         }
       }
     }

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { computed, defineComponent, reactive, ref, watch } from '@vue/composition-api'
+import { computed, defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
 import vue from 'vue'
 
 export default defineComponent({
@@ -156,6 +156,11 @@ export default defineComponent({
 
     watch(topicList.value, (v) => {
       context.emit('update:list', v)
+      validateForm()
+    })
+
+    onMounted(() => {
+      setTopicRules()
       validateForm()
     })
 

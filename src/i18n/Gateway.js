@@ -243,4 +243,12 @@ export default {
     zh: 'DTLS 版本',
     en: 'DTLS Versions',
   },
+  sendBuf: {
+    zh: '发送缓冲区大小',
+    en: 'Send Buffer',
+  },
+  recBuf: {
+    zh: '接受缓冲区大小',
+    en: 'Receive Buffer',
+  },
 }

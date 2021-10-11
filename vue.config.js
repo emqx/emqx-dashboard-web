@@ -27,10 +27,6 @@ module.exports = {
     disableHostCheck: true,
     // before,
     proxy: {
-      '/api/v4': {
-        target: process.env.HOST_URL || 'http://127.0.0.1:18083',
-        changeOrigin: true,
-      },
       '/api/v5': {
         target: 'http://34.219.115.160:18083/',
         changeOrigin: true,

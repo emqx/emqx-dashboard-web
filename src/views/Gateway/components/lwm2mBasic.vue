@@ -14,7 +14,7 @@
           <el-form-item :label="tl('qmodewindow')">
             <el-input
               :placeholder="lValueDefault.qmode_time_window[0]"
-              v-model="lValue.qmode_time_window[0]"
+              v-model.number="lValue.qmode_time_window[0]"
             >
               <el-select slot="append" v-model="lValue.qmode_time_window[1]">
                 <el-option value="s"></el-option>
@@ -24,7 +24,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('minLifetime')">
-            <el-input :placeholder="lValueDefault.lifetime_min[0]" v-model="lValue.lifetime_min[0]">
+            <el-input
+              :placeholder="lValueDefault.lifetime_min[0]"
+              v-model.number="lValue.lifetime_min[0]"
+            >
               <el-select slot="append" v-model="lValue.lifetime_min[1]">
                 <el-option value="s"></el-option>
                 <el-option value="m"></el-option>
@@ -36,7 +39,10 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="tl('maxLifetime')">
-            <el-input :placeholder="lValueDefault.lifetime_max[0]" v-model="lValue.lifetime_max[0]">
+            <el-input
+              :placeholder="lValueDefault.lifetime_max[0]"
+              v-model.number="lValue.lifetime_max[0]"
+            >
               <el-select slot="append" v-model="lValue.lifetime_max[1]">
                 <el-option value="s"></el-option>
                 <el-option value="m"></el-option>
@@ -67,7 +73,10 @@
             </el-select> </el-form-item></el-col
         ><el-col :span="12">
           <el-form-item :label="tl('idleTime')">
-            <el-input v-model="lValue.idle_timeout[0]" :placeholder="lValueDefault.idle_timeout[0]">
+            <el-input
+              v-model.number="lValue.idle_timeout[0]"
+              :placeholder="lValueDefault.idle_timeout[0]"
+            >
               <el-select slot="append" v-model="lValue.idle_timeout[1]">
                 <el-option value="s"></el-option>
               </el-select>
@@ -129,6 +138,7 @@
 <script>
 import { defineComponent, onMounted, reactive, watch } from '@vue/composition-api'
 import _ from 'lodash'
+import { transformUnitArrayToStr, transformStrToUnitArray } from '@/common/utils'
 
 export default defineComponent({
   name: 'Lwm2mBasic',
@@ -154,7 +164,14 @@ export default defineComponent({
       'translators.update': { topic: 'up/update', qos: 0 },
     }
 
-    let lValue = reactive({ ..._.cloneDeep(lValueDefault), ..._.cloneDeep(props.value) })
+    let normalizeProps = transformStrToUnitArray(_.cloneDeep(props.value), [
+      'idle_timeout',
+      'qmode_time_window',
+      'lifetime_min',
+      'lifetime_max',
+    ])
+
+    let lValue = reactive({ ..._.cloneDeep(lValueDefault), ...normalizeProps })
 
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
@@ -163,11 +180,11 @@ export default defineComponent({
     watch(
       () => _.cloneDeep(lValue),
       (v) => {
-        context.emit('update:value', v)
+        context.emit('update:value', transformUnitArrayToStr(v))
       },
     )
     onMounted(() => {
-      context.emit('update:value', lValue)
+      context.emit('update:value', transformUnitArrayToStr(lValue))
     })
 
     return {
