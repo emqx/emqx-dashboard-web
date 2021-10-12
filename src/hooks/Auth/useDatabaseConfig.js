@@ -64,8 +64,7 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
       `
       databaseConfig.database = 'mqtt_user'
     } else {
-      defaultContent.value =
-        "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1"
+      defaultContent.value = `SELECT action, permission, topic FROM mqtt_acl where username = '\${username}'`
       helpContent.value = `
         CREATE TYPE ACTION AS ENUM('publish','subscribe','all');
         CREATE TYPE PERMISSION AS ENUM('allow','deny');
