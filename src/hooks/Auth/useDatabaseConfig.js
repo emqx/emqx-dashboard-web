@@ -11,6 +11,7 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
   })
   const helpContent = ref('')
   const setMySql = () => {
+    let defaultDatabase = ''
     if (authType === 'authn') {
       defaultContent.value =
         "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1"
@@ -26,7 +27,7 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
           UNIQUE KEY \`mqtt_username\` (\`username\`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
       `
-      databaseConfig.database = 'mqtt_user'
+      defaultDatabase = 'mqtt_user'
     } else {
       defaultContent.value = `SELECT action, permission, topic FROM mqtt_acl where username = '\${username}'`
       helpContent.value = `
@@ -41,15 +42,17 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
         PRIMARY KEY (\`id\`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
       `
-      databaseConfig.database = 'mqtt_acl'
+      defaultDatabase = 'mqtt_user'
     }
     if (id.value) {
       return
     }
+    databaseConfig.database = defaultDatabase
     databaseConfig.server = '127.0.0.1:3306'
     databaseConfig.query = defaultContent.value
   }
   const setPgSql = () => {
+    let defaultDatabase = ''
     if (authType === 'authn') {
       defaultContent.value =
         "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1"
@@ -62,7 +65,7 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
           salt character varying(40)
         )
       `
-      databaseConfig.database = 'mqtt_user'
+      defaultDatabase = 'mqtt_user'
     } else {
       defaultContent.value = `SELECT action, permission, topic FROM mqtt_acl where username = '\${username}'`
       helpContent.value = `
@@ -79,11 +82,12 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
           topic CHARACTER VARYING(255) NOT NULL
         );
       `
-      databaseConfig.database = 'mqtt_acl'
+      defaultDatabase = 'mqtt_acl'
     }
     if (id.value) {
       return
     }
+    databaseConfig.database = defaultDatabase
     databaseConfig.server = '127.0.0.1:5432'
     databaseConfig.query = defaultContent.value
   }
