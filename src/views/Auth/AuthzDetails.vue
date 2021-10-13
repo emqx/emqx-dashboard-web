@@ -34,6 +34,7 @@
             auth-type="authz"
           ></database-config>
           <file-config v-else-if="type === 'file'" v-model="configData"></file-config>
+          <http-config v-else-if="type === 'http'" v-model="configData"></http-config>
           <el-button type="primary" @click="handleUpdate">
             {{ $t('Base.update') }}
           </el-button>
@@ -58,6 +59,7 @@ import FileConfig from './components/FileConfig.vue'
 import DatabaseConfig from './components/DatabaseConfig.vue'
 import useAuthzCreate from '@/hooks/Auth/useAuthzCreate'
 import BuiltInManager from './components/BuiltInManager.vue'
+import HttpConfig from './components/HttpConfig.vue'
 
 export default defineComponent({
   name: 'AuthzDetails',
@@ -66,6 +68,7 @@ export default defineComponent({
     FileConfig,
     DatabaseConfig,
     BuiltInManager,
+    HttpConfig,
   },
   setup() {
     const authzDetailLock = ref(false)
