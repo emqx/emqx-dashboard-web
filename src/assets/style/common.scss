@@ -234,6 +234,7 @@ code {
   width: 100%;
   overflow: hidden;
   display: flex;
+  align-items: center;
   &:not(:first-of-type) {
     margin-top: 40px;
   }

@@ -97,36 +97,36 @@
         <el-col :span="12">
           <el-form-item :label="tl('trCommand')">
             <el-input
-              :placeholder="lValueDefault['translators.command'].topic"
-              v-model="lValue['translators.command'].topic"
+              :placeholder="lValueDefault.translators.command.topic"
+              v-model="lValue.translators.command.topic"
             ></el-input
           ></el-form-item> </el-col
         ><el-col :span="12">
           <el-form-item :label="tl('trResponse')"
             ><el-input
-              :placeholder="lValueDefault['translators.response'].topic"
-              v-model="lValue['translators.response'].topic"
+              :placeholder="lValueDefault.translators.response.topic"
+              v-model="lValue.translators.response.topic"
             ></el-input
           ></el-form-item> </el-col
         ><el-col :span="12">
           <el-form-item :label="tl('trNotify')"
             ><el-input
-              :placeholder="lValueDefault['translators.notify'].topic"
-              v-model="lValue['translators.notify'].topic"
+              :placeholder="lValueDefault.translators.notify.topic"
+              v-model="lValue.translators.notify.topic"
             ></el-input
           ></el-form-item> </el-col
         ><el-col :span="12">
           <el-form-item :label="tl('trRegister')"
             ><el-input
-              :placeholder="lValueDefault['translators.register'].topic"
-              v-model="lValue['translators.register'].topic"
+              :placeholder="lValueDefault.translators.register.topic"
+              v-model="lValue.translators.register.topic"
             ></el-input
           ></el-form-item> </el-col
         ><el-col :span="12">
           <el-form-item :label="tl('trUpdate')"
             ><el-input
-              :placeholder="lValueDefault['translators.update'].topic"
-              v-model="lValue['translators.update'].topic"
+              :placeholder="lValueDefault.translators.update.topic"
+              v-model="lValue.translators.update.topic"
             ></el-input
           ></el-form-item>
         </el-col>
@@ -136,16 +136,18 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, reactive, watch } from '@vue/composition-api'
+import { defineComponent, onMounted, reactive, watch, ref } from '@vue/composition-api'
 import _ from 'lodash'
 import { transformUnitArrayToStr, transformStrToUnitArray } from '@/common/utils'
 
 export default defineComponent({
-  name: 'Lwm2mBasic',
-  value: {
-    type: Object,
-    required: false,
-    default: () => ({}),
+  name: 'LwBasic',
+  props: {
+    value: {
+      type: Object,
+      required: false,
+      default: () => ({}),
+    },
   },
   setup(props, context) {
     let lValueDefault = {
@@ -157,11 +159,13 @@ export default defineComponent({
       auto_observe: true,
       enable_stats: true,
       update_msg_publish_condition: 'contains_object_list',
-      'translators.command': { topic: 'dn/#', qos: 0 },
-      'translators.response': { topic: 'up/resp', qos: 0 },
-      'translators.notify': { topic: 'up/notify', qos: 0 },
-      'translators.register': { topic: 'up/resp', qos: 0 },
-      'translators.update': { topic: 'up/update', qos: 0 },
+      translators: {
+        command: { topic: 'dn/#', qos: 0 },
+        response: { topic: 'up/resp', qos: 0 },
+        notify: { topic: 'up/notify', qos: 0 },
+        register: { topic: 'up/resp', qos: 0 },
+        update: { topic: 'up/update', qos: 0 },
+      },
     }
 
     let normalizeProps = transformStrToUnitArray(_.cloneDeep(props.value), [

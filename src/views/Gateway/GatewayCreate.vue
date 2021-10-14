@@ -24,7 +24,7 @@
           <coap-basic :value.sync="basicData"></coap-basic>
         </template>
         <template v-else-if="name === 'LWM2M'">
-          <lwm2m-basic :value.sync="basicData"></lwm2m-basic>
+          <lw-basic :value.sync="basicData"></lw-basic>
         </template>
       </div>
 
@@ -75,14 +75,15 @@
 import { defineComponent, onMounted, ref, watch, getCurrentInstance } from '@vue/composition-api'
 import CoapBasic from './components/coapBasic.vue'
 import Listeners from './components/listeners.vue'
-import Lwm2mBasic from './components/lwm2mBasic.vue'
+import LwBasic from './components/lwm2mBasic.vue'
 import MqttsnBasic from './components/mqttsnBasic.vue'
 import stompBasic from './components/stompBasic.vue'
 import _ from 'lodash'
 import { postGateway, getGateway } from '@/api/gateway'
+import router from '@/routes'
 
 export default defineComponent({
-  components: { stompBasic, Listeners, MqttsnBasic, Lwm2mBasic, CoapBasic },
+  components: { stompBasic, Listeners, MqttsnBasic, LwBasic, CoapBasic },
   name: 'GatewayCreate',
   data: function () {
     return {
@@ -109,12 +110,13 @@ export default defineComponent({
     )
 
     const gotoList = function () {
-      this.$router.push({ name: 'gateway' })
+      router.push({ name: 'gateway' })
     }
 
     const createGateway = async function () {
       submitLoading.value = true
       if (!this.name) return
+
       let data = {
         ...basicData.value,
         listeners: [...listenerList.value],
@@ -126,9 +128,10 @@ export default defineComponent({
           type: 'success',
           message: this.$t('Base.createSuccess'),
         })
-        gotoList.bind(this)
+        gotoList()
       } else {
       }
+      submitLoading.value = false
     }
 
     const gatewayStatus = async function () {
@@ -137,6 +140,8 @@ export default defineComponent({
       if (!name) {
         gotoList()
       }
+      name = String(name).toLowerCase()
+
       let res = await getGateway(name).catch(() => {})
       if (res) {
         let { enable, status } = res

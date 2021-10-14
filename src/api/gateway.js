@@ -6,16 +6,29 @@ export function getGatewayList() {
 
 export async function getGatewayListeners(name, id) {
   if (!name) return Promise.reject()
-  return http.get('/gateway/' + name + '/listeners' + (id && '/' + id))
+  return http.get(
+    '/gateway/' +
+      encodeURIComponent(name) +
+      '/listeners' +
+      ((id && '/' + encodeURIComponent(id)) || ''),
+  )
 }
 
 export function addGatewayListener(name, body) {
-  return http.post(`/gateway/${name}/listeners`, body)
+  return http.post(`/gateway/${encodeURIComponent(name)}/listeners`, body)
+}
+
+export async function updateGatewayListener(name, id, body) {
+  if (!name || !id) return Promise.reject()
+  return http.put(
+    '/gateway/' + encodeURIComponent(name) + '/listeners/' + encodeURIComponent(id),
+    body,
+  )
 }
 
 export async function updateGateway(name, body) {
   if (!name) return Promise.reject()
-  return http.put('/gateway/' + name, body)
+  return http.put('/gateway/' + encodeURIComponent(name), body)
 }
 
 export async function postGateway(body) {
@@ -25,4 +38,9 @@ export async function postGateway(body) {
 export async function getGateway(name) {
   if (!name) return Promise.reject()
   return http.get('/gateway/' + name)
+}
+
+export async function getGatewayClients(name, params) {
+  if (!name) return Promise.reject()
+  return http.get('/gateway/' + name + '/clients', { params: params })
 }

@@ -12,7 +12,7 @@
       </div>
       <div>
         <!-- <el-button type="danger" plain size="small">{{ $t('Base.delete') }}</el-button> -->
-        <el-button size="small"> {{ $t('Base.stop') }}</el-button>
+        <el-button size="small" type="danger" plain> {{ $t('Base.stop') }}</el-button>
       </div>
     </div>
     <el-menu router :default-active="matchedUrl" mode="horizontal">

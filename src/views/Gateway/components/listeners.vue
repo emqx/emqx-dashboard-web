@@ -6,7 +6,7 @@
         {{ tl('addListener') }}
       </el-button>
     </div>
-    <el-table :data="listenerTable">
+    <el-table :data="listenerTable" v-loading="listenerLoading">
       <el-table-column :label="'ID'" sortable prop="id"></el-table-column>
       <el-table-column :label="tl('lType')" sortable prop="type"></el-table-column>
       <el-table-column :label="tl('lAddress')" sortable prop="bind"></el-table-column>
@@ -76,6 +76,28 @@
               <el-input v-model="listenerInput.max_conn_rate"></el-input>
             </el-form-item>
           </el-col>
+          <template v-if="listenerInput.type === 'tcp' || listenerInput.type === 'ssl'">
+            <el-col :span="12">
+              <el-form-item :label="'Proxy Protocol'">
+                <el-select v-model="listenerInput.proxy_protocol">
+                  <el-option value="true"></el-option>
+                  <el-option value="false"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item :label="'Proxy Protocol Timeout'">
+                <el-input
+                  v-model.number="listenerInput.proxy_protocol_timeout[0]"
+                  :placeholder="baseInput.proxy_protocol_timeout[0]"
+                >
+                  <el-select slot="append" v-model="listenerInput.proxy_protocol_timeout[1]">
+                    <el-option value="s"></el-option>
+                  </el-select>
+                </el-input>
+              </el-form-item>
+            </el-col>
+          </template>
         </el-row>
 
         <template v-if="listenerInput.type === 'tcp' || listenerInput.type === 'ssl'">
@@ -94,7 +116,7 @@
             <el-col :span="12">
               <el-form-item :label="'Buffer'">
                 <el-input
-                  v-model="listenerInput.tcp.buffer[0]"
+                  v-model.number="listenerInput.tcp.buffer[0]"
                   :placeholder="baseInput.tcp.buffer[0]"
                 >
                   <el-select slot="append" v-model="listenerInput.tcp.buffer[1]">
@@ -122,7 +144,7 @@
             <el-col :span="12">
               <el-form-item :label="tl('sendTimeout')">
                 <el-input
-                  v-model="listenerInput.tcp.send_timeout[0]"
+                  v-model.number="listenerInput.tcp.send_timeout[0]"
                   :placeholder="baseInput.tcp.send_timeout[0]"
                 >
                   <el-select slot="append" v-model="listenerInput.tcp.send_timeout[1]">
@@ -137,26 +159,6 @@
                   <el-option value="true"></el-option>
                   <el-option value="false"></el-option>
                 </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item :label="'Proxy Protocol'">
-                <el-select v-model="listenerInput.tcp.proxy_protocol">
-                  <el-option value="true"></el-option>
-                  <el-option value="false"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item :label="'Proxy Protocol Timeout'">
-                <el-input
-                  v-model="listenerInput.tcp.proxy_protocol_timeout[0]"
-                  :placeholder="baseInput.tcp.proxy_protocol_timeout[0]"
-                >
-                  <el-select slot="append" v-model="listenerInput.tcp.proxy_protocol_timeout[1]">
-                    <el-option value="s"></el-option>
-                  </el-select>
-                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -178,7 +180,7 @@
             <el-col :span="12">
               <el-form-item :label="'Buffer'">
                 <el-input
-                  v-model="listenerInput.udp.buffer[0]"
+                  v-model.number="listenerInput.udp.buffer[0]"
                   :placeholder="baseInput.udp.buffer[0]"
                 >
                   <el-select slot="append" v-model="listenerInput.udp.buffer[1]">
@@ -190,7 +192,7 @@
             <el-col :span="12">
               <el-form-item :label="tl('recBuf')">
                 <el-input
-                  v-model="listenerInput.udp.recbuf[0]"
+                  v-model.number="listenerInput.udp.recbuf[0]"
                   :placeholder="baseInput.udp.recbuf[0]"
                 >
                   <el-select slot="append" v-model="listenerInput.udp.recbuf[1]">
@@ -202,7 +204,7 @@
             <el-col :span="12">
               <el-form-item :label="tl('sendBuf')">
                 <el-input
-                  v-model="listenerInput.udp.sndbuf[0]"
+                  v-model.number="listenerInput.udp.sndbuf[0]"
                   :placeholder="baseInput.udp.sndbuf[0]"
                 >
                   <el-select slot="append" v-model="listenerInput.udp.sndbuf[1]">
@@ -311,9 +313,13 @@
         </template>
       </el-form>
       <template #footer>
-        <el-button type="primary" size="small" @click="submitListener(editListener)">{{
-          editListener ? $t('Base.update') : $t('Base.add')
-        }}</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          @click="submitListener(editListener)"
+          :loading="submitLoading"
+          >{{ editListener ? $t('Base.update') : $t('Base.add') }}</el-button
+        >
         <el-button size="small" @click="opListener = false">{{ $t('Base.cancel') }}</el-button>
       </template>
     </el-dialog>
@@ -321,8 +327,16 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, reactive, ref, watch } from '@vue/composition-api'
-import { getGatewayListeners } from '@/api/gateway'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from '@vue/composition-api'
+import { getGatewayListeners, updateGatewayListener, addGatewayListener } from '@/api/gateway'
 import _ from 'lodash'
 import { transformUnitArrayToStr, transformStrToUnitArray } from '@/common/utils'
 
@@ -344,6 +358,11 @@ export default defineComponent({
       default: () => [],
     },
   },
+  data: function () {
+    return {
+      name: String(this.$route.params.name).toUpperCase(),
+    }
+  },
   setup(props, context) {
     let baseInput = {
       type: 'tcp',
@@ -354,15 +373,15 @@ export default defineComponent({
       max_connections: 102400,
       max_conn_rate: 1000,
       mountpoint: '',
+      proxy_protocol: false,
+      proxy_protocol_timeout: [15, 's'],
       tcp: {
         nodelay: false,
         reuseaddr: true,
         send_timeout_close: true,
-        proxy_protocol: false,
         active_n: 100,
         buffer: [4, 'KB'],
         send_timeout: [15, 's'],
-        proxy_protocol_timeout: [15, 's'],
       },
       udp: {
         active_n: 100,
@@ -397,10 +416,13 @@ export default defineComponent({
     let editListener = ref(false)
     let listenerInput = ref({ ..._.cloneDeep(baseInput) })
     const { integration } = props
-    let listenerTable = ref(integration ? props.list.map((v) => denormalizeStructure(v)) : [])
+    let listenerTable = ref([])
+    let listenerLoading = ref(false)
+    let submitLoading = ref(false)
 
     const ID_SEPERATE = ':'
     let editPos = 0
+    let vm = getCurrentInstance()
 
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
@@ -419,30 +441,70 @@ export default defineComponent({
     }
 
     const loadListenerData = async function () {
-      let res = await getGatewayListeners(props.name).catch(() => {})
+      listenerLoading.value = true
+      let gName = vm.data.name || props.gatewayName
+      if (!gName) return
+      gName = String(gName).toLowerCase()
+      let res = await getGatewayListeners(gName).catch(() => {})
       if (res) {
         listenerTable.value = res
       }
+      listenerLoading.value = false
     }
 
     const submitListener = async function (edit = false) {
-      let id = [
-        props.gatewayName.toLowerCase(),
-        listenerInput.value.type,
-        listenerInput.value.name,
-      ].join(ID_SEPERATE)
+      let gName = vm.data.name || props.gatewayName
+      if (!gName) return
+      gName = String(gName).toLowerCase()
+
+      let id = [gName, listenerInput.value.type, listenerInput.value.name].join(ID_SEPERATE)
 
       let input = { ..._.cloneDeep(listenerInput.value), id }
+      if (listenerInput.value.type === 'udp') input.acceptors = ''
       if (integration) {
         if (edit) {
           listenerTable.value.splice(editPos, 1, input)
         } else {
           listenerTable.value.push(input)
         }
+        opListener.value = false
       } else {
-      }
+        let remoteRes = await submitGatewayListenerInfo(edit, gName, input).catch(() => {})
 
-      opListener.value = false
+        if (remoteRes) {
+          opListener.value = false
+        }
+      }
+    }
+
+    const submitGatewayListenerInfo = async function (edit = false, name, formData) {
+      submitLoading.value = true
+      let data = normalizeStructure(formData)
+      if (edit) {
+        let res = await updateGatewayListener(name, data).catch(() => {})
+        if (res) {
+          this.$message({
+            type: 'success',
+            message: this.$t('Base.editSuccess'),
+          })
+          return true
+        } else {
+          submitLoading.value = false
+          return Promise.reject()
+        }
+      } else {
+        let res = await addGatewayListener(name, data).catch(() => {})
+        if (res) {
+          this.$message({
+            type: 'success',
+            message: this.$t('Base.createSuccess'),
+          })
+          return true
+        } else {
+          submitLoading.value = false
+          return Promise.reject()
+        }
+      }
     }
 
     const delListener = async function (row) {
@@ -463,8 +525,23 @@ export default defineComponent({
       let result = {}
 
       Object.keys(record).forEach((v) => {
-        if (typeof record[v] !== 'object' || record[v] === null) {
-          result[v] = record[v]
+        switch (v) {
+          case 'proxy_protocol_timeout':
+          case 'proxy_protocol':
+            if (type === 'tcp' || type === 'ssl') {
+              result[v] = record[v]
+            }
+            break
+          case 'acceptors':
+            if (type !== 'udp') {
+              result[v] = record[v]
+            }
+            break
+
+          default:
+            if (typeof record[v] !== 'object' || record[v] === null) {
+              result[v] = record[v]
+            }
         }
       })
 
@@ -477,45 +554,16 @@ export default defineComponent({
         Object.assign(result[type], record.xtls)
       }
 
-      // function changeSpVal(obj) {
-      //   let dest = {}
-      //   Object.entries(obj).forEach((e) => {
-      //     const [k, v] = e
-      //     if (v instanceof Array && v.length === 2) {
-      //       dest[k] = v.join('')
-      //     } else {
-      //       dest[k] = v
-      //     }
-      //   })
-      //   return dest
-      // }
-
       return transformUnitArrayToStr(result)
     }
 
     function denormalizeStructure(record) {
-      // const expandKey = {
-      //   tcp: ['buffer', 'send_timeout', 'proxy_protocol_timeout'],
-      //   udp: ['buffer', 'recbuf', 'sndbuf'],
-      // }
-
-      // let result = _.cloneDeep(record)
       const { type = 'tcp' } = record
-      // const topExpandKey = Object.keys(expandKey)
 
-      // Object.keys(record).forEach((v) => {
-      //   if (topExpandKey.includes(v) && expandKey[v] instanceof Array) {
-      //     expandKey[v].forEach((ev) => {
-      //       if (ev in record[v]) {
-      //         result[v][ev] = splitSpVal(record[v][ev])
-      //       }
-      //     })
-      //   }
-      // })
       const expandKey = [
         'tcp.buffer',
         'tcp.send_timeout',
-        'tcp.proxy_protocol_timeout',
+        'proxy_protocol_timeout',
         'udp.buffer',
         'udp.recbuf',
         'udp.sndbuf',
@@ -535,11 +583,6 @@ export default defineComponent({
         })
       }
 
-      // function splitSpVal(val) {
-      //   let matching = val.match(/(\d+)(\w+)/)
-      //   return [+matching[1], matching[2]]
-      // }
-
       return result
     }
 
@@ -554,6 +597,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (integration) {
+        listenerTable.value = props.list.map((v) => denormalizeStructure(v))
       } else {
         loadListenerData()
       }
@@ -561,7 +605,7 @@ export default defineComponent({
 
     return {
       tl,
-      showIntegration: !!props.integration,
+      showIntegration: integration,
       openDialog,
       opListener,
       listenerTable,
@@ -570,6 +614,8 @@ export default defineComponent({
       baseInput,
       editListener,
       delListener,
+      listenerLoading,
+      submitLoading,
     }
   },
 })

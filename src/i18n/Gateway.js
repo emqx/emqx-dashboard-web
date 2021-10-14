@@ -64,7 +64,7 @@ export default {
     en: 'Client ID',
   },
   username: {
-    zh: 'Username',
+    zh: '用户名',
     en: 'Username',
   },
   mountSetting: {
@@ -250,5 +250,21 @@ export default {
   recBuf: {
     zh: '接受缓冲区大小',
     en: 'Receive Buffer',
+  },
+  endpointName: {
+    zh: 'EndPoint Name',
+    en: 'EndPoint Name',
+  },
+  ipaddress: {
+    zh: 'IP地址',
+    en: 'IP Address',
+  },
+  connectedAt: {
+    zh: '连接时间',
+    en: 'Connected At',
+  },
+  lifetime: {
+    zh: '心跳时间',
+    en: 'LifeTime',
   },
 }

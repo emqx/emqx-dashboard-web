@@ -1,16 +1,16 @@
 <template>
   <div class="basic-info" v-loading="infoLoading">
     <template v-if="name === 'STOMP'">
-      <stomp-basic :value.sync="basicData" />
+      <stomp-basic :value.sync="basicData" :key="iKey" />
     </template>
     <template v-else-if="name === 'MQTTSN'">
-      <mqttsn-basic :value.sync="basicData"></mqttsn-basic>
+      <mqttsn-basic :value.sync="basicData" :key="iKey"></mqttsn-basic>
     </template>
     <template v-else-if="name === 'COAP'">
-      <coap-basic :value.sync="basicData"></coap-basic>
+      <coap-basic :value.sync="basicData" :key="iKey"></coap-basic>
     </template>
     <template v-else-if="name === 'LWM2M'">
-      <lwm2m-basic :value.sync="basicData"></lwm2m-basic>
+      <lwm2m-basic :value.sync="basicData" :key="iKey"></lwm2m-basic>
     </template>
     <el-button type="primary" size="small" :loading="updateLoading" @click="updateGatewayInfo()">{{
       $t('Base.update')
@@ -29,6 +29,7 @@ import _ from 'lodash'
 
 export default defineComponent({
   components: { stompBasic, MqttsnBasic, Lwm2mBasic, CoapBasic },
+  name: 'GatewayDetailBasic',
   data: function () {
     return {
       name: String(this.$route.params.name).toUpperCase(),
@@ -40,6 +41,7 @@ export default defineComponent({
     let updateLoading = ref(false)
 
     let vm = getCurrentInstance()
+    let iKey = ref(0)
 
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
@@ -60,6 +62,7 @@ export default defineComponent({
       let res = await getGateway(name).catch(() => {})
       if (res) {
         basicData.value = res
+        ++iKey.value
       }
       infoLoading.value = false
     }
@@ -90,6 +93,7 @@ export default defineComponent({
       updateLoading,
       infoLoading,
       updateGatewayInfo,
+      iKey,
     }
   },
 })
