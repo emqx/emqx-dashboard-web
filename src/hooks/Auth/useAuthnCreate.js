@@ -32,8 +32,8 @@ export default function useAuthnCreate() {
         2,
       ),
       pool_size: 8,
-      connect_timeout: 5000,
-      request_timeout: 5000,
+      connect_timeout: '5s',
+      request_timeout: '5s',
       enable_pipelining: true,
       ssl: {
         enable: false,

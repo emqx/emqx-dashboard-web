@@ -35,7 +35,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="$t('Auth.connectTimeout')">
-            <el-input v-model.number="httpConfig.connect_timeout"></el-input>
+            <time-input-with-unit-select v-model="httpConfig.connect_timeout" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -85,7 +85,7 @@
         </el-collapse-transition>
         <el-col :span="12">
           <el-form-item :label="$t('Auth.requestTimeout')">
-            <el-input v-model.number="httpConfig.request_timeout"></el-input>
+            <time-input-with-unit-select v-model="httpConfig.request_timeout" />
           </el-form-item>
         </el-col>
       </el-form>
@@ -96,13 +96,14 @@
 <script>
 import { computed, defineComponent, reactive, ref, watch } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
+import TimeInputWithUnitSelect from '@/components/TimeInputWithUnitSelect.vue'
 import TLSConfig from './TLSConfig.vue'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor.vue'
 import useCopy from '@/hooks/useCopy'
 
 export default defineComponent({
   name: 'HttpConfig',
-  components: { KeyAndValueEditor, CodeView, TLSConfig },
+  components: { KeyAndValueEditor, CodeView, TLSConfig, TimeInputWithUnitSelect },
   model: {
     prop: 'value',
     event: 'update',
