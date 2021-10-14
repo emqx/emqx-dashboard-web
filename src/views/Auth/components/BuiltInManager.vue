@@ -230,7 +230,7 @@ export default defineComponent({
         lockTable.value = false
       })
       if (type.value === 'all') {
-        allTableData.value = res[0].rules
+        allTableData.value = res.rules
       } else {
         tableData.value = res
       }

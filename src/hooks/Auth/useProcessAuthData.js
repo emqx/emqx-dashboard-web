@@ -29,6 +29,8 @@ export default function useProcessAuthData() {
     }
     if (selector !== '') {
       tempData.selector = JSON.parse(selector)
+    } else {
+      tempData.selector = undefined
     }
     return tempData
   }
