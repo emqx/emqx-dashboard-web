@@ -27,7 +27,9 @@ export default function useProcessAuthData() {
       delete tempData.replica_set_name
       delete tempData.servers
     }
-    tempData.selector = JSON.parse(selector)
+    if (selector !== '') {
+      tempData.selector = JSON.parse(selector)
+    }
     return tempData
   }
   const processJwtConfig = (data) => {
