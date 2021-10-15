@@ -8,6 +8,7 @@
               :placeholder="tl('endpointName')"
               size="small"
               v-model="searchParams.like_endpoint_name"
+              clearable
             ></el-input>
           </el-col>
           <el-col :span="6">
@@ -36,6 +37,7 @@
               :placeholder="tl('clientid')"
               size="small"
               v-model="searchParams.like_clientid"
+              clearable
             ></el-input>
           </el-col>
           <el-col :span="6">
@@ -43,6 +45,7 @@
               :placeholder="tl('username')"
               size="small"
               v-model="searchParams.like_username"
+              clearable
             ></el-input>
           </el-col>
           <el-col :span="6">
@@ -110,27 +113,34 @@
         </template>
       </el-table-column>
       <el-table-column :label="$t('Base.operation')">
-        <template>
-          <el-button>{{ $t('Base.view') }}</el-button>
-          <el-button type="danger" plain>{{ $t('Clients.kickOut') }}</el-button>
+        <template #default="{ row }">
+          <el-button @click="openClientDetail(row)">{{ $t('Base.view') }}</el-button>
+          <el-button type="danger" plain @click="disconnectClient(row)">{{
+            $t('Clients.kickOut')
+          }}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div class="emq-table-footer">
       <common-pagination ref="pCommon" :reload-func="loadGatewayClients"></common-pagination>
     </div>
+
+    <el-drawer :visible.sync="clientsDetailVisible" direction="rtl" size="70%">
+      <client-details gateway :clientid="currentClientId" :key="currentClientId"></client-details>
+    </el-drawer>
   </div>
 </template>
 
 <script>
 import { defineComponent, getCurrentInstance, onMounted, reactive, ref } from '@vue/composition-api'
 import commonPagination from '@/components/commonPagination.vue'
-import { getGatewayClients } from '@/api/gateway'
+import { getGatewayClients, disconnGatewayClient } from '@/api/gateway'
 import { loadNodes } from '@/api/common'
 import moment from 'moment'
+import ClientDetails from '../../Clients/ClientDetails.vue'
 
 export default defineComponent({
-  components: { commonPagination },
+  components: { commonPagination, ClientDetails },
   data: function () {
     return {
       name: String(this.$route.params.name).toUpperCase(),
@@ -147,6 +157,8 @@ export default defineComponent({
       like_endpoint_name: '',
     })
     let nodes = ref([])
+    let clientsDetailVisible = ref(false)
+    let currentClientId = ref('')
     let vm = getCurrentInstance()
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
@@ -181,6 +193,31 @@ export default defineComponent({
       loadGatewayClients(params)
     }
 
+    const openClientDetail = async function (row) {
+      clientsDetailVisible.value = true
+      currentClientId.value = row.clientid
+    }
+
+    const disconnectClient = async function (row) {
+      this.$msgbox
+        .confirm(this.$t('Clients.willDisconnectTheConnection'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        .then(async () => {
+          let gName = String(vm.data.name).toLowerCase()
+          let id = row.clientid
+          let res = await disconnGatewayClient(gName, id).catch(() => {})
+          if (res) {
+            this.$message.success(this.$t('Clients.successfulDisconnection'))
+
+            pCommon.value.$emit('loadPage')
+          }
+        })
+        .catch(() => {})
+    }
+
     onMounted(() => {
       loadAllNodes()
       pCommon.value.$emit('loadPage')
@@ -196,6 +233,10 @@ export default defineComponent({
       searchGatewayList,
       searchParams,
       nodes,
+      clientsDetailVisible,
+      currentClientId,
+      openClientDetail,
+      disconnectClient,
     }
   },
 })

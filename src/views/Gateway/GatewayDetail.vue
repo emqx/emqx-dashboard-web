@@ -81,4 +81,7 @@ export default defineComponent({
   height: 18px;
   border-radius: 6px;
 }
+.el-menu.el-menu--horizontal {
+  margin-bottom: 40px;
+}
 </style>

@@ -30,6 +30,7 @@
 
 <script>
 import { subscribe } from '@/api/clients'
+import { addGatewayClientSubs } from '@/api/gateway'
 
 export default {
   name: 'CreateSubscribe',
@@ -43,6 +44,16 @@ export default {
     },
     clientId: {
       type: String,
+      default: '',
+    },
+    gateway: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    gatewayName: {
+      type: String,
+      required: false,
       default: '',
     },
   },
@@ -75,6 +86,11 @@ export default {
       if (!valid) {
         return
       }
+      if (this.gateway) {
+        this.addGatewaySubs()
+        return
+      }
+
       let clientId = this.clientId || this.record.clientid
 
       let subs = await subscribe(clientId, {
@@ -82,6 +98,15 @@ export default {
         qos: this.record.qos,
       }).catch(() => {})
       if (subs) {
+        this.$emit('create:subs')
+        this.close()
+      }
+    },
+    async addGatewaySubs() {
+      let clientId = this.clientId || this.record.clientid
+      let gName = this.gatewayName
+      let res = await addGatewayClientSubs(gName, clientId).catch(() => {})
+      if (res) {
         this.$emit('create:subs')
         this.close()
       }

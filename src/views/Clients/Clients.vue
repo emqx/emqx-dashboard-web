@@ -280,8 +280,9 @@ export default {
         })
         .then(async () => {
           await disconnectClient(row.clientid)
-          this.loadNodeClients()
+          // this.loadNodeClients()
           this.$message.success(successMsg)
+          this.$refs.p.$emit('loadPage')
         })
         .catch(() => {})
     },

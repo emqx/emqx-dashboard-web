@@ -40,8 +40,8 @@
           {{ $t('Clients.connectionInfo') }}
         </div>
         <el-row>
-          <el-col v-for="item in clientsOrganizied.connection" :key="item" :span="8">
-            <div v-if="item == 'protocol_type'" class="detail-item">
+          <el-col v-for="item in clientDetailParts.connection" :key="item" :span="8">
+            <div v-if="item == 'proto_type'" class="detail-item">
               <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
               <span
                 v-if="record.proto_name === 'MQTT'"
@@ -72,7 +72,7 @@
           {{ $t('Clients.sessionInfo') }}
         </div>
         <el-row>
-          <el-col v-for="item in clientsOrganizied.session" :key="item" :span="8">
+          <el-col v-for="item in clientDetailParts.session" :key="item" :span="8">
             <div v-if="item == 'subscriptions'" class="detail-item">
               <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
               <span :title="record.subscriptions_cnt + '/' + record.subscriptions_max">
@@ -139,11 +139,13 @@
     <create-subscribe
       :visible.sync="dialogVisible"
       :client-id="record.clientid"
+      :gateway="!!gateway"
+      :gateway-name="clientType"
       @create:subs="loadSubs"
     >
     </create-subscribe>
 
-    <el-dialog
+    <!-- <el-dialog
       :visible.sync="errDialog"
       :before-close="
         () => {
@@ -152,7 +154,7 @@
       "
     >
       <span>{{ $t('Clients.clientDetailErr') }}</span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -160,11 +162,28 @@
 import { loadClientDetail, loadSubscriptions, unsubscribe, disconnectClient } from '@/api/clients'
 import CreateSubscribe from './components/CreateSubscribe'
 import moment from 'moment'
+import {
+  getGatewayClientDetail,
+  getGatewayClientSubs,
+  disconnGatewayClient,
+  unsubscribeGatewayClientSub,
+} from '@/api/gateway'
 
 export default {
   name: 'ClientDetails',
   components: { CreateSubscribe },
-
+  props: {
+    gateway: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    clientid: {
+      type: String,
+      required: false,
+      default: '',
+    },
+  },
   data() {
     return {
       dialogVisible: false,
@@ -175,38 +194,79 @@ export default {
       errDialog: false,
       record: {},
       clientsOrganizied: {
-        connection: [
-          'node',
-          'clientid',
-          'username',
-          'protocol_type',
-          'ip_address',
-          'keepalive',
-          'is_bridge',
-          'connected_at',
-          'disconnected_at',
-          'zone',
-          'recv_cnt',
-          'recv_msg',
-          'recv_oct',
-          'recv_pkt',
-        ],
-        session: [
-          'clean_start',
-          'expiry_interval',
-          'created_at',
-          'subscriptions',
-          'mqueue',
-          'inflight',
-          'heap_size',
-          'reductions',
-          'awaiting_rel',
-          'max_awaiting_rel',
-          'send_cnt',
-          'send_msg',
-          'send_oct',
-          'send_pkt',
-        ],
+        MQTT: {
+          connection: [
+            'node',
+            'clientid',
+            'username',
+            'proto_type',
+            'ip_address',
+            'keepalive',
+            'is_bridge',
+            'connected_at',
+            'disconnected_at',
+            'zone',
+            'recv_cnt',
+            'recv_msg',
+            'recv_oct',
+            'recv_pkt',
+          ],
+          session: [
+            'clean_start',
+            'expiry_interval',
+            'created_at',
+            'subscriptions',
+            'mqueue',
+            'inflight',
+            'heap_size',
+            'reductions',
+            'awaiting_rel',
+            'max_awaiting_rel',
+            'send_cnt',
+            'send_msg',
+            'send_oct',
+            'send_pkt',
+          ],
+        },
+        LWM2M: {
+          connection: [
+            'node',
+            'endpoint_name',
+            'client_id',
+            'username',
+            'proto_type',
+            'ip_address',
+            'lifetime',
+            'connected_at',
+            'disconnected_at',
+            'recv_oct',
+            'send_oct',
+            'recv_cnt',
+            'send_cnt',
+            'recv_pkt',
+            'send_pkt',
+          ],
+          session: ['subscriptions', 'mqueue', 'inflight', 'heap_size', 'reductions'],
+        },
+        others: {
+          connection: [
+            'node',
+            'client_id',
+            'username',
+            'proto_type',
+            'ip_address',
+            'keepalive',
+            'connected_at',
+            'disconnected_at',
+            'recv_oct',
+            'send_oct',
+            'recv_cnt',
+            'sent_cnt',
+            'recv_pkt',
+            'send_pkt',
+          ],
+          session: ['subscriptions', 'mqueue', 'inflight', 'heap_size', 'reductions'],
+        },
       },
       mqttVersion: {
         3: 'v3.1',
@@ -219,7 +279,17 @@ export default {
 
   computed: {
     clientId() {
-      return this.$route.params.clientId
+      return this.$route.params.clientId || this.clientid
+    },
+    clientType() {
+      return String(this.record.proto_name).toUpperCase()
+    },
+    clientDetailParts() {
+      let allParts = Object.keys(this.clientsOrganizied)
+      if (Array.prototype.includes.call(allParts, this.clientType))
+        return this.clientsOrganizied[this.clientType]
+
+      return this.clientsOrganizied.others
     },
   },
 
@@ -249,13 +319,14 @@ export default {
           cancelButtonText: this.$t('Base.cancel'),
           type: 'warning',
         })
-        .then(async () => {
+        .then(() => {
           return disconnectClient(this.record.clientid)
         })
         .then(() => {
-          this.$set(this.record, 'connected', false)
+          // this.$set(this.record, 'connected', false)
+          this.record.connected = false
           this.$message.success(successMsg)
-          this.$router.push({ path: '/clients' })
+          // this.$router.push({ path: '/clients' })
         })
         .catch(() => {})
     },
@@ -263,15 +334,46 @@ export default {
       this.dialogVisible = true
     },
     async loadData() {
-      this.record = await loadClientDetail(this.clientId).catch(() => {
-        this.errDialog = true
-        return {}
-      })
+      if (this.gateway) {
+        return this.loadGatewayData()
+      }
+      this.clientDetailLock = true
+      let res = await loadClientDetail(this.clientId).catch(() => {})
+      if (res) {
+        this.record = res
+      } else {
+        this.record = {}
+      }
+      this.clientDetailLock = false
+    },
+    async loadGatewayData() {
+      this.clientDetailLock = true
+      let name = this.clientType.toLowerCase()
+      let res = await getGatewayClientDetail(name, this.clientId).catch(() => {})
+      if (res) {
+        this.record = res
+      } else {
+        this.record = {}
+      }
       this.clientDetailLock = false
     },
     async loadSubs() {
+      if (this.gateway) {
+        return this.loadGatewaySubs()
+      }
       this.subsLockTable = true
-      let res = await loadSubscriptions(this.clientId).catch(() => [])
+      let res = await loadSubscriptions(this.clientId).catch(() => {})
+      if (res) {
+        this.subscriptions = res
+      } else {
+        this.subscriptions = []
+      }
+      this.subsLockTable = false
+    },
+    async loadGatewaySubs() {
+      this.subsLockTable = true
+      let name = this.clientType.toLowerCase()
+      let res = await getGatewayClientSubs(name, this.clientId).catch(() => {})
       if (res) {
         this.subscriptions = res
       } else {

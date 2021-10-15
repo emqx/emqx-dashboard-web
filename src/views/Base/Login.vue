@@ -197,7 +197,7 @@ export default {
     width: 44%;
     float: left;
     padding: 3%;
-    height: 333px;
+    height: 324px;
     overflow: hidden;
   }
 

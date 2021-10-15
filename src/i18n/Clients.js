@@ -297,6 +297,14 @@ export default {
   },
   clientDetailErr: {
     zh: '客户端详情获取出错',
-    en: 'There are some errors occured in retriving the client\'s detail'
-  }
+    en: "There are some errors occured in retriving the client's detail",
+  },
+  endpointName: {
+    zh: 'Endpoint Name',
+    en: 'Endpoint Name',
+  },
+  lifetime: {
+    zh: '心跳',
+    en: 'LifeTime',
+  },
 }
