@@ -116,6 +116,9 @@
 
       <el-table-column prop="username" sortable :label="$t('Clients.username')"></el-table-column>
       <el-table-column prop="ip_address" sortable :label="$t('Clients.ipAddress')">
+        <template #default="{ row }">
+          {{ row.ip_address + ':' + row.port }}
+        </template>
       </el-table-column>
       <el-table-column prop="keepalive" sortable :label="$t('Clients.keepalive')"></el-table-column>
       <el-table-column prop="proto_name" sortable :label="$t('Clients.protocol')">
@@ -289,7 +292,7 @@ export default {
 
     async handleSearch() {
       this.params = this.genQueryParams(this.fuzzyParams)
-      this.$refs.p.$emit('loadPage')
+      this.$refs.p.$emit('loadPage', 1)
     },
     genQueryParams(params) {
       let newParams = {}

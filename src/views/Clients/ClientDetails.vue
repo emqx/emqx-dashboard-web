@@ -61,6 +61,12 @@
                 {{ moment(record[item]).format('YYYY-MM-DD HH:mm:ss') }}
               </span>
             </div>
+            <div v-else-if="item == 'ip_address'" class="detail-item">
+              <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
+              <span :title="record.ip_address + ':' + record.port">{{
+                record.ip_address + ':' + record.port
+              }}</span>
+            </div>
             <div v-else class="detail-item">
               <span :title="tl(snake2pascal(item))">{{ tl(snake2pascal(item)) }}:</span>
               <span :title="record[item]">{{ record[item] }}</span>
