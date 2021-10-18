@@ -26,7 +26,7 @@
             <div class="field-title">{{ $t('RuleEngine.state') }}:</div>
             <span class="field-value">
               <a-badge
-                style="font-size: 12px;"
+                style="font-size: 12px"
                 :status="isAlive ? 'success' : 'error'"
                 :text="isAlive ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')"
                 dot
@@ -36,7 +36,7 @@
                 v-if="!isAlive"
                 :loading="reloading"
                 size="mini"
-                style="margin-left: 12px;"
+                style="margin-left: 12px"
                 type="primary"
                 @click="reconnectResource"
               >

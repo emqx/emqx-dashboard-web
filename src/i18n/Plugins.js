@@ -161,8 +161,7 @@ export default {
   },
   payloadDesc: {
     zh: '启用 verify_claims 时有效, 可以使用 %u，%c 占位符分别替换输入的 username 和 clientid，详见',
-    en:
-      'It is valid when verify_claims is enabled. You can use% u and% c placeholders to replace the entered user name and clientid respectively. For details, see',
+    en: 'It is valid when verify_claims is enabled. You can use% u and% c placeholders to replace the entered user name and clientid respectively. For details, see',
   },
   jwtDoc: {
     zh: 'JWT 认证',
@@ -190,8 +189,7 @@ export default {
   },
   leaveTokenPage: {
     zh: '离开页面后当前输入的配置与生成的 TOKEN 信息均不再保留，确认离开？',
-    en:
-      'After leaving the page, the currently entered configuration and generated TOKEN information are no longer retained. Continue?',
+    en: 'After leaving the page, the currently entered configuration and generated TOKEN information are no longer retained. Continue?',
   },
   usernameOrClientid: {
     zh: '用户名或 Client ID',

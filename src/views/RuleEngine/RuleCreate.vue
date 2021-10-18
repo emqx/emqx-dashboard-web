@@ -152,8 +152,8 @@ import { loadTopics } from '@/api/server'
 import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck, verifyID } from '@/common/utils'
 import Monaco from '@/components/Monaco'
 import StretchHeight from '@/components/StretchHeight'
-import RuleActions from './components/RuleActions'
 import { ruleEngineProvider } from '@/common/provider'
+import RuleActions from './components/RuleActions'
 
 export default {
   name: 'RuleCrate',

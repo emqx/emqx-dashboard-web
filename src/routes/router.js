@@ -358,7 +358,7 @@ let routes = [
       {
         path: 'detail',
         name: 'module-detail',
-        component: ModuleDetail
+        component: ModuleDetail,
       },
     ],
   },

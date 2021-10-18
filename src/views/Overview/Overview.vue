@@ -110,7 +110,7 @@
           <emq-select
             v-model="nodeName"
             size="mini"
-            style="margin-right: 20px;"
+            style="margin-right: 20px"
             :field="{ options: nodes }"
             :field-name="{ label: 'name', value: 'node' }"
             @change="dataTypeChange"

@@ -92,8 +92,7 @@ export default {
   },
   allow_anonymous: {
     zh: '如果未加载身份验证插件，则默认情况下允许匿名身份验证。建议在生产部署中禁用该选项！',
-    en:
-      'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
+    en: 'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
   },
   retry_interval: {
     zh: 'QoS 1/2 消息传递的重试间隔',
@@ -113,8 +112,7 @@ export default {
   },
   flapping_threshold: {
     zh: '每分钟的状态更改次数，指定用于检测连接是否开始 flapping 的阈值',
-    en:
-      'The times of state change per minute, specifying the threshold which is used to detect if the connection starts flapping',
+    en: 'The times of state change per minute, specifying the threshold which is used to detect if the connection starts flapping',
   },
   mqtt_max_packet_size: {
     zh: '最大 MQTT 数据包大小',
