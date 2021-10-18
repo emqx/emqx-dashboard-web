@@ -667,9 +667,11 @@ export default {
         const { form, rules } = configData
         this.paramsList = commonParamsList.concat(form)
         this.rules.params = Object.assign(rulesCommonConfig, rules)
-        const { ...recordParams } = this.assignRecordParams(form)
-        const addRecordParams = recordParams
-        this.record.params = Object.assign(recordCommonConfig, addRecordParams)
+        if (this.currentOper === 'add') {
+          const { ...recordParams } = this.assignRecordParams(form)
+          const addRecordParams = recordParams
+          this.record.params = Object.assign(recordCommonConfig, addRecordParams)
+        }
       } else {
         this.paramsList = commonParamsList
         this.rules.params = rulesCommonConfig

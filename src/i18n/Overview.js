@@ -241,8 +241,7 @@ export default {
   },
   beforeTheCertificateExpires: {
     zh: '证书到期前 EMQ 将通过邮件通知签发邮箱，请留意信息接收以免错过续期时间对业务造成影响。',
-    en:
-      'EMQ will issue mailbox through email notification before the certificate expires. Please pay attention to receiving information so as not to miss the renewal time, which will affect the business.',
+    en: 'EMQ will issue mailbox through email notification before the certificate expires. Please pay attention to receiving information so as not to miss the renewal time, which will affect the business.',
   },
   forTrialEdition: {
     zh: '当前 License 为试用版',

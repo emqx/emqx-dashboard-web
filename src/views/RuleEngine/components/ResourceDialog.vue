@@ -25,7 +25,7 @@
           :loading="loadingButton === 'testButton'"
           :disabled="!record.type"
           type="primary"
-          style="margin-left: 20px;"
+          style="margin-left: 20px"
           @click="handleCreate(true)"
         >
           {{ $t('RuleEngine.testConnection') }}

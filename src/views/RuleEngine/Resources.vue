@@ -51,7 +51,7 @@
           <el-table-column prop="isAvailable">
             <template slot-scope="{ row }">
               <a-badge
-                style="font-size: 12px;"
+                style="font-size: 12px"
                 :status="row.isAvailable ? 'success' : 'error'"
                 :text="row.isAvailable ? $t('RuleEngine.available') : $t('RuleEngine.notAvailable')"
                 dot

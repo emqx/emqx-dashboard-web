@@ -1,12 +1,12 @@
 <template>
-  <el-container class="layout" style="min-height: 100vh;">
+  <el-container class="layout" style="min-height: 100vh">
     <!-- 左侧 -->
     <el-aside width="auto">
       <left-bar></left-bar>
     </el-aside>
 
-    <el-main style="margin: 0; padding: 0;" :style="elMainStyle">
-      <el-header v-if="$hasShow('nav-header')" style="height: 80px; padding: 0;">
+    <el-main style="margin: 0; padding: 0" :style="elMainStyle">
+      <el-header v-if="$hasShow('nav-header')" style="height: 80px; padding: 0">
         <nav-header></nav-header>
         <nav-tabs></nav-tabs>
       </el-header>

@@ -202,6 +202,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { createModule, loadAllModules, updateModule, destroyModule } from '@/api/modules'
 import { renderParamsForm, fillI18n } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
@@ -215,7 +216,6 @@ import AuthSasl from './components/AuthSasl/AuthSasl'
 import LwClients from './components/Lwm2mProtocol/LwClients'
 import TopicMetrics from './components/TopicMetrics/TopicMetrics'
 
-import _ from 'lodash'
 import Listeners from './components/Listeners'
 
 export default {
@@ -305,7 +305,7 @@ export default {
     document.body.scrollTop = 0
   },
   mounted() {
-    if (this.$route.query.type == 'lwm2m' && this.$route.query.imei) {
+    if (this.$route.query.type === 'lwm2m' && this.$route.query.imei) {
       this.detailTabs = 'lwm2m'
     }
   },
@@ -481,7 +481,7 @@ export default {
         .catch(() => {})
     },
     exitDetail(isCancel = false) {
-      //this.cleanForm()
+      // this.cleanForm()
       setTimeout(() => {
         if (this.from === 'modules' || !isCancel) {
           this.$router.push('/modules')

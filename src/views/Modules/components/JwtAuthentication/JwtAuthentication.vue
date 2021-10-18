@@ -35,7 +35,7 @@
                 <a :href="jwtDoc" target="_blank" rel="noopener">{{ $t('Plugins.jwtDoc') }}</a>
               </p>
               <el-form-item prop="payload">
-                <div class="monaco-container" style="height: 200px;">
+                <div class="monaco-container" style="height: 200px">
                   <monaco id="jwt-payload" v-model="record.payload" lang="json"> </monaco>
                 </div>
               </el-form-item>
@@ -43,7 +43,7 @@
                 {{ $t('Plugins.dataDesc') }}
               </p>
               <el-form-item prop="data">
-                <div class="monaco-container" style="height: 200px;">
+                <div class="monaco-container" style="height: 200px">
                   <monaco id="jwt-data" v-model="record.data" lang="plaintext"> </monaco>
                 </div>
               </el-form-item>

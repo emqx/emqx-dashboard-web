@@ -2,7 +2,7 @@
   <div class="client-details">
     <page-header>
       <div class="page-header-title-view">
-        <div style="display: flex; align-items: center;">
+        <div style="display: flex; align-items: center">
           <span class="title">
             {{ clientId }}
           </span>
