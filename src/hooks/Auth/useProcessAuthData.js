@@ -2,7 +2,11 @@ export default function useProcessAuthData() {
   const processHttpConfig = (data) => {
     const tempData = _.cloneDeep(data)
     const { body } = data
-    tempData.body = JSON.parse(body)
+    if (body !== '') {
+      tempData.body = JSON.parse(body)
+    } else {
+      tempData.body = undefined
+    }
     return tempData
   }
   const processRedisConfig = (data) => {
