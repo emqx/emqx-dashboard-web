@@ -174,7 +174,7 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
       }
       return
     }
-    databaseConfig.cmd = defaultContent.value
+    databaseConfig.query = defaultContent.value
   }
   switch (database) {
     case 'mysql':
