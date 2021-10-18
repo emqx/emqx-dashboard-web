@@ -72,7 +72,7 @@ export default function useAuthnCreate() {
       password: '',
       password_hash_algorithm: 'sha256',
       pool_size: 8,
-      cmd: '',
+      query: '',
       ssl: {
         enable: false,
       },

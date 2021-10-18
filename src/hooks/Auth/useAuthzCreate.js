@@ -74,7 +74,7 @@ export default function useAuthzCreate() {
       auto_reconnect: true,
       password: '',
       pool_size: 8,
-      cmd: '',
+      query: '',
       ssl: {
         enable: false,
       },
