@@ -7,7 +7,8 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
     emit('update', value)
   })
   const id = computed(function () {
-    return this.$route.params.id
+    const { id, type } = this.$route.params
+    return id || type
   })
   const helpContent = ref('')
   const setMySql = () => {

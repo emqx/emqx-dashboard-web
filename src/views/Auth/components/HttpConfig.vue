@@ -51,7 +51,7 @@
     <!-- TLS -->
     <TLS-config v-model="httpConfig.ssl"></TLS-config>
     <div class="create-form-title">
-      {{ $t('Auth.authConfig') }}
+      {{ authType === 'authn' ? $t('Auth.authnConfig') : $t('Auth.authzConfig') }}
       <el-button class="help-btn" size="mini" @click="needHelp = !needHelp">
         {{ $t('Base.help') }}
       </el-button>
@@ -113,6 +113,10 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    authType: {
+      required: true,
+      type: String,
+    },
   },
   setup(props, ctx) {
     const defaultContent = JSON.stringify(
@@ -156,7 +160,8 @@ export default defineComponent({
       })
     `
     const id = computed(function () {
-      return this.$route.params.id
+      const { id, type } = this.$route.params
+      return id || type
     })
     if (id.value) {
       const { body } = httpConfig

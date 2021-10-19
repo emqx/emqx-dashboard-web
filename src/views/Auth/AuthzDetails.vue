@@ -34,7 +34,11 @@
             auth-type="authz"
           ></database-config>
           <file-config v-else-if="type === 'file'" v-model="configData"></file-config>
-          <http-config v-else-if="type === 'http'" v-model="configData"></http-config>
+          <http-config
+            v-else-if="type === 'http'"
+            auth-type="authz"
+            v-model="configData"
+          ></http-config>
           <el-button type="primary" @click="handleUpdate">
             {{ $t('Base.update') }}
           </el-button>

@@ -44,7 +44,11 @@
                 v-model="configData"
                 auth-type="authn"
               ></database-config>
-              <http-config v-else-if="currBackend === 'http'" v-model="configData"></http-config>
+              <http-config
+                auth-type="authn"
+                v-else-if="currBackend === 'http'"
+                v-model="configData"
+              ></http-config>
               <built-in-config
                 v-else-if="currBackend === 'built-in-database'"
                 :type="configData.mechanism"

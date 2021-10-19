@@ -47,7 +47,11 @@
       <!-- Config -->
       <div v-if="step === 1">
         <file-config v-if="type === 'file'" v-model="configData"></file-config>
-        <http-config v-else-if="type === 'http'" v-model="configData"></http-config>
+        <http-config
+          v-else-if="type === 'http'"
+          auth-type="authz"
+          v-model="configData"
+        ></http-config>
         <p v-else-if="type === 'built-in-database'" class="item-description">
           {{ $t('Auth.builtInDatabaseDesc') }}
         </p>
