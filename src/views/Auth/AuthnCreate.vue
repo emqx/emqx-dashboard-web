@@ -128,7 +128,11 @@
             v-model="configData"
             :type="mechanism"
           ></built-in-config>
-          <http-config v-else-if="backend === 'http'" v-model="configData"></http-config>
+          <http-config
+            auth-type="authn"
+            v-else-if="backend === 'http'"
+            v-model="configData"
+          ></http-config>
         </template>
         <jwt-config v-else v-model="configData"></jwt-config>
         <!-- Result -->

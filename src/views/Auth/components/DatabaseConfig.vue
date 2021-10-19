@@ -102,7 +102,7 @@
       </el-form>
     </el-row>
     <div class="create-form-title">
-      {{ $t('Auth.authConfig') }}
+      {{ authType === 'authn' ? $t('Auth.authnConfig') : $t('Auth.authzConfig') }}
       <el-button class="help-btn" size="mini" @click="needHelp = !needHelp">
         {{ $t('Base.help') }}
       </el-button>

@@ -83,9 +83,13 @@ export default {
     zh: '自动重连',
     en: 'Reconnect',
   },
-  authConfig: {
+  authnConfig: {
     zh: '认证配置',
     en: 'Authentication configuration',
+  },
+  authzConfig: {
+    zh: '权限配置',
+    en: 'Authorization configuration',
   },
   dataConfig: {
     zh: '数据管理',
