@@ -56,7 +56,7 @@ export default function useAuthnCreate() {
       salt_position: 'prefix',
     }
     if (backend === 'mysql') {
-      data.query_timeout = 5000
+      data.query_timeout = '5s'
     }
     return data
   }

@@ -170,7 +170,9 @@
         <template v-if="authType === 'authn'">
           <el-col v-if="isMySQL" :span="12">
             <el-form-item :label="$t('Auth.queryTimeout')">
-              <el-input v-model.number="databaseConfig.query_timeout"></el-input>
+              <time-input-with-unit-select
+                v-model="databaseConfig.query_timeout"
+              ></time-input-with-unit-select>
             </el-form-item>
           </el-col>
           <el-col v-if="isMongoDB" :span="12">
@@ -218,6 +220,7 @@
 <script>
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import CodeView from '@/components/CodeView'
+import TimeInputWithUnitSelect from '@/components/TimeInputWithUnitSelect.vue'
 import TLSConfig from './TLSConfig.vue'
 import usePassword from '@/hooks/usePassword'
 import useDatabaseConfig from '@/hooks/Auth/useDatabaseConfig'
@@ -225,7 +228,7 @@ import useCopy from '@/hooks/useCopy'
 
 export default defineComponent({
   name: 'DatabaseConfig',
-  components: { CodeView, TLSConfig },
+  components: { CodeView, TLSConfig, TimeInputWithUnitSelect },
   model: {
     prop: 'value',
     event: 'update',
