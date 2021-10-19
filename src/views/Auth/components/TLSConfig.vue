@@ -46,7 +46,7 @@
                   type="textarea"
                   :rows="4"
                   v-model="record.cacertfile"
-                  placeholder="Begins with -----BEGIN RSA PRIVATE KEY-----"
+                  placeholder="Begins with -----BEGIN CERTIFICATE -----"
                 ></el-input>
                 <el-upload class="bottom-btn" ref="upload" action="" :auto-upload="false">
                   <!-- <el-button slot="trigger" size="mini">
