@@ -15,7 +15,7 @@ export default function useDatabaseConfig({ database, value, authType }, { emit 
     let defaultDatabase = ''
     if (authType === 'authn') {
       defaultContent.value =
-        "SELECT password_hash FROM mqtt_user where username = '${username}' LIMIT 1"
+        "SELECT password FROM mqtt_user where username = '${mqtt-username}' LIMIT 1"
       helpContent.value = `
         CREATE TABLE IF NOT EXISTS \`mqtt_user\` (
           \`id\` int(11) unsigned NOT NULL AUTO_INCREMENT,
