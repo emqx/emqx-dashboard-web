@@ -33,7 +33,7 @@
           {{ $t('Alarm.duration') }}
         </span>
         <template slot-scope="{ row }">
-          <span v-show="row.duration">{{ getDuration(row.duration / 1000) }}</span>
+          <span v-show="row.duration">{{ getDuration(row.duration) }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -95,7 +95,7 @@
       </el-table-column>
       <el-table-column prop="deactivate_at" :label="$t('Alarm.duration')" sortable>
         <template slot-scope="{ row }">
-          {{ getDuration(row.duration / 1000) }}
+          {{ getDuration(row.duration) }}
         </template>
       </el-table-column>
     </el-table>

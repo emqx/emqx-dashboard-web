@@ -13,9 +13,6 @@
         <div :span="12" class="login-wrapper">
           <div class="emq-title">
             {{ $t('Base.signIn') }}
-            <div class="sub-title">
-              {{ $t('Base.loginUserAccount') }}
-            </div>
           </div>
           <el-form
             ref="record"
@@ -161,7 +158,7 @@ export default {
   // height: 100vh;
 
   .emq-title {
-    margin-bottom: 32px;
+    margin-bottom: 74px;
   }
 
   .el-form-item {
