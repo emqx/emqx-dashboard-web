@@ -6,13 +6,24 @@
         <span class="title-n-status">
           <span class="section-title">{{ gname }}</span>
           <el-tag type="info" class="section-status">
-            <span><i class="g-status"></i></span>
+            <span
+              ><i :class="['g-status', gInfo.status !== 'running' && 'is-stopped']"></i
+              ><span>{{ gInfo.status }}</span></span
+            >
           </el-tag>
         </span>
       </div>
       <div>
         <!-- <el-button type="danger" plain size="small">{{ $t('Base.delete') }}</el-button> -->
-        <el-button size="small" type="danger" plain> {{ $t('Base.stop') }}</el-button>
+        <el-button
+          size="small"
+          type="danger"
+          plain
+          :disabled="gInfo.status !== 'running'"
+          @click="gatewayStop()"
+        >
+          {{ $t('Base.stop') }}</el-button
+        >
       </div>
     </div>
     <el-menu router :default-active="matchedUrl" mode="horizontal">
@@ -25,14 +36,17 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from '@vue/composition-api'
+import { defineComponent, getCurrentInstance, onMounted, ref } from '@vue/composition-api'
+import { getGateway, updateGateway } from '@/api/gateway'
+import { Message } from 'element-ui'
+import i18n from '@/i18n'
 
 export default defineComponent({
   name: 'GatewayDetail',
   data: function () {
     return {
       types: ['basic', 'listeners', 'auth', 'clients'],
-      gname: this.$route.params.name,
+      gname: String(this.$route.params.name).toLowerCase(),
     }
   },
   computed: {
@@ -46,12 +60,39 @@ export default defineComponent({
     },
   },
   setup(p) {
+    let gInfo = ref({})
+    let vm = getCurrentInstance()
     const tl = function (key, collection = 'Gateway') {
       return this.$t(collection + '.' + key)
     }
 
+    const getGatewayInfo = async () => {
+      let res = await getGateway(vm.data.gname).catch(() => {})
+      if (res) {
+        gInfo.value = res
+      } else {
+        gInfo.value = {}
+      }
+    }
+
+    const gatewayStop = async () => {
+      let body = { enable: false }
+      let res = await updateGateway(vm.data.gname, body).catch(() => {})
+      if (res) {
+        Message({
+          type: 'success',
+          message: i18n.t('Base.disabledSuccess'),
+        })
+        gInfo.value.status = 'stopped'
+      }
+    }
+
+    onMounted(getGatewayInfo)
+
     return {
       tl,
+      gInfo,
+      gatewayStop,
     }
   },
 })
@@ -83,5 +124,22 @@ export default defineComponent({
 }
 .el-menu.el-menu--horizontal {
   margin-bottom: 40px;
+}
+.el-tag.el-tag--info {
+  line-height: 18px;
+  height: 20px;
+
+  .g-status {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    background-color: #00b173;
+    border-radius: 5px;
+    margin-right: 4px;
+
+    &.is-stopped {
+      background-color: #575f6e;
+    }
+  }
 }
 </style>

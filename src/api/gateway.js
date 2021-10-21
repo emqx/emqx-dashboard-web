@@ -78,3 +78,24 @@ export async function unsubscribeGatewayClientSub(name, id, topic) {
     )}/subscriptions/${encodeURIComponent(topic)}`,
   )
 }
+
+//gateway auth
+export async function getGatewayAuth(name) {
+  if (!name) return Promise.reject()
+  return http.get('/gateway/' + encodeURIComponent(name) + '/authentication')
+}
+
+export async function deleteGatewayAuth(name) {
+  if (!name) return Promise.reject()
+  return http.delete('/gateway/' + encodeURIComponent(name) + '/authentication')
+}
+
+export async function updateGatewayAuth(name) {
+  if (!name) return Promise.reject()
+  return http.put('/gateway/' + encodeURIComponent(name) + '/authentication')
+}
+
+export async function addGatewayAuth(name) {
+  if (!name) return Promise.reject()
+  return http.post('/gateway/' + encodeURIComponent(name) + '/authentication')
+}

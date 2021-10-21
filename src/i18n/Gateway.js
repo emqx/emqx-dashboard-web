@@ -267,4 +267,24 @@ export default {
     zh: '心跳时间',
     en: 'LifeTime',
   },
+  alreadyLoad: {
+    zh: '此网关已经初始化',
+    en: 'This gateway is already loaded',
+  },
+  grpcListener: {
+    zh: 'gRPC 监听',
+    en: 'gRPC ConnectionAdapter',
+  },
+  grpcConnection: {
+    zh: 'gRPC 连接',
+    en: 'gRPC ConnectionHandler',
+  },
+  tlsConfig: {
+    zh: 'TLS 配置',
+    en: 'TLS Config',
+  },
+  enableTls: {
+    zh: '启用 TLS',
+    en: 'Enable TLS',
+  },
 }

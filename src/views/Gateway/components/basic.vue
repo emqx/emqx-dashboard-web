@@ -12,9 +12,17 @@
     <template v-else-if="name === 'LWM2M'">
       <lwm2m-basic :value.sync="basicData" :key="iKey"></lwm2m-basic>
     </template>
-    <el-button type="primary" size="small" :loading="updateLoading" @click="updateGatewayInfo()">{{
-      $t('Base.update')
-    }}</el-button>
+    <template v-else-if="name === 'EXPROTO'">
+      <exproto-basic :value.sync="basicData"></exproto-basic>
+    </template>
+    <el-button
+      type="primary"
+      size="small"
+      :loading="updateLoading"
+      @click="updateGatewayInfo()"
+      :disabled="basicData.status === 'unloaded'"
+      >{{ $t('Base.update') }}</el-button
+    >
   </div>
 </template>
 
@@ -24,11 +32,12 @@ import CoapBasic from './coapBasic.vue'
 import Lwm2mBasic from './lwm2mBasic.vue'
 import MqttsnBasic from './mqttsnBasic.vue'
 import stompBasic from './stompBasic.vue'
+import ExprotoBasic from './exprotoBasic.vue'
 import { updateGateway, getGateway } from '@/api/gateway'
 import _ from 'lodash'
 
 export default defineComponent({
-  components: { stompBasic, MqttsnBasic, Lwm2mBasic, CoapBasic },
+  components: { stompBasic, MqttsnBasic, Lwm2mBasic, CoapBasic, ExprotoBasic },
   name: 'GatewayDetailBasic',
   data: function () {
     return {
@@ -47,12 +56,12 @@ export default defineComponent({
       return this.$t(collection + '.' + key)
     }
 
-    watch(
-      () => _.cloneDeep(basicData.value),
-      (v) => {
-        console.log(v)
-      },
-    )
+    // watch(
+    //   () => _.cloneDeep(basicData.value),
+    //   (v) => {
+    //     console.log(v)
+    //   },
+    // )
 
     const getGatewayInfo = async () => {
       infoLoading.value = true

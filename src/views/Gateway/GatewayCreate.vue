@@ -26,6 +26,9 @@
         <template v-else-if="name === 'LWM2M'">
           <lw-basic :value.sync="basicData"></lw-basic>
         </template>
+        <template v-else-if="name === 'EXPROTO'">
+          <exproto-basic :value.sync="basicData"></exproto-basic>
+        </template>
       </div>
 
       <div v-else-if="stepActive === 1">
@@ -78,12 +81,16 @@ import Listeners from './components/listeners.vue'
 import LwBasic from './components/lwm2mBasic.vue'
 import MqttsnBasic from './components/mqttsnBasic.vue'
 import stompBasic from './components/stompBasic.vue'
+import ExprotoBasic from './components/exprotoBasic.vue'
+
 import _ from 'lodash'
 import { postGateway, getGateway } from '@/api/gateway'
 import router from '@/routes'
+import { Message } from 'element-ui'
+import i18n from '@/i18n'
 
 export default defineComponent({
-  components: { stompBasic, Listeners, MqttsnBasic, LwBasic, CoapBasic },
+  components: { stompBasic, Listeners, MqttsnBasic, LwBasic, CoapBasic, ExprotoBasic },
   name: 'GatewayCreate',
   data: function () {
     return {
@@ -124,9 +131,9 @@ export default defineComponent({
       }
       let res = await postGateway(data).catch(() => {})
       if (res) {
-        this.$message({
+        Message({
           type: 'success',
-          message: this.$t('Base.createSuccess'),
+          message: i18n.t('Base.createSuccess'),
         })
         gotoList()
       } else {
@@ -144,7 +151,14 @@ export default defineComponent({
 
       let res = await getGateway(name).catch(() => {})
       if (res) {
-        let { enable, status } = res
+        let { status } = res
+        if (status !== 'unloaded') {
+          Message({
+            type: 'error',
+            message: i18n.t('Gateway.alreadyLoad'),
+          })
+          gotoList()
+        }
       }
     }
 

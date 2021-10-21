@@ -23,6 +23,8 @@ import GatewayDetailListener from '@/views/Gateway/components/listeners'
 import GatewayDetailAuth from '@/views/Gateway/components/auth'
 import GatewayDetailClients from '@/views/Gateway/components/clients'
 import GatewayCreate from '@/views/Gateway/GatewayCreate'
+import IoT from '@/views/RuleEngine/IoT'
+import Bridge from '@/views/RuleEngine/Bridge'
 
 let routes = [
   {
@@ -416,6 +418,38 @@ let routes = [
             component: GatewayDetailClients,
           },
         ],
+      },
+    ],
+  },
+  //iot
+  {
+    path: '/iot',
+    component: Layout,
+    meta: {
+      hideKey: 'iot',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'iot',
+        component: IoT,
+      },
+    ],
+  },
+  //bridge
+  {
+    path: '/bridge',
+    component: Layout,
+    mata: {
+      hideKey: 'bridge',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'bridge',
+        component: Bridge,
       },
     ],
   },
