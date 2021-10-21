@@ -110,6 +110,11 @@ export default {
       },
     ]
 
+    let ruleengine = [
+      { title: 'iot', path: '/iot' },
+      { title: 'bridge', path: '/bridge' },
+    ]
+
     this.menus = [
       {
         title: 'monitoring',
@@ -126,7 +131,11 @@ export default {
         icon: 'icon-authentication',
         c: authentication,
       },
-
+      {
+        title: 'ruleengine',
+        icon: 'icon-configuration',
+        c: ruleengine,
+      },
       {
         title: 'system',
         icon: 'icon-system',
@@ -137,11 +146,7 @@ export default {
         icon: 'icon-configuration',
         c: config,
       },
-      // {
-      //   title: 'ruleengine',
-      //   icon: 'icon-guizeyinqing',
-      //   path: '/ruleengine',
-      // },
+
       // {
       //   title: 'modules',
       //   path: '/modules',

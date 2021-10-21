@@ -155,7 +155,7 @@
 </template>
 
 <script>
-import { defineComponent, ref, reactive, watch, onMounted, del } from '@vue/composition-api'
+import { defineComponent, ref, reactive, watch, onMounted } from '@vue/composition-api'
 import _ from 'lodash'
 import { transformUnitArrayToStr, transformStrToUnitArray } from '@/common/utils'
 

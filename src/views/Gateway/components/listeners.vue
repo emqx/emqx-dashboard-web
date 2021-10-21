@@ -35,12 +35,12 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="tl('name')">
-              <el-input v-model="listenerInput.name"></el-input>
+              <el-input v-model="listenerInput.name" :disabled="editListener"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item :label="tl('lType')">
-              <el-select v-model="listenerInput.type">
+              <el-select v-model="listenerInput.type" :disabled="editListener">
                 <el-option :value="'tcp'"></el-option>
                 <el-option :value="'ssl'"></el-option>
                 <el-option :value="'udp'"></el-option>
@@ -432,8 +432,8 @@ export default defineComponent({
       opListener.value = true
       editListener.value = !!edit
       if (edit) {
-        let name = current.id.split(ID_SEPERATE)[2]
-        listenerInput.value = { ..._.cloneDeep(baseInput), ..._.cloneDeep(current), name }
+        // let name = current.name || current?.id?.split(ID_SEPERATE)[2]
+        listenerInput.value = { ..._.cloneDeep(baseInput), ..._.cloneDeep(current) }
         editPos = index
       } else {
         listenerInput.value = { ..._.cloneDeep(baseInput) }
@@ -447,7 +447,7 @@ export default defineComponent({
       gName = String(gName).toLowerCase()
       let res = await getGatewayListeners(gName).catch(() => {})
       if (res) {
-        listenerTable.value = res
+        listenerTable.value = res.map((v) => denormalizeStructure(v))
       }
       listenerLoading.value = false
     }
@@ -457,9 +457,9 @@ export default defineComponent({
       if (!gName) return
       gName = String(gName).toLowerCase()
 
-      let id = [gName, listenerInput.value.type, listenerInput.value.name].join(ID_SEPERATE)
+      // let id = [gName, listenerInput.value.type, listenerInput.value.name].join(ID_SEPERATE)
 
-      let input = { ..._.cloneDeep(listenerInput.value), id }
+      let input = { ..._.cloneDeep(listenerInput.value) }
       if (listenerInput.value.type === 'udp') input.acceptors = ''
       if (integration) {
         if (edit) {
@@ -545,11 +545,13 @@ export default defineComponent({
         }
       })
 
-      result[type] = { ...record[type] }
-      if (type === 'ssl') {
+      if (record[type]) {
+        result[type] = { ...record[type] }
+      }
+      if (type === 'ssl' && record.tcp) {
         result.tcp = { ...record.tcp }
         Object.assign(result[type], record.xtls)
-      } else if (type === 'dtls') {
+      } else if (type === 'dtls' && record.udp) {
         result.udp = { ...record.udp }
         Object.assign(result[type], record.xtls)
       }
@@ -581,6 +583,15 @@ export default defineComponent({
             delete result.xtls[v]
           }
         })
+      }
+
+      if (!record.name) {
+        result.name = record?.id?.split(ID_SEPERATE)[2] || ''
+      }
+      if (!record.id) {
+        let gName = vm.data.name || props.gatewayName
+        gName = String(gName).toLowerCase()
+        result.id = [gName, record.type, record.name].join(ID_SEPERATE)
       }
 
       return result

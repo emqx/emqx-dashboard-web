@@ -89,6 +89,44 @@ import router from '@/routes'
 import { Message } from 'element-ui'
 import i18n from '@/i18n'
 
+const STATIC_LISTENER = {
+  exproto: {
+    type: 'tcp',
+    name: 'default',
+    bind: '7993',
+    max_conn_rate: 1000,
+    max_connections: 1024000,
+  },
+  lwm2m: {
+    type: 'udp',
+    name: 'default',
+    bind: '5783',
+    max_conn_rate: 1000,
+    max_connections: 1024000,
+  },
+  coap: {
+    type: 'udp',
+    name: 'default',
+    bind: '5683',
+    max_conn_rate: 1000,
+    max_connections: 1024000,
+  },
+  mqttsn: {
+    type: 'udp',
+    name: 'default',
+    bind: '1884',
+    max_conn_rate: 1000,
+    max_connections: 1024000,
+  },
+  stomp: {
+    type: 'tcp',
+    name: 'default',
+    bind: '61613',
+    max_conn_rate: 1000,
+    max_connections: 1024000,
+  },
+}
+
 export default defineComponent({
   components: { stompBasic, Listeners, MqttsnBasic, LwBasic, CoapBasic, ExprotoBasic },
   name: 'GatewayCreate',
@@ -162,8 +200,11 @@ export default defineComponent({
       }
     }
 
-    onMounted(function () {
+    onMounted(() => {
       gatewayStatus()
+
+      let staticListener = STATIC_LISTENER[String(vm.data.name).toLowerCase()]
+      staticListener && listenerList.value.push({ ...staticListener })
     })
 
     return {
