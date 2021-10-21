@@ -134,7 +134,7 @@
         <template v-else-if="isRedis">
           <el-col :span="24">
             <el-form-item :label="$t('Auth.cmd')">
-              <el-input v-model="databaseConfig.cmd" type="textarea" :rows="6"></el-input>
+              <el-input v-model="databaseConfig.query" type="textarea" :rows="6"></el-input>
               <el-button class="bottom-btn" size="mini" @click="setDefaultContent('cmd')">
                 {{ $t('Auth.setDefault') }}
               </el-button>
