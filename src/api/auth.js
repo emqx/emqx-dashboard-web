@@ -64,8 +64,8 @@ export function createAuthnUsers(id, body) {
   return http.post(`/authentication/${encodeURIComponent(id)}/users`, body)
 }
 
-export function loadAuthnUsers(id) {
-  return http.get(`/authentication/${encodeURIComponent(id)}/users`)
+export function loadAuthnUsers(id, params = {}) {
+  return http.get(`/authentication/${encodeURIComponent(id)}/users`, { params })
 }
 
 export function deleteAuthnUser(id, userId) {
@@ -85,8 +85,8 @@ export function moveAuthn(id, body) {
   return http.post(`/authentication/${encodeURIComponent(id)}/move`, body)
 }
 
-export function loadBuiltInDatabaseData(type) {
-  return http.get(`/authorization/sources/built-in-database/${type}`)
+export function loadBuiltInDatabaseData(type, params = {}) {
+  return http.get(`/authorization/sources/built-in-database/${type}`, { params })
 }
 
 export function createBuiltInDatabaseData(type, body) {

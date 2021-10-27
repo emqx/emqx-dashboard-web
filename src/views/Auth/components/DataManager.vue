@@ -58,6 +58,20 @@
       </el-table-column>
     </el-table>
 
+    <div class="emq-table-footer">
+      <el-pagination
+        v-if="count > 0"
+        layout="total, sizes, prev, pager, next"
+        :page-sizes="[20, 50, 100, 500]"
+        :page-size.sync="limit"
+        :current-page.sync="page"
+        :total="count"
+        @size-change="loadData(id)"
+        @current-change="loadData(id)"
+      >
+      </el-pagination>
+    </div>
+
     <el-dialog :title="$t('Base.edit')" :visible.sync="dialogVisible">
       <el-form ref="recordForm" :model="record" :rules="getRules()">
         <el-form-item prop="username" :label="field">
@@ -113,16 +127,24 @@ export default defineComponent({
     const tableData = ref([])
     const lockTable = ref(false)
     const dialogVisible = ref(false)
+    const page = ref(1)
+    const limit = ref(20)
+    const count = ref(0)
+
     const id = computed(function () {
       return this.$route.params.id
     })
-    const loadData = async (id) => {
+    const loadData = async (id, reload) => {
+      if (reload) {
+        page.value = 1
+      }
       lockTable.value = true
-      const res = await loadAuthnUsers(id).catch(() => {
+      const res = await loadAuthnUsers(id, { page: page.value, limit: limit.value }).catch(() => {
         lockTable.value = false
       })
       if (res) {
-        tableData.value = res
+        tableData.value = res.data
+        count.value = res.meta.count
       }
       lockTable.value = false
     }
@@ -152,7 +174,7 @@ export default defineComponent({
         })
           .then(async () => {
             await deleteAuthnUser(id.value, row.user_id).catch(() => {})
-            loadData(id.value)
+            loadData(id.value, true)
           })
           .catch(() => {})
       } else if (command === 'edit') {
@@ -180,11 +202,16 @@ export default defineComponent({
       loadData(id.value)
     }
     return {
+      id,
       dialogVisible,
       tableData,
       lockTable,
       dataManager,
       record,
+      page,
+      limit,
+      count,
+      loadData,
       handleUpdate,
       handleAdd,
       handleCommand,
