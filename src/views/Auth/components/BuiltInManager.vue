@@ -34,43 +34,58 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-table v-show="type !== 'all'" :data="tableData" v-loading.lock="lockTable">
-      <el-table-column type="expand">
-        <template slot-scope="{ row }">
-          <el-table :data="row.rules">
-            <el-table-column prop="permission" label="Permission" min-width="80px">
-            </el-table-column>
-            <el-table-column prop="action" label="Action" min-width="80px"></el-table-column>
-            <el-table-column prop="topic" label="Topic"></el-table-column>
-          </el-table>
-        </template>
-      </el-table-column>
-      <el-table-column
-        v-if="type === 'clientid'"
-        prop="clientid"
-        label="ClientID"
-      ></el-table-column>
-      <el-table-column
-        v-else-if="type === 'username'"
-        prop="username"
-        label="Username"
-      ></el-table-column>
-      <el-table-column prop="rules" :label="$t('Auth.permissionCount')">
-        <template slot-scope="{ row }">
-          {{ row.rules.length }}
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('Base.operation')">
-        <template slot-scope="{ row }">
-          <el-button size="mini" @click="handleEdit(row)">
-            {{ $t('Base.edit') }}
-          </el-button>
-          <el-button size="mini" @click="handleDelete(row)">
-            {{ $t('Base.delete') }}
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div v-show="type !== 'all'">
+      <el-table :data="tableData" v-loading.lock="lockTable">
+        <el-table-column type="expand">
+          <template slot-scope="{ row }">
+            <el-table :data="row.rules">
+              <el-table-column prop="permission" label="Permission" min-width="80px">
+              </el-table-column>
+              <el-table-column prop="action" label="Action" min-width="80px"></el-table-column>
+              <el-table-column prop="topic" label="Topic"></el-table-column>
+            </el-table>
+          </template>
+        </el-table-column>
+        <el-table-column
+          v-if="type === 'clientid'"
+          prop="clientid"
+          label="ClientID"
+        ></el-table-column>
+        <el-table-column
+          v-else-if="type === 'username'"
+          prop="username"
+          label="Username"
+        ></el-table-column>
+        <el-table-column prop="rules" :label="$t('Auth.permissionCount')">
+          <template slot-scope="{ row }">
+            {{ row.rules.length }}
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('Base.operation')">
+          <template slot-scope="{ row }">
+            <el-button size="mini" @click="handleEdit(row)">
+              {{ $t('Base.edit') }}
+            </el-button>
+            <el-button size="mini" @click="handleDelete(row)">
+              {{ $t('Base.delete') }}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="emq-table-footer">
+        <el-pagination
+          v-if="count > 0"
+          layout="total, sizes, prev, pager, next"
+          :page-sizes="[20, 50, 100, 500]"
+          :page-size.sync="limit"
+          :current-page.sync="page"
+          :total="count"
+          @size-change="loadData()"
+          @current-change="loadData()"
+        >
+        </el-pagination>
+      </div>
+    </div>
     <el-dialog :title="isEdit ? $t('Base.edit') : $t('Base.add')" :visible.sync="dialogVisible">
       <el-form ref="recordForm" :model="record" :rules="getRules()">
         <template v-if="type === 'all'">
@@ -198,6 +213,9 @@ export default defineComponent({
     const dialogVisible = ref(false)
     const isEdit = ref(false)
     const editIndex = ref(0)
+    const page = ref(1)
+    const limit = ref(20)
+    const count = ref(0)
     const getRules = function () {
       return {
         clientid: [
@@ -224,15 +242,22 @@ export default defineComponent({
     const loadData = async (reload) => {
       if (reload) {
         tableData.value = []
+        page.value = 1
       }
       lockTable.value = true
-      const res = await loadBuiltInDatabaseData(type.value).catch(() => {
+      const params = {}
+      if (type.value !== 'all') {
+        params.page = page.value
+        params.limit = limit.value
+      }
+      const res = await loadBuiltInDatabaseData(type.value, params).catch(() => {
         lockTable.value = false
       })
       if (type.value === 'all') {
         allTableData.value = res.rules
       } else {
-        tableData.value = res
+        tableData.value = res.data
+        count.value = res.meta.count
       }
       lockTable.value = false
     }
@@ -315,7 +340,7 @@ export default defineComponent({
               rules,
             })
           }
-          loadData()
+          loadData(true)
         })
         .catch(() => {})
     }
@@ -360,6 +385,10 @@ export default defineComponent({
       allTableData,
       rulesData,
       isEdit,
+      page,
+      limit,
+      count,
+      loadData,
       getRules,
       handleAdd,
       addColumn,
