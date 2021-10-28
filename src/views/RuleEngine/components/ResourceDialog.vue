@@ -118,19 +118,6 @@
               </el-form-item>
             </template>
           </el-col>
-          <el-col
-            v-if="
-              ([false, 'false'].includes(record.config['ssl']) && wholeConfigList.length > 11) ||
-              (![false, 'false'].includes(record.config['ssl']) && wholeConfigList.length > 8)
-            "
-            :span="24"
-            class="show-more"
-          >
-            <a href="javascript:;" @click="showWholeList">
-              {{ showMoreItem ? $t('Clients.collapse') : $t('Clients.expand') }}
-              <i :class="showMoreItem ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
-            </a>
-          </el-col>
         </template>
       </el-row>
       <a-skeleton v-else-if="oper === 'edit' && (!record.type || resourceTypes.length < 1)" active></a-skeleton>
@@ -156,7 +143,6 @@ import { loadResourceTypes, createResource, editResource } from '@/api/rules'
 import { renderParamsForm, verifyID } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import FileEditor from '@/components/FileEditor'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
 
 export default {
@@ -167,7 +153,6 @@ export default {
   inheritAttrs: false,
 
   props: {
-    // eslint-disable-next-line
     value: {},
     visible: {
       type: Boolean,
@@ -245,29 +230,7 @@ export default {
     },
   },
 
-  watch: {
-    sslValue: {
-      handler(val) {
-        if (val && val.toString() === 'true') {
-          this.showMoreItem = true
-          this.configList = this.wholeConfigList
-        }
-      },
-      deep: true,
-    },
-  },
-
   methods: {
-    showWholeList() {
-      if (this.showMoreItem === false) {
-        this.showMoreItem = true
-        this.configList = this.wholeConfigList
-      } else {
-        this.showMoreItem = false
-        this.configList = this.wholeConfigList.slice(0, 8)
-      }
-    },
-
     clearForm() {
       if (this.$refs.record) {
         setTimeout(() => {
@@ -303,7 +266,7 @@ export default {
       this.record.config = {}
       this.wholeConfigList = form
       this.showMoreItem = false
-      this.configList = form.length > 8 ? form.slice(0, 8) : form
+      this.configList = this.wholeConfigList
 
       if (this.oper === 'edit') {
         this.assignValuesToRecord()
