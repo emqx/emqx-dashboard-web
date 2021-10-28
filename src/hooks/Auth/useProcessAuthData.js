@@ -1,13 +1,19 @@
+import { Message } from 'element-ui'
+
 export default function useProcessAuthData() {
   const processHttpConfig = (data) => {
-    const tempData = _.cloneDeep(data)
-    const { body } = data
-    if (body !== '') {
-      tempData.body = JSON.parse(body)
-    } else {
-      tempData.body = undefined
+    try {
+      const tempData = _.cloneDeep(data)
+      const { body } = data
+      if (body !== '') {
+        tempData.body = JSON.parse(body)
+      } else {
+        tempData.body = undefined
+      }
+      return tempData
+    } catch (error) {
+      Message.error(error.toString())
     }
-    return tempData
   }
   const processRedisConfig = (data) => {
     const tempData = _.cloneDeep(data)
@@ -22,21 +28,25 @@ export default function useProcessAuthData() {
     return tempData
   }
   const processMongoDBConfig = (data) => {
-    const tempData = _.cloneDeep(data)
-    const { mongo_type, servers, selector } = data
-    if (mongo_type !== 'single') {
-      delete tempData.server
-      tempData.servers = servers.split(',')
-    } else {
-      delete tempData.replica_set_name
-      delete tempData.servers
+    try {
+      const tempData = _.cloneDeep(data)
+      const { mongo_type, servers, selector } = data
+      if (mongo_type !== 'single') {
+        delete tempData.server
+        tempData.servers = servers.split(',')
+      } else {
+        delete tempData.replica_set_name
+        delete tempData.servers
+      }
+      if (selector !== '') {
+        tempData.selector = JSON.parse(selector)
+      } else {
+        tempData.selector = undefined
+      }
+      return tempData
+    } catch (error) {
+      Message.error(error.toString())
     }
-    if (selector !== '') {
-      tempData.selector = JSON.parse(selector)
-    } else {
-      tempData.selector = undefined
-    }
-    return tempData
   }
   const processJwtConfig = (data) => {
     const {
