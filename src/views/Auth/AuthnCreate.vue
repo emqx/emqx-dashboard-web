@@ -1,6 +1,6 @@
 <template>
   <div class="auth authn-create app-wrapper">
-    <back-button back-url="/authentication">
+    <back-button back-url="/authentication" v-if="!gateway">
       {{ $t('Auth.backAuthnList') }}
     </back-button>
     <div class="page-header-title">
@@ -40,7 +40,7 @@
           <el-button type="primary" @click="handleNext">
             {{ $t('Base.nextStep') }}
           </el-button>
-          <el-button @click="$router.push('/authentication')">
+          <el-button @click="cancelCreate()">
             {{ $t('Base.cancel') }}
           </el-button>
         </div>
@@ -63,13 +63,13 @@
               :key="item.value"
               :value="$t('Modules.added')"
               class="item"
-              :hidden="!addedAuthn.includes(`${mechanism}_${item.value}`)"
+              :hidden="!addedAuthn.includes(`${mechanism}_${item.value}`) || gateway"
             >
               <el-radio
                 :label="item.value"
                 class="backend"
                 border
-                :disabled="addedAuthn.includes(`${mechanism}_${item.value}`)"
+                :disabled="addedAuthn.includes(`${mechanism}_${item.value}`) && !gateway"
               >
                 <img height="32" width="32" :src="item.img" :alt="item.key" />
                 <span>{{ item.label }}</span>
@@ -85,7 +85,7 @@
                 v-for="item in others"
                 :key="item.value"
                 :value="$t('Modules.added')"
-                :hidden="!addedAuthn.includes(`${mechanism}_${item.value}`)"
+                :hidden="!addedAuthn.includes(`${mechanism}_${item.value}`) || gateway"
                 class="item"
               >
                 <el-radio
@@ -93,7 +93,7 @@
                   :label="item.value"
                   class="backend"
                   border
-                  :disabled="addedAuthn.includes(`${mechanism}_${item.value}`)"
+                  :disabled="addedAuthn.includes(`${mechanism}_${item.value}`) && !gateway"
                 >
                   <img height="32" width="32" :src="item.img" :alt="item.key" />
                   <span>{{ item.label }}</span>
@@ -168,6 +168,7 @@ import JwtConfig from './components/JwtConfig.vue'
 import useGuide from '@/hooks/useGuide'
 import { createAuthn } from '@/api/auth'
 import useAuthnCreate from '@/hooks/Auth/useAuthnCreate'
+import router from '@/routes'
 
 export default defineComponent({
   name: 'AuthnCreate',
@@ -179,7 +180,26 @@ export default defineComponent({
     HttpConfig,
     JwtConfig,
   },
-  setup() {
+  props: {
+    gateway: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    cancelFunc: {
+      type: Function,
+      required: false,
+      default: () => {},
+    },
+    createFunc: {
+      type: Function,
+      required: false,
+      default: () => {
+        return true
+      },
+    },
+  },
+  setup(props) {
     const mechanism = ref('password-based')
     const backend = ref('')
     const databases = ref([])
@@ -238,11 +258,28 @@ export default defineComponent({
       }
     }
     const { step, activeGuidesIndex, handleNext, handleBack } = useGuide(beforeNext)
+
     const handleCreate = async function () {
-      const data = create(configData.value, backend.value, mechanism.value)
-      await createAuthn(data)
-      this.$message.success(this.$t('Base.createSuccess'))
-      this.$router.push({ name: 'authentication' })
+      if (props.gateway) {
+        await props.createFunc({
+          config: configData.value,
+          backend: backend.value,
+          mechanism: mechanism.value,
+        })
+      } else {
+        const data = create(configData.value, backend.value, mechanism.value)
+        await createAuthn(data).catch(() => {})
+        this.$message.success(this.$t('Base.createSuccess'))
+        this.$router.push({ name: 'authentication' })
+      }
+    }
+
+    const cancelCreate = async function () {
+      if (props.gateway) {
+        props.cancelFunc()
+      } else {
+        router.push('/authentication')
+      }
     }
     return {
       activeGuidesIndex,
@@ -259,6 +296,7 @@ export default defineComponent({
       handleNext,
       handleBack,
       handleCreate,
+      cancelCreate,
     }
   },
 })

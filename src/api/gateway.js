@@ -90,12 +90,12 @@ export async function deleteGatewayAuth(name) {
   return http.delete('/gateway/' + encodeURIComponent(name) + '/authentication')
 }
 
-export async function updateGatewayAuth(name) {
+export async function updateGatewayAuth(name, body) {
   if (!name) return Promise.reject()
-  return http.put('/gateway/' + encodeURIComponent(name) + '/authentication')
+  return http.put('/gateway/' + encodeURIComponent(name) + '/authentication', body)
 }
 
-export async function addGatewayAuth(name) {
+export async function addGatewayAuth(name, body) {
   if (!name) return Promise.reject()
-  return http.post('/gateway/' + encodeURIComponent(name) + '/authentication')
+  return http.post('/gateway/' + encodeURIComponent(name) + '/authentication', body)
 }

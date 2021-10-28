@@ -95,7 +95,24 @@ export default defineComponent({
     DataManager,
     JwtConfig,
   },
-  setup() {
+  props: {
+    gatewayInfo: {
+      type: [Object, Boolean],
+      required: false,
+      default: false,
+    },
+    updateFunc: {
+      type: Function,
+      required: false,
+      default: () => {},
+    },
+    deleteFunc: {
+      type: Function,
+      required: false,
+      default: () => {},
+    },
+  },
+  setup(props) {
     const authnDetailLock = ref(false)
     const id = computed(function () {
       return this.$route.params.id
@@ -117,10 +134,9 @@ export default defineComponent({
     })
     const loadData = async function () {
       authnDetailLock.value = true
-      const res = await loadAuthn(id.value).catch(() => {
-        authnDetailLock.value = false
-      })
+      const res = props.gatewayInfo || (await loadAuthn(id.value).catch(() => {}))
       authnDetailLock.value = false
+
       if (res) {
         currBackend.value = res.backend
         configData.value = res

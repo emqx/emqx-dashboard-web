@@ -287,4 +287,8 @@ export default {
     zh: '启用 TLS',
     en: 'Enable TLS',
   },
+  noAuthTips: {
+    zh: '如需对接入的客户端进行身份认证，请先添加认证，配置并启用客户端认证后未通过认证的客户端将无法连接到集群中。',
+    en: 'To authenticate the client, please add authentication first. After configuring and enabling client authentication, clients that fail to pass authentication will not be able to connect to the cluster.',
+  },
 }
