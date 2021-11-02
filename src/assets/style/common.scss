@@ -226,6 +226,9 @@ code {
 .g-tcp::before {
   background-image: url('~@/assets/gateway/tcp.png');
 }
+.g-exproto::before {
+  background-image: url('~@/assets/gateway/exproto.png');
+}
 
 .section-header {
   font-size: 24px;

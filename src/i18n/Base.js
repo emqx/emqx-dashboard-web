@@ -255,4 +255,8 @@ export default {
     zh: '下移',
     en: 'Down',
   },
+  setting: {
+    zh: '设置',
+    en: 'Setting',
+  },
 }
