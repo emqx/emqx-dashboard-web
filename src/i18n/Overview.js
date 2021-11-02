@@ -12,8 +12,8 @@ export default {
     en: 'Retained',
   },
   connectionsTips: {
-    zh: '当前活跃连接数',
-    en: 'Currently active connections',
+    zh: '当前连接数总数',
+    en: 'Current total connections',
   },
   view: {
     zh: '查看',
