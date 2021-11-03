@@ -1,28 +1,7 @@
 # emqx-dashboard
-## A open source frontend dashboard platform for emqx (Broker/Enterprise)
-### Project setup
-```
-yarn install
-```
 
-### Start dev server for development
-```
-yarn run serve
-```
+# v5 branch is reaching its lifetime ending. The refactored version using Vue 3 at
 
-### Compile for production
-```
-yarn run build
-```
+# [emqx-dashboard-web-new](https://github.com/emqx/emqx-dashboard-web-new)
 
-### Run tests
-```
-yarn run test
-```
-
-### Run lints
-```
-yarn run lint
-```
-
-### This Project is powered by VUE; EMQX is a corporation which is a gold sponsor of VUE
+# DONT COMMIT ANY CODE TO BRANCH V5 ON THIS REPOSITORY

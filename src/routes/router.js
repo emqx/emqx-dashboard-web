@@ -25,6 +25,7 @@ import GatewayDetailClients from '@/views/Gateway/components/clients'
 import GatewayCreate from '@/views/Gateway/GatewayCreate'
 import IoT from '@/views/RuleEngine/IoT'
 import Bridge from '@/views/RuleEngine/Bridge'
+import BridgeCreate from '@/views/RuleEngine/BridgeCreate'
 
 let routes = [
   {
@@ -450,6 +451,11 @@ let routes = [
         path: '',
         name: 'bridge',
         component: Bridge,
+      },
+      {
+        path: 'create',
+        name: 'bridge-create',
+        component: BridgeCreate,
       },
     ],
   },
