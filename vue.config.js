@@ -21,12 +21,6 @@ const customConfig = {
   ...(config[VUE_APP_BUILD_ENV] || {}),
 }
 
-let { publicPath } = customConfig
-if (customConfig.useRelativeResourcePath && process.env.NODE_ENV === 'production') {
-  process.env.VUE_APP_PUBLIC_PATH_FOR_ROUTER = publicPath
-  publicPath = './'
-}
-
 module.exports = {
   devServer: {
     port: 3001,
@@ -58,7 +52,7 @@ module.exports = {
     },
   },
   assetsDir: 'static',
-  publicPath,
+  publicPath: customConfig.publicPath,
   productionSourceMap: false,
   configureWebpack: {
     plugins: [
