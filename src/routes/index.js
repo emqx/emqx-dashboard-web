@@ -9,7 +9,7 @@ Vue.use(Router)
 
 const router = new Router({
   mode: 'hash',
-  base: process.env.BASE_URL,
+  base: process.env.VUE_APP_PUBLIC_PATH_FOR_ROUTER || process.env.BASE_URL,
   scrollBehavior(to, from, savedPosition) {
     if (to.path === '/modules/detail' || (to.meta.keepAlive && savedPosition)) {
       return savedPosition
