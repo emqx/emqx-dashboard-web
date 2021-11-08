@@ -233,6 +233,17 @@ export function renderParamsForm(params = {}, propPrefix = '') {
   return { form, rules }
 }
 
+export function setAFieldRequired(rule, required = true) {
+  if (Array.isArray(rule)) {
+    return rule.map((ruleItem) => ({ ...ruleItem, required }))
+  }
+  return { ...rule, required }
+}
+
+export function booleanFieldValueToBoolean(val) {
+  return typeof val === 'boolean' ? val : val === 'true'
+}
+
 /**
  * 根据语言获取跳转的链接
  * @param name
