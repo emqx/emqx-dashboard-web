@@ -2,6 +2,7 @@
   "base": {
     "baseURL": "/api/v4",
     "httpTimeout": 15000,
+    "useRelativeResourcePath": true,
     "publicPath": "/",
     "hide": {
       "routes": [
@@ -12,6 +13,7 @@
   },
   "cloud": {
     "baseURL": "/dashboard",
+    "useRelativeResourcePath": false,
     "publicPath": "/",
     "hide": {
       "routes": [
