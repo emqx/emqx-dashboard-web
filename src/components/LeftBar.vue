@@ -1,7 +1,7 @@
 <template>
   <div class="left-bar" :style="{ width: leftBarCollapse ? '80px' : '200px' }">
     <div class="logo" :style="{ paddingLeft: leftBarCollapse ? '6px' : '20px' }">
-      <img class="logo-img" src="../assets/emq_logo.svg" alt="logo" />
+      <img class="logo-img" src="../assets/emqx_logo.png" alt="logo" />
     </div>
 
     <a-menu
@@ -298,8 +298,8 @@ export default {
     background: #2f333e;
 
     .logo-img {
-      width: 72px;
-      height: auto;
+      width: auto;
+      height: 36px;
       position: relative;
       left: -3px;
     }
