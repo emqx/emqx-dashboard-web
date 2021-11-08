@@ -250,7 +250,7 @@ export default {
 @import '../assets/style/variables';
 
 .left-bar {
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 50px);
   background-color: $color-theme;
   transition: all 0.3s;
 

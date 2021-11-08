@@ -6,9 +6,8 @@
     </el-aside>
 
     <el-main style="margin: 0; padding: 0" :style="elMainStyle">
-      <el-header v-if="$hasShow('nav-header')" style="height: 80px; padding: 0">
+      <el-header v-if="$hasShow('nav-header')" style="height: 50px; padding: 0">
         <nav-header></nav-header>
-        <nav-tabs></nav-tabs>
       </el-header>
 
       <div :style="{ minHeight: '360px', minWidth: '600px', overflowX: 'hidden' }">
@@ -28,7 +27,6 @@
 <script>
 import LeftBar from '@/components/LeftBar'
 import NavHeader from '@/components/NavHeader'
-import NavTabs from '@/components/NavTabs.vue'
 
 export default {
   name: 'Layout',
@@ -36,7 +34,6 @@ export default {
   components: {
     NavHeader,
     LeftBar,
-    NavTabs,
   },
 
   data() {
