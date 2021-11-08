@@ -28,9 +28,6 @@ function getConfigState() {
     ...envConfig,
   }
 }
-function getNavTabs() {
-  return JSON.parse(localStorage.getItem('navTabs')) || []
-}
 function getCollapse() {
   const collapse = localStorage.getItem('leftBarCollapse')
   if (collapse === null) {
@@ -47,7 +44,6 @@ export default new Vuex.Store({
     leftBarCollapse: getCollapse(),
     alertCount: 0,
     config: getConfigState(),
-    navTabs: getNavTabs(),
     selectedModule: JSON.parse(localStorage.getItem('selectedModule')) || {},
   },
   actions: {
@@ -88,21 +84,6 @@ export default new Vuex.Store({
     LOADING({ commit }, loading = false) {
       commit('LOADING', loading)
     },
-    ADD_NAV_TABS({ commit }, tab) {
-      commit('ADD_NAV_TABS', tab)
-    },
-    REMOVE_NAV_TABS({ commit, state }, tab) {
-      const tabs = [...state.navTabs]
-      // eslint-disable-next-line
-      for (const [index, value] of tabs.entries()) {
-        if (value.url === tab.url) {
-          tabs.splice(index, 1)
-          break
-        }
-      }
-      commit('REMOVE_NAV_TABS', tabs)
-      return tabs
-    },
   },
   mutations: {
     UPDATE_MODULE(state, selectedModule) {
@@ -129,14 +110,6 @@ export default new Vuex.Store({
     },
     SET_LANGUAGE(state, lang) {
       state.lang = lang
-    },
-    ADD_NAV_TABS(state, tab) {
-      state.navTabs.push(tab)
-      localStorage.setItem('navTabs', JSON.stringify(state.navTabs))
-    },
-    REMOVE_NAV_TABS(state, tabs) {
-      state.navTabs = tabs
-      localStorage.setItem('navTabs', JSON.stringify(state.navTabs))
     },
   },
 })

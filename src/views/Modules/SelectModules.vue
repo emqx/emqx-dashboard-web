@@ -356,7 +356,7 @@ export default {
     width: 100%;
     height: 112px;
     position: fixed;
-    top: 80px;
+    top: 50px;
     right: 0;
     z-index: 9;
 
