@@ -84,13 +84,15 @@
             <span>
               {{ _formatNumber(currentMetrics.connection) }}
             </span>
-            <el-progress
-              class="status-progress"
-              :stroke-width="20"
-              :percentage="licensePercentage"
-              :format="() => ''"
-              :color="getProgressColor(licensePercentage, '#2DC8B2')"
-            ></el-progress>
+            <div class="flux-wrapper">
+              <connection-statistics
+                :max-connections="license.max_connections"
+                :connection-data="{
+                  connection: currentMetrics.connection,
+                  live_connection: currentMetrics.live_connection,
+                }"
+              ></connection-statistics>
+            </div>
           </div>
           <div class="app-footer">
             <div class="footer-item">
@@ -225,11 +227,13 @@
 
 <script>
 import Moment from 'moment'
+import { formatNumber } from '@/common/utils.js'
 import { loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo } from '@/api/overview'
 import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
 import PercentageCards from './components/PercentageCards'
 import PolylineCards from './components/PolylineCards'
+import ConnectionStatistics from './components/ConnectionStatistics'
 
 export default {
   name: 'Overview',
@@ -239,6 +243,7 @@ export default {
     SimpleLine,
     PercentageCards,
     PolylineCards,
+    ConnectionStatistics,
   },
 
   props: {},
@@ -303,6 +308,7 @@ export default {
         sent: 0, // 消息 out 速率
         subscription: 0, // 订阅数
         connection: 0, // 连接数
+        live_connection: 0, // 活跃连接
       },
     }
   },
@@ -363,14 +369,7 @@ export default {
     formatConnection() {
       const { connection } = this.currentMetrics
       const { max_connections } = this.license
-      return `${this._formatNumber(connection)}/${this._formatNumber(max_connections)}`
-    },
-    _formatNumber(num) {
-      if (num > 10000) {
-        const value = num / 1000
-        return `${parseInt(value * 100, 10) / 100}K`
-      }
-      return num
+      return `${formatNumber(connection)}/${formatNumber(max_connections)}`
     },
     async loadLicenseData() {
       this.license = await loadLicenseInfo()
@@ -422,6 +421,7 @@ export default {
       }
       return color
     },
+    _formatNumber: formatNumber,
   },
 }
 </script>
@@ -438,7 +438,8 @@ export default {
     width: 100%;
     box-sizing: border-box;
 
-    .simple-line {
+    .simple-line,
+    .connection-statistics {
       box-sizing: border-box;
       height: 32px;
     }
