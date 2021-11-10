@@ -61,7 +61,16 @@
           </el-col>
           <el-col :span="12">
             <el-form-item :label="$t('Overview.currentConnection')">
-              <span class="form-item-value"> {{ record['connections.count'] }} / {{ record['connections.max'] }} </span>
+              <span class="form-item-value">
+                {{ record['live_connections.count'] }} / {{ record['connections.count'] }} /
+                {{ record['connections.max'] }}
+              </span>
+              <el-popover
+                trigger="hover"
+                :content="`${$t('Overview.active')}/${$t('Overview.all')}/${$t('Overview.limit')}`"
+              >
+                <i slot="reference" class="el-icon-question"></i>
+              </el-popover>
             </el-form-item>
           </el-col>
           <el-col :span="12">
