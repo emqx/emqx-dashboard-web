@@ -381,6 +381,14 @@ export const formatNumberSize = (number) => {
   return `${$integer}.${residue}${digitList[digit]}B`
 }
 
+export const formatNumber = (num) => {
+  if (num > 10000) {
+    const value = num / 1000
+    return `${parseInt(value * 100, 10) / 100}K`
+  }
+  return num
+}
+
 export function ruleOldSqlCheck(sql) {
   const $sql = sql.replace(/\"/g, '')
   const oldEvent = [
