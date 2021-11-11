@@ -141,12 +141,15 @@
 <script>
 import _ from 'lodash'
 import { loadResourceTypes, createResource, editResource } from '@/api/rules'
-import { renderParamsForm, verifyID, booleanFieldValueToBoolean, setAFieldRequired } from '@/common/utils'
+import handleMongoDBSRV from '@/mixins/handleMongoDBSRV'
+import { renderParamsForm, verifyID } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import FileEditor from '@/components/FileEditor'
 
 export default {
   name: 'ResourceDialog',
+
+  mixins: [handleMongoDBSRV('resource')],
 
   components: { KeyAndValueEditor, FileEditor },
 
@@ -228,16 +231,6 @@ export default {
       const { ssl } = this.record.config
       return ssl
     },
-    srvRecord() {
-      const srvRecord = this.record && this.record.config && this.record.config.srv_record
-      return srvRecord === undefined ? srvRecord : booleanFieldValueToBoolean(srvRecord)
-    },
-  },
-
-  watch: {
-    srvRecord() {
-      this.setRsSetNameFieldRequired()
-    },
   },
 
   methods: {
@@ -289,15 +282,6 @@ export default {
       }
       this.configLoading = false
       setTimeout(this.$refs.record.clearValidate, 10)
-    },
-
-    setRsSetNameFieldRequired() {
-      if (this.record.name !== 'backend_mongo_rs' || this.srvRecord === undefined) {
-        return
-      }
-      if (this.rules && this.rules.config && this.rules.config.rs_set_name) {
-        this.rules.config.rs_set_name = setAFieldRequired(this.rules.config.rs_set_name, this.srvRecord)
-      }
     },
 
     cleanFileContent(config) {
