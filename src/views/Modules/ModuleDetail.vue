@@ -205,6 +205,7 @@
 import _ from 'lodash'
 import { createModule, loadAllModules, updateModule, destroyModule } from '@/api/modules'
 import { renderParamsForm, fillI18n } from '@/common/utils'
+import handleMongoDBSRV from '@/mixins/handleMongoDBSRV'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ArrayEditor from '@/components/ArrayEditor'
 import FileEditor from '@/components/FileEditor'
@@ -234,6 +235,8 @@ export default {
     LwClients,
     TopicMetrics,
   },
+
+  mixins: [handleMongoDBSRV('module')],
 
   inheritAttrs: false,
 
@@ -288,6 +291,9 @@ export default {
     listeners() {
       return this.record.config.listeners
     },
+    rsSetName() {
+      return this.record && this.record.config && this.record.config.rs_set_name
+    },
   },
 
   watch: {
@@ -295,6 +301,13 @@ export default {
       deep: true,
       immediate: true,
       handler: 'handlelistenersChange',
+    },
+    /**
+     * Because the rsSetName field is not present when the form is initialized,
+     * it needs to be monitored and set its rules when it appears.
+     */
+    rsSetName() {
+      this.setRsSetNameFieldRequired()
     },
   },
 
