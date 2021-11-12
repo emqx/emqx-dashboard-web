@@ -182,6 +182,9 @@ import { loadNodes as loadNodesApi } from '@/api/overview'
 import Monaco from '@/components/Monaco.vue'
 
 let LOG_VIEW_POSITION = 0
+const MAX_LOG_SIZE = 5 * 1024 * 1024
+const BYTEPERPAGE = 50 * 1024
+
 export default {
   components: { Monaco },
   name: 'LogTrace',
@@ -227,21 +230,19 @@ export default {
         ],
         topic: [{ required: true, messages: this.$t('General.pleaseEnter') }],
         clientid: [{ required: true, messages: this.$t('General.pleaseEnter') }],
-        // startTime: [{ required: true, messages: this.$t('General.pleaseEnter') }],
         startTime: [
           {
             validator(r, v, cb) {
               // eslint-disable-next-line no-unused-expressions
-              v && v[0] && v[1] ? cb() : cb(new Error('start time or end time is required'))
+              v && v[0] && v[1] ? cb() : cb(new Error(this.$t('LogTrace.needStartTime')))
             },
           },
         ],
-        // packets: [{ required: true, messages: this.$t('General.pleaseEnter') }],
         packets: [
           {
             validator(r, v, cb) {
               // eslint-disable-next-line no-unused-expressions
-              v.length ? cb() : cb(new Error('please choose one'))
+              v.length ? cb() : cb(new Error(this.$t('LogTrace.needOnePacket')))
             },
           },
         ],
@@ -258,7 +259,6 @@ export default {
         type: 'clientid',
       },
       viewLogName: '',
-      // logSizeKey: '_log_size',
     }
   },
   created() {
@@ -266,7 +266,6 @@ export default {
   },
   watch: {
     node(v, oldV) {
-      console.log(v, oldV)
       if (v && oldV && v.node !== oldV.node) this.viewDetail({ name: this.viewLogName })
     },
   },
@@ -279,24 +278,13 @@ export default {
     async loadTraceList() {
       // eslint-disable-next-line no-unused-expressions
       ;(this.aTraceTbLoading = true), (this.fTraceTbLoading = true)
-      // this.aTraceTb = await getTraceList(true).catch(() => {})
-      // this.calcTraceLogSize(this.aTraceTb)
-      // this.fTraceTb = await getTraceList(false).catch(() => {})
-      // this.calcTraceLogSize(this.fTraceTb)
       const traceList = await Promise.all([getTraceList(true), getTraceList(false)]).catch(() => {})
       this.aTraceTb = traceList[0]
       this.fTraceTb = traceList[1]
       this.aTraceTbLoading = false
       this.fTraceTbLoading = false
     },
-    // calcTraceLogSize(traceList) {
-    //   if (!traceList || !traceList.length) return
 
-    //   traceList.forEach((v, k) => {
-    //     const logSize = Object.keys(v.log_size).reduce((c, lv) => c + v.log_size[lv], 0)
-    //     v[this.logSizeKey] = logSize
-    //   })
-    // },
     async submitTrace() {
       this.$refs.createForm.validate(async (valid) => {
         if (!valid) return
@@ -335,7 +323,6 @@ export default {
       this.viewNodeLoading = false
     },
     async loadLogDetail(name) {
-      const BYTEPERPAGE = 50 * 1024
       const params = { position: LOG_VIEW_POSITION, bytes: BYTEPERPAGE, node: this.node.node }
       const logResp = await getTraceLog(name, params).catch(() => {})
       if (logResp) {
@@ -347,16 +334,8 @@ export default {
       if (!row.name) {
         return
       }
-      const res = await downloadTrace(row.name).catch(() => {})
-      if (res) {
-        console.log(res)
-        const url = URL.createObjectURL(new Blob(res))
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', 'emqx.log')
-        document.body.appendChild(link)
-        link.click()
-      }
+      await downloadTrace(row.name).catch(() => {})
+      // download link, no more action needed
     },
     async stopTraceHandler(row) {
       if (row.name) return
@@ -368,7 +347,7 @@ export default {
     },
     async scrollLoadFunc(event) {
       if (event.scrollTop + this.initialHeight >= event.scrollHeight && !this.viewNodeLoading) {
-        if (LOG_VIEW_POSITION <= 5 * 1024 * 1024) {
+        if (LOG_VIEW_POSITION <= MAX_LOG_SIZE) {
           this.viewNodeLoading = true
           console.log('scrollloading')
           await this.loadLogDetail(this.viewLogName)

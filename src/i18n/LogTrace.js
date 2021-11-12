@@ -87,4 +87,12 @@ export default {
     zh: '确定删除该Trace',
     en: 'Confirm to delete this Trace',
   },
+  needStartTime: {
+    zh: '请输入起始时间和结束时间',
+    en: 'start time or end time is required',
+  },
+  needOnePacket: {
+    zh: '请选择至少一种',
+    en: 'please choose at least one packet',
+  },
 }
