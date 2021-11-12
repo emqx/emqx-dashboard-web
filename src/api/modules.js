@@ -104,4 +104,12 @@ export function publishOrder(body) {
   return http.post('/mqtt/publish', body)
 }
 
+export function querySlowQueryTopicData(params) {
+  return http.get('/slow_topic', { params })
+}
+
+export function clearSlowQueryData() {
+  return http.delete('/slow_topic')
+}
+
 export default {}

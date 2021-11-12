@@ -209,6 +209,30 @@ export default {
     zh: '指标数据',
     en: 'Topic Metrics',
   },
+  topicData: {
+    zh: 'Topic 记录',
+    en: 'Topic Data',
+  },
+  clearData: {
+    zh: '重置数据',
+    en: 'Clear data',
+  },
+  timeoutTimes: {
+    zh: '超时次数',
+    en: 'Timeout times',
+  },
+  averageTime: {
+    zh: '平均耗时',
+    en: 'Mean Latency',
+  },
+  clearSlowQueryConfirm: {
+    zh: '清除当前所有数据并重新统计慢 Topic',
+    en: 'Clear current data and re count slow topic',
+  },
+  successfulCleanSlowQuey: {
+    zh: '清除成功',
+    en: 'Cleared successfully',
+  },
   listNull: {
     zh: '列表为空，请调整过滤条件再试',
     en: 'Empty. Please change the filter and try again',
