@@ -226,12 +226,9 @@ import JwtAuthentication from './components/JwtAuthentication/JwtAuthentication'
 import AuthSasl from './components/AuthSasl/AuthSasl'
 import LwClients from './components/Lwm2mProtocol/LwClients'
 import TopicMetrics from './components/TopicMetrics/TopicMetrics'
-<<<<<<< Updated upstream
 import SlowQuery from './components/SlowQuery/SlowQuery.vue'
 
-=======
 import LogTrace from './components/LogTrace/LogTrace'
->>>>>>> Stashed changes
 import Listeners from './components/Listeners'
 
 export default {
@@ -249,11 +246,8 @@ export default {
     AuthSasl,
     LwClients,
     TopicMetrics,
-<<<<<<< Updated upstream
     SlowQuery,
-=======
     LogTrace,
->>>>>>> Stashed changes
   },
 
   mixins: [handleMongoDBSRV('module')],
