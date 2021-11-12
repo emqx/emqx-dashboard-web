@@ -34,6 +34,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    scrollLoading: {
+      type: Boolean,
+      default: false,
+    },
+    scrollFunc: {
+      type: Function,
+      default: () => () => {},
+    },
   },
 
   data() {
@@ -129,10 +137,9 @@ export default {
         value: this.value,
         language: this.lang,
         readOnly: this.disabled,
-        fontSize: 14,
+        fontSize: 12,
         automaticLayout: true,
         scrollBeyondLastLine: false,
-        lineNumbersMinChars: 2,
         theme: 'vs',
         minimap: {
           enabled: false,
@@ -160,6 +167,8 @@ export default {
       })
       // Update editor options
       this.editor.getModel().updateOptions({ tabSize: 2 })
+
+      if (this.scrollLoading) this.editor.onDidScrollChange(this.scrollFunc)
     },
     beforeMonacoCreate(options) {
       if (this.warp) {

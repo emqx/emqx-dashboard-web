@@ -231,4 +231,8 @@ export default {
     zh: '请选择禁用属性',
     en: 'Please select property',
   },
+  validString: {
+    zh: '请输入合法字符',
+    en: 'Please enter a valid value',
+  },
 }

@@ -39,7 +39,7 @@
                     @qucik-save="handleSQLTest"
                   ></monaco>
                 </div>
-                <stretch-height v-model="sqlEditorHeight"></stretch-height>
+                <!-- <stretch-height v-model="sqlEditorHeight"></stretch-height> -->
               </el-form-item>
 
               <el-form-item prop="id" :label="$t('RuleEngine.ruleID')">

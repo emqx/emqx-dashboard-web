@@ -318,4 +318,8 @@ export default {
     zh: ',添加之后即可启用',
     en: ', you can use it after adding this module',
   },
+  trace: {
+    zh: 'Trace 记录',
+    en: 'Trace Log',
+  },
 }

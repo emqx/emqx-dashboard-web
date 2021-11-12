@@ -155,4 +155,8 @@ export default {
     zh: '详情',
     en: 'Details',
   },
+  download: {
+    zh: '下载',
+    en: 'Download',
+  },
 }

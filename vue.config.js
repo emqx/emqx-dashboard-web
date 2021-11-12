@@ -34,7 +34,8 @@ module.exports = {
     before,
     proxy: {
       '/api': {
-        target: process.env.HOST_URL || 'http://127.0.0.1:18083',
+        target: process.env.HOST_URL || 'http://34.219.115.160:18084',
+        // target: process.env.HOST_URL || 'http://127.0.0.1:18083',
         changeOrigin: true,
       },
       '/dashboard': {
@@ -64,7 +65,7 @@ module.exports = {
     plugins: [
       new MonacoWebpackPlugin({
         output: 'static/',
-        languages: ['json', 'sql', 'plaintext', 'avro', 'protobuf'],
+        languages: ['json', 'sql', 'plaintext', 'avro', 'protobuf', 'powershell'],
         features: ['!gotoSymbol'],
       }),
     ],

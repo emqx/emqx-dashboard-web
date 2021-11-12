@@ -200,6 +200,11 @@
               <slow-query></slow-query>
             </el-tab-pane>
           </template>
+          <template v-else-if="moduleData.type == 'tracer'">
+            <el-tab-pane :label="$t('Modules.trace')" name="trace">
+              <log-trace></log-trace>
+            </el-tab-pane>
+          </template>
         </template>
       </el-tabs>
     </div>
@@ -221,8 +226,12 @@ import JwtAuthentication from './components/JwtAuthentication/JwtAuthentication'
 import AuthSasl from './components/AuthSasl/AuthSasl'
 import LwClients from './components/Lwm2mProtocol/LwClients'
 import TopicMetrics from './components/TopicMetrics/TopicMetrics'
+<<<<<<< Updated upstream
 import SlowQuery from './components/SlowQuery/SlowQuery.vue'
 
+=======
+import LogTrace from './components/LogTrace/LogTrace'
+>>>>>>> Stashed changes
 import Listeners from './components/Listeners'
 
 export default {
@@ -240,7 +249,11 @@ export default {
     AuthSasl,
     LwClients,
     TopicMetrics,
+<<<<<<< Updated upstream
     SlowQuery,
+=======
+    LogTrace,
+>>>>>>> Stashed changes
   },
 
   mixins: [handleMongoDBSRV('module')],
@@ -269,13 +282,13 @@ export default {
       },
       buttonLoading: false,
       detailTabs: 'configuration',
-      canManageModuleTypes: [
-        'mnesia_authentication',
-        'jwt_authentication',
-        'auth_sasl',
-        'lwm2m_protocol',
-        'topic_metrics',
-      ],
+      // canManageModuleTypes: [
+      //   'mnesia_authentication',
+      //   'jwt_authentication',
+      //   'auth_sasl',
+      //   'lwm2m_protocol',
+      //   'topic_metrics',
+      // ],
     }
   },
 
