@@ -195,6 +195,11 @@
               <topic-metrics></topic-metrics>
             </el-tab-pane>
           </template>
+          <template v-else-if="moduleData.type == 'slow_topics_statistics'">
+            <el-tab-pane :label="$t('Modules.topicData')" name="topic">
+              <slow-query></slow-query>
+            </el-tab-pane>
+          </template>
         </template>
       </el-tabs>
     </div>
@@ -216,6 +221,7 @@ import JwtAuthentication from './components/JwtAuthentication/JwtAuthentication'
 import AuthSasl from './components/AuthSasl/AuthSasl'
 import LwClients from './components/Lwm2mProtocol/LwClients'
 import TopicMetrics from './components/TopicMetrics/TopicMetrics'
+import SlowQuery from './components/SlowQuery/SlowQuery.vue'
 
 import Listeners from './components/Listeners'
 
@@ -234,6 +240,7 @@ export default {
     AuthSasl,
     LwClients,
     TopicMetrics,
+    SlowQuery,
   },
 
   mixins: [handleMongoDBSRV('module')],
