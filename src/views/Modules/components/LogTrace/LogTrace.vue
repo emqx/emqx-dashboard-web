@@ -12,7 +12,7 @@
           {{ row[row.type] }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('LogTrace.startTime')">
+      <el-table-column :label="$t('LogTrace.startEndTime')">
         <template #default="{ row }">
           {{
             moment(row.start_at).format('YYYY-MM-DD HH:mm:ss') + '-' + moment(row.end_at).format('YYYY-MM-DD HH:mm:ss')
@@ -46,7 +46,7 @@
           {{ row[row.type] }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('LogTrace.startTime')">
+      <el-table-column :label="$t('LogTrace.startEndTime')">
         <template #default="{ row }">
           {{
             moment(row.start_at).format('YYYY-MM-DD HH:mm:ss') + '-' + moment(row.end_at).format('YYYY-MM-DD HH:mm:ss')
@@ -95,7 +95,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12" style="clear: both">
-            <el-form-item :label="$t('LogTrace.startTime')" prop="startTime">
+            <el-form-item :label="$t('LogTrace.startEndTime')" prop="startTime">
               <el-date-picker
                 type="datetimerange"
                 :start-placeholde="$t('LogTrace.startTime')"
@@ -184,6 +184,7 @@ import Monaco from '@/components/Monaco.vue'
 let LOG_VIEW_POSITION = 0
 const MAX_LOG_SIZE = 5 * 1024 * 1024
 const BYTEPERPAGE = 50 * 1024
+const DEFAULT_DURATION = 30 * 60 * 1000
 
 export default {
   components: { Monaco },
@@ -202,7 +203,9 @@ export default {
       aTraceTb: [],
       fTraceTb: [],
       nodes: [],
-      node: '',
+      node: {
+        node: '',
+      },
       packetType: {
         clientid: [
           'CONNECT',
@@ -312,7 +315,7 @@ export default {
     async openCreateDialog() {
       this.createDialog = true
       const timeNow = new Date()
-      this.record.startTime = [timeNow, new Date(timeNow.getTime() + 30 * 60 * 1000)]
+      this.record.startTime = [timeNow, new Date(timeNow.getTime() + DEFAULT_DURATION)]
     },
     async viewDetail(row) {
       if (!row || !row.name) return
@@ -351,7 +354,8 @@ export default {
       }
     },
     async scrollLoadFunc(event) {
-      if (event.scrollTop + this.initialHeight >= event.scrollHeight && !this.viewNodeLoading) {
+      // wtf monaco scrollchanged event
+      if (event.scrollTop + this.initialHeight >= event.scrollHeight && !this.viewNodeLoading && this.viewDialog) {
         if (LOG_VIEW_POSITION <= MAX_LOG_SIZE) {
           this.viewNodeLoading = true
           this.nextPageLoading = this.$t('LogTrace.loadNextPage')

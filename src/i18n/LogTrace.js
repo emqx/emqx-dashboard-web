@@ -27,6 +27,10 @@ export default {
     zh: '结束时间',
     en: 'End Time',
   },
+  startEndTime: {
+    zh: '起止时间',
+    en: 'Start Time/End Time',
+  },
   status: {
     zh: '状态',
     en: 'Status',
