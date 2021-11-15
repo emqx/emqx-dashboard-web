@@ -50,6 +50,12 @@ export default new Vuex.Store({
     navTabs: getNavTabs(),
     selectedModule: JSON.parse(localStorage.getItem('selectedModule')) || {},
   },
+  getters: {
+    httpBaseUrl: (state) => {
+      const { baseURL, useRelativeResourcePath } = state.config
+      return useRelativeResourcePath && baseURL.slice(0, 1) === '/' ? baseURL.slice(1) : baseURL
+    },
+  },
   actions: {
     UPDATE_MODULE({ commit }, selectedModule) {
       localStorage.setItem('selectedModule', JSON.stringify(selectedModule))
