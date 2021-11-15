@@ -27,9 +27,9 @@
       </el-table-column>
       <el-table-column min-width="100">
         <template #default="{ row }">
-          <el-button size="mini" dashed @click="viewDetail(row)">{{ $t('LogTrace.view') }}</el-button>
-          <el-button size="mini" dashed @click="download(row)">{{ $t('LogTrace.download') }}</el-button>
-          <el-button size="mini" dashed plain type="danger" @click="stopTraceHandler(row)">{{
+          <el-button type="dashed" size="mini" @click="viewDetail(row)">{{ $t('LogTrace.view') }}</el-button>
+          <el-button type="dashed" size="mini" @click="download(row)">{{ $t('LogTrace.download') }}</el-button>
+          <el-button size="mini" plain type="danger" @click="stopTraceHandler(row)">{{
             $t('LogTrace.stop')
           }}</el-button>
         </template>
@@ -60,9 +60,9 @@
       </el-table-column>
       <el-table-column min-width="100">
         <template #default="{ row }">
-          <el-button size="mini" dashed @click="viewDetail(row)">{{ $t('LogTrace.view') }}</el-button>
-          <el-button size="mini" dashed @click="download(row)">{{ $t('LogTrace.download') }}</el-button>
-          <el-button size="mini" dashed type="danger" plain @click="deleteTraceHandler(row)">{{
+          <el-button type="dashed" size="mini" @click="viewDetail(row)">{{ $t('LogTrace.view') }}</el-button>
+          <el-button type="dashed" size="mini" @click="download(row)">{{ $t('LogTrace.download') }}</el-button>
+          <el-button size="mini" type="danger" plain @click="deleteTraceHandler(row)">{{
             $t('LogTrace.delete')
           }}</el-button>
         </template>
@@ -135,7 +135,7 @@
       </div>
     </el-dialog>
     <el-dialog :title="$t('LogTrace.viewLog')" :visible.sync="viewDialog">
-      <div v-loading="viewNodeLoading">
+      <div v-loading="viewNodeLoading" :element-loading-text="nextPageLoading">
         <el-row>
           <el-col :span="10">
             <emq-select
@@ -196,6 +196,8 @@ export default {
         callback(new Error(this.$t('General.validString')))
       }
     }
+    const needStartTime = this.$t('LogTrace.needStartTime')
+    const needOnePacket = this.$t('LogTrace.needOnePacket')
     return {
       aTraceTb: [],
       fTraceTb: [],
@@ -234,7 +236,7 @@ export default {
           {
             validator(r, v, cb) {
               // eslint-disable-next-line no-unused-expressions
-              v && v[0] && v[1] ? cb() : cb(new Error(this.$t('LogTrace.needStartTime')))
+              v && v[0] && v[1] ? cb() : cb(new Error(needStartTime))
             },
           },
         ],
@@ -242,7 +244,7 @@ export default {
           {
             validator(r, v, cb) {
               // eslint-disable-next-line no-unused-expressions
-              v.length ? cb() : cb(new Error(this.$t('LogTrace.needOnePacket')))
+              v.length ? cb() : cb(new Error(needOnePacket))
             },
           },
         ],
@@ -259,6 +261,7 @@ export default {
         type: 'clientid',
       },
       viewLogName: '',
+      nextPageLoading: '',
     }
   },
   created() {
@@ -300,6 +303,7 @@ export default {
         const res = await addTrace(sendbody).catch(() => {})
         if (res) {
           this.$message.success(this.$t('LogTrace.createSuc'))
+          this.loadTraceList()
           this.cancelDialog()
         }
         this.createLoading = false
@@ -317,6 +321,7 @@ export default {
       this.viewLogName = row.name
       LOG_VIEW_POSITION = 0
       this.logContent = ''
+      this.nextPageLoading = ''
       await this.loadNodes()
       await this.loadLogDetail(row.name)
 
@@ -325,7 +330,7 @@ export default {
     async loadLogDetail(name) {
       const params = { position: LOG_VIEW_POSITION, bytes: BYTEPERPAGE, node: this.node.node }
       const logResp = await getTraceLog(name, params).catch(() => {})
-      if (logResp) {
+      if (logResp && logResp.items) {
         this.logContent += logResp.items
         LOG_VIEW_POSITION += BYTEPERPAGE + 1
       }
@@ -334,11 +339,11 @@ export default {
       if (!row.name) {
         return
       }
-      await downloadTrace(row.name).catch(() => {})
+      await downloadTrace(row.name)
       // download link, no more action needed
     },
     async stopTraceHandler(row) {
-      if (row.name) return
+      if (!row.name) return
       const res = await stopTrace(row.name).catch(() => {})
       if (res) {
         this.$message.success(this.$t('LogTrace.stopSuc'))
@@ -349,7 +354,7 @@ export default {
       if (event.scrollTop + this.initialHeight >= event.scrollHeight && !this.viewNodeLoading) {
         if (LOG_VIEW_POSITION <= MAX_LOG_SIZE) {
           this.viewNodeLoading = true
-          console.log('scrollloading')
+          this.nextPageLoading = this.$t('LogTrace.loadNextPage')
           await this.loadLogDetail(this.viewLogName)
           this.viewNodeLoading = false
         } else {

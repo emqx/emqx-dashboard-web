@@ -16,7 +16,7 @@ export function getTraceLog(name, params) {
 
 export function downloadTrace(name) {
   const link = document.createElement('a')
-  link.href = `${store.state.config.baseURL}/trace/${encodeURIComponent(name)}/download`
+  link.href = `${store.getters.httpBaseUrl}/trace/${encodeURIComponent(name)}/download`
   // link.setAttribute('download', 'emqx.zip')
   document.body.appendChild(link)
   link.click()

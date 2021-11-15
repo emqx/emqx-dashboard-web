@@ -95,4 +95,8 @@ export default {
     zh: '请选择至少一种',
     en: 'please choose at least one packet',
   },
+  loadNextPage: {
+    zh: '正在加载更多',
+    en: 'Loading More Log',
+  },
 }
