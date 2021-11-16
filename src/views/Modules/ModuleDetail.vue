@@ -511,7 +511,7 @@ export default {
         this.$set(this.originRecord.config, key, value)
       })
     },
-    addConfigAccordingType(extraConfigs, type) {
+    addConfigAccordingType(extraConfigs, type, isInit = false) {
       const [...commonConfig] = this.originConfigList
       const { ...rulesCommonConfig } = this.originRules.config
       const { ...recordCommonConfig } = this.originRecord.config
@@ -519,9 +519,15 @@ export default {
         const configData = renderParamsForm(extraConfigs, 'config')
         const { form, rules } = configData
         const addConfigs = {}
-        form.forEach(({ key, value }) => {
-          this.$set(addConfigs, key, value)
-        })
+        if (isInit && this.oper === 'edit') {
+          form.forEach(({ key, value }) => {
+            this.$set(addConfigs, key, this.moduleData.config[key] || value)
+          })
+        } else {
+          form.forEach(({ key, value }) => {
+            this.$set(addConfigs, key, value)
+          })
+        }
         this.configList = commonConfig.concat(form)
         this.rules.config = Object.assign(rulesCommonConfig, rules)
         this.record.config = Object.assign(recordCommonConfig, addConfigs)
