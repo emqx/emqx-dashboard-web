@@ -91,7 +91,7 @@ export default {
 
   created() {
     this.loadData()
-    this.$emit('updateConfig', this.extraConfigs[this.rawValue], this.rawValue, this.extraConfigs)
+    this.$emit('updateConfig', this.extraConfigs[this.rawValue], this.rawValue, this.extraConfigs, true)
   },
 
   methods: {
