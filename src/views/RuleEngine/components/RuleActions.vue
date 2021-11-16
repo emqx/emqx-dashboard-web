@@ -266,6 +266,7 @@
                     v-else-if="item.type === 'password'"
                     v-model="record.params[item.key]"
                     v-bind="item.bindAttributes"
+                    autocomplete="new-password"
                     show-password
                   >
                   </el-input>
