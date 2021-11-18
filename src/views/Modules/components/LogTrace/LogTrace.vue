@@ -182,6 +182,7 @@ import { loadNodes as loadNodesApi } from '@/api/overview'
 import Monaco from '@/components/Monaco.vue'
 
 let LOG_VIEW_POSITION = 0
+let LAST_ACTIVED_SCROLLTOP = 0
 const MAX_LOG_SIZE = 5 * 1024 * 1024
 const BYTEPERPAGE = 50 * 1024
 const DEFAULT_DURATION = 30 * 60 * 1000
@@ -327,6 +328,7 @@ export default {
       this.viewNodeLoading = true
       this.viewLogName = row.name
       LOG_VIEW_POSITION = 0
+      LAST_ACTIVED_SCROLLTOP = 0
       this.logContent = ''
       this.nextPageLoading = ''
       if (!changeNode) {
@@ -340,8 +342,9 @@ export default {
       const params = { position: LOG_VIEW_POSITION, bytes: BYTEPERPAGE, node: this.node.node }
       const logResp = await getTraceLog(name, params).catch(() => {})
       if (logResp && logResp.items) {
+        const { meta = {} } = logResp
         this.logContent += logResp.items
-        LOG_VIEW_POSITION += BYTEPERPAGE + 1
+        LOG_VIEW_POSITION += meta.position || BYTEPERPAGE
       }
     },
     async download(row) {
@@ -360,9 +363,13 @@ export default {
       }
     },
     async scrollLoadFunc(event) {
-      // wtf monaco scrollchanged event
-      if (event.scrollTop + this.initialHeight >= event.scrollHeight && !this.viewNodeLoading && this.viewDialog) {
+      if (
+        event.scrollTop + this.initialHeight >= event.scrollHeight &&
+        event.scrollTopChanged &&
+        event.scrollTop >= LAST_ACTIVED_SCROLLTOP
+      ) {
         if (LOG_VIEW_POSITION <= MAX_LOG_SIZE) {
+          LAST_ACTIVED_SCROLLTOP = event.scrollTop
           this.viewNodeLoading = true
           this.nextPageLoading = this.$t('LogTrace.loadNextPage')
           await this.loadLogDetail(this.viewLogName)
