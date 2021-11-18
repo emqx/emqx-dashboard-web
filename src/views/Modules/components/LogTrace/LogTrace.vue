@@ -22,7 +22,7 @@
       <el-table-column :label="$t('LogTrace.status')"></el-table-column>
       <el-table-column :label="$t('LogTrace.logSize')">
         <template #default="{ row }">
-          {{ Object.keys(row.log_size).reduce((c, v) => c + row.log_size[v], 0) / 1024 }}KB
+          {{ (Object.keys(row.log_size).reduce((c, v) => c + row.log_size[v], 0) / 1024).toFixed(2) }}KB
         </template>
       </el-table-column>
       <el-table-column min-width="100">
@@ -139,10 +139,10 @@
         <el-row>
           <el-col :span="10">
             <emq-select
-              v-model="node"
+              v-model="node.node"
               size="mini"
               :field="{ options: nodes }"
-              :field-name="{ label: 'name', value: 'node' }"
+              :field-name="{ label: 'node', value: 'node' }"
             ></emq-select>
           </el-col>
         </el-row>
@@ -203,9 +203,7 @@ export default {
       aTraceTb: [],
       fTraceTb: [],
       nodes: [],
-      node: {
-        node: '',
-      },
+      node: '',
       packetType: {
         clientid: [
           'CONNECT',
@@ -271,15 +269,21 @@ export default {
     this.loadTraceList()
   },
   watch: {
-    node(v, oldV) {
-      if (v && oldV && v.node !== oldV.node) this.viewDetail({ name: this.viewLogName })
+    'node.node': function (v, oldV) {
+      if (v && oldV && v !== oldV) this.viewDetail({ name: this.viewLogName }, true)
     },
   },
   methods: {
     moment,
     async loadNodes() {
-      this.nodes = (await loadNodesApi().catch(() => {})) || []
-      this.node = this.nodes[0]
+      this.nodes = []
+      const nodes = await loadNodesApi().catch(() => {})
+      if (nodes) {
+        nodes.forEach((v) => {
+          this.nodes.push({ node: v.node })
+        })
+        this.node = this.nodes[0]
+      }
     },
     async loadTraceList() {
       // eslint-disable-next-line no-unused-expressions
@@ -317,7 +321,7 @@ export default {
       const timeNow = new Date()
       this.record.startTime = [timeNow, new Date(timeNow.getTime() + DEFAULT_DURATION)]
     },
-    async viewDetail(row) {
+    async viewDetail(row, changeNode = false) {
       if (!row || !row.name) return
       this.viewDialog = true
       this.viewNodeLoading = true
@@ -325,7 +329,9 @@ export default {
       LOG_VIEW_POSITION = 0
       this.logContent = ''
       this.nextPageLoading = ''
-      await this.loadNodes()
+      if (!changeNode) {
+        await this.loadNodes()
+      }
       await this.loadLogDetail(row.name)
 
       this.viewNodeLoading = false
