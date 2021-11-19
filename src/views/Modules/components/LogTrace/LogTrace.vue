@@ -12,10 +12,10 @@
           {{ row[row.type] }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('LogTrace.startEndTime')">
+      <el-table-column :label="$t('LogTrace.startEndTime')" min-width="90">
         <template #default="{ row }">
-          {{
-            moment(row.start_at).format('YYYY-MM-DD HH:mm:ss') + '-' + moment(row.end_at).format('YYYY-MM-DD HH:mm:ss')
+          {{ moment(row.start_at).format('YYYY-MM-DD HH:mm:ss') }}<br />{{
+            moment(row.end_at).format('YYYY-MM-DD HH:mm:ss')
           }}
         </template>
       </el-table-column>
@@ -46,11 +46,10 @@
           {{ row[row.type] }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('LogTrace.startEndTime')">
+      <el-table-column :label="$t('LogTrace.startEndTime')" min-width="90">
         <template #default="{ row }">
-          {{
-            moment(row.start_at).format('YYYY-MM-DD HH:mm:ss') + '-' + moment(row.end_at).format('YYYY-MM-DD HH:mm:ss')
-          }}
+          {{ moment(row.start_at).format('YYYY-MM-DD HH:mm:ss') }}<br />
+          {{ moment(row.end_at).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
       </el-table-column>
       <el-table-column :label="$t('LogTrace.logSize')">
@@ -104,7 +103,7 @@
               ></el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
+          <!-- <el-col :span="24">
             <el-form-item label="Packets" prop="packets">
               <el-checkbox-group v-model="record.packets">
                 <template v-for="item in packetType.clientid">
@@ -118,7 +117,7 @@
                 </template>
               </el-checkbox-group>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-form>
       <div class="dialog-align-footer" slot="footer">
@@ -134,16 +133,13 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="$t('LogTrace.viewLog')" :visible.sync="viewDialog">
+    <el-dialog :title="$t('LogTrace.viewLog')" :visible.sync="viewDialog" fullscreen>
       <div v-loading="viewNodeLoading" :element-loading-text="nextPageLoading">
         <el-row>
           <el-col :span="10">
-            <emq-select
-              v-model="node.node"
-              size="mini"
-              :field="{ options: nodes }"
-              :field-name="{ label: 'node', value: 'node' }"
-            ></emq-select>
+            <el-select v-model="node" size="small">
+              <el-option v-for="item in nodes" :value="item.node" :key="item.node"></el-option>
+            </el-select>
           </el-col>
         </el-row>
         <el-row>
@@ -205,26 +201,26 @@ export default {
       fTraceTb: [],
       nodes: [],
       node: '',
-      packetType: {
-        clientid: [
-          'CONNECT',
-          'CONNACK',
-          'AUTH',
-          'PUBLISH',
-          'PUBACK',
-          'PUBREC',
-          'PUBREL',
-          'PUBCOMP',
-          'SUBSCRIBE',
-          'SUBACK',
-          'UNSUBSCRIBE',
-          'UNSUBACK',
-          'PINGREQ',
-          'PINGRESP',
-          'DISCONNECT',
-        ],
-        topic: ['PUBLISH', 'SUBSCRIBE', 'UNSUBSCRIBE'],
-      },
+      // packetType: {
+      //   clientid: [
+      //     'CONNECT',
+      //     'CONNACK',
+      //     'AUTH',
+      //     'PUBLISH',
+      //     'PUBACK',
+      //     'PUBREC',
+      //     'PUBREL',
+      //     'PUBCOMP',
+      //     'SUBSCRIBE',
+      //     'SUBACK',
+      //     'UNSUBSCRIBE',
+      //     'UNSUBACK',
+      //     'PINGREQ',
+      //     'PINGRESP',
+      //     'DISCONNECT',
+      //   ],
+      //   topic: ['PUBLISH', 'SUBSCRIBE', 'UNSUBSCRIBE'],
+      // },
       createDialog: false,
       viewDialog: false,
       createRules: {
@@ -242,14 +238,14 @@ export default {
             },
           },
         ],
-        packets: [
-          {
-            validator(r, v, cb) {
-              // eslint-disable-next-line no-unused-expressions
-              v.length ? cb() : cb(new Error(needOnePacket))
-            },
-          },
-        ],
+        // packets: [
+        //   {
+        //     validator(r, v, cb) {
+        //       // eslint-disable-next-line no-unused-expressions
+        //       v.length ? cb() : cb(new Error(needOnePacket))
+        //     },
+        //   },
+        // ],
       },
       logContent: '',
       initialHeight: 350,
@@ -270,7 +266,7 @@ export default {
     this.loadTraceList()
   },
   watch: {
-    'node.node': function (v, oldV) {
+    node(v, oldV) {
       if (v && oldV && v !== oldV) this.viewDetail({ name: this.viewLogName }, true)
     },
   },
@@ -283,12 +279,12 @@ export default {
         nodes.forEach((v) => {
           this.nodes.push({ node: v.node })
         })
-        this.node = this.nodes[0]
+        this.node = (this.nodes[0] && this.nodes[0].node) || ''
       }
     },
     async loadTraceList() {
-      // eslint-disable-next-line no-unused-expressions
-      ;(this.aTraceTbLoading = true), (this.fTraceTbLoading = true)
+      this.aTraceTbLoading = true
+      this.fTraceTbLoading = true
       const traceList = await Promise.all([getTraceList(true), getTraceList(false)]).catch(() => {})
       this.aTraceTb = traceList[0]
       this.fTraceTb = traceList[1]
@@ -303,8 +299,8 @@ export default {
         this.createLoading = true
         const sendbody = {
           ...this.record,
-          start_at: new Date(this.record.startTime[0]).toISOString,
-          end_at: new Date(this.record.startTime[1]).toISOString,
+          start_at: new Date(this.record.startTime[0]).toISOString(),
+          end_at: new Date(this.record.startTime[1]).toISOString(),
         }
 
         delete sendbody.startTime
@@ -339,7 +335,7 @@ export default {
       this.viewNodeLoading = false
     },
     async loadLogDetail(name) {
-      const params = { position: LOG_VIEW_POSITION, bytes: BYTEPERPAGE, node: this.node.node }
+      const params = { position: LOG_VIEW_POSITION, bytes: BYTEPERPAGE, node: this.node }
       const logResp = await getTraceLog(name, params).catch(() => {})
       if (logResp && logResp.items) {
         const { meta = {} } = logResp
