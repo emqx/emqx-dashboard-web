@@ -13,3 +13,19 @@
   opacity: 0;
   transform: translateX(-30px);
 }
+
+/* logo-transform */
+.logo-transform-leave-active,
+.logo-transform-enter-active {
+  transition: all 0.3s;
+}
+
+.logo-transform-enter {
+  opacity: 0;
+  transform: translateX(30px) scale(0.3);
+}
+
+.logo-transform-leave-to {
+  opacity: 0;
+  transform: scale(0.3) translateX(-10px);
+}

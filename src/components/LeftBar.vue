@@ -1,7 +1,12 @@
 <template>
   <div class="left-bar" :style="{ width: leftBarCollapse ? '80px' : '200px' }">
     <div class="logo" :style="{ paddingLeft: leftBarCollapse ? '6px' : '20px' }">
-      <img class="logo-img" src="../assets/emqx_logo.png" alt="logo" />
+      <transition name="logo-transform" mode="out-in">
+        <img class="logo-img" v-if="!leftBarCollapse" src="../assets/emqx_logo.png" alt="logo" />
+      </transition>
+      <transition name="logo-transform" mode="out-in">
+        <img class="logo-img-fold" v-if="leftBarCollapse" src="../assets/emqx_logo_fold.png" alt="logo" />
+      </transition>
     </div>
 
     <a-menu
@@ -22,9 +27,7 @@
               <span>{{ item.title }}</span>
             </span>
             <template v-for="item2 in item.children">
-              <a-menu-item v-if="$hasShow(item2.key)" :key="item2.path">
-                {{ item2.title }}
-              </a-menu-item>
+              <a-menu-item v-if="$hasShow(item2.key)" :key="item2.path">{{ item2.title }}</a-menu-item>
             </template>
           </a-sub-menu>
 
@@ -248,14 +251,16 @@ export default {
 
 <style lang="scss">
 @import '../assets/style/variables';
+@import '../assets/style/transition.scss';
 
 .left-bar {
-  min-height: calc(100vh - 60px);
+  $logo-height: 50px;
+  min-height: calc(100vh - #{$logo-height});
   background-color: $color-theme;
   transition: all 0.3s;
 
   .menu-wrapper {
-    margin-top: 54px;
+    margin-top: $logo-height;
   }
   .ant-menu {
     border-right-color: transparent;
@@ -284,8 +289,8 @@ export default {
   .logo {
     text-align: center;
     width: 200px;
-    height: 60px;
-    line-height: 60px;
+    height: $logo-height;
+    line-height: $logo-height;
     overflow: hidden;
     position: fixed;
     top: 0;
@@ -297,11 +302,19 @@ export default {
     padding: 0 20px;
     background: #2f333e;
 
-    .logo-img {
-      width: auto;
-      height: 36px;
+    .logo-img,
+    .logo-img-fold {
       position: relative;
+      height: 32px;
+    }
+
+    .logo-img {
+      width: 174px;
       left: -3px;
+    }
+
+    .logo-img-fold {
+      left: 20px;
     }
 
     .line {
