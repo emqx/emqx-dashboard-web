@@ -1,8 +1,8 @@
 import http from '@/common/http'
 import store from '@/stores'
 
-export function getTraceList(enable) {
-  return http.get('/trace', { params: { enable: !!enable } })
+export function getTraceList() {
+  return http.get('/trace')
 }
 
 export function addTrace(body) {

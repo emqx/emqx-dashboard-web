@@ -103,4 +103,16 @@ export default {
     zh: '正在加载更多',
     en: 'Loading More Log',
   },
+  srunning: {
+    zh: '运行中',
+    en: 'Running',
+  },
+  sstopped: {
+    zh: '已停止',
+    en: 'Stopped',
+  },
+  swaiting: {
+    zh: '等待中',
+    en: 'Waiting',
+  },
 }

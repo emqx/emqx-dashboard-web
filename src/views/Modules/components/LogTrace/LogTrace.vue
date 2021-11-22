@@ -1,10 +1,10 @@
 <template>
   <div class="log-trace">
     <el-button size="small" @click="openCreateDialog" type="primary">{{ $t('Base.create') }}</el-button>
-    <div class="part-header">
+    <!-- <div class="part-header">
       {{ $t('LogTrace.activeList') }}
-    </div>
-    <el-table :data="aTraceTb" v-loading="aTraceTbLoading">
+    </div> -->
+    <el-table :data="traceTable" v-loading="traceTbLoading" class="data-table">
       <el-table-column :label="$t('LogTrace.name')" prop="name"></el-table-column>
       <el-table-column :label="$t('LogTrace.type')" prop="type"></el-table-column>
       <el-table-column :label="$t('LogTrace.condition')">
@@ -19,7 +19,15 @@
           }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('LogTrace.status')"></el-table-column>
+      <el-table-column :label="$t('LogTrace.status')">
+        <template #default="{ row }">
+          <a-badge
+            is-dot
+            :status="row.status === 'running' ? 'success' : row.status === 'stopped' ? 'default' : 'warning'"
+            :text="$t('LogTrace.s' + row.status)"
+          ></a-badge>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('LogTrace.logSize')">
         <template #default="{ row }">
           {{ (Object.keys(row.log_size).reduce((c, v) => c + row.log_size[v], 0) / 1024).toFixed(2) }}KB
@@ -29,16 +37,21 @@
         <template #default="{ row }">
           <el-button type="dashed" size="mini" @click="viewDetail(row)">{{ $t('LogTrace.view') }}</el-button>
           <el-button type="dashed" size="mini" @click="download(row)">{{ $t('LogTrace.download') }}</el-button>
-          <el-button size="mini" plain type="danger" @click="stopTraceHandler(row)">{{
-            $t('LogTrace.stop')
-          }}</el-button>
+          <template v-if="row.status !== 'stopped'">
+            <el-button size="mini" type="dashed" @click="stopTraceHandler(row)">{{ $t('LogTrace.stop') }}</el-button>
+          </template>
+          <template v-else>
+            <el-button size="mini" type="dashed" @click="deleteTraceHandler(row)">{{
+              $t('LogTrace.delete')
+            }}</el-button>
+          </template>
         </template>
       </el-table-column>
     </el-table>
-    <div class="part-header">
+    <!-- <div class="part-header">
       {{ $t('LogTrace.finishedList') }}
-    </div>
-    <el-table :data="fTraceTb" v-loading="fTraceTbLoading">
+    </div> -->
+    <!-- <el-table :data="fTraceTb" v-loading="fTraceTbLoading">
       <el-table-column :label="$t('LogTrace.name')" prop="name"></el-table-column>
       <el-table-column :label="$t('LogTrace.type')" prop="type"></el-table-column>
       <el-table-column :label="$t('LogTrace.condition')">
@@ -66,7 +79,7 @@
           }}</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
     <el-dialog :title="$t('LogTrace.createLog')" :visible.sync="createDialog">
       <el-form ref="createForm" size="small" label-position="top" :model="record" :rules="createRules">
         <el-row :gutter="20">
@@ -78,8 +91,9 @@
           <el-col :span="12">
             <el-form-item :label="$t('LogTrace.type')" prop="type">
               <el-select v-model="record.type">
-                <el-option value="clientid"></el-option>
-                <el-option value="topic"></el-option>
+                <el-option value="clientid" label="ClientID"></el-option>
+                <el-option value="topic" label="Topic"></el-option>
+                <el-option value="ip_address" label="IP Address"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -91,6 +105,11 @@
           <el-col :span="12" v-if="record.type === 'clientid'">
             <el-form-item label="ClientID" prop="clientid">
               <el-input v-model="record.clientid"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" v-if="record.type === 'ip_address'">
+            <el-form-item label="IP Address" prop="ip_address">
+              <el-input v-model="record.ip_address"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" style="clear: both">
@@ -136,10 +155,21 @@
     <el-dialog :title="$t('LogTrace.viewLog')" :visible.sync="viewDialog" fullscreen>
       <div v-loading="viewNodeLoading" :element-loading-text="nextPageLoading">
         <el-row>
-          <el-col :span="10">
+          <el-col :span="6">
             <el-select v-model="node" size="small">
               <el-option v-for="item in nodes" :value="item.node" :key="item.node"></el-option>
             </el-select>
+          </el-col>
+          <el-col :span="4">
+            <el-button
+              class="dialog-primary-btn"
+              type="primary"
+              size="small"
+              @click="download({ name: viewLogName })"
+              :disabled="viewNodeLoading"
+            >
+              {{ $t('Base.download') }}
+            </el-button>
           </el-col>
         </el-row>
         <el-row>
@@ -155,7 +185,7 @@
           </div>
         </el-row>
       </div>
-      <div class="dialog-align-footer" slot="footer">
+      <!-- <div class="dialog-align-footer" slot="footer">
         <el-button size="small" @click="cancelViewDialog()">{{ $t('Base.cancel') }}</el-button>
         <el-button
           class="dialog-primary-btn"
@@ -166,7 +196,7 @@
         >
           {{ $t('Base.download') }}
         </el-button>
-      </div>
+      </div> -->
     </el-dialog>
   </div>
 </template>
@@ -195,10 +225,10 @@ export default {
       }
     }
     const needStartTime = this.$t('LogTrace.needStartTime')
-    const needOnePacket = this.$t('LogTrace.needOnePacket')
+    // const needOnePacket = this.$t('LogTrace.needOnePacket')
     return {
-      aTraceTb: [],
-      fTraceTb: [],
+      // aTraceTb: [],
+      traceTable: [],
       nodes: [],
       node: '',
       // packetType: {
@@ -230,6 +260,12 @@ export default {
         ],
         topic: [{ required: true, messages: this.$t('General.pleaseEnter') }],
         clientid: [{ required: true, messages: this.$t('General.pleaseEnter') }],
+        ip_address: [
+          { required: true, messages: this.$t('General.pleaseEnter') },
+          // {
+          //   validator(r, v, cb) {},
+          // },
+        ],
         startTime: [
           {
             validator(r, v, cb) {
@@ -250,11 +286,11 @@ export default {
       logContent: '',
       initialHeight: 350,
       createLoading: false,
-      aTraceTbLoading: false,
-      fTraceTbLoading: false,
+      traceTbLoading: false,
+      // fTraceTbLoading: false,
       viewNodeLoading: false,
       record: {
-        packets: [],
+        // packets: [],
         startTime: [],
         type: 'clientid',
       },
@@ -283,13 +319,13 @@ export default {
       }
     },
     async loadTraceList() {
-      this.aTraceTbLoading = true
-      this.fTraceTbLoading = true
-      const traceList = await Promise.all([getTraceList(true), getTraceList(false)]).catch(() => {})
-      this.aTraceTb = traceList[0]
-      this.fTraceTb = traceList[1]
-      this.aTraceTbLoading = false
-      this.fTraceTbLoading = false
+      this.traceTbLoading = true
+      // this.fTraceTbLoading = true
+      const traceList = await getTraceList().catch(() => {})
+      this.traceTable = traceList
+      // this.fTraceTb = traceList[1]
+      this.traceTbLoading = false
+      // this.fTraceTbLoading = false
     },
 
     async submitTrace() {
@@ -395,6 +431,7 @@ export default {
     },
     cancelDialog() {
       this.createDialog = false
+      this.$refs.createForm.resetFields()
     },
     cancelViewDialog() {
       this.viewDialog = false
@@ -404,9 +441,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.part-header {
-  margin: 30px 0 10px;
-  font-weight: 700;
+.data-table {
+  margin-top: 30px;
 }
 .el-select {
   width: 100%;
@@ -420,5 +456,9 @@ export default {
 .m-container {
   border: 1px solid #ddd;
   margin-top: 30px;
+}
+
+.el-button.el-button--small {
+  line-height: 14px;
 }
 </style>
