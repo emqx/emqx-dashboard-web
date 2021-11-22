@@ -67,7 +67,7 @@
               </span>
               <el-popover
                 trigger="hover"
-                :content="`${$t('Overview.active')}/${$t('Overview.all')}/${$t('Overview.limit')}`"
+                :content="`${$t('Overview.active')}/${$t('Overview.all')}/${$t('Overview.maximum')}`"
               >
                 <i slot="reference" class="el-icon-question"></i>
               </el-popover>
