@@ -504,9 +504,7 @@ export default {
       let action = {}
       if (this.isFallbacks) {
         action = { ...this.record }
-        if (this.currentOper === 'edit') {
-          this.currentAction.fallbacks = []
-        }
+        this.currentAction.fallbacks = []
         this.currentAction.fallbacks.push(action)
         this.rawValue.splice(this.currentEditIndex, 1, this.currentAction)
       } else {
