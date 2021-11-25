@@ -201,8 +201,8 @@
               <topic-metrics></topic-metrics>
             </el-tab-pane>
           </template>
-          <template v-else-if="moduleData.type == 'slow_topics_statistics'">
-            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.topicData')" name="topic">
+          <template v-else-if="moduleData.type == 'slow_subscribers_statistics'">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.topicData')" name="subscribers">
               <slow-query></slow-query>
             </el-tab-pane>
           </template>

@@ -8,10 +8,30 @@
           </el-button>
         </div>
         <el-table :data="tableData">
-          <el-table-column prop="topic" label="Topic"></el-table-column>
-          <el-table-column prop="count" :label="$t('Modules.timeoutTimes')"></el-table-column>
-          <el-table-column :label="$t('Modules.averageTime')">
-            <template slot-scope="{ row }"> {{ row.elapsed / 1000 }} s </template>
+          <el-table-column prop="clientid" label="CliendID"></el-table-column>
+          <el-table-column :filters="typeFilters" filter-placement="bottom-start" :filter-method="filterType">
+            <template slot="header">
+              <span>{{ $t('General.reason') }}</span>
+              <el-popover placement="top-start" width="320" trigger="hover">
+                <div>
+                  <b>{{ $t('Modules.messageBacklog') }}</b> {{ ': ' + $t('Modules.messageBacklogDesc') }}
+                  <br />
+                  <b>{{ $t('Modules.highAverageTime') }}</b> {{ ': ' + $t('Modules.highAverageTimeDesc') }}
+                </div>
+                <i slot="reference" class="el-icon-question icon-column-desc"></i>
+              </el-popover>
+            </template>
+            <template slot-scope="{ row }">
+              {{ reasonText(row.type) }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="latency" :label="$t('Modules.latencyTime')" sortable>
+            <template slot-scope="{ row }"> {{ formatTime(row.latency) }} </template>
+          </el-table-column>
+          <el-table-column prop="last_update_time" :label="$t('Modules.updated')">
+            <template slot-scope="{ row }">
+              {{ formatDate(row.last_update_time) }}
+            </template>
           </el-table-column>
         </el-table>
         <div class="emq-table-footer">
@@ -20,8 +40,8 @@
             background
             layout="total, sizes, prev, pager, next"
             :page-sizes="[20, 50, 100, 500]"
-            :page-size.sync="params.limit"
-            :current-page.sync="params.page"
+            :page-size.sync="params._limit"
+            :current-page.sync="params._page"
             :total="count"
             @size-change="handleSizeChange"
             @current-change="getTopicRecordData"
@@ -34,6 +54,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { querySlowQueryTopicData, clearSlowQueryData } from '@/api/modules'
 
 export default {
@@ -47,8 +68,13 @@ export default {
       },
       count: 0,
       isTableLoading: false,
+      typeFilters: [
+        { text: this.$t('Modules.highAverageTime'), value: 'average' },
+        { text: this.$t('Modules.messageBacklog'), value: 'expire' },
+      ],
     }
   },
+
   created() {
     this.getTopicRecordData()
   },
@@ -58,10 +84,10 @@ export default {
       try {
         this.isTableLoading = true
         const {
-          data = [],
+          items = [],
           meta: { count = 0 },
         } = await querySlowQueryTopicData(this.params)
-        this.tableData = data
+        this.tableData = items
         this.count = count
       } catch (error) {
         //
@@ -70,7 +96,7 @@ export default {
       }
     },
     handleSizeChange() {
-      this.params.page = 1
+      this.params._page = 1
       this.getTopicRecordData()
     },
     async clearData() {
@@ -82,9 +108,30 @@ export default {
         })
         await clearSlowQueryData()
         this.$message.success(this.$t('Modules.successfulCleanSlowQuey'))
+        this.handleSizeChange()
       } catch (error) {
         //
       }
+    },
+    reasonText(reason) {
+      return (
+        {
+          average: this.$t('Modules.highAverageTime'),
+          expire: this.$t('Modules.messageBacklog'),
+        }[reason] || ''
+      )
+    },
+    formatTime(time) {
+      if (time < 1000) {
+        return `${time}ms`
+      }
+      return `${time / 1000}s`
+    },
+    filterType(value, row) {
+      return row.type === value
+    },
+    formatDate(ipt) {
+      return moment(ipt).format('YYYY-MM-DD HH:mm:ss')
     },
   },
 }
@@ -94,6 +141,10 @@ export default {
 .slow-query {
   .emq-table-header {
     justify-content: flex-end;
+  }
+  .icon-column-desc {
+    margin-left: 6px;
+    margin-right: 6px;
   }
 }
 </style>
