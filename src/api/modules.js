@@ -105,11 +105,11 @@ export function publishOrder(body) {
 }
 
 export function querySlowQueryTopicData(params) {
-  return http.get('/slow_topic', { params })
+  return http.get('/slow_subscriptions', { params })
 }
 
 export function clearSlowQueryData() {
-  return http.delete('/slow_topic')
+  return http.delete('/slow_subscriptions')
 }
 
 export default {}
