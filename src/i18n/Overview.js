@@ -11,6 +11,14 @@ export default {
     zh: '保留消息',
     en: 'Retained',
   },
+  activeConnection: {
+    zh: '活跃连接',
+    en: 'Active connection',
+  },
+  allConnection: {
+    zh: '全部连接',
+    en: 'All connection',
+  },
   connectionsTips: {
     zh: '当前活跃连接数',
     en: 'Total number of active connections',
