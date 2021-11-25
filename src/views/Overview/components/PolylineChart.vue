@@ -12,6 +12,8 @@ import 'echarts/lib/component/legend'
 
 import resizeChart from '@/mixins/resizeChart'
 
+const DEFAULT_CHART_HEIGHT = '190px'
+
 export default {
   name: 'PolylineChart',
 
@@ -48,7 +50,7 @@ export default {
     },
     height: {
       type: String,
-      default: '190px',
+      default: DEFAULT_CHART_HEIGHT,
     },
     gridRight: {
       type: String,
@@ -69,6 +71,12 @@ export default {
       seriesConfig: [],
       chart: undefined,
     }
+  },
+
+  computed: {
+    isSmallChart() {
+      return !(this.height !== DEFAULT_CHART_HEIGHT && parseInt(this.height, 10) > 300)
+    },
   },
 
   watch: {
@@ -113,20 +121,53 @@ export default {
         })
       }
     },
+    handleTextWithWrap(text, wrapLength = 40) {
+      return text.replace(new RegExp(`.{${wrapLength}}`, 'g'), (matched) => `${matched}<br />`)
+    },
+    ellipsisText(str, length) {
+      return echarts.format.truncateText(str, length, '14px Microsoft Yahei', '…')
+    },
+    dataItemToHTML(name, data, marker) {
+      return `<div class="polyline-chart-tooltip-item ${this.isSmallChart ? 'is-short' : 'is-long'}">
+        <div>
+          ${marker}
+          <span class="series-name">${this.handleTextWithWrap(name)}</span>
+        </div>
+        <span>${data}</span>
+        </div>`
+    },
     drawChart() {
       this.setSeriesConfig()
       this.chart = echarts.init(document.getElementById(this.chartId))
+      const _this = this
       const option = {
         legend: {
           bottom: this.legendBottom,
           data: this.yTitle,
           icon: 'circle',
-          itemWidth: 6,
+          itemWidth: 8,
+          formatter(name) {
+            return _this.isSmallChart ? '' : _this.ellipsisText(name, 600)
+          },
+          tooltip: {
+            show: true,
+            formatter({ name }) {
+              return _this.handleTextWithWrap(name, _this.isSmallChart ? 40 : 120)
+            },
+          },
         },
         color: this.chartColors,
         tooltip: {
           trigger: 'axis',
           confine: true,
+          formatter(arr) {
+            return arr
+              .map(({ seriesName, data, marker }) => {
+                const name = _this.isSmallChart ? _this.ellipsisText(seriesName, 100) : seriesName
+                return _this.dataItemToHTML(name, data, marker)
+              })
+              .join('')
+          },
         },
         grid: {
           left: this.gridLeft,
@@ -179,3 +220,20 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.polyline-chart-tooltip-item {
+  display: flex;
+  justify-content: space-between;
+  &.is-shorter {
+    width: 160px;
+  }
+  &.is-long {
+    width: 360px;
+  }
+  .series-name {
+    display: inline-block;
+    vertical-align: top;
+  }
+}
+</style>
