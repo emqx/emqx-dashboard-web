@@ -47,6 +47,10 @@ export default {
     zh: '创建应用',
     en: 'Create App',
   },
+  viewApp: {
+    zh: '查看应用',
+    en: 'View App',
+  },
   secret: {
     zh: '密钥',
     en: 'Secret',

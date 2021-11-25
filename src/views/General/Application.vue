@@ -65,12 +65,7 @@
       </a-card>
     </div>
 
-    <el-dialog
-      width="600px"
-      :title="accessType === 'edit' ? $t('General.editApp') : $t('General.createApp')"
-      :visible.sync="dialogVisible"
-      @close="clearInput"
-    >
+    <el-dialog width="600px" :title="dialogTitle" :visible.sync="dialogVisible" @close="clearInput">
       <el-form ref="recordForm" size="small" :model="record" :rules="accessType === 'view' ? {} : rules">
         <el-row :gutter="20">
           <el-col :span="12">
@@ -160,6 +155,17 @@ export default {
         status: [{ required: true, message: this.$t('General.pleaseChoose') }],
       },
     }
+  },
+
+  computed: {
+    dialogTitle() {
+      const titleKeyMap = {
+        edit: 'edit',
+        create: 'create',
+        view: 'view',
+      }
+      return this.$t(`General.${titleKeyMap[this.accessType] || 'create'}App`)
+    },
   },
 
   created() {

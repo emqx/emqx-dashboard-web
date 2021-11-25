@@ -24,7 +24,12 @@
       </div>
     </page-header>
     <div class="app-wrapper">
-      <el-tabs type="border-card" v-model="detailTabs">
+      <el-tabs
+        class="module-detail-tabs"
+        :class="{ 'put-config-tab-back': configList.length === 0 }"
+        type="border-card"
+        v-model="detailTabs"
+      >
         <el-tab-pane :label="$t('Modules.configuration')" name="configuration">
           <!-- <div class="emq-title module-title">
             {{ $t('Modules.configuration') }}
@@ -169,7 +174,7 @@
         <!-- modules with more management tools-->
         <template v-if="oper == 'edit'">
           <template v-if="moduleData.type == 'mnesia_authentication'">
-            <el-tab-pane :label="$t('Modules.auth')" name="auth">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.auth')" name="auth">
               <mnesia-auth-table ref="auth"></mnesia-auth-table>
             </el-tab-pane>
             <el-tab-pane label="ACL" name="acl">
@@ -177,32 +182,32 @@
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'jwt_authentication'">
-            <el-tab-pane :label="$t('Modules.tabJwt')" name="jwt">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabJwt')" name="jwt">
               <jwt-authentication></jwt-authentication>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'auth_sasl'">
-            <el-tab-pane :label="$t('Modules.tabSasl')" name="sasl">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabSasl')" name="sasl">
               <auth-sasl></auth-sasl>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'lwm2m_protocol'">
-            <el-tab-pane :label="$t('Modules.tabLwm2m')" name="lwm2m">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabLwm2m')" name="lwm2m">
               <lw-clients :type="$route.query.type" :id="$route.query.imei"></lw-clients>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'topic_metrics'">
-            <el-tab-pane :label="$t('Modules.tabTopic')" name="topic">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabTopic')" name="topic">
               <topic-metrics></topic-metrics>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'slow_topics_statistics'">
-            <el-tab-pane :label="$t('Modules.topicData')" name="topic">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.topicData')" name="topic">
               <slow-query></slow-query>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'tracer'">
-            <el-tab-pane :label="$t('Modules.trace')" name="trace">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.trace')" name="trace">
               <log-trace></log-trace>
             </el-tab-pane>
           </template>
@@ -258,6 +263,7 @@ export default {
   data() {
     return {
       configLoading: false,
+      initPromise: undefined,
       configList: [],
       record: {
         config: {},
@@ -336,6 +342,7 @@ export default {
     if (this.$route.query.type === 'lwm2m' && this.$route.query.imei) {
       this.detailTabs = 'lwm2m'
     }
+    this.setInitActiveTab()
   },
 
   methods: {
@@ -346,15 +353,19 @@ export default {
       this.$refs.record.validate()
     },
     loadData() {
-      if (this.oper === 'add') {
-        this.loadConfigList(this.moduleData.paramsData)
-      } else {
-        this.loadParams()
-          .then((res) => {
-            this.loadConfigList(res)
-          })
-          .catch()
-      }
+      this.initPromise = new Promise((resolve) => {
+        if (this.oper === 'add') {
+          this.loadConfigList(this.moduleData.paramsData)
+          resolve()
+        } else {
+          this.loadParams()
+            .then((res) => {
+              this.loadConfigList(res)
+              resolve()
+            })
+            .catch()
+        }
+      })
     },
     // cleanForm() {
     //   if (this.$refs.record) {
@@ -574,6 +585,12 @@ export default {
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },
+    async setInitActiveTab() {
+      await this.initPromise
+      if (this.configList.length === 0 && this.$refs.moduleSpecialTab && this.$refs.moduleSpecialTab.name) {
+        this.detailTabs = this.$refs.moduleSpecialTab.name
+      }
+    },
   },
 }
 </script>
@@ -585,6 +602,18 @@ export default {
   }
   .oper-button {
     top: calc(50% - 14px);
+  }
+
+  .module-detail-tabs {
+    ::v-deep .el-tabs__nav {
+      display: flex;
+    }
+
+    &.put-config-tab-back {
+      ::v-deep .el-tabs__item:first-child {
+        order: 9;
+      }
+    }
   }
 
   .module-title {

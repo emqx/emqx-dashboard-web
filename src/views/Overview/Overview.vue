@@ -76,14 +76,10 @@
 
       <el-col v-if="$hasShow('monitor.connections')" :span="6">
         <a-card class="app-card" :bordered="true" :loading="pageLoading">
-          <div class="app-card-title">
-            {{ $t('Overview.connectionNumber') }}
-          </div>
+          <div class="app-card-title">{{ $t('Overview.activeConnection') }}</div>
 
           <div class="content">
-            <span>
-              {{ _formatNumber(currentMetrics.connection) }}
-            </span>
+            <span>{{ _formatNumber(currentMetrics.live_connection) }}</span>
             <div class="flux-wrapper">
               <connection-statistics
                 :max-connections="license.max_connections"
@@ -95,8 +91,13 @@
             </div>
           </div>
           <div class="app-footer">
-            <div class="footer-item">
-              {{ $t('Overview.connectionsTips') }}
+            <div class="footer-item is-flex">
+              <span>
+                {{ `${$t('Overview.allConnection')}: ${_formatNumber(currentMetrics.connection)}` }}
+              </span>
+              <span>
+                {{ `${$t('Overview.limit')}: ${_formatNumber(license.max_connections)}` }}
+              </span>
             </div>
           </div>
         </a-card>
@@ -492,6 +493,11 @@ export default {
 
       .footer-item {
         color: rgba(0, 0, 0, 0.65);
+
+        &.is-flex {
+          display: flex;
+          justify-content: space-between;
+        }
 
         .item-value {
           color: rgba(0, 0, 0, 0.85);
