@@ -1,14 +1,25 @@
 <template>
-  <div class="slow-query">
-    <div class="app-wrapper">
-      <a-card class="emq-list-card" :loading="isTableLoading">
-        <div class="emq-table-header">
+  <div class="slow-query" :loading="isTableLoading">
+    <el-row :gutter="30">
+      <el-col>
+        <div class="slow-query-header">
           <el-button class="confirm-btn" type="primary" size="small" @click="clearData">
             {{ $t('Modules.clearData') }}
           </el-button>
         </div>
         <el-table :data="tableData">
-          <el-table-column prop="clientid" label="CliendID"></el-table-column>
+          <el-table-column prop="clientid" label="Client ID">
+            <template slot-scope="{ row }">
+              <router-link
+                :to="{
+                  path: '/clients/detail',
+                  query: { clientid: row.clientid },
+                }"
+              >
+                {{ row.clientid }}
+              </router-link>
+            </template>
+          </el-table-column>
           <el-table-column :filters="typeFilters" filter-placement="bottom-start" :filter-method="filterType">
             <template slot="header">
               <span>{{ $t('General.reason') }}</span>
@@ -48,8 +59,8 @@
           >
           </el-pagination>
         </div>
-      </a-card>
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -101,13 +112,13 @@ export default {
     },
     async clearData() {
       try {
-        await this.$msgbox.confirm(this.$t('Modules.clearSlowQueryConfirm'), {
+        await this.$msgbox.confirm(this.$t('Modules.clearSlowSubscriptionConfirm'), {
           confirmButtonText: this.$t('Base.confirm'),
           cancelButtonText: this.$t('Base.cancel'),
           type: 'warning',
         })
         await clearSlowQueryData()
-        this.$message.success(this.$t('Modules.successfulCleanSlowQuey'))
+        this.$message.success(this.$t('Modules.successfulCleanSlowSubscription'))
         this.handleSizeChange()
       } catch (error) {
         //
@@ -139,8 +150,9 @@ export default {
 
 <style lang="scss">
 .slow-query {
-  .emq-table-header {
-    justify-content: flex-end;
+  padding: 10px;
+  .slow-query-header {
+    margin-bottom: 30px;
   }
   .icon-column-desc {
     margin-left: 6px;

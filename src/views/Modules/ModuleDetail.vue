@@ -175,40 +175,40 @@
         <template v-if="oper == 'edit'">
           <template v-if="moduleData.type == 'mnesia_authentication'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.auth')" name="auth">
-              <mnesia-auth-table ref="auth"></mnesia-auth-table>
+              <mnesia-auth-table ref="auth" v-if="detailTabs === 'auth'"></mnesia-auth-table>
             </el-tab-pane>
             <el-tab-pane label="ACL" name="acl">
-              <mnesia-acl-table ref="acl"></mnesia-acl-table>
+              <mnesia-acl-table ref="acl" v-if="detailTabs === 'acl'"></mnesia-acl-table>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'jwt_authentication'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabJwt')" name="jwt">
-              <jwt-authentication></jwt-authentication>
+              <jwt-authentication v-if="detailTabs === 'jwt'"></jwt-authentication>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'auth_sasl'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabSasl')" name="sasl">
-              <auth-sasl></auth-sasl>
+              <auth-sasl v-if="detailTabs === 'sasl'"></auth-sasl>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'lwm2m_protocol'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabLwm2m')" name="lwm2m">
-              <lw-clients :type="$route.query.type" :id="$route.query.imei"></lw-clients>
+              <lw-clients v-if="detailTabs === 'lwm2m'" :type="$route.query.type" :id="$route.query.imei"></lw-clients>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'topic_metrics'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabTopic')" name="topic">
-              <topic-metrics></topic-metrics>
+              <topic-metrics v-if="detailTabs === 'topic'"></topic-metrics>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'slow_subscribers_statistics'">
-            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.topicData')" name="subscribers">
-              <slow-query></slow-query>
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.statistics')" name="subscribers">
+              <slow-query v-if="detailTabs === 'subscribers'"></slow-query>
             </el-tab-pane>
           </template>
           <template v-else-if="moduleData.type == 'tracer'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.trace')" name="trace">
-              <log-trace></log-trace>
+              <log-trace v-if="detailTabs === 'trace'"></log-trace>
             </el-tab-pane>
           </template>
         </template>
