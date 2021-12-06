@@ -24,12 +24,48 @@
       </div>
     </page-header>
     <div class="app-wrapper">
-      <el-tabs
-        class="module-detail-tabs"
-        :class="{ 'put-config-tab-back': configList.length === 0 }"
-        type="border-card"
-        v-model="detailTabs"
-      >
+      <el-tabs class="module-detail-tabs" type="border-card" v-model="detailTabs">
+        <!-- modules with more management tools-->
+        <template v-if="oper == 'edit'">
+          <template v-if="moduleData.type == 'mnesia_authentication'">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.auth')" :name="specialModuleDefaultTabName">
+              <mnesia-auth-table ref="auth" v-if="detailTabs === 'auth'"></mnesia-auth-table>
+            </el-tab-pane>
+            <el-tab-pane label="ACL" name="acl">
+              <mnesia-acl-table ref="acl" v-if="detailTabs === 'acl'"></mnesia-acl-table>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'jwt_authentication'">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabJwt')" :name="specialModuleDefaultTabName">
+              <jwt-authentication v-if="detailTabs === 'jwt'"></jwt-authentication>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'auth_sasl'">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabSasl')" :name="specialModuleDefaultTabName">
+              <auth-sasl v-if="detailTabs === 'sasl'"></auth-sasl>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'lwm2m_protocol'">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabLwm2m')" :name="specialModuleDefaultTabName">
+              <lw-clients v-if="detailTabs === 'lwm2m'" :type="$route.query.type" :id="$route.query.imei"></lw-clients>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'topic_metrics'">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabTopic')" :name="specialModuleDefaultTabName">
+              <topic-metrics v-if="detailTabs === 'topic'"></topic-metrics>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'slow_subscribers_statistics'">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.statistics')" :name="specialModuleDefaultTabName">
+              <slow-query v-if="detailTabs === 'subscribers'"></slow-query>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'tracer'">
+            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.trace')" :name="specialModuleDefaultTabName">
+              <log-trace v-if="detailTabs === 'trace'"></log-trace>
+            </el-tab-pane>
+          </template>
+        </template>
         <el-tab-pane :label="$t('Modules.configuration')" name="configuration">
           <!-- <div class="emq-title module-title">
             {{ $t('Modules.configuration') }}
@@ -171,47 +207,6 @@
             </el-button>
           </div>
         </el-tab-pane>
-        <!-- modules with more management tools-->
-        <template v-if="oper == 'edit'">
-          <template v-if="moduleData.type == 'mnesia_authentication'">
-            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.auth')" name="auth">
-              <mnesia-auth-table ref="auth" v-if="detailTabs === 'auth'"></mnesia-auth-table>
-            </el-tab-pane>
-            <el-tab-pane label="ACL" name="acl">
-              <mnesia-acl-table ref="acl" v-if="detailTabs === 'acl'"></mnesia-acl-table>
-            </el-tab-pane>
-          </template>
-          <template v-else-if="moduleData.type == 'jwt_authentication'">
-            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabJwt')" name="jwt">
-              <jwt-authentication v-if="detailTabs === 'jwt'"></jwt-authentication>
-            </el-tab-pane>
-          </template>
-          <template v-else-if="moduleData.type == 'auth_sasl'">
-            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabSasl')" name="sasl">
-              <auth-sasl v-if="detailTabs === 'sasl'"></auth-sasl>
-            </el-tab-pane>
-          </template>
-          <template v-else-if="moduleData.type == 'lwm2m_protocol'">
-            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabLwm2m')" name="lwm2m">
-              <lw-clients v-if="detailTabs === 'lwm2m'" :type="$route.query.type" :id="$route.query.imei"></lw-clients>
-            </el-tab-pane>
-          </template>
-          <template v-else-if="moduleData.type == 'topic_metrics'">
-            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabTopic')" name="topic">
-              <topic-metrics v-if="detailTabs === 'topic'"></topic-metrics>
-            </el-tab-pane>
-          </template>
-          <template v-else-if="moduleData.type == 'slow_subscribers_statistics'">
-            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.statistics')" name="subscribers">
-              <slow-query v-if="detailTabs === 'subscribers'"></slow-query>
-            </el-tab-pane>
-          </template>
-          <template v-else-if="moduleData.type == 'tracer'">
-            <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.trace')" name="trace">
-              <log-trace v-if="detailTabs === 'trace'"></log-trace>
-            </el-tab-pane>
-          </template>
-        </template>
       </el-tabs>
     </div>
   </div>
@@ -263,7 +258,6 @@ export default {
   data() {
     return {
       configLoading: false,
-      initPromise: undefined,
       configList: [],
       record: {
         config: {},
@@ -283,6 +277,15 @@ export default {
       },
       buttonLoading: false,
       detailTabs: 'configuration',
+      specialModuleDefaultTabMap: {
+        mnesia_authentication: 'auth',
+        jwt_authentication: 'jwt',
+        auth_sasl: 'sasl',
+        lwm2m_protocol: 'lwm2m',
+        topic_metrics: 'topic',
+        slow_subscribers_statistics: 'subscribers',
+        tracer: 'trace',
+      },
       // canManageModuleTypes: [
       //   'mnesia_authentication',
       //   'jwt_authentication',
@@ -314,6 +317,9 @@ export default {
     },
     rsSetName() {
       return this.record && this.record.config && this.record.config.rs_set_name
+    },
+    specialModuleDefaultTabName() {
+      return this.specialModuleDefaultTabMap[this.moduleData.type]
     },
   },
 
@@ -353,19 +359,15 @@ export default {
       this.$refs.record.validate()
     },
     loadData() {
-      this.initPromise = new Promise((resolve) => {
-        if (this.oper === 'add') {
-          this.loadConfigList(this.moduleData.paramsData)
-          resolve()
-        } else {
-          this.loadParams()
-            .then((res) => {
-              this.loadConfigList(res)
-              resolve()
-            })
-            .catch()
-        }
-      })
+      if (this.oper === 'add') {
+        this.loadConfigList(this.moduleData.paramsData)
+      } else {
+        this.loadParams()
+          .then((res) => {
+            this.loadConfigList(res)
+          })
+          .catch()
+      }
     },
     // cleanForm() {
     //   if (this.$refs.record) {
@@ -585,10 +587,9 @@ export default {
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },
-    async setInitActiveTab() {
-      await this.initPromise
-      if (this.configList.length === 0 && this.$refs.moduleSpecialTab && this.$refs.moduleSpecialTab.name) {
-        this.detailTabs = this.$refs.moduleSpecialTab.name
+    setInitActiveTab() {
+      if (this.specialModuleDefaultTabName) {
+        this.detailTabs = this.specialModuleDefaultTabName
       }
     },
   },
@@ -607,12 +608,6 @@ export default {
   .module-detail-tabs {
     ::v-deep .el-tabs__nav {
       display: flex;
-    }
-
-    &.put-config-tab-back {
-      ::v-deep .el-tabs__item:first-child {
-        order: 9;
-      }
     }
   }
 
