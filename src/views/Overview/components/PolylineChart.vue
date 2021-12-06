@@ -91,6 +91,11 @@ export default {
   },
 
   methods: {
+    processedIntoChartData() {
+      this.chartDataToShow = this.chartData.map(({ xData, yData }) => {
+        return xData.map((item, index) => [item, yData[index]])
+      })
+    },
     setSeriesConfig() {
       this.seriesConfig = []
       for (let i = 0; i < this.yTitle.length; i += 1) {
@@ -100,7 +105,7 @@ export default {
           smooth: true,
           symbolSize: 5,
           showSymbol: false,
-          data: this.chartData[i].yData,
+          data: this.chartDataToShow[i],
           step: false,
           lineStyle: {
             width: 2,
@@ -109,7 +114,7 @@ export default {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
                 offset: 0,
-                color: i % 6 === 0 && i !== 0 ? this.chartColors[6] : this.chartColors[i % 6],
+                color: i % 6 === 0 && i !== 0 ? this.chartColors[5] : this.chartColors[i % 6],
               },
               {
                 offset: 1,
@@ -137,6 +142,7 @@ export default {
         </div>`
     },
     drawChart() {
+      this.processedIntoChartData()
       this.setSeriesConfig()
       this.chart = echarts.init(document.getElementById(this.chartId))
       const _this = this
@@ -161,12 +167,14 @@ export default {
           trigger: 'axis',
           confine: true,
           formatter(arr) {
-            return arr
-              .map(({ seriesName, data, marker }) => {
-                const name = _this.isSmallChart ? _this.ellipsisText(seriesName, 100) : seriesName
-                return _this.dataItemToHTML(name, data, marker)
-              })
-              .join('')
+            let markerTime
+            const dataList = arr.map(({ seriesName, data: [time, count], marker }) => {
+              const name = _this.isSmallChart ? _this.ellipsisText(seriesName, 100) : seriesName
+              markerTime = time
+              return _this.dataItemToHTML(name, count, marker)
+            })
+            dataList.unshift(`<p class="tooltip-title">${markerTime}</p>`)
+            return dataList.join('')
           },
         },
         grid: {
@@ -179,7 +187,6 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: this.chartData[0].xData,
           axisLine: {
             lineStyle: {
               color: this.axisColor.colorAxisLine,
@@ -222,6 +229,11 @@ export default {
 </script>
 
 <style lang="scss">
+.tooltip-title {
+  line-height: 1.5;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
 .polyline-chart-tooltip-item {
   display: flex;
   justify-content: space-between;
