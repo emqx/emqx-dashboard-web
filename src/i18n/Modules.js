@@ -209,9 +209,9 @@ export default {
     zh: '指标数据',
     en: 'Topic Metrics',
   },
-  topicData: {
-    zh: 'Topic 记录',
-    en: 'Topic Data',
+  statistics: {
+    zh: '慢订阅记录',
+    en: 'Statistics',
   },
   clearData: {
     zh: '重置数据',
@@ -225,11 +225,11 @@ export default {
     zh: '平均耗时',
     en: 'Mean Latency',
   },
-  clearSlowQueryConfirm: {
-    zh: '清除当前所有数据并重新统计慢 Topic',
-    en: 'Clear current data and re count slow topic',
+  clearSlowSubscriptionConfirm: {
+    zh: '清除当前所有数据并重新统计慢订阅',
+    en: 'Clear current data and re-count slow subscription',
   },
-  successfulCleanSlowQuey: {
+  successfulCleanSlowSubscription: {
     zh: '清除成功',
     en: 'Cleared successfully',
   },
