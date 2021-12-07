@@ -170,7 +170,7 @@
         <el-form-item prop="name" :label="$t('RuleEngine.actionType')">
           <el-row :gutter="10">
             <el-col :span="8">
-              <el-select class="reset-width" :disabled="isEdit" v-model="actionCategory" @change="actionCategoryChange">
+              <el-select class="reset-width" v-model="actionCategory" @change="actionCategoryChange">
                 <el-option
                   v-for="(value, index) in actionCategoryOptions"
                   :key="index"
@@ -183,7 +183,6 @@
               <emq-select
                 class="reset-width"
                 v-model="record.name"
-                :disabled="isEdit"
                 :field="{ options: availableActions[actionCategory] }"
                 :field-name="{ label: 'title', value: 'name' }"
                 style="width: 240px"
@@ -351,11 +350,21 @@ export default {
       actionDialogTitle: this.$t('RuleEngine.addActions'),
       actionDialogVisible: false,
       isFallbacks: false,
-      setRefresh: false,
       actionsMap: {},
       paramsList: [],
       paramsLoading: false,
+      /**
+       * If you want to judge whether the operation of opening dialog is editing or adding,
+       * this variable is more reliable than ‘currentOper’.
+       * When it is -1, the operation is addition,
+       * and when it is greater than -1, the operation is edit
+       * Because there can only be one fallback action, this parameter is meaningful only when editing actions(diff from fallback action)
+       */
       currentEditIndex: 0,
+      /**
+       * This variable is untrustworthy when it is 'add',
+       * it will change from 'edit' to 'add' in various function
+       */
       currentOper: '',
       currentAction: {},
       actionCategory: '',
@@ -397,7 +406,6 @@ export default {
       },
       actions: [], // 全部 actions
       resources: [], // 全部资源
-      isEdit: false,
     }
   },
 
@@ -509,9 +517,9 @@ export default {
         this.rawValue.splice(this.currentEditIndex, 1, this.currentAction)
       } else {
         action = { ...this.record }
-        if (this.currentOper === 'edit') {
+        if (this.currentEditIndex > -1) {
           this.rawValue.splice(this.currentEditIndex, 1, action)
-        } else if (this.currentOper === 'add') {
+        } else {
           this.rawValue.push(action)
         }
       }
@@ -708,9 +716,9 @@ export default {
     },
     addAction() {
       this.actionDialogTitle = this.$t('RuleEngine.addActions')
+      this.currentEditIndex = -1
       this.actionTypeChange(this.record.name, 'add')
       this.actionDialogVisible = true
-      this.isEdit = false
     },
     editAction(one, index) {
       const item = _.cloneDeep(one)
@@ -721,7 +729,6 @@ export default {
       this.record = { ...item }
       this.originRecord = { ...item }
       this.actionDialogVisible = true
-      this.isEdit = true
     },
     initEnableBatch(item) {
       const { _config, params } = { ...item }
@@ -782,6 +789,7 @@ export default {
 
     handleAddFallbacks(action) {
       this.isFallbacks = true
+      this.currentEditIndex = -1
       this.actionDialogTitle = this.$t('RuleEngine.addActions')
       this.actionDialogVisible = true
       this.currentAction = action
