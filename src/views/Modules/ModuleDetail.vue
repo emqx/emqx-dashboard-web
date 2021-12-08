@@ -34,9 +34,7 @@
               <template v-if="configList.length > 0">
                 <div v-for="(item, i) in configList" :key="i">
                   <template v-if="item.key !== 'listener'">
-                    <el-col
-                      :span="item.type === 'textarea' || item.type === 'object' || item.type === 'array' ? 24 : 12"
-                    >
+                    <el-col :span="columnSpan(item)">
                       <el-form-item
                         v-if="item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)"
                         v-bind="item.formItemAttributes"
@@ -541,6 +539,7 @@ export default {
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },
+    columnSpan: ({ type }) => (['textarea', 'object', 'array', 'file'].includes(type) ? 24 : 12),
   },
 }
 </script>
