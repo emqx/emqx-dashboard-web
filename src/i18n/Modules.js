@@ -346,4 +346,12 @@ export default {
     zh: '更新时间',
     en: 'Updated',
   },
+  fileInputPlaceholder: {
+    zh: '粘贴或导入文件内容',
+    en: 'Paste or import file contents',
+  },
+  confirmReplacement: {
+    zh: '是否确认替换当前文件内容',
+    en: 'Are you sure to replace the contents of the current file',
+  },
 }

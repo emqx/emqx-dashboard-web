@@ -53,7 +53,7 @@
           <el-col
             v-for="(item, i) in configList"
             :key="i"
-            :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
+            :span="item.type === 'textarea' || item.type === 'object' || item.type === 'file' ? 24 : 12"
           >
             <el-form-item
               v-if="item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)"
