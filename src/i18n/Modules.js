@@ -294,4 +294,12 @@ export default {
     zh: ',添加之后即可启用',
     en: ",you couldn't use it before you add this module",
   },
+  fileInputPlaceholder: {
+    zh: '粘贴或导入文件内容',
+    en: 'Paste or import file contents',
+  },
+  confirmReplacement: {
+    zh: '是否确认替换当前文件内容',
+    en: 'Are you sure to replace the contents of the current file',
+  },
 }

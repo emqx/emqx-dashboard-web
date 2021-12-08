@@ -29,7 +29,7 @@
           </div>
           <template v-else-if="showConfigList.length > 0">
             <div v-for="(item, i) in showConfigList" :key="i">
-              <el-col :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12">
+              <el-col :span="item.type === 'textarea' || item.type === 'object' || item.type === 'file' ? 24 : 12">
                 <el-form-item v-bind="item.formItemAttributes">
                   <template v-if="item.formItemAttributes.description" slot="label">
                     {{ item.formItemAttributes.label }}
