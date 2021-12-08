@@ -112,6 +112,11 @@ export function fillI18n(data = [], keys = [], autoSearch = false) {
   return data
 }
 
+function isDescTooShort(desc) {
+  const lengthLimit = store.state.lang === 'zh' ? 10 : 16
+  return desc.length < lengthLimit
+}
+
 /**
  * 根据参数生成 render 数据
  * @param params 资源或动作参数
@@ -185,14 +190,14 @@ export function renderParamsForm(params = {}, propPrefix = '') {
       elType = 'select'
       field = { list: enumValue }
     }
-    const inputPlaceholder = description.length < 24 && propPrefix !== 'configs' ? description : ''
+    const inputPlaceholder = isDescTooShort(description) && propPrefix !== 'configs' ? description : ''
     // 表单类型, 渲染使用的属性
     form.push({
       formItemAttributes: {
         prop: propPrefix ? `${propPrefix}.${k}` : k,
         label: title,
         description:
-          inputPlaceholder && elType !== 'file' && propPrefix !== 'configs'
+          description === title || (inputPlaceholder && elType !== 'file' && propPrefix !== 'configs')
             ? null
             : description.replace(/\n/g, '<br/>'),
       },
