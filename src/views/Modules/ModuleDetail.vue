@@ -588,7 +588,7 @@ export default {
       windowUrl.opener = null
     },
     setInitActiveTab() {
-      if (this.specialModuleDefaultTabName) {
+      if (this.oper === 'edit' && this.specialModuleDefaultTabName && this.$refs.moduleSpecialTab) {
         this.detailTabs = this.specialModuleDefaultTabName
       }
     },
