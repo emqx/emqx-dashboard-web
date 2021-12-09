@@ -486,4 +486,11 @@ export const verifyListener = (rule, value, callback) => {
     }
   }
 }
+
+export const createURLWithAuth = (rawURL) => {
+  const { protocol, host, pathname } = window.location
+  const { password, username } = store.state.user
+  const { useRelativeResourcePath } = store.state.config
+  return `${protocol}//${username}:${password}@${host}${useRelativeResourcePath ? pathname : ''}${rawURL}`
+}
 export default {}

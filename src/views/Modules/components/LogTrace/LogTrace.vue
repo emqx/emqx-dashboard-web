@@ -152,7 +152,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog :title="$t('LogTrace.viewLog')" :visible.sync="viewDialog" fullscreen>
+    <el-dialog :title="$t('LogTrace.viewLog')" :visible.sync="viewDialog" custom-class="log-dialog" fullscreen>
       <div v-loading="viewNodeLoading" :element-loading-text="nextPageLoading">
         <el-row>
           <el-col :span="6">
@@ -173,7 +173,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <div :style="{ height: initialHeight + 'px' }" class="m-container">
+          <div :style="{ height: initialHeight + 'px' }" class="m-container" ref="monacoContainer">
             <monaco
               id="log-trace"
               v-model="logContent"
@@ -357,6 +357,9 @@ export default {
     async viewDetail(row, changeNode = false) {
       if (!row || !row.name) return
       this.viewDialog = true
+      this.$nextTick(() => {
+        this.countInitialHeight()
+      })
       this.viewNodeLoading = true
       this.viewLogName = row.name
       LOG_VIEW_POSITION = 0
@@ -428,6 +431,11 @@ export default {
           this.loadTraceList()
         }
       }
+    },
+    countInitialHeight() {
+      const windowHeight = window.innerHeight
+      const containerTop = this.$refs.monacoContainer.getBoundingClientRect().top
+      this.initialHeight = windowHeight - containerTop - 50
     },
     cancelDialog() {
       this.createDialog = false
