@@ -218,7 +218,7 @@ export default {
   name: 'LogTrace',
   data() {
     const nameValidator = (rule, value, callback) => {
-      if (/[\w-]+/.test(value)) {
+      if (/[a-zA-Z0-9-_]+/.test(value)) {
         callback()
       } else {
         callback(new Error(this.$t('General.validString')))
