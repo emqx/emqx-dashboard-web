@@ -297,6 +297,6 @@ export default {
   },
   clientNotExistPlaceholder: {
     zh: '该客户端不存在',
-    en: 'This client is not exists',
+    en: 'This client does not exists',
   },
 }
