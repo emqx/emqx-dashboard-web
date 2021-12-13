@@ -295,4 +295,8 @@ export default {
     zh: '连接成功',
     en: 'Connected',
   },
+  clientNotExistPlaceholder: {
+    zh: '该客户端不存在',
+    en: 'This client is not exists',
+  },
 }
