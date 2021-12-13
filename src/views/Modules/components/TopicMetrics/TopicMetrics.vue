@@ -153,7 +153,9 @@ export default {
       topics: [],
       currentExpandRow: {},
       currentTopic: {},
-      record: {},
+      record: {
+        topic: '',
+      },
       rules: {
         topic: {
           required: true,

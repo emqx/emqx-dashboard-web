@@ -291,8 +291,12 @@ export default {
       viewNodeLoading: false,
       record: {
         // packets: [],
-        startTime: [],
+        name: '',
         type: 'clientid',
+        clientid: '',
+        ip_address: '',
+        topic: '',
+        startTime: [],
       },
       viewLogName: '',
       nextPageLoading: '',

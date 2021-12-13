@@ -123,6 +123,8 @@ export default {
 
       if (oper === 'view') {
         this.record = { ...row }
+      } else {
+        this.record = {}
       }
     },
 
