@@ -91,9 +91,12 @@
           <el-col :span="12">
             <el-form-item :label="$t('LogTrace.type')" prop="type">
               <el-select v-model="record.type">
-                <el-option value="clientid" label="ClientID"></el-option>
-                <el-option value="topic" label="Topic"></el-option>
-                <el-option value="ip_address" label="IP Address"></el-option>
+                <el-option
+                  v-for="{ value, label } in typeOptions"
+                  :key="value"
+                  :value="value"
+                  :label="label"
+                ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -213,6 +216,21 @@ const MAX_LOG_SIZE = 5 * 1024 * 1024
 const BYTEPERPAGE = 50 * 1024
 const DEFAULT_DURATION = 30 * 60 * 1000
 
+const typeOptions = [
+  {
+    value: 'clientid',
+    label: 'ClientID',
+  },
+  {
+    value: 'topic',
+    label: 'Topic',
+  },
+  {
+    value: 'ip_address',
+    label: 'IP Address',
+  },
+]
+
 export default {
   components: { Monaco },
   name: 'LogTrace',
@@ -227,6 +245,7 @@ export default {
     const needStartTime = this.$t('LogTrace.needStartTime')
     // const needOnePacket = this.$t('LogTrace.needOnePacket')
     return {
+      typeOptions,
       // aTraceTb: [],
       traceTable: [],
       nodes: [],
@@ -292,7 +311,7 @@ export default {
       record: {
         // packets: [],
         name: '',
-        type: 'clientid',
+        type: typeOptions[0].value,
         clientid: '',
         ip_address: '',
         topic: '',
@@ -337,8 +356,24 @@ export default {
         if (!valid) return
 
         this.createLoading = true
+        const { clientid, ip_address, name, topic, type } = this.record
+        let targetInfo = {}
+        switch (type) {
+          case typeOptions[0].value:
+            targetInfo = { clientid, type }
+            break
+          case typeOptions[1].value:
+            targetInfo = { topic, type }
+            break
+          case typeOptions[2].value:
+            targetInfo = { ip_address, type }
+            break
+          default:
+            break
+        }
         const sendbody = {
-          ...this.record,
+          name,
+          ...targetInfo,
           start_at: new Date(this.record.startTime[0]).toISOString(),
           end_at: new Date(this.record.startTime[1]).toISOString(),
         }
