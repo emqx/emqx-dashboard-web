@@ -36,6 +36,7 @@
                 :placeholder="$t('Base.password')"
                 show-password
                 clearable
+                autocomplete="new-password"
               >
               </el-input>
             </el-form-item>
