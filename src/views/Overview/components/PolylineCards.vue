@@ -124,7 +124,7 @@ export default {
           const currentData = this.metricLog[typeName]
           this.metricTitles.forEach((key, index) => {
             data[key].forEach((item) => {
-              currentData[index].xData.push(this._formatTime(item[0]))
+              currentData[index].xData.push(item[0])
               currentData[index].yData.push(item[1])
             })
           })
@@ -145,7 +145,7 @@ export default {
             currentData[index].xData.shift()
             currentData[index].yData.shift()
           }
-          currentData[index].xData.push(this._formatTime(lastData[0]))
+          currentData[index].xData.push(lastData[0])
           currentData[index].yData.push(lastData[1])
         })
       })
