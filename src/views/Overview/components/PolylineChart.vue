@@ -9,10 +9,22 @@ import 'echarts/lib/component/grid'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
+import moment from 'moment'
 
 import resizeChart from '@/mixins/resizeChart'
 
 const DEFAULT_CHART_HEIGHT = '190px'
+
+const formatTime = (time) => moment(time).utcOffset(0).format('HH:mm')
+const createArrFromTimeRange = (earliest, latest) => {
+  const STEP = 1000 * 60
+  const ret = []
+  const stepCount = Math.floor((latest - earliest) / STEP)
+  for (let i = 0; i < stepCount; i += 1) {
+    ret.push(formatTime(earliest + i * STEP))
+  }
+  return ret
+}
 
 export default {
   name: 'PolylineChart',
@@ -70,6 +82,14 @@ export default {
     return {
       seriesConfig: [],
       chart: undefined,
+      /**
+       * @type Array<string>
+       */
+      xAxisData: [],
+      /**
+       * @type Array<Array<number>>
+       */
+      yAxisData: [],
     }
   },
 
@@ -91,11 +111,6 @@ export default {
   },
 
   methods: {
-    processedIntoChartData() {
-      this.chartDataToShow = this.chartData.map(({ xData, yData }) => {
-        return xData.map((item, index) => [item, yData[index]])
-      })
-    },
     setSeriesConfig() {
       this.seriesConfig = []
       for (let i = 0; i < this.yTitle.length; i += 1) {
@@ -105,7 +120,7 @@ export default {
           smooth: true,
           symbolSize: 5,
           showSymbol: false,
-          data: this.chartDataToShow[i],
+          data: this.yAxisData[i],
           step: false,
           lineStyle: {
             width: 2,
@@ -141,8 +156,38 @@ export default {
         <span>${data}</span>
         </div>`
     },
+    countXAxisData() {
+      const totalXData = this.chartData.reduce((arr, { xData }) => arr.concat(xData), [])
+      const theEarliest = Math.min(...totalXData)
+      const theLatest = Math.max(...totalXData)
+      this.xAxisData = createArrFromTimeRange(theEarliest, theLatest)
+    },
+    countYAxisData() {
+      this.yAxisData = []
+      this.chartData.forEach(({ xData, yData }) => {
+        const currentMap = new Map()
+        const currentYAxisData = []
+        xData.forEach((timeStamp, index) => {
+          currentMap.set(formatTime(timeStamp), yData[index])
+        })
+        this.xAxisData.forEach((time) => {
+          currentYAxisData.push(currentMap.get(time))
+        })
+        this.yAxisData.push(currentYAxisData)
+      })
+    },
     drawChart() {
-      this.processedIntoChartData()
+      /* 
+        1. Find the earliest time among all the data
+        2. Find the latest time among all the data
+        3. Generate a map from the data of each node
+          - key is the formatted time
+          - value is value
+        4. Generate X-axis data according to the earliest time and latest time
+        5. Then find the value of each node at that time according to each tick time on the X axis, and fill in 0 when it is not found
+      */
+      this.countXAxisData()
+      this.countYAxisData()
       this.setSeriesConfig()
       this.chart = echarts.init(document.getElementById(this.chartId))
       const _this = this
@@ -167,14 +212,13 @@ export default {
           trigger: 'axis',
           confine: true,
           formatter(arr) {
-            let markerTime
-            const dataList = arr.map(({ seriesName, data: [time, count], marker }) => {
-              const name = _this.isSmallChart ? _this.ellipsisText(seriesName, 100) : seriesName
-              markerTime = time
-              return _this.dataItemToHTML(name, count, marker)
-            })
-            dataList.unshift(`<p class="tooltip-title">${markerTime}</p>`)
-            return dataList.join('')
+            return arr
+              .filter(({ seriesName, data, marker }) => data !== undefined)
+              .map(({ seriesName, data, marker }) => {
+                const name = _this.isSmallChart ? _this.ellipsisText(seriesName, 100) : seriesName
+                return _this.dataItemToHTML(name, data, marker)
+              })
+              .join('')
           },
         },
         grid: {
@@ -187,6 +231,7 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: false,
+          data: this.xAxisData,
           axisLine: {
             lineStyle: {
               color: this.axisColor.colorAxisLine,
