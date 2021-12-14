@@ -27,6 +27,12 @@ if (customConfig.useRelativeResourcePath && process.env.NODE_ENV === 'production
   publicPath = './'
 }
 
+const getVersion = () => {
+  const matched = process.env.npm_package_version.match(/^\d\.\d/)
+  return matched ? `v${matched[0]}` : 'latest'
+}
+process.env.VUE_APP_VERSION = getVersion()
+
 module.exports = {
   devServer: {
     port: 3001,
@@ -34,7 +40,7 @@ module.exports = {
     before,
     proxy: {
       '/api': {
-        target: process.env.HOST_URL || 'http://34.219.115.160:18084',
+        target: process.env.HOST_URL || 'http://192.168.0.234:18083',
         // target: process.env.HOST_URL || 'http://127.0.0.1:18083',
         changeOrigin: true,
       },
