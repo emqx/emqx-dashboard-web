@@ -21,6 +21,12 @@ const customConfig = {
   ...(config[VUE_APP_BUILD_ENV] || {}),
 }
 
+const getVersion = () => {
+  const matched = process.env.npm_package_version.match(/^\d\.\d/)
+  return matched ? `v${matched[0]}` : 'latest'
+}
+process.env.VUE_APP_VERSION = getVersion()
+
 module.exports = {
   devServer: {
     port: 3001,

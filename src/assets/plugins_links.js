@@ -1,0 +1,33 @@
+const version = process.env.VUE_APP_VERSION
+export default {
+  en: {
+    emqx_auth_clientid: `https://docs.emqx.io/en/broker/${version}/advanced/auth-clientid.html`,
+    emqx_auth_username: `https://docs.emqx.io/en/broker/${version}/advanced/auth-username.html`,
+    emqx_auth_http: `https://docs.emqx.io/en/broker/${version}/advanced/auth-http.html`,
+    emqx_auth_jwt: `https://docs.emqx.io/en/broker/${version}/advanced/auth-jwt.html`,
+    emqx_auth_ldap: `https://docs.emqx.io/en/broker/${version}/advanced/auth-ldap.html`,
+    emqx_auth_mnesia: `https://docs.emqx.io/en/broker/${version}/advanced/auth-mnesia.html`,
+    emqx_auth_mongo: `https://docs.emqx.io/en/broker/${version}/advanced/auth-mongodb.html`,
+    emqx_auth_mysql: `https://docs.emqx.io/en/broker/${version}/advanced/auth-mysql.html`,
+    emqx_auth_pgsql: `https://docs.emqx.io/en/broker/${version}/advanced/auth-postgresql.html`,
+    emqx_auth_redis: `https://docs.emqx.io/en/broker/${version}/advanced/auth-redis.html`,
+    emqx_dashboard: `https://docs.emqx.io/en/broker/${version}/getting-started/dashboard.html`,
+    emqx_extension_hook: `https://docs.emqx.io/en/broker/${version}/advanced/lang-lua.html`,
+    emqx_rule_engine: `https://docs.emqx.io/en/broker/${version}/rule/rule-engine.html`,
+  },
+  zh: {
+    emqx_auth_clientid: `https://docs.emqx.cn/cn/broker/${version}/advanced/auth-clientid.html`,
+    emqx_auth_username: `https://docs.emqx.cn/cn/broker/${version}/advanced/auth-username.html`,
+    emqx_auth_http: `https://docs.emqx.cn/cn/broker/${version}/advanced/auth-http.html`,
+    emqx_auth_jwt: `https://docs.emqx.cn/cn/broker/${version}/advanced/auth-jwt.html`,
+    emqx_auth_ldap: `https://docs.emqx.cn/cn/broker/${version}/advanced/auth-ldap.html`,
+    emqx_auth_mnesia: `https://docs.emqx.cn/cn/broker/${version}/advanced/auth-mnesia.html`,
+    emqx_auth_mongo: `https://docs.emqx.cn/cn/broker/${version}/advanced/auth-mongodb.html`,
+    emqx_auth_mysql: `https://docs.emqx.cn/cn/broker/${version}/advanced/auth-mysql.html`,
+    emqx_auth_pgsql: `https://docs.emqx.cn/cn/broker/${version}/advanced/auth-postgresql.html`,
+    emqx_auth_redis: `https://docs.emqx.cn/cn/broker/${version}/advanced/auth-redis.html`,
+    emqx_dashboard: `https://docs.emqx.cn/cn/broker/${version}/getting-started/dashboard.html`,
+    emqx_extension_hook: `https://docs.emqx.cn/cn/broker/${version}/advanced/lang-lua.html`,
+    emqx_rule_engine: `https://docs.emqx.cn/cn/broker/${version}/rule/rule-engine.html`,
+  },
+}

@@ -338,7 +338,7 @@ export default {
     },
     toReadMore(type) {
       const langUrl = this.lang === 'zh' ? 'cn/cn/' : 'io/en/'
-      const url = `https://docs.emqx.${langUrl}enterprise/latest/modules/${type}.html`
+      const url = `https://docs.emqx.${langUrl}enterprise/${process.env.VUE_APP_VERSION}/modules/${type}.html`
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },

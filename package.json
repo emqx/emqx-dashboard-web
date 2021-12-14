@@ -1,6 +1,6 @@
 {
   "name": "ee-dashboard",
-  "version": "4.1.0",
+  "version": "4.4.5",
   "private": true,
   "scripts": {
     "dev-cloud": "export VUE_APP_BUILD_ENV=cloud && yarn serve",
