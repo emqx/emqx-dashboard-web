@@ -53,6 +53,8 @@ export default {
   },
 
   data() {
+    const totalColors = ['#22BB7A', '#4065E0', '#EEC90D', '#07E3E4', '#6ECAFA', '#AF79FF']
+
     return {
       dataTypeMap: {
         dropped: this.$t('Overview.messageDrop'),
@@ -74,29 +76,20 @@ export default {
       dataTypeList: ['dropped', 'connection', 'route', 'subscriptions', 'sent', 'received'],
       timerMetrics: null,
       bigChartItem: {},
+      chartColorList: {
+        dropped: totalColors,
+        connection: totalColors,
+        route: totalColors,
+        subscriptions: totalColors,
+        sent: totalColors,
+        received: totalColors,
+      },
     }
   },
 
   computed: {
     dataTypeFilter() {
       return Object.entries(this.dataTypeMap).map(([value, text]) => ({ text, value }))
-    },
-    chartColorList() {
-      const getLineColors = (index) => {
-        const totalColors = ['#22BB7A', '#4065E0', '#EEC90D', '#07E3E4', '#6ECAFA', '#AF79FF']
-        // Swap the first and index positions
-        const changedColorArr = [...totalColors.splice(0, 1, totalColors[index])]
-        totalColors.splice(index, 1, changedColorArr[0])
-        return totalColors
-      }
-      return {
-        dropped: getLineColors(0),
-        connection: getLineColors(1),
-        route: getLineColors(2),
-        subscriptions: getLineColors(3),
-        sent: getLineColors(4),
-        received: getLineColors(5),
-      }
     },
   },
 
