@@ -3,7 +3,10 @@ import http from '@/common/http'
 // 加载配置数据
 export const loadConfig = async () => {
   const res = await http.get('/configs')
-  const mqttRes = res.find(($) => $.type === 'emqx').configs
+
+  const findResult = res.find(($) => $.type === 'emqx')
+  const mqttRes = findResult ? findResult.configs : {}
+
   const monitorResList = []
 
   res.forEach((item) => {
