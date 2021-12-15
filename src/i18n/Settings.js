@@ -170,6 +170,14 @@ export default {
     zh: '是否在严格模式下解析 MQTT 帧',
     en: 'Whether to parse the MQTT frame in strict mode',
   },
+  acl_file: {
+    zh: 'ACL 文件路径',
+    en: 'ACL file path',
+  },
+  broker_perf_trie_compaction: {
+    zh: '是否启用 MQTT topic 前缀树压缩功能',
+    en: 'Enable MQTT topic prefix tree compression',
+  },
   // 集群设置字段
   invite: {
     zh: '邀请',
