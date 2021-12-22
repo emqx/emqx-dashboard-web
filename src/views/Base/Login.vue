@@ -4,7 +4,7 @@
       <div class="split-wrapper">
         <div class="logo-wrapper"></div>
 
-        <div :span="12" class="login-wrapper">
+        <div :span="12" class="login-wrapper" v-if="!needChangePwd">
           <div class="emq-title">
             {{ $t('Base.signIn') }}
             <div class="sub-title">
@@ -38,6 +38,7 @@
             </el-form-item>
           </el-form>
         </div>
+        <PwdFormInLogin v-else @submit="submitNewPwd" @skip="returnToPageBeforeLogin"></PwdFormInLogin>
       </div>
     </a-card>
   </div>
@@ -45,15 +46,17 @@
 
 <script>
 import { auth } from '@/api/common'
+import { changePassword } from '@/api/function.js'
 import { awaitWrap } from '@/common/utils'
 import store from '@/stores'
+import PwdFormInLogin from './components/PwdFormInLogin.vue'
 
 export default {
   name: 'Login',
 
-  components: {},
-
-  props: {},
+  components: {
+    PwdFormInLogin,
+  },
 
   data() {
     return {
@@ -67,9 +70,19 @@ export default {
         username: { required: true },
         password: { required: true },
       },
+      /**
+       * log in manually, in order to skip the login page
+       * when embedded in other systems, need to log in manually
+       * when it is **true**
+       */
       isNeedAuth: true,
       fullLoading: false,
       fromCloud: false,
+      /**
+       * When the current user password is the default password,
+       * the password needs to be changed.
+       */
+      needChangePwd: false,
     }
   },
 
@@ -105,12 +118,14 @@ export default {
             return
           }
           this.loginError = ''
+          const { is_default_password, is_week_password } = res
           this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember })
+          if (is_default_password && this.isNeedAuth) {
+            this.needChangePwd = true
+            return
+          }
           setTimeout(() => {
-            const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query
-            this.$router.replace({
-              path: to,
-            })
+            this.returnToPageBeforeLogin()
             if (!this.isNeedAuth) {
               this.fullLoading.close()
             }
@@ -123,6 +138,27 @@ export default {
           this.isNeedAuth = true
           this.loginError = error
         })
+    },
+
+    async submitNewPwd(newPwd) {
+      try {
+        const { username, password: oldPwd, remember } = this.record
+        await changePassword(username, {
+          new_pwd: newPwd,
+          old_pwd: oldPwd,
+        })
+        this.$store.dispatch('UPDATE_USER_INFO', { username, remember, password: newPwd })
+        this.returnToPageBeforeLogin()
+      } catch (error) {
+        console.error(error)
+      }
+    },
+
+    returnToPageBeforeLogin() {
+      const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query
+      this.$router.replace({
+        path: to,
+      })
     },
 
     async nativeLogin() {

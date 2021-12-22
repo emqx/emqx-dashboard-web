@@ -76,6 +76,7 @@
 
 <script>
 import { loadUser, createUser, updateUser, destroyUser, changePassword } from '@/api/function'
+import pwdRule from '@/common/pwdRule'
 
 export default {
   name: 'Users',
@@ -116,23 +117,7 @@ export default {
             trigger: ['blur', 'change'],
           },
         ],
-        newPassword: [
-          {
-            required: true,
-            message: this.$t('General.pleaseEnterNewPassword'),
-            trigger: ['blur', 'change'],
-          },
-          {
-            min: 3,
-            max: 32,
-            message: this.$t('General.passwordLength'),
-            trigger: ['blur', 'change'],
-          },
-        ],
-        repeatPassword: [
-          { required: true, message: this.$t('General.pleaseEnterAConfirmationPassword') },
-          { validator: validatePass, trigger: ['blur', 'change'] },
-        ],
+        ...pwdRule(validatePass),
       },
     }
   },
