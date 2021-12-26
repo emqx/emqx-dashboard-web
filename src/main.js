@@ -24,14 +24,14 @@ Vue.use(ElementUI)
 Vue.use(Waves)
 Vue.use(directive)
 
-const i18n = new VueI18n({
+export const i18n = new VueI18n({
   locale: store.state.lang,
   messages: lang,
 })
 
 ElementLocale.i18n((key, value) => i18n.t(key, value))
 
-new Vue({
+export default new Vue({
   router,
   store,
   i18n,

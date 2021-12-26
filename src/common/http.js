@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import { i18n } from '@/main'
 
 import { getBasicAuthInfo, toLogin } from '@/common/utils'
 import store from '@/stores'
@@ -94,6 +95,13 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
+const ACCOUNT_LOCKED_ERROR = 1103
+function handleAccountLockedError(response) {
+  const { retry_after } = response.data
+  const { username } = JSON.parse(response.config.data)
+  return i18n.t('Base.accountLockedMessage', { username, second: retry_after })
+}
+
 function handleError(error) {
   clearTimeout(timer)
   timer = setTimeout(() => {
@@ -120,6 +128,16 @@ function handleError(error) {
   }
   const { name: currentPage, fullPath } = router.history.current
   if (status === 401) {
+    if (currentPage === 'login') {
+      // If the user name and password are incorrect or account locked, the interface
+      // will return the status code 401, which requires special handling.
+      const { code } = error.response.data
+      if (code && httpMap[code]) {
+        error.message = httpMap[code]
+      } else if (code === ACCOUNT_LOCKED_ERROR) {
+        error.message = handleAccountLockedError(error.response)
+      }
+    }
     toLogin()
   } else if (status === 404 && pluginPages.includes(currentPage)) {
     Message.error(httpMap['-2'])
