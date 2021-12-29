@@ -31,6 +31,10 @@ export default {
     zh: '您正在使用默认密码，请及时修改。',
     en: 'You are using the default username and password, please modify it in time.',
   },
+  weakPwdTip: {
+    zh: '您的密码强度弱，请及时修改。',
+    en: 'Your password is weak, please modify it in time.',
+  },
   skip: {
     zh: '跳过',
     en: 'Skip',

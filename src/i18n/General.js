@@ -231,4 +231,8 @@ export default {
     zh: '请选择禁用属性',
     en: 'Please select property',
   },
+  pwdRegExpError: {
+    zh: '请输入由字母、数字及下划线组成的长度为8～32的密码，且至少包含一个大写字母，一个小写字母和一个数字',
+    en: 'Please enter a password consisting of letters, numbers and underscores with a length of 8-32 and at least one uppercase letter, one lowercase letter and one number',
+  },
 }

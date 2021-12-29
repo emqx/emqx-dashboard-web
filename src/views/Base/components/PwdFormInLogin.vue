@@ -3,7 +3,7 @@
     <div class="emq-title">
       {{ $t('Base.signIn') }}
       <div class="sub-title">
-        {{ $t('Base.defaultPwdTip') }}
+        {{ type === 'default' ? $t('Base.defaultPwdTip') : $t('Base.weakPwdTip') }}
       </div>
     </div>
     <el-form ref="formCom" :model="record" :rules="rules" hide-required-asterisk @keyup.enter.native="submit">
@@ -24,6 +24,10 @@ import pwdRule from '@/common/pwdRule'
 
 export default {
   name: 'PwdFormInLogin',
+  props: {
+    // 'weak' || 'default'
+    type: String,
+  },
   data() {
     const validatePass = (rule, value, callback) => {
       if (value === '') {

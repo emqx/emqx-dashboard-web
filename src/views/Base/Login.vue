@@ -38,7 +38,12 @@
             </el-form-item>
           </el-form>
         </div>
-        <PwdFormInLogin v-else @submit="submitNewPwd" @skip="returnToPageBeforeLogin"></PwdFormInLogin>
+        <PwdFormInLogin
+          v-else
+          @submit="submitNewPwd"
+          @skip="returnToPageBeforeLogin"
+          :type="needChangePwdReason"
+        ></PwdFormInLogin>
       </div>
     </a-card>
   </div>
@@ -83,6 +88,8 @@ export default {
        * the password needs to be changed.
        */
       needChangePwd: false,
+      // weak or default
+      needChangePwdReason: '',
     }
   },
 
@@ -118,9 +125,10 @@ export default {
             return
           }
           this.loginError = ''
-          const { is_default_password, is_week_password } = res
+          const { is_default_password, is_weak_password } = res
           this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember })
-          if (is_default_password && this.isNeedAuth) {
+          if ((is_default_password || is_weak_password) && this.isNeedAuth) {
+            this.needChangePwdReason = is_default_password ? 'default' : 'weak'
             this.needChangePwd = true
             return
           }
