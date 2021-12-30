@@ -4,11 +4,12 @@ import store from '@/stores'
 const local = store.state.lang
 const VueI18n = lang[local]
 
+export const pwdRegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_]{8,32}$/
+
 /**
  * @param comparisonFunc A function that compares whether the new password is consistent with the confirmed password.
  */
 export default (comparisonFunc) => {
-  const regExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d_]{8,32}$/
   return {
     newPassword: [
       {
@@ -17,7 +18,7 @@ export default (comparisonFunc) => {
         trigger: ['blur', 'change'],
       },
       {
-        pattern: regExp,
+        pattern: pwdRegExp,
         message: VueI18n.General.pwdRegExpError,
         trigger: ['blur'],
       },
