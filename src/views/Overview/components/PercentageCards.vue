@@ -3,7 +3,7 @@
     <el-row :gutter="20">
       <div v-for="(item, index) in doughnutChartList" :key="index">
         <el-col :span="8">
-          <a-card class="doughnut-card">
+          <a-card class="doughnut-card" :loading="isLoading">
             <doughnut-chart
               :chartId="item.chartId"
               :cardTitle="item.cardTitle"
@@ -65,24 +65,41 @@ export default {
           ],
         },
       ],
+      isLoading: false,
     }
   },
 
   created() {
-    this.loadMetricsData()
+    this.initMetricsData()
   },
 
   methods: {
+    async initMetricsData() {
+      try {
+        this.isLoading = true
+        await this.loadMetricsData()
+        this.isLoading = false
+      } catch (error) {
+        this.isLoading = false
+        console.error(error)
+      }
+    },
+
     async loadMetricsData() {
-      const res = await loadAllMetrics()
-      this.doughnutChartList.forEach((item) => {
-        item.seriesData.forEach((one) => {
-          const index = item.seriesData.indexOf(one)
-          const data = res[item.chartId]
-          const dataKeys = Object.keys(data)
-          one.value = data[dataKeys[index]]
+      try {
+        const res = await loadAllMetrics()
+        this.doughnutChartList.forEach((item) => {
+          item.seriesData.forEach((one) => {
+            const index = item.seriesData.indexOf(one)
+            const data = res[item.chartId]
+            const dataKeys = Object.keys(data)
+            one.value = data[dataKeys[index]]
+          })
         })
-      })
+        return Promise.resolve()
+      } catch (error) {
+        return Promise.reject(error)
+      }
     },
   },
 }
@@ -98,6 +115,9 @@ export default {
     @include trans-up-mixin(-1px);
     border-radius: 8px;
     height: 255px;
+    &.ant-card-loading {
+      height: auto;
+    }
 
     .ant-card-body {
       padding: 12px;

@@ -2,7 +2,7 @@
   <div class="overview app-wrapper">
     <el-row class="content-wrapper" :gutter="20">
       <el-col :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading">
+        <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.messageOut') }}
           </div>
@@ -27,7 +27,7 @@
       </el-col>
 
       <el-col :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading">
+        <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.messageIn') }}
           </div>
@@ -52,7 +52,7 @@
       </el-col>
 
       <el-col :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading">
+        <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.subscriptionNumber') }}
           </div>
@@ -75,7 +75,7 @@
       </el-col>
 
       <el-col v-if="$hasShow('monitor.connections')" :span="6">
-        <a-card class="app-card" :bordered="true" :loading="pageLoading">
+        <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">{{ $t('Overview.activeConnection') }}</div>
 
           <div class="content">
@@ -104,35 +104,37 @@
       </el-col>
     </el-row>
 
-    <a-card class="node-wrapper" :loading="pageLoading">
-      <div class="emq-title">
-        <div class="title">
-          {{ $t('Overview.nodeData') }}
+    <a-card class="node-wrapper">
+      <a-skeleton v-if="isNodesLoading && pageLoading" active :paragraph="{ rows: 8 }" />
+      <template v-else>
+        <div class="emq-title">
+          <div class="title">
+            {{ $t('Overview.nodeData') }}
+          </div>
+          <div class="type-filter">
+            <emq-select
+              v-model="nodeName"
+              size="mini"
+              style="margin-right: 20px"
+              :field="{ options: nodes }"
+              :field-name="{ label: 'name', value: 'node' }"
+              @change="dataTypeChange"
+            ></emq-select>
+          </div>
         </div>
-        <div class="type-filter">
-          <emq-select
-            v-model="nodeName"
-            size="mini"
-            style="margin-right: 20px"
-            :field="{ options: nodes }"
-            :field-name="{ label: 'name', value: 'node' }"
-            @change="dataTypeChange"
-          ></emq-select>
+        <div class="basic">
+          <el-row :gutter="20">
+            <node-basic-card :value="currentNode"></node-basic-card>
+          </el-row>
         </div>
-      </div>
-
-      <div class="basic">
-        <el-row :gutter="20">
-          <node-basic-card :value="currentNode"></node-basic-card>
-        </el-row>
-      </div>
+      </template>
     </a-card>
 
     <percentage-cards ref="percentageCards"></percentage-cards>
 
     <polyline-cards></polyline-cards>
 
-    <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="pageLoading">
+    <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="isLicenseLoading && pageLoading">
       <div class="emq-title">
         {{ $t('Overview.license') }}
       </div>
@@ -255,23 +257,24 @@ export default {
       pageLoading: true,
       nodeName: '',
       initCurrentNode: {
-        connections: 16,
-        load1: '14.01',
-        load15: '11.85',
-        load5: '12.54',
-        max_fds: 7168,
-        memory_total: '126.59M',
-        memory_used: '97.05M',
-        node: 'emqx@127.0.0.1',
-        node_status: 'Running',
-        otp_release: 'R21/10.3.4',
-        process_available: 2097152,
-        process_used: 402,
-        uptime: '12 minutes, 37 seconds',
-        version: '0.0.0+build.1.ref8234b61',
+        connections: 0,
+        load1: '',
+        load15: '',
+        load5: '',
+        max_fds: 0,
+        memory_total: '',
+        memory_used: '',
+        node: '',
+        node_status: '',
+        otp_release: '',
+        process_available: 0,
+        process_used: 0,
+        uptime: '',
+        version: '',
       },
       timer: 0,
       nodes: [],
+      isNodesLoading: false,
       licenseTipVisible: false,
       isLicenseExpiry: false,
       noprompt: false,
@@ -289,6 +292,7 @@ export default {
         expiry: false,
         customer_type: 0,
       },
+      isLicenseLoading: false,
       currentMetricsLogs: {
         received: {
           x: Array(32).fill('N/A'),
@@ -311,6 +315,7 @@ export default {
         connection: 0, // 连接数
         live_connection: 0, // 活跃连接
       },
+      isCurrentMetricsLoading: false,
     }
   },
 
@@ -337,17 +342,11 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     this.pageLoading = true
-    this.loadData()
-    this.loadLicenseData()
-    clearInterval(this.timerData)
-    this.timerData = setInterval(() => {
-      this.loadData()
-      this.loadNodes()
-      this.$refs.percentageCards.loadMetricsData()
-    }, 10 * 1000)
-    this.dataTypeChange()
+    await Promise.all([this.loadData(), this.loadLicenseData(), this.dataTypeChange()])
+    this.pageLoading = false
+    this.startPolling()
   },
 
   beforeDestroy() {
@@ -355,17 +354,38 @@ export default {
   },
 
   methods: {
+    startPolling() {
+      clearInterval(this.timerData)
+      this.timerData = setInterval(() => {
+        this.loadData()
+        this.loadNodes()
+        this.$refs.percentageCards.loadMetricsData()
+      }, 10 * 1000)
+    },
     liceEvaTipShowChange(val) {
       if (val) {
         localStorage.setItem('licenseTipVisible', false)
       }
     },
-    dataTypeChange() {
-      this.loadNodes()
+    async dataTypeChange() {
+      try {
+        await this.loadNodes()
+        return Promise.resolve()
+      } catch (error) {
+        return Promise.resolve()
+      }
     },
     async loadNodes() {
-      this.nodes = await loadNodesApi()
-      this.nodeName = this.nodeName || (this.nodes[0] || {}).node
+      try {
+        this.isNodesLoading = true
+        this.nodes = await loadNodesApi()
+        this.nodeName = this.nodeName || (this.nodes[0] || {}).node
+        return Promise.resolve()
+      } catch (error) {
+        return Promise.reject(error)
+      } finally {
+        this.isNodesLoading = true
+      }
     },
     formatConnection() {
       const { connection } = this.currentMetrics
@@ -373,30 +393,45 @@ export default {
       return `${formatNumber(connection)}/${formatNumber(max_connections)}`
     },
     async loadLicenseData() {
-      this.license = await loadLicenseInfo()
-      setTimeout(() => {
-        // evaluation 许可证
-        if (this.license.customer_type === this.evaluation && localStorage.getItem('licenseTipVisible') !== 'false') {
-          this.licenseTipVisible = true
-          this.isLicenseExpiry = false
-          this.licenseTipWidth = 520
-        }
-        // 证书过期
-        if (this.license.expiry === true) {
-          this.licenseTipVisible = true
-          this.isLicenseExpiry = true
-          this.licenseTipWidth = 600
-        }
-      }, 1000)
+      try {
+        this.isLicenseLoading = true
+        this.license = await loadLicenseInfo()
+        setTimeout(() => {
+          // evaluation 许可证
+          if (this.license.customer_type === this.evaluation && localStorage.getItem('licenseTipVisible') !== 'false') {
+            this.licenseTipVisible = true
+            this.isLicenseExpiry = false
+            this.licenseTipWidth = 520
+          }
+          // 证书过期
+          if (this.license.expiry === true) {
+            this.licenseTipVisible = true
+            this.isLicenseExpiry = true
+            this.licenseTipWidth = 600
+          }
+        }, 1000)
+        this.isLicenseLoading = false
+        return Promise.resolve()
+      } catch (error) {
+        return Promise.resolve(error)
+      }
     },
     async loadData() {
-      const state = await loadCurrentMetrics()
-      this.pageLoading = false
-      if (!state) {
-        return
+      try {
+        this.isCurrentMetricsLoading = true
+        const state = await loadCurrentMetrics()
+        if (!state) {
+          return Promise.resolve()
+        }
+        this.currentMetrics = state
+        this.setCurrentMetricsLogsRealtime(state)
+        return Promise.resolve()
+      } catch (error) {
+        console.error(error)
+        return Promise.resolve()
+      } finally {
+        this.isCurrentMetricsLoading = false
       }
-      this.currentMetrics = state
-      this.setCurrentMetricsLogsRealtime(state)
     },
     getNow() {
       return Moment().format('HH:mm:ss')
@@ -468,6 +503,10 @@ export default {
 
     .ant-card-body {
       padding: 16px 16px 0 16px;
+    }
+
+    &.ant-card-loading .ant-card-body {
+      padding-bottom: 8px;
     }
 
     .content {
@@ -629,6 +668,10 @@ export default {
 
   .tip-button {
     text-align: right;
+  }
+  .ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-title,
+  .ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-paragraph > li {
+    background: linear-gradient(90deg, rgba(207, 216, 220, 0.2), rgba(207, 216, 220, 0.4), rgba(207, 216, 220, 0.2));
   }
 }
 </style>
