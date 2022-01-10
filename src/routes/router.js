@@ -37,6 +37,10 @@ let routes = [
       {
         path: '/monitor',
         name: 'monitor',
+        meta: {
+          hideKey: 'monitor',
+          authRequired: true,
+        },
         component: () => import('@/views/Overview/Overview'),
       },
       {
