@@ -60,7 +60,7 @@
 
 <script>
 import Breadcrumb from './Breadcrumb.vue'
-import { loadAlarm } from '@/api/common'
+import { loadAlarm, logout as requestLogout } from '@/api/common'
 
 export default {
   name: 'NavHeader',
@@ -122,7 +122,9 @@ export default {
       const alert = await loadAlarm()
       this.$store.dispatch('SET_ALERT_COUNT', (alert || []).length)
     },
-    logout() {
+    async logout() {
+      const { username, token } = this.$store.state.user
+      await requestLogout(username, token)
       this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
       setTimeout(() => {
         this.$message.success(this.$t('components.loggedOut'))

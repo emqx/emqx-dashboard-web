@@ -73,8 +73,14 @@ export default new Vuex.Store({
       // localStorage.setItem('leftBarCollapse', collapse ? 'true' : '')
       commit('SET_LEFT_BAR_COLLAPSE', !!collapse)
     },
-    UPDATE_USER_INFO({ commit }, userInfo = {}) {
+    UPDATE_USER_INFO({ commit, state }, userInfo = {}) {
       const { logOut = false, remember } = userInfo
+      // Prevent sometimes updating user information without carrying a token
+      const { token } = state
+      if (token && !userInfo.token && !logOut) {
+        userInfo.token = token
+      }
+
       if (logOut) {
         localStorage.removeItem('user')
         sessionStorage.removeItem('user')

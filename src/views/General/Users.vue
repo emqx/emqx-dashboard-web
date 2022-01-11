@@ -177,7 +177,8 @@ export default {
               }
               await changePassword(username, passwordData)
               // 更新当前用户
-              vue.$store.dispatch('UPDATE_USER_INFO', { username, password })
+              const { remember, token } = store.state.user
+              vue.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, token })
             }
             vue.$message.success(vue.$t('Base.editSuccess'))
             vue.dialogVisible = false

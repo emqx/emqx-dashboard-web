@@ -9,6 +9,19 @@ export function auth(user = {}) {
   })
 }
 
+export const login = (user) => {
+  return http.post('/login', user, {
+    params: {
+      _t: false,
+      _m: false,
+    },
+  })
+}
+
+export const logout = (username, token) => {
+  return http.post('/logout', { username, token })
+}
+
 export function loadBrokers() {
   return http.get('/brokers')
 }

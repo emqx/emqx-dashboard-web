@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { auth } from '@/api/common'
+import { login as requestLogin } from '@/api/common'
 import { changePassword } from '@/api/function.js'
 import { awaitWrap } from '@/common/utils'
 import store from '@/stores'
@@ -103,20 +103,35 @@ export default {
     if (store.state.config.baseURL === '/dashboard') {
       this.fromCloud = true
     }
-    const { lang } = this.$route.query
-    if (['en', 'zh'].indexOf(lang) !== -1 && this.language !== lang && this.fromCloud) {
-      document.querySelector('html').setAttribute('lang', lang)
-      localStorage.setItem('language', lang)
-      this.$i18n.locale = lang
+    this.setLanguage()
+    if (!this.checkLoginStatus()) {
+      this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
     }
-    this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
     this.autoLogin()
   },
 
   methods: {
+    checkLoginStatus() {
+      const { username, token } = store.state.user
+      if (username && token) {
+        this.$router.push('/')
+        return true
+      }
+      return false
+    },
+
+    setLanguage() {
+      const { lang } = this.$route.query
+      if (['en', 'zh'].indexOf(lang) !== -1 && this.language !== lang && this.fromCloud) {
+        document.querySelector('html').setAttribute('lang', lang)
+        localStorage.setItem('language', lang)
+        this.$i18n.locale = lang
+      }
+    },
+
     login() {
       const { username, password, remember } = this.record
-      auth({
+      requestLogin({
         username,
         password,
       })
@@ -125,8 +140,8 @@ export default {
             return
           }
           this.loginError = ''
-          const { is_default_password, is_weak_password } = res
-          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember })
+          const { is_default_password, is_weak_password, token } = res
+          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, token })
           if ((is_default_password || is_weak_password) && this.isNeedAuth) {
             this.needChangePwdReason = is_default_password ? 'default' : 'weak'
             this.needChangePwd = true
@@ -151,11 +166,12 @@ export default {
     async submitNewPwd(newPwd) {
       try {
         const { username, password: oldPwd, remember } = this.record
+        const { token } = store.state.user
         await changePassword(username, {
           new_pwd: newPwd,
           old_pwd: oldPwd,
         })
-        this.$store.dispatch('UPDATE_USER_INFO', { username, remember, password: newPwd })
+        this.$store.dispatch('UPDATE_USER_INFO', { username, remember, password: newPwd, token })
         this.returnToPageBeforeLogin()
       } catch (error) {
         console.error(error)

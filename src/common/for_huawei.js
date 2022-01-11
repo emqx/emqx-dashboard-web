@@ -1,4 +1,4 @@
-import { auth } from '@/api/common'
+import { login } from '@/api/common'
 import { toLogin, getBasicAuthInfo } from '../common/utils'
 // Before entering the page, check whether the user is the default password;
 // in order to prevent the user from modifying the default password after logging in,
@@ -10,7 +10,7 @@ const checkIsDefaultPwd = async () => {
     // do not handle it
     return
   }
-  const { is_default_password, is_weak_password } = await auth({ username, password })
+  const { is_default_password, is_weak_password } = await login({ username, password })
   if (is_default_password || is_weak_password) {
     toLogin()
   }
