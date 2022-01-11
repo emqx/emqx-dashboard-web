@@ -19,10 +19,9 @@ const router = new Router({
   routes,
 })
 
-router.beforeEach((form, to, next) => {
+router.beforeEach((to, from, next) => {
   const { authRequired = false, before, hideLeftBar = false } = to.meta
-  const { hideLeftBar: hideLeftBarForm = false } = form.meta
-
+  const { hideLeftBar: hideLeftBarForm = false } = to.meta
   if (authRequired && !getBasicAuthInfo().username) {
     toLogin()
   } else {

@@ -29,6 +29,7 @@
 import LeftBar from '@/components/LeftBar'
 import NavHeader from '@/components/NavHeader'
 import NavTabs from '@/components/NavTabs.vue'
+import checkIsDefaultPwd from '@/common/for_huawei'
 
 export default {
   name: 'Layout',
@@ -37,6 +38,10 @@ export default {
     NavHeader,
     LeftBar,
     NavTabs,
+  },
+
+  created() {
+    checkIsDefaultPwd()
   },
 
   data() {

@@ -14,7 +14,6 @@
         <el-input v-model="record.pwdConfirm" type="password" :placeholder="$t('General.confirmPassword')"></el-input>
       </el-form-item>
       <el-button class="sub-btn" type="primary" @click="submit">{{ $t('General.changePassword') }}</el-button>
-      <el-button class="btn-skip" @click="skip" type="text">{{ $t('Base.skip') }}</el-button>
     </el-form>
   </div>
 </template>
@@ -54,9 +53,6 @@ export default {
     async submit() {
       await this.$refs.formCom.validate()
       this.$emit('submit', this.record.pwd)
-    },
-    skip() {
-      this.$emit('skip')
     },
   },
 }
