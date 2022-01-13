@@ -23,7 +23,7 @@
       <div v-for="item in dataTypeFilter" :key="item.value">
         <template v-if="item !== bigChartItem">
           <el-col :span="8">
-            <a-card class="polyline-card">
+            <a-card class="polyline-card" :loading="isLoading">
               <div class="card-title">{{ item.text }}</div>
               <span class="enlarge-icon" @click="bigChartItem = item"></span>
               <polyline-chart
@@ -84,6 +84,7 @@ export default {
         sent: totalColors,
         received: totalColors,
       },
+      isLoading: false,
     }
   },
 
@@ -108,23 +109,34 @@ export default {
     _formatTime(time) {
       return Moment(time).utcOffset(0).format('HH:mm')
     },
-    loadMetricsLogData() {
+    async loadMetricsLogData() {
       try {
-        this.dataTypeList.forEach(async (typeName) => {
-          const data = await loadMetricsLog(false, typeName)
-          this.metricTitles = Object.keys(data)
-          this.metricLog[typeName] = this.chartDataFill(this.metricTitles.length)
-          const currentData = this.metricLog[typeName]
-          this.metricTitles.forEach((key, index) => {
-            data[key].forEach((item) => {
-              currentData[index].xData.push(item[0])
-              currentData[index].yData.push(item[1])
-            })
-          })
-        })
+        this.isLoading = true
+        await Promise.all(
+          this.dataTypeList.map(async (typeName) => {
+            try {
+              const data = await loadMetricsLog(false, typeName)
+              console.log(data)
+              this.metricTitles = Object.keys(data)
+              this.metricLog[typeName] = this.chartDataFill(this.metricTitles.length)
+              const currentData = this.metricLog[typeName]
+              this.metricTitles.forEach((key, index) => {
+                data[key].forEach((item) => {
+                  currentData[index].xData.push(item[0])
+                  currentData[index].yData.push(item[1])
+                })
+              })
+              return Promise.resolve()
+            } catch (error) {
+              return Promise.resolve()
+            }
+          }),
+        )
+        this.isLoading = false
         this.timerMetrics = setInterval(this.setMetricsChartRealTime, 60000)
       } catch (e) {
         console.error(e)
+        this.isLoading = false
       }
     },
     setMetricsChartRealTime() {
@@ -214,6 +226,9 @@ export default {
 
   .polyline-card {
     height: 255px;
+    &.ant-card-loading {
+      height: auto;
+    }
 
     .enlarge-icon {
       visibility: hidden;
