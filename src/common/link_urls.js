@@ -1,5 +1,5 @@
-import Plugins from '../assets/plugins_links.json'
-import Documents from '../assets/docs_links.json'
+import Plugins from '../assets/plugins_links'
+import Documents from '../assets/docs_links'
 
 export const enDocsLink = Documents.en
 export const zhDocsLink = Documents.zh

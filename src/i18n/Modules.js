@@ -294,4 +294,40 @@ export default {
     zh: ',添加之后即可启用',
     en: ', you can use it after adding this module',
   },
+  trace: {
+    zh: 'Trace 记录',
+    en: 'Trace Log',
+  },
+  messageBacklog: {
+    zh: '消息堆积',
+    en: 'Message backlog',
+  },
+  messageBacklogDesc: {
+    zh: '消息一直处于超时情况下的超时时间',
+    en: 'Message backlog timeout',
+  },
+  highAverageTime: {
+    zh: '平均耗时较高',
+    en: 'High average time',
+  },
+  highAverageTimeDesc: {
+    zh: '消息传递平均时间超过预设阈值',
+    en: 'The average message delivery time exceeds the setting',
+  },
+  latencyTime: {
+    zh: '时延/堆积时长',
+    en: 'Latency / Backlog Time',
+  },
+  updated: {
+    zh: '更新时间',
+    en: 'Updated',
+  },
+  fileInputPlaceholder: {
+    zh: '粘贴或导入文件内容',
+    en: 'Paste or import file contents',
+  },
+  confirmReplacement: {
+    zh: '是否确认替换当前文件内容',
+    en: 'Are you sure to replace the contents of the current file',
+  },
 }
