@@ -177,7 +177,7 @@ export default {
               }
               await changePassword(username, passwordData)
               // 更新当前用户
-              const { remember, token } = store.state.user
+              const { remember, token } = vue.$store.state.user
               vue.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, token })
             }
             vue.$message.success(vue.$t('Base.editSuccess'))
