@@ -111,6 +111,49 @@
             </li>
 
             <li class="field-info-item">
+              <div class="field-title">
+                {{ $t('RuleEngine.sqlPassed') }}
+                <el-popover width="220" placement="right" trigger="hover">
+                  {{ $t('RuleEngine.sqlPassedDesc') }}
+                  <i slot="reference" class="icon el-icon-question"></i>
+                </el-popover>
+                :
+              </div>
+              <span class="field-value">
+                {{ currentRules.metricsData.matched }}
+                <span class="unit">{{ $t('RuleEngine.times') }}</span>
+              </span>
+            </li>
+
+            <li class="field-info-item">
+              <div class="field-title">
+                {{ $t('RuleEngine.sqlFailed') }}
+                <el-popover width="220" placement="right" trigger="hover">
+                  {{ $t('RuleEngine.sqlFailedDesc') }}
+                  <i slot="reference" class="icon el-icon-question"></i> </el-popover
+                >:
+              </div>
+              <span class="field-value">
+                {{ currentRules.metricsData.exception }}
+                <span class="unit">{{ $t('RuleEngine.times') }}</span>
+              </span>
+            </li>
+
+            <li class="field-info-item">
+              <div class="field-title">
+                {{ $t('RuleEngine.sqlNoResult') }}
+                <el-popover width="220" placement="right" trigger="hover">
+                  {{ $t('RuleEngine.sqlNoResultDesc') }}
+                  <i slot="reference" class="icon el-icon-question"></i> </el-popover
+                >:
+              </div>
+              <span class="field-value">
+                {{ currentRules.metricsData.no_result }}
+                <span class="unit">{{ $t('RuleEngine.times') }}</span>
+              </span>
+            </li>
+
+            <li class="field-info-item">
               <div class="field-title">{{ $t('RuleEngine.currentSpeed') }}:</div>
 
               <span class="field-value">
