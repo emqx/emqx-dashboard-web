@@ -63,7 +63,7 @@
                       type="datetime"
                       value-format="timestamp"
                       size="small"
-                      :placeholder="$t('Clients.createdAt')"
+                      :placeholder="$t('Clients.connectionAt')"
                     >
                     </el-date-picker>
                   </el-col>
