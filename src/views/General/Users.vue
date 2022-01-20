@@ -77,6 +77,7 @@
 <script>
 import { loadUser, createUser, updateUser, destroyUser, changePassword } from '@/api/function'
 import pwdRule, { pwdRegExp } from '@/common/pwdRule'
+import { toLogin } from '@/common/utils'
 
 export default {
   name: 'Users',
@@ -101,6 +102,7 @@ export default {
       accessType: '',
       allowChange: false,
       record: {},
+      isCurrentUserBeingEdited: false,
       rules: {
         username: [{ required: true, message: this.$t('General.enterOneUserName') }],
         tags: [{ required: true, message: this.$t('General.pleaseEnterNotes') }],
@@ -143,6 +145,7 @@ export default {
       if (type === 'edit') {
         Object.assign(this.record, item)
         this.accessType = 'edit'
+        this.isCurrentUserBeingEdited = item.username === this.$store.state.user.username
       }
       this.dialogVisible = true
     },
@@ -176,9 +179,9 @@ export default {
                 old_pwd: vue.record.password,
               }
               await changePassword(username, passwordData)
-              // 更新当前用户
-              const { remember, token } = vue.$store.state.user
-              vue.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, token })
+              if (vue.isCurrentUserBeingEdited) {
+                window.setTimeout(toLogin, 500)
+              }
             }
             vue.$message.success(vue.$t('Base.editSuccess'))
             vue.dialogVisible = false
