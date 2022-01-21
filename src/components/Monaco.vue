@@ -215,6 +215,9 @@ export default {
 </script>
 
 <style lang="scss">
+.monaco-container {
+  padding-bottom: 2px;
+}
 .monaco-view {
   height: 100%;
   position: relative;
