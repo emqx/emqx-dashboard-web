@@ -10,7 +10,7 @@ export const loadConfig = async () => {
   const monitorResList = []
 
   res.forEach((item) => {
-    if (item.type.includes('mon')) {
+    if (item.type.includes('mon') || item.type === 'license') {
       monitorResList.push(item)
     }
   })
