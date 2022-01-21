@@ -263,6 +263,54 @@ export default {
     zh: '发送的 MQTT 报文数量',
     en: 'Number of MQTT messages sent',
   },
+  recv_msg_qos0: {
+    zh: 'QoS 0 消息流入',
+    en: 'QoS 0 Messages Received',
+  },
+  recv_msg_qos1: {
+    zh: 'QoS 1 消息流入',
+    en: 'QoS 1 Messages Received',
+  },
+  recv_msg_qos2: {
+    zh: 'QoS 2 消息流入',
+    en: 'QoS 2 Messages Received',
+  },
+  recv_msg_dropped: {
+    zh: '消息流入丢弃数',
+    en: 'Dropped Messages In',
+  },
+  recv_msg_dropped_expired: {
+    zh: '消息流入丢弃数（过期）',
+    en: 'Dropped Messages In(Expired)',
+  },
+  send_msg_qos0: {
+    zh: 'QoS 0 消息流出',
+    en: 'QoS 0 Messages Sent',
+  },
+  send_msg_qos1: {
+    zh: 'QoS 1 消息流出',
+    en: 'QoS 1 Messages Sent',
+  },
+  send_msg_qos2: {
+    zh: 'QoS 2 消息流出',
+    en: 'QoS 2 Messages Sent',
+  },
+  send_msg_dropped: {
+    zh: '消息流出丢弃数',
+    en: 'Dropped Messages Out',
+  },
+  send_msg_dropped_expired: {
+    zh: '消息流出丢弃数（过期）',
+    en: 'Dropped Messages Out(Expired)',
+  },
+  send_msg_dropped_queue_full: {
+    zh: '消息流出丢弃数（队列已满）',
+    en: 'Dropped Messages Out(Queue Full)',
+  },
+  send_msg_dropped_too_large: {
+    zh: '消息流出丢弃数（消息过大）',
+    en: 'Dropped Messages Out(Message Oversize)',
+  },
   kickOut: {
     zh: '踢除',
     en: 'Kick Out',

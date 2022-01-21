@@ -183,6 +183,54 @@
                         <div class="field-title">{{ $t('Clients.send_pkt_desc') }}:</div>
                         <span>{{ record.send_pkt }}</span>
                       </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.recv_msg_qos0') }}:</div>
+                        <span>{{ record['recv_msg.qos0'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.recv_msg_qos1') }}:</div>
+                        <span>{{ record['recv_msg.qos1'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.recv_msg_qos2') }}:</div>
+                        <span>{{ record['recv_msg.qos2'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.recv_msg_dropped') }}:</div>
+                        <span>{{ record['recv_msg.dropped'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.recv_msg_dropped_expired') }}:</div>
+                        <span>{{ record['recv_msg.dropped.expired'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.send_msg_qos0') }}:</div>
+                        <span>{{ record['send_msg.qos0'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.send_msg_qos1') }}:</div>
+                        <span>{{ record['send_msg.qos1'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.send_msg_qos2') }}:</div>
+                        <span>{{ record['send_msg.qos2'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.send_msg_dropped') }}:</div>
+                        <span>{{ record['send_msg.dropped'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.send_msg_dropped_expired') }}:</div>
+                        <span>{{ record['send_msg.dropped.expired'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.send_msg_dropped_queue_full') }}:</div>
+                        <span>{{ record['send_msg.dropped.queue_full'] }}</span>
+                      </li>
+                      <li class="field-info-item">
+                        <div class="field-title">{{ $t('Clients.send_msg_dropped_too_large') }}:</div>
+                        <span>{{ record['send_msg.dropped.too_large'] }}</span>
+                      </li>
                     </ul>
                   </el-col>
                 </el-row>
