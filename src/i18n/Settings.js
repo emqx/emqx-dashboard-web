@@ -339,9 +339,9 @@ export default {
     of processes exceeds this value, an alarm will be triggered`,
   },
   process_low_watermark: {
-    zh: '当前进程数量占进程最大数量的百分比回落到该值以下时将触发告警',
+    zh: '当前进程数量占进程最大数量的百分比回落到该值以下时将清除告警',
     en: `
-    An alarm will be triggered when the percentage of the current number of
+    An alarm will be cleared when the percentage of the current number of
     processes in the maximum number of processes falls below this value`,
   },
   busy_dist_port: {
@@ -381,6 +381,14 @@ export default {
   cpu_low_watermark: {
     zh: 'CPU 占用率回落到该值以下时将清除告警',
     en: 'The alarm will be cleared when the CPU usage falls below this value',
+  },
+  connection_high_watermark_alarm: {
+    zh: '当前连接数量占 License 规格的百分比超过该值时将触发告警',
+    en: 'When the percentage of the current number of connections to the total number of licenses exceeds this value, an alarm will be triggered',
+  },
+  connection_low_watermark_alarm: {
+    zh: '当前连接数量占 License 规格的百分比回落到该值以下时将清除告警',
+    en: 'When the percentage of the current number of connections to the license specification falls below this value, the alarm will be cleared.',
   },
   mem_check_interval: {
     zh: '内存占用率检查周期',
