@@ -110,6 +110,11 @@ export const ruleEngineProvider = [
     documentation: VueI18n.RuleEngine.session_unsubscribed,
     type: 'Method',
   },
+  {
+    name: '"$events/delivery_dropped"',
+    documentation: VueI18n.RuleEngine.delivery_dropped,
+    type: 'Method',
+  },
 ]
 
 export default []

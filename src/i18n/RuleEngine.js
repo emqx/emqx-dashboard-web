@@ -431,6 +431,10 @@ export default {
     en: 'session unsubscribed',
     zh: '会话取消订阅',
   },
+  delivery_dropped: {
+    en: 'delivery dropped',
+    zh: '消息投递丢弃',
+  },
   parse_confirm: {
     en: 'Detected incompatible old SQL syntax, confirm to automatically convert it to the new version?',
     zh: '检测到不兼容的旧版 SQL 语法，是否自动转换为新版语法？',

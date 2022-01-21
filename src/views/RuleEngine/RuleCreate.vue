@@ -285,6 +285,7 @@ export default {
         'events/client_disconnected',
         'events/session_subscribed',
         'events/session_unsubscribed',
+        'events/delivery_dropped',
       ]
       let values = null
       let value = ''
