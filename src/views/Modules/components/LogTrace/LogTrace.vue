@@ -319,6 +319,8 @@ export default {
       },
       viewLogName: '',
       nextPageLoading: '',
+      // Prevents monaco components from repeatedly triggering load events for unknown reasons
+      isLoadedDataWithin300MS: false,
     }
   },
   created() {
@@ -413,12 +415,20 @@ export default {
       this.viewNodeLoading = false
     },
     async loadLogDetail(name) {
+      if (this.isLoadedDataWithin300MS) {
+        return
+      }
+      this.isLoadedDataWithin300MS = true
+      window.setTimeout(() => {
+        this.isLoadedDataWithin300MS = false
+      }, 300)
+
       const params = { position: LOG_VIEW_POSITION, bytes: BYTEPERPAGE, node: this.node }
       const logResp = await getTraceLog(name, params).catch(() => {})
       if (logResp && logResp.items) {
         const { meta = {} } = logResp
         this.logContent += logResp.items
-        LOG_VIEW_POSITION += meta.position || BYTEPERPAGE
+        LOG_VIEW_POSITION = meta.position ? meta.position : LOG_VIEW_POSITION + BYTEPERPAGE
       }
     },
     async download(row) {
