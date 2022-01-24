@@ -225,6 +225,10 @@ export default {
     zh: '平均耗时',
     en: 'Mean Latency',
   },
+  duration: {
+    zh: '时长',
+    en: 'Duration',
+  },
   clearSlowSubscriptionConfirm: {
     zh: '清除当前所有数据并重新统计慢订阅',
     en: 'Clear current data and re-count slow subscription',

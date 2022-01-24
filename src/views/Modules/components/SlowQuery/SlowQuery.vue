@@ -7,8 +7,8 @@
             {{ $t('Modules.clearData') }}
           </el-button>
         </div>
-        <el-table :data="tableData">
-          <el-table-column prop="clientid" label="Client ID">
+        <el-table :data="tableData" @sort-change="sortTable">
+          <el-table-column prop="clientid" :label="$t('Clients.clientId')">
             <template slot-scope="{ row }">
               <router-link
                 :to="{
@@ -20,25 +20,12 @@
               </router-link>
             </template>
           </el-table-column>
-          <el-table-column :filters="typeFilters" filter-placement="bottom-start" :filter-method="filterType">
-            <template slot="header">
-              <span>{{ $t('General.reason') }}</span>
-              <el-popover placement="top-start" width="320" trigger="hover">
-                <div>
-                  <b>{{ $t('Modules.messageBacklog') }}</b> {{ ': ' + $t('Modules.messageBacklogDesc') }}
-                  <br />
-                  <b>{{ $t('Modules.highAverageTime') }}</b> {{ ': ' + $t('Modules.highAverageTimeDesc') }}
-                </div>
-                <i slot="reference" class="el-icon-question icon-column-desc"></i>
-              </el-popover>
-            </template>
-            <template slot-scope="{ row }">
-              {{ reasonText(row.type) }}
-            </template>
+
+          <el-table-column prop="topic" :label="$t('Topics.topic')" />
+          <el-table-column prop="timespan" :label="$t('Modules.duration')" sortable="custom">
+            <template slot-scope="{ row }"> {{ formatTime(row.timespan) }} </template>
           </el-table-column>
-          <el-table-column prop="latency" :label="$t('Modules.latencyTime')" sortable>
-            <template slot-scope="{ row }"> {{ formatTime(row.latency) }} </template>
-          </el-table-column>
+          <el-table-column prop="node" :label="$t('Clients.node')" />
           <el-table-column prop="last_update_time" :label="$t('Modules.updated')">
             <template slot-scope="{ row }">
               {{ formatDate(row.last_update_time) }}
@@ -51,11 +38,11 @@
             background
             layout="total, sizes, prev, pager, next"
             :page-sizes="[20, 50, 100, 500]"
-            :page-size.sync="params._limit"
-            :current-page.sync="params._page"
-            :total="count"
-            @size-change="handleSizeChange"
-            @current-change="getTopicRecordData"
+            :page-size.sync="params.limit"
+            :current-page.sync="params.page"
+            :total="params.count"
+            @size-change="refreshLocalData"
+            @current-change="getPageData"
           >
           </el-pagination>
         </div>
@@ -67,18 +54,23 @@
 <script>
 import moment from 'moment'
 import { querySlowQueryTopicData, clearSlowQueryData } from '@/api/modules'
+import paging from '@/common/paging'
+
+const { setTotalData, getAPageData } = paging()
 
 export default {
   name: 'SlowQuery',
   data() {
     return {
+      totalSlowSubData: [],
       tableData: [],
       params: {
-        _page: 1,
-        _limit: 20,
+        page: 1,
+        limit: 20,
+        count: 0,
       },
-      count: 0,
       isTableLoading: false,
+      tableSorter: undefined,
       typeFilters: [
         { text: this.$t('Modules.highAverageTime'), value: 'average' },
         { text: this.$t('Modules.messageBacklog'), value: 'expire' },
@@ -97,8 +89,10 @@ export default {
         const {
           items = [],
           meta: { count = 0 },
-        } = await querySlowQueryTopicData(this.params)
-        this.tableData = items
+        } = await querySlowQueryTopicData()
+        this.totalSlowSubData = items
+        setTotalData(items)
+        this.getPageData()
         this.count = count
       } catch (error) {
         //
@@ -106,9 +100,26 @@ export default {
         this.isTableLoading = false
       }
     },
-    handleSizeChange() {
-      this.params._page = 1
-      this.getTopicRecordData()
+    getPageData() {
+      const { limit, page } = this.params
+      const { tableSorter } = this
+      const { data, meta } = getAPageData({ limit, page }, [], tableSorter)
+      this.params = meta
+      this.tableData = data
+    },
+    refreshLocalData() {
+      this.params.page = 1
+      this.getPageData()
+    },
+    sortTable(orderMsg) {
+      const { order } = orderMsg
+      this.tableSorter = !order
+        ? undefined
+        : {
+            key: 'timespan',
+            type: order === 'descending' ? 'desc' : 'asc',
+          }
+      this.refreshLocalData()
     },
     async clearData() {
       try {
@@ -119,7 +130,7 @@ export default {
         })
         await clearSlowQueryData()
         this.$message.success(this.$t('Modules.successfulCleanSlowSubscription'))
-        this.handleSizeChange()
+        this.getTopicRecordData()
       } catch (error) {
         //
       }
