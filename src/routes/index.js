@@ -22,8 +22,10 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   const { authRequired = false, before, hideLeftBar = false } = to.meta
   const { hideLeftBar: hideLeftBarForm = false } = from.meta
-  if (authRequired && !getBasicAuthInfo().username && to.name !== 'login') {
-    toLogin()
+  if (authRequired && !getBasicAuthInfo().username) {
+    if (!toLogin()) {
+      next()
+    }
   } else {
     if (before) {
       before()

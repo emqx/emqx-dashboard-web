@@ -29,7 +29,11 @@ export function getBasicAuthInfo() {
  */
 export function toLogin() {
   store.dispatch('UPDATE_USER_INFO', { logOut: true })
-  router.push({ path: '/login', query: { to: router.fullPath } })
+  if (!(router.currentRoute && router.currentRoute.name === 'login')) {
+    router.push({ path: '/login', query: { to: router.fullPath } })
+    return true
+  }
+  return false
 }
 
 /**
