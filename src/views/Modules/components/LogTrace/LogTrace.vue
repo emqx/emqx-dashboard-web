@@ -177,14 +177,14 @@
         </el-row>
         <el-row>
           <div :style="{ height: initialHeight + 'px' }" class="m-container" ref="monacoContainer">
-            <monaco
+            <log-content
               id="log-trace"
               v-model="logContent"
               :scroll-loading="true"
               :scroll-func="scrollLoadFunc"
               lang="powershell"
               :disabled="true"
-            ></monaco>
+            />
           </div>
         </el-row>
       </div>
@@ -208,7 +208,7 @@
 import moment from 'moment'
 import { getTraceList, addTrace, getTraceLog, downloadTrace, stopTrace, deleteTrace } from '@/api/logTrace'
 import { loadNodes as loadNodesApi } from '@/api/overview'
-import Monaco from '@/components/Monaco.vue'
+import LogContent from './LogContent.vue'
 
 let LOG_VIEW_POSITION = 0
 let LAST_ACTIVED_SCROLLTOP = 0
@@ -232,7 +232,7 @@ const typeOptions = [
 ]
 
 export default {
-  components: { Monaco },
+  components: { LogContent },
   name: 'LogTrace',
   data() {
     const nameValidator = (rule, value, callback) => {
