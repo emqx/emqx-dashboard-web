@@ -24,7 +24,7 @@
         </div>
 
         <el-row :gutter="40" class="metrics-wrapper">
-          <el-col class="metrics-card" :span="8">
+          <el-col class="metrics-card" :span="4">
             <div class="card-title">
               {{ $t('RuleEngine.numberOfHits') }}
             </div>
@@ -36,7 +36,43 @@
               {{ $t('RuleEngine.numberOfRulesExecutedAfterEnabling') }}
             </div>
           </el-col>
-          <el-col class="metrics-card" :span="8">
+          <el-col class="metrics-card" :span="4">
+            <div class="card-title">
+              {{ $t('RuleEngine.sqlPassed') }}
+            </div>
+            <div class="card-value">
+              {{ record.metricsData.matched }}
+              <span class="card-unit">{{ $t('RuleEngine.times') }}</span>
+            </div>
+            <div class="card-desc">
+              {{ $t('RuleEngine.sqlPassedDesc') }}
+            </div>
+          </el-col>
+          <el-col class="metrics-card" :span="4">
+            <div class="card-title">
+              {{ $t('RuleEngine.sqlFailed') }}
+            </div>
+            <div class="card-value">
+              {{ record.metricsData.exception }}
+              <span class="card-unit">{{ $t('RuleEngine.times') }}</span>
+            </div>
+            <div class="card-desc">
+              {{ $t('RuleEngine.sqlFailedDesc') }}
+            </div>
+          </el-col>
+          <el-col class="metrics-card" :span="4">
+            <div class="card-title">
+              {{ $t('RuleEngine.sqlNoResult') }}
+            </div>
+            <div class="card-value">
+              {{ record.metricsData.no_result }}
+              <span class="card-unit">{{ $t('RuleEngine.times') }}</span>
+            </div>
+            <div class="card-desc">
+              {{ $t('RuleEngine.sqlNoResultDesc') }}
+            </div>
+          </el-col>
+          <el-col class="metrics-card" :span="4">
             <div class="card-title">
               {{ $t('RuleEngine.currentSpeed') }}
             </div>
@@ -51,7 +87,7 @@
             </div>
           </el-col>
 
-          <el-col class="metrics-card last-child" :span="8">
+          <el-col class="metrics-card last-child" :span="4">
             <div class="card-title">
               {{ $t('RuleEngine.last5MinutesSpeed') }}
             </div>
