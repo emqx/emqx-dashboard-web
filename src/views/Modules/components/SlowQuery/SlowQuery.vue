@@ -86,14 +86,10 @@ export default {
     async getTopicRecordData() {
       try {
         this.isTableLoading = true
-        const {
-          items = [],
-          meta: { count = 0 },
-        } = await querySlowQueryTopicData()
-        this.totalSlowSubData = items
-        setTotalData(items)
+        const data = await querySlowQueryTopicData()
+        this.totalSlowSubData = data || []
+        setTotalData(data)
         this.getPageData()
-        this.count = count
       } catch (error) {
         //
       } finally {
