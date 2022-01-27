@@ -56,7 +56,7 @@
           </el-col>
           <el-col v-if="oper !== 'view'" :span="12">
             <el-form-item prop="password" :label="$t('Base.password')">
-              <el-input v-model="record.password" type="password" show-password></el-input>
+              <el-input v-model="record.password" type="password" show-password autocomplete="new-password"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">

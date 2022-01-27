@@ -36,6 +36,7 @@
                 :placeholder="$t('Base.password')"
                 show-password
                 clearable
+                autocomplete="new-password"
               >
               </el-input>
             </el-form-item>
@@ -121,7 +122,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item prop="password" label="Password">
-              <el-input v-model="editRecord.password" type="password"></el-input>
+              <el-input v-model="editRecord.password" type="password" autocomplete="new-password"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -261,6 +262,9 @@ export default {
         login: data[type],
         password: data.password,
       }
+      this.$nextTick(() => {
+        this.$refs.editRecord.clearValidate()
+      })
     },
     async handleDelete(row, type) {
       this.$confirm(this.$t('Modules.confirmDelete'), this.$t('Base.warning'), {
