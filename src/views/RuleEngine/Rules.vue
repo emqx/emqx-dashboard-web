@@ -120,7 +120,7 @@
                 :
               </div>
               <span class="field-value">
-                {{ currentRules.metricsData.matched }}
+                {{ currentRules.metricsData.passed }}
                 <span class="unit">{{ $t('RuleEngine.times') }}</span>
               </span>
             </li>
