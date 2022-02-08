@@ -549,7 +549,7 @@ export default {
         this.$set(this.originRecord.config, key, value)
       })
     },
-    addConfigAccordingType(extraConfigs, type, isInit = false) {
+    addConfigAccordingType(extraConfigs, type, totalExtraConfigs, isInit = false) {
       const [...commonConfig] = this.originConfigList
       const { ...rulesCommonConfig } = this.originRules.config
       const { ...recordCommonConfig } = this.originRecord.config
