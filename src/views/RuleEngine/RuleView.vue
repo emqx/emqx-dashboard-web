@@ -41,7 +41,7 @@
               {{ $t('RuleEngine.sqlPassed') }}
             </div>
             <div class="card-value">
-              {{ record.metricsData.matched }}
+              {{ record.metricsData.passed }}
               <span class="card-unit">{{ $t('RuleEngine.times') }}</span>
             </div>
             <div class="card-desc">
