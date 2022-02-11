@@ -1,16 +1,31 @@
 import http from '@/common/http'
 
+const sortMonitorResList = (monitorResList) => {
+  const arrSort = ['vm_mon', 'license', 'os_mon']
+  return monitorResList.sort(({ type: type1 }, { type: type2 }) => {
+    try {
+      return arrSort.findIndex((type) => type === type1) - arrSort.findIndex((type) => type === type2)
+    } catch (error) {
+      return 0
+    }
+  })
+}
+
 // 加载配置数据
 export const loadConfig = async () => {
   const res = await http.get('/configs')
-  const mqttRes = res.find(($) => $.type === 'emqx').configs
-  const monitorResList = []
+
+  const findResult = res.find(($) => $.type === 'emqx')
+  const mqttRes = findResult ? findResult.configs : {}
+
+  let monitorResList = []
 
   res.forEach((item) => {
     if (item.type.includes('mon')) {
       monitorResList.push(item)
     }
   })
+  monitorResList = sortMonitorResList(monitorResList)
   return {
     mqttRes,
     monitorResList,
