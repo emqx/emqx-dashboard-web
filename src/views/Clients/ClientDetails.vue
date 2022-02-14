@@ -201,7 +201,7 @@
                       </li>
                       <li class="field-info-item">
                         <div class="field-title">{{ $t('Clients.recv_msg_dropped_expired') }}:</div>
-                        <span>{{ record['recv_msg.dropped.expired'] }}</span>
+                        <span>{{ record['recv_msg.dropped.await_pubrel_timeout'] }}</span>
                       </li>
                       <li class="field-info-item">
                         <div class="field-title">{{ $t('Clients.send_msg_qos0') }}:</div>
