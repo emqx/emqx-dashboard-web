@@ -40,7 +40,7 @@
             </el-col>
           </template>
 
-          <div v-for="(item, index) in showConfigList" :key="index">
+          <div class="config-item" v-for="(item, index) in showConfigList" :key="index">
             <el-col :span="12">
               <el-form-item :label="item.key" v-bind="item.formItemAttributes">
                 <template v-if="item.key === 'zone'">
@@ -480,6 +480,18 @@ export default {
       height: 1px;
       background-color: #edeef2;
     }
+  }
+  .config-item {
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+  }
+  .el-form-item__label {
+    word-break: break-all;
+    line-height: 1.2;
   }
 }
 </style>
