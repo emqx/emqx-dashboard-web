@@ -95,9 +95,9 @@
               <span>
                 {{ `${$t('Overview.allConnection')}: ${_formatNumber(currentMetrics.connection)}` }}
               </span>
-              <span>
+              <!-- <span>
                 {{ `${$t('Overview.limit')}: ${_formatNumber(license.max_connections)}` }}
-              </span>
+              </span> -->
             </div>
           </div>
         </a-card>
@@ -134,7 +134,7 @@
 
     <polyline-cards></polyline-cards>
 
-    <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="isLicenseLoading && pageLoading">
+    <!-- <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="isLicenseLoading && pageLoading">
       <div class="emq-title">
         {{ $t('Overview.license') }}
       </div>
@@ -198,9 +198,9 @@
           </el-tooltip>
         </div>
       </div>
-    </a-card>
+    </a-card> -->
 
-    <el-dialog
+    <!-- <el-dialog
       title="标题"
       :width="`${licenseTipWidth}px`"
       :visible.sync="licenseTipVisible"
@@ -224,7 +224,7 @@
       <div class="tip-button">
         <el-button type="primary" size="small" @click="licenseTipVisible = false">{{ $t('Overview.konw') }}</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
