@@ -21,7 +21,7 @@
         </transition>
       </div>
     </el-main>
-    <LicenseDialog v-model="licenseTipVisible" />
+    <!-- <LicenseDialog v-model="licenseTipVisible" /> -->
   </el-container>
 </template>
 

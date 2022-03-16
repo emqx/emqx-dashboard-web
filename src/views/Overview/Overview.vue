@@ -95,9 +95,9 @@
               <span>
                 {{ `${$t('Overview.allConnection')}: ${_formatNumber(currentMetrics.connection)}` }}
               </span>
-              <span>
+              <!-- <span>
                 {{ `${$t('Overview.limit')}: ${_formatNumber(license.max_connections)}` }}
-              </span>
+              </span> -->
             </div>
           </div>
         </a-card>
@@ -134,7 +134,7 @@
 
     <polyline-cards></polyline-cards>
 
-    <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="isLicenseLoading && pageLoading">
+    <!-- <a-card v-if="$hasShow('monitor.license')" class="license-card" :loading="isLicenseLoading && pageLoading">
       <div class="emq-title">
         {{ $t('Overview.license') }}
       </div>
@@ -187,7 +187,7 @@
         </div>
         <LicenseUploaded @uploaded="loadLicenseData" />
       </template>
-    </a-card>
+    </a-card> -->
   </div>
 </template>
 
