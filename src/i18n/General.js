@@ -4,8 +4,8 @@ export default {
     en: 'Confirm delete?',
   },
   applicationIsCalled: {
-    zh: '应用为调用 REST API 认证凭证，通过 REST API 可查询、调整 EMQ X 集群信息，对设备进行管理操作',
-    en: 'In order to invoke the certificate of REST API, the application can query and adjust EMQ X cluster information through REST API, and manage and operate the equipment',
+    zh: '应用为调用 REST API 认证凭证，通过 REST API 可查询、调整 EMQX 集群信息，对设备进行管理操作',
+    en: 'In order to invoke the certificate of REST API, the application can query and adjust EMQX cluster information through REST API, and manage and operate the equipment',
   },
   appId: {
     zh: '应用 ID',
