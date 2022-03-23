@@ -133,7 +133,7 @@ export default {
         node: 'emqx@127.0.0.1',
         node_status: 'Running',
         otp_release: 'R21/10.3.4',
-        sysdescr: 'EMQ X Broker',
+        sysdescr: 'EMQX Broker',
         uptime: '2 days,6 hours, 47 minutes, 50 seconds',
         version: '0.0.0+build.1.ref6ab9527',
         'subscriptions.shared.max': 0,
