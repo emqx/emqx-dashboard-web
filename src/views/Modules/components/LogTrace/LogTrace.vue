@@ -494,6 +494,9 @@ export default {
       this.viewDialog = false
     },
   },
+  beforeRouteLeave() {
+    this.viewDialog = false
+  },
 }
 </script>
 
