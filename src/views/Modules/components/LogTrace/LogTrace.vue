@@ -121,6 +121,7 @@
                 type="datetimerange"
                 :start-placeholde="$t('LogTrace.startTime')"
                 :end-placeholde="$t('LogTrace.endTime')"
+                :picker-options="pickerOptions"
                 v-model="record.startTime"
               ></el-date-picker>
             </el-form-item>
@@ -244,8 +245,14 @@ export default {
     }
     const needStartTime = this.$t('LogTrace.needStartTime')
     // const needOnePacket = this.$t('LogTrace.needOnePacket')
+    const pickerOptions = {
+      disabledDate(date) {
+        return date.getTime() < new Date(new Date().setHours(0)).getTime()
+      },
+    }
     return {
       typeOptions,
+      pickerOptions,
       // aTraceTb: [],
       traceTable: [],
       nodes: [],
