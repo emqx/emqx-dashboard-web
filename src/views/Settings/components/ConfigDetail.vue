@@ -314,6 +314,25 @@ export default {
         setTimeout(this.$refs.record.clearValidate, 10)
       }
     },
+    /**
+     * for validate
+     */
+    setValueToNumWhenTypeIsNumAndHasEnum(key, value) {
+      const target = this.configList.find((item) => item.key === key)
+      if (!target) {
+        return value
+      }
+      const { bindAttributes } = target
+      if (
+        target.type === 'number' &&
+        Array.isArray(bindAttributes.field && bindAttributes.field.list) &&
+        value !== undefined &&
+        value !== ''
+      ) {
+        return Number(value)
+      }
+      return value
+    },
     assignEditData() {
       const { ...editConfig } = this.editConfig
       Object.keys(editConfig).forEach((key) => {
@@ -321,6 +340,7 @@ export default {
           editConfig[key] = ''
           this.nullKeys.push(key)
         }
+        editConfig[key] = this.setValueToNumWhenTypeIsNumAndHasEnum(key, editConfig[key])
         this.record.configs[key] = editConfig[key]
         this.originRecord.configs[key] = editConfig[key]
       })

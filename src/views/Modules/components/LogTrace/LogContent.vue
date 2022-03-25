@@ -175,7 +175,6 @@ export default {
         foreground,
         ...otherConfig,
       }))
-      debugger
       const specialMsgRules = highlightLogTargetArr.map(({ type, color: foreground }) => ({
         token: `${CLASS_PREFIX}${type}`,
         foreground,
