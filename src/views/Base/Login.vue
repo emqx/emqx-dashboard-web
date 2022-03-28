@@ -171,7 +171,7 @@ export default {
     },
 
     autoLogin() {
-      const { username, password } = this.$route.params
+      const { username, password } = this.$route.query
       this.isNeedAuth = !(username && password)
       if (this.isNeedAuth) {
         return

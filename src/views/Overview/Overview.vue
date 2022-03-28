@@ -154,11 +154,11 @@
             ></el-progress>
           </div>
         </li>
-        <template v-if="license.customer_type !== evaluation">
-          <li class="item">
+        <template>
+          <!-- <li class="item">
             <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
             <span class="value">{{ license.email }}</span>
-          </li>
+          </li> -->
 
           <li class="item">
             <span class="key">{{ $t('Overview.issuedAt') }}:</span>
@@ -172,7 +172,7 @@
         </template>
       </ul>
 
-      <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
+      <!-- <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
         <div
           v-if="license.customer_type === evaluation"
           class="description"
@@ -194,7 +194,7 @@
             <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
           </el-tooltip>
         </div>
-      </div>
+      </div> -->
     </a-card>
 
     <el-dialog
