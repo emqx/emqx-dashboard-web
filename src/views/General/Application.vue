@@ -178,6 +178,11 @@ export default {
         this.$refs.recordForm.resetFields()
       }
     },
+    clearValidate() {
+      if (this.$refs.recordForm) {
+        this.$refs.recordForm.clearValidate()
+      }
+    },
     async loadData() {
       this.tableData = await loadApp()
     },
@@ -209,6 +214,9 @@ export default {
         }
       }
       this.dialogVisible = true
+      this.$nextTick(() => {
+        this.clearValidate()
+      })
     },
     updateApplication(item) {
       updateApp(item.app_id, item).then(() => {
