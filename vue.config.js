@@ -40,8 +40,8 @@ module.exports = {
     before,
     proxy: {
       '/api': {
-        target: process.env.HOST_URL || 'http://192.168.0.234:18083',
-        // target: process.env.HOST_URL || 'http://127.0.0.1:18083',
+        // target: process.env.HOST_URL || 'http://192.168.0.234:18083',
+        target: process.env.HOST_URL || 'http://127.0.0.1:18083',
         changeOrigin: true,
       },
       '/dashboard': {
