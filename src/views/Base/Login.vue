@@ -2,7 +2,9 @@
   <div class="login">
     <a-card v-if="isNeedAuth" class="login-card emq-list-card">
       <div class="split-wrapper">
-        <div class="logo-wrapper"></div>
+        <div class="logo-wrapper">
+          <img class="logo-img" src="../../assets/header_logo.png" alt="logo" />
+        </div>
 
         <div :span="12" class="login-wrapper" v-if="!needChangePwd">
           <div class="emq-title">
@@ -207,24 +209,19 @@ export default {
   }
 
   .logo-wrapper {
-    background-image: url('../../assets/emqx_banner.png');
-    background-size: 100%;
-    background-repeat: no-repeat;
+    background-color: #30333d;
     position: relative;
     height: 512px;
     border-radius: 6px 0 0 6px;
 
-    .logo {
+    .logo-img {
       position: relative;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 10;
       text-align: center;
-
-      img {
-        width: 84px;
-      }
+      height: 48px;
     }
 
     width: 50%;
