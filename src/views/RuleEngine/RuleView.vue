@@ -8,6 +8,9 @@
       </div>
 
       <div class="page-header-top-start btn">
+        <el-button size="small" @click="copyRule">
+          {{ $t('RuleEngine.duplicate') }}
+        </el-button>
         <el-button type="danger" size="small" @click="deleteRule">
           {{ $t('Base.delete') }}
         </el-button>
@@ -249,6 +252,9 @@ export default {
           }, 500)
         })
         .catch(() => {})
+    },
+    copyRule() {
+      this.$router.push({ name: 'rules-create', query: { command: 'copy', rule: this.ruleId } })
     },
   },
 }

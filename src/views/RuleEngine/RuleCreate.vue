@@ -219,6 +219,9 @@ export default {
     sqlProvider() {
       return ruleEngineProvider
     },
+    isCopy() {
+      return this.$route.query.command === 'copy'
+    },
     currentRule() {
       return this.$route.query.rule
     },
@@ -234,7 +237,7 @@ export default {
     const data = await loadTopics()
     this.topics = data.items || []
     if (this.currentRule) {
-      this.isEdit = true
+      this.isEdit = !this.isCopy
       this.loadRule()
     } else {
       this.initData('$events/message_publish')
@@ -409,6 +412,9 @@ export default {
     async loadRule() {
       const rule = await loadRuleDetails(this.currentRule)
       this.record = rule
+      if (this.isCopy) {
+        this.record.id += '_Copy'
+      }
       setTimeout(() => {
         this.$refs.ruleAction.loadActions()
       }, 500)
