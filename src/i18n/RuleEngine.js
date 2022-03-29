@@ -528,4 +528,8 @@ export default {
     zh: 'SQL 成功执行但没有输出结果',
     en: 'SQL executes successfully but no output results',
   },
+  duplicate: {
+    zh: '复制',
+    en: 'Duplicate',
+  },
 }
