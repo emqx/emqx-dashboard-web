@@ -435,6 +435,14 @@ export default {
     en: 'delivery dropped',
     zh: '消息投递丢弃',
   },
+  client_check_acl_complete: {
+    en: 'client check acl complete',
+    zh: '鉴权结果',
+  },
+  client_connack: {
+    en: 'client connack',
+    zh: '连接确认',
+  },
   parse_confirm: {
     en: 'Detected incompatible old SQL syntax, confirm to automatically convert it to the new version?',
     zh: '检测到不兼容的旧版 SQL 语法，是否自动转换为新版语法？',
