@@ -81,10 +81,13 @@
             :label="$t('RuleEngine.responseAction')"
           >
           </el-table-column>
-          <el-table-column width="120px" prop="id">
+          <el-table-column width="180px" prop="id">
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="editRule(row)">
                 {{ $t('Base.edit') }}
+              </el-button>
+              <el-button type="dashed" size="mini" @click="copyRule(row)">
+                {{ $t('RuleEngine.duplicate') }}
               </el-button>
               <el-button type="dashed danger" size="mini" @click="deleteRule(row)">
                 {{ $t('Base.delete') }}
@@ -383,6 +386,9 @@ export default {
     },
     editRule(row) {
       this.$router.push(`/rules/create?rule=${row.id}`)
+    },
+    copyRule({ id }) {
+      this.$router.push({ name: 'rules-create', query: { command: 'copy', rule: id } })
     },
   },
 }
