@@ -450,9 +450,9 @@ export default {
     },
     getProgressColor(val, primaryColor) {
       let color = primaryColor
-      if (val === 100) {
+      if (val > 100) {
         color = '#f5222d'
-      } else if (val >= 85 && val < 100) {
+      } else if (val >= 80 && val <= 100) {
         color = '#faad14'
       }
       return color
