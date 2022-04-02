@@ -116,7 +116,6 @@ export default {
           this.dataTypeList.map(async (typeName) => {
             try {
               const data = await loadMetricsLog(false, typeName)
-              console.log(data)
               this.metricTitles = Object.keys(data)
               this.metricLog[typeName] = this.chartDataFill(this.metricTitles.length)
               const currentData = this.metricLog[typeName]

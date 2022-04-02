@@ -128,6 +128,14 @@ export default {
     },
 
     createSeries() {
+      const isOverflow = this.connectionData.connection > this.maxConnections
+      const isCloseLimit = this.connectionData.connection > this.maxConnections * 0.8
+      let colorConnection = '#70d4b6'
+      let colorActive = '#00aa5b'
+      if (isOverflow || isCloseLimit) {
+        colorConnection = isOverflow ? '#f9878d' : '#fad997'
+        colorActive = isOverflow ? '#e23c39' : '#faad14'
+      }
       return [
         {
           type: 'bar',
@@ -142,7 +150,7 @@ export default {
           name: this.$t('Overview.all'),
           data: [this.connectionData.connection],
           itemStyle: {
-            color: '#70d4b6',
+            color: colorConnection,
           },
           barMinHeight: 6,
         },
@@ -151,7 +159,7 @@ export default {
           name: this.$t('Overview.active'),
           data: [this.connectionData.live_connection],
           itemStyle: {
-            color: '#00aa5b',
+            color: colorActive,
           },
           barMinHeight: 6,
           barGap: '-100%',
