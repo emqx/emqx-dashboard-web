@@ -549,10 +549,35 @@ export default {
         this.$set(this.originRecord.config, key, value)
       })
     },
+    /**
+     * find out which fields need to be added and which fields need to be deleted
+     * @param {Array<ConfigItem>} oldConfig
+     * @param {Array<ConfigItem>} newConfig
+     * @returns {needAdded:Array<string>,needDeleted:Array<string>}
+     */
+    diffConfigList(oldConfig, newConfig) {
+      const oldKeys = oldConfig.map(({ key }) => key)
+      const newKeys = newConfig.map(({ key }) => key)
+      const needDeleted = oldKeys.filter((oldItem) => !newKeys.some((newItem) => newItem === oldItem))
+      const needAdded = newKeys.filter((newItem) => !oldKeys.some((oldItem) => oldItem === newItem))
+      return {
+        needDeleted,
+        needAdded,
+      }
+    },
     addConfigAccordingType(extraConfigs, type, totalExtraConfigs, isInit = false) {
       const [...commonConfig] = this.originConfigList
       const { ...rulesCommonConfig } = this.originRules.config
       const { ...recordCommonConfig } = this.originRecord.config
+      const { needDeleted: needDeletedConfigs, needAdded: needAddedConfigs } = this.diffConfigList(
+        this.configList,
+        commonConfig,
+      )
+      const record = {
+        ..._.omit(this.record.config, needDeletedConfigs),
+        ..._.pick(recordCommonConfig, needAddedConfigs),
+      }
+
       if (Object.keys(extraConfigs).length) {
         const configData = renderParamsForm(extraConfigs, 'config')
         const { form, rules } = configData
@@ -568,11 +593,11 @@ export default {
         }
         this.configList = commonConfig.concat(form)
         this.rules.config = Object.assign(rulesCommonConfig, rules)
-        this.record.config = Object.assign(recordCommonConfig, addConfigs)
+        this.record.config = Object.assign(record, addConfigs)
       } else {
         this.configList = commonConfig
         this.rules.config = rulesCommonConfig
-        this.record.config = recordCommonConfig
+        this.record.config = record
       }
       this.record.config.type = type
       if (this.$refs.record) {
