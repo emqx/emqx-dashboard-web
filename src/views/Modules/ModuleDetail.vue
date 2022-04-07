@@ -112,7 +112,7 @@
                         <!-- input -->
                         <template v-else-if="item.elType !== 'select'">
                           <el-input
-                            v-if="item.type === 'number'"
+                            v-if="item.type === 'number' || item.type === 'integer'"
                             v-model.number="record.config[item.key]"
                             v-bind="item.bindAttributes"
                           >
@@ -133,7 +133,7 @@
                         <!-- select -->
                         <template v-else>
                           <emq-select
-                            v-if="item.type === 'number'"
+                            v-if="item.type === 'number' || item.type === 'integer'"
                             v-model.number="record.config[item.key]"
                             v-bind="item.bindAttributes"
                             class="reset-width"
