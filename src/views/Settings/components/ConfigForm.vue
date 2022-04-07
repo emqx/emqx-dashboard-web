@@ -4,7 +4,6 @@
       ref="record"
       class="basic-config-form"
       size="small"
-      label-suffix=":"
       :label-width="labelWidth"
       label-position="right"
       :model="recordConfig"
@@ -250,6 +249,21 @@ export default {
 
 <style lang="scss">
 .config-form {
+  .el-form-item__label {
+    position: relative;
+    display: flex;
+    height: 32px;
+    align-items: center;
+    justify-content: flex-end;
+    word-break: break-all;
+    line-height: 1.2;
+    &::after {
+      content: ':';
+      position: relative;
+      right: -2px;
+      top: 0;
+    }
+  }
   .show-more {
     text-align: center;
     a {

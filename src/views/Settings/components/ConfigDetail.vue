@@ -5,7 +5,6 @@
         ref="record"
         :class="from === 'listener' ? 'no-form-margin' : 'form-margin'"
         size="small"
-        label-suffix=":"
         :label-width="labelWidth"
         label-position="right"
         :model="record"
@@ -510,8 +509,19 @@ export default {
     }
   }
   .el-form-item__label {
+    position: relative;
+    display: flex;
+    height: 32px;
+    align-items: center;
+    justify-content: flex-end;
     word-break: break-all;
     line-height: 1.2;
+    &::after {
+      content: ':';
+      position: relative;
+      right: -2px;
+      top: 0;
+    }
   }
 }
 </style>
