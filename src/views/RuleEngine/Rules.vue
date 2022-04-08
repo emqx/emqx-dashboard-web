@@ -99,6 +99,9 @@
     </div>
 
     <a-drawer v-bind="rulesDrawer" placement="right" closable :visible="metricsDrawerVisible" @close="onMetricsClose">
+      <el-button class="btn-reset" type="primary" plain size="small" @click="resetStatistics">
+        {{ $t('RuleEngine.resetRuleStatistics') }}
+      </el-button>
       <div class="rule-metrics">
         <div class="metrics-item">
           <div class="metrics-item-title">
@@ -215,7 +218,15 @@
 </template>
 
 <script>
-import { loadRules, loadRuleDetails, loadActions, destroyRule, loadRuleEvents, updateRule } from '@/api/rules'
+import {
+  loadRules,
+  loadRuleDetails,
+  loadActions,
+  destroyRule,
+  loadRuleEvents,
+  updateRule,
+  resetRuleStatistics,
+} from '@/api/rules'
 import { getLink } from '@/common/utils'
 
 export default {
@@ -367,6 +378,21 @@ export default {
       this.metricsDrawerVisible = true
     },
 
+    async refreshMetrics() {
+      this.currentRules = await loadRuleDetails(this.currentRules.id)
+    },
+
+    async resetStatistics() {
+      await this.$msgbox.confirm(this.$t('RuleEngine.resetRuleStatisticsConfirm'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
+      await resetRuleStatistics(this.currentRules.id)
+      this.$message.success(this.$t('RuleEngine.resetSuccessfully'))
+      this.refreshMetrics()
+    },
+
     onMetricsClose() {
       this.metricsDrawerVisible = false
     },
@@ -395,6 +421,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.btn-reset {
+  position: absolute;
+  top: 14px;
+  right: 48px;
+}
 .rule-metrics {
   .metrics-item {
     margin-bottom: 50px;
