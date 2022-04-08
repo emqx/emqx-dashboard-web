@@ -160,4 +160,8 @@ export function updateRule(id, rule = {}) {
   return http.put(`/rules/${id}`, rule)
 }
 
+export function resetRuleStatistics(id) {
+  return http.put(`/rules/${id}/reset_metrics`)
+}
+
 export default {}

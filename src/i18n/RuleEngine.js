@@ -540,4 +540,16 @@ export default {
     zh: '复制',
     en: 'Duplicate',
   },
+  resetRuleStatistics: {
+    zh: '重置指标',
+    en: 'Reset data',
+  },
+  resetRuleStatisticsConfirm: {
+    zh: '是否确认重置该规则统计数据？',
+    en: 'Are you sure you want to reset this rule statistic?',
+  },
+  resetSuccessfully: {
+    zh: '重置成功',
+    en: 'Reset successfully',
+  },
 }

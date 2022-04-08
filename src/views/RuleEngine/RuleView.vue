@@ -11,6 +11,9 @@
         <el-button size="small" @click="copyRule">
           {{ $t('RuleEngine.duplicate') }}
         </el-button>
+        <el-button size="small" type="primary" plain @click="resetStatistics">
+          {{ $t('RuleEngine.resetRuleStatistics') }}
+        </el-button>
         <el-button type="danger" size="small" @click="deleteRule">
           {{ $t('Base.delete') }}
         </el-button>
@@ -161,7 +164,7 @@
 </template>
 
 <script>
-import { loadRuleDetails, destroyRule } from '@/api/rules'
+import { loadRuleDetails, destroyRule, resetRuleStatistics } from '@/api/rules'
 import CodeView from '@/components/CodeView'
 import RuleMetricsTable from './components/RuleMetricsTable'
 import RuleActions from './components/RuleActions'
@@ -253,6 +256,17 @@ export default {
         })
         .catch(() => {})
     },
+    async resetStatistics() {
+      await this.$msgbox.confirm(this.$t('RuleEngine.resetRuleStatisticsConfirm'), {
+        confirmButtonText: this.$t('Base.confirm'),
+        cancelButtonText: this.$t('Base.cancel'),
+        type: 'warning',
+      })
+      await resetRuleStatistics(this.ruleId)
+      this.$message.success(this.$t('RuleEngine.resetSuccessfully'))
+      this.loadData()
+    },
+
     copyRule() {
       this.$router.push({ name: 'rules-create', query: { command: 'copy', rule: this.ruleId } })
     },
@@ -266,6 +280,13 @@ export default {
 
   .field-title {
     width: 100px;
+  }
+
+  .el-button--primary.is-plain {
+    background-color: transparent;
+    &:hover {
+      background-color: #34c388;
+    }
   }
 
   .rule-metrics-table {
