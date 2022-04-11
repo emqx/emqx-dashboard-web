@@ -300,7 +300,7 @@ export default {
     en: `
     You are now using the 10-connection evaluation license.<br>Please
     <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/en/apply-licenses/emqx">upgrade license</a>.
-    If you already applied offcial license,<br>please <a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.io/en/enterprise/${process.env.VUE_APP_VERSION}/getting-started/start.html#license">replace</a> with your official license.
+    If you already applied offcial license,<br>please <a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.com/en/enterprise/${process.env.VUE_APP_VERSION}/getting-started/start.html#license">replace</a> with your official license.
     `,
   },
   konw: {
