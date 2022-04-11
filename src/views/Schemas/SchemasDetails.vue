@@ -297,8 +297,8 @@ export default {
       if (val === this.RESOURCES) {
         const res = await loadResource()
         if (res) {
-          const types = ['parser_tcp', 'parser_http']
-          this.availableResources = res.filter(($) => types.includes($.type))
+          const reg = /^parser_/
+          this.availableResources = res.filter(($) => reg.test($.type))
         }
       }
     },
