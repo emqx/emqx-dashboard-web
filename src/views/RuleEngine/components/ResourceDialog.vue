@@ -231,6 +231,15 @@ export default {
     },
   },
 
+  watch: {
+    dialogVisible(val) {
+      if (!val) {
+        console.log('looked')
+        this.loadingButton = undefined
+      }
+    },
+  },
+
   methods: {
     clearForm() {
       if (this.$refs.record) {
@@ -337,13 +346,15 @@ export default {
         .catch(() => {})
     },
 
-    handleOperateSuccess(test, id) {
+    handleOperateSuccess(isTest, id) {
       // test request not return id
       setTimeout(() => {
         this.loadingButton = undefined
       }, 100)
-      if (test) {
-        this.$message.success(this.$t('RuleEngine.resourceAvailable'))
+      if (isTest) {
+        if (this.dialogVisible) {
+          this.$message.success(this.$t('RuleEngine.resourceAvailable'))
+        }
         return
       }
       const successMsg = this.oper === 'add' ? this.$t('Base.createSuccess') : this.$t('Base.editSuccess')
