@@ -15,7 +15,7 @@
           <el-col :span="12">
             <el-form-item :label="$t('Overview.erlangVMMemory')">
               <span class="form-item-value">
-                {{ record.memory_used | formatMemory }} / {{ record.memory_total | formatMemory }}
+                {{ record.memory_used | formatMemory }}
               </span>
             </el-form-item>
           </el-col>
