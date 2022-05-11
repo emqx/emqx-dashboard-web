@@ -24,7 +24,7 @@
         </div>
 
         <el-row :gutter="40" class="metrics-wrapper">
-          <el-col class="metrics-card" :span="8">
+          <el-col class="metrics-card" :span="4">
             <div class="card-title">
               {{ $t('RuleEngine.numberOfHits') }}
             </div>
@@ -87,7 +87,7 @@
             </div>
           </el-col>
 
-          <el-col class="metrics-card last-child" :span="8">
+          <el-col class="metrics-card last-child" :span="4">
             <div class="card-title">
               {{ $t('RuleEngine.last5MinutesSpeed') }}
             </div>
