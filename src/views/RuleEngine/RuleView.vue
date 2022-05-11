@@ -121,10 +121,8 @@
         <ul class="field-info">
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.topic') }}:</div>
-            <span v-if="configItem.events" class="field-value">
-              <span v-for="(event, index) in configItem.events" :key="index">
-                {{ event.title }} ({{ event.event }})
-              </span>
+            <span class="field-value">
+              {{ configItem.from }}
             </span>
           </li>
           <li class="field-info-item">
@@ -169,6 +167,17 @@ import CodeView from '@/components/CodeView'
 import RuleMetricsTable from './components/RuleMetricsTable'
 import RuleActions from './components/RuleActions'
 
+const handleSQLFromPartStatement = (fromStr) => {
+  return fromStr
+    .trim()
+    .split(',')
+    .map((item) => {
+      const ret = item.trim()
+      return ret.replace(/'|"/g, '')
+    })
+    .join(', ')
+}
+
 export default {
   name: 'RuleView',
 
@@ -206,16 +215,36 @@ export default {
           event: {},
         }
       }
+
       const { rawsql = '' } = this.record
-      const sql = rawsql.replace(/\n/g, ' ')
-      const reField = sql.match(/SELECT (.+) FROM/i)
-      const fields = reField ? reField[1] : '*'
-      const reWhere = sql.match(/(.|\n)+WHERE (?<where>(.|\n)+)/i)
-      const where = reWhere && reWhere.groups && reWhere.groups.where ? reWhere.groups.where : ''
+      const sql = rawsql.trim()
+
+      let fields = ''
+      let fromStr = ''
+      let whereStr = ''
+      let matchResult = null
+
+      const isForeachReg = /^FOREACH/i
+      if (isForeachReg.test(sql)) {
+        matchResult = sql.match(/(.|\n)+WHERE(?<where>(.|\n)+)/)
+      } else {
+        matchResult =
+          sql.match(/^SELECT(?<select>(.|\n)+)FROM(?<from>(.|\n)+)(WHERE(?<where>(.|\n)+))/i) ||
+          sql.match(/^SELECT(?<select>(.|\n)+)FROM(?<from>(.|\n)+)/i)
+      }
+      if (matchResult) {
+        const { groups } = matchResult
+        const { foreach = '', select = '', from = '', where = '' } = groups || {}
+        fields = foreach || select.trim()
+        fromStr = handleSQLFromPartStatement(from)
+        if (where) {
+          whereStr = where.trim()
+        }
+      }
       return {
         fields,
-        where,
-        ...this.record,
+        from: fromStr,
+        where: whereStr,
       }
     },
   },
