@@ -208,10 +208,10 @@ export default {
       }
       const { rawsql = '' } = this.record
       const sql = rawsql.replace(/\n/g, ' ')
-      const reField = sql.match(/SELECT (.+) FROM/)
+      const reField = sql.match(/SELECT (.+) FROM/i)
       const fields = reField ? reField[1] : '*'
-      const reWhere = sql.split(' WHERE ')
-      const where = reWhere && reWhere[1] ? reWhere[1] : ''
+      const reWhere = sql.match(/(.|\n)+WHERE (?<where>(.|\n)+)/i)
+      const where = reWhere && reWhere.groups && reWhere.groups.where ? reWhere.groups.where : ''
       return {
         fields,
         where,
