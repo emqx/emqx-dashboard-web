@@ -298,10 +298,9 @@ export default {
     background: #2f333e;
 
     .logo-img {
-      height: 40px;
+      height: 28px;
       width: auto;
       position: relative;
-      left: -20px;
     }
 
     .line {

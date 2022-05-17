@@ -3,7 +3,7 @@
     <a-card v-if="isNeedAuth" class="login-card emq-list-card">
       <div class="split-wrapper">
         <div class="logo-wrapper">
-          <img class="logo-img" src="../../assets/header_logo.png" alt="logo" />
+          <img class="logo-img" src="../../assets/login-banner.png" alt="logo" />
         </div>
 
         <div :span="12" class="login-wrapper" v-if="!needChangePwd">
