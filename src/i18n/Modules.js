@@ -302,4 +302,8 @@ export default {
     zh: '是否确认替换当前文件内容',
     en: 'Are you sure to replace the contents of the current file',
   },
+  addACL: {
+    zh: '添加 ACL',
+    en: 'Add ACL',
+  },
 }
