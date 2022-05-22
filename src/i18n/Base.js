@@ -159,4 +159,8 @@ export default {
     zh: '下载',
     en: 'Download',
   },
+  search: {
+    zh: '搜索',
+    en: 'Search',
+  },
 }
