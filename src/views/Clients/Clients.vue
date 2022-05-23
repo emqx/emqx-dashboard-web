@@ -74,6 +74,12 @@
                   <el-option v-for="name in protoNames" :key="name" :value="name"> </el-option>
                 </el-select>
               </el-col>
+              <el-col :span="8">
+                <el-select v-model="fuzzyParams.clean_start" size="small" placeholder="Clean Start" clearable>
+                  <el-option label="True" :value="true" />
+                  <el-option label="False" :value="false" />
+                </el-select>
+              </el-col>
             </template>
             <div class="col-oper">
               <el-button type="primary" icon="el-icon-search" size="small" @click="handleSearch">
@@ -247,13 +253,23 @@ export default {
     },
     genQueryParams(params) {
       let newParams = {}
-      const { _like_clientid, _like_username, ip_address, conn_state, proto_name, comparator, _connected_at } = params
+      const {
+        _like_clientid,
+        _like_username,
+        ip_address,
+        conn_state,
+        proto_name,
+        comparator,
+        _connected_at,
+        clean_start,
+      } = params
       newParams = {
         _like_clientid: _like_clientid || undefined,
         _like_username: _like_username || undefined,
         ip_address: ip_address || undefined,
         conn_state: conn_state || undefined,
         proto_name: proto_name || undefined,
+        clean_start: typeof clean_start === 'boolean' ? clean_start : undefined,
       }
       if (_connected_at) {
         const connectedAtKey = `${comparator}_connected_at`
@@ -341,6 +357,9 @@ export default {
       }
       .el-col-8 {
         margin-bottom: 20px;
+        .el-col-8 {
+          margin-bottom: 0;
+        }
       }
       .form-item-row {
         margin-top: 0px;
