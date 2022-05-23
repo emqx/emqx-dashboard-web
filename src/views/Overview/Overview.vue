@@ -174,30 +174,26 @@
           </li>
         </template>
       </ul>
-
-      <div v-if="$hasShow('monitor.connections')" class="license-card-footer">
-        <div
-          v-if="license.customer_type === evaluation"
-          class="description"
-          v-html="$t('Overview.licenseEvaluationTip')"
-        >
-          {{ $t('Overview.licenseEvaluationTip') }}
+      <template v-if="$hasShow('monitor.connections')">
+        <div class="license-card-footer">
+          <div
+            v-if="license.customer_type === evaluation"
+            class="description"
+            v-html="$t('Overview.licenseEvaluationTip')"
+          ></div>
+          <div v-else-if="license.expiry === true" class="description" v-html="$t('Overview.licenseExpiryTip')"></div>
+          <div v-else class="description">{{ $t('Overview.beforeTheCertificateExpires') }}</div>
+          <div
+            v-if="license.type === 'trial' && license.customer_type !== evaluation && license.expiry === false"
+            class="oper"
+          >
+            <el-tooltip effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false">
+              <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
+            </el-tooltip>
+          </div>
         </div>
-        <div v-else-if="license.expiry === true" class="description" v-html="$t('Overview.licenseExpiryTip')">
-          {{ $t('Overview.licenseExpiryTip') }}
-        </div>
-        <div v-else class="description">
-          {{ $t('Overview.beforeTheCertificateExpires') }}
-        </div>
-        <div
-          v-if="license.type === 'trial' && license.customer_type !== evaluation && license.expiry === false"
-          class="oper"
-        >
-          <el-tooltip effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false">
-            <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
-          </el-tooltip>
-        </div>
-      </div>
+        <LicenseUploaded @uploaded="loadLicenseData" />
+      </template>
     </a-card>
 
     <el-dialog
@@ -237,6 +233,7 @@ import SimpleLine from './components/SimpleLine'
 import PercentageCards from './components/PercentageCards'
 import PolylineCards from './components/PolylineCards'
 import ConnectionStatistics from './components/ConnectionStatistics'
+import LicenseUploaded from './components/LicenseUploaded'
 
 export default {
   name: 'Overview',
@@ -247,6 +244,7 @@ export default {
     PercentageCards,
     PolylineCards,
     ConnectionStatistics,
+    LicenseUploaded,
   },
 
   props: {},
@@ -558,6 +556,7 @@ export default {
     .license-card-footer {
       display: flex;
       margin-top: 12px;
+      margin-bottom: 12px;
       align-items: center;
       justify-content: space-between;
 
