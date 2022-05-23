@@ -5,6 +5,7 @@
         <el-row class="search-bar" :gutter="20">
           <el-col :span="8">
             <el-input
+              v-if="type !== '$all'"
               v-model="searchOpt[type]"
               size="small"
               :placeholder="$t(`Clients.${type}`)"
@@ -109,7 +110,7 @@ export default {
       this.listLoading = true
       const searchParams = checkNOmitFromObj({
         topic: this.searchOpt.topic,
-        [this.type]: this.searchOpt[this.type],
+        [`_like_${this.type}`]: this.searchOpt[this.type],
       })
       const data = await loadAcl(this.type, { ...this.aclParams, ...searchParams })
       const {
