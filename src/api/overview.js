@@ -132,4 +132,17 @@ export async function loadAllMetrics() {
   return data
 }
 
+export async function uploadLicense(file) {
+  const reader = new FileReader()
+  reader.readAsText(file)
+  const content = await new Promise((resolve) => {
+    reader.onloadend = (evt) => {
+      if (evt.target.readyState === FileReader.DONE) {
+        resolve(evt.target.result)
+      }
+    }
+  })
+  return http.post('/license/upload', { license: content })
+}
+
 export default {}

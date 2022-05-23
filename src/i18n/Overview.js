@@ -303,6 +303,10 @@ export default {
     If you already applied offcial license,<br>please <a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.com/en/enterprise/${process.env.VUE_APP_VERSION}/getting-started/start.html#license">replace</a> with your official license.
     `,
   },
+  updateLicense: {
+    zh: '更新 License',
+    en: 'Update License',
+  },
   konw: {
     zh: '知道了',
     en: 'Acknowledge',
