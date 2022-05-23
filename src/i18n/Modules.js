@@ -314,4 +314,8 @@ export default {
     zh: '编辑认证',
     en: 'Edits Authentication',
   },
+  onlySupportsExactSearch: {
+    zh: '（只支持精确搜索）',
+    en: '(Only supports exact search)',
+  },
 }
