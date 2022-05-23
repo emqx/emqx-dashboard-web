@@ -362,4 +362,12 @@ export default {
     zh: '添加 ACL',
     en: 'Add ACL',
   },
+  createAuthentication: {
+    zh: '添加认证',
+    en: 'Add Authentication',
+  },
+  editAuthentication: {
+    zh: '编辑认证',
+    en: 'Edits Authentication',
+  },
 }

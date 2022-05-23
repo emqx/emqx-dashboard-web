@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :width="400" :visible.sync="showDialog" :title="$t('Modules.addACL')" :z-index="2000">
+  <el-dialog width="520px" :visible.sync="showDialog" :title="$t('Modules.addACL')" :z-index="2000">
     <el-form :model="record" ref="record" :rules="rules" label-position="top">
       <el-form-item v-if="type !== '$all'" :prop="type" :label="$t(`Clients.${type}`)">
         <el-input v-model="record[type]" size="small" />
@@ -15,7 +15,7 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <span class="dialog-footer">
+      <span class="dialog-footer dialog-align-footer">
         <el-button size="small" @click="showDialog = false">{{ $t('Base.cancel') }}</el-button>
         <el-button type="primary" size="small" @click="save" :loading="addLoading">{{ $t('Base.add') }}</el-button>
       </span>
