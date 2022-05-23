@@ -16,7 +16,7 @@
             <el-input
               v-model="searchOpt.topic"
               size="small"
-              :placeholder="$t('Topics.topic')"
+              :placeholder="$t('Topics.topic') + $t('Modules.onlySupportsExactSearch')"
               @keyup.enter.native="loadData"
             />
           </el-col>
