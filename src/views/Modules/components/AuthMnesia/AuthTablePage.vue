@@ -95,7 +95,7 @@ export default {
   methods: {
     async loadData() {
       this.listLoading = true
-      const searchParams = checkNOmitFromObj({ [this.type]: this.searchOpt[this.type] })
+      const searchParams = checkNOmitFromObj({ [`_like_${this.type}`]: this.searchOpt[this.type] })
       const data = await loadAuth(this.type, { ...this.pageParams, ...searchParams })
       const {
         items = [],
