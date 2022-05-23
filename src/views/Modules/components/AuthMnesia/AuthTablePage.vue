@@ -11,36 +11,24 @@
               @keyup.enter.native="loadData"
             />
           </el-col>
-          <el-col :span="8">
-            <el-input
-              v-model="searchOpt.topic"
-              size="small"
-              :placeholder="$t('Topics.topic')"
-              @keyup.enter.native="loadData"
-            />
-          </el-col>
           <el-col :span="6">
             <el-button type="primary" size="small" @click="loadData">
               {{ $t('Base.search') }}
             </el-button>
           </el-col>
         </el-row>
-        <el-button type="primary" icon="el-icon-plus" size="small" @click="addACL">
+        <el-button type="primary" icon="el-icon-plus" size="small" @click="addAuth">
           {{ $t('Base.add') }}
         </el-button>
       </div>
     </div>
     <el-table :data="tableData" class="data-list" v-loading="listLoading">
-      <el-table-column v-if="type !== '$all'" :prop="type" :label="$t(`Clients.${type}`)"> </el-table-column>
-      <el-table-column prop="topic" :label="$t('Topics.topic')"> </el-table-column>
-      <el-table-column prop="action" :label="$t('Modules.action')"> </el-table-column>
-      <el-table-column prop="access" :label="$t('Modules.isAllow')">
-        <template slot-scope="{ row }">
-          {{ row.access === 'allow' ? $t('Modules.allow') : $t('Modules.deny') }}
-        </template>
-      </el-table-column>
+      <el-table-column :prop="type" :label="$t(`Clients.${type}`)" />
       <el-table-column prop="oper" width="120px">
         <template slot-scope="{ row }">
+          <el-button type="dashed" size="mini" @click="showEdit(row)">
+            {{ $t('Base.edit') }}
+          </el-button>
           <el-button type="dashed danger" size="mini" @click="handleDelete(row)">
             {{ $t('Base.delete') }}
           </el-button>
@@ -53,27 +41,27 @@
         background
         layout="total, sizes, prev, pager, next"
         :page-sizes="[10, 50, 100, 500]"
-        :page-size.sync="aclParams._limit"
-        :current-page.sync="aclParams._page"
+        :page-size.sync="pageParams._limit"
+        :current-page.sync="pageParams._page"
         :total="count"
         @size-change="handleSizeChange"
         @current-change="handleCurrentPageChange"
       >
       </el-pagination>
     </div>
-    <AddACLDialog v-model="showAddDialog" :type="type" @added="loadData" />
+    <AuthDialog v-model="showDialog" :auth="currentAuth" :type="type" @submitted="loadData" />
   </div>
 </template>
 
 <script>
-import { loadAcl, deleteAcl, delete$allAcl } from '@/api/modules'
-import AddACLDialog from './AddACLDialog.vue'
+import { loadAuth, deleteAuth } from '@/api/modules'
+import AuthDialog from './AuthDialog.vue'
 import { checkNOmitFromObj } from '@/common/utils.js'
 
 export default {
-  name: 'AclTablePage',
+  name: 'AuthTablePage',
 
-  components: { AddACLDialog },
+  components: { AuthDialog },
 
   props: {
     type: {
@@ -87,16 +75,16 @@ export default {
       searchOpt: {
         username: '',
         clientid: '',
-        topic: '',
       },
       tableData: [],
       listLoading: false,
-      aclParams: {
+      pageParams: {
         _limit: 10,
         _page: 1,
       },
       count: 0,
-      showAddDialog: false,
+      currentAuth: undefined,
+      showDialog: false,
     }
   },
 
@@ -107,11 +95,8 @@ export default {
   methods: {
     async loadData() {
       this.listLoading = true
-      const searchParams = checkNOmitFromObj({
-        topic: this.searchOpt.topic,
-        [this.type]: this.searchOpt[this.type],
-      })
-      const data = await loadAcl(this.type, { ...this.aclParams, ...searchParams })
+      const searchParams = checkNOmitFromObj({ [this.type]: this.searchOpt[this.type] })
+      const data = await loadAuth(this.type, { ...this.pageParams, ...searchParams })
       const {
         items = [],
         meta: { count = 0 },
@@ -126,8 +111,13 @@ export default {
     handleCurrentPageChange() {
       this.loadData()
     },
-    addACL() {
-      this.showAddDialog = true
+    addAuth() {
+      this.currentAuth = undefined
+      this.showDialog = true
+    },
+    showEdit(auth) {
+      this.currentAuth = auth
+      this.showDialog = true
     },
     async handleDelete(row) {
       this.$confirm(this.$t('Modules.confirmDelete'), this.$t('Base.warning'), {
@@ -137,10 +127,10 @@ export default {
       })
         .then(async () => {
           let res
-          if (this.type !== '$all') {
-            res = await deleteAcl(this.type, row[this.type], row.topic)
+          if (this.type === 'clientid') {
+            res = await deleteAuth(this.type, row.clientid)
           } else {
-            res = await delete$allAcl(row.topic)
+            res = await deleteAuth(this.type, row.username)
           }
           if (res) {
             this.loadData()

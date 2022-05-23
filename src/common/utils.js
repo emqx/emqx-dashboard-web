@@ -7,6 +7,7 @@ import { Message } from 'element-ui'
 import store from '@/stores'
 import router from '@/routes'
 import lang from '@/i18n'
+import { omit, cloneDeep, isObject } from 'lodash'
 
 import { enDocsLink, zhDocsLink, pluginsZh, pluginsEn } from '@/common/link_urls'
 
@@ -467,4 +468,23 @@ export const verifyListener = (rule, value, callback) => {
     }
   }
 }
+
+export const createURLWithAuth = (rawURL) => {
+  const { protocol, host, pathname } = window.location
+  const { password, username } = store.state.user
+  const { useRelativeResourcePath } = store.state.config
+  return `${protocol}//${username}:${password}@${host}${useRelativeResourcePath ? pathname : ''}${rawURL}`
+}
+
+export const checkNOmitFromObj = (obj) => {
+  const ret = cloneDeep(obj)
+  const emptyValueKeyArr = Object.keys(ret).filter((key) => {
+    if (isObject(ret[key]) && !Array.isArray(ret[key])) {
+      ret[key] = checkNOmitFromObj(ret[key])
+    }
+    return typeof ret[key] === 'string' ? !ret[key] : false
+  })
+  return omit(ret, emptyValueKeyArr)
+}
+
 export default {}
