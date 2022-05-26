@@ -450,7 +450,7 @@ export default {
       } else {
         const isEdited = !_.isEqual(this.record.config, this.originRecord.config)
         if (isEdited) {
-          this.$confirm(this.$t('Modules.editTip'), this.$t('Base.warning'), {
+          this.$confirm(this.$t('Modules.editTip'), {
             type: 'warning',
             cancelButtonText: this.$t('Base.cancel'),
             confirmButtonText: this.$t('Modules.continueCommit'),

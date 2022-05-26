@@ -493,7 +493,7 @@ export default {
     },
 
     doExecute(one) {
-      this.$confirm(`Are you sure to ${one.name}?`, this.$t('Base.warning'), {
+      this.$confirm(`Are you sure to ${one.name}?`, {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
@@ -647,7 +647,7 @@ export default {
     },
 
     handleDelete(path) {
-      this.$confirm(this.$t('Modules.confirmDelete'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('Modules.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',

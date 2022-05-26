@@ -105,7 +105,7 @@ export default {
         this.loadData()
       }
       if (!this.disabled) {
-        const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
+        const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), {
           type: 'warning',
           cancelButtonText: this.$t('Settings.no'),
         })
@@ -137,7 +137,7 @@ export default {
       const { ...configs } = record
       if (this.oper !== 'add') {
         data = { transport_type: type, configs }
-        this.$confirm(this.$t('Settings.confirmUpdateListener'), this.$t('Base.warning'), {
+        this.$confirm(this.$t('Settings.confirmUpdateListener'), {
           confirmButtonText: this.$t('Base.confirm'),
           cancelButtonText: this.$t('Base.cancel'),
           type: 'warning',
@@ -177,7 +177,7 @@ export default {
         enabled: !enabled,
       }
       if (enabled) {
-        this.$confirm(`${this.$t('Settings.isStopListener') + row.name}?`, this.$t('Base.warning'), {
+        this.$confirm(`${this.$t('Settings.isStopListener') + row.name}?`, {
           confirmButtonText: this.$t('Base.confirm'),
           cancelButtonText: this.$t('Base.cancel'),
           type: 'warning',
@@ -195,7 +195,7 @@ export default {
       this.loadData()
     },
     async deleteListener() {
-      this.$confirm(this.$t('Settings.isDeleteListener'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('Settings.isDeleteListener'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',

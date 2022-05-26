@@ -76,7 +76,7 @@ export default {
         // 设置是否修改过
         const { disabled } = this.$refs[oldName]._data
         if (!disabled) {
-          const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
+          const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), {
             type: 'warning',
             cancelButtonText: this.$t('Settings.no'),
           })

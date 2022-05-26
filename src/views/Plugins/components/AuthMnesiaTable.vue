@@ -293,7 +293,7 @@ export default {
       }
     },
     handleAuthDelete({ login }) {
-      this.$confirm(this.$t('Plugins.confirmDelete'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('Plugins.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
@@ -368,7 +368,7 @@ export default {
       }
     },
     handleACLDelete({ login, topic }) {
-      this.$confirm(this.$t('Plugins.confirmDelete'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('Plugins.confirmDelete'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',
