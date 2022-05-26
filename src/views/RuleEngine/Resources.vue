@@ -48,7 +48,7 @@
             show-overflow-tooltip
             :label="$t('RuleEngine.resourceDes')"
           ></el-table-column>
-          <el-table-column prop="isAvailable">
+          <el-table-column prop="isAvailable" :label="$t('RuleEngine.isAvailable')">
             <template slot-scope="{ row }">
               <a-badge
                 style="font-size: 12px"
