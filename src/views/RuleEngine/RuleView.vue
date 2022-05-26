@@ -313,7 +313,8 @@ export default {
 
   .el-button--primary.is-plain {
     background-color: transparent;
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: #34c388;
     }
   }
