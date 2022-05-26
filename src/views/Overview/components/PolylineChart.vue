@@ -9,6 +9,8 @@ import 'echarts/lib/component/grid'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
+import 'echarts/lib/component/legendScroll'
+
 import moment from 'moment'
 
 import resizeChart from '@/mixins/resizeChart'
@@ -177,7 +179,7 @@ export default {
       })
     },
     drawChart() {
-      /* 
+      /*
         1. Find the earliest time among all the data
         2. Find the latest time among all the data
         3. Generate a map from the data of each node
@@ -193,10 +195,12 @@ export default {
       const _this = this
       const option = {
         legend: {
+          type: 'scroll',
           bottom: this.legendBottom,
           data: this.yTitle,
           icon: 'circle',
           itemWidth: 8,
+          padding: [5, 50, 5, 5],
           formatter(name) {
             return _this.isSmallChart ? '' : _this.ellipsisText(name, 600)
           },
@@ -211,9 +215,10 @@ export default {
         tooltip: {
           trigger: 'axis',
           confine: true,
+          appendToBody: true,
           formatter(arr) {
             return arr
-              .filter(({ seriesName, data, marker }) => data !== undefined)
+              .filter(({ data }) => data !== undefined)
               .map(({ seriesName, data, marker }) => {
                 const name = _this.isSmallChart ? _this.ellipsisText(seriesName, 100) : seriesName
                 return _this.dataItemToHTML(name, data, marker)
