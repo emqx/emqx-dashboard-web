@@ -440,11 +440,10 @@ export default {
     },
     async save() {
       const valid = await this.$refs.record.validate()
-      if (!valid) {
-        this.showMoreItems = true
+      if (!valid && !this.showMoreItems) {
+        this.toggleRecords()
         return
       }
-      this.showMoreItems = false
       const { ...record } = this.recordConfig
       const { name, type } = this.record
       Object.keys(record).forEach((item) => {
