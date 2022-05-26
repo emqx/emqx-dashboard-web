@@ -129,23 +129,25 @@ export default {
   methods: {
     clearInput() {
       if (this.$refs.recordForm) {
-        this.$refs.recordForm.resetFields()
+        this.$refs.recordForm.clearValidate()
       }
+      window.setTimeout(() => {
+        this.record = { username: '', tags: '' }
+      }, 500)
     },
     async loadData() {
       this.tableData = await loadUser()
     },
     showDialog(type, item) {
-      this.record = {
-        username: '',
-        tags: '',
-      }
       this.accessType = 'create'
       if (type === 'edit') {
         Object.assign(this.record, item)
         this.accessType = 'edit'
       }
       this.dialogVisible = true
+      if (this.$refs.recordForm) {
+        this.$refs.recordForm.clearValidate()
+      }
     },
     closeDialog() {
       this.dialogVisible = false
@@ -186,7 +188,6 @@ export default {
             vue.dialogVisible = false
             vue.allowChange = false
             vue.accessType = ''
-            vue.record = {}
             vue.loadData()
           })
         } else {
@@ -194,7 +195,6 @@ export default {
             vue.$message.success(vue.$t('General.createUserSuccess'))
             vue.dialogVisible = false
             vue.accessType = ''
-            vue.record = {}
             vue.loadData()
           })
         }
