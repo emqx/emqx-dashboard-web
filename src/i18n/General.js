@@ -129,7 +129,7 @@ export default {
   },
   dontChangePassword: {
     zh: '不修改密码',
-    en: 'Dot change password',
+    en: "Don't change password",
   },
   changePassword: {
     zh: '修改密码',
