@@ -201,11 +201,8 @@
       :width="`${licenseTipWidth}px`"
       :visible.sync="licenseTipVisible"
       :close-on-click-modal="false"
+      custom-class="license-dialog"
     >
-      <div slot="title" class="tip-title">
-        <i class="el-icon-warning"></i>
-        <span>{{ $t('Base.warning') }}</span>
-      </div>
       <div class="tip-content">
         <p v-if="!isLicenseExpiry" v-html="$t('Overview.licenseEvaluationTip')">
           {{ $t('Overview.licenseEvaluationTip') }}
@@ -671,6 +668,14 @@ export default {
   .ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-title,
   .ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-paragraph > li {
     background: linear-gradient(90deg, rgba(207, 216, 220, 0.2), rgba(207, 216, 220, 0.4), rgba(207, 216, 220, 0.2));
+  }
+}
+.license-dialog {
+  .el-dialog__header {
+    display: none;
+  }
+  .el-dialog__body {
+    padding-bottom: 20px;
   }
 }
 </style>
