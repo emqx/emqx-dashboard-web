@@ -1,12 +1,6 @@
 <template>
   <div class="breadcrumb">
     <a-breadcrumb>
-      <a-breadcrumb-item>
-        <router-link to="/" tag="span" class="btn btn-default raw">
-          {{ $t('components.monitor') }}
-        </router-link>
-      </a-breadcrumb-item>
-
       <template v-if="!isIndex">
         <a-breadcrumb-item>
           <router-link v-if="backPath" :to="backPath" tag="span" class="btn btn-default raw">
@@ -23,6 +17,11 @@
           </span>
         </a-breadcrumb-item>
       </template>
+      <a-breadcrumb-item v-else>
+        <router-link to="/" tag="span" class="btn btn-default raw">
+          {{ $t('components.monitor') }}
+        </router-link>
+      </a-breadcrumb-item>
     </a-breadcrumb>
   </div>
 </template>
