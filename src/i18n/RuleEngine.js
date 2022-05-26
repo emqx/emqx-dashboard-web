@@ -155,6 +155,10 @@ export default {
     zh: '基本信息',
     en: 'Basic Info',
   },
+  isAvailable: {
+    zh: '是否可用',
+    en: 'Available',
+  },
   available: {
     zh: '可用',
     en: 'available',
