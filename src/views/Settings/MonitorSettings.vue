@@ -49,7 +49,7 @@ export default {
     async handleBeforeLeave(activeName, oldName) {
       if (activeName !== oldName) {
         if (!this.disabled) {
-          const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
+          const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), {
             type: 'warning',
             cancelButtonText: this.$t('Settings.no'),
           })

@@ -418,7 +418,7 @@ export default {
           }, 100)
         }
       }
-      this.$confirm(this.$t('RuleEngine.editResourceTips'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('RuleEngine.editResourceTips'), {
         type: 'warning',
         cancelButtonText: this.$t('Base.cancel'),
         confirmButtonText: this.$t('Base.confirm'),

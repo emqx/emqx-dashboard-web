@@ -267,7 +267,7 @@ export default {
       this.sqlParse(val, checkValues[0])
     },
     sqlParse(sql, oldEvent) {
-      this.$confirm(this.$t('RuleEngine.parse_confirm'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('RuleEngine.parse_confirm'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',

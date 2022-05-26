@@ -39,7 +39,7 @@ export default {
 
   beforeRouteLeave(to, from, next) {
     if (this.pluginName === 'emqx_auth_jwt') {
-      this.$confirm(this.$t('Plugins.leaveTokenPage'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('Plugins.leaveTokenPage'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',

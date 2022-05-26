@@ -76,7 +76,7 @@ export default {
     async handleBeforeLeave(activeName, oldName) {
       if (!this.canChangeTab && activeName !== oldName) {
         if (!this.disabled) {
-          const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), this.$t('Base.warning'), {
+          const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), {
             type: 'warning',
             cancelButtonText: this.$t('Settings.no'),
           })
@@ -126,7 +126,7 @@ export default {
       }
     },
     async deleteZone(name) {
-      this.$confirm(this.$t('Settings.isDeleteZone'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('Settings.isDeleteZone'), {
         confirmButtonText: this.$t('Base.confirm'),
         cancelButtonText: this.$t('Base.cancel'),
         type: 'warning',

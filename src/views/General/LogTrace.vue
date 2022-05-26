@@ -157,7 +157,7 @@ export default {
     },
 
     deleteConfirm(row) {
-      this.$confirm(this.$t('Modules.confirmDelete'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('Modules.confirmDelete'), {
         type: 'warning',
         cancelButtonText: this.$t('Base.cancel'),
         confirmButtonText: this.$t('Base.confirm'),

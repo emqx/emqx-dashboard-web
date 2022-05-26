@@ -242,7 +242,7 @@ export default {
       })
     },
     removeNode(name) {
-      this.$confirm(this.$t('Settings.removeConfirm'), this.$t('Base.warning'), {
+      this.$confirm(this.$t('Settings.removeConfirm'), {
         type: 'warning',
       })
         .then(async () => {
