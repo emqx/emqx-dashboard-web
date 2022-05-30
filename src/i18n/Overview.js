@@ -307,6 +307,10 @@ export default {
     zh: '更新 License',
     en: 'Update License',
   },
+  uploadedSuccessfully: {
+    zh: '上传成功',
+    en: 'Uploaded successfully',
+  },
   konw: {
     zh: '知道了',
     en: 'Acknowledge',
