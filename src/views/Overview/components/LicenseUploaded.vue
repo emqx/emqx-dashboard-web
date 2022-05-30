@@ -22,6 +22,7 @@ export default {
   methods: {
     handleUpload(file) {
       uploadLicense(file).then(() => {
+        this.$message.success(this.$t('Overview.uploadedSuccessfully'))
         this.$emit('uploaded')
       })
       return false
