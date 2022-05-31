@@ -294,13 +294,11 @@ export default {
   licenseEvaluationTip: {
     zh: `
     当前正在使用评估 License，限制为10个连接。请
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/zh/apply-licenses/emqx">升级 License</a> 。<br>如已购买
-    License，请<a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.com/zh/enterprise/${process.env.VUE_APP_VERSION}/getting-started/start.html#license"> 替换 </a>正式的 License。
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/zh/apply-licenses/emqx">升级 License</a> 。
     `,
     en: `
     You are now using the 10-connection evaluation license.<br>Please
     <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/en/apply-licenses/emqx">upgrade license</a>.
-    If you already applied offcial license,<br>please <a target="_blank" rel="noopener norefferrer" href="https://docs.emqx.com/en/enterprise/${process.env.VUE_APP_VERSION}/getting-started/start.html#license">replace</a> with your official license.
     `,
   },
   updateLicense: {
