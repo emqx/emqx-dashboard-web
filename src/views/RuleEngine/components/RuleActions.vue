@@ -305,7 +305,13 @@
       </div>
     </el-dialog>
 
-    <resource-dialog ref="resource" @created="confirmResource" @cache="confirmResource(null)"> </resource-dialog>
+    <resource-dialog
+      ref="resource"
+      @created="confirmResource"
+      @cache="confirmResource(null)"
+      @update:visible="resourceDialogVisibleChanged"
+    >
+    </resource-dialog>
   </div>
 </template>
 
@@ -350,6 +356,10 @@ export default {
     return {
       actionDialogTitle: this.$t('RuleEngine.addActions'),
       actionDialogVisible: false,
+      /**
+       * just for confirm resource dialog visible, not for control visible
+       */
+      resourceDialogVisible: false,
       isFallbacks: false,
       setRefresh: false,
       actionsMap: {},
@@ -443,7 +453,7 @@ export default {
 
   watch: {
     actionDialogVisible(val) {
-      if (!val) {
+      if (!val && !this.resourceDialogVisible) {
         this.initData()
         this.isFallbacks = false
       }
@@ -539,6 +549,7 @@ export default {
     toCreateResource() {
       const { types = [] } = this.selectedAction
       this.$refs.resource.setup({ types, action: 'create' })
+      this.resourceDialogVisible = true
       this.actionDialogVisible = false
       sessionStorage.setItem(
         'currentAction',
@@ -592,6 +603,10 @@ export default {
       }
       this.loadResourceData()
       this.currentOper = this.actionDialogTitle === this.$t('RuleEngine.editActions') ? 'edit' : 'add'
+    },
+
+    resourceDialogVisibleChanged(val) {
+      this.resourceDialogVisible = val
     },
 
     async loadResourceData() {
