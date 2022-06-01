@@ -199,6 +199,7 @@
       :visible.sync="licenseTipVisible"
       :close-on-click-modal="false"
       custom-class="license-dialog"
+      top="0"
     >
       <div class="tip-content">
         <p v-if="!isLicenseExpiry" v-html="$t('Overview.licenseEvaluationTip')">
@@ -664,6 +665,8 @@ export default {
   }
 }
 .license-dialog {
+  top: 50%;
+  transform: translateY(-50%);
   .el-dialog__header {
     display: none;
   }
