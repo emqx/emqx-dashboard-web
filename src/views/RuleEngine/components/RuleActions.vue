@@ -226,7 +226,7 @@
 
         <div v-if="selectedAction.params.$resource" class="line"></div>
 
-        <el-row v-if="paramsLoading || paramsList" class="params-item-wrapper" :gutter="50">
+        <el-row v-if="paramsLoading || paramsList" class="params-item-wrapper" :gutter="40">
           <template>
             <el-col
               v-for="item in paramsList"

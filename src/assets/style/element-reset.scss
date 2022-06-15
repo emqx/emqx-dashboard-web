@@ -149,8 +149,17 @@
 
 /* Dialog */
 .el-dialog {
+  max-height: 70vh;
+  margin-bottom: 15px;
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  .el-dialog__body {
+    overflow-y: scroll;
+  }
   .dialog-align-footer {
+    padding-top: 16px;
+    border-top: 1px solid #d9d9d9;
     text-align: center;
   }
 }
