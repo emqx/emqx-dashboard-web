@@ -188,6 +188,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
     }
     const inputPlaceholder = description.length < 24 && propPrefix !== 'configs' ? description : ''
     // 表单类型, 渲染使用的属性
+    const isEditableSelect = input === 'editable_select'
     form.push({
       formItemAttributes: {
         prop: propPrefix ? `${propPrefix}.${k}` : k,
@@ -202,6 +203,8 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         field: elType === 'select' || elType === 'cfgselect' ? field : undefined,
         placeholder: inputPlaceholder,
         rows: inputType === 'textarea' ? 5 : 0,
+        filterable: isEditableSelect,
+        'allow-create': isEditableSelect,
       },
       key: k,
       type: inputType,
@@ -224,7 +227,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         rules[k].push({ required: true, message: elType === 'input' ? requiredInputText : requiredSelectText })
       }
     }
-    if (enumValue) {
+    if (enumValue && !isEditableSelect) {
       const options = enumValue.map(($) => (typeof $ === 'boolean' ? $.toString() : $))
       rules[k].push({ type: 'enum', enum: options })
     }
