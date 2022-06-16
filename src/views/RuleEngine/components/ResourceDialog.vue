@@ -116,14 +116,7 @@
               </template>
             </el-form-item>
             <template v-else>
-              <el-form-item
-                v-if="
-                  ['true', true].includes(record.config['https_enabled']) ||
-                  ['true', true].includes(record.config['ssl']) ||
-                  (record.config['ssl'] === undefined && record.config['https_enabled'] === undefined)
-                "
-                v-bind="item.formItemAttributes"
-              >
+              <el-form-item v-if="showSSLField" v-bind="item.formItemAttributes">
                 <file-editor v-if="item.elType === 'file'" v-model="record.config[item.key]"></file-editor>
                 <emq-select v-else v-model="record.config[item.key]" v-bind="item.bindAttributes" class="reset-width">
                 </emq-select>
@@ -250,6 +243,16 @@ export default {
     sslValue() {
       const { ssl } = this.record.config
       return ssl
+    },
+    showSSLField() {
+      const params = this.record.config
+      const httpsEnabled = ['true', true].includes(params['https_enabled'])
+      const SSLEnabled = ['true', true].includes(params['ssl'])
+      const noController = params['ssl'] === undefined && params['https_enabled'] === undefined
+      if (this.record.type !== 'bridge_pulsar') {
+        return httpsEnabled || SSLEnabled || noController
+      }
+      return /^pulsar\+ssl\:\/\/.+$/i.test(params.servers)
     },
   },
 
