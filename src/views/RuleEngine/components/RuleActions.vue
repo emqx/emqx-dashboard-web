@@ -723,12 +723,9 @@ export default {
       const { ...rulesCommonConfig } = this.originRules.params
       const { ...recordCommonConfig } = this.originRecord.params
       Object.assign(recordCommonConfig, { $resource })
-      const { needDeleted: needDeletedConfigs, needAdded: needAddedConfigs } = this.diffConfigList(
-        this.paramsList,
-        commonParamsList,
-      )
+      const { needAdded: needAddedConfigs } = this.diffConfigList(this.paramsList, commonParamsList)
       const record = {
-        ..._.omit(this.record.params, needDeletedConfigs),
+        ..._.omit(this.record.params, Object.keys(otherExtraConfigs)),
         ..._.pick(recordCommonConfig, needAddedConfigs),
       }
 
