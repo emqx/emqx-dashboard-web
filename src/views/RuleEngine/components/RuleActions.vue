@@ -713,11 +713,15 @@ export default {
       })
       return _.pick(rules, keysNeed)
     },
+    getOtherExtraConfigs(allExtraConfigs, type) {
+      const keys = Object.keys(allExtraConfigs).filter((key) => key !== type)
+      return keys.reduce((obj, key) => {
+        return { ...obj, ...allExtraConfigs[key] }
+      }, {})
+    },
     addConfigAccordingType(extraConfigs, type, allExtraConfigs, inInit, changeEnableBatch = false) {
-      // value did not select
-      const otherType = type === 'true' ? 'false' : 'true'
       // configs do not neeed
-      const otherExtraConfigs = allExtraConfigs[otherType]
+      const otherExtraConfigs = this.getOtherExtraConfigs(allExtraConfigs, type)
       // delete do not need configs
       this.deleteHideItems(otherExtraConfigs)
       const { $resource } = this.record.params
