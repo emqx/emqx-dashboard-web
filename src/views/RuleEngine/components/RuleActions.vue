@@ -667,34 +667,93 @@ export default {
         this.originRecord.params = recordParams
       }
     },
-
-    addConfigAccordingType(extraConfigs, type, allExtraConfigs) {
+    /**
+     * find out which fields need to be added and which fields need to be deleted
+     * @param {Array<ConfigItem>} oldConfig
+     * @param {Array<ConfigItem>} newConfig
+     * @returns {needAdded:Array<string>,needDeleted:Array<string>}
+     */
+    diffConfigList(oldConfig, newConfig) {
+      const oldKeys = oldConfig.map(({ key }) => key)
+      const newKeys = newConfig.map(({ key }) => key)
+      const needDeleted = oldKeys.filter((oldItem) => !newKeys.some((newItem) => newItem === oldItem))
+      const needAdded = newKeys.filter((newItem) => !oldKeys.some((oldItem) => oldItem === newItem))
+      return {
+        needDeleted,
+        needAdded,
+      }
+    },
+    findCurrentExtraConfigParams() {
+      const commonParamsKeyList = this.originParamsList.map(({ key }) => key)
+      return _.cloneDeep(
+        this.paramsList.filter(({ key }) => {
+          return !commonParamsKeyList.includes(key)
+        }),
+      )
+    },
+    deleteParamsByKeys(params, keys) {
+      return params.filter(({ key }) => {
+        return !keys.includes(key)
+      })
+    },
+    findCurrentExtraRules() {
+      const commonRulesKeyList = Object.keys(this.originRules.params)
+      const extraRulesKeys = Object.keys(this.rules.params).filter((key) => !commonRulesKeyList.includes(key))
+      return _.cloneDeep(_.pick(this.rules.params, extraRulesKeys))
+    },
+    deleteRulesByKeys(rules, keys) {
+      const keysNeed = Object.keys(rules).filter((item) => {
+        return !keys.includes(item)
+      })
+      return _.pick(rules, keysNeed)
+    },
+    addConfigAccordingType(extraConfigs, type, allExtraConfigs, inInit, changeEnableBatch = false) {
+      // value did not select
       const otherType = type === 'true' ? 'false' : 'true'
+      // configs do not neeed
       const otherExtraConfigs = allExtraConfigs[otherType]
+      // delete do not need configs
       this.deleteHideItems(otherExtraConfigs)
       const { $resource } = this.record.params
       const [...commonParamsList] = this.originParamsList
       const { ...rulesCommonConfig } = this.originRules.params
       const { ...recordCommonConfig } = this.originRecord.params
       Object.assign(recordCommonConfig, { $resource })
+      const { needDeleted: needDeletedConfigs, needAdded: needAddedConfigs } = this.diffConfigList(
+        this.paramsList,
+        commonParamsList,
+      )
+      const record = {
+        ..._.omit(this.record.params, needDeletedConfigs),
+        ..._.pick(recordCommonConfig, needAddedConfigs),
+      }
+
+      const extraParamsNeeds = this.deleteParamsByKeys(
+        this.findCurrentExtraConfigParams(),
+        Object.keys(otherExtraConfigs),
+      )
+
+      const extraRulesNeeds = this.deleteRulesByKeys(this.findCurrentExtraRules(), Object.keys(otherExtraConfigs))
 
       if (Object.keys(extraConfigs).length) {
         const configData = renderParamsForm(extraConfigs, 'params')
         const { form, rules } = configData
-        this.paramsList = commonParamsList.concat(form)
-        this.rules.params = Object.assign(rulesCommonConfig, rules)
+        this.paramsList = commonParamsList.concat(form, extraParamsNeeds)
+        this.rules.params = Object.assign(rulesCommonConfig, rules, extraRulesNeeds)
         if (this.currentOper === 'add') {
           const { ...recordParams } = this.assignRecordParams(form)
           const addRecordParams = recordParams
-          this.record.params = Object.assign(recordCommonConfig, addRecordParams)
+          this.record.params = Object.assign(record, addRecordParams)
         }
       } else {
-        this.paramsList = commonParamsList
-        this.rules.params = rulesCommonConfig
-        this.record.params = recordCommonConfig
+        this.paramsList = commonParamsList.concat(extraParamsNeeds)
+        this.rules.params = Object.assign(rulesCommonConfig, extraRulesNeeds)
+        this.record.params = record
       }
       this.paramsList.sort((prev, next) => prev.order - next.order)
-      this.record.params.enable_batch = type
+      if (changeEnableBatch) {
+        this.record.params.enable_batch = type
+      }
 
       if (this.$refs.record) {
         setTimeout(this.$refs.record.clearValidate, 10)
@@ -750,7 +809,7 @@ export default {
       const type = enable_batch.toString()
       const allExtraConfigs = items
       const extraConfigs = allExtraConfigs[type]
-      this.addConfigAccordingType(extraConfigs, type, allExtraConfigs)
+      this.addConfigAccordingType(extraConfigs, type, allExtraConfigs, false, true)
     },
     initRecordEnableBatch() {
       if (this.record.params.enable_batch !== undefined) {
