@@ -156,13 +156,15 @@ export default {
     },
   },
 
-  created() {
-    this.loadData()
+  async created() {
+    await this.loadData()
+    this.$nextTick(() => {
+      this.returnPosition()
+    })
   },
 
   mounted() {
     window.addEventListener('scroll', this.scrollToTop)
-    this.returnPosition()
   },
   destroyed() {
     window.removeEventListener('scroll', this.scrollToTop)
