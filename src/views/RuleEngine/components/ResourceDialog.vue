@@ -375,7 +375,7 @@ export default {
         ..._.pick(recordCommonConfig, needAddedConfigs),
       }
 
-      if (Object.keys(extraConfigs).length) {
+      if (extraConfigs && typeof extraConfigs === 'object' && Object.keys(extraConfigs).length) {
         const configData = renderParamsForm(extraConfigs, 'config')
         const { form, rules } = configData
         const addConfigs = {}

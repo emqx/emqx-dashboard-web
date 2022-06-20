@@ -736,7 +736,7 @@ export default {
 
       const extraRulesNeeds = this.deleteRulesByKeys(this.findCurrentExtraRules(), Object.keys(otherExtraConfigs))
 
-      if (Object.keys(extraConfigs).length) {
+      if (extraConfigs && typeof extraConfigs === 'object' && Object.keys(extraConfigs).length) {
         const configData = renderParamsForm(extraConfigs, 'params')
         const { form, rules } = configData
         this.paramsList = commonParamsList.concat(form, extraParamsNeeds)
