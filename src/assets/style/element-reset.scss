@@ -148,7 +148,7 @@
 }
 
 /* Dialog */
-.el-dialog {
+.el-dialog:not(.is-fullscreen) {
   max-height: 70vh;
   margin-bottom: 15px;
   border-radius: 4px;
