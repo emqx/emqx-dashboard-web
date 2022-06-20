@@ -224,6 +224,9 @@ export default {
     disabled(val) {
       this.selfDisabled = val
     },
+    editConfig() {
+      this.initConfigs()
+    },
   },
 
   created() {
