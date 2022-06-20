@@ -129,6 +129,9 @@ export default {
           delay: 500,
           enabled: true,
         },
+        wordWrap: 'on',
+        wordWrapMinified: true,
+        wrappingIndent: 'indent',
       }
       const options = this.beforeMonacoCreate(defaultOptions)
       // Create
