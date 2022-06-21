@@ -451,6 +451,20 @@ export default {
       this.selfVisible = false
     },
 
+    findParamItemByKey(keyForFind) {
+      return this.configList.find(({ key }) => keyForFind === key) || {}
+    },
+
+    isParamBoolType(param) {
+      const { type, elType, bindAttributes } = param
+      if (type !== 'text' && elType !== 'select') {
+        return false
+      }
+      const optList = (bindAttributes && bindAttributes.field && bindAttributes.field.list) || []
+      const isBoolOpts = optList.length === 2 && [true, false].every((item) => optList.includes(item))
+      return isBoolOpts
+    },
+
     async handleCreate(test = false) {
       const valid = await this.$refs.record.validate()
       if (!valid) {
@@ -460,6 +474,12 @@ export default {
       const { config } = this.record
       // String to Boolean
       Object.keys(config).forEach((label) => {
+        const param = this.findParamItemByKey(label)
+        const isBoolType = this.isParamBoolType(param)
+        if (!isBoolType) {
+          return
+        }
+
         const value = config[label]
         if (value === 'true') {
           this.record.config[label] = true

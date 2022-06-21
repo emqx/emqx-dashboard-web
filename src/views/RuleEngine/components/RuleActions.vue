@@ -494,6 +494,20 @@ export default {
       }, 10)
     },
 
+    findParamItemByKey(keyForFind) {
+      return this.paramsList.find(({ key }) => keyForFind === key) || {}
+    },
+
+    isParamBoolType(param) {
+      const { type, elType, bindAttributes } = param
+      if (type !== 'text' && elType !== 'select') {
+        return false
+      }
+      const optList = (bindAttributes && bindAttributes.field && bindAttributes.field.list) || []
+      const isBoolOpts = optList.length === 2 && [true, false].every((item) => optList.includes(item))
+      return isBoolOpts
+    },
+
     async handleCreate() {
       this.initRecordEnableBatch()
       try {
@@ -505,8 +519,10 @@ export default {
       // To boolean
       if (this.record.params) {
         Object.keys(this.record.params).forEach((key) => {
+          const param = this.findParamItemByKey(key)
+          const isBoolean = this.isParamBoolType(param)
           const value = this.record.params[key]
-          if (value === 'true' || value === 'false') {
+          if (isBoolean && (value === 'true' || value === 'false')) {
             this.record.params[key] = JSON.parse(value)
           }
         })
