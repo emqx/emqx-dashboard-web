@@ -507,12 +507,9 @@ export default {
     },
 
     isParamBoolType(param) {
-      const { type, elType, bindAttributes } = param
-      if (type !== 'text' && elType !== 'select') {
-        return false
-      }
+      const { bindAttributes } = param
       const optList = (bindAttributes && bindAttributes.field && bindAttributes.field.list) || []
-      const isBoolOpts = optList.length === 2 && [true, false].every((item) => optList.includes(item))
+      const isBoolOpts = optList.length >= 2 && [true, false].every((item) => optList.includes(item))
       return isBoolOpts
     },
 
