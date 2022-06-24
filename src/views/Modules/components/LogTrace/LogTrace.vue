@@ -281,13 +281,13 @@ export default {
       viewDialog: false,
       createRules: {
         name: [
-          { required: true, messages: this.$t('General.pleaseEnter') },
+          { required: true, message: this.$t('General.pleaseEnter') },
           { validator: nameValidator, trigger: ['blur', 'change'] },
         ],
-        topic: [{ required: true, messages: this.$t('General.pleaseEnter') }],
-        clientid: [{ required: true, messages: this.$t('General.pleaseEnter') }],
+        topic: [{ required: true, message: this.$t('General.pleaseEnter') }],
+        clientid: [{ required: true, message: this.$t('General.pleaseEnter') }],
         ip_address: [
-          { required: true, messages: this.$t('General.pleaseEnter') },
+          { required: true, message: this.$t('General.pleaseEnter') },
           // {
           //   validator(r, v, cb) {},
           // },
