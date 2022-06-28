@@ -20,7 +20,7 @@
               :open-delay="500"
               :content="$t('RuleEngine.fallbackActionCreate')"
             >
-              <el-button slot="reference" type="text" icon="el-icon-plus" @click="handleAddFallbacks(item)">
+              <el-button slot="reference" type="text" icon="el-icon-plus" @click="handleAddFallbacks(item, i)">
                 {{ $t('RuleEngine.fallbackAction') }}
               </el-button>
             </el-popover>
@@ -368,7 +368,7 @@ export default {
        * this variable is more reliable than ‘currentOper’.
        * When it is -1, the operation is addition,
        * and when it is greater than -1, the operation is edit
-       * Because there can only be one fallback action, this parameter is meaningful only when editing actions(diff from fallback action)
+       * When adding an fallback action, the index indicates the fallback action will be added in which action
        */
       currentEditIndex: 0,
       /**
@@ -875,9 +875,9 @@ export default {
       })
     },
 
-    handleAddFallbacks(action) {
+    handleAddFallbacks(action, majorActionIndex) {
       this.isFallbacks = true
-      this.currentEditIndex = -1
+      this.currentEditIndex = majorActionIndex
       this.actionDialogTitle = this.$t('RuleEngine.addActions')
       this.actionDialogVisible = true
       this.currentAction = action
