@@ -245,14 +245,19 @@ export default {
       return ssl
     },
     showSSLField() {
+      const typesNeedSpecialHandling = ['bridge_pulsar', 'web_hook']
       const params = this.record.config
       const httpsEnabled = ['true', true].includes(params['https_enabled'])
       const SSLEnabled = ['true', true].includes(params['ssl'])
       const noController = params['ssl'] === undefined && params['https_enabled'] === undefined
-      if (this.record.type !== 'bridge_pulsar') {
+      const { type } = this.record
+      if (!typesNeedSpecialHandling.includes(type)) {
         return httpsEnabled || SSLEnabled || noController
       }
-      return /^pulsar\+ssl\:\/\/.+$/i.test(params.servers)
+      if (type === 'bridge_pulsar') {
+        return /^pulsar\+ssl\:\/\/.+$/i.test(params.servers)
+      }
+      return /^https\:\/\/.+$/i.test(params.url)
     },
   },
 
