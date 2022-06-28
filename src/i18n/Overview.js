@@ -327,4 +327,20 @@ export default {
     zh: '消息丢弃',
     en: 'Dropped',
   },
+  limit: {
+    zh: '限制',
+    en: 'Limit',
+  },
+  all: {
+    zh: '全部',
+    en: 'All',
+  },
+  active: {
+    zh: '活跃',
+    en: 'Active',
+  },
+  memory: {
+    zh: '内存',
+    en: 'Memory',
+  },
 }
