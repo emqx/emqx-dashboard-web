@@ -353,4 +353,8 @@ export default {
     zh: '活跃',
     en: 'Active',
   },
+  memory: {
+    zh: '内存',
+    en: 'Memory',
+  },
 }

@@ -12,10 +12,10 @@
               <span class="form-item-value">{{ record.datetime }}</span>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item :label="$t('Overview.erlangVMMemory')">
+          <el-col :span="12" v-if="record.memory_total && record.memory_used">
+            <el-form-item :label="$t('Overview.memory')">
               <span class="form-item-value">
-                {{ record.memory_used | formatMemory }}
+                {{ transMemorySizeNumToStr(record.memory_used) + ' / ' + transMemorySizeNumToStr(record.memory_total) }}
               </span>
             </el-form-item>
           </el-col>
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { formatNumberSize } from '@/common/utils'
+import { formatNumberSize, transMemorySizeNumToStr } from '@/common/utils'
 
 export default {
   name: 'NodeBasicCard',
@@ -194,6 +194,7 @@ export default {
   created() {},
 
   methods: {
+    transMemorySizeNumToStr,
     toDetails() {
       this.$router.push({
         path: '/monitor/node',
