@@ -726,6 +726,19 @@ export default {
         return { ...obj, ...allExtraConfigs[key] }
       }, {})
     },
+    /**
+     * Sometimes strange function(like initEnableBatch..) calls lead to duplicate params...
+     */
+    deduplicateParams() {
+      const keyList = []
+      this.paramsList = this.paramsList.reduce((arr, item) => {
+        if (keyList.includes(item.key)) {
+          return arr
+        }
+        keyList.push(item.key)
+        return [...arr, item]
+      }, [])
+    },
     addConfigAccordingType(extraConfigs, type, allExtraConfigs, inInit, changeEnableBatch = false) {
       // configs do not neeed
       const otherExtraConfigs = this.getOtherExtraConfigs(allExtraConfigs, type)
@@ -764,6 +777,7 @@ export default {
         this.rules.params = Object.assign(rulesCommonConfig, extraRulesNeeds)
         this.record.params = record
       }
+      this.deduplicateParams()
       this.paramsList.sort((prev, next) => prev.order - next.order)
       if (changeEnableBatch) {
         this.record.params.enable_batch = type
