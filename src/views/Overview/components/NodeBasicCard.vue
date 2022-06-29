@@ -15,7 +15,7 @@
           <el-col :span="12" v-if="record.memory_total && record.memory_used">
             <el-form-item :label="$t('Overview.memory')">
               <span class="form-item-value">
-                {{ transMemorySizeNumToStr(record.memory_used) + ' / ' + transMemorySizeNumToStr(record.memory_total) }}
+                {{ record.memory_used + ' / ' + record.memory_total }}
               </span>
             </el-form-item>
           </el-col>
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { formatNumberSize, transMemorySizeNumToStr } from '@/common/utils'
+import { formatNumberSize } from '@/common/utils'
 
 export default {
   name: 'NodeBasicCard',
@@ -194,7 +194,6 @@ export default {
   created() {},
 
   methods: {
-    transMemorySizeNumToStr,
     toDetails() {
       this.$router.push({
         path: '/monitor/node',
