@@ -55,10 +55,7 @@
             :key="i"
             :span="item.type === 'textarea' || item.type === 'object' || item.type === 'file' ? 24 : 12"
           >
-            <el-form-item
-              v-if="item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)"
-              v-bind="item.formItemAttributes"
-            >
+            <el-form-item v-if="!isParamSSLType(item)" v-bind="item.formItemAttributes">
               <template v-if="item.formItemAttributes.description" slot="label">
                 {{ item.formItemAttributes.label }}
                 <el-popover width="220" trigger="hover" placement="top">
@@ -80,6 +77,8 @@
                 >
                 </config-select>
               </template>
+              <!-- file -->
+              <file-editor v-else-if="item.elType === 'file'" v-model="record.config[item.key]"></file-editor>
               <!-- input -->
               <template v-else-if="item.elType !== 'select'">
                 <el-input
@@ -473,6 +472,14 @@ export default {
       const optList = (bindAttributes && bindAttributes.field && bindAttributes.field.list) || []
       const isBoolOpts = optList.length === 2 && [true, false].every((item) => optList.includes(item))
       return isBoolOpts
+    },
+
+    isParamSSLType(param) {
+      const fileTypeFieldsButNotForSSL = ['kerberos_keytab']
+      return (
+        (param.elType === 'file' && !fileTypeFieldsButNotForSSL.includes(param.key)) ||
+        ['verify', 'tls_version'].includes(param.key)
+      )
     },
 
     async handleCreate(test = false) {
