@@ -335,6 +335,7 @@ import {
   deduplicateParams,
   diffConfigList,
 } from '@/common/someUtilsForCfgselect'
+import { isParamBoolType, findParamItemByKey } from '@/common/someUtilsForSchemaForm'
 
 export default {
   name: 'RuleActions',
@@ -478,6 +479,7 @@ export default {
     deleteRulesByKeys,
     getOtherExtraConfigs,
     diffConfigList,
+    isParamBoolType,
     initData() {
       this.record = {
         name: '',
@@ -508,14 +510,7 @@ export default {
     },
 
     findParamItemByKey(keyForFind) {
-      return this.paramsList.find(({ key }) => keyForFind === key) || {}
-    },
-
-    isParamBoolType(param) {
-      const { bindAttributes } = param
-      const optList = (bindAttributes && bindAttributes.field && bindAttributes.field.list) || []
-      const isBoolOpts = optList.length >= 2 && [true, false].every((item) => optList.includes(item))
-      return isBoolOpts
+      return findParamItemByKey(this.paramsList, keyForFind)
     },
 
     async handleCreate() {

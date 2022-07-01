@@ -158,6 +158,7 @@ import {
   getOtherExtraConfigs,
   diffConfigList,
 } from '@/common/someUtilsForCfgselect'
+import { isParamBoolType, isParamSSLType, findParamItemByKey } from '@/common/someUtilsForSchemaForm'
 
 export default {
   name: 'ResourceDialog',
@@ -280,6 +281,8 @@ export default {
     deleteRulesByKeys,
     getOtherExtraConfigs,
     diffConfigList,
+    isParamBoolType,
+    isParamSSLType,
     clearForm() {
       if (this.$refs.record) {
         setTimeout(() => {
@@ -466,17 +469,7 @@ export default {
     },
 
     findParamItemByKey(keyForFind) {
-      return this.configList.find(({ key }) => keyForFind === key) || {}
-    },
-
-    isParamBoolType(param) {
-      const { type, elType, bindAttributes } = param
-      if (type !== 'text' && elType !== 'select') {
-        return false
-      }
-      const optList = (bindAttributes && bindAttributes.field && bindAttributes.field.list) || []
-      const isBoolOpts = optList.length === 2 && [true, false].every((item) => optList.includes(item))
-      return isBoolOpts
+      return findParamItemByKey(this.configList, keyForFind)
     },
 
     async handleCreate(test = false) {
