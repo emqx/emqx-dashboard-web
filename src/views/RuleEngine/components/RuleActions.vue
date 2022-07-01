@@ -737,16 +737,17 @@ export default {
      */
     deduplicateParams() {
       const keyList = []
-      this.paramsList = this.paramsList.reduce((arr, item) => {
+      const listAfterDeduplicate = this.paramsList.reduce((arr, item) => {
         if (keyList.includes(item.key)) {
           return arr
         }
         keyList.push(item.key)
         return [...arr, item]
       }, [])
+      this.paramsList = listAfterDeduplicate
     },
     addConfigAccordingType(extraConfigs, type, allExtraConfigs, inInit, changeEnableBatch = false) {
-      // configs do not neeed
+      // unneeded configuration items
       const otherExtraConfigs = this.getOtherExtraConfigs(allExtraConfigs, type)
       // delete do not need configs
       this.deleteHideItems(otherExtraConfigs)
