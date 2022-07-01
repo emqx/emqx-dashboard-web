@@ -50,9 +50,30 @@ export const deleteRulesByKeys = (rules, keyList) => {
  */
 export const getOtherExtraConfigs = (allExtraParams, usedFieldValue) => {
   const keys = Object.keys(allExtraParams).filter((key) => key !== usedFieldValue)
-  return keys.reduce((obj, key) => {
+  const ret = keys.reduce((obj, key) => {
     return { ...obj, ...allExtraParams[key] }
   }, {})
+  const walkCfgParams = (params) => {
+    const paramKeys = Object.keys(params)
+    paramKeys.forEach((parentKey) => {
+      const currentParam = params[parentKey]
+      if (currentParam.type === 'cfgselect') {
+        Object.keys(currentParam.items).forEach((valueKey) => {
+          const subParams = currentParam.items[valueKey]
+          const subParamKeys = Object.keys(subParams)
+          subParamKeys.forEach((subKey) => {
+            if (subParams[subKey].type === 'cfgselect') {
+              walkCfgParams(subParams[subKey].items)
+            } else {
+              ret[subKey] = _.cloneDeep(subParams[subKey])
+            }
+          })
+        })
+      }
+    })
+  }
+  walkCfgParams(ret)
+  return ret
 }
 
 /**
