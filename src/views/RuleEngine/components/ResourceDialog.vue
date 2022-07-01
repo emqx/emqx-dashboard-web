@@ -323,11 +323,17 @@ export default {
 
     cleanFileContent(config) {
       const falseValues = [false, 'false']
+      // if SSL is disabled, clean the file content
       if (falseValues.includes(config.ssl) || falseValues.includes(config.https_enabled)) {
         config.verify = false
         Object.keys(config).forEach((key) => {
           const oneValue = config[key]
-          if (typeof oneValue === 'object' && Object.keys(oneValue).includes('file')) {
+          const paramItem = this.findParamItemByKey(key)
+          if (
+            typeof oneValue === 'object' &&
+            Object.keys(oneValue).includes('file') &&
+            this.isParamSSLType(paramItem)
+          ) {
             config[key] = {
               file: '',
               filename: '',
