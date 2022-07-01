@@ -325,6 +325,15 @@ import Monaco from '@/components/Monaco'
 import { setTimeout } from 'timers'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ConfigSelect from '@/components/ConfigSelect'
+import {
+  findCurrentExtraConfigParams,
+  deleteParamsByKeys,
+  findCurrentExtraRules,
+  deleteRulesByKeys,
+  getOtherExtraConfigs,
+  deduplicateParams,
+  diffConfigList,
+} from '@/common/someUtilsForCfgselect'
 
 export default {
   name: 'RuleActions',
@@ -473,6 +482,10 @@ export default {
   },
 
   methods: {
+    deleteParamsByKeys,
+    deleteRulesByKeys,
+    getOtherExtraConfigs,
+    diffConfigList,
     initData() {
       this.record = {
         name: '',
@@ -686,65 +699,17 @@ export default {
         this.originRecord.params = recordParams
       }
     },
-    /**
-     * find out which fields need to be added and which fields need to be deleted
-     * @param {Array<ConfigItem>} oldConfig
-     * @param {Array<ConfigItem>} newConfig
-     * @returns {needAdded:Array<string>,needDeleted:Array<string>}
-     */
-    diffConfigList(oldConfig, newConfig) {
-      const oldKeys = oldConfig.map(({ key }) => key)
-      const newKeys = newConfig.map(({ key }) => key)
-      const needDeleted = oldKeys.filter((oldItem) => !newKeys.some((newItem) => newItem === oldItem))
-      const needAdded = newKeys.filter((newItem) => !oldKeys.some((oldItem) => oldItem === newItem))
-      return {
-        needDeleted,
-        needAdded,
-      }
-    },
     findCurrentExtraConfigParams() {
-      const commonParamsKeyList = this.originParamsList.map(({ key }) => key)
-      return _.cloneDeep(
-        this.paramsList.filter(({ key }) => {
-          return !commonParamsKeyList.includes(key)
-        }),
-      )
-    },
-    deleteParamsByKeys(params, keys) {
-      return params.filter(({ key }) => {
-        return !keys.includes(key)
-      })
+      return findCurrentExtraConfigParams(this.originParamsList, this.paramsList)
     },
     findCurrentExtraRules() {
-      const commonRulesKeyList = Object.keys(this.originRules.params)
-      const extraRulesKeys = Object.keys(this.rules.params).filter((key) => !commonRulesKeyList.includes(key))
-      return _.cloneDeep(_.pick(this.rules.params, extraRulesKeys))
-    },
-    deleteRulesByKeys(rules, keys) {
-      const keysNeed = Object.keys(rules).filter((item) => {
-        return !keys.includes(item)
-      })
-      return _.pick(rules, keysNeed)
-    },
-    getOtherExtraConfigs(allExtraConfigs, type) {
-      const keys = Object.keys(allExtraConfigs).filter((key) => key !== type)
-      return keys.reduce((obj, key) => {
-        return { ...obj, ...allExtraConfigs[key] }
-      }, {})
+      return findCurrentExtraRules(this.originRules.params, this.rules.params)
     },
     /**
      * Sometimes strange function(like initEnableBatch..) calls lead to duplicate params...
      */
     deduplicateParams() {
-      const keyList = []
-      const listAfterDeduplicate = this.paramsList.reduce((arr, item) => {
-        if (keyList.includes(item.key)) {
-          return arr
-        }
-        keyList.push(item.key)
-        return [...arr, item]
-      }, [])
-      this.paramsList = listAfterDeduplicate
+      this.paramsList = deduplicateParams(this.paramsList)
     },
     addConfigAccordingType(extraConfigs, type, allExtraConfigs, inInit, changeEnableBatch = false) {
       // unneeded configuration items
