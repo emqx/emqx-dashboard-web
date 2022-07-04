@@ -229,11 +229,7 @@
 
         <el-row v-if="paramsLoading || paramsList" class="params-item-wrapper" :gutter="50">
           <template>
-            <el-col
-              v-for="item in paramsList"
-              :key="record.name + item.key"
-              :span="item.type === 'textarea' || item.type === 'object' ? 24 : 12"
-            >
+            <el-col v-for="item in paramsList" :key="record.name + item.key" :span="getParamItemSpan(item)">
               <el-form-item :class="item.key === 'sql' ? 'code-editor__item' : ''" v-bind="item.formItemAttributes">
                 <template v-if="item.formItemAttributes.description" slot="label">
                   {{ item.formItemAttributes.label }}
@@ -335,7 +331,7 @@ import {
   deduplicateParams,
   diffConfigList,
 } from '@/common/someUtilsForCfgselect'
-import { isParamBoolType, findParamItemByKey } from '@/common/someUtilsForSchemaForm'
+import { isParamBoolType, findParamItemByKey, getParamItemSpan } from '@/common/someUtilsForSchemaForm'
 
 export default {
   name: 'RuleActions',
@@ -480,6 +476,7 @@ export default {
     getOtherExtraConfigs,
     diffConfigList,
     isParamBoolType,
+    getParamItemSpan,
     initData() {
       this.record = {
         name: '',

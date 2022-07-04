@@ -34,7 +34,7 @@
               <template v-if="configList.length > 0">
                 <div v-for="(item, i) in configList" :key="i">
                   <template v-if="item.key !== 'listener'">
-                    <el-col :span="columnSpan(item)">
+                    <el-col :span="getParamItemSpan(item)">
                       <el-form-item
                         v-if="item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)"
                         v-bind="item.formItemAttributes"
@@ -217,6 +217,9 @@ import TopicMetrics from './components/TopicMetrics/TopicMetrics'
 
 import Listeners from './components/Listeners'
 
+import { getParamItemSpan, isParamBoolType, findParamItemByKey } from '@/common/someUtilsForSchemaForm.js'
+import { diffConfigList } from '@/common/someUtilsForCfgselect.js'
+
 export default {
   name: 'ModuleDetail',
 
@@ -310,6 +313,9 @@ export default {
   },
 
   methods: {
+    isParamBoolType,
+    getParamItemSpan,
+    diffConfigList,
     handlelistenersChange(val) {
       this.originRecord.config.listeners = _.cloneDeep(val)
     },
@@ -372,16 +378,7 @@ export default {
       }
     },
     findParamItemByKey(keyForFind) {
-      return this.configList.find(({ key }) => keyForFind === key) || {}
-    },
-    isParamBoolType(param) {
-      const { type, elType, bindAttributes } = param
-      if (type !== 'text' && elType !== 'select') {
-        return false
-      }
-      const optList = (bindAttributes && bindAttributes.field && bindAttributes.field.list) || []
-      const isBoolOpts = optList.length === 2 && [true, false].every((item) => optList.includes(item))
-      return isBoolOpts
+      return findParamItemByKey(this.configList, keyForFind)
     },
     async handleCreate() {
       const { arrayEditor } = this.$refs
@@ -527,22 +524,6 @@ export default {
         this.$set(this.originRecord.config, key, value)
       })
     },
-    /**
-     * find out which fields need to be added and which fields need to be deleted
-     * @param {Array<ConfigItem>} oldConfig
-     * @param {Array<ConfigItem>} newConfig
-     * @returns {needAdded:Array<string>,needDeleted:Array<string>}
-     */
-    diffConfigList(oldConfig, newConfig) {
-      const oldKeys = oldConfig.map(({ key }) => key)
-      const newKeys = newConfig.map(({ key }) => key)
-      const needDeleted = oldKeys.filter((oldItem) => !newKeys.some((newItem) => newItem === oldItem))
-      const needAdded = newKeys.filter((newItem) => !oldKeys.some((oldItem) => oldItem === newItem))
-      return {
-        needDeleted,
-        needAdded,
-      }
-    },
     addConfigAccordingType(extraConfigs, type, totalExtraConfigs, isInit = false) {
       const [...commonConfig] = this.originConfigList
       const { ...rulesCommonConfig } = this.originRules.config
@@ -587,7 +568,6 @@ export default {
       const windowUrl = window.open(url)
       windowUrl.opener = null
     },
-    columnSpan: ({ type }) => (['textarea', 'object', 'array', 'file'].includes(type) ? 24 : 12),
   },
 }
 </script>
