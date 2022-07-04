@@ -50,11 +50,7 @@
           <a-skeleton active></a-skeleton>
         </div>
         <template v-else-if="configList.length > 0">
-          <el-col
-            v-for="(item, i) in configList"
-            :key="i"
-            :span="item.type === 'textarea' || item.type === 'object' || item.type === 'file' ? 24 : 12"
-          >
+          <el-col v-for="(item, i) in configList" :key="i" :span="getParamItemSpan(item)">
             <el-form-item
               v-if="item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)"
               v-bind="item.formItemAttributes"
@@ -158,7 +154,7 @@ import {
   getOtherExtraConfigs,
   diffConfigList,
 } from '@/common/someUtilsForCfgselect'
-import { isParamBoolType, isParamSSLType, findParamItemByKey } from '@/common/someUtilsForSchemaForm'
+import { isParamBoolType, isParamSSLType, findParamItemByKey, getParamItemSpan } from '@/common/someUtilsForSchemaForm'
 
 export default {
   name: 'ResourceDialog',
@@ -283,6 +279,7 @@ export default {
     diffConfigList,
     isParamBoolType,
     isParamSSLType,
+    getParamItemSpan,
     clearForm() {
       if (this.$refs.record) {
         setTimeout(() => {
