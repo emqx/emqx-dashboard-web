@@ -179,6 +179,16 @@ export function renderParamsForm(params = {}, propPrefix = '') {
             : defaultValue
         elType = 'file'
         break
+      case 'binary_file':
+        defaultValue =
+          typeof defaultValue === 'string'
+            ? {
+                file: '',
+                filename: defaultValue,
+              }
+            : defaultValue
+        elType = 'binary_file'
+        break
       case 'array':
         if (items.type === 'object') {
           const { schema } = items
@@ -517,6 +527,36 @@ export const checkNOmitFromObj = (obj) => {
     return typeof ret[key] === 'string' ? !ret[key] : false
   })
   return omit(ret, emptyValueKeyArr)
+}
+
+export const readFile = async (file, fileType) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    if (fileType === 'text') {
+      reader.readAsText(file, 'UTF-8')
+    } else {
+      reader.readAsArrayBuffer(file)
+    }
+    reader.onload = function (evt) {
+      const content = evt.target.result
+      if (content) {
+        resolve(content)
+      } else if (content === '') {
+        // TODO:t
+        Message.error(t('common.readFileError'))
+        reject()
+      } else if (content === undefined) {
+        // TODO:t
+        Message.error(t('common.readFileError'))
+        reject()
+      }
+    }
+    reader.onerror = function (evt) {
+      // TODO:t
+      Message.error(t('common.readFileError'))
+      reject()
+    }
+  })
 }
 
 export default {}

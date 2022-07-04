@@ -556,4 +556,12 @@ export default {
     zh: '重置成功',
     en: 'Reset successfully',
   },
+  binaryUploadTip: {
+    zh: '请上传一个二进制文件',
+    en: 'Please upload a binary file',
+  },
+  fileContentAfterBASE64: {
+    zh: 'BASE64 编码后的文件内容。',
+    en: 'File content after BASE64 encoding',
+  },
 }

@@ -50,11 +50,7 @@
           <a-skeleton active></a-skeleton>
         </div>
         <template v-else-if="configList.length > 0">
-          <el-col
-            v-for="(item, i) in configList"
-            :key="i"
-            :span="item.type === 'textarea' || item.type === 'object' || item.type === 'file' ? 24 : 12"
-          >
+          <el-col v-for="(item, i) in configList" :key="i" :span="getParamItemSpan(item)">
             <el-form-item v-if="!isParamSSLType(item)" v-bind="item.formItemAttributes">
               <template v-if="item.formItemAttributes.description" slot="label">
                 {{ item.formItemAttributes.label }}
@@ -79,6 +75,10 @@
               </template>
               <!-- file -->
               <file-editor v-else-if="item.elType === 'file'" v-model="record.config[item.key]"></file-editor>
+              <binary-file-editor
+                v-else-if="item.elType === 'binary_file'"
+                v-model="record.config[item.key]"
+              ></binary-file-editor>
               <!-- input -->
               <template v-else-if="item.elType !== 'select'">
                 <el-input
@@ -158,14 +158,15 @@ import {
   getOtherExtraConfigs,
   diffConfigList,
 } from '@/common/someUtilsForCfgselect'
-import { isParamBoolType, isParamSSLType, findParamItemByKey } from '@/common/someUtilsForSchemaForm'
+import { isParamBoolType, isParamSSLType, findParamItemByKey, getParamItemSpan } from '@/common/someUtilsForSchemaForm'
+import BinaryFileEditor from '@/components/BinaryFileEditor.vue'
 
 export default {
   name: 'ResourceDialog',
 
   mixins: [handleMongoDBSRV('resource')],
 
-  components: { KeyAndValueEditor, FileEditor, ConfigSelect },
+  components: { KeyAndValueEditor, FileEditor, ConfigSelect, BinaryFileEditor },
 
   inheritAttrs: false,
 
@@ -285,6 +286,7 @@ export default {
     diffConfigList,
     isParamBoolType,
     isParamSSLType,
+    getParamItemSpan,
     clearForm() {
       if (this.$refs.record) {
         setTimeout(() => {

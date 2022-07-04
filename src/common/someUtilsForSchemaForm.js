@@ -28,4 +28,9 @@ export const findParamItemByKey = (paramList, keyForFind) => {
   return paramList.find(({ key }) => keyForFind === key) || {}
 }
 
+const fieldTypesWider = ['textarea', 'object', 'file', 'binary_file']
+export const getParamItemSpan = (param) => {
+  return fieldTypesWider.includes(param.type) ? 24 : 12
+}
+
 export default {}
