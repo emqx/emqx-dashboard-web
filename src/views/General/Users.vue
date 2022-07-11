@@ -39,7 +39,7 @@
       width="520px"
       :title="accessType === 'edit' ? $t('General.editorUser') : $t('General.creatingUser')"
       :visible.sync="dialogVisible"
-      @close="clearInput"
+      @close="closeDialog"
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
         <el-form-item prop="username" :label="$t('General.userName')">
@@ -142,14 +142,6 @@ export default {
   },
 
   methods: {
-    clearInput() {
-      if (this.$refs.recordForm) {
-        this.$refs.recordForm.clearValidate()
-      }
-      window.setTimeout(() => {
-        this.record = { username: '', tags: '' }
-      }, 500)
-    },
     async loadData() {
       this.tableData = await loadUser()
     },
@@ -167,6 +159,12 @@ export default {
     closeDialog() {
       this.dialogVisible = false
       this.allowChange = false
+      if (this.$refs.recordForm) {
+        this.$refs.recordForm.clearValidate()
+      }
+      window.setTimeout(() => {
+        this.record = { username: '', tags: '' }
+      }, 500)
     },
     togglePassword() {
       this.allowChange = !this.allowChange
