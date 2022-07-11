@@ -112,7 +112,7 @@
               </template>
             </el-form-item>
             <template v-else>
-              <el-form-item v-if="showSSLField" v-bind="item.formItemAttributes">
+              <el-form-item v-if="showSSLField(item.key)" v-bind="item.formItemAttributes">
                 <file-editor v-if="item.elType === 'file'" v-model="record.config[item.key]"></file-editor>
                 <emq-select v-else v-model="record.config[item.key]" v-bind="item.bindAttributes" class="reset-width">
                 </emq-select>
@@ -155,6 +155,9 @@ import {
   diffConfigList,
 } from '@/common/someUtilsForCfgselect'
 import { isParamBoolType, isParamSSLType, findParamItemByKey, getParamItemSpan } from '@/common/someUtilsForSchemaForm'
+
+const httpsURLReg = /^https\:\/\/.+$/i
+const SAPsSSLFieldReg = /^(keyfile|certfile|cacertfile)_(?<target>token|sendmsg)$/
 
 export default {
   name: 'ResourceDialog',
@@ -246,20 +249,24 @@ export default {
       const { ssl } = this.record.config
       return ssl
     },
-    showSSLField() {
-      const typesNeedSpecialHandling = ['bridge_pulsar', 'web_hook']
-      const params = this.record.config
-      const httpsEnabled = ['true', true].includes(params['https_enabled'])
-      const SSLEnabled = ['true', true].includes(params['ssl'])
-      const noController = params['ssl'] === undefined && params['https_enabled'] === undefined
-      const { type } = this.record
-      if (!typesNeedSpecialHandling.includes(type)) {
-        return httpsEnabled || SSLEnabled || noController
+    isSAP() {
+      return this.record.type === 'sap_event_mesh'
+    },
+    /* ForSQP */
+    isEnableTokenSSL() {
+      if (!this.isSAP) {
+        return false
       }
-      if (type === 'bridge_pulsar') {
-        return /^pulsar\+ssl\:\/\/.+$/i.test(params.servers)
+      const URL = this.record.config.token_endpoint_uri || ''
+      return httpsURLReg.test(URL)
+    },
+    /* ForSAP */
+    isEnableSendSSL() {
+      if (!this.isSAP) {
+        return false
       }
-      return /^https\:\/\/.+$/i.test(params.url)
+      const URL = this.record.config.send_message_uri || ''
+      return httpsURLReg.test(URL)
     },
   },
 
@@ -414,6 +421,39 @@ export default {
       if (this.$refs.record) {
         setTimeout(this.$refs.record.clearValidate, 10)
       }
+    },
+
+    showSAPsSSLField(fieldKey) {
+      if (!SAPsSSLFieldReg.test(fieldKey)) {
+        return true
+      }
+      const { target } = fieldKey.match(SAPsSSLFieldReg).groups || {}
+      if (!target) {
+        return true
+      }
+      if (target === 'token') {
+        return this.isEnableTokenSSL
+      }
+      return this.isEnableSendSSL
+    },
+
+    showSSLField(fieldKey) {
+      const typesNeedSpecialHandling = ['bridge_pulsar', 'web_hook']
+      const params = this.record.config
+      const httpsEnabled = ['true', true].includes(params['https_enabled'])
+      const SSLEnabled = ['true', true].includes(params['ssl'])
+      const noController = params['ssl'] === undefined && params['https_enabled'] === undefined
+      const { type } = this.record
+      if (!(typesNeedSpecialHandling.includes(type) || this.isSAP)) {
+        return httpsEnabled || SSLEnabled || noController
+      }
+      if (this.isSAP) {
+        return this.showSAPsSSLField(fieldKey)
+      }
+      if (type === 'bridge_pulsar') {
+        return /^pulsar\+ssl\:\/\/.+$/i.test(params.servers)
+      }
+      return httpsURLReg.test(params.url)
     },
 
     async handleEdit(record) {
