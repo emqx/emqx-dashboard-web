@@ -16,7 +16,7 @@ export async function loadRuleEvents() {
 }
 
 export function loadRules(params) {
-  return http.get('/rules', params)
+  return http.get('/rules', { params })
 }
 
 export async function loadRuleDetails(id) {
