@@ -1,101 +1,189 @@
 <template>
   <div class="rules">
-    <page-header>
-      <div class="page-header-content-view">
-        <div class="content">
-          <p class="description">
-            {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
-          </p>
-          <div class="page-header-top-start">
-            <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
-              <i class="icon el-icon-position"></i>
-              {{ $t('RuleEngine.quickStart') }}
-            </a>
+    <div class="rules-page">
+      <page-header>
+        <div class="page-header-content-view">
+          <div class="content">
+            <p class="description">
+              {{ $t('RuleEngine.definingRuleConditionsAndDataProcessing') }}
+            </p>
+            <div class="page-header-top-start">
+              <a rel="noopener" :href="docs.tutorial" target="_blank" class="link-item">
+                <i class="icon el-icon-position"></i>
+                {{ $t('RuleEngine.quickStart') }}
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </page-header>
+      </page-header>
 
-    <div class="app-wrapper">
-      <a-card class="emq-list-card" :loading="listLoading">
-        <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">
-            {{ $t('Base.create') }}
-          </el-button>
-        </div>
-
-        <el-table v-bind="rulesTable" :data="tableData" class="data-list">
-          <el-table-column type="index" width="50" label=" "> </el-table-column>
-          <el-table-column prop="id" label="ID">
-            <template slot-scope="{ row }">
-              <router-link
-                :to="{
-                  path: `/rules/${row.id}`,
-                  query: { oper: 'view' },
-                }"
-                >{{ row.id }}</router-link
-              >
-            </template>
-          </el-table-column>
-          <el-table-column prop="for" min-width="120" :label="$t('RuleEngine.topic')">
-            <template slot-scope="{ row }">
-              <div v-for="(item, index) in row.for" :key="index">
-                {{ item }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
-            <template slot-scope="{ row }">
-              <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="description"
-            show-overflow-tooltip
-            :label="$t('RuleEngine.describe')"
-          ></el-table-column>
-          <el-table-column prop="status" :label="$t('RuleEngine.status')">
-            <template slot-scope="{ row }">
-              <el-tooltip
-                :content="row.enabled ? $t('RuleEngine.ruleEnabled') : $t('RuleEngine.ruleDisabled')"
-                placement="left"
-              >
-                <el-switch
-                  v-model="row.enabled"
-                  active-text=""
-                  inactive-text=""
-                  active-color="#13ce66"
-                  inactive-color="#d0d3e0"
-                  @change="updateRule(row)"
-                >
-                </el-switch>
-              </el-tooltip>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="actions"
-            :filters="filterOptions.actions"
-            :filter-method="actionsColumnFilter"
-            filter-placement="bottom"
-            :formatter="actionsFormatter"
-            :label="$t('RuleEngine.responseAction')"
+      <div class="app-wrapper">
+        <a-card class="card-filter">
+          <el-form
+            ref="filterParams"
+            :model="filterParams"
+            label-position="left"
+            label-width="88px"
+            class="form-filter"
+            @keyup.enter.native="searchData"
           >
-          </el-table-column>
-          <el-table-column width="200px" prop="id">
-            <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="editRule(row)">
-                {{ $t('Base.edit') }}
-              </el-button>
-              <el-button type="dashed" size="mini" @click="copyRule(row)">
-                {{ $t('RuleEngine.duplicate') }}
-              </el-button>
-              <el-button type="dashed danger" size="mini" @click="deleteRule(row)">
-                {{ $t('Base.delete') }}
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </a-card>
+            <el-row :gutter="32" :class="{ 'multiple-rows': showMoreQuery }">
+              <el-col :span="6">
+                <el-form-item label="ID">
+                  <el-input type="text" size="small" v-model="filterParams._like_id" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item :label="$t('RuleEngine.topic')">
+                  <el-input type="text" size="small" v-model="filterParams[keyForSearchTopic]">
+                    <template slot="prepend">
+                      <el-select class="select-topic-type" size="small" v-model="keyForSearchTopic">
+                        <el-option
+                          v-for="{ label, value } in KEYS_FOR_SEARCH_TOPIC"
+                          :key="value"
+                          :label="label"
+                          :value="value"
+                        />
+                      </el-select>
+                    </template>
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item :label="$t('RuleEngine.status')">
+                  <el-select class="select-status" v-model="filterParams.enabled" size="small" clearable>
+                    <el-option :label="$t('RuleEngine.ruleEnabled')" :value="true" />
+                    <el-option :label="$t('RuleEngine.ruleDisabled')" :value="false" />
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <template v-if="showMoreQuery">
+                <el-col :span="6">
+                  <el-form-item :label="$t('RuleEngine.resourceDes')">
+                    <el-input type="text" size="small" v-model="filterParams._like_description" />
+                  </el-form-item>
+                </el-col>
+              </template>
+
+              <div class="col-oper">
+                <el-button size="small" type="primary" plain @click="searchData">
+                  {{ $t('Base.search') }}
+                </el-button>
+                <el-button
+                  size="small"
+                  plain
+                  @click="
+                    resetFilterParams()
+                    loadData()
+                  "
+                >
+                  {{ $t('Clients.reset') }}
+                </el-button>
+                <a href="javascript:;" class="show-more" @click="showMoreQuery = !showMoreQuery">
+                  {{ showMoreQuery ? $t('Clients.collapse') : $t('Clients.expand') }}
+                  <i :class="showMoreQuery ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i>
+                </a>
+              </div>
+            </el-row>
+          </el-form>
+        </a-card>
+        <a-card class="emq-list-card" :loading="listLoading">
+          <div class="emq-table-header">
+            <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">
+              {{ $t('Base.create') }}
+            </el-button>
+          </div>
+
+          <el-table v-bind="rulesTable" :data="tableData" class="data-list">
+            <el-table-column type="index" width="50" label=" "> </el-table-column>
+            <el-table-column prop="id" label="ID">
+              <template slot-scope="{ row }">
+                <router-link
+                  :to="{
+                    path: `/rules/${row.id}`,
+                    query: { oper: 'view' },
+                  }"
+                  >{{ row.id }}</router-link
+                >
+              </template>
+            </el-table-column>
+            <el-table-column prop="for" min-width="120" :label="$t('RuleEngine.topic')">
+              <template slot-scope="{ row }">
+                <div v-for="(item, index) in row.for" :key="index">
+                  {{ item }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="metrics" :label="$t('RuleEngine.monitor')">
+              <template slot-scope="{ row }">
+                <i class="iconfont icon-tubiao-zhuzhuangtu btn btn-default" @click="showMetrics(row)"></i>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="description"
+              show-overflow-tooltip
+              :label="$t('RuleEngine.describe')"
+            ></el-table-column>
+            <el-table-column prop="status" :label="$t('RuleEngine.status')">
+              <template slot-scope="{ row }">
+                <el-tooltip
+                  :content="row.enabled ? $t('RuleEngine.ruleEnabled') : $t('RuleEngine.ruleDisabled')"
+                  placement="left"
+                >
+                  <el-switch
+                    v-model="row.enabled"
+                    active-text=""
+                    inactive-text=""
+                    active-color="#13ce66"
+                    inactive-color="#d0d3e0"
+                    @change="updateRule(row)"
+                  >
+                  </el-switch>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="actions"
+              :filters="filterOptions.actions"
+              :filter-method="actionsColumnFilter"
+              filter-placement="bottom"
+              :formatter="actionsFormatter"
+              :label="$t('RuleEngine.responseAction')"
+            >
+            </el-table-column>
+            <el-table-column width="200px" prop="id">
+              <template slot-scope="{ row }">
+                <el-button type="dashed" size="mini" @click="editRule(row)">
+                  {{ $t('Base.edit') }}
+                </el-button>
+                <el-button type="dashed" size="mini" @click="copyRule(row)">
+                  {{ $t('RuleEngine.duplicate') }}
+                </el-button>
+                <el-button type="dashed danger" size="mini" @click="deleteRule(row)">
+                  {{ $t('Base.delete') }}
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+
+          <div class="emq-table-footer">
+            <el-pagination
+              hide-on-single-page
+              background
+              layout="total, sizes, prev, pager, next"
+              :page-sizes="[10, 50, 100, 300, 500]"
+              :current-page.sync="pageParams._page"
+              :page-size="pageParams._limit"
+              :total="rulesCount"
+              @size-change="
+                resetPageNo()
+                loadData()
+              "
+              @current-change="loadData()"
+            />
+          </div>
+        </a-card>
+      </div>
     </div>
 
     <a-drawer v-bind="rulesDrawer" placement="right" closable :visible="metricsDrawerVisible" @close="onMetricsClose">
@@ -229,13 +317,27 @@ import {
 } from '@/api/rules'
 import { getLink } from '@/common/utils'
 
+const createRawFilterParams = () => ({
+  _like_id: undefined,
+
+  _like_for: undefined,
+  _match_for: undefined,
+
+  enabled: undefined,
+  _like_description: undefined,
+})
+
+const KEYS_FOR_SEARCH_TOPIC = [
+  { value: '_like_for', label: 'Topic' },
+  { value: '_match_for', label: 'Wildcard' },
+]
+
 export default {
   name: 'Rules',
 
-  props: {},
-
   data() {
     return {
+      KEYS_FOR_SEARCH_TOPIC,
       docs: {
         tutorial: getLink('ruleEngineTutorial'),
         docs: '',
@@ -316,6 +418,14 @@ export default {
       actionsFormatter(row, column, cellValue) {
         return cellValue.map(($) => $._name).join(',')
       },
+      pageParams: {
+        _limit: 10,
+        _page: 1,
+      },
+      rulesCount: 0,
+      showMoreQuery: false,
+      filterParams: createRawFilterParams(),
+      keyForSearchTopic: KEYS_FOR_SEARCH_TOPIC[0].value,
     }
   },
 
@@ -349,14 +459,49 @@ export default {
       return (row.actions || []).find(($) => $.name === value)
     },
 
+    getFilterParams() {
+      const { _like_for, _match_for, ...filterParams } = this.filterParams
+      const ret = Object.keys(filterParams).reduce((obj, currentKey) => {
+        const currentVal = this.filterParams[currentKey]
+        if (currentVal !== undefined && currentVal !== '') {
+          return { ...obj, [currentKey]: currentVal }
+        }
+        return obj
+      }, {})
+      if (this.filterParams[this.keyForSearchTopic]) {
+        ret[this.keyForSearchTopic] = this.filterParams[this.keyForSearchTopic]
+      }
+      return ret
+    },
+
     async loadData() {
-      const tableData = await loadRules()
-      tableData.forEach((rule) => {
-        rule.actions.forEach((action) => {
-          action._name = this.actionsMap[action.name]
+      try {
+        const params = { ...this.pageParams, ...this.getFilterParams() }
+        const { items, meta } = await loadRules(params)
+        items.forEach((rule) => {
+          rule.actions.forEach((action) => {
+            action._name = this.actionsMap[action.name]
+          })
         })
-      })
-      this.tableData = tableData
+        this.tableData = items
+        this.rulesCount = meta.count
+      } catch (error) {
+        //
+      }
+    },
+
+    resetPageNo() {
+      this.pageParams._page = 1
+    },
+
+    searchData() {
+      this.resetPageNo()
+      this.loadData()
+    },
+
+    resetFilterParams() {
+      this.filterParams = createRawFilterParams()
+      this.resetPageNo()
     },
 
     async loadActionsFilter() {
@@ -464,6 +609,54 @@ export default {
   .metrics-item-body {
     .item-title {
       color: #101010;
+    }
+  }
+}
+.emq-list-card {
+  margin-top: 20px;
+}
+</style>
+
+<style lang="scss">
+.rules-page {
+  .page-title {
+    margin-bottom: 24px;
+  }
+
+  .form-filter {
+    .select-status {
+      width: 100%;
+    }
+    .el-row.multiple-rows {
+      .el-col {
+        margin-bottom: 12px;
+      }
+    }
+    .el-col {
+      line-height: 1;
+      .el-form-item {
+        margin-bottom: 0;
+      }
+    }
+    .el-form-item__content {
+      line-height: 1;
+    }
+  }
+
+  .col-oper {
+    float: right;
+    position: relative;
+    top: 1px;
+    .show-more {
+      margin: 0px 10px;
+      font-size: 12px;
+    }
+    margin-bottom: 10px;
+  }
+
+  .select-topic-type {
+    .el-input {
+      width: 100px;
     }
   }
 }
