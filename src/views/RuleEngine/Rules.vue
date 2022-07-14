@@ -175,10 +175,7 @@
               :current-page.sync="pageParams._page"
               :page-size="pageParams._limit"
               :total="rulesCount"
-              @size-change="
-                resetPageNo()
-                loadData()
-              "
+              @size-change="handlePageSizeChanged()"
               @current-change="loadData()"
             />
           </div>
@@ -502,6 +499,12 @@ export default {
     resetFilterParams() {
       this.filterParams = createRawFilterParams()
       this.resetPageNo()
+    },
+
+    handlePageSizeChanged(size) {
+      this.pageParams._limit = size
+      this.resetPageNo()
+      this.loadData()
     },
 
     async loadActionsFilter() {
