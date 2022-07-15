@@ -41,7 +41,10 @@
 
           <div class="config-item" v-for="(item, index) in showConfigList" :key="index">
             <el-col :span="12">
-              <el-form-item :label="item.key" v-bind="item.formItemAttributes">
+              <el-form-item v-bind="item.formItemAttributes">
+                <template slot="label">
+                  <span v-html="labelToShow(item.key)"></span>
+                </template>
                 <template v-if="item.key === 'zone'">
                   <emq-select v-model="record.configs[item.key]" :field="{ options: listenerZoneOptions }">
                   </emq-select>
@@ -119,6 +122,7 @@ import { loadZoneConfig, loadConfigSpec } from '@/api/settings'
 import { renderParamsForm, verifyID, verifyListener } from '@/common/utils'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
+import labelCut from '@/mixins/labelCut'
 
 export default {
   name: 'ConfigDetail',
@@ -127,6 +131,8 @@ export default {
     prop: 'disabled',
     event: 'updateDisabled',
   },
+
+  mixins: [labelCut],
 
   data() {
     return {
