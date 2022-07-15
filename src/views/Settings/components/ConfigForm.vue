@@ -11,7 +11,10 @@
     >
       <div v-for="(key, index) in showKeyList" :key="index">
         <el-col :span="12">
-          <el-form-item :label="key === '' ? 'listener_on' : key" :prop="key">
+          <el-form-item :label="key === '' ? 'listener_on' : labelToShow(key)" :prop="key">
+            <template slot="label">
+              <span v-html="key === '' ? 'listener_on' : labelToShow(key)"></span>
+            </template>
             <template v-if="deepRecord[key] === 'true' || deepRecord[key] === 'false'">
               <emq-select v-model="recordConfig[key]" :field="{ options: boolOptions }"> </emq-select>
             </template>
@@ -67,6 +70,8 @@
 </template>
 
 <script>
+import labelCut from '@/mixins/labelCut'
+
 export default {
   name: 'ConfigForm',
 
@@ -74,6 +79,8 @@ export default {
     prop: 'disabled',
     event: 'updateDisabled',
   },
+
+  mixins: [labelCut],
 
   props: {
     disabled: {
