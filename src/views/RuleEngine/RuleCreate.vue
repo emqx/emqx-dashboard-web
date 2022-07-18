@@ -149,7 +149,7 @@
 <script>
 import { loadRuleEvents, SQLTest, createRule, loadRuleDetails, updateRule } from '@/api/rules'
 import { loadTopics } from '@/api/server'
-import { sqlExampleFormatter, ruleNewSqlParser, ruleOldSqlCheck, verifyID } from '@/common/utils'
+import { sqlExampleFormatter, verifyID } from '@/common/utils'
 import Monaco from '@/components/Monaco'
 import StretchHeight from '@/components/StretchHeight'
 import { ruleEngineProvider } from '@/common/provider'
@@ -228,7 +228,7 @@ export default {
   },
 
   watch: {
-    'record.rawsql': 'handleSqlChanged',
+    'record.rawsql': 'triggerEventChange',
   },
 
   async created() {
@@ -254,30 +254,6 @@ export default {
       if (ruleAction) {
         ruleAction.initData()
       }
-    },
-    handleSqlChanged(val) {
-      this.triggerEventChange(val)
-      if (!this.needCheckSql) {
-        return
-      }
-      const checkValues = ruleOldSqlCheck(val)
-      if (!checkValues) {
-        return
-      }
-      this.sqlParse(val, checkValues[0])
-    },
-    sqlParse(sql, oldEvent) {
-      this.$confirm(this.$t('RuleEngine.parse_confirm'), {
-        confirmButtonText: this.$t('Base.confirm'),
-        cancelButtonText: this.$t('Base.cancel'),
-        type: 'warning',
-      })
-        .then(() => {
-          this.record.rawsql = sqlExampleFormatter(ruleNewSqlParser(sql, oldEvent))
-        })
-        .catch(() => {
-          this.needCheckSql = false
-        })
     },
     triggerEventChange(sql) {
       const events = [
@@ -328,14 +304,6 @@ export default {
       })
       this.$set(this.record, 'ctx', testFieldObject)
     },
-    beforeSqlValid(sql) {
-      const checkValues = ruleOldSqlCheck(sql)
-      if (!checkValues) {
-        return true
-      }
-      this.sqlParse(sql, checkValues[0])
-      return false
-    },
     handleSQLTest() {
       this.needCheckSql = true
       this.$refs.record.validate(async (valid) => {
@@ -345,9 +313,6 @@ export default {
           } else {
             return
           }
-        }
-        if (!this.beforeSqlValid(this.record.rawsql)) {
-          return
         }
         const data = JSON.parse(JSON.stringify(this.record))
         this.testOutPut = ''
