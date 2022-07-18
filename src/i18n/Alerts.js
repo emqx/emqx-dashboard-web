@@ -99,4 +99,16 @@ export default {
     zh: '日：时：分：秒',
     en: 'Days: Hours: Minutes: Seconds',
   },
+  clearHistory: {
+    zh: '清除历史告警',
+    en: 'Clear Historical Alarms',
+  },
+  clearHistoryConfirm: {
+    zh: '是否确认清除历史告警？',
+    en: 'Are you sure to clear historical alarms?',
+  },
+  clearSuccess: {
+    zh: '清除历史告警成功',
+    en: 'Clear historical alarms successfully',
+  },
 }

@@ -55,4 +55,8 @@ export async function loadHistoryAlarm() {
   return data
 }
 
+export async function clearHistoryAlarm() {
+  return http.delete('/alarms/deactivated')
+}
+
 export default {}

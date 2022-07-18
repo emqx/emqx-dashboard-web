@@ -4,10 +4,23 @@
       <a-card class="emq-list-card">
         <div class="emq-table-header">
           <div></div>
-          <el-radio-group v-model="alertType" border size="mini" @change="loadData">
-            <el-radio-button label="present">{{ $t('Alerts.currentAlarm') }}</el-radio-button>
-            <el-radio-button label="history">{{ $t('Alerts.historyAlarm') }}</el-radio-button>
-          </el-radio-group>
+          <div>
+            <el-button
+              v-if="alertType === 'history'"
+              class="btn-clear"
+              type="danger"
+              plain
+              @click="clearHistoryAlarm"
+              :disabled="!tableData.length"
+              size="mini"
+            >
+              {{ $t('Alerts.clearHistory') }}
+            </el-button>
+            <el-radio-group v-model="alertType" border size="mini" @change="loadData">
+              <el-radio-button label="present">{{ $t('Alerts.currentAlarm') }}</el-radio-button>
+              <el-radio-button label="history">{{ $t('Alerts.historyAlarm') }}</el-radio-button>
+            </el-radio-group>
+          </div>
         </div>
 
         <el-table v-bind="alertTable" :data="tableData" class="data-list" :key="alertType">
@@ -61,6 +74,7 @@
 import { loadAlarm, loadHistoryAlarm } from '@/api/common'
 import { getDateDiff } from '@/common/utils'
 import dateformat from 'dateformat'
+import { clearHistoryAlarm } from '@/api/common'
 
 export default {
   name: 'Alerts',
@@ -106,6 +120,21 @@ export default {
       }
       return stateMap[state] || `${this.$t('Alerts.abnormal')} ${state} ${this.$t('Alerts.second')}`
     },
+
+    async clearHistoryAlarm() {
+      try {
+        await this.$msgbox.confirm(this.$t('Alerts.clearHistoryConfirm'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        await clearHistoryAlarm()
+        this.$message.success(this.$t('Alerts.clearSuccess'))
+        this.loadData()
+      } catch (error) {
+        //
+      }
+    },
   },
 }
 </script>
@@ -120,5 +149,9 @@ export default {
   color: #a7a7a7;
   cursor: pointer;
   vertical-align: middle;
+}
+
+.btn-clear {
+  margin-right: 12px;
 }
 </style>
