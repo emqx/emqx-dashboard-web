@@ -23,19 +23,24 @@
             ref="filterParams"
             :model="filterParams"
             label-position="left"
-            label-width="88px"
+            label-width="0px"
             class="form-filter"
             @keyup.enter.native="searchData"
           >
             <el-row :gutter="32" :class="{ 'multiple-rows': showMoreQuery }">
               <el-col :span="6">
-                <el-form-item label="ID">
-                  <el-input type="text" size="small" v-model="filterParams._like_id" />
+                <el-form-item>
+                  <el-input type="text" size="small" v-model="filterParams._like_id" placeholder="ID" />
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item :label="$t('RuleEngine.topic')">
-                  <el-input type="text" size="small" v-model="filterParams[keyForSearchTopic]">
+                <el-form-item>
+                  <el-input
+                    type="text"
+                    size="small"
+                    v-model="filterParams[keyForSearchTopic]"
+                    :placeholder="$t('RuleEngine.topic')"
+                  >
                     <template slot="prepend">
                       <el-select class="select-topic-type" size="small" v-model="keyForSearchTopic">
                         <el-option
@@ -50,8 +55,14 @@
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-form-item :label="$t('RuleEngine.status')">
-                  <el-select class="select-status" v-model="filterParams.enabled" size="small" clearable>
+                <el-form-item>
+                  <el-select
+                    class="select-status"
+                    v-model="filterParams.enabled"
+                    size="small"
+                    clearable
+                    :placeholder="$t('RuleEngine.status')"
+                  >
                     <el-option :label="$t('RuleEngine.ruleEnabled')" :value="true" />
                     <el-option :label="$t('RuleEngine.ruleDisabled')" :value="false" />
                   </el-select>
@@ -59,8 +70,13 @@
               </el-col>
               <template v-if="showMoreQuery">
                 <el-col :span="6">
-                  <el-form-item :label="$t('RuleEngine.resourceDes')">
-                    <el-input type="text" size="small" v-model="filterParams._like_description" />
+                  <el-form-item>
+                    <el-input
+                      type="text"
+                      size="small"
+                      v-model="filterParams._like_description"
+                      :placeholder="$t('RuleEngine.resourceDes')"
+                    />
                   </el-form-item>
                 </el-col>
               </template>
