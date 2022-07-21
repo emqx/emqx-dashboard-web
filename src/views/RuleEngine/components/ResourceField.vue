@@ -5,11 +5,11 @@
         <li v-if="item.value.filename !== ''" class="field-info-item" :title="item.description">
           <div class="field-title">{{ item.title }}:</div>
           <span class="field-value">
-            <span :class="{ 'field-password': showPwdIndex !== i && item.key === 'password' }">
-              {{ item.value | itemValue({ i, key: item.key, showPwdIndex }) }}
+            <span :class="{ 'field-password': showPwdIndex !== i && item.type === 'password' }">
+              {{ item.value | itemValue({ i, key: item.key, showPwdIndex, type: item.type }) }}
             </span>
             <span
-              v-if="item.key === 'password' && item.value"
+              v-if="item.type === 'password' && item.value"
               :class="['el-icon-view', showPwdIndex === i ? 'active' : '']"
               @click="togglePassword(i)"
             ></span>
@@ -28,13 +28,13 @@ export default {
 
   filters: {
     itemValue(val, params) {
-      const { i, key, showPwdIndex } = params
+      const { i, type, showPwdIndex } = params
       if (typeof val === 'object') {
         const { filename } = val
         const data = !filename ? JSON.stringify(val) : filename
         return data
       }
-      if (val && key === 'password' && showPwdIndex !== i) {
+      if (val && type === 'password' && showPwdIndex !== i) {
         return '**********'
       }
       return val
