@@ -281,7 +281,7 @@ export default {
   },
   pleaseAddAResponseAction: {
     zh: '请添加响应动作',
-    en: 'Please add a action',
+    en: 'Action is required',
   },
   resultIsEmpty: {
     zh: '输出为空',

@@ -165,7 +165,7 @@ export default {
   },
   emptyListenerTip: {
     zh: '请添加监听器！',
-    en: 'Please add Listener!',
+    en: 'Listener is required!',
   },
   fileTip: {
     zh: '请上传文件',
