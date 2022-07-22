@@ -661,5 +661,10 @@ export default {
       width: 200px !important;
     }
   }
+  .el-col-12 {
+    .el-form-item__label {
+      min-height: 32px;
+    }
+  }
 }
 </style>
