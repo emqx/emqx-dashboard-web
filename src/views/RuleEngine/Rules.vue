@@ -191,8 +191,8 @@
               :current-page.sync="pageParams._page"
               :page-size="pageParams._limit"
               :total="rulesCount"
-              @size-change="handlePageSizeChanged()"
-              @current-change="loadData()"
+              @size-change="handlePageSizeChanged"
+              @current-change="loadData"
             />
           </div>
         </a-card>
