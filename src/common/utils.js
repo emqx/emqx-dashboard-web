@@ -492,6 +492,9 @@ export const checkNOmitFromObj = (obj) => {
 }
 
 export const hidePwd = (pwd) => {
+  if (!pwd || typeof pwd !== 'string') {
+    return pwd
+  }
   return pwd.replace(/./g, '*')
 }
 
