@@ -559,4 +559,8 @@ export const readFile = async (file, fileType) => {
   })
 }
 
+export const hidePwd = (pwd) => {
+  return pwd.replace(/./g, '*')
+}
+
 export default {}

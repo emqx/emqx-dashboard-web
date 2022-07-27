@@ -51,7 +51,12 @@
         </div>
         <div v-for="(itemValue, itemValueIndex) in item._value" :key="itemValueIndex" class="action-item-field">
           <div class="title">{{ itemValue.label }}</div>
-          <div class="value">{{ itemValue.value }}</div>
+          <div class="value" v-if="!isPasswordField(itemValue.key, item._config.params)">
+            {{ itemValue.value }}
+          </div>
+          <div class="value" v-else>
+            {{ hidePwd(itemValue.value) }}
+          </div>
         </div>
       </div>
 
@@ -315,7 +320,7 @@
 import _ from 'lodash'
 /* eslint-disable vue/no-side-effects-in-computed-properties */
 import { loadActionsList, loadResource } from '@/api/rules'
-import { renderParamsForm } from '@/common/utils'
+import { renderParamsForm, hidePwd } from '@/common/utils'
 import ResourceDialog from '@/views/RuleEngine/components/ResourceDialog.vue'
 import Monaco from '@/components/Monaco'
 import { setTimeout } from 'timers'
@@ -485,6 +490,7 @@ export default {
     diffConfigList,
     isParamBoolType,
     getParamItemSpan,
+    hidePwd,
     initData() {
       this.record = {
         name: '',
@@ -501,6 +507,11 @@ export default {
         fallbacks: [],
       }
       this.currentAction = {}
+    },
+
+    isPasswordField(key, paramsMap) {
+      const target = paramsMap[key]
+      return (target ? target.type : '') === 'password'
     },
 
     toggleShowMetrics(item) {
