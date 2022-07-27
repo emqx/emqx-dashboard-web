@@ -491,4 +491,8 @@ export const checkNOmitFromObj = (obj) => {
   return omit(ret, emptyValueKeyArr)
 }
 
+export const hidePwd = (pwd) => {
+  return pwd.replace(/./g, '*')
+}
+
 export default {}
