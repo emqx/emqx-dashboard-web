@@ -87,7 +87,14 @@ export default {
 
   components: {},
 
-  props: {},
+  props: {
+    /**
+     * from route
+     */
+    isForChangeDefaultPwd: {
+      type: Boolean,
+    },
+  },
 
   data() {
     const validatePass = (rule, value, callback) => {
@@ -127,9 +134,6 @@ export default {
   },
 
   computed: {
-    isForChangeDefaultPwd() {
-      return !!this.$route.query.forChangeDefaultPwd
-    },
     currentUserName() {
       return this.$store.state.user.username
     },
