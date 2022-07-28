@@ -23,6 +23,18 @@ export default {
     zh: '密码',
     en: 'Password',
   },
+  accountLockedMessage: {
+    zh: '{username} 登录已被锁定，请在 {second} 秒后重试',
+    en: 'User {username} has been locked. Please try again {second} seconds later',
+  },
+  defaultPwdTip: {
+    zh: '检测到您正在使用默认密码登录，请及时修改密码',
+    en: 'Detected that you are logging in with the default password, please change your password in time.',
+  },
+  skip: {
+    zh: '跳过',
+    en: 'Skip',
+  },
   remember: {
     zh: '记住',
     en: 'remember',

@@ -47,6 +47,7 @@
 import { auth } from '@/api/common'
 import { awaitWrap } from '@/common/utils'
 import store from '@/stores'
+import { DEFAULT_PWD } from '@/common/constants'
 
 export default {
   name: 'Login',
@@ -105,7 +106,13 @@ export default {
             return
           }
           this.loginError = ''
-          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember })
+          const { is_default_password } = res
+          const isUsingDefaultPwd = password === DEFAULT_PWD
+          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, isUsingDefaultPwd })
+          if (is_default_password && this.isNeedAuth) {
+            this.needChangePwd = true
+            return
+          }
           setTimeout(() => {
             const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query
             this.$router.replace({

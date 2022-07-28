@@ -40,6 +40,8 @@
       :title="accessType === 'edit' ? $t('General.editorUser') : $t('General.creatingUser')"
       :visible.sync="dialogVisible"
       @close="closeDialog"
+      :show-close="!isForChangeDefaultPwd"
+      :close-on-click-modal="!isForChangeDefaultPwd"
     >
       <el-form ref="recordForm" size="small" :model="record" :rules="rules">
         <el-form-item prop="username" :label="$t('General.userName')">
@@ -61,13 +63,15 @@
         <el-form-item v-if="allowChange" prop="repeatPassword" :label="$t('General.confirmPassword')">
           <el-input v-model="record.repeatPassword" type="password"></el-input>
         </el-form-item>
-        <el-link v-if="accessType === 'edit'" :underline="false" @click="togglePassword">
+        <el-link v-if="accessType === 'edit' && !isForChangeDefaultPwd" :underline="false" @click="togglePassword">
           {{ allowChange ? $t('General.dontChangePassword') : $t('General.changePassword') }}
         </el-link>
       </el-form>
 
       <div slot="footer" class="dialog-align-footer">
-        <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
+        <el-button plain size="small" @click="closeDialog" v-if="!isForChangeDefaultPwd">
+          {{ $t('Base.cancel') }}
+        </el-button>
         <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
       </div>
     </el-dialog>
@@ -137,8 +141,26 @@ export default {
     }
   },
 
-  created() {
-    this.loadData()
+  computed: {
+    isForChangeDefaultPwd() {
+      return !!this.$route.query.forChangeDefaultPwd
+    },
+    currentUserName() {
+      return this.$store.state.user.username
+    },
+  },
+
+  watch: {
+    isForChangeDefaultPwd(val) {
+      if (val) {
+        this.openChangePwdDialog()
+      }
+    },
+  },
+
+  async created() {
+    await this.loadData()
+    this.confirmForChangeDefaultPwdParam()
   },
 
   methods: {
@@ -195,6 +217,9 @@ export default {
               // 更新当前用户
               if (vue.$store.state.user.username === username) {
                 vue.$store.dispatch('UPDATE_USER_INFO', { username, password: vue.record.newPassword })
+                if (vue.isForChangeDefaultPwd) {
+                  vue.$router.replace({ name: 'users', query: {} })
+                }
               }
             }
             vue.$message.success(vue.$t('Base.editSuccess'))
@@ -229,6 +254,26 @@ export default {
           })
         })
         .catch(() => {})
+    },
+    /**
+     * open when user using default pwd
+     */
+    openChangePwdDialog() {
+      try {
+        const user = this.tableData.find(({ username }) => username === this.currentUserName)
+        if (!user) {
+          throw new Error('User not found')
+        }
+        this.showDialog('edit', user)
+        this.allowChange = true
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    confirmForChangeDefaultPwdParam() {
+      if (this.isForChangeDefaultPwd) {
+        this.openChangePwdDialog()
+      }
     },
   },
 }
