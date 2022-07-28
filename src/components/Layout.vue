@@ -78,12 +78,16 @@ export default {
         customClass: 'default-pwd-tip',
         callback: () => {
           const route = {
-            path: '/users',
-            query: { forChangeDefaultPwd: 'true' },
+            name: 'users',
+            params: { isForChangeDefaultPwd: true },
           }
           if (this.$route.name === 'users') {
-            // FIXME:
-            this.$router.replace(route)
+            this.$router.replace({
+              params: { isForChangeDefaultPwd: true },
+              // just for vue route can update params, if don't add this, the params will not update
+              // i think maybe this is a bug
+              query: { _t: Date.now() },
+            })
           } else {
             this.$router.push(route)
           }

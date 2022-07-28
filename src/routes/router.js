@@ -300,6 +300,7 @@ let routes = [
         path: '',
         name: 'users',
         component: () => import('@/views/General/Users'),
+        props: true,
       },
     ],
   },
