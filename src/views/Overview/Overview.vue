@@ -195,30 +195,6 @@
         <LicenseUploaded @uploaded="loadLicenseData" />
       </template>
     </a-card>
-
-    <el-dialog
-      title="标题"
-      :width="`${licenseTipWidth}px`"
-      :visible.sync="licenseTipVisible"
-      :close-on-click-modal="false"
-      custom-class="license-dialog"
-      top="0"
-    >
-      <div class="tip-content">
-        <p v-if="!isLicenseExpiry" v-html="$t('Overview.licenseEvaluationTip')">
-          {{ $t('Overview.licenseEvaluationTip') }}
-        </p>
-        <p v-else v-html="$t('Overview.licenseExpiryTip')">
-          {{ $t('Overview.licenseExpiryTip') }}
-        </p>
-      </div>
-      <div v-if="!isLicenseExpiry" class="tip-checkbox">
-        <el-checkbox v-model="noprompt" @change="liceEvaTipShowChange">{{ $t('Overview.notPromptAgain') }}</el-checkbox>
-      </div>
-      <div class="tip-button">
-        <el-button type="primary" size="small" @click="licenseTipVisible = false">{{ $t('Overview.konw') }}</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -271,24 +247,6 @@ export default {
       timer: 0,
       nodes: [],
       isNodesLoading: false,
-      licenseTipVisible: false,
-      isLicenseExpiry: false,
-      noprompt: false,
-      licenseTipWidth: 460,
-      license: {
-        customer: '',
-        email: '',
-        plugins: '',
-        max_connections: 100000,
-        issued_at: '',
-        expiry_at: '',
-        vendor: '',
-        version: '',
-        type: 'trial',
-        expiry: false,
-        customer_type: 0,
-      },
-      isLicenseLoading: false,
       currentMetricsLogs: {
         received: {
           x: Array(32).fill('N/A'),
@@ -336,11 +294,17 @@ export default {
       }
       return this.initCurrentNode
     },
+    isLicenseLoading() {
+      return this.$store.state.isLicenseLoading
+    },
+    license() {
+      return this.$store.state.license
+    },
   },
 
   async created() {
     this.pageLoading = true
-    await Promise.all([this.loadData(), this.loadLicenseData(), this.dataTypeChange()])
+    await Promise.all([this.loadData(), this.dataTypeChange()])
     this.pageLoading = false
     this.startPolling()
   },
@@ -357,11 +321,6 @@ export default {
         this.loadNodes()
         this.$refs.percentageCards.loadMetricsData()
       }, 10 * 1000)
-    },
-    liceEvaTipShowChange(val) {
-      if (val) {
-        localStorage.setItem('licenseTipVisible', false)
-      }
     },
     async dataTypeChange() {
       try {
@@ -389,28 +348,7 @@ export default {
       return `${formatNumber(connection)}/${formatNumber(max_connections)}`
     },
     async loadLicenseData() {
-      try {
-        this.isLicenseLoading = true
-        this.license = await loadLicenseInfo()
-        setTimeout(() => {
-          // evaluation 许可证
-          if (this.license.customer_type === this.evaluation && localStorage.getItem('licenseTipVisible') !== 'false') {
-            this.licenseTipVisible = true
-            this.isLicenseExpiry = false
-            this.licenseTipWidth = 520
-          }
-          // 证书过期
-          if (this.license.expiry === true) {
-            this.licenseTipVisible = true
-            this.isLicenseExpiry = true
-            this.licenseTipWidth = 600
-          }
-        }, 1000)
-        this.isLicenseLoading = false
-        return Promise.resolve()
-      } catch (error) {
-        return Promise.resolve(error)
-      }
+      this.$store.dispatch('GET_LICENSE')
     },
     async loadData() {
       try {
@@ -638,47 +576,9 @@ export default {
     justify-content: center;
   }
 
-  .tip-title {
-    font-size: 18px;
-    .el-icon-warning {
-      color: #e6a23c;
-    }
-    span {
-      display: inline-block;
-      margin-left: 10px;
-    }
-  }
-
-  .tip-content {
-    font-size: 16px;
-    p {
-      word-break: break-word;
-    }
-  }
-
-  .tip-checkbox {
-    margin-top: 10px;
-    .el-checkbox {
-      color: #aaa;
-    }
-  }
-
-  .tip-button {
-    text-align: right;
-  }
   .ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-title,
   .ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-paragraph > li {
     background: linear-gradient(90deg, rgba(207, 216, 220, 0.2), rgba(207, 216, 220, 0.4), rgba(207, 216, 220, 0.2));
-  }
-}
-.license-dialog {
-  top: 50%;
-  transform: translateY(-50%);
-  .el-dialog__header {
-    display: none;
-  }
-  .el-dialog__body {
-    padding-bottom: 20px;
   }
 }
 </style>

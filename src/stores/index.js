@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import config from '../../script/config'
+import { loadLicenseInfo } from '@/api/overview'
 
 Vue.use(Vuex)
 
@@ -45,6 +46,20 @@ export default new Vuex.Store({
     alertCount: 0,
     config: getConfigState(),
     selectedModule: JSON.parse(localStorage.getItem('selectedModule')) || {},
+    isLicenseLoading: false,
+    license: {
+      version: '',
+      vendor: '',
+      type: '',
+      original_max_connections: 10,
+      max_connections: 10,
+      issued_at: '',
+      expiry_at: '',
+      expiry: false,
+      email: '',
+      customer_type: 10,
+      customer: '',
+    },
   },
   getters: {
     httpBaseUrl: (state) => {
@@ -90,6 +105,17 @@ export default new Vuex.Store({
     LOADING({ commit }, loading = false) {
       commit('LOADING', loading)
     },
+    async GET_LICENSE({ commit }) {
+      try {
+        commit('SET_LICENSE_LOADING_STATUS', true)
+        const data = await loadLicenseInfo()
+        commit('SET_LICENSE', data)
+      } catch (error) {
+        //
+      } finally {
+        commit('SET_LICENSE_LOADING_STATUS', false)
+      }
+    },
   },
   mutations: {
     UPDATE_MODULE(state, selectedModule) {
@@ -116,6 +142,12 @@ export default new Vuex.Store({
     },
     SET_LANGUAGE(state, lang) {
       state.lang = lang
+    },
+    SET_LICENSE(state, licenseData) {
+      state.license = licenseData
+    },
+    SET_LICENSE_LOADING_STATUS(state, isLoading) {
+      state.isLicenseLoading = isLoading
     },
   },
 })
