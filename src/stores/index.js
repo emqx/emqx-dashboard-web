@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import config from '../../script/config'
+import { loadLicenseInfo } from '@/api/overview'
 
 Vue.use(Vuex)
 
@@ -49,6 +50,20 @@ export default new Vuex.Store({
     config: getConfigState(),
     navTabs: getNavTabs(),
     selectedModule: JSON.parse(localStorage.getItem('selectedModule')) || {},
+    isLicenseLoading: false,
+    license: {
+      version: '',
+      vendor: '',
+      type: '',
+      original_max_connections: 10,
+      max_connections: 10,
+      issued_at: '',
+      expiry_at: '',
+      expiry: false,
+      email: '',
+      customer_type: 10,
+      customer: '',
+    },
   },
   actions: {
     UPDATE_MODULE({ commit }, selectedModule) {
@@ -103,6 +118,17 @@ export default new Vuex.Store({
       commit('REMOVE_NAV_TABS', tabs)
       return tabs
     },
+    async GET_LICENSE({ commit }) {
+      try {
+        commit('SET_LICENSE_LOADING_STATUS', true)
+        const data = await loadLicenseInfo()
+        commit('SET_LICENSE', data)
+      } catch (error) {
+        //
+      } finally {
+        commit('SET_LICENSE_LOADING_STATUS', false)
+      }
+    },
   },
   mutations: {
     UPDATE_MODULE(state, selectedModule) {
@@ -137,6 +163,12 @@ export default new Vuex.Store({
     REMOVE_NAV_TABS(state, tabs) {
       state.navTabs = tabs
       localStorage.setItem('navTabs', JSON.stringify(state.navTabs))
+    },
+    SET_LICENSE(state, licenseData) {
+      state.license = licenseData
+    },
+    SET_LICENSE_LOADING_STATUS(state, isLoading) {
+      state.isLicenseLoading = isLoading
     },
   },
 })

@@ -22,6 +22,7 @@
         </transition>
       </div>
     </el-main>
+    <LicenseDialog v-model="licenseTipVisible" />
   </el-container>
 </template>
 
@@ -29,6 +30,7 @@
 import LeftBar from '@/components/LeftBar'
 import NavHeader from '@/components/NavHeader'
 import NavTabs from '@/components/NavTabs.vue'
+import LicenseDialog from '@/views/Base/LicenseDialog.vue'
 
 export default {
   name: 'Layout',
@@ -37,16 +39,28 @@ export default {
     NavHeader,
     LeftBar,
     NavTabs,
+    LicenseDialog,
   },
 
   data() {
     return {
       collapsed: false,
       theme: 'light',
+      licenseTipVisible: false,
+      /**
+       * maybe is a constant? i don't know
+       */
+      evaluation: 10,
     }
   },
 
   computed: {
+    license() {
+      return this.$store.state.license
+    },
+    isTrialLicense() {
+      return this.license.customer_type === this.evaluation
+    },
     elAsideWidth() {
       return this.$store.state.leftBarCollapse ? 'auto' : '200px'
     },
@@ -80,10 +94,20 @@ export default {
         showClose: false,
       })
     },
+    async initLicense() {
+      await this.$store.dispatch('GET_LICENSE')
+      if (this.isTrialLicense && localStorage.getItem('licenseTipVisible') !== 'false') {
+        this.licenseTipVisible = true
+      }
+      if (this.license.expiry === true) {
+        this.licenseTipVisible = true
+      }
+    },
   },
 
-  created() {
-    if (this.isUsingDefaultPwd) {
+  async created() {
+    await this.initLicense()
+    if (!this.isTrialLicense && this.isUsingDefaultPwd) {
       this.popupMessageBox()
     }
   },
