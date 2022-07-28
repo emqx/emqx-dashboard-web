@@ -50,6 +50,7 @@ import { changePassword } from '@/api/function.js'
 import { awaitWrap } from '@/common/utils'
 import store from '@/stores'
 import PwdFormInLogin from './components/PwdFormInLogin.vue'
+import { DEFAULT_PWD } from '@/common/constants'
 
 export default {
   name: 'Login',
@@ -118,8 +119,9 @@ export default {
             return
           }
           this.loginError = ''
-          const { is_default_password, is_week_password } = res
-          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember })
+          const { is_default_password } = res
+          const isUsingDefaultPwd = password === DEFAULT_PWD
+          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, isUsingDefaultPwd })
           if (is_default_password && this.isNeedAuth) {
             this.needChangePwd = true
             return

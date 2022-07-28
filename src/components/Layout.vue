@@ -53,6 +53,39 @@ export default {
     elMainStyle() {
       return { marginLeft: !this.$store.state.leftBarCollapse ? '200px' : '80px' }
     },
+    isUsingDefaultPwd() {
+      return this.$store.state.user.isUsingDefaultPwd
+    },
+  },
+
+  methods: {
+    popupMessageBox() {
+      this.$msgbox({
+        type: 'info',
+        message: this.$t('Base.defaultPwdTip'),
+        confirmButtonText: 'OK',
+        customClass: 'default-pwd-tip',
+        callback: () => {
+          const route = {
+            path: '/users',
+            query: { forChangeDefaultPwd: 'true' },
+          }
+          if (this.$route.name === 'users') {
+            // FIXME:
+            this.$router.replace(route)
+          } else {
+            this.$router.push(route)
+          }
+        },
+        showClose: false,
+      })
+    },
+  },
+
+  created() {
+    if (this.isUsingDefaultPwd) {
+      this.popupMessageBox()
+    }
   },
 }
 </script>
@@ -73,5 +106,12 @@ export default {
 
 .el-main {
   transition: margin-left 0.3s;
+}
+</style>
+<style lang="scss">
+.default-pwd-tip {
+  .el-message-box__content {
+    padding-top: 28px;
+  }
 }
 </style>

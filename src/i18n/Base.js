@@ -28,8 +28,8 @@ export default {
     en: 'User {username} has been locked. Please try again {second} seconds later',
   },
   defaultPwdTip: {
-    zh: '您正在使用默认密码，请及时修改。',
-    en: 'You are using the default username and password, please modify it in time.',
+    zh: '检测到您正在使用默认密码登录，请及时修改密码',
+    en: 'Detected that you are logging in with the default password, please change your password in time.',
   },
   skip: {
     zh: '跳过',
