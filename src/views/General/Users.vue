@@ -106,6 +106,14 @@ export default {
         callback()
       }
     }
+    const newPwdSameConfirm = (rule, value, callback) => {
+      if (value === this.record.password) {
+        callback(new Error(this.$t('General.noSameNewPwd')))
+      } else {
+        callback()
+      }
+    }
+    const { newPassword, repeatPassword } = pwdRule(validatePass)
     return {
       dialogVisible: false,
       tableData: [],
@@ -128,7 +136,14 @@ export default {
             trigger: ['blur', 'change'],
           },
         ],
-        ...pwdRule(validatePass),
+        newPassword: [
+          ...newPassword,
+          {
+            validator: newPwdSameConfirm,
+            trigger: ['blur'],
+          },
+        ],
+        repeatPassword,
       },
     }
   },
