@@ -151,6 +151,10 @@ export default {
     zh: '两次输入密码不一致',
     en: 'Two inconsistencies in password input',
   },
+  noSameNewPwd: {
+    zh: '新密码不能与旧密码相同',
+    en: 'The new and old passwords cannot be the same',
+  },
   enterOneUserName: {
     zh: '请输入用户名',
     en: 'Please enter username',
