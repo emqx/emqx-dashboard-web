@@ -206,7 +206,7 @@
               <el-table-column prop="topic" min-width="110px" show-overflow-tooltip label="Topic"></el-table-column>
               <el-table-column prop="qos" min-width="110px" label="QoS"></el-table-column>
               <el-table-column prop="node" min-width="80px" :label="$t('Clients.node')"></el-table-column>
-              <el-table-column prop="clientid" width="100px">
+              <el-table-column prop="clientid" width="110px">
                 <template slot-scope="{ row }">
                   <el-button type="dashed" size="mini" @click="handleUnSubscription(row)">
                     {{ $t('Clients.unsubscribe') }}
