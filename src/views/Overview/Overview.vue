@@ -140,7 +140,7 @@
       </div>
 
       <ul class="license-field">
-        <li v-if="license.customer_type !== evaluation" class="item">
+        <li v-if="!isEvaluationLicense" class="item">
           <span class="key">{{ $t('Overview.customer') }}:</span>
           <span class="value">{{ license.customer }}</span>
         </li>
@@ -157,7 +157,7 @@
             ></el-progress>
           </div>
         </li>
-        <template v-if="license.customer_type !== evaluation">
+        <template v-if="!isEvaluationLicense">
           <li class="item">
             <span class="key">{{ $t('Overview.issuanceOfEmail') }}:</span>
             <span class="value">{{ license.email }}</span>
@@ -176,17 +176,10 @@
       </ul>
       <template v-if="$hasShow('monitor.connections')">
         <div class="license-card-footer">
-          <div
-            v-if="license.customer_type === evaluation"
-            class="description"
-            v-html="$t('Overview.licenseEvaluationTip')"
-          ></div>
+          <div v-if="isEvaluationLicense" class="description" v-html="$t('Overview.licenseEvaluationTip')"></div>
           <div v-else-if="license.expiry === true" class="description" v-html="$t('Overview.licenseExpiryTip')"></div>
           <div v-else class="description">{{ $t('Overview.beforeTheCertificateExpires') }}</div>
-          <div
-            v-if="license.type === 'trial' && license.customer_type !== evaluation && license.expiry === false"
-            class="oper"
-          >
+          <div v-if="license.type === 'trial' && !isEvaluationLicense && license.expiry === false" class="oper">
             <el-tooltip effect="dark" :content="$t('Overview.forTrialEdition')" placement="top" :visible-arrow="false">
               <el-tag type="danger">{{ $t('Overview.trialEdition') }}</el-tag>
             </el-tooltip>
@@ -225,7 +218,6 @@ export default {
 
   data() {
     return {
-      evaluation: 10,
       pageLoading: true,
       nodeName: '',
       initCurrentNode: {
@@ -299,6 +291,9 @@ export default {
     },
     license() {
       return this.$store.state.license
+    },
+    isEvaluationLicense() {
+      return this.$store.getters.isEvaluationLicense
     },
   },
 

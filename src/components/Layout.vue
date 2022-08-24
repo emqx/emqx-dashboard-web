@@ -44,10 +44,6 @@ export default {
       collapsed: false,
       theme: 'light',
       licenseTipVisible: false,
-      /**
-       * maybe is a constant? i don't know
-       */
-      evaluation: 10,
     }
   },
 
@@ -55,8 +51,8 @@ export default {
     license() {
       return this.$store.state.license
     },
-    isTrialLicense() {
-      return this.license.customer_type === this.evaluation
+    isEvaluationLicense() {
+      return this.$store.getters.isEvaluationLicense
     },
     elAsideWidth() {
       return this.$store.state.leftBarCollapse ? 'auto' : '200px'
@@ -97,10 +93,9 @@ export default {
     },
     async initLicense() {
       await this.$store.dispatch('GET_LICENSE')
-      if (this.isTrialLicense && localStorage.getItem('licenseTipVisible') !== 'false') {
+      if (this.isEvaluationLicense && localStorage.getItem('licenseTipVisible') !== 'false') {
         this.licenseTipVisible = true
-      }
-      if (this.license.expiry === true) {
+      } else if (this.license.expiry === true) {
         this.licenseTipVisible = true
       }
     },
@@ -108,7 +103,7 @@ export default {
 
   async created() {
     await this.initLicense()
-    if (!this.isTrialLicense && this.isUsingDefaultPwd) {
+    if (!this.isEvaluationLicense && this.isUsingDefaultPwd) {
       this.popupMessageBox()
     }
   },

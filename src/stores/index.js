@@ -37,6 +37,8 @@ function getCollapse() {
   return JSON.parse(collapse)
 }
 
+const EVALUATION_LICENSE_CONNECTION_LIMIT = 10
+
 export default new Vuex.Store({
   state: {
     loading: false,
@@ -65,6 +67,9 @@ export default new Vuex.Store({
     httpBaseUrl: (state) => {
       const { baseURL, useRelativeResourcePath } = state.config
       return useRelativeResourcePath && baseURL.slice(0, 1) === '/' ? baseURL.slice(1) : baseURL
+    },
+    isEvaluationLicense(state) {
+      return state.license.customer_type === EVALUATION_LICENSE_CONNECTION_LIMIT
     },
   },
   actions: {
