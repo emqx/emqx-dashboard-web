@@ -40,6 +40,8 @@ function getCollapse() {
   return JSON.parse(collapse)
 }
 
+const EVALUATION_LICENSE_CONNECTION_LIMIT = 10
+
 export default new Vuex.Store({
   state: {
     loading: false,
@@ -63,6 +65,11 @@ export default new Vuex.Store({
       email: '',
       customer_type: 10,
       customer: '',
+    },
+  },
+  getters: {
+    isEvaluationLicense(state) {
+      return state.license.customer_type === EVALUATION_LICENSE_CONNECTION_LIMIT
     },
   },
   actions: {
