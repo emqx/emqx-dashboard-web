@@ -176,6 +176,7 @@
             </el-button>
           </el-col>
         </el-row>
+        <p class="default-node-tip">{{ $t('Modules.defaultNodeTip') }}</p>
         <el-row>
           <div :style="{ height: initialHeight + 'px' }" class="m-container" ref="monacoContainer">
             <log-content
@@ -207,7 +208,15 @@
 
 <script>
 import moment from 'moment'
-import { getTraceList, addTrace, getTraceLog, downloadTrace, stopTrace, deleteTrace } from '@/api/logTrace'
+import {
+  getTraceList,
+  addTrace,
+  getTraceLog,
+  downloadTrace,
+  stopTrace,
+  deleteTrace,
+  getTraceDetail,
+} from '@/api/logTrace'
 import { loadNodes as loadNodesApi } from '@/api/overview'
 import LogContent from './LogContent.vue'
 
@@ -402,6 +411,19 @@ export default {
       const timeNow = new Date()
       this.record.startTime = [timeNow, new Date(timeNow.getTime() + DEFAULT_DURATION)]
     },
+    async getWhichNodeHasNewestLog(name) {
+      const nodeList = await getTraceDetail(name)
+      if (!nodeList || nodeList.length === 0) {
+        return false
+      }
+      return nodeList.sort((node1, node2) => node2.mtime - node1.mtime)[0].node
+    },
+    initLogContent() {
+      LOG_VIEW_POSITION = 0
+      LAST_ACTIVED_SCROLLTOP = 0
+      this.logContent = ''
+      this.nextPageLoading = ''
+    },
     async viewDetail(row, changeNode = false) {
       if (!row || !row.name) return
       this.viewDialog = true
@@ -410,12 +432,13 @@ export default {
       })
       this.viewNodeLoading = true
       this.viewLogName = row.name
-      LOG_VIEW_POSITION = 0
-      LAST_ACTIVED_SCROLLTOP = 0
-      this.logContent = ''
-      this.nextPageLoading = ''
+
+      this.initLogContent()
+
       if (!changeNode) {
         await this.loadNodes()
+        const node = await this.getWhichNodeHasNewestLog(row.name)
+        this.node = node || this.node
       }
       await this.loadLogDetail(row.name)
 
@@ -527,5 +550,11 @@ export default {
 
 .el-button.el-button--small {
   line-height: 14px;
+}
+
+.default-node-tip {
+  margin-bottom: 0;
+  margin-top: 8px;
+  color: #bcbcbc;
 }
 </style>

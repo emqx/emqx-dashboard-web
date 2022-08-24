@@ -30,3 +30,7 @@ export function stopTrace(name) {
 export function deleteTrace(name) {
   return http.delete(`/trace/${encodeURIComponent(name)}`)
 }
+
+export function getTraceDetail(name) {
+  return http.get(`/trace/${encodeURIComponent(name)}/detail`)
+}
