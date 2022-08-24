@@ -68,6 +68,14 @@ export default {
     },
   },
 
+  watch: {
+    isEvaluationLicense(nVal, oVal) {
+      if (oVal && !nVal && this.isUsingDefaultPwd) {
+        window.setTimeout(this.popupMessageBox, 300)
+      }
+    },
+  },
+
   methods: {
     popupMessageBox() {
       this.$msgbox({
