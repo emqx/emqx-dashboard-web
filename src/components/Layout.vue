@@ -47,6 +47,7 @@ export default {
       collapsed: false,
       theme: 'light',
       licenseTipVisible: false,
+      alreadyPopupPwdMsg: false,
     }
   },
 
@@ -78,6 +79,11 @@ export default {
 
   methods: {
     popupMessageBox() {
+      // do not popup repeat
+      if (this.alreadyPopupPwdMsg) {
+        return
+      }
+      this.alreadyPopupPwdMsg = true
       this.$msgbox({
         type: 'info',
         message: this.$t('Base.defaultPwdTip'),
