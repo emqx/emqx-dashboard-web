@@ -117,7 +117,10 @@ export default {
       tableData: [],
       accessType: '',
       allowChange: false,
-      record: {},
+      record: {
+        username: '',
+        tags: '',
+      },
       rules: {
         username: [{ required: true, message: this.$t('General.enterOneUserName') }],
         tags: [{ required: true, message: this.$t('General.pleaseEnterNotes') }],
