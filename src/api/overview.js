@@ -145,4 +145,16 @@ export async function uploadLicense(file) {
   return http.post('/license/upload', { license: content })
 }
 
+export async function getClientCount() {
+  return http.get('/clients_counter')
+}
+
+export async function getClientCounterStatus() {
+  return http.get('/clients_counter/status')
+}
+
+export async function setClientCounterStatus(status) {
+  return http.put('/clients_counter/status', { command: status })
+}
+
 export default {}

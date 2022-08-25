@@ -1,7 +1,7 @@
 <template>
   <div class="overview app-wrapper">
     <el-row class="content-wrapper" :gutter="20">
-      <el-col :span="6">
+      <el-col :span="5">
         <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.messageOut') }}
@@ -26,7 +26,7 @@
         </a-card>
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="5">
         <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.messageIn') }}
@@ -51,7 +51,7 @@
         </a-card>
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="5">
         <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.subscriptionNumber') }}
@@ -74,7 +74,7 @@
         </a-card>
       </el-col>
 
-      <el-col v-if="$hasShow('monitor.connections')" :span="6">
+      <el-col v-if="$hasShow('monitor.connections')" :span="5">
         <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">{{ $t('Overview.activeConnection') }}</div>
 
@@ -101,6 +101,10 @@
             </div>
           </div>
         </a-card>
+      </el-col>
+
+      <el-col :span="4">
+        <ClientCountCard :overview-loading="isCurrentMetricsLoading && pageLoading" />
       </el-col>
     </el-row>
 
@@ -232,6 +236,7 @@ import PercentageCards from './components/PercentageCards'
 import PolylineCards from './components/PolylineCards'
 import ConnectionStatistics from './components/ConnectionStatistics'
 import LicenseUploaded from './components/LicenseUploaded'
+import ClientCountCard from '@/views/Overview/components/ClientCountCard'
 
 export default {
   name: 'Overview',
@@ -243,6 +248,7 @@ export default {
     PolylineCards,
     ConnectionStatistics,
     LicenseUploaded,
+    ClientCountCard,
   },
 
   props: {},

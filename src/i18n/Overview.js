@@ -357,4 +357,16 @@ export default {
     zh: '内存',
     en: 'Memory',
   },
+  recentActiveClients: {
+    zh: '近期活跃客户端数',
+    en: 'Recent Active Clients',
+  },
+  startCounter: {
+    zh: '启动计数',
+    en: 'Start counter',
+  },
+  pauseCounter: {
+    zh: '暂停计数',
+    en: 'Pause counter',
+  },
 }
