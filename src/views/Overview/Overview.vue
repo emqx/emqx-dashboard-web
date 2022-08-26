@@ -1,7 +1,7 @@
 <template>
   <div class="overview app-wrapper">
     <el-row class="content-wrapper" :gutter="20">
-      <el-col :span="5">
+      <el-col :span="5" class="el-col-metric">
         <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.messageOut') }}
@@ -26,7 +26,7 @@
         </a-card>
       </el-col>
 
-      <el-col :span="5">
+      <el-col :span="5" class="el-col-metric">
         <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.messageIn') }}
@@ -51,7 +51,7 @@
         </a-card>
       </el-col>
 
-      <el-col :span="5">
+      <el-col :span="5" class="el-col-metric">
         <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">
             {{ $t('Overview.subscriptionNumber') }}
@@ -74,7 +74,7 @@
         </a-card>
       </el-col>
 
-      <el-col v-if="$hasShow('monitor.connections')" :span="5">
+      <el-col v-if="$hasShow('monitor.connections')" :span="5" class="el-col-metric">
         <a-card class="app-card" :bordered="true" :loading="isCurrentMetricsLoading && pageLoading">
           <div class="app-card-title">{{ $t('Overview.activeConnection') }}</div>
 
@@ -103,7 +103,7 @@
         </a-card>
       </el-col>
 
-      <el-col :span="4">
+      <el-col :span="5" class="el-col-metric">
         <ClientCountCard :overview-loading="isCurrentMetricsLoading && pageLoading" />
       </el-col>
     </el-row>
@@ -470,6 +470,10 @@ export default {
 .overview {
   .status-count {
     text-align: center;
+  }
+
+  .el-col-metric {
+    width: 20%;
   }
 
   .flux-wrapper {

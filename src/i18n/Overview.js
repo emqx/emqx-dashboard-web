@@ -369,4 +369,12 @@ export default {
     zh: '暂停计数',
     en: 'Pause counter',
   },
+  recentlyActiveElectricVehicles: {
+    zh: '近期活跃电车数',
+    en: 'Recently active electric vehicles',
+  },
+  recentlyActiveFuelVehicles: {
+    zh: '近期活跃油车数',
+    en: 'Recently active fuel vehicles',
+  },
 }

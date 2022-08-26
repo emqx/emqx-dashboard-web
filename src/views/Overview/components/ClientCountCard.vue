@@ -2,10 +2,18 @@
   <a-card class="client-count-card app-card" :loading="overviewLoading || isDataLoading">
     <div class="app-card-title">{{ $t('Overview.recentActiveClients') }}</div>
     <div class="content">
-      <span>
-        {{ formatNumber(count) }}
-      </span>
-      <div class="flux-wrapper"></div>
+      <div class="count-item">
+        <span>
+          {{ formatNumber(countElect) }}
+        </span>
+        <p class="number-label">{{ $t('Overview.recentlyActiveElectricVehicles') }}</p>
+      </div>
+      <div class="count-item">
+        <span>
+          {{ formatNumber(countGas) }}
+        </span>
+        <p class="number-label">{{ $t('Overview.recentlyActiveFuelVehicles') }}</p>
+      </div>
     </div>
     <div class="app-footer">
       <el-button v-if="status === STOPPED" size="mini" type="primary" @click="changeStatus(START)">
@@ -41,15 +49,18 @@ export default {
       STARTED,
       START,
       isDataLoading: false,
-      count: 0,
+      countElect: 0,
+      countGas: 0,
       status: STARTED,
     }
   },
   methods: {
     async getCount() {
       try {
-        const { count } = await getClientCount()
-        this.count = count
+        const { count_1883, count_11883 } = await getClientCount()
+        console.log({ count_1883, count_11883 })
+        this.countElect = count_1883
+        this.countGas = count_11883
       } catch (error) {
         //
       }
@@ -90,15 +101,25 @@ export default {
 
 <style lang="scss">
 .client-count-card {
-  .count-bd {
+  .count-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 4px 0;
+    span {
+      font-size: 20px;
+    }
+    p {
+      margin-bottom: 0;
+      font-size: 12px;
+      line-height: 1.2;
+      flex-basis: 92px;
+      text-align: right;
+    }
   }
-  .num {
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 0;
+  .number-label {
+    font-size: 14px;
+    color: #bcbcbc;
   }
 }
 </style>
