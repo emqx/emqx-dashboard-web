@@ -217,7 +217,6 @@ import {
   deleteTrace,
   getTraceDetail,
 } from '@/api/logTrace'
-import { loadNodes as loadNodesApi } from '@/api/overview'
 import LogContent from './LogContent.vue'
 
 let LOG_VIEW_POSITION = 0
@@ -349,14 +348,12 @@ export default {
   },
   methods: {
     moment,
-    async loadNodes() {
-      this.nodes = []
-      const nodes = await loadNodesApi().catch(() => {})
-      if (nodes) {
-        nodes.forEach((v) => {
-          this.nodes.push({ node: v.node })
-        })
-        this.node = (this.nodes[0] && this.nodes[0].node) || ''
+    async loadNodes(name) {
+      try {
+        this.nodes = []
+        this.nodes = await getTraceDetail(name)
+      } catch (error) {
+        //
       }
     },
     async loadTraceList() {
@@ -411,10 +408,10 @@ export default {
       const timeNow = new Date()
       this.record.startTime = [timeNow, new Date(timeNow.getTime() + DEFAULT_DURATION)]
     },
-    async getWhichNodeHasNewestLog(name) {
-      const nodeList = await getTraceDetail(name)
+    getWhichNodeHasNewestLog() {
+      const nodeList = this.nodes
       if (!nodeList || nodeList.length === 0) {
-        return false
+        return ''
       }
       return nodeList.sort((node1, node2) => node2.mtime - node1.mtime)[0].node
     },
@@ -436,9 +433,8 @@ export default {
       this.initLogContent()
 
       if (!changeNode) {
-        await this.loadNodes()
-        const node = await this.getWhichNodeHasNewestLog(row.name)
-        this.node = node || this.node
+        await this.loadNodes(this.viewLogName)
+        this.node = this.getWhichNodeHasNewestLog(row.name)
       }
       await this.loadLogDetail(row.name)
 
