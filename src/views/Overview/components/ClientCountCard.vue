@@ -6,13 +6,13 @@
         <span>
           {{ formatNumber(countElect) }}
         </span>
-        <p class="number-label">{{ $t('Overview.recentlyActiveElectricVehicles') }}</p>
+        <p class="number-label">{{ $t('Overview.electricVehicles') }}</p>
       </div>
       <div class="count-item">
         <span>
           {{ formatNumber(countGas) }}
         </span>
-        <p class="number-label">{{ $t('Overview.recentlyActiveFuelVehicles') }}</p>
+        <p class="number-label">{{ $t('Overview.fuelVehicles') }}</p>
       </div>
     </div>
     <div class="app-footer">
@@ -58,7 +58,6 @@ export default {
     async getCount() {
       try {
         const { count_1883, count_11883 } = await getClientCount()
-        console.log({ count_1883, count_11883 })
         this.countElect = count_1883
         this.countGas = count_11883
       } catch (error) {
