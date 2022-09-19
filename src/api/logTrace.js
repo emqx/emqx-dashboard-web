@@ -1,6 +1,5 @@
 import http from '@/common/http'
-import store from '@/stores'
-import { createURLWithAuth } from '../common/utils'
+import { downloadBlobData } from '../common/utils'
 
 export function getTraceList() {
   return http.get('/trace')
@@ -15,14 +14,19 @@ export function getTraceLog(name, params) {
   return http.get(`/trace/${encodeURIComponent(name)}/log`, { params })
 }
 
-export function downloadTrace(name) {
-  const link = document.createElement('a')
-  link.href = createURLWithAuth(`${store.getters.httpBaseUrl}/trace/${encodeURIComponent(name)}/download`)
-  // link.setAttribute('download', 'emqx.zip')
-  document.body.appendChild(link)
-  link.click()
-  return Promise.resolve()
+export async function downloadTrace(name) {
+  try {
+    const res = await http.get(`/trace/${encodeURIComponent(name)}/download`, {
+      responseType: 'blob',
+      timeout: 45000,
+    })
+    downloadBlobData(res)
+    return Promise.resolve()
+  } catch (error) {
+    return Promise.reject(error)
+  }
 }
+
 export function stopTrace(name) {
   return http.put(`/trace/${encodeURIComponent(name)}/stop`)
 }

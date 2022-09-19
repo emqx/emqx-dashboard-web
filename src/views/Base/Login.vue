@@ -107,12 +107,16 @@ export default {
           }
           this.loginError = ''
           const { is_default_password } = res
-          const isUsingDefaultPwd = password === DEFAULT_PWD
-          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, isUsingDefaultPwd })
           if (is_default_password && this.isNeedAuth) {
             this.needChangePwd = true
             return
           }
+
+          // TODO:confirm
+          const token = { res }
+          const isUsingDefaultPwd = password === DEFAULT_PWD
+          this.$store.dispatch('UPDATE_USER_INFO', { username, password, token, remember, isUsingDefaultPwd })
+
           setTimeout(() => {
             const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query
             this.$router.replace({

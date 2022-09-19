@@ -77,12 +77,14 @@ axios.interceptors.request.use(
     const {
       params: { _t: tokenRequired = true },
     } = config
-    if (!user.username && tokenRequired) {
+    if (!user.token && tokenRequired) {
       toLogin()
       throw new Error(httpMap['-1'])
     }
-    config.auth.username = user.username
-    config.auth.password = user.password
+    if (!config.headers) {
+      config.headers = {}
+    }
+    config.headers['Authorization'] = 'Bearer ' + user.token
 
     store.dispatch('LOADING', true)
     // lwm2m observe
@@ -137,6 +139,10 @@ function handleError(error) {
 }
 
 axios.interceptors.response.use((response) => {
+  // for blob data
+  if (response.request.responseType === 'blob') {
+    return response
+  }
   let res = response.data
   if (response.config.url.includes('/data/file')) {
     const { file, filename, data } = response.data

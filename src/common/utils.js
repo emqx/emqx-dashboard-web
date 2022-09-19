@@ -511,13 +511,6 @@ export const verifyListener = (rule, value, callback) => {
   }
 }
 
-export const createURLWithAuth = (rawURL) => {
-  const { protocol, host, pathname } = window.location
-  const { password, username } = store.state.user
-  const { useRelativeResourcePath } = store.state.config
-  return `${protocol}//${username}:${password}@${host}${useRelativeResourcePath ? pathname : ''}${rawURL}`
-}
-
 export const checkNOmitFromObj = (obj) => {
   const ret = cloneDeep(obj)
   const emptyValueKeyArr = Object.keys(ret).filter((key) => {
@@ -564,6 +557,28 @@ export const hidePwd = (pwd) => {
     return pwd
   }
   return pwd.replace(/./g, '*')
+}
+
+export const downloadBlobData = (blobRes) => {
+  const { data, headers } = blobRes
+  if (!(data instanceof Blob)) {
+    return
+  }
+  const fileName =
+    (headers && headers['content-disposition'] && headers['content-disposition'].replace(/\w+; filename=(.*)/, '$1')) ||
+    'file'
+  const blob = new Blob([data], { type: headers['content-type'] })
+  const DOM = document.createElement('a')
+  const url = window.URL.createObjectURL(blob)
+  DOM.href = url
+  DOM.download = decodeURI(fileName)
+  DOM.style.display = 'none'
+  document.body.appendChild(DOM)
+  DOM.click()
+  if (DOM.parentNode) {
+    DOM.parentNode.removeChild(DOM)
+  }
+  window.URL.revokeObjectURL(url)
 }
 
 export default {}
