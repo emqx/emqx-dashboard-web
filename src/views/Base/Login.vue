@@ -113,9 +113,9 @@ export default {
           }
 
           // TODO:confirm
-          const token = { res }
+          const token = res
           const isUsingDefaultPwd = password === DEFAULT_PWD
-          this.$store.dispatch('UPDATE_USER_INFO', { username, password, token, remember, isUsingDefaultPwd })
+          this.$store.dispatch('UPDATE_USER_INFO', { username, token, remember, isUsingDefaultPwd })
 
           setTimeout(() => {
             const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query

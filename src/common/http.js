@@ -67,7 +67,6 @@ Object.assign(axios.defaults, {
   },
   baseURL: store.getters.httpBaseUrl,
   timeout: store.state.httpTimeout,
-  auth: {},
 })
 
 axios.interceptors.request.use(
