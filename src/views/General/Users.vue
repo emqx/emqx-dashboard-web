@@ -82,11 +82,14 @@
 <script>
 import { loadUser, createUser, updateUser, destroyUser, changePassword } from '@/api/function'
 import pwdRule from '@/common/pwdRule'
+import changeDefaultPwd from '@/mixins/changeDefaultPwd'
 
 export default {
   name: 'Users',
 
   components: {},
+
+  mixins: [changeDefaultPwd],
 
   props: {
     /**
@@ -288,25 +291,6 @@ export default {
     confirmForChangeDefaultPwdParam() {
       if (this.isForChangeDefaultPwd) {
         this.openChangePwdDialog()
-      }
-    },
-    preventLeaveWithoutChangeDefaultPwd(to, from, next) {
-      const { name = '', params = {} } = to
-      if (
-        this.isForChangeDefaultPwd &&
-        this.$store.state.user.isUsingDefaultPwd &&
-        // For stop infinite loop
-        !(name === 'users' && params.isForChangeDefaultPwd === true)
-      ) {
-        next({
-          name: 'users',
-          params: { isForChangeDefaultPwd: true },
-          // just for vue route can update params, if don't add this, the params will not update
-          // i think maybe this is a bug
-          query: { _t: Date.now() },
-        })
-      } else {
-        next()
       }
     },
   },

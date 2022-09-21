@@ -31,9 +31,12 @@ import LeftBar from '@/components/LeftBar'
 import NavHeader from '@/components/NavHeader'
 import NavTabs from '@/components/NavTabs.vue'
 import LicenseDialog from '@/views/Base/LicenseDialog.vue'
+import changeDefaultPwd from '@/mixins/changeDefaultPwd'
 
 export default {
   name: 'Layout',
+
+  mixins: [changeDefaultPwd],
 
   components: {
     NavHeader,
@@ -48,6 +51,7 @@ export default {
       theme: 'light',
       licenseTipVisible: false,
       alreadyPopupPwdMsg: false,
+      isPwdMsgBoxClosed: false,
     }
   },
 
@@ -89,7 +93,9 @@ export default {
         message: this.$t('Base.defaultPwdTip'),
         confirmButtonText: 'OK',
         customClass: 'default-pwd-tip',
+        closeOnHashChange: false,
         callback: () => {
+          this.isPwdMsgBoxClosed = true
           const route = {
             name: 'users',
             params: { isForChangeDefaultPwd: true },
@@ -124,6 +130,13 @@ export default {
     } else if (this.isEvaluationLicense) {
       this.initLicense()
     }
+  },
+
+  beforeRouteLeave(to, from, next) {
+    if (this.isUsingDefaultPwd && !this.isPwdMsgBoxClosed) {
+      this.$msgbox.close()
+    }
+    this.preventLeaveWithoutChangeDefaultPwd(to, from, next)
   },
 }
 </script>
