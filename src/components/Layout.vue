@@ -119,9 +119,10 @@ export default {
   },
 
   async created() {
-    await this.initLicense()
-    if (!this.isEvaluationLicense && this.isUsingDefaultPwd) {
+    if (this.isUsingDefaultPwd) {
       this.popupMessageBox()
+    } else if (this.isEvaluationLicense) {
+      this.initLicense()
     }
   },
 }
