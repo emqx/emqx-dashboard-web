@@ -280,7 +280,6 @@ export default {
   watch: {
     dialogVisible(val) {
       if (!val) {
-        console.log('looked')
         this.loadingButton = undefined
       }
     },
@@ -367,6 +366,9 @@ export default {
       }
     },
 
+    /**
+     * just be called when type is edit
+     */
     assignValuesToRecord() {
       const record = _.cloneDeep(this.editItem)
       const { configVal, description, type, id } = record
@@ -415,8 +417,8 @@ export default {
         const { form, rules } = configData
         const addConfigs = {}
         if (isInit && this.oper === 'edit') {
-          form.forEach(({ key, value }) => {
-            this.$set(addConfigs, key, this.record.config[key] || value)
+          form.forEach(({ key }) => {
+            this.$set(addConfigs, key, this.record.config[key])
           })
         } else {
           form.forEach(({ key, value }) => {

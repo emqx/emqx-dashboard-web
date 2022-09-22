@@ -581,8 +581,8 @@ export default {
         const { form, rules } = configData
         const addConfigs = {}
         if (isInit && this.oper === 'edit') {
-          form.forEach(({ key, value }) => {
-            this.$set(addConfigs, key, this.moduleData.config[key] || value)
+          form.forEach(({ key }) => {
+            this.$set(addConfigs, key, this.moduleData.config[key])
           })
         } else {
           form.forEach(({ key, value }) => {
