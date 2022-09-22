@@ -138,6 +138,13 @@ export default {
     }
     this.preventLeaveWithoutChangeDefaultPwd(to, from, next)
   },
+
+  beforeRouteUpdate(to, from, next) {
+    if (!this.isPwdMsgBoxClosed && to.name === from.name && to.name === 'users') {
+      this.$msgbox.close()
+    }
+    next()
+  },
 }
 </script>
 
