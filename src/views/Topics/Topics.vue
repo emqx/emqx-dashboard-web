@@ -15,7 +15,11 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="topic" :label="$t('Topics.topic')"></el-table-column>
+          <el-table-column prop="topic" :label="$t('Topics.topic')">
+            <template slot-scope="{ row }">
+              <span class="keep-spaces">{{ row.topic }}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="node" :label="$t('Clients.node')"></el-table-column>
         </el-table>
 

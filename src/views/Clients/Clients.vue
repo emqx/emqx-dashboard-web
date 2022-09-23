@@ -104,13 +104,19 @@
                   path: '/clients/detail',
                   query: { clientid: row.clientid },
                 }"
+                class="keep-spaces"
+                >{{ row.clientid }}</router-link
               >
-                {{ row.clientid }}
-              </router-link>
             </template>
           </el-table-column>
 
-          <el-table-column prop="username" min-width="120px" :label="$t('Clients.username')"></el-table-column>
+          <el-table-column prop="username" min-width="120px" :label="$t('Clients.username')">
+            <template slot-scope="{ row }">
+              <span class="keep-spaces">
+                {{ row.username }}
+              </span>
+            </template>
+          </el-table-column>
           <el-table-column prop="ipaddress" min-width="120px" :label="$t('Clients.ipAddress')">
             <template slot-scope="{ row }"> {{ row.ip_address }}:{{ row.port }} </template>
           </el-table-column>
