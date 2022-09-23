@@ -65,8 +65,16 @@
         </div>
 
         <el-table :data="tableData" class="data-list">
-          <el-table-column prop="clientid" min-width="130px" :label="$t('Clients.clientId')"></el-table-column>
-          <el-table-column prop="topic" :label="$t('Subs.topic')"></el-table-column>
+          <el-table-column prop="clientid" min-width="130px" :label="$t('Clients.clientId')">
+            <template slot-scope="{ row }">
+              <span class="keep-spaces">{{ row.clientid }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="topic" :label="$t('Subs.topic')">
+            <template slot-scope="{ row }">
+              <span class="keep-spaces">{{ row.topic }}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="qos" label="QoS"></el-table-column>
         </el-table>
 

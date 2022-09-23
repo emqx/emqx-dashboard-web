@@ -3,9 +3,7 @@
     <page-header>
       <div class="page-header-title-view">
         <div style="display: flex; align-items: center">
-          <span class="title">
-            {{ clientId }}
-          </span>
+          <span class="title keep-spaces">{{ clientId }}</span>
           <a-badge v-if="isThisClientExist" :status="connStatus" :text="connStatusText"></a-badge>
         </div>
       </div>
@@ -38,11 +36,11 @@
                     </li>
                     <li class="field-info-item">
                       <div class="field-title">{{ $t('Clients.clientId') }}</div>
-                      <span class="field-value">{{ record.clientid }}</span>
+                      <span class="field-value keep-spaces">{{ record.clientid }}</span>
                     </li>
                     <li class="field-info-item">
                       <div class="field-title">{{ $t('Clients.username') }}:</div>
-                      <span class="field-value">{{ record.username }}</span>
+                      <span class="field-value keep-spaces">{{ record.username }}</span>
                     </li>
                     <li class="field-info-item">
                       <div class="field-title">{{ $t('Clients.protocolType') }}:</div>
