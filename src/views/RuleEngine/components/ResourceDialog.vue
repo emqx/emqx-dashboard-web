@@ -434,7 +434,6 @@ export default {
         this.record.config = record
       }
       this.configList.sort((prev, next) => prev.order - next.order)
-      this.record.config.type = type
       if (this.$refs.record) {
         setTimeout(this.$refs.record.clearValidate, 10)
       }

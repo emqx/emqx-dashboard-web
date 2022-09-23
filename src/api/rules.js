@@ -112,6 +112,40 @@ export async function loadResource(params = {}) {
   })
 }
 
+/**
+ * find cfgselect fields in params
+ * find fields below cfgselect by value in record
+ * flat it
+ * @param {Record<string,any>} config the record of resource
+ * @param {*} params resource raw params
+ */
+const flatParams = (config, params) => {
+  const ret = { ...params }
+  try {
+    const walkParamsBelowCfgselect = (subParams) => {
+      Object.keys(subParams).forEach((subKey) => {
+        const paramsItem = subParams[subKey]
+        ret[subKey] = paramsItem
+        if (paramsItem.type === 'cfgselect') {
+          walkParamsBelowCfgselect(paramsItem.items[config[subKey]])
+        }
+      })
+    }
+
+    const cfgselectFieldKeyArr = Object.keys(ret).filter((key) => {
+      return ret[key].type === 'cfgselect'
+    })
+    cfgselectFieldKeyArr.forEach((key) => {
+      const value = config[key]
+      const subParams = ret[key] && ret[key].items && ret[key].items[value]
+      walkParamsBelowCfgselect(subParams)
+    })
+  } catch (error) {
+    console.error(error)
+  }
+  return ret
+}
+
 export async function loadResourceDetails(id) {
   if (Object.keys(resourceTypes).length === 0) {
     const types = await loadResourceTypes()
@@ -123,9 +157,10 @@ export async function loadResourceDetails(id) {
     const resource = await http.get(`/resources/${id}`)
     resource.typeInfo = resourceTypes[resource.type] || {}
     resource._config = []
+    const flattenParams = flatParams(resource.config, resource.typeInfo.params)
     Object.keys(resource.config).forEach((key) => {
       const value = resource.config[key]
-      const { title, description, type } = resource.typeInfo.params[key] || {}
+      const { title, description, type } = flattenParams[key] || {}
       resource._config.push({
         key,
         value,
