@@ -18,7 +18,7 @@
         </a-breadcrumb-item>
       </template>
       <a-breadcrumb-item v-else>
-        <router-link to="/" tag="span" class="btn btn-default raw">
+        <router-link :to="{ name: 'monitor' }" tag="span" class="btn btn-default raw">
           {{ $t('components.monitor') }}
         </router-link>
       </a-breadcrumb-item>
@@ -27,6 +27,9 @@
 </template>
 
 <script>
+import { isSubApp } from '../common/forToBeSubApp.js'
+import { getPathForEmqxDashBoardPage } from '../common/utils.js'
+
 export default {
   name: 'Breadcrumb',
 
@@ -48,28 +51,31 @@ export default {
   created() {
     this.getBreadcrumb()
   },
-
   methods: {
     getBreadcrumb() {
       const { path, query, name: routeName } = this.$route
       const pathList = path.split('/')
-      const name = pathList[1]
-      const oper = query.oper || pathList[2]
-
-      this.isIndex = path === '/monitor'
+      const name = isSubApp ? pathList[8] : pathList[1]
+      const oper = query.oper || (isSubApp ? pathList[9] : pathList[2])
+      if (isSubApp) {
+        const subAppPre = `/${path.split('/')[8]}`
+        this.isIndex = subAppPre === '/monitor'
+      } else {
+        this.isIndex = path === '/monitor'
+      }
       this.oper = ''
       this.backPath = undefined
       this.currentTitle = this.$t(`components.${name}`)
 
       if (['create', 'view', 'detail', 'add', 'select', 'manage'].includes(oper)) {
         this.oper = this.$t(`Base.${oper}`)
-        this.backPath = `/${name}`
+        this.backPath = getPathForEmqxDashBoardPage(path, `/${name}`)
       } else if (oper === 'node') {
         this.currentTitle = this.$t('Overview.nodeData')
       }
       if (routeName === 'pluginsName' && this.$route.params.pluginName) {
         this.oper = this.$route.params.pluginName
-        this.backPath = `/${name}`
+        this.backPath = getPathForEmqxDashBoardPage(path, `/${name}`)
       }
     },
   },

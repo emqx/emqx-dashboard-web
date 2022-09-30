@@ -88,8 +88,8 @@
 
 <script>
 import { loadResourceDetails, reconnectResource, destroyResource } from '@/api/rules'
-import ResourceNode from './components/ResourceNode'
-import ResourceField from './components/ResourceField'
+import ResourceNode from './components/ResourceNode.vue'
+import ResourceField from './components/ResourceField.vue'
 
 export default {
   name: 'ResourceView',
@@ -145,7 +145,7 @@ export default {
           await destroyResource(this.record.id)
           this.$message.success(this.$t('Base.deleteSuccess'))
           setTimeout(() => {
-            this.$router.push({ path: '/resources' })
+            this.$router.push({ name: 'resources' })
           }, 500)
         })
         .catch(() => {})

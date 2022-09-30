@@ -10,7 +10,7 @@
         <nav-header></nav-header>
       </el-header>
 
-      <div :style="{ minHeight: '360px', minWidth: '600px', overflowX: 'hidden' }">
+      <div class="layout-container">
         <transition name="fade-transform" mode="out-in">
           <keep-alive>
             <router-view v-if="$route.meta.keepAlive"></router-view>
@@ -161,6 +161,11 @@ export default {
 
 .el-main {
   transition: margin-left 0.3s;
+}
+.layout-container {
+  min-height: 360px;
+  min-width: 600px;
+  overflow-x: hidden;
 }
 </style>
 <style lang="scss">

@@ -12,7 +12,7 @@
             <template slot-scope="{ row }">
               <router-link
                 :to="{
-                  path: '/clients/detail',
+                  name: 'clients-view',
                   query: { clientid: row.clientid },
                 }"
               >

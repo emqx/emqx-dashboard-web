@@ -108,7 +108,7 @@ export default {
     showClientDetails(row) {
       const { imei } = row
       this.$router.push({
-        path: '/modules/detail',
+        name: 'module-detail',
         query: {
           type: 'lwm2m',
           imei,

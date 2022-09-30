@@ -235,7 +235,7 @@ export default {
     },
     toNodeDetails(name) {
       this.$router.push({
-        path: '/monitor/node',
+        name: 'node',
         query: {
           name,
         },

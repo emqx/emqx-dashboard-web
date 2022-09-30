@@ -173,7 +173,7 @@
           <el-button :loading="saveLoading" type="primary" size="medium" @click="save">
             {{ $t('Base.create') }}
           </el-button>
-          <el-button type="default" size="medium" @click="$router.push({ path: '/schemas' })">
+          <el-button type="default" size="medium" @click="toSchemas">
             {{ $t('Base.cancel') }}
           </el-button>
         </div>
@@ -183,12 +183,12 @@
 </template>
 
 <script>
+import { setTimeout } from 'timers'
 import { loadResource } from '@/api/rules'
 import { createSchema, viewSchema, deleteSchema } from '@/api/schemas'
 import detailsPage from '@/mixins/detailsPage'
 import Monaco from '@/components/Monaco'
 import StretchHeight from '@/components/StretchHeight'
-import { setTimeout } from 'timers'
 
 export default {
   name: 'SchemasDetails',
@@ -252,9 +252,12 @@ export default {
   },
 
   methods: {
+    toSchemas() {
+      this.$router.push({ name: 'schemas' })
+    },
     routeToSchemas() {
       setTimeout(() => {
-        this.$router.push({ path: '/schemas' })
+        this.$router.push({ name: 'schemas' })
       }, 500)
     },
 

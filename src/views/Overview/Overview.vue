@@ -236,6 +236,7 @@ export default {
         uptime: '',
         version: '',
       },
+      timerData: 0,
       timer: 0,
       nodes: [],
       isNodesLoading: false,
@@ -299,13 +300,19 @@ export default {
 
   async created() {
     this.pageLoading = true
-    await Promise.all([this.loadData(), this.dataTypeChange()])
-    this.pageLoading = false
     this.startPolling()
+    try {
+      await Promise.all([this.loadData(), this.dataTypeChange()])
+    } catch (error) {
+      //
+    } finally {
+      this.pageLoading = false
+    }
   },
 
   beforeDestroy() {
     clearInterval(this.timerData)
+    clearInterval(this.timer)
   },
 
   methods: {
@@ -314,7 +321,7 @@ export default {
       this.timerData = setInterval(() => {
         this.loadData()
         this.loadNodes()
-        this.$refs.percentageCards.loadMetricsData()
+        if (this.$refs.percentageCards) this.$refs.percentageCards.loadMetricsData()
       }, 10 * 1000)
     },
     async dataTypeChange() {
@@ -322,7 +329,7 @@ export default {
         await this.loadNodes()
         return Promise.resolve()
       } catch (error) {
-        return Promise.resolve()
+        return Promise.reject()
       }
     },
     async loadNodes() {
@@ -356,8 +363,7 @@ export default {
         this.setCurrentMetricsLogsRealtime(state)
         return Promise.resolve()
       } catch (error) {
-        console.error(error)
-        return Promise.resolve()
+        return Promise.reject()
       } finally {
         this.isCurrentMetricsLoading = false
       }

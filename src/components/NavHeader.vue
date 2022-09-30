@@ -18,7 +18,7 @@
         <div class="alert-info func-item">
           <a-badge :count="alertCount">
             <router-link
-              to="/alerts/list"
+              :to="{ name: 'alerts' }"
               tag="i"
               class="iconfont icon-Notificationlisttongzhiliebiao"
               @click="clearAlert"
@@ -61,6 +61,7 @@
 <script>
 import Breadcrumb from './Breadcrumb.vue'
 import { loadAlarm } from '@/api/common'
+import { isSubApp } from '@/common/forToBeSubApp'
 
 export default {
   name: 'NavHeader',
@@ -83,7 +84,7 @@ export default {
       return { left: !this.$store.state.leftBarCollapse ? '201px' : '80px' }
     },
     username() {
-      return this.$store.state.user.username || this.$t('components.notLoggedIn')
+      return isSubApp ? '' : this.$store.state.user.username || this.$t('components.notLoggedIn')
     },
     alertText() {
       return this.alertCount > 0
@@ -126,7 +127,7 @@ export default {
       this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
       setTimeout(() => {
         this.$message.success(this.$t('components.loggedOut'))
-        this.$router.push('/login')
+        this.$router.push({ name: 'login' })
       }, 300)
     },
     toggleLeftNarCollapse() {
@@ -138,7 +139,7 @@ export default {
         return
       }
       if (command !== 'login') {
-        this.$router.push({ path: `/${command}` })
+        this.$router.push({ name: command })
         return
       }
       this.$msgbox

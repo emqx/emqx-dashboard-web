@@ -96,6 +96,7 @@ export default {
 
   created() {
     this.loadMetricsLogData()
+    this.timerMetrics = setInterval(this.setMetricsChartRealTime, 60000)
   },
 
   beforeDestroy() {
@@ -127,12 +128,11 @@ export default {
               })
               return Promise.resolve()
             } catch (error) {
-              return Promise.resolve()
+              return Promise.reject()
             }
           }),
         )
         this.isLoading = false
-        this.timerMetrics = setInterval(this.setMetricsChartRealTime, 60000)
       } catch (e) {
         console.error(e)
         this.isLoading = false

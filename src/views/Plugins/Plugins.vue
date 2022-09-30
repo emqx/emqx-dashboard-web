@@ -170,8 +170,9 @@
         <span>{{ $t('Base.tips') }}</span>
       </div>
       <div class="tip-content">
-        <p v-html="$t('Modules.useModulesTip')">
-          {{ $t('Modules.useModulesTip') }}
+        <p>
+          <span>{{ $t('Modules.useModulesTip') }}</span>
+          <a @click="toModules">{{ $t('Modules.modulesTip') }}</a>
         </p>
       </div>
       <div class="tip-checkbox">
@@ -280,10 +281,16 @@ export default {
       const { name } = item
       const node = this.nodeName
       this.$router.push({
-        path: `/plugins/${name}`,
+        name: 'pluginsName',
+        params: { pluginName: name },
         query: {
           node,
         },
+      })
+    },
+    toModules() {
+      this.$router.push({
+        name: 'modules',
       })
     },
     typeFilterHandler(value, row) {
@@ -368,7 +375,8 @@ export default {
     },
     handleManage(row) {
       this.$router.push({
-        path: `/plugins/${row.name}`,
+        name: 'pluginsName',
+        params: { pluginName: row.name },
       })
     },
   },

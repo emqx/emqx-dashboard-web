@@ -185,7 +185,8 @@ export default {
     },
     showResource(row) {
       this.$router.push({
-        path: `/resources/${row.id}`,
+        name: 'resources-view',
+        params: { id: row.id },
         query: { oper: 'view' },
       })
     },

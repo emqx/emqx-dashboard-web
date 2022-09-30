@@ -34,5 +34,17 @@
         "rules.schema"
       ]
     }
+  },
+  "sub-app": {
+    "baseURL": "/api/v4",
+    "httpTimeout": 15000,
+    "useRelativeResourcePath": true,
+    "publicPath": "/",
+    "hide": {
+      "routes": [
+        "usersAcl"
+      ],
+      "children": ["monitor.license"]
+    }
   }
 }

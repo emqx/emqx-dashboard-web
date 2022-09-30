@@ -44,6 +44,7 @@
 <script>
 import { Menu } from 'ant-design-vue'
 import 'ant-design-vue/lib/menu/style'
+import { isSubApp } from '../common/forToBeSubApp.js'
 
 export default {
   name: 'LeftBar',
@@ -71,7 +72,13 @@ export default {
     },
     defaultSelectedKeys() {
       const { path } = this.$route
-      return [`/${path.split('/')[1]}`]
+      return isSubApp
+        ? [
+            `/${path.split('/')[1]}/${path.split('/')[2]}/${path.split('/')[3]}/${path.split('/')[4]}/${
+              path.split('/')[5]
+            }/${path.split('/')[6]}/${path.split('/')[7]}/${path.split('/')[8]}`,
+          ]
+        : [`/${path.split('/')[1]}`]
     },
     logoStyle() {
       return { left: !this.$store.state.leftBarCollapse ? 0 : '-200px' }
@@ -92,33 +99,41 @@ export default {
   },
 
   created() {
+    // 需要qiankun
+    // 拿到前缀
+    const { path } = this.$route
     this.menus = [
       {
         title: this.$t('components.monitor'),
         path: '/monitor',
         key: 'monitor',
         icon: 'icon-yibiaopan',
+        name: 'monitor',
       },
       {
         title: this.$t('components.usersAcl'),
         path: '/users_and_acl',
         key: 'usersAcl',
         icon: 'icon-kongjian',
+        name: 'users_and_acl',
       },
       {
         title: this.$t('components.clients'),
         path: '/clients',
         icon: 'icon-guanlianshebei',
+        name: 'clients',
       },
       {
         title: this.$t('components.topics'),
         path: '/topics',
         icon: 'icon-zuzhiqunzu',
+        name: 'topics',
       },
       {
         title: this.$t('components.subscriptions'),
         path: '/subscriptions',
         icon: 'icon-shebeiguanli',
+        name: 'subscriptions',
       },
       {
         title: this.$t('components.rules'),
@@ -130,18 +145,21 @@ export default {
             key: 'rules.ruleEngine',
             path: '/rules',
             parentKey: 'rules',
+            name: 'rules',
           },
           {
             title: this.$t('components.resources'),
             key: 'rules.resources',
             path: '/resources',
             parentKey: 'rules',
+            name: 'resources',
           },
           {
             title: this.$t('components.schemas'),
             key: 'rules.schema',
             path: '/schemas',
             parentKey: 'rules',
+            name: 'schemas',
           },
         ],
       },
@@ -150,12 +168,14 @@ export default {
         key: 'modules',
         path: '/modules',
         icon: 'icon-changjingguanli',
+        name: 'modules',
       },
       {
         title: this.$t('components.alerts'),
         key: 'alerts',
         path: '/alerts',
         icon: 'icon-gaojing',
+        name: 'alerts',
       },
       {
         title: this.$t('components.tool'),
@@ -167,6 +187,7 @@ export default {
             key: 'tool.WebSocket',
             path: '/websocket',
             parentKey: 'tools',
+            name: 'websocket',
           },
         ],
       },
@@ -221,6 +242,18 @@ export default {
         ],
       },
     ]
+    if (path.startsWith('/emqxDashBoard')) {
+      // 代表是subapp
+      const subAppPre = path.split('/').splice(0, 8).join('/')
+      this.menus.forEach((item) => {
+        item.path = subAppPre + item.path
+        if (item.children && item.children.length > 0) {
+          item.children.forEach((children) => {
+            children.path = subAppPre + children.path
+          })
+        }
+      })
+    }
     this.initRouter()
   },
 

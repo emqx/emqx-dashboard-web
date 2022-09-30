@@ -19,17 +19,7 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card">
         <div class="emq-table-header">
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-plus"
-            @click="
-              $router.push({
-                path: '/schemas/0',
-                query: { oper: 'create' },
-              })
-            "
-          >
+          <el-button type="primary" size="small" icon="el-icon-plus" @click="baseCreateSchemas">
             {{ $t('Base.create') }}
           </el-button>
         </div>
@@ -37,15 +27,7 @@
         <el-table :data="tableData" class="data-list">
           <el-table-column prop="name" :label="$t('Schemas.name')">
             <template slot-scope="{ row }">
-              <a
-                href="javascript:;"
-                @click="
-                  $router.push({
-                    path: `/schemas/${row.name}`,
-                    query: { oper: 'view' },
-                  })
-                "
-              >
+              <a href="javascript:;" @click="createShcemasName(row)">
                 {{ row.name }}
               </a>
             </template>
@@ -98,6 +80,20 @@ export default {
   },
 
   methods: {
+    baseCreateSchemas() {
+      this.$router.push({
+        name: 'schemas-details',
+        params: { id: '0' },
+        query: { oper: 'create' },
+      })
+    },
+    createShcemasName(row) {
+      this.$router.push({
+        name: 'schemas-details',
+        params: { id: row.name },
+        query: { oper: 'view' },
+      })
+    },
     async loadData() {
       const res = await loadSchemas()
       if (res) {
