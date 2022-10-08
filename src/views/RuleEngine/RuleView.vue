@@ -121,7 +121,7 @@
           </li>
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.resourceDes') }}:</div>
-            <span class="field-value">{{ configItem.description }}</span>
+            <span class="field-value">{{ record.description }}</span>
           </li>
           <li class="field-info-item">
             <div class="field-title">{{ $t('RuleEngine.selectFiled') }}:</div>
