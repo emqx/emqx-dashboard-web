@@ -6,7 +6,7 @@
           <div class="content-left">
             {{ $t('Modules.modules') }}
             <span v-cloak class="modules-num">{{ moduleCount }}</span>
-            <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/select')">
+            <el-button class="confirm-btn" type="primary" size="small" @click="addModule">
               {{ $t('Modules.moduleAdd') }}
             </el-button>
           </div>
@@ -103,6 +103,9 @@ export default {
   },
 
   methods: {
+    addModule() {
+      this.$router.push({ name: 'modules-select' })
+    },
     manageModule(item) {
       if (this.canManageModuleTypes.indexOf(item.type) === -1) {
         return
@@ -168,7 +171,7 @@ export default {
       this.selectedModule.from = 'modules'
       this.selectedModule.oper = 'edit'
       this.$store.dispatch('UPDATE_MODULE', this.selectedModule)
-      this.$router.push('/modules/detail')
+      this.$router.push({ name: 'module-detail' })
     },
     async loadData() {
       this.searchVal = ''

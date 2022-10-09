@@ -48,8 +48,8 @@
                         <span class="field-value">{{ record.proto_name }} {{ mqttVersionMap[record.proto_ver] }}</span>
                       </template>
                       <template v-else>
-                        <span class="field-value"
-                          >{{ record.proto_name }}
+                        <span class="field-value">
+                          {{ record.proto_name }}
                           <span v-if="record.proto_ver"> v{{ record.proto_ver }}</span>
                         </span>
                       </template>
@@ -391,7 +391,7 @@ export default {
           this.$set(this.record, 'connected', false)
           this.$message.success(successMsg)
           setTimeout(() => {
-            this.$router.push({ path: '/clients' })
+            this.$router.push({ name: 'clients' })
           }, 500)
         })
         .catch(() => {})

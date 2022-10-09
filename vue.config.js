@@ -1,9 +1,13 @@
+const path = require('path')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 const mock = require('./script/mock.json')
 const config = require('./script/config.json')
 
 const { NODE_ENV, VUE_APP_BUILD_ENV = 'base' } = process.env
 
+function resolve(dir) {
+  return path.join(__dirname, dir)
+}
 const before = (app) => {
   // 开发环境下可以使用 mock 数据
   if (NODE_ENV === 'development' && mock) {
@@ -25,6 +29,10 @@ let { publicPath } = customConfig
 if (customConfig.useRelativeResourcePath && process.env.NODE_ENV === 'production') {
   process.env.VUE_APP_PUBLIC_PATH_FOR_ROUTER = publicPath
   publicPath = './'
+}
+const name = 'emqxDashBoard-bc'
+if (VUE_APP_BUILD_ENV === 'sub-app') {
+  publicPath = '/integration/emqx-dashboard/v4.4.0-bc/'
 }
 
 const getVersion = () => {
@@ -52,6 +60,9 @@ module.exports = {
         },
       },
     },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
   },
   css: {
     loaderOptions: {
@@ -75,5 +86,24 @@ module.exports = {
         features: ['!gotoSymbol'],
       }),
     ],
+    output: {
+      // 把子应用打包成 umd 库格式
+      // 必须打包成一个库文件
+      library: `${name}-[name]`,
+      libraryTarget: 'umd',
+      jsonpFunction: `webpackJsonp_${name}`,
+    },
+    resolve: {
+      alias: {
+        '@': resolve('src'),
+      },
+      // 导入时想要省略的扩展名列表
+      // 不建议使用 .vue 影响IDE和类型支持
+      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],
+    },
+  },
+  chainWebpack: (config) => {
+    config.module.rule('fonts').use('url-loader').loader('url-loader').options({}).end()
+    config.module.rule('images').use('url-loader').loader('url-loader').options({}).end()
   },
 }

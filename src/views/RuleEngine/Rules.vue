@@ -105,7 +105,7 @@
         </a-card>
         <a-card class="emq-list-card" :loading="listLoading">
           <div class="emq-table-header">
-            <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">
+            <el-button type="primary" size="small" icon="el-icon-plus" @click="createRules">
               {{ $t('Base.create') }}
             </el-button>
           </div>
@@ -116,7 +116,8 @@
               <template slot-scope="{ row }">
                 <router-link
                   :to="{
-                    path: `/rules/${row.id}`,
+                    name: 'rules-view',
+                  params: row.id,
                     query: { oper: 'view' },
                   }"
                   >{{ row.id }}</router-link
@@ -449,6 +450,9 @@ export default {
   },
 
   methods: {
+    createRules() {
+      this.$router.push({ name: 'rules-create' })
+    },
     deleteRule(row) {
       this.$msgbox
         .confirm(this.$t('RuleEngine.deleteRuleConfirm'), {
@@ -575,7 +579,7 @@ export default {
         })
     },
     editRule(row) {
-      this.$router.push(`/rules/create?rule=${row.id}`)
+      this.$router.push({ name: 'rules-create', query: { rule: row.id } })
     },
     copyRule({ id }) {
       this.$router.push({ name: 'rules-create', query: { command: 'copy', rule: id } })

@@ -7,6 +7,7 @@ import 'nprogress/nprogress.css'
 import { getBasicAuthInfo, toLogin } from '@/common/utils'
 import store from '@/stores'
 import router from '@/routes'
+import { isSubApp } from '../common/forToBeSubApp.js'
 
 let timer = 0
 
@@ -33,6 +34,7 @@ const httpCode = {
     115: '主题错误',
     '-1': '需要登录',
     '-2': '相关插件未开启',
+    '-3': 'dashbard 没有权限',
   },
   en: {
     0: 'Success',
@@ -53,6 +55,7 @@ const httpCode = {
     115: 'Bad topic',
     '-1': 'Login Required',
     '-2': 'Plugin not started',
+    '-3': 'dashbard not allowed',
   },
 }
 
@@ -60,30 +63,49 @@ const httpMap = httpCode[lang]
 
 const pluginPages = ['schemas', 'rules', 'resources', 'setting']
 
-Object.assign(axios.defaults, {
-  headers: {
-    'Content-Type': 'application/json',
-    'Cache-Control': 'no-cache',
-  },
-  baseURL: store.getters.httpBaseUrl,
-  timeout: store.state.httpTimeout,
-  auth: {},
-})
+if (!isSubApp) {
+  Object.assign(axios.defaults, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+    },
+    baseURL: store.getters.httpBaseUrl,
+    timeout: store.state.httpTimeout,
+    auth: {},
+  })
+} else {
+  Object.assign(axios.defaults, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+    },
+    baseURL: '',
+    timeout: store.state.httpTimeout,
+  })
+}
 
 axios.interceptors.request.use(
   (config) => {
+    if (store.state.isSubAppDestroyed) {
+      // console.log('是否退出=========')
+      throw new axios.Cancel('cancel')
+    }
     const user = getBasicAuthInfo()
     config.params = config.params || {}
+    // 如果是 subapp
     const {
       params: { _t: tokenRequired = true },
     } = config
-    if (!user.username && tokenRequired) {
+    if (isSubApp) {
+      // do nothing
+    } else if (!user.username && tokenRequired) {
       toLogin()
       throw new Error(httpMap['-1'])
     }
-    config.auth.username = user.username
-    config.auth.password = user.password
-
+    if (!isSubApp) {
+      config.auth.username = user.username
+      config.auth.password = user.password
+    }
     store.dispatch('LOADING', true)
     // lwm2m observe
     if (!config.url.includes('?msgType=observe&path=')) {
@@ -111,6 +133,7 @@ function handleError(error) {
       config: {
         params: { _m: showMessage = true },
       },
+      headers: {},
     },
   } = error
   if (selfError) {
@@ -120,7 +143,18 @@ function handleError(error) {
   }
   const { name: currentPage, fullPath } = router.history.current
   if (status === 401) {
-    toLogin()
+    if (!isSubApp) {
+      toLogin()
+    } else {
+      for (let i = 0; i <= timer; i++) {
+        clearTimeout(i)
+      }
+      Message.closeAll()
+      Message.error(httpMap['-3'])
+      if (window.orgId && window.projectId && window.deployId) {
+        router.push({ path: `/deploy/${window.orgId}/${window.projectId}/${window.deployId}/overview` })
+      }
+    }
   } else if (status === 404 && pluginPages.includes(currentPage)) {
     Message.error(httpMap['-2'])
   } else if (showMessage) {
@@ -149,6 +183,7 @@ axios.interceptors.response.use((response) => {
   let error = ''
   let selfError = ''
   if (typeof res === 'object') {
+    console.log(res, 'res')
     const { status } = response
     const { code = -100, meta, message } = response.data
     let { data } = response.data
@@ -162,7 +197,6 @@ axios.interceptors.response.use((response) => {
     }
     res = { data, status }
   }
-
   clearTimeout(timer)
   timer = setTimeout(() => {
     store.dispatch('LOADING', false)

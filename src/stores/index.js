@@ -3,10 +3,12 @@ import Vuex from 'vuex'
 
 import config from '../../script/config'
 import { loadLicenseInfo } from '@/api/overview'
+import { isSubApp } from '../common/forToBeSubApp.js'
 
 Vue.use(Vuex)
 
 const BASE_ENV = 'base'
+const SUBAPP_ENV = 'sub-app'
 
 function checkLanguage(lang) {
   if (['en', 'zh'].includes(lang)) {
@@ -21,9 +23,14 @@ function getDefaultLanguage() {
   return localStorageLanguage || defaultLanguage || browserLanguage || 'en'
 }
 function getConfigState() {
-  const buildEnv = process.env.VUE_APP_BUILD_ENV || BASE_ENV
-  const envConfig = config[buildEnv] || config.base
-
+  // const buildEnv = process.env.VUE_APP_BUILD_ENV || BASE_ENV
+  // const envConfig = config[buildEnv] || config.base
+  // return {
+  //   ...config.base,
+  //   ...envConfig,
+  // }
+  const buildEnv = !isSubApp ? process.env.VUE_APP_BUILD_ENV || BASE_ENV : process.env.VUE_APP_BUILD_ENV || SUBAPP_ENV
+  const envConfig = config[buildEnv] || (!isSubApp ? config.base : config['sub-app'])
   return {
     ...config.base,
     ...envConfig,
@@ -41,6 +48,10 @@ const EVALUATION_LICENSE_CONNECTION_LIMIT = 10
 
 export default new Vuex.Store({
   state: {
+    isSubApp,
+    isSubAppDestroyed: false,
+    deployId: localStorage.getItem('DEPLOYID'),
+    subAppVersion: localStorage.getItem('SUBAPPVERSION'),
     loading: false,
     user: JSON.parse(localStorage.user || sessionStorage.user || '{}') || {},
     lang: getDefaultLanguage(),
@@ -110,6 +121,14 @@ export default new Vuex.Store({
     LOADING({ commit }, loading = false) {
       commit('LOADING', loading)
     },
+    UPDATE_DEPLOYED({ commit }, deployId) {
+      localStorage.setItem('DEPLOYID', deployId)
+      commit('SET_DEPLOY_ID', deployId)
+    },
+    UPDATE_SUBAPPVERSION({ commit }, subAppVersion) {
+      localStorage.setItem('SUBAPPVERSION', subAppVersion)
+      commit('SET_SUBAPPVERSION', subAppVersion)
+    },
     async GET_LICENSE({ commit }) {
       try {
         commit('SET_LICENSE_LOADING_STATUS', true)
@@ -123,6 +142,12 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    SET_DEPLOY_ID(state, deployId) {
+      state.deployId = deployId
+    },
+    SET_SUBAPPVERSION(state, subAppVersion) {
+      state.subAppVersion = subAppVersion
+    },
     UPDATE_MODULE(state, selectedModule) {
       state.selectedModule = selectedModule
     },
@@ -147,6 +172,9 @@ export default new Vuex.Store({
     },
     SET_LANGUAGE(state, lang) {
       state.lang = lang
+    },
+    SET_SUB_APP_DESTROYED(state, payload) {
+      state.isSubAppDestroyed = payload
     },
     SET_LICENSE(state, licenseData) {
       state.license = licenseData

@@ -11,8 +11,21 @@ import { omit, cloneDeep, isObject } from 'lodash'
 
 import { enDocsLink, zhDocsLink, pluginsZh, pluginsEn } from '@/common/link_urls'
 
+import { isSubApp } from './forToBeSubApp.js'
+
 const locale = store.state.lang
 const VueI18n = lang[locale]
+
+const isSubAppIn = isSubApp
+//qiankun 处理路由
+export function getPathForEmqxDashBoardPage(routePath, path) {
+  if (isSubAppIn) {
+    const pathPre = routePath.split('/').splice(0, 8).join('/')
+    return `${pathPre}${path}`
+  } else {
+    return path
+  }
+}
 
 /**
  * 获取基础的验证信息

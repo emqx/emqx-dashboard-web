@@ -136,7 +136,7 @@
       class="button-group__center rule-create-operation"
       :style="{ width: $store.state.leftBarCollapse ? ' calc(100% - 80px)' : ' calc(100% - 200px)' }"
     >
-      <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
+      <el-button type="default" size="medium" @click="toRules">
         {{ $t('Base.cancel') }}
       </el-button>
       <el-button type="primary" size="medium" @click="save">
@@ -255,6 +255,9 @@ export default {
         ruleAction.initData()
       }
     },
+    toRules() {
+      this.$router.push({ name: 'rules' })
+    },
     triggerEventChange(sql) {
       const events = [
         'events/message_delivered',
@@ -364,14 +367,14 @@ export default {
         updateRule(this.currentRule, data).then(() => {
           this.$message.success(this.$t('Base.editSuccess'))
           setTimeout(() => {
-            this.$router.push({ path: '/rules' })
+            this.$router.push({ name: 'rules' })
           }, 600)
         })
       } else {
         createRule(data).then(() => {
           this.$message.success(this.$t('Base.createSuccess'))
           setTimeout(() => {
-            this.$router.push({ path: '/rules' })
+            this.$router.push({ name: 'rules' })
           }, 600)
         })
       }

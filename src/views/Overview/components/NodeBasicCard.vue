@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { formatNumberSize } from '@/common/utils'
+import { formatNumberSize } from '@/common/utils.js'
 
 export default {
   name: 'NodeBasicCard',
@@ -196,7 +196,7 @@ export default {
   methods: {
     toDetails() {
       this.$router.push({
-        path: '/monitor/node',
+        name: 'node',
         query: {
           name: this.record.node,
         },

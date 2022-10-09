@@ -262,7 +262,7 @@ export default {
           })
           .catch()
       }
-      this.$router.push(`/modules/detail?id=${this.activeNavId}&top=${this.scrollTop}`)
+      this.$router.push({ name: 'module-detail', query: { id: this.activeNavId, top: this.scrollTop } })
     },
     async getAddedModuleInfo(id) {
       const data = await showCreatedModuleInfo(id)

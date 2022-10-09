@@ -1,20 +1,18 @@
+const path = require('path')
+
 module.exports = {
   root: true,
   env: {
     node: true,
   },
-  extends: [
-    'plugin:vue/essential',
-    '@vue/airbnb',
-    '@vue/prettier',
-  ],
+  extends: ['plugin:vue/essential', '@vue/airbnb', '@vue/prettier', 'plugin:vue/base'],
   rules: {
     'prettier/prettier': 'error',
     'no-console': 'off',
     'no-debugger': 'off',
     'import/extensions': 0,
     'vue/max-attributes-per-line': [
-      4,
+      2,
       {
         singleline: 6,
         multiline: {
@@ -38,5 +36,17 @@ module.exports = {
   },
   parserOptions: {
     parser: 'babel-eslint',
+  },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [['@', path.resolve(__dirname, 'src')]],
+        extensions: ['.js', '.jsx'],
+      },
+      node: {
+        paths: ['src'],
+        extensions: ['.js', '.ts', '.d.ts', '.tsx'],
+      },
+    },
   },
 }

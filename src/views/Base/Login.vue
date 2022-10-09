@@ -114,9 +114,9 @@ export default {
             return
           }
           setTimeout(() => {
-            const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query
+            const { to = this.fromCloud ? 'users_and_acl' : 'monitor' } = this.$route.query
             this.$router.replace({
-              path: to,
+              name: to,
             })
             if (!this.isNeedAuth) {
               this.fullLoading.close()

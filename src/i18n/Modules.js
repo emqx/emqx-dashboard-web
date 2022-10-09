@@ -258,9 +258,13 @@ export default {
     en: 'Allowed',
   },
   useModulesTip: {
-    zh: 'EMQX 提供了丰富的模块用于替换插件，建议您前往使用 <a href="/#/modules">模块</a>。',
+    zh: 'EMQX 提供了丰富的模块用于替换插件，建议您前往使用 ',
     en: `EMQX provides a wealth of Modules to replace Plugin,
-    it is recommended that you go to use <a href="/#/modules">Modules</a>.`,
+    it is recommended that you go to use `,
+  },
+  modulesTip: {
+    zh: '模块。',
+    en: 'Modules.',
   },
   searchClient: {
     zh: '请输入 IMEI',
