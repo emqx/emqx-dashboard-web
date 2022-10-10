@@ -219,7 +219,10 @@
             @visible-change="checkResource"
           >
             <div slot="option" slot-scope="{ item }" class="custom-option" :title="item.description">
-              <span class="key">{{ item.description || item.id }}</span>
+              <div class="opt-hd">
+                <span class="key">{{ item.id }}</span>
+                <span class="desc">{{ item.description }}</span>
+              </div>
               <span class="value">{{ item.config.title }}</span>
             </div>
           </emq-select>
@@ -1092,13 +1095,26 @@ export default {
 .custom-option {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
-  .key {
-    display: inline-block;
+  .opt-hd {
+    display: flex;
+    align-items: center;
     max-width: 350px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    .key {
+      max-width: 180px;
+    }
+    span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .desc {
+    color: #9a9a9a;
+    margin-left: 12px;
   }
 }
 </style>
