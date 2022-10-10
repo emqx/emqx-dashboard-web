@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import config from '../../script/config'
 import { loadLicenseInfo } from '@/api/overview'
+import { getUser, setUser, removeUser } from '@/common/auth'
 
 Vue.use(Vuex)
 
@@ -45,7 +46,7 @@ const EVALUATION_LICENSE_CONNECTION_LIMIT = 10
 export default new Vuex.Store({
   state: {
     loading: false,
-    user: JSON.parse(localStorage.user || sessionStorage.user || '{}') || {},
+    user: getUser() || {},
     lang: getDefaultLanguage(),
     leftBarCollapse: getCollapse(),
     alertCount: 0,
@@ -98,13 +99,15 @@ export default new Vuex.Store({
     UPDATE_USER_INFO({ commit }, userInfo = {}) {
       const { logOut = false, remember } = userInfo
       if (logOut) {
-        localStorage.removeItem('user')
-        sessionStorage.removeItem('user')
-      } else if (remember) {
-        localStorage.setItem('user', JSON.stringify(userInfo))
+        removeUser()
       } else {
-        sessionStorage.setItem('user', JSON.stringify(userInfo))
+        setUser(userInfo, remember)
       }
+      // else if (remember) {
+      //   localStorage.setItem('user', JSON.stringify(userInfo))
+      // } else {
+      //   sessionStorage.setItem('user', JSON.stringify(userInfo))
+      // }
       commit('UPDATE_USER_INFO', logOut ? {} : userInfo)
     },
     LOADING({ commit }, loading = false) {
