@@ -9,7 +9,7 @@ export const loadSchemas = () => http.get('/schemas')
 
 export const viewSchema = async (id) => {
   try {
-    const data = await http.get(`/schemas/${id}`)
+    const data = await http.get(`/schemas/${encodeURIComponent(id)}`)
     const res = data
     const { parser_addr } = res
     if (parser_addr) {
@@ -32,7 +32,7 @@ export const viewSchema = async (id) => {
 
 export const deleteSchema = async (id) => {
   try {
-    return await http.delete(`/schemas/${id}`)
+    return await http.delete(`/schemas/${encodeURIComponent(id)}`)
   } catch (error) {
     console.error(error)
     return false
