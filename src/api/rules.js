@@ -20,7 +20,7 @@ export function loadRules(params) {
 }
 
 export async function loadRuleDetails(id) {
-  const rule = await http.get(`/rules/${id}`)
+  const rule = await http.get(`/rules/${encodeURIComponent(id)}`)
   await loadRuleEvents()
   rule.events = rule.for.map((item) => {
     if (!eventsMap[item]) {
@@ -56,15 +56,15 @@ export async function loadActions(options = { fillI18n: false }) {
 }
 
 export function destroyRule(id) {
-  return http.delete(`/rules/${id}`)
+  return http.delete(`/rules/${encodeURIComponent(id)}`)
 }
 
 export function destroyResource(id) {
-  return http.delete(`/resources/${id}`)
+  return http.delete(`/resources/${encodeURIComponent(id)}`)
 }
 
 export function reconnectResource(id) {
-  return http.post(`/resources/${id}`)
+  return http.post(`/resources/${encodeURIComponent(id)}`)
 }
 
 export function SQLTest(rule = {}) {
@@ -120,7 +120,7 @@ export async function loadResourceDetails(id) {
     })
   }
   try {
-    const resource = await http.get(`/resources/${id}`)
+    const resource = await http.get(`/resources/${encodeURIComponent(id)}`)
     resource.typeInfo = resourceTypes[resource.type] || {}
     resource._config = []
     Object.keys(resource.config).forEach((key) => {
@@ -150,7 +150,7 @@ export function createResource(resource = {}, test = false) {
 }
 
 export function editResource(resource = {}) {
-  return http.put(`/resources/${resource.id}`, resource)
+  return http.put(`/resources/${encodeURIComponent(resource.id)}`, resource)
 }
 
 export function createRule(rule = {}) {
@@ -158,11 +158,11 @@ export function createRule(rule = {}) {
 }
 
 export function updateRule(id, rule = {}) {
-  return http.put(`/rules/${id}`, rule)
+  return http.put(`/rules/${encodeURIComponent(id)}`, rule)
 }
 
 export function resetRuleStatistics(id) {
-  return http.put(`/rules/${id}/reset_metrics`)
+  return http.put(`/rules/${encodeURIComponent(id)}/reset_metrics`)
 }
 
 export default {}
