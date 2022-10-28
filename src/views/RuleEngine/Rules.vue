@@ -116,11 +116,13 @@
               <template slot-scope="{ row }">
                 <router-link
                   :to="{
-                    path: `/rules/${row.id}`,
+                    name: 'rules-view',
+                    params: { id: row.id },
                     query: { oper: 'view' },
                   }"
-                  >{{ row.id }}</router-link
                 >
+                  {{ row.id }}
+                </router-link>
               </template>
             </el-table-column>
             <el-table-column prop="for" min-width="120" :label="$t('RuleEngine.topic')">

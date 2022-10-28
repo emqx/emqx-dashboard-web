@@ -276,16 +276,6 @@ export default {
       })
       return iconMap
     },
-    toConfig(item = {}) {
-      const { name } = item
-      const node = this.nodeName
-      this.$router.push({
-        path: `/plugins/${name}`,
-        query: {
-          node,
-        },
-      })
-    },
     typeFilterHandler(value, row) {
       return value === row.type
     },
@@ -368,7 +358,10 @@ export default {
     },
     handleManage(row) {
       this.$router.push({
-        path: `/plugins/${row.name}`,
+        name: 'pluginsName',
+        params: {
+          pluginName: row.name,
+        },
       })
     },
   },
