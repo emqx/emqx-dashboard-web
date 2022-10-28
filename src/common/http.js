@@ -183,7 +183,6 @@ axios.interceptors.response.use((response) => {
   let error = ''
   let selfError = ''
   if (typeof res === 'object') {
-    console.log(res, 'res')
     const { status } = response
     const { code = -100, meta, message } = response.data
     let { data } = response.data

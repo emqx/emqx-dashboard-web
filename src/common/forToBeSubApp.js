@@ -1,4 +1,2 @@
-export const SING_NODE_VALUE = 'single-node'
-export const isSingNode = (node) => node === SING_NODE_VALUE
-
+// eslint-disable-next-line import/prefer-default-export
 export const isSubApp = window.__POWERED_BY_QIANKUN__

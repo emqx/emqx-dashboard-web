@@ -242,7 +242,7 @@ export default {
         ],
       },
     ]
-    if (path.startsWith('/emqxDashBoard')) {
+    if (isSubApp) {
       // 代表是subapp
       const subAppPre = path.split('/').splice(0, 8).join('/')
       this.menus.forEach((item) => {
