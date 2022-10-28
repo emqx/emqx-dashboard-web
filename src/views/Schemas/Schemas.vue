@@ -25,7 +25,8 @@
             icon="el-icon-plus"
             @click="
               $router.push({
-                path: '/schemas/0',
+                name: 'schemas-details',
+                params: { id: 0 },
                 query: { oper: 'create' },
               })
             "
@@ -41,7 +42,8 @@
                 href="javascript:;"
                 @click="
                   $router.push({
-                    path: `/schemas/${row.name}`,
+                    name: 'schemas-details',
+                    params: { id: row.name },
                     query: { oper: 'view' },
                   })
                 "
