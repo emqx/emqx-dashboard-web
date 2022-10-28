@@ -2,7 +2,7 @@
   <div class="websocket">
     <div class="app-wrapper">
       <el-tabs v-model="activeTab" type="card" :before-leave="handleBeforeLeave" @tab-remove="handleTabEdit">
-        <el-tab-pane v-for="(item, i) in tabs" :key="i" :closable="i > 0" :name="item.name">
+        <el-tab-pane v-for="(item, i) in tabs" :key="item.id" :closable="i > 0" :name="item.id">
           <span slot="label">
             <el-badge class="message-count" :hidden="item.messageCount === 0" :value="item.messageCount" :max="99">
               {{ item.label }}
@@ -18,8 +18,8 @@
 
       <web-socket-item
         v-for="(item, i) in tabs"
-        v-show="item.name === activeTab"
-        :ref="item.name"
+        v-show="item.id === activeTab"
+        :ref="item.id"
         :key="i"
         :message-count.sync="item.messageCount"
       ></web-socket-item>
@@ -29,22 +29,22 @@
 
 <script>
 import WebSocketItem from './components/WebSocketItem'
+import { createRandomString } from '@/common/utils'
 
 export default {
   name: 'WebSocket',
 
   components: { WebSocketItem },
 
-  props: {},
-
   data() {
+    const defaultID = createRandomString()
     return {
-      activeTab: '0',
+      activeTab: defaultID,
       tabs: [
         {
-          name: '0',
           label: this.$t('Tools.defaultConnection'),
           messageCount: 0,
+          id: defaultID,
         },
       ],
     }
@@ -52,8 +52,8 @@ export default {
 
   watch: {
     activeTab(val, oldVal) {
-      const ins = this.tabs.find(($) => $.name === val)
-      const insOld = this.tabs.find(($) => $.name === oldVal)
+      const ins = this.tabs.find(($) => $.id === val)
+      const insOld = this.tabs.find(($) => $.id === oldVal)
 
       if (insOld) {
         insOld.messageCount = 0
@@ -66,28 +66,28 @@ export default {
 
   methods: {
     // 活动标签切换时触发
-    handleBeforeLeave(currentName) {
-      if (currentName === 'add') {
+    handleBeforeLeave(currentTabName) {
+      if (currentTabName === 'add') {
         this.handleTabEdit('add')
         return false
       }
       return true
     },
-    handleTabEdit(targetName) {
-      if (targetName === 'add') {
+    handleTabEdit(targetTabName) {
+      if (targetTabName === 'add') {
         if (this.tabs.length > 6) {
           this.$message.error(this.$t('Tools.maxSix'))
           return
         }
-        const name = this.tabs.length.toString()
+        const id = createRandomString()
         this.tabs.push({
-          name,
+          id,
           label: this.$t('Tools.connectionName'),
           messageCount: 0,
         })
-        this.activeTab = name
+        this.activeTab = id
       } else {
-        const ins = this.$refs[targetName] && this.$refs[targetName][0]
+        const ins = this.$refs[targetTabName] && this.$refs[targetTabName][0]
         if (!ins) {
           return
         }
@@ -95,14 +95,14 @@ export default {
           ins.client.end()
         }
         this.tabs.forEach((tab, index) => {
-          if (tab.name === targetName) {
+          if (tab.id === targetTabName) {
             const nextTab = this.tabs[index + 1] || this.tabs[index - 1]
             if (nextTab) {
-              this.activeTab = nextTab.name
+              this.activeTab = nextTab.id
             }
           }
         })
-        this.tabs = this.tabs.filter(($) => $.name !== targetName)
+        this.tabs = this.tabs.filter(($) => $.id !== targetTabName)
       }
     },
   },
