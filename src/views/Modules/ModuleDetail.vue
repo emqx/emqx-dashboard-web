@@ -32,8 +32,8 @@
           <el-form ref="record" :model="record" :rules="rules" label-position="top" size="small">
             <el-row class="config-item-wrapper" :gutter="30">
               <template v-if="configList.length > 0">
-                <div v-for="(item, i) in configList" :key="i">
-                  <template v-if="item.key !== 'listener'">
+                <template v-for="(item, i) in configList">
+                  <div v-if="item.key !== 'listener' && item.key !== 'acl_req' && !isAuthOrAclUrlInHttp(item)" :key="i">
                     <el-col :span="getParamItemSpan(item)">
                       <el-form-item
                         v-if="item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)"
@@ -128,8 +128,16 @@
                         </el-form-item>
                       </template>
                     </el-col>
-                  </template>
-                </div>
+                  </div>
+                  <div v-else-if="isAuthOrAclUrlInHttp(item) && item.key === 'auth_req'" :key="item.key">
+                    <el-col :span="getParamItemSpan(item)">
+                      <el-form-item v-bind="item.formItemAttributes" :label="$t('Modules.authAclRequestUrl')">
+                        <!-- special handler for http auth -->
+                        <el-input v-model="httpAuthRequestUrl" v-bind="item.bindAttributes" />
+                      </el-form-item>
+                    </el-col>
+                  </div>
+                </template>
               </template>
               <template v-else-if="!configList.length">
                 <div class="no-config">
@@ -289,6 +297,18 @@ export default {
     },
     listeners() {
       return this.record.config.listeners
+    },
+    specialModuleDefaultTabName() {
+      return this.specialModuleDefaultTabMap[this.moduleData.type]
+    },
+    httpAuthRequestUrl: {
+      get() {
+        return this.record && this.record.config && this.record.config.auth_req
+      },
+      set(val) {
+        this.record.config.auth_req = val
+        this.record.config.acl_req = val
+      },
     },
   },
 
@@ -567,6 +587,13 @@ export default {
       const url = `https://docs.emqx.${langUrl}enterprise/${process.env.VUE_APP_VERSION}/modules/${type}.html`
       const windowUrl = window.open(url)
       windowUrl.opener = null
+    },
+    /* Special handler for HTTP Auth */
+    isAuthOrAclUrlInHttp(configItem) {
+      return (
+        this.moduleData.type === 'http_authentication' &&
+        (configItem.key === 'auth_req' || configItem.key === 'acl_req')
+      )
     },
   },
 }
