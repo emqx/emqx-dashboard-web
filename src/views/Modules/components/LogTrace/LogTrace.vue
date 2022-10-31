@@ -35,8 +35,12 @@
       </el-table-column>
       <el-table-column min-width="100">
         <template #default="{ row }">
-          <el-button type="dashed" size="mini" @click="viewDetail(row)">{{ $t('LogTrace.view') }}</el-button>
-          <el-button type="dashed" size="mini" @click="download(row)">{{ $t('LogTrace.download') }}</el-button>
+          <el-button type="dashed" size="mini" @click="viewDetail(row)">
+            {{ $t('LogTrace.view') }}
+          </el-button>
+          <el-button type="dashed" size="mini" @click="download(row)" :loading="row.downloading">
+            {{ $t('LogTrace.download') }}
+          </el-button>
           <template v-if="row.status !== 'stopped'">
             <el-button size="mini" type="dashed" @click="stopTraceHandler(row)">{{ $t('LogTrace.stop') }}</el-button>
           </template>
@@ -169,8 +173,9 @@
               class="dialog-primary-btn"
               type="primary"
               size="small"
-              @click="download({ name: viewLogName })"
+              @click="downloadInDetailPage"
               :disabled="viewNodeLoading"
+              :loading="isDetailPageDownloading"
             >
               {{ $t('Base.download') }}
             </el-button>
@@ -323,6 +328,7 @@ export default {
       traceTbLoading: false,
       // fTraceTbLoading: false,
       viewNodeLoading: false,
+      isDetailPageDownloading: false,
       record: {
         // packets: [],
         name: '',
@@ -359,11 +365,16 @@ export default {
     async loadTraceList() {
       this.traceTbLoading = true
       // this.fTraceTbLoading = true
-      const traceList = await getTraceList().catch(() => {})
-      this.traceTable = traceList
-      // this.fTraceTb = traceList[1]
-      this.traceTbLoading = false
-      // this.fTraceTbLoading = false
+      try {
+        const traceList = await getTraceList()
+        this.traceTable = traceList.map((item) => ({ ...item, downloading: false }))
+        // this.fTraceTb = traceList[1]
+        // this.fTraceTbLoading = false
+      } catch (error) {
+        //
+      } finally {
+        this.traceTbLoading = false
+      }
     },
 
     async submitTrace() {
@@ -424,6 +435,7 @@ export default {
     async viewDetail(row, changeNode = false) {
       if (!row || !row.name) return
       this.viewDialog = true
+      this.isDetailPageDownloading = false
       this.$nextTick(() => {
         this.countInitialHeight()
       })
@@ -461,8 +473,27 @@ export default {
       if (!row.name) {
         return
       }
-      await downloadTrace(row.name)
-      // download link, no more action needed
+      try {
+        row.downloading = true
+        await downloadTrace(row.name)
+      } catch (error) {
+        //
+      } finally {
+        row.downloading = false
+      }
+    },
+    async downloadInDetailPage() {
+      if (!this.viewLogName) {
+        return
+      }
+      try {
+        this.isDetailPageDownloading = true
+        await downloadTrace(this.viewLogName)
+      } catch (error) {
+        //
+      } finally {
+        this.isDetailPageDownloading = false
+      }
     },
     async stopTraceHandler(row) {
       if (!row.name) return

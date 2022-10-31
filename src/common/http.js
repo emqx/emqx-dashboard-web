@@ -181,6 +181,10 @@ axios.interceptors.response.use((response) => {
       response,
     })
   }
+  // for blob data
+  if (response.request.responseType === 'blob') {
+    return response
+  }
   return res.data || {}
 }, handleError)
 

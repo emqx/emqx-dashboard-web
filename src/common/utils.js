@@ -583,4 +583,32 @@ export const createRandomString = (length = 8) => {
   }, '')
 }
 
+export const downloadBlobData = (blobRes) => {
+  const { data, headers } = blobRes
+  if (!(data instanceof Blob)) {
+    return
+  }
+  const fileName =
+    (headers && headers['content-disposition'] && headers['content-disposition'].replace(/\w+; filename=(.*)/, '$1')) ||
+    'file'
+
+  const blob = new Blob([data], { type: headers['content-type'] })
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    //IE11 and the legacy version Edge support
+    window.navigator.msSaveBlob(blob, fileName)
+  } else {
+    const DOM = document.createElement('a')
+    const url = window.URL.createObjectURL(blob)
+    DOM.href = url
+    DOM.download = decodeURI(fileName)
+    DOM.style.display = 'none'
+    document.body.appendChild(DOM)
+    DOM.click()
+    if (DOM.parentNode) {
+      DOM.parentNode.removeChild(DOM)
+    }
+    window.URL.revokeObjectURL(url)
+  }
+}
+
 export default {}
