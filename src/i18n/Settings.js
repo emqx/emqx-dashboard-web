@@ -78,6 +78,29 @@ export default {
     zh: '功能',
     en: 'Function',
   },
+  acl_order: {
+    zh: `配置多个 ACL 后端时，可以使用该配置来指定检查的顺序。默认值 none 表示未定义任何顺序。使用逗号分隔多个后端名称（或别名）。
+         例如 'jwt,http' 表示先检查 jwt，再检查 http。
+         支持的名称有：internal（或 file）、http、jwt、ldap、mnesia、mongo（或 mongodb）、mysql、pgsql（或 postgres）、redis。
+         指定顺序的后端总是排在未指定顺序的前面，例如如果使用了 mnesia，jwt 和 http，但是在配置中仅指定了 jwt,http，那么 mnesia 会排在最后。
+         如果使用了第三方插件，则必需使用具体的回调模块名称，例如 my_auth_plugin_module。
+         无法识别的名字会被忽略。`,
+    en: `When multile ACL backend is in use, this config can be used to define their order.
+         The default value 'none' means no explicit ordering, in which case the order dpends on the plugin (or module) start/restart order.
+         Use comma to separate the names (or aliases), for example 'jwt,http' means jwt authentication should be checked before http.
+         Supported aliases are: internal (or file), http, jwt, ldap, mnesia, mongo (or mongodb), mysql, pgsql (or postgres), redis.
+         It is not necessary to enumerate all the in-use ACL backends here,
+         if only a part of the backends are listed here, the ones not listed will be ordered at the end.
+         When using a thrid-party plugin, there is no alias support for it, so the has to be the specific callback module name,
+         e.g. my_auth_plugin_module.
+         Unknown names are silently discarded.`
+  },
+  auth_order: {
+    zh: `配置多个认证后端时，可以使用该配置来指定检查的顺序。默认值 none 表示未定义任何顺序。使用逗号分隔多个后端名称（或别名）。
+         配置使用与 acl_order 类似，只是认证没有 'internal' 这个后端。`,
+    en: `When multile authentication backend is in use, this config can be used to define their order.
+         This config is similar to acl_order, only there is no 'internal' authentication backend.`
+  },
   enable_acl: {
     zh: '是否启用 ACL 检查',
     en: 'Enable ACL check',
