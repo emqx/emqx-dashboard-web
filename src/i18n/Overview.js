@@ -290,23 +290,23 @@ export default {
   licenseExpiryTip: {
     zh: `
     您的试用 License 已过期，请
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/zh/apply-licenses/emqx">更新 License </a>
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/zh/apply-licenses/emqx?utm_source=emqx-dashboard&utm_medium=referral&utm_campaign=dashboard-to-license">更新 License </a>
     或联系销售人员更新 License。
     `,
     en: `
     Your license has expired. Please
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/en/apply-licenses/emqx">update license</a>
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/en/apply-licenses/emqx?utm_source=emqx-dashboard&utm_medium=referral&utm_campaign=dashboard-to-license">update license</a>
     or contact our customer services for an updated license.
     `,
   },
   licenseEvaluationTip: {
     zh: `
     当前正在使用评估 License，限制为10个连接。请
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/zh/apply-licenses/emqx">升级 License</a> 。
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/zh/apply-licenses/emqx?utm_source=emqx-dashboard&utm_medium=referral&utm_campaign=dashboard-to-license">升级 License</a> 。
     `,
     en: `
     You are now using the 10-connection evaluation license.<br>Please
-    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/en/apply-licenses/emqx">upgrade license</a>.
+    <a target="_blank" rel="noopener norefferrer" href="https://www.emqx.com/en/apply-licenses/emqx?utm_source=emqx-dashboard&utm_medium=referral&utm_campaign=dashboard-to-license">upgrade license</a>.
     `,
   },
   updateLicense: {
