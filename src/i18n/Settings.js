@@ -93,13 +93,13 @@ export default {
          if only a part of the backends are listed here, the ones not listed will be ordered at the end.
          When using a thrid-party plugin, there is no alias support for it, so the has to be the specific callback module name,
          e.g. my_auth_plugin_module.
-         Unknown names are silently discarded.`
+         Unknown names are silently discarded.`,
   },
   auth_order: {
     zh: `配置多个认证后端时，可以使用该配置来指定检查的顺序。默认值 none 表示未定义任何顺序。使用逗号分隔多个后端名称（或别名）。
          配置使用与 acl_order 类似，只是认证没有 'internal' 这个后端。`,
     en: `When using multiple authentication backends, this config can be used to define their order.
-         This config is similar to 'acl_order', only there is no 'internal' authentication backend.`
+         This config is similar to 'acl_order', only there is no 'internal' authentication backend.`,
   },
   enable_acl: {
     zh: '是否启用 ACL 检查',
