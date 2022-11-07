@@ -96,6 +96,35 @@ export async function loadResourceTypes() {
 
 const resourceTypes = {}
 
+const getNoneValue = (items) => {
+  const authType = Object.keys(items)
+  return authType.find((key) => Object.keys(items[key]).length === 0)
+}
+
+const getPlainValue = (items) => {
+  const authType = Object.keys(items)
+  return authType.find((key) => {
+    const param = items[key]
+    const keys = Object.keys(param)
+    return !key.match(/sha/i) && keys.some((item) => item === 'password') && keys.some((item) => item === 'username')
+  })
+}
+
+const handleKafkaForHotFix = (resourceItem) => {
+  const { type, configVal } = resourceItem
+  const kafkaSchema = resourceItem.config
+  const { params } = kafkaSchema
+  const { authentication_mechanism } = params
+  if (type === 'bridge_kafka' && configVal.authentication_mechanism === undefined && authentication_mechanism) {
+    if (!configVal.username) {
+      resourceItem.configVal.authentication_mechanism = getNoneValue(authentication_mechanism.items)
+    } else {
+      resourceItem.configVal.authentication_mechanism = getPlainValue(authentication_mechanism.items)
+    }
+  }
+  return resourceItem
+}
+
 export async function loadResource(params = {}) {
   if (Object.keys(resourceTypes).length === 0) {
     const types = await loadResourceTypes()
@@ -105,9 +134,11 @@ export async function loadResource(params = {}) {
   }
   const resources = await http.get('/resources', { params })
   return resources.map((item) => {
-    const { config } = item
-    item.configVal = config
-    item.config = resourceTypes[item.type] || {}
+    let ret = item
+    const { config } = ret
+    ret.configVal = config
+    ret.config = resourceTypes[ret.type] || {}
+    ret = handleKafkaForHotFix(ret)
     return item
   })
 }
