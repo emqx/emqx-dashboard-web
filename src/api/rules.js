@@ -1,3 +1,4 @@
+import { omit } from 'lodash'
 import http from '@/common/http'
 import { fillI18n } from '@/common/utils'
 
@@ -152,6 +153,9 @@ export async function loadResource(params = {}) {
  */
 const flatParams = (config, params) => {
   const ret = { ...params }
+  if (!config) {
+    return ret
+  }
   try {
     const walkParamsBelowCfgselect = (subParams) => {
       Object.keys(subParams).forEach((subKey) => {
@@ -177,6 +181,25 @@ const flatParams = (config, params) => {
   return ret
 }
 
+/**
+ * some field diff
+ */
+const handleKafkaForHotFixInDetailPage = (resourceItem) => {
+  const { type, config } = resourceItem
+  const kafkaSchema = resourceItem.typeInfo
+  const { params } = kafkaSchema
+  const { authentication_mechanism } = params
+  if (type === 'bridge_kafka' && config.authentication_mechanism === undefined && authentication_mechanism) {
+    if (!config.username) {
+      resourceItem.config.authentication_mechanism = getNoneValue(authentication_mechanism.items)
+      resourceItem.config = omit(resourceItem.config, ['username', 'password'])
+    } else {
+      resourceItem.config.authentication_mechanism = getPlainValue(authentication_mechanism.items)
+    }
+  }
+  return resourceItem
+}
+
 export async function loadResourceDetails(id) {
   if (Object.keys(resourceTypes).length === 0) {
     const types = await loadResourceTypes()
@@ -185,8 +208,9 @@ export async function loadResourceDetails(id) {
     })
   }
   try {
-    const resource = await http.get(`/resources/${encodeURIComponent(id)}`)
+    let resource = await http.get(`/resources/${encodeURIComponent(id)}`)
     resource.typeInfo = resourceTypes[resource.type] || {}
+    resource = handleKafkaForHotFixInDetailPage(resource)
     resource._config = []
     const flattenParams = flatParams(resource.config, resource.typeInfo.params)
     Object.keys(resource.config).forEach((key) => {
