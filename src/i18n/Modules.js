@@ -378,8 +378,4 @@ export default {
     zh: '已默认选中最新产生日志的节点，也可手动选择其他节点进行查看',
     en: 'The default selected node is the node which generated the log latest, or you can manually select another node to view the log',
   },
-  authAclRequestUrl: {
-    zh: '认证/访问控制 请求地址',
-    en: 'AUTH/ACL Request URL',
-  },
 }
