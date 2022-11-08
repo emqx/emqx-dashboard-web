@@ -318,8 +318,4 @@ export default {
     zh: '（只支持精确搜索）',
     en: '(Only supports exact search)',
   },
-  authAclRequestUrl: {
-    zh: '认证/访问控制 请求地址',
-    en: 'AUTH/ACL Request URL',
-  },
 }
