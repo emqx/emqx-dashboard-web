@@ -21,6 +21,7 @@
             <el-form-item
               :prop="`tableData.${$index}.${row[item].formItemAttributes.prop}`"
               :rules="form.rules[row[item].formItemAttributes.prop]"
+              ref="formItems"
             >
               <!-- input -->
               <template v-if="row[item].elType !== 'select'">
@@ -82,6 +83,8 @@
 </template>
 
 <script>
+import { isFunction } from 'lodash'
+
 export default {
   name: 'MulObjectEditor',
 
@@ -181,12 +184,25 @@ export default {
         this.atInputChange()
       }, 50)
     },
+    clearValidates() {
+      const formItemComArr = this.$refs.formItems
+      formItemComArr.forEach((item) => {
+        try {
+          if (item.clearValidate && isFunction(item.clearValidate)) {
+            item.clearValidate()
+          }
+        } catch (error) {
+          console.error(error)
+        }
+      })
+    },
     addColumn() {
       const row = { ...this.oneRow }
       row.key = Math.random().toString(16).slice(3)
       this.form.tableData.push(row)
       setTimeout(() => {
         this.atInputChange()
+        this.clearValidates()
       }, 50)
     },
     // eslint-disable-next-line no-unused-vars
