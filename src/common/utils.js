@@ -193,7 +193,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         if (items.type === 'object') {
           const { schema } = items
           oneObjOfArray = renderParamsForm(schema)
-          defaultValue = !defaultValue.length ? [] : defaultValue
+          defaultValue = defaultValue && defaultValue.length ? defaultValue : []
         }
         elType = 'array'
         break

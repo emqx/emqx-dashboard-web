@@ -245,52 +245,54 @@
                     <i slot="reference" class="el-icon-question"></i>
                   </el-popover>
                 </template>
-                <template v-if="item.elType === 'object'">
-                  <key-and-value-editor v-model="record.params[item.key]"></key-and-value-editor>
-                </template>
-                <template v-else-if="item.elType === 'cfgselect'">
-                  <config-select
-                    v-model="record.params[item.key]"
-                    v-bind="item.bindAttributes"
-                    class="reset-width"
-                    :extraConfigs="item.extraConfigs"
-                    @updateConfig="addConfigAccordingType"
-                  >
-                  </config-select>
-                </template>
+                <key-and-value-editor v-if="item.elType === 'object'" v-model="record.params[item.key]" />
+                <config-select
+                  v-else-if="item.elType === 'cfgselect'"
+                  v-model="record.params[item.key]"
+                  v-bind="item.bindAttributes"
+                  class="reset-width"
+                  :extraConfigs="item.extraConfigs"
+                  @updateConfig="addConfigAccordingType"
+                />
+                <array-editor
+                  v-else-if="item.elType === 'array'"
+                  ref="arrayEditor"
+                  v-model="record.params[item.key]"
+                  :data="item.oneObjOfArray"
+                  :isDadRequired="rules.params[item.key].length > 0"
+                  @updateValidate="validateRecord"
+                />
+                <!-- TODO: -->
                 <template v-else-if="item.elType !== 'select'">
                   <el-input
                     v-if="item.type === 'number'"
                     v-model.number="record.params[item.key]"
                     v-bind="item.bindAttributes"
-                  >
-                  </el-input>
+                  />
                   <el-input
                     v-else-if="item.type === 'password'"
                     v-model="record.params[item.key]"
                     v-bind="item.bindAttributes"
                     autocomplete="new-password"
                     show-password
-                  >
-                  </el-input>
+                  />
                   <div v-else-if="item.key === 'sql'" class="monaco-container monaco-action__sql">
                     <monaco
                       :id="`${record.name}-sql${Math.random().toString(16).slice(3)}`"
                       v-model="record.params.sql"
                       lang="sql"
-                    >
-                    </monaco>
+                    />
                   </div>
-                  <el-input v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </el-input>
+                  <el-input v-else v-model="record.params[item.key]" v-bind="item.bindAttributes" />
                 </template>
+
                 <template v-else>
                   <emq-select
                     v-if="item.type === 'number'"
                     v-model.number="record.params[item.key]"
                     v-bind="item.bindAttributes"
-                  >
-                  </emq-select>
-                  <emq-select v-else v-model="record.params[item.key]" v-bind="item.bindAttributes"> </emq-select>
+                  />
+                  <emq-select v-else v-model="record.params[item.key]" v-bind="item.bindAttributes" />
                 </template>
               </el-form-item>
             </el-col>
@@ -339,6 +341,7 @@ import {
   diffConfigList,
 } from '@/common/someUtilsForCfgselect'
 import { isParamBoolType, findParamItemByKey, getParamItemSpan } from '@/common/someUtilsForSchemaForm'
+import ArrayEditor from '@/components/ArrayEditor'
 
 export default {
   name: 'RuleActions',
@@ -348,6 +351,7 @@ export default {
     Monaco,
     KeyAndValueEditor,
     ConfigSelect,
+    ArrayEditor,
   },
 
   props: {
@@ -526,6 +530,10 @@ export default {
       setTimeout(() => {
         this.$refs.record.clearValidate()
       }, 10)
+    },
+
+    validateRecord() {
+      this.$refs.record.validate()
     },
 
     findParamItemByKey(keyForFind) {
@@ -1072,6 +1080,16 @@ export default {
     .el-input,
     .el-select {
       width: 200px !important;
+    }
+
+    .array-editor {
+      .el-input,
+      .el-select {
+        width: 100% !important;
+      }
+      .cell {
+        padding: 0 4px;
+      }
     }
 
     .el-textarea {
