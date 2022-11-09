@@ -221,7 +221,7 @@ export default {
       rules: {
         config: {},
         type: { required: true, message: this.$t('General.pleaseChoose') },
-        id: { required: true, validator: verifyID },
+        id: { required: true, validator: (rules, value) => verifyID(value, this.oper === 'edit') },
       },
     }
   },

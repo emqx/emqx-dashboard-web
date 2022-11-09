@@ -143,7 +143,7 @@ export default {
       showConfigList: [],
       rules: {
         configs: {},
-        name: [{ required: true, validator: verifyID }],
+        name: [{ required: true, validator: (rules, value) => verifyID(value, this.oper === 'edit') }],
       },
       record: {
         configs: {},
