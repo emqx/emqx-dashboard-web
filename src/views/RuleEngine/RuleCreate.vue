@@ -204,7 +204,8 @@ export default {
       },
       rules: {
         rawsql: { required: true, message: this.$t('RuleEngine.pleaseEnterTheSQL') },
-        id: { required: true, validator: verifyID },
+        // id: { required: true, validator: verifyID },
+        id: { required: true, validator: (rules, value) => verifyID(value, this.isEdit), trigger: 'blur' },
       },
     }
   },

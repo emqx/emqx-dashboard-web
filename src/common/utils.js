@@ -446,17 +446,21 @@ export function getDateDiff(duration) {
     .join(':')
 }
 
-export const verifyID = (rule, value, callback) => {
+export const verifyID = (value, isEdit = false) => {
+  if (isEdit) {
+    return Promise.resolve()
+  }
   const reg = /^[0-9a-zA-Z_:]{1,64}$/
   if (!value) {
-    callback(new Error(VueI18n.RuleEngine.pleaseEnter))
-  } else if (value.length > 64) {
-    callback(new Error(VueI18n.RuleEngine.id_len_tip))
-  } else if (!reg.test(value)) {
-    callback(new Error(VueI18n.RuleEngine.id_char_tip))
-  } else {
-    callback()
+    return Promise.reject(VueI18n.RuleEngine.pleaseEnter)
   }
+  if (value.length > 64) {
+    return Promise.reject(VueI18n.RuleEngine.id_len_tip)
+  }
+  if (!reg.test(value)) {
+    return Promise.reject(VueI18n.RuleEngine.id_char_tip)
+  }
+  return Promise.resolve()
 }
 
 export const verifyListener = (rule, value, callback) => {
