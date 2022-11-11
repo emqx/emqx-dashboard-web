@@ -103,12 +103,6 @@ export default {
   },
 
   methods: {
-    manageModule(item) {
-      if (this.canManageModuleTypes.indexOf(item.type) === -1) {
-        return
-      }
-      this.$router.push(`/modules/manage?type=${item.type}`)
-    },
     deleteModule(item) {
       this.$msgbox
         .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {

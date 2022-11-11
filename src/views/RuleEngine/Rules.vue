@@ -577,7 +577,10 @@ export default {
         })
     },
     editRule(row) {
-      this.$router.push(`/rules/create?rule=${row.id}`)
+      this.$router.push({
+        name: 'rules-create',
+        query: { rule: row.id },
+      })
     },
     copyRule({ id }) {
       this.$router.push({ name: 'rules-create', query: { command: 'copy', rule: id } })

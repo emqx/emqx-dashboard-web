@@ -500,7 +500,13 @@ export default {
         if (this.from === 'modules' || !isCancel) {
           this.$router.push('/modules')
         } else {
-          this.$router.push(`/modules/select?id=${this.$route.query.id}&top=${this.$route.query.top}`)
+          this.$router.push({
+            name: 'modules-select',
+            query: {
+              id: this.$route.query.id,
+              top: this.$route.query.top,
+            },
+          })
         }
       }, 10)
     },
