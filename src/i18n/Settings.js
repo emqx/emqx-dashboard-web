@@ -117,6 +117,17 @@ export default {
     zh: '如果未加载身份验证插件，则默认情况下允许匿名身份验证。建议在生产部署中禁用该选项！',
     en: 'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
   },
+  crl_cache_http_timeout: {
+    zh: `获取CRLs时HTTP请求的超时。这对所有听众来说是全球性的。`,
+    en: `The timeout for the HTTP request when fetching CRLs.  This is global
+         for all listeners.`,
+  },
+  crl_cache_refresh_interval: {
+    zh: `从服务器刷新CRL的周期。 这是全球
+         所有URL和监听器。 不能短于1分钟。`,
+    en: `The period to refresh the CRLs from the servers.  This is global
+         for all URLs and listeners.  Cannot be shorter than 1 minute.`,
+  },
   retry_interval: {
     zh: 'QoS 1/2 消息传递的重试间隔',
     en: 'Retry interval for QoS1/2 message delivering',
