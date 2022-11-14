@@ -118,15 +118,13 @@ export default {
     en: 'Allow anonymous authentication by default if no auth plugins loaded. Disable the option in production deployment',
   },
   crl_cache_http_timeout: {
-    zh: `获取CRLs时HTTP请求的超时。这对所有听众来说是全球性的。`,
-    en: `The timeout for the HTTP request when fetching CRLs.  This is global
-         for all listeners.`,
+    zh: `获取 CRL 时 HTTP 请求的超时限制。该参数适用于所有启用了 CRL 检查的监听器。`,
+    en: `The timeout for the HTTP request when fetching CRLs. This is a global setting for all listeners with CRL check enabled.`,
   },
   crl_cache_refresh_interval: {
-    zh: `从服务器刷新CRL的周期。 这是全球
-         所有URL和监听器。 不能短于1分钟。`,
+    zh: `从 CRL 服务器刷新 CRL 的周期。 该配置会被所有启用 CRL 检查的监听器用到。 不能短于1分钟。`,
     en: `The period to refresh the CRLs from the servers.  This is global
-         for all URLs and listeners.  Cannot be shorter than 1 minute.`,
+         for all listeners with CRL check enabled.  Cannot be shorter than 1 minute.`,
   },
   retry_interval: {
     zh: 'QoS 1/2 消息传递的重试间隔',
