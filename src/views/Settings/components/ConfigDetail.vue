@@ -45,10 +45,15 @@
                 <template slot="label">
                   <span v-html="labelToShow(item.key)"></span>
                 </template>
-                <template v-if="item.key === 'zone'">
-                  <emq-select v-model="record.configs[item.key]" :field="{ options: listenerZoneOptions }">
-                  </emq-select>
-                </template>
+                <emq-select
+                  v-if="item.key === 'zone'"
+                  v-model="record.configs[item.key]"
+                  :field="{ options: listenerZoneOptions }"
+                />
+                <TLSVersionSelect
+                  v-else-if="from === 'listener' && item.key === 'tls_versions'"
+                  v-model="record.configs[item.key]"
+                />
 
                 <template v-else>
                   <template v-if="item.elType !== 'select'">
@@ -56,17 +61,15 @@
                       v-if="item.type === 'number'"
                       v-model.number="record.configs[item.key]"
                       v-bind="item.bindAttributes"
-                    >
-                    </el-input>
+                    />
                     <el-input
                       v-else-if="item.type === 'password'"
                       v-model="record.configs[item.key]"
                       v-bind="item.bindAttributes"
                       autocomplete="new-password"
                       show-password
-                    >
-                    </el-input>
-                    <el-input v-else v-model="record.configs[item.key]" v-bind="item.bindAttributes"> </el-input>
+                    />
+                    <el-input v-else v-model="record.configs[item.key]" v-bind="item.bindAttributes" />
                   </template>
                   <template v-else>
                     <emq-select
@@ -74,15 +77,13 @@
                       v-model.number="record.configs[item.key]"
                       v-bind="item.bindAttributes"
                       class="reset-width"
-                    >
-                    </emq-select>
+                    />
                     <emq-select
                       v-else
                       v-model="record.configs[item.key]"
                       v-bind="item.bindAttributes"
                       class="reset-width"
-                    >
-                    </emq-select>
+                    />
                   </template>
                 </template>
               </el-form-item>
@@ -123,6 +124,7 @@ import { renderParamsForm, verifyID, verifyListener } from '@/common/utils'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
 import labelCut from '@/mixins/labelCut'
+import TLSVersionSelect from './TLSVersionSelect.vue'
 
 export default {
   name: 'ConfigDetail',
@@ -133,6 +135,10 @@ export default {
   },
 
   mixins: [labelCut],
+
+  components: {
+    TLSVersionSelect,
+  },
 
   data() {
     return {
