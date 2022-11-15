@@ -32,8 +32,11 @@ export default {
         }
       },
       set(val) {
-        const str = val.join(CONNECTOR)
-        this.$emit('input', str)
+        if (val === undefined) {
+          this.$emit('input', '')
+        } else {
+          this.$emit('input', val.join(CONNECTOR))
+        }
       },
     },
   },
