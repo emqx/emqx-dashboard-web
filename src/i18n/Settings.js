@@ -193,6 +193,10 @@ export default {
     zh: '是否在严格模式下解析 MQTT 帧',
     en: 'Whether to parse the MQTT frame in strict mode',
   },
+  mqtt_exclusive_subscription: {
+    zh: '是否启用对 MQTT 排它订阅的支持',
+    en: 'Whether to enable support for MQTT exclusive subscription',
+  },
   // 集群设置字段
   invite: {
     zh: '邀请',
