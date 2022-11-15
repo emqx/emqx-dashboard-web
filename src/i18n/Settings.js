@@ -123,8 +123,8 @@ export default {
   },
   crl_cache_refresh_interval: {
     zh: '从 CRL 服务器刷新 CRL 的周期。 该配置会被所有启用 CRL 检查的监听器用到。 不能短于1分钟。',
-    en: 'The period to refresh the CRLs from the servers. This is global
-         for all listeners with CRL check enabled. Cannot be shorter than 1 minute.',
+    en: `The period to refresh the CRLs from the servers. This is global
+         for all listeners with CRL check enabled. Cannot be shorter than 1 minute.`,
   },
   retry_interval: {
     zh: 'QoS 1/2 消息传递的重试间隔',
@@ -209,6 +209,10 @@ export default {
   broker_perf_trie_compaction: {
     zh: '是否启用 MQTT topic 前缀树压缩功能',
     en: 'Enable MQTT topic prefix tree compression',
+  },
+  mqtt_exclusive_subscription: {
+    zh: '是否启用对 MQTT 排它订阅的支持',
+    en: 'Whether to enable support for MQTT exclusive subscription',
   },
   // 集群设置字段
   invite: {
