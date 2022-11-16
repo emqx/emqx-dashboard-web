@@ -185,7 +185,10 @@ body {
 
 .emq-popover-content {
   font-size: 12px;
-  word-break: break-all;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 .field-info {
