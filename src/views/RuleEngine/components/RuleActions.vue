@@ -170,7 +170,7 @@
       {{ $t('RuleEngine.addAction') }}
     </el-button>
 
-    <el-dialog :visible.sync="actionDialogVisible" :title="actionDialogTitle" width="520px">
+    <el-dialog :visible.sync="actionDialogVisible" :title="actionDialogTitle" width="550px">
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
         <el-form-item prop="name" :label="$t('RuleEngine.actionType')">
           <el-row :gutter="10">
@@ -1079,7 +1079,7 @@ export default {
 
     .el-input,
     .el-select {
-      width: 200px !important;
+      width: 216px !important;
     }
 
     .array-editor {
