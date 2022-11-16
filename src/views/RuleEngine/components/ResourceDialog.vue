@@ -52,7 +52,7 @@
         <template v-else-if="configList.length > 0">
           <el-col v-for="(item, i) in configList" :key="i" :span="getParamItemSpan(item)">
             <el-form-item
-              v-if="item.elType !== 'file' && !['verify', 'tls_version'].includes(item.key)"
+              v-if="item.elType !== 'file' && !['verify', 'tls_version', 'server_name_indication'].includes(item.key)"
               v-bind="item.formItemAttributes"
             >
               <template v-if="item.formItemAttributes.description" slot="label">
@@ -114,6 +114,12 @@
             <template v-else>
               <el-form-item v-if="showSSLField(item.key)" v-bind="item.formItemAttributes">
                 <file-editor v-if="item.elType === 'file'" v-model="record.config[item.key]"></file-editor>
+                <el-input
+                  v-else-if="item.elType === 'input'"
+                  v-model="record.config[item.key]"
+                  v-bind="item.bindAttributes"
+                >
+                </el-input>
                 <emq-select v-else v-model="record.config[item.key]" v-bind="item.bindAttributes" class="reset-width">
                 </emq-select>
               </el-form-item>
