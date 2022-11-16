@@ -67,7 +67,7 @@
             <!-- </el-form> -->
           </template>
         </el-table-column>
-        <el-table-column width="60px">
+        <el-table-column width="52px">
           <span slot="header" class="btn" @click="addColumn">
             {{ $t('Base.add') }}
           </span>
@@ -246,7 +246,22 @@ export default {
   .requiredclass > div.cell::before {
     content: '*';
     color: #f5222d;
-    margin-right: 4px;
+    margin-right: 2px;
+  }
+
+  th .cell {
+    word-break: break-all;
+  }
+
+  .my-header {
+    position: relative;
+
+    .el-icon-question {
+      position: absolute;
+      right: -15px;
+      top: 1px;
+      font-size: 11px;
+    }
   }
 
   .el-form-item__content {
