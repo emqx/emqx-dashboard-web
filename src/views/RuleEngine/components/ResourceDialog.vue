@@ -456,9 +456,9 @@ export default {
     showSSLField(fieldKey) {
       const typesNeedSpecialHandling = ['bridge_pulsar', 'web_hook']
       const params = this.record.config
-      const httpsEnabled = ['true', true].includes(params['https_enabled'])
-      const SSLEnabled = ['true', true].includes(params['ssl'])
-      const noController = params['ssl'] === undefined && params['https_enabled'] === undefined
+      const httpsEnabled = ['true', true].includes(params.https_enabled)
+      const SSLEnabled = ['true', true].includes(params.ssl)
+      const noController = params.ssl === undefined && params.https_enabled === undefined
       const { type } = this.record
       if (!(typesNeedSpecialHandling.includes(type) || this.isSAP)) {
         return httpsEnabled || SSLEnabled || noController

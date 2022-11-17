@@ -322,11 +322,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import _ from 'lodash'
 /* eslint-disable vue/no-side-effects-in-computed-properties */
+import { setTimeout } from 'timers'
 import { loadActionsList, loadResource } from '@/api/rules'
 import { renderParamsForm, hidePwd } from '@/common/utils'
 import ResourceDialog from '@/views/RuleEngine/components/ResourceDialog.vue'
 import Monaco from '@/components/Monaco'
-import { setTimeout } from 'timers'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ConfigSelect from '@/components/ConfigSelect'
 import {
