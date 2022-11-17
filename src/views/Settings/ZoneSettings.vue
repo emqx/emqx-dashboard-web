@@ -14,6 +14,7 @@
           oper="edit"
           :editConfig="item.configs"
           :btn-loading="saveLoading"
+          :label-width="'250px'"
           from="zone"
           v-model="disabled"
           @update="handleUpdate(...arguments)"
@@ -33,6 +34,7 @@
           ref="addZone"
           v-model="disabled"
           from="zone"
+          :label-width="'250px'"
           :btn-loading="saveLoading"
           @update="handleUpdate(...arguments)"
         ></config-detail>

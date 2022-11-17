@@ -1,19 +1,19 @@
 <template>
-  <el-row :gutter="12" class="config-form">
+  <el-row :gutter="24" class="config-form">
     <el-form
       ref="record"
       class="basic-config-form"
       size="small"
       :label-width="labelWidth"
-      label-position="right"
+      label-position="left"
       :model="recordConfig"
       :rules="rules"
     >
       <div v-for="(key, index) in showKeyList" :key="index">
-        <el-col :span="12">
-          <el-form-item :label="key === '' ? 'listener_on' : labelToShow(key)" :prop="key">
+        <el-col :span="14">
+          <el-form-item :label="key === '' ? 'listener_on' : key" :prop="key">
             <template slot="label">
-              <span v-html="key === '' ? 'listener_on' : labelToShow(key)"></span>
+              <span v-html="key === '' ? 'listener_on' : key"></span>
             </template>
             <template v-if="deepRecord[key] === 'true' || deepRecord[key] === 'false'">
               <emq-select v-model="recordConfig[key]" :field="{ options: boolOptions }"> </emq-select>
@@ -45,7 +45,7 @@
             </template>
           </el-form-item>
         </el-col>
-        <el-col :span="12" class="form-item-desc">
+        <el-col :span="10" class="form-item-desc">
           <span v-if="key !== ''">{{ $t(`Settings.${key}`) }}</span>
           <span v-else>{{ $t(`Settings.listener_on`) }}</span>
         </el-col>
@@ -70,8 +70,6 @@
 </template>
 
 <script>
-import labelCut from '@/mixins/labelCut'
-
 export default {
   name: 'ConfigForm',
 
@@ -79,8 +77,6 @@ export default {
     prop: 'disabled',
     event: 'updateDisabled',
   },
-
-  mixins: [labelCut],
 
   props: {
     disabled: {
@@ -257,11 +253,9 @@ export default {
 <style lang="scss">
 .config-form {
   .el-form-item__label {
-    position: relative;
     display: flex;
     height: 32px;
     align-items: center;
-    justify-content: flex-end;
     word-break: break-all;
     line-height: 1.2;
     &::after {

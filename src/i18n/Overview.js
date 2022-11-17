@@ -285,7 +285,7 @@ export default {
   },
   notPromptAgain: {
     zh: '不再提示',
-    en: "don't prompt again",
+    en: "Don't ask me again",
   },
   licenseExpiryTip: {
     zh: `
