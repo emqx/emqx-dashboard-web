@@ -494,7 +494,7 @@ export default {
   },
   isOpened: {
     zh: '是否开启',
-    en: 'Is Started',
+    en: 'Enabled',
   },
   isStopListener: {
     zh: '确定停止监听器：',

@@ -1,12 +1,12 @@
 <template>
   <div class="config-detail">
-    <el-row :gutter="12" class="config-form">
+    <el-row :gutter="24" class="config-form">
       <el-form
         ref="record"
         :class="from === 'listener' ? 'no-form-margin' : 'form-margin'"
         size="small"
         :label-width="labelWidth"
-        label-position="right"
+        label-position="left"
         :model="record"
         :rules="rules"
       >
@@ -43,7 +43,7 @@
             <el-col :span="12">
               <el-form-item v-bind="item.formItemAttributes">
                 <template slot="label">
-                  <span v-html="labelToShow(item.key)"></span>
+                  <span v-html="item.key"></span>
                 </template>
                 <emq-select
                   v-if="item.key === 'zone'"
@@ -119,11 +119,10 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { loadZoneConfig, loadConfigSpec } from '@/api/settings'
 import { renderParamsForm, verifyID, verifyListener } from '@/common/utils'
 // eslint-disable-next-line import/no-extraneous-dependencies
-import _ from 'lodash'
-import labelCut from '@/mixins/labelCut'
 import TLSVersionSelect from './TLSVersionSelect.vue'
 
 export default {
@@ -133,8 +132,6 @@ export default {
     prop: 'disabled',
     event: 'updateDisabled',
   },
-
-  mixins: [labelCut],
 
   components: {
     TLSVersionSelect,
@@ -527,7 +524,6 @@ export default {
     display: flex;
     height: 32px;
     align-items: center;
-    justify-content: flex-end;
     word-break: break-all;
     line-height: 1.2;
     &::after {

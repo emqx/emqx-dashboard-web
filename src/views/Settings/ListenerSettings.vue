@@ -33,7 +33,7 @@
       <el-row>
         <el-col :span="4">
           <span class="return-button" @click="returnList">
-            <i class="el-icon-arrow-left">{{ $t('Settings.returnList') }}</i>
+            <i class="el-icon-arrow-left"></i>{{ $t('Settings.returnList') }}
           </span>
         </el-col>
         <el-col v-if="oper === 'edit'" :span="4" :offset="16">
@@ -47,7 +47,6 @@
         from="listener"
         :listenerType="transport_type"
         :btn-loading="saveLoading"
-        labelWidth="170px"
         :listenerZoneOptions="listenerZoneOptions"
         v-model="disabled"
         @update="handleUpdate(...arguments)"
