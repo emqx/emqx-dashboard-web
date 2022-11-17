@@ -228,9 +228,8 @@ export default {
       })
       return data
     },
-    async toModuleDetail(val, list) {
+    async toModuleDetail(val) {
       if (val.status !== 'unadd') return
-      const index = list.indexOf(val)
       const oper = val.status === 'unadd' ? 'add' : 'edit'
       this.oper = oper
       this.selectedModule = {}

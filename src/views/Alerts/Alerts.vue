@@ -71,10 +71,9 @@
 </template>
 
 <script>
-import { loadAlarm, loadHistoryAlarm } from '@/api/common'
-import { getDateDiff } from '@/common/utils'
 import dateformat from 'dateformat'
-import { clearHistoryAlarm } from '@/api/common'
+import { loadAlarm, loadHistoryAlarm, clearHistoryAlarm } from '@/api/common'
+import { getDateDiff } from '@/common/utils'
 
 export default {
   name: 'Alerts',

@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import PolylineChart from './PolylineChart'
 import Moment from 'moment'
+import PolylineChart from './PolylineChart'
 import { loadMetricsLog } from '@/api/overview'
 
 export default {
