@@ -239,10 +239,22 @@ export function renderParamsForm(params = {}, propPrefix = '') {
     const requiredInputText = locale === 'zh' ? '请输入' : 'Field required'
     const requiredSelectText = locale === 'zh' ? '请选择' : 'Please select'
     const requiredArrayText = locale === 'zh' ? '请添加' : 'Please Add'
+    const requiredFileText = locale === 'zh' ? '请上传' : 'Please upload'
 
     if (required) {
       if (elType === 'array') {
         rules[k].push({ required: true, message: requiredArrayText })
+      } else if (elType === 'file') {
+        rules[k].push({
+          required: true,
+          validator: (rule, value) => {
+            if (!value.file) {
+              return Promise.reject(requiredFileText)
+            }
+            return Promise.resolve()
+          },
+          message: requiredFileText,
+        })
       } else {
         rules[k].push({ required: true, message: elType === 'input' ? requiredInputText : requiredSelectText })
       }
