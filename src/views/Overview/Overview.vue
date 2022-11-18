@@ -194,7 +194,7 @@
 <script>
 import Moment from 'moment'
 import { formatNumber } from '@/common/utils.js'
-import { loadNodes as loadNodesApi, loadCurrentMetrics, loadLicenseInfo } from '@/api/overview'
+import { loadNodes as loadNodesApi, loadCurrentMetrics } from '@/api/overview'
 import NodeBasicCard from './components/NodeBasicCard'
 import SimpleLine from './components/SimpleLine'
 import PercentageCards from './components/PercentageCards'
