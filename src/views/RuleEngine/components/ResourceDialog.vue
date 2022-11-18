@@ -161,7 +161,7 @@ import {
 import { isParamBoolType, isParamSSLType, findParamItemByKey, getParamItemSpan } from '@/common/someUtilsForSchemaForm'
 import BinaryFileEditor from '@/components/BinaryFileEditor.vue'
 
-const httpsURLReg = /^https\:\/\/.+$/i
+const httpsURLReg = /^https:\/\/.+$/i
 const SAPsSSLFieldReg = /^(keyfile|certfile|cacertfile)_(?<target>token|sendmsg)$/
 
 export default {
@@ -467,7 +467,7 @@ export default {
         return this.showSAPsSSLField(fieldKey)
       }
       if (type === 'bridge_pulsar') {
-        return /^pulsar\+ssl\:\/\/.+$/i.test(params.servers)
+        return /^pulsar\+ssl:\/\/.+$/i.test(params.servers)
       }
       return httpsURLReg.test(params.url)
     },
