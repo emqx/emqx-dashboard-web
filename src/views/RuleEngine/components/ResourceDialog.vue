@@ -140,11 +140,11 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { loadResourceTypes, createResource, editResource } from '@/api/rules'
 import { renderParamsForm, verifyID } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import FileEditor from '@/components/FileEditor'
-import _ from 'lodash'
 import ConfigSelect from '@/components/ConfigSelect'
 import {
   findCurrentExtraConfigParams,
@@ -156,7 +156,7 @@ import {
 } from '@/common/someUtilsForCfgselect'
 import { isParamBoolType, isParamSSLType, findParamItemByKey, getParamItemSpan } from '@/common/someUtilsForSchemaForm'
 
-const httpsURLReg = /^https\:\/\/.+$/i
+const httpsURLReg = /^https:\/\/.+$/i
 const SAPsSSLFieldReg = /^(keyfile|certfile|cacertfile)_(?<target>token|sendmsg)$/
 
 export default {
@@ -442,9 +442,9 @@ export default {
     showSSLField(fieldKey) {
       const typesNeedSpecialHandling = ['bridge_pulsar', 'web_hook']
       const params = this.record.config
-      const httpsEnabled = ['true', true].includes(params['https_enabled'])
-      const SSLEnabled = ['true', true].includes(params['ssl'])
-      const noController = params['ssl'] === undefined && params['https_enabled'] === undefined
+      const httpsEnabled = ['true', true].includes(params.https_enabled)
+      const SSLEnabled = ['true', true].includes(params.ssl)
+      const noController = params.ssl === undefined && params.https_enabled === undefined
       const { type } = this.record
       if (!(typesNeedSpecialHandling.includes(type) || this.isSAP)) {
         return httpsEnabled || SSLEnabled || noController
@@ -453,7 +453,7 @@ export default {
         return this.showSAPsSSLField(fieldKey)
       }
       if (type === 'bridge_pulsar') {
-        return /^pulsar\+ssl\:\/\/.+$/i.test(params.servers)
+        return /^pulsar\+ssl:\/\/.+$/i.test(params.servers)
       }
       return httpsURLReg.test(params.url)
     },
