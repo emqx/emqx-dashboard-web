@@ -67,6 +67,10 @@ export default {
       })
     },
     handleChange(file) {
+      if (file.raw.size > 128 * 1000) {
+        this.$message.error(this.$t('Backup.fileTooLarge'))
+        return
+      }
       const reader = new FileReader()
       reader.readAsText(file.raw)
       reader.onload = async (event) => {

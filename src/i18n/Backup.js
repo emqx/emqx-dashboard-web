@@ -59,4 +59,8 @@ export default {
     zh: '上传文件过大，请使用命令行工具上传',
     en: 'The upload file is too large, please use the command line tool to upload',
   },
+  fileTooLarge: {
+    zh: '请上传 128 kb 内的文件或手动拷贝文件内容至文本框。',
+    en: 'Please upload a file of up to 128 kb or manually copy the contents of the file into the text box.',
+  },
 }
