@@ -318,4 +318,8 @@ export default {
     zh: '（只支持精确搜索）',
     en: '(Only supports exact search)',
   },
+  topicCannotContain: {
+    zh: '不能包含通配符',
+    en: 'Cannot contain wildcards',
+  },
 }
