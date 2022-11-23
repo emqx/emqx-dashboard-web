@@ -381,6 +381,45 @@ export default {
     //     }, 10)
     //   }
     // },
+    /**
+     * for module rewrite
+     */
+    addRuleForValidateDestTopic() {
+      const _this = this
+      const targetArrayField = this.configList.find(({ key }) => key === 'rules')
+      const targetRule =
+        targetArrayField &&
+        targetArrayField.oneObjOfArray &&
+        targetArrayField.oneObjOfArray.rules &&
+        targetArrayField.oneObjOfArray.rules.dest
+      if (targetRule) {
+        // TODO:add rule for rewrite
+        targetArrayField.oneObjOfArray.rules.dest.push({
+          validator: (rule, value, callback) => {
+            this.$nextTick(() => {
+              const indexReg = /\.(\d+)\./
+              const fieldPath = rule.field
+              if (!fieldPath) {
+                callback()
+                return
+              }
+              const targetIndex = fieldPath.match(indexReg) ? Number(fieldPath.match(indexReg)[1]) : undefined
+              const rewriteType = _this.record.config.rules[targetIndex] && _this.record.config.rules[targetIndex].type
+              if (!rewriteType) {
+                callback()
+                return
+              }
+              const wildcardReg = /\/(#|\+)/
+              if (rewriteType === 'publish' && wildcardReg.test(value)) {
+                callback(_this.$t('Modules.topicCannotContain'))
+              } else {
+                callback()
+              }
+            })
+          },
+        })
+      }
+    },
     loadConfigList(params) {
       const { listener, ...paramsData } = params
       if (listener) {
@@ -390,6 +429,9 @@ export default {
       const configData = renderParamsForm(paramsData, 'config')
       const { form, rules } = configData
       this.configList = form
+      if (this.moduleData.type === 'topic_rewrite') {
+        this.addRuleForValidateDestTopic()
+      }
       this.rules.config = rules
       this.record.config = {}
       form.forEach(({ key, value }) => {

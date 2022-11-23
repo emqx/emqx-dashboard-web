@@ -232,5 +232,14 @@ export default {
     color: #f5222d;
     margin-right: 4px;
   }
+
+  .el-form-item__content {
+    padding-bottom: 16px;
+    padding-top: 8px;
+    .el-form-item__error {
+      top: auto;
+      bottom: 0;
+    }
+  }
 }
 </style>
