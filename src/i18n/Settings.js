@@ -467,6 +467,14 @@ export default {
     zh: 'Broker 统计信息发布间隔',
     en: 'Broker statistics release interval',
   },
+  broker_client_disconnect_discarded: {
+    zh: '新连接使用相同 ClientID ，且 clean_session = true 时，当前客户端 Session 被废弃 (discarded) 时是否触发客户端断连事件。',
+    en: 'Whether the client disconnect event will be triggered by Session discarded when a new connection with same clientid and `clean_session = true`.',
+  },
+  broker_client_disconnect_takeovered: {
+    zh: '新连接使用相同 ClientID ，且 clean_session = false 时，当前客户端 Session 被接管 (takeovered) 时是否触发客户端断连事件。',
+    en: 'Whether the client disconnect event will be triggered by Session takeovered when a new connection with same clientid and `clean_session = false`.',
+  },
   // baseSettings end
   confirmUpdateListener: {
     zh: '应用设置将重新启动监听器，该操作将导致当前活跃连接断开，是否继续？',
