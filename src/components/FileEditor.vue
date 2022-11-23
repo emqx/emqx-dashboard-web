@@ -12,10 +12,12 @@
             :auto-upload="false"
             :on-change="handleChange"
             :on-error="handleError"
+            :accept="accept"
           >
             <el-button>{{ $t('Backup.selectFile') }}</el-button>
           </el-upload>
         </div>
+        <p class="tip-upload" v-if="uploadTip">{{ uploadTip }}</p>
       </el-col>
     </el-row>
   </div>
@@ -34,6 +36,9 @@ export default {
     value: {
       type: Object,
       required: true,
+    },
+    accept: {
+      type: String,
     },
   },
 
@@ -55,6 +60,12 @@ export default {
         }
         this.$emit('update', { filename: name, file: val })
       },
+    },
+    uploadTip() {
+      if (this.accept && this.accept.indexOf(',') === -1) {
+        return this.$t('RuleEngine.uploadTip', { format: this.accept.slice(1) })
+      }
+      return undefined
     },
   },
 
@@ -122,6 +133,13 @@ export default {
       background-color: #f7f7f7;
       border-color: #f7f7f7;
     }
+  }
+  .tip-upload {
+    margin-top: 4px;
+    margin-bottom: 0;
+    line-height: 1.6;
+    font-size: 12px;
+    color: #808080;
   }
 }
 </style>

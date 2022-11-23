@@ -116,7 +116,11 @@
             </el-form-item>
             <template v-else>
               <el-form-item v-if="showSSLField(item.key)" v-bind="item.formItemAttributes">
-                <file-editor v-if="item.elType === 'file'" v-model="record.config[item.key]"></file-editor>
+                <file-editor
+                  v-if="item.elType === 'file'"
+                  v-model="record.config[item.key]"
+                  :accept="fileEditorAccept(item)"
+                ></file-editor>
                 <emq-select v-else v-model="record.config[item.key]" v-bind="item.bindAttributes" class="reset-width">
                 </emq-select>
               </el-form-item>
@@ -470,6 +474,16 @@ export default {
         return /^pulsar\+ssl:\/\/.+$/i.test(params.servers)
       }
       return httpsURLReg.test(params.url)
+    },
+
+    /**
+     * for GCP
+     */
+    fileEditorAccept(field) {
+      if (this.record.type === 'bridge_gcp_pubsub' && field.key === 'service_account_json') {
+        return '.json'
+      }
+      return undefined
     },
 
     async handleEdit(record) {

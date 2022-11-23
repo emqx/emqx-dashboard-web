@@ -564,4 +564,8 @@ export default {
     zh: 'BASE64 编码后的文件内容。',
     en: 'File content after BASE64 encoding',
   },
+  uploadTip: {
+    zh: '请上传 {format} 文件',
+    en: 'Please upload a {format} file',
+  },
 }
