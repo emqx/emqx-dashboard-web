@@ -112,9 +112,7 @@
 
           <el-table-column prop="username" min-width="120px" :label="$t('Clients.username')">
             <template slot-scope="{ row }">
-              <span class="keep-spaces">
-                {{ row.username }}
-              </span>
+              <span class="keep-spaces">{{ row.username }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="ipaddress" min-width="120px" :label="$t('Clients.ipAddress')">
