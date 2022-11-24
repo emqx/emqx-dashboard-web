@@ -409,7 +409,7 @@ export default {
                 callback()
                 return
               }
-              const wildcardReg = /\/(#|\+)/
+              const wildcardReg = /(^(#|\+)$)|(\/(#|\+)\/)|(\/(#|\+)$)|(^(\+|#)\/)/
               if (rewriteType === 'publish' && wildcardReg.test(value)) {
                 callback(_this.$t('Modules.topicCannotContain'))
               } else {
