@@ -91,7 +91,7 @@ export default {
          Supported aliases are: internal (or file), http, jwt, ldap, mnesia, mongo (or mongodb), mysql, pgsql (or postgres), redis.
          It is not necessary to enumerate all the in-use ACL backends here,
          if only a part of the backends are listed here, the ones not listed will be ordered at the end.
-         When using a thrid-party plugin, there is no alias support for it, so the has to be the specific callback module name,
+         When using a thrid-party plugin, there is no alias support for it, so it has to be the specific callback module name,
          e.g. my_auth_plugin_module.
          Unknown names are silently discarded.`
   },
