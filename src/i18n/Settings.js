@@ -86,12 +86,12 @@ export default {
          如果使用了第三方插件，则必需使用具体的回调模块名称，例如 my_auth_plugin_module。
          无法识别的名字会被忽略。`,
     en: `When using multiple ACL backends, this config can be used to define their order.
-         The default value 'none' means no explicit ordering, in which case the order dpends on the plugin (or module) start/restart order.
+         The default value 'none' means no explicit ordering, in which case the order depends on the plugin (or module) start/restart order.
          Use comma to separate the names (or aliases), for example 'jwt,http' means jwt authentication should be checked before http.
          Supported aliases are: internal (or file), http, jwt, ldap, mnesia, mongo (or mongodb), mysql, pgsql (or postgres), redis.
          It is not necessary to enumerate all the in-use ACL backends here,
          if only a part of the backends are listed here, the ones not listed will be ordered at the end.
-         When using a thrid-party plugin, there is no alias support for it, so it has to be the specific callback module name,
+         When using a third-party plugin, there is no alias support for it, so it has to be the specific callback module name,
          e.g. my_auth_plugin_module.
          Unknown names are silently discarded.`,
   },
