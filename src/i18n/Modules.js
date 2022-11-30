@@ -322,4 +322,8 @@ export default {
     zh: '不能包含通配符',
     en: 'Cannot contain wildcards',
   },
+  invalidSignature: {
+    zh: '无效私钥',
+    en: 'Invalid secret',
+  },
 }

@@ -18,9 +18,21 @@
                   </emq-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12" v-if="!inCurrentAlgNeedPubKey()">
                 <el-form-item prop="secret">
                   <el-input v-model="record.secret" :placeholder="$t('Plugins.secret')" size="small"> </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" v-else>
+                <el-form-item prop="secret">
+                  <el-input
+                    v-model="record.secret"
+                    :placeholder="$t('Plugins.secret')"
+                    size="small"
+                    type="textarea"
+                    :rows="5"
+                  >
+                  </el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -94,6 +106,8 @@ import jwt from 'jsonwebtoken'
 import Monaco from '@/components/Monaco'
 import { getLink } from '@/common/utils'
 
+const algorithmsDoNotNeedPubKey = ['HS256', 'HS384', 'HS512']
+
 export default {
   name: 'JwtAuthentication',
 
@@ -120,7 +134,20 @@ export default {
         payload: { required: true, message: this.$t('Plugins.payloadRequired') },
         data: { required: true, message: this.$t('Plugins.dataRequired') },
       },
-      algsOptions: ['HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'ES512'],
+      algsOptions: [
+        'HS256',
+        'HS384',
+        'HS512',
+        'RS256',
+        'RS384',
+        'RS512',
+        'ES256',
+        'ES384',
+        'ES512',
+        'PS256',
+        'PS384',
+        'PS512',
+      ],
       payloadVisible: false,
       pickerOptions: {
         disabledDate(time) {
@@ -165,52 +192,65 @@ export default {
 
   methods: {
     save() {
-      this.$refs.record.validate((valid) => {
+      this.$refs.record.validate(async (valid) => {
         if (!valid) {
           return
         }
-        if (this.payloadVisible) {
-          this.records = this.getPayloadJWTData(this.record.payload, this.record.data)
-        } else {
-          this.records = this.getPrivateKeyJWTData()
+        try {
+          if (this.payloadVisible) {
+            this.records = await this.getPayloadJWTData(this.record.payload, this.record.data)
+          } else {
+            this.records = await this.getPrivateKeyJWTData()
+          }
+        } catch (error) {
+          this.records = []
         }
       })
     },
-    getPayloadJWTData(template, data) {
+    inCurrentAlgNeedPubKey() {
+      return !algorithmsDoNotNeedPubKey.includes(this.record.alg)
+    },
+    async getPayloadJWTData(template, data) {
       let payloadStr = JSON.stringify(template)
-      return data.split('\n').map((item) => {
-        const [username = '', clientid = ''] = item.split(',')
-        payloadStr = template.replace(/%u/g, username).replace(/%c/g, clientid)
-        const payload = JSON.parse(payloadStr)
-        const options = {
-          algorithm: this.record.alg,
-        }
-        if (this.record.expired) {
-          payload.exp = this.record.expired / 1000
-        }
-        const token = jwt.sign(payload, this.record.secret, options)
-        return {
-          username,
-          clientid,
-          token,
-        }
-      })
+      const ret = await Promise.all(
+        data.split('\n').map((item) => {
+          const [username = '', clientid = ''] = item.split(',')
+          payloadStr = template.replace(/%u/g, username).replace(/%c/g, clientid)
+          const payload = JSON.parse(payloadStr)
+          const options = { algorithm: this.record.alg }
+          if (this.record.expired) {
+            payload.exp = this.record.expired / 1000
+          }
+          return new Promise((resolve, reject) => {
+            jwt.sign(payload, this.record.secret, options, (err, token) => {
+              if (err) {
+                this.$message.error(this.$t('Modules.invalidSignature'))
+                reject()
+              } else {
+                resolve({ username, clientid, token })
+              }
+            })
+          })
+        }),
+      )
+      return Promise.resolve(ret)
     },
-    getPrivateKeyJWTData() {
+    async getPrivateKeyJWTData() {
       const payload = {}
       if (this.record.expired) {
         payload.exp = this.record.expired / 1000
       }
-      const token = jwt.sign(payload, this.record.secret, {
-        algorithm: this.record.alg,
+      const options = { algorithm: this.record.alg }
+      return new Promise((resolve, reject) => {
+        jwt.sign(payload, this.record.secret, options, (err, token) => {
+          if (err) {
+            this.$message.error(this.$t('Modules.invalidSignature'))
+            reject()
+          } else {
+            resolve([{ clientid: '', username: '', token }])
+          }
+        })
       })
-      return [
-        {
-          clientid: '',
-          username: '',
-          token,
-        },
-      ]
     },
     copySuccessed() {
       this.$message.success(this.$t('Base.copied'))
