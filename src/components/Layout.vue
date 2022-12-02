@@ -48,7 +48,7 @@ export default {
       theme: 'light',
       licenseTipVisible: false,
       alreadyPopupPwdMsg: false,
-      isPwdMsgBoxClosed: false,
+      isPwdMsgBoxClosed: true,
     }
   },
 
@@ -85,6 +85,7 @@ export default {
         return
       }
       this.alreadyPopupPwdMsg = true
+      this.isPwdMsgBoxClosed = false
       this.$msgbox({
         type: 'info',
         message: this.$t('Base.defaultPwdTip'),
@@ -130,8 +131,9 @@ export default {
   },
 
   beforeRouteLeave(to, from, next) {
-    if (this.isUsingDefaultPwd && !this.isPwdMsgBoxClosed) {
+    if (!this.isPwdMsgBoxClosed) {
       this.$msgbox.close()
+      this.isPwdMsgBoxClosed = true
     }
     this.preventLeaveWithoutChangeDefaultPwd(to, from, next)
   },
