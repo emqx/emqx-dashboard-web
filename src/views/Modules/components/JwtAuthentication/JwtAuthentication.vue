@@ -134,20 +134,7 @@ export default {
         payload: { required: true, message: this.$t('Plugins.payloadRequired') },
         data: { required: true, message: this.$t('Plugins.dataRequired') },
       },
-      algsOptions: [
-        'HS256',
-        'HS384',
-        'HS512',
-        'RS256',
-        'RS384',
-        'RS512',
-        'ES256',
-        'ES384',
-        'ES512',
-        'PS256',
-        'PS384',
-        'PS512',
-      ],
+      algsOptions: ['HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'ES512'],
       payloadVisible: false,
       pickerOptions: {
         disabledDate(time) {
