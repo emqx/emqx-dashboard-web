@@ -3,18 +3,21 @@
     <el-row>
       <el-col :span="24">
         <div class="input-container">
-          <el-input type="textarea" :rows="4" v-model="fileContent"></el-input>
-          <el-upload
-            ref="upload"
-            class="file-upload"
-            :show-file-list="false"
-            action="/api/v4/data/file"
-            :auto-upload="false"
-            :on-change="handleChange"
-            :on-error="handleError"
-          >
-            <el-button>{{ $t('Backup.selectFile') }}</el-button>
-          </el-upload>
+          <el-input type="textarea" :rows="5" v-model="fileContent"></el-input>
+          <div class="editor-ft">
+            <p class="tip">{{ $t('Base.inputWithUploaderTip') }}</p>
+            <el-upload
+              ref="upload"
+              class="file-upload"
+              :show-file-list="false"
+              action="/api/v4/data/file"
+              :auto-upload="false"
+              :on-change="handleChange"
+              :on-error="handleError"
+            >
+              <el-button>{{ $t('Backup.selectFile') }}</el-button>
+            </el-upload>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -111,16 +114,48 @@ export default {
       padding-bottom: 6px + 28px;
       box-sizing: border-box;
       resize: none;
-    }
-    .file-upload {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      padding: 4px 18px 6px;
+      border-width: 0;
+      border-bottom-width: 60px;
+      border-color: transparent;
+      border-bottom: 60px solid transparent;
+      box-shadow: 0 0 0 1px #d9d9d9;
+      &:hover {
+        box-shadow: 0 0 0 1px #c0c4cc;
+      }
+      &:focus {
+        box-shadow: 0 0 0 1px #34c388, 0 0 0 3px rgb(52 195 136 / 20%);
+      }
     }
     .el-button {
       background-color: #f7f7f7;
       border-color: #f7f7f7;
+    }
+  }
+  .editor-ft {
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+    right: 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 2px);
+    height: 60px;
+    padding: 10px 12px;
+    .tip {
+      margin-bottom: 0;
+      color: #969696;
+      font-size: 13px;
+    }
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 12px;
+      display: block;
+      height: 1px;
+      width: calc(100% - 12px - 12px);
+      background: #d9d9d9;
     }
   }
 }
