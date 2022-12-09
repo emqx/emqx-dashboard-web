@@ -175,4 +175,8 @@ export default {
     zh: '搜索',
     en: 'Search',
   },
+  inputWithUploaderTip: {
+    zh: '可输入文件内容或点击右侧按钮选择文件',
+    en: 'You can enter the content of the file or select file by clicking the button on the right',
+  },
 }
