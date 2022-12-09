@@ -8,6 +8,7 @@ module.exports = {
     'prettier/prettier': 'error',
     'no-console': 'off',
     'no-debugger': 'off',
+    'no-bitwise': 'off',
     'import/extensions': 0,
     'vue/max-attributes-per-line': [
       4,
