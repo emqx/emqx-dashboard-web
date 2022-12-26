@@ -121,6 +121,12 @@
                   v-model="record.config[item.key]"
                   :accept="fileEditorAccept(item)"
                 ></file-editor>
+                <el-input
+                  v-else-if="item.elType === 'input'"
+                  v-model="record.config[item.key]"
+                  v-bind="item.bindAttributes"
+                >
+                </el-input>
                 <emq-select v-else v-model="record.config[item.key]" v-bind="item.bindAttributes" class="reset-width">
                 </emq-select>
               </el-form-item>

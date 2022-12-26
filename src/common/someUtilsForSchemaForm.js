@@ -17,7 +17,7 @@ export const isParamSSLType = (param) => {
   const fileTypeFieldsButNotForSSL = ['kerberos_keytab']
   return (
     (param.elType === 'file' && !fileTypeFieldsButNotForSSL.includes(param.key)) ||
-    ['verify', 'tls_version'].includes(param.key)
+    ['verify', 'tls_version', 'server_name_indication'].includes(param.key)
   )
 }
 
