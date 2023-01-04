@@ -153,8 +153,15 @@ export default {
     padding: 10px 12px;
     .tip {
       margin-bottom: 0;
+      margin-right: 12px;
       color: #969696;
       font-size: 13px;
+      line-height: 1.2;
+      -ms-hyphens: auto;
+      -moz-hyphens: auto;
+      -webkit-hyphens: auto;
+      hyphens: auto;
+      word-break: normal;
     }
     &::before {
       content: '';
