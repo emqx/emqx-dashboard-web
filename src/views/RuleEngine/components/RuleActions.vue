@@ -260,7 +260,6 @@
                   v-model="record.params[item.key]"
                   :data="item.oneObjOfArray"
                   :isDadRequired="rules.params[item.key].length > 0"
-                  @updateValidate="validateRecord"
                 />
                 <!-- TODO: -->
                 <template v-else-if="item.elType !== 'select'">
@@ -540,10 +539,24 @@ export default {
       return findParamItemByKey(this.paramsList, keyForFind)
     },
 
+    async validateArrayEditor() {
+      return new Promise((resolve, reject) => {
+        const { arrayEditor } = this.$refs
+        if (arrayEditor && arrayEditor[0] && arrayEditor[0].validateForm && _.isFunction(arrayEditor[0].validateForm)) {
+          arrayEditor[0].validateForm()
+          if (arrayEditor[0]._data.innerValid === false) {
+            reject()
+          }
+        }
+        resolve()
+      })
+    },
+
     async handleCreate() {
       this.initRecordEnableBatch()
       try {
         await this.$refs.record.validate()
+        await this.validateArrayEditor()
       } catch (e) {
         return
       }
