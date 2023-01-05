@@ -243,4 +243,8 @@ export default {
     zh: '请输入合法字符',
     en: 'Please enter a valid value',
   },
+  passwordRequirement: {
+    zh: '密码长度必须为 8～64 个字符；至少包含字母、数字、符号中的两种',
+    en: 'The password must be 8 to 64 characters in length; contain at least two of the letters, numbers and symbols',
+  },
 }
