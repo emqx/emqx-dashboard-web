@@ -44,7 +44,7 @@
       :close-on-click-modal="!isForChangeDefaultPwd"
       :close-on-press-escape="!isForChangeDefaultPwd"
     >
-      <el-form ref="recordForm" size="small" :model="record" :rules="rules">
+      <el-form ref="recordForm" size="small" :model="record" :rules="rules" :validate-on-rule-change="false">
         <el-form-item prop="username" :label="$t('General.userName')">
           <el-input v-model="record.username" :disabled="accessType === 'edit'"></el-input>
         </el-form-item>
@@ -101,23 +101,6 @@ export default {
   },
 
   data() {
-    const validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(this.$t('General.pleaseEnterYourPasswordAgain')))
-      } else if (value !== this.record.newPassword) {
-        callback(new Error(this.$t('General.confirmNotMatch')))
-      } else {
-        callback()
-      }
-    }
-    const newPwdSameConfirm = (rule, value, callback) => {
-      if (value === this.record.password) {
-        callback(new Error(this.$t('General.noSameNewPwd')))
-      } else {
-        callback()
-      }
-    }
-    const { newPassword, repeatPassword } = pwdRule(validatePass)
     return {
       dialogVisible: false,
       tableData: [],
@@ -127,19 +110,38 @@ export default {
         username: '',
         tags: '',
       },
-      rules: {
+    }
+  },
+
+  computed: {
+    currentUserName() {
+      return this.$store.state.user.username
+    },
+    rules() {
+      const validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error(this.$t('General.pleaseEnterYourPasswordAgain')))
+        } else if (value !== this.record.newPassword) {
+          callback(new Error(this.$t('General.confirmNotMatch')))
+        } else {
+          callback()
+        }
+      }
+      const newPwdSameConfirm = (rule, value, callback) => {
+        if (value === this.record.password) {
+          callback(new Error(this.$t('General.noSameNewPwd')))
+        } else {
+          callback()
+        }
+      }
+      const { newPassword, repeatPassword } = pwdRule(validatePass)
+      const ret = {
         username: [{ required: true, message: this.$t('General.enterOneUserName') }],
         tags: [{ required: true, message: this.$t('General.pleaseEnterNotes') }],
         password: [
           {
             required: true,
             message: this.$t('General.pleaseEnterPassword'),
-            trigger: ['blur', 'change'],
-          },
-          {
-            min: 3,
-            max: 32,
-            message: this.$t('General.passwordLength'),
             trigger: ['blur', 'change'],
           },
         ],
@@ -151,13 +153,16 @@ export default {
           },
         ],
         repeatPassword,
-      },
-    }
-  },
-
-  computed: {
-    currentUserName() {
-      return this.$store.state.user.username
+      }
+      // when is create
+      if (this.accessType !== 'edit') {
+        ret.password.push({
+          pattern: /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$)[ -~]{8,64}$/,
+          message: this.$t('General.passwordRequirement'),
+          trigger: ['blur'],
+        })
+      }
+      return ret
     },
   },
 

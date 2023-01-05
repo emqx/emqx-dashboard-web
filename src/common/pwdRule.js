@@ -16,10 +16,9 @@ export default (comparisonFunc) => {
         trigger: ['blur', 'change'],
       },
       {
-        min: 3,
-        max: 32,
-        message: VueI18n.General.passwordLength,
-        trigger: ['blur', 'change'],
+        pattern: /^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$)[ -~]{8,64}$/,
+        message: VueI18n.General.passwordRequirement,
+        trigger: ['blur'],
       },
     ],
     repeatPassword: [
