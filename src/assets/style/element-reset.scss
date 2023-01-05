@@ -84,6 +84,12 @@
     }
   }
 }
+.el-form-item__error {
+  -ms-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  word-break: normal;
+}
 .el-form--label-top .el-form-item__label {
   padding: 0px;
 }
