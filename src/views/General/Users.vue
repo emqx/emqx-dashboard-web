@@ -50,6 +50,9 @@
         <el-form-item prop="tags" :label="$t('General.remark')">
           <el-input v-model="record.tags"></el-input>
         </el-form-item>
+        <el-form-item v-if="accessType !== 'edit'" prop="phone_number" :label="$t('General.phoneNumber')">
+          <el-input v-model="record.phone_number"></el-input>
+        </el-form-item>
         <el-form-item
           v-if="accessType !== 'edit' || allowChange"
           prop="password"
@@ -79,6 +82,7 @@
 </template>
 
 <script>
+import { omit } from 'lodash'
 import { loadUser, createUser, updateUser, destroyUser, changePassword } from '@/api/function'
 
 export default {
@@ -120,10 +124,12 @@ export default {
       record: {
         username: '',
         tags: '',
+        phone_number: '',
       },
       rules: {
         username: [{ required: true, message: this.$t('General.enterOneUserName') }],
         tags: [{ required: true, message: this.$t('General.pleaseEnterNotes') }],
+        phone_number: [{ required: true, message: this.$t('General.pleaseEnterPhoneNumber') }],
         password: [
           {
             required: true,
@@ -225,7 +231,7 @@ export default {
         }
         if (vue.accessType === 'edit') {
           const { username, password } = vue.record
-          updateUser(username, vue.record).then(async () => {
+          updateUser(username, omit(vue.record, 'phone_number')).then(async () => {
             if (vue.allowChange) {
               const passwordData = {
                 new_pwd: vue.record.newPassword,
@@ -243,7 +249,7 @@ export default {
             vue.$message.success(vue.$t('Base.editSuccess'))
             vue.dialogVisible = false
             vue.allowChange = false
-            vue.accessType = ''
+            window.setTimeout(() => (vue.accessType = ''), 1000)
             vue.loadData()
           })
         } else {

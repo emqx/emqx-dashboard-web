@@ -31,6 +31,10 @@ export default {
     zh: '备注',
     en: 'Remark',
   },
+  phoneNumber: {
+    zh: '手机号码',
+    en: 'Phone Number',
+  },
   isEnabled: {
     zh: '是否启用',
     en: 'Is Enabled',
@@ -162,6 +166,10 @@ export default {
   pleaseEnterNotes: {
     zh: '请输入备注',
     en: 'Please enter notes',
+  },
+  pleaseEnterPhoneNumber: {
+    zh: '请输入手机号码',
+    en: 'Please enter phone number',
   },
   pleaseEnterPassword: {
     zh: '请输入密码',
