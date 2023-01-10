@@ -75,7 +75,7 @@ import { awaitWrap } from '@/common/utils'
 import store from '@/stores'
 import { DEFAULT_PWD } from '@/common/constants'
 
-const timeReg = /timeout[^\d]+(\d+)/
+const timeReg = /timeout[^\d]+(\d+)/i
 const getTimeFromMessage = (msg) => {
   const time = msg.match(timeReg)
   return time && time[1] ? time[1] : undefined
@@ -141,7 +141,7 @@ export default {
       if (!(await awaitWrap(this.$refs.record.validate()))) {
         return
       }
-      if (this.SMSNeedWait) {
+      if (isResend && this.SMSNeedWait) {
         return
       }
       this.sendSMSError = ''
