@@ -1,5 +1,14 @@
 import http from '@/common/http'
 
+export function requestSendSMS(user) {
+  return http.post('/send_sms', user, {
+    params: {
+      _t: false,
+      _m: false,
+    },
+  })
+}
+
 export function auth(user = {}) {
   return http.post('/auth', user, {
     params: {

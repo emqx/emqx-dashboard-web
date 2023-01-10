@@ -27,6 +27,34 @@ export default {
     zh: '{username} 登录已被锁定，请在 {second} 秒后重试',
     en: 'User {username} has been locked. Please try again {second} seconds later',
   },
+  SMSConfirm: {
+    zh: '短信验证码二次验证',
+    en: 'Secondary verification of SMS verification code',
+  },
+  SMSConfirmText: {
+    zh: '验证码已经发送到 {phone}，请您输入收到的验证码',
+    en: 'The verification code has been sent to {phone}, please enter the code you received',
+  },
+  codeRequired: {
+    zh: '请输入验证码',
+    en: 'Please enter the verification code',
+  },
+  SMSTooMuchError: {
+    zh: '发送短信过于频繁，请 {s} 秒后重试',
+    en: 'Sending SMS too many times, please try again after {s} seconds',
+  },
+  SMSError: {
+    zh: '发送失败，请稍后重试',
+    en: 'Sending failed, please try again later',
+  },
+  resendVerificationCode: {
+    zh: '重新发送验证码',
+    en: 'Resend verification code',
+  },
+  waitSecond: {
+    zh: '等待 {s} 秒',
+    en: 'Wait {s} seconds',
+  },
   defaultPwdTip: {
     zh: '检测到您正在使用默认密码登录，请及时修改密码',
     en: 'Detected that you are logging in with the default password, please change your password in time.',

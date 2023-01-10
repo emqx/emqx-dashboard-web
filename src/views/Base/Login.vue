@@ -20,34 +20,66 @@
             :rules="rules"
             hide-required-asterisk
             :show-message="false"
-            @keyup.enter.native="nativeLogin"
+            @keyup.enter.native="getSMS(false, $event)"
           >
-            <el-alert v-if="loginError" :title="loginError" type="error" @close="loginError = ''"> </el-alert>
+            <el-alert v-if="sendSMSError" :title="sendSMSError" type="error" @close="sendSMSError = ''" />
 
             <el-form-item prop="username">
-              <el-input v-model="record.username" :placeholder="$t('Base.userName')"></el-input>
+              <el-input v-model="record.username" :placeholder="$t('Base.userName')" />
             </el-form-item>
             <el-form-item prop="password">
-              <el-input v-model="record.password" type="password" :placeholder="$t('Base.password')"></el-input>
+              <el-input v-model="record.password" type="password" :placeholder="$t('Base.password')" />
             </el-form-item>
 
             <el-checkbox v-model="record.remember">{{ $t('Base.remember') }}</el-checkbox>
 
             <el-form-item class="oper-wrapper" label="">
-              <el-button class="sub-btn" type="primary" @click="nativeLogin">{{ $t('Base.signIn') }}</el-button>
+              <el-button class="sub-btn" type="primary" @click="getSMS(false, $event)" :loading="isSendingMsg">
+                {{ $t('Base.signIn') }}
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
       </div>
     </a-card>
+    <el-dialog
+      width="500px"
+      class="code-form"
+      :close-on-click-modal="false"
+      :title="$t('Base.SMSConfirm')"
+      :visible.sync="showCodeDialog"
+      @close="initCodeDialog"
+    >
+      <p>{{ $t('Base.SMSConfirmText', { phone: userPhone }) }}</p>
+      <el-alert v-if="loginError" :title="loginError" type="error" @close="loginError = ''" />
+      <el-form ref="codeForm" :model="codeForm" :rules="codeRules" @submit.native.prevent @keyup.enter.native="login">
+        <el-form-item prop="code">
+          <el-input v-model="codeForm.code" />
+        </el-form-item>
+      </el-form>
+      <el-button size="medium" :disabled="!!SMSNeedWait" :loading="isResending" @click="getSMS(true, $event)">
+        {{ $t('Base.resendVerificationCode') }}
+        <template v-if="!!SMSNeedWait">({{ $t('Base.waitSecond', { s: SMSNeedWait }) }})</template>
+      </el-button>
+      <template slot="footer">
+        <el-button @click="showCodeDialog = false">{{ $t('Base.cancel') }}</el-button>
+        <el-button type="primary" @click="login" :loading="isLoading">{{ $t('Base.confirm') }}</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { auth } from '@/api/common'
+import { auth, requestSendSMS } from '@/api/common'
 import { awaitWrap } from '@/common/utils'
 import store from '@/stores'
 import { DEFAULT_PWD } from '@/common/constants'
+
+const timeReg = /timeout[^\d]+(\d+)/
+const getTimeFromMessage = (msg) => {
+  const time = msg.match(timeReg)
+  return time && time[1] ? time[1] : undefined
+}
 
 export default {
   name: 'Login',
@@ -63,7 +95,7 @@ export default {
         password: '',
         remember: false,
       },
-      loginError: '',
+      sendSMSError: '',
       rules: {
         username: { required: true },
         password: { required: true },
@@ -71,6 +103,16 @@ export default {
       isNeedAuth: true,
       fullLoading: false,
       fromCloud: false,
+      isSendingMsg: false,
+      isResending: false,
+      SMSNeedWait: undefined,
+
+      showCodeDialog: false,
+      userPhone: '',
+      codeForm: { code: '' },
+      codeRules: { code: [{ required: true, message: this.$t('Base.codeRequired') }] },
+      isLoading: false,
+      loginError: '',
     }
   },
 
@@ -95,11 +137,50 @@ export default {
   },
 
   methods: {
-    login() {
+    async getSMS(isResend = false) {
+      if (!(await awaitWrap(this.$refs.record.validate()))) {
+        return
+      }
+      if (this.SMSNeedWait) {
+        return
+      }
+      this.sendSMSError = ''
+      const { username, password } = this.record
+      try {
+        if (isResend) {
+          this.isResending = true
+        } else {
+          this.isSendingMsg = true
+        }
+        this.userPhone = await requestSendSMS({ username, password })
+        if (!isResend) {
+          this.codeForm.code = ''
+          this.showCodeDialog = true
+        }
+        this.SMSNeedWait = 60
+        this.decreaseSMSWait()
+      } catch (error) {
+        const seconds = getTimeFromMessage(error)
+        if (seconds) {
+          this.sendSMSError = this.$t('Base.SMSTooMuchError', { s: seconds })
+        } else {
+          this.sendSMSError = this.$t('Base.SMSError', { s: seconds })
+        }
+      } finally {
+        if (isResend) {
+          this.isResending = false
+        } else {
+          this.isSendingMsg = false
+        }
+      }
+    },
+    async login() {
+      await this.$refs.codeForm.validate()
       const { username, password, remember } = this.record
+      this.isLoading = true
       auth({
-        username,
-        password,
+        username: this.record.username,
+        code: this.codeForm.code,
       })
         .then((res) => {
           if (!res) {
@@ -116,6 +197,7 @@ export default {
           const token = res
           const isUsingDefaultPwd = password === DEFAULT_PWD
           this.$store.dispatch('UPDATE_USER_INFO', { username, token, remember, isUsingDefaultPwd })
+          this.isLoading = false
 
           setTimeout(() => {
             const { to = this.fromCloud ? '/users_and_acl' : '/' } = this.$route.query
@@ -133,7 +215,20 @@ export default {
           }
           this.isNeedAuth = true
           this.loginError = error
+          this.isLoading = false
         })
+    },
+
+    decreaseSMSWait() {
+      const decrease = () => {
+        this.SMSNeedWait -= 1
+        if (this.SMSNeedWait > 0) {
+          window.setTimeout(decrease, 1000)
+        } else {
+          this.SMSNeedWait = undefined
+        }
+      }
+      decrease()
     },
 
     async nativeLogin() {
@@ -158,6 +253,11 @@ export default {
       this.record.username = username
       this.record.password = password
       this.login()
+    },
+
+    initCodeDialog() {
+      this.codeForm.code = ''
+      this.userPhone = ''
     },
   },
 }
@@ -228,6 +328,14 @@ export default {
 
   .sub-btn {
     width: 100%;
+  }
+}
+.code-form {
+  .el-alert {
+    margin-bottom: 12px;
+  }
+  .el-form-item {
+    margin: 0 0 24px;
   }
 }
 </style>

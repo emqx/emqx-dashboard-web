@@ -83,7 +83,7 @@ axios.interceptors.request.use(
     if (!config.headers) {
       config.headers = {}
     }
-    config.headers['Authorization'] = 'Bearer ' + user.token
+    config.headers['Authorization'] = 'Bearer ' + (user.token || '')
 
     store.dispatch('LOADING', true)
     // lwm2m observe
