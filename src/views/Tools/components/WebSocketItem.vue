@@ -443,7 +443,9 @@ export default {
           this.$message.error(this.$t('Tools.subscriptionFailure'))
           return
         }
-        if (this.subscriptions.find(($) => $.topic === topic)) {
+        const oldSub = this.subscriptions.find(($) => $.topic === topic)
+        if (oldSub) {
+          oldSub.qos = qos
           return
         }
         this.subscriptions.unshift({
