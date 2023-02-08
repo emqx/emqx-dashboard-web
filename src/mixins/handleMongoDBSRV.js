@@ -25,7 +25,7 @@ export default (type = 'resource') => {
           return
         }
         if (this.rules && this.rules.config && this.rules.config.rs_set_name) {
-          this.rules.config.rs_set_name = setAFieldRequired(this.rules.config.rs_set_name, this.srvRecord)
+          this.rules.config.rs_set_name = setAFieldRequired(this.rules.config.rs_set_name, !this.srvRecord)
         }
       },
     },
