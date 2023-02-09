@@ -44,6 +44,8 @@
                   <template v-else-if="item.elType === 'file'">
                     <file-editor v-model="record.config[item.key]"></file-editor>
                   </template>
+                  <!-- TLS Version -->
+                  <TLSVersionSelect v-else-if="judgeIsTLSVersion(item)" v-model="record.config[item.key]" />
                   <!-- input -->
                   <template v-else-if="item.elType !== 'select'">
                     <el-input
@@ -102,6 +104,8 @@
 import { renderParamsForm, verifyListener } from '@/common/utils'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import FileEditor from '@/components/FileEditor'
+import TLSVersionSelect from '@/components/TLSVersionSelect.vue'
+import { judgeIsTLSVersion } from '@/common/utils'
 
 export default {
   name: 'Listeners',
@@ -109,6 +113,7 @@ export default {
   components: {
     KeyAndValueEditor,
     FileEditor,
+    TLSVersionSelect,
   },
 
   model: {
@@ -178,6 +183,9 @@ export default {
   },
 
   methods: {
+    judgeIsTLSVersion(item) {
+      return judgeIsTLSVersion(item)
+    },
     addDataAccordingListenerType(type) {
       const keyName = `${type}_options`
       const { form, rules } = this.optionConfig[keyName]

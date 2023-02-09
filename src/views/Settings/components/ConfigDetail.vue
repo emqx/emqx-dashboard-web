@@ -123,7 +123,7 @@ import _ from 'lodash'
 import { loadZoneConfig, loadConfigSpec } from '@/api/settings'
 import { renderParamsForm, verifyID, verifyListener } from '@/common/utils'
 // eslint-disable-next-line import/no-extraneous-dependencies
-import TLSVersionSelect from './TLSVersionSelect.vue'
+import TLSVersionSelect from '@/components/TLSVersionSelect.vue'
 
 export default {
   name: 'ConfigDetail',

@@ -109,6 +109,8 @@
                           >
                           </config-select>
                         </template>
+                        <!-- TLS Version -->
+                        <TLSVersionSelect v-else-if="judgeIsTLSVersion(item)" v-model="record.config[item.key]" />
                         <!-- input -->
                         <template v-else-if="item.elType !== 'select'">
                           <el-input
@@ -213,7 +215,7 @@
 <script>
 import _ from 'lodash'
 import { createModule, loadAllModules, updateModule, destroyModule } from '@/api/modules'
-import { renderParamsForm, fillI18n } from '@/common/utils'
+import { renderParamsForm, fillI18n, judgeIsTLSVersion } from '@/common/utils'
 import handleMongoDBSRV from '@/mixins/handleMongoDBSRV'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ArrayEditor from '@/components/ArrayEditor'
@@ -226,6 +228,7 @@ import AuthSasl from './components/AuthSasl/AuthSasl'
 import LwClients from './components/Lwm2mProtocol/LwClients'
 import TopicMetrics from './components/TopicMetrics/TopicMetrics'
 import SlowQuery from './components/SlowQuery/SlowQuery.vue'
+import TLSVersionSelect from '@/components/TLSVersionSelect.vue'
 
 import LogTrace from './components/LogTrace/LogTrace'
 import Listeners from './components/Listeners'
@@ -250,6 +253,7 @@ export default {
     TopicMetrics,
     SlowQuery,
     LogTrace,
+    TLSVersionSelect,
   },
 
   mixins: [handleMongoDBSRV('module')],
@@ -356,6 +360,9 @@ export default {
     isParamBoolType,
     getParamItemSpan,
     diffConfigList,
+    judgeIsTLSVersion(item) {
+      return judgeIsTLSVersion(item)
+    },
     handlelistenersChange(val) {
       this.originRecord.config.listeners = _.cloneDeep(val)
     },

@@ -627,4 +627,11 @@ export const downloadBlobData = (blobRes) => {
   }
 }
 
+export const judgeIsTLSVersion = ({ key, value, elType }) => {
+  if (!key || !value || !elType) {
+    return false
+  }
+  return elType === 'input' && key.indexOf('version') > -1 && /^tlsv/i.test(value)
+}
+
 export default {}
