@@ -119,6 +119,9 @@ import { loadAllModules, showCreatedModuleInfo, destroyModule } from '@/api/modu
 import { fillI18n, matchSearch } from '@/common/utils'
 import store from '@/stores'
 
+let eachBlockScrollTopArr = []
+let throttleTimer = 0
+
 export default {
   name: 'ModuleAdd',
 
@@ -160,6 +163,7 @@ export default {
     await this.loadData()
     this.$nextTick(() => {
       this.returnPosition()
+      this.countEachBlockScrollTop()
     })
   },
 
@@ -330,6 +334,8 @@ export default {
         } else {
           this.scrollTop = targetOffsetTop
         }
+        // close the count in which block
+        throttleTimer = Date.now()
         document.documentElement.scrollTop = this.scrollTop
         document.body.scrollTop = this.scrollTop
         this.scrolling = true
@@ -339,9 +345,45 @@ export default {
         }
       }, 20)
     },
+    countEachBlockScrollTop() {
+      if ((!this.classList && !Array.isArray(this.classList)) || this.classList.length === 0) {
+        return
+      }
+      let basisTop = 0
+      if (this.classList[0].id) {
+        const ele = document.querySelector(`#${this.classList[0].id}`)
+        basisTop = ele ? ele.offsetTop : 0
+      }
+      eachBlockScrollTopArr = this.classList.reduce((arr, { id }) => {
+        const ele = document.querySelector(`#${id}`)
+        return ele ? [...arr, { top: ele.offsetTop - basisTop, id }] : arr
+      }, [])
+    },
+    countInWhichBlock() {
+      const currentTop = document.documentElement.scrollTop
+      for (let index = 0; index < this.classList.length; index += 1) {
+        if (index === eachBlockScrollTopArr.length - 1) {
+          this.activeNavId = this.classList[index].id
+        } else if (
+          currentTop >= eachBlockScrollTopArr[index].top &&
+          currentTop < eachBlockScrollTopArr[index + 1].top
+        ) {
+          this.activeNavId = this.classList[index].id
+          break
+        }
+      }
+    },
     scrollToTop() {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      this.scrollTop = scrollTop
+      const func = () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        this.scrollTop = scrollTop
+        this.countInWhichBlock()
+      }
+      if (Date.now() - throttleTimer < 100) {
+        return
+      }
+      throttleTimer = Date.now()
+      func()
     },
     toReadMore(type) {
       const langUrl = this.lang === 'zh' ? 'cn/cn/' : 'io/en/'
