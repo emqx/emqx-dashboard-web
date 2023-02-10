@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { sign } from '@/common/sign.js'
+import jwt from 'jsonwebtoken'
 import Monaco from '@/components/Monaco'
 import { getLink } from '@/common/utils'
 
@@ -134,20 +134,7 @@ export default {
         payload: { required: true, message: this.$t('Plugins.payloadRequired') },
         data: { required: true, message: this.$t('Plugins.dataRequired') },
       },
-      algsOptions: [
-        'HS256',
-        'HS384',
-        'HS512',
-        'RS256',
-        'RS384',
-        'RS512',
-        'ES256',
-        'ES384',
-        'ES512',
-        'PS256',
-        'PS384',
-        'PS512',
-      ],
+      algsOptions: ['HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512', 'ES256', 'ES384', 'ES512'],
       payloadVisible: false,
       pickerOptions: {
         disabledDate(time) {
@@ -217,18 +204,19 @@ export default {
           const [username = '', clientid = ''] = item.split(',')
           payloadStr = template.replace(/%u/g, username).replace(/%c/g, clientid)
           const payload = JSON.parse(payloadStr)
-          const header = { alg: this.record.alg }
+          const options = { algorithm: this.record.alg }
           if (this.record.expired) {
             payload.exp = this.record.expired / 1000
           }
-          return new Promise(async (resolve, reject) => {
-            try {
-              const token = await sign(header, payload, this.record.secret)
-              resolve({ username, clientid, token })
-            } catch (error) {
-              this.$message.error(error)
-              reject()
-            }
+          return new Promise((resolve, reject) => {
+            jwt.sign(payload, this.record.secret, options, (err, token) => {
+              if (err) {
+                this.$message.error(this.$t('Modules.invalidSignature'))
+                reject()
+              } else {
+                resolve({ username, clientid, token })
+              }
+            })
           })
         }),
       )
@@ -239,15 +227,16 @@ export default {
       if (this.record.expired) {
         payload.exp = this.record.expired / 1000
       }
-      const header = { alg: this.record.alg }
-      return new Promise(async (resolve, reject) => {
-        try {
-          const token = await sign(header, payload, this.record.secret)
-          resolve([{ clientid: '', username: '', token }])
-        } catch (error) {
-          this.$message.error(error)
-          reject()
-        }
+      const options = { algorithm: this.record.alg }
+      return new Promise((resolve, reject) => {
+        jwt.sign(payload, this.record.secret, options, (err, token) => {
+          if (err) {
+            this.$message.error(this.$t('Modules.invalidSignature'))
+            reject()
+          } else {
+            resolve([{ clientid: '', username: '', token }])
+          }
+        })
       })
     },
     copySuccessed() {

@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { sign } from '@/common/sign.js'
+import jwt from 'jsonwebtoken'
 import Monaco from '@/components/Monaco'
 import { getLink } from '@/common/utils'
 
@@ -180,54 +180,39 @@ export default {
     },
     getPayloadJWTData(template, data) {
       let payloadStr = JSON.stringify(template)
-      return data
-        .split('\n')
-        .map((item) => {
-          const [username = '', clientid = ''] = item.split(',')
-          payloadStr = template.replace(/%u/g, username).replace(/%c/g, clientid)
-          const payload = JSON.parse(payloadStr)
-          const header = { alg: this.record.alg }
-          if (this.record.expired) {
-            payload.exp = this.record.expired / 1000
-          }
-          try {
-            const token = sign(header, payload, this.record.secret)
-            return {
-              username,
-              clientid,
-              token,
-            }
-          } catch (error) {
-            this.$message.error(error)
-            return undefined
-          }
-        })
-        .filter((item) => !!item)
+      return data.split('\n').map((item) => {
+        const [username = '', clientid = ''] = item.split(',')
+        payloadStr = template.replace(/%u/g, username).replace(/%c/g, clientid)
+        const payload = JSON.parse(payloadStr)
+        const options = {
+          algorithm: this.record.alg,
+        }
+        if (this.record.expired) {
+          payload.exp = this.record.expired / 1000
+        }
+        const token = jwt.sign(payload, this.record.secret, options)
+        return {
+          username,
+          clientid,
+          token,
+        }
+      })
     },
     getPrivateKeyJWTData() {
       const payload = {}
       if (this.record.expired) {
         payload.exp = this.record.expired / 1000
       }
-      try {
-        const token = sign(
-          {
-            alg: this.record.alg,
-          },
-          payload,
-          this.record.secret,
-        )
-        return [
-          {
-            clientid: '',
-            username: '',
-            token,
-          },
-        ]
-      } catch (error) {
-        this.$message.error(error)
-        return []
-      }
+      const token = jwt.sign(payload, this.record.secret, {
+        algorithm: this.record.alg,
+      })
+      return [
+        {
+          clientid: '',
+          username: '',
+          token,
+        },
+      ]
     },
     copySuccessed() {
       this.$message.success(this.$t('Base.copied'))
