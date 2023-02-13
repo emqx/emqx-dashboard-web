@@ -85,6 +85,8 @@
 <script>
 import { isFunction } from 'lodash'
 
+const ID = Math.random().toString(16).slice(0, 4)
+
 export default {
   name: 'MulObjectEditor',
 
@@ -117,7 +119,7 @@ export default {
   data() {
     return {
       headers: [],
-      oneRow: {},
+      newRowData: {},
       defaultConfig: {},
       allColumnRule: {},
       form: {
@@ -154,9 +156,9 @@ export default {
         const labelName = v.formItemAttributes.label
         this.headers.push(labelName)
         this.descriptionDic[labelName] = v.formItemAttributes.description
-        this.oneRow[labelName] = v
+        this.newRowData[labelName] = v
         const { key, value } = v
-        this.oneRow[key] = value
+        this.newRowData[key] = value
         this.defaultConfig[key] = value
         this.allColumnRule[labelName] = rules[key]
       })
@@ -179,7 +181,7 @@ export default {
       }
     },
     deleteItem(row) {
-      this.form.tableData = this.form.tableData.filter(($) => $.key !== row.key)
+      this.form.tableData = this.form.tableData.filter(($) => $[ID] !== row[ID])
       setTimeout(() => {
         this.atInputChange()
       }, 50)
@@ -197,8 +199,8 @@ export default {
       })
     },
     addColumn() {
-      const row = { ...this.oneRow }
-      row.key = Math.random().toString(16).slice(3)
+      const row = { ...this.newRowData }
+      row[ID] = Math.random().toString(16).slice(3)
       this.form.tableData.push(row)
       setTimeout(() => {
         this.atInputChange()
