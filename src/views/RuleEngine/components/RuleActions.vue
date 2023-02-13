@@ -552,6 +552,13 @@ export default {
       })
     },
 
+    removeTargetField(action) {
+      if (action.name === 'data_to_kafka' && !action.params.kafka_headers) {
+        delete action.params.kafka_headers
+      }
+      return action
+    },
+
     async handleCreate() {
       this.initRecordEnableBatch()
       try {
@@ -572,19 +579,19 @@ export default {
           }
         })
       }
-      let action = {}
+      const action = this.removeTargetField({ ...this.record })
+      console.log(JSON.stringify(action, null, 4))
+
       if (this.isFallbacks) {
-        action = { ...this.record }
         this.currentAction.fallbacks = []
         this.currentAction.fallbacks.push(action)
         this.rawValue.splice(this.currentEditIndex, 1, this.currentAction)
+      } else if (this.currentEditIndex > -1) {
+        // edit
+        this.rawValue.splice(this.currentEditIndex, 1, action)
       } else {
-        action = { ...this.record }
-        if (this.currentEditIndex > -1) {
-          this.rawValue.splice(this.currentEditIndex, 1, action)
-        } else {
-          this.rawValue.push(action)
-        }
+        // create
+        this.rawValue.push(action)
       }
       if (action.params && !action.params.$resource) {
         delete action.params.$resource
