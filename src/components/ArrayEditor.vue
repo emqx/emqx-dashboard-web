@@ -39,6 +39,7 @@
                   v-bind="row[item].bindAttributes"
                   @input="atInputChange"
                   size="small"
+                  :show-password="row[item].bindAttributes && row[item].bindAttributes.type === 'password'"
                 >
                 </el-input>
               </template>
