@@ -296,6 +296,7 @@ export default {
   .series-name {
     display: inline-block;
     vertical-align: top;
+    margin-right: 16px;
   }
 }
 </style>
