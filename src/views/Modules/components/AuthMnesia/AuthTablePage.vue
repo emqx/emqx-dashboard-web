@@ -8,11 +8,11 @@
               v-model="searchOpt[type]"
               size="small"
               :placeholder="$t(`Clients.${type}`)"
-              @keyup.enter.native="loadData"
+              @keyup.enter.native="initPageNLoad"
             />
           </el-col>
           <el-col :span="6">
-            <el-button type="primary" size="small" @click="loadData">
+            <el-button type="primary" size="small" @click="initPageNLoad">
               {{ $t('Base.search') }}
             </el-button>
           </el-col>
@@ -44,8 +44,8 @@
         :page-size.sync="pageParams._limit"
         :current-page.sync="pageParams._page"
         :total="count"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentPageChange"
+        @size-change="initPageNLoad"
+        @current-change="loadData"
       >
       </el-pagination>
     </div>
@@ -93,6 +93,10 @@ export default {
   },
 
   methods: {
+    initPageNLoad() {
+      this.pageParams._page = 1
+      this.loadData()
+    },
     async loadData() {
       this.listLoading = true
       const searchParams = checkNOmitFromObj({ [`_like_${this.type}`]: this.searchOpt[this.type] })
@@ -104,12 +108,6 @@ export default {
       this.tableData = items
       this.count = count
       this.listLoading = false
-    },
-    handleSizeChange() {
-      this.loadData()
-    },
-    handleCurrentPageChange() {
-      this.loadData()
     },
     addAuth() {
       this.currentAuth = undefined
