@@ -9,7 +9,7 @@
               v-model="searchOpt[type]"
               size="small"
               :placeholder="$t(`Clients.${type}`)"
-              @keyup.enter.native="loadData"
+              @keyup.enter.native="initPageNLoad"
             />
           </el-col>
           <el-col :span="8">
@@ -17,11 +17,11 @@
               v-model="searchOpt.topic"
               size="small"
               :placeholder="$t('Topics.topic') + $t('Modules.onlySupportsExactSearch')"
-              @keyup.enter.native="loadData"
+              @keyup.enter.native="initPageNLoad"
             />
           </el-col>
           <el-col :span="6">
-            <el-button type="primary" size="small" @click="loadData">
+            <el-button type="primary" size="small" @click="initPageNLoad">
               {{ $t('Base.search') }}
             </el-button>
           </el-col>
@@ -57,8 +57,8 @@
         :page-size.sync="aclParams._limit"
         :current-page.sync="aclParams._page"
         :total="count"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentPageChange"
+        @size-change="initPageNLoad"
+        @current-change="loadData"
       >
       </el-pagination>
     </div>
@@ -106,6 +106,10 @@ export default {
   },
 
   methods: {
+    initPageNLoad() {
+      this.aclParams._page = 1
+      this.loadData()
+    },
     async loadData() {
       this.listLoading = true
       const searchParams = checkNOmitFromObj({
@@ -120,12 +124,6 @@ export default {
       this.tableData = items
       this.count = count
       this.listLoading = false
-    },
-    handleSizeChange() {
-      this.loadData()
-    },
-    handleCurrentPageChange() {
-      this.loadData()
     },
     addACL() {
       this.showAddDialog = true
