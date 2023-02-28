@@ -525,7 +525,7 @@ export default {
     en: 'SQL execution failed due to syntax or function call failure',
   },
   sqlNoResult: {
-    zh: 'SQL 无结果',
+    zh: 'SQL 无输出',
     en: 'SQL no result',
   },
   sqlNoResultDesc: {
