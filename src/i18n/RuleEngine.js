@@ -529,8 +529,8 @@ export default {
     en: 'SQL no result',
   },
   sqlNoResultDesc: {
-    zh: 'SQL 成功执行但没有输出结果',
-    en: 'SQL executes successfully but no output results',
+    zh: 'SQL 返回结果为空，条件子句未匹配',
+    en: 'SQL returns empty, conditional clause not matched',
   },
   duplicate: {
     zh: '复制',
