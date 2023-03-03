@@ -286,7 +286,7 @@ export default {
         }
       })
       // wss: ssl+tcp+ws
-      const { ...sslConfigs } = this.configOptions.ssl
+      const { ...sslConfigs } = this.configOptions.ssl_ws
       const { ...wsConfigs } = this.configOptions.ws
       this.configOptions.wss = {
         form: wsConfigs.form.concat(sslConfigs.form),
