@@ -96,7 +96,6 @@
                             v-model="record.config[item.key]"
                             :data="item.oneObjOfArray"
                             :isDadRequired="rules.config[item.key].length > 0"
-                            @updateValidate="updateValidate"
                           ></array-editor>
                         </template>
                         <template v-else-if="item.elType === 'cfgselect'">
@@ -366,9 +365,6 @@ export default {
     handlelistenersChange(val) {
       this.originRecord.config.listeners = _.cloneDeep(val)
     },
-    updateValidate() {
-      this.$refs.record.validate()
-    },
     loadData() {
       if (this.oper === 'add') {
         this.loadConfigList(this.moduleData.paramsData)
@@ -466,18 +462,29 @@ export default {
         })
       }
     },
+    async validateArrayEditor() {
+      return new Promise((resolve, reject) => {
+        const { arrayEditor } = this.$refs
+        if (arrayEditor && arrayEditor[0] && arrayEditor[0].validateForm && _.isFunction(arrayEditor[0].validateForm)) {
+          arrayEditor[0].validateForm()
+          if (arrayEditor[0]._data.innerValid === false) {
+            reject()
+          }
+        }
+        resolve()
+      })
+    },
     findParamItemByKey(keyForFind) {
       return findParamItemByKey(this.configList, keyForFind)
     },
     async handleCreate() {
-      const { arrayEditor } = this.$refs
-      if (arrayEditor && arrayEditor[0]._data.innerValid === false) {
+      try {
+        await this.$refs.record.validate()
+        await this.validateArrayEditor()
+      } catch (error) {
         return
       }
-      const valid = await this.$refs.record.validate()
-      if (!valid) {
-        return
-      }
+
       if (Object.keys(this.listener).length && !this.record.config.listeners.length) {
         this.$message.error(this.$t('Modules.emptyListenerTip'))
         return

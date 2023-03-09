@@ -166,7 +166,6 @@ export default {
       this.assignValue()
     },
     atInputChange() {
-      this.validateForm()
       const data = []
       this.form.tableData.forEach((item) => {
         const tempConfig = {}
