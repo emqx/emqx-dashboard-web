@@ -170,7 +170,7 @@
       {{ $t('RuleEngine.addAction') }}
     </el-button>
 
-    <el-dialog :visible.sync="actionDialogVisible" :title="actionDialogTitle" width="550px">
+    <el-dialog :visible.sync="actionDialogVisible" :title="actionDialogTitle" width="550px" destroy-on-close>
       <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
         <el-form-item prop="name" :label="$t('RuleEngine.actionType')">
           <el-row :gutter="10">
@@ -342,6 +342,12 @@ import {
 import { isParamBoolType, findParamItemByKey, getParamItemSpan } from '@/common/someUtilsForSchemaForm'
 import ArrayEditor from '@/components/ArrayEditor'
 
+const createRawRecord = () => ({
+  name: '',
+  params: { $resource: '' },
+  fallbacks: [],
+})
+
 export default {
   name: 'RuleActions',
 
@@ -410,13 +416,7 @@ export default {
         },
         fallbacks: [],
       },
-      record: {
-        name: '',
-        params: {
-          $resource: '',
-        },
-        fallbacks: [],
-      },
+      record: createRawRecord(),
       rules: {
         name: { required: true, message: this.$t('General.pleaseChoose') },
         params: {
