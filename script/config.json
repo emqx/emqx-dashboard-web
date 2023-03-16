@@ -5,34 +5,13 @@
     "useRelativeResourcePath": true,
     "publicPath": "/",
     "hide": {
-      "routes": [
-        "usersAcl"
-      ],
+      "routes": ["usersAcl"],
       "children": []
     }
   },
   "cloud": {
-    "baseURL": "/dashboard",
-    "useRelativeResourcePath": false,
-    "publicPath": "/",
-    "hide": {
-      "routes": [
-        "monitor",
-        "analysis",
-        "alerts",
-        "plugins",
-        "modules",
-        "setting",
-        "general",
-        "schemas"
-      ],
-      "children": [
-        "nav-header",
-        "navbar.user",
-        "monitor.connections",
-        "monitor.license",
-        "rules.schema"
-      ]
-    }
+    "baseURL": "/dashboard/api/v4",
+    "publicPath": "/dashboard",
+    "useRelativeResourcePath": false
   }
 }
