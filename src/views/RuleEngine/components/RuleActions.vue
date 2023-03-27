@@ -580,7 +580,6 @@ export default {
         })
       }
       const action = this.removeTargetField({ ...this.record })
-      console.log(JSON.stringify(action, null, 4))
 
       if (this.isFallbacks) {
         this.currentAction.fallbacks = []
