@@ -196,6 +196,14 @@
               @size-change="handlePageSizeChanged"
               @current-change="loadData"
             />
+            <custom-pagination
+              v-if="rulesCount === -1"
+              :hasnext="hasnext"
+              :page="pageParams._page"
+              @prevClick="handlePrevClick"
+              @nextClick="handleNextClick"
+            >
+            </custom-pagination>
           </div>
         </a-card>
       </div>
@@ -331,6 +339,7 @@ import {
   resetRuleStatistics,
 } from '@/api/rules'
 import { getLink } from '@/common/utils'
+import CustomPagination from '@/components/CustomPagination.vue'
 
 const createRawFilterParams = () => ({
   _like_id: undefined,
@@ -349,6 +358,10 @@ const KEYS_FOR_SEARCH_TOPIC = [
 
 export default {
   name: 'Rules',
+
+  components: {
+    CustomPagination,
+  },
 
   data() {
     return {
@@ -437,6 +450,7 @@ export default {
         _limit: 10,
         _page: 1,
       },
+      hasnext: false,
       rulesCount: 0,
       showMoreQuery: false,
       filterParams: createRawFilterParams(),
@@ -500,6 +514,7 @@ export default {
         })
         this.tableData = items
         this.rulesCount = meta.count
+        this.hasnext = meta.hasnext
       } catch (error) {
         //
       }
@@ -517,6 +532,21 @@ export default {
     resetFilterParams() {
       this.filterParams = createRawFilterParams()
       this.resetPageNo()
+    },
+
+    handlePrevClick() {
+      if (this.pageParams._page === 1) {
+        return
+      }
+      this.pageParams._page -= 1
+      this.loadData()
+    },
+    handleNextClick() {
+      if (!this.hasnext) {
+        return
+      }
+      this.pageParams._page += 1
+      this.loadData()
     },
 
     handlePageSizeChanged(size) {
