@@ -83,7 +83,7 @@ export default {
          例如 'jwt,http' 表示先检查 jwt，再检查 http。
          支持的名称有：internal（或 file）、http、jwt、ldap、mnesia、mongo（或 mongodb）、mysql、pgsql（或 postgres）、redis。
          指定顺序的后端总是排在未指定顺序的前面，例如如果使用了 mnesia，jwt 和 http，但是在配置中仅指定了 jwt,http，那么 mnesia 会排在最后。
-         如果使用了第三方插件，则必需使用具体的回调模块名称，例如 my_auth_plugin_module。
+         如果使用了第三方插件，则必须使用具体的回调模块名称，例如 my_auth_plugin_module。
          无法识别的名字会被忽略。`,
     en: `When using multiple ACL backends, this config can be used to define their order.
          The default value 'none' means no explicit ordering, in which case the order dpends on the plugin (or module) start/restart order.
@@ -462,7 +462,7 @@ export default {
   // baseSettings start
   broker_session_locking_strategy: {
     zh: `会话锁策略。保证集群中 Client ID 在集群中的创建会话的唯一性。
-    all 表示全集群锁，leader 表示仅主节点锁，quorum 多数节点锁，local 表仅当前节点锁`,
+    all 表示全集群锁，leader 表示仅主节点锁，quorum 多数节点锁，local 表示仅当前节点锁`,
     en: `Session locking policy. Ensure the uniqueness of the Client ID creation session in the cluster.
     All represents the total set group lock, the leader represents the master node lock only,
     the quorum majority node lock only, and the local table only the current node lock
