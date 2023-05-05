@@ -80,10 +80,6 @@ export default {
   mixins: [resizeChart],
 
   props: {
-    maxConnections: {
-      type: Number,
-      required: true,
-    },
     /**
      * { connection: number; live_connection: number; }
      */
@@ -101,10 +97,6 @@ export default {
   },
 
   watch: {
-    maxConnections() {
-      this.setXAxisMaxValue()
-      this.setSeries()
-    },
     connectionData: {
       deep: true,
       handler: 'setSeries',
@@ -128,23 +120,9 @@ export default {
     },
 
     createSeries() {
-      const isOverflow = this.connectionData.connection > this.maxConnections
-      const isCloseLimit = this.connectionData.connection > this.maxConnections * 0.8
-      let colorConnection = '#70d4b6'
-      let colorActive = '#00aa5b'
-      if (isOverflow || isCloseLimit) {
-        colorConnection = isOverflow ? '#f9878d' : '#fad997'
-        colorActive = isOverflow ? '#e23c39' : '#faad14'
-      }
+      const colorConnection = '#70d4b6'
+      const colorActive = '#00aa5b'
       return [
-        {
-          type: 'bar',
-          name: this.$t('Overview.limit'),
-          data: [this.maxConnections],
-          itemStyle: {
-            color: '#ebeef4',
-          },
-        },
         {
           type: 'bar',
           name: this.$t('Overview.all'),
@@ -173,7 +151,7 @@ export default {
         return
       }
       this.chart.setOption({
-        xAxis: { max: this.maxConnections },
+        xAxis: { max: this.connectionData.connection },
       })
     },
 

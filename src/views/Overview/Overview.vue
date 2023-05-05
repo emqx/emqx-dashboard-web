@@ -82,7 +82,6 @@
             <span>{{ _formatNumber(currentMetrics.live_connection) }}</span>
             <div class="flux-wrapper">
               <connection-statistics
-                :max-connections="license.max_connections"
                 :connection-data="{
                   connection: currentMetrics.connection,
                   live_connection: currentMetrics.live_connection,
@@ -200,7 +199,6 @@ import SimpleLine from './components/SimpleLine'
 import PercentageCards from './components/PercentageCards'
 import PolylineCards from './components/PolylineCards'
 import ConnectionStatistics from './components/ConnectionStatistics'
-import LicenseUploaded from './components/LicenseUploaded'
 
 export default {
   name: 'Overview',
@@ -211,7 +209,6 @@ export default {
     PercentageCards,
     PolylineCards,
     ConnectionStatistics,
-    LicenseUploaded,
   },
 
   props: {},
