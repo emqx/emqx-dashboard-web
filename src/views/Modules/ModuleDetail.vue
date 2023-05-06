@@ -27,14 +27,15 @@
       <el-tabs class="module-detail-tabs" type="border-card" v-model="detailTabs">
         <!-- modules with more management tools-->
         <template v-if="oper == 'edit'">
-          <template v-if="moduleData.type == 'mnesia_authentication'">
+          <GCPIoT v-if="moduleData.type == 'mnesia_authentication'" />
+          <!-- <template v-if="moduleData.type == 'mnesia_authentication'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.auth')" :name="specialModuleDefaultTabName">
               <mnesia-auth-table ref="auth" v-if="detailTabs === 'auth'"></mnesia-auth-table>
             </el-tab-pane>
             <el-tab-pane label="ACL" name="acl">
               <mnesia-acl-table ref="acl" v-if="detailTabs === 'acl'"></mnesia-acl-table>
             </el-tab-pane>
-          </template>
+          </template> -->
           <template v-else-if="moduleData.type == 'jwt_authentication'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabJwt')" :name="specialModuleDefaultTabName">
               <jwt-authentication v-if="detailTabs === 'jwt'"></jwt-authentication>
@@ -227,6 +228,7 @@ import AuthSasl from './components/AuthSasl/AuthSasl'
 import LwClients from './components/Lwm2mProtocol/LwClients'
 import TopicMetrics from './components/TopicMetrics/TopicMetrics'
 import SlowQuery from './components/SlowQuery/SlowQuery.vue'
+import GCPIoT from './components/GCPIoT/GCPIoT.vue'
 import TLSVersionSelect from '@/components/TLSVersionSelect.vue'
 
 import LogTrace from './components/LogTrace/LogTrace'
@@ -253,6 +255,7 @@ export default {
     SlowQuery,
     LogTrace,
     TLSVersionSelect,
+    GCPIoT,
   },
 
   mixins: [handleMongoDBSRV('module')],

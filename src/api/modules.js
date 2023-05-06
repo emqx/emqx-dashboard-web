@@ -112,4 +112,29 @@ export function clearSlowQueryData() {
   return http.delete('/slow_subscriptions')
 }
 
+// GCP IoT
+export function queryDevices() {
+  return http.get('/gcp_device/keys')
+}
+
+export function createDevice(params) {
+  return http.post('/gcp_device/keys', params)
+}
+
+export function deleteDevice(params) {
+  return http.get('/gcp_device/keys', { data: params })
+}
+
+export function uploadDevice(params) {
+  return http.post('/gcp_device/import', params)
+}
+
+export function getDeviceConfig(deviceId) {
+  return http.get(`/gcp_device/${deviceId}/config`)
+}
+
+export function updateDeviceConfig(deviceId, configs) {
+  return http.put(`/gcp_device/${deviceId}/config`, configs)
+}
+
 export default {}
