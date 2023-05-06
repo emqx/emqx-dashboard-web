@@ -386,4 +386,40 @@ export default {
     zh: '无效私钥',
     en: 'Invalid secret',
   },
+  import: {
+    zh: '导入',
+    en: 'Import',
+  },
+  deviceId: {
+    zh: '设备 ID',
+    en: 'Device ID',
+  },
+  devicePublicKey: {
+    zh: '设备公钥',
+    en: 'Device public key',
+  },
+  devicePublicKeyTip: {
+    zh: '添加至多 3 个用于对此设备进行身份验证的公钥',
+    en: 'Add up to 3 public keys for authenticating this device',
+  },
+  format: {
+    zh: '格式',
+    en: 'Format',
+  },
+  publicKey: {
+    zh: '公钥',
+    en: 'Public Key',
+  },
+  registry: {
+    zh: '注册表',
+    en: 'Registry',
+  },
+  region: {
+    zh: '区域',
+    en: 'Region',
+  },
+  project: {
+    zh: '项目',
+    en: 'Project',
+  },
 }
