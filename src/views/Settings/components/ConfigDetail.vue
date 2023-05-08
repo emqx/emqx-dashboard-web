@@ -39,7 +39,7 @@
             </el-col>
           </template>
 
-          <div class="config-item" v-for="(item, index) in showConfigList" :key="index">
+          <div class="config-item" v-for="item in showConfigList" :key="item.key">
             <el-col :span="12">
               <el-form-item v-bind="item.formItemAttributes">
                 <template slot="label">

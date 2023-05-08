@@ -9,7 +9,7 @@
       :model="recordConfig"
       :rules="rules"
     >
-      <div v-for="(key, index) in showKeyList" :key="index">
+      <div v-for="key in showKeyList" :key="key">
         <el-col :span="14">
           <el-form-item :label="key === '' ? 'listener_on' : key" :prop="key">
             <template slot="label">
