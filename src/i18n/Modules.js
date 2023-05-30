@@ -402,6 +402,10 @@ export default {
     zh: '添加至多 3 个用于对此设备进行身份验证的公钥',
     en: 'Add up to 3 public keys for authenticating this device',
   },
+  addPubKey: {
+    zh: '添加公钥',
+    en: 'Add Public Key',
+  },
   format: {
     zh: '格式',
     en: 'Format',
@@ -409,6 +413,10 @@ export default {
   publicKey: {
     zh: '公钥',
     en: 'Public Key',
+  },
+  pubKeyFormat: {
+    zh: '公钥格式',
+    en: 'Public Key Format',
   },
   registry: {
     zh: '注册表',
@@ -421,5 +429,13 @@ export default {
   project: {
     zh: '项目',
     en: 'Project',
+  },
+  addDevice: {
+    zh: '添加设备',
+    en: 'Add Device',
+  },
+  editDevice: {
+    zh: '编辑设备',
+    en: 'Edit Device',
   },
 }
