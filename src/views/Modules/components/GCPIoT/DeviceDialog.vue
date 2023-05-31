@@ -20,7 +20,13 @@
                 <label>{{ $t('Modules.devicePublicKey') }}</label>
                 <p class="pub-key-tip">{{ $t('Modules.devicePublicKeyTip') }}</p>
               </div>
-              <el-button class="btn-add" icon="el-icon-plus" size="small" @click="showKeyDialog">
+              <el-button
+                class="btn-add"
+                icon="el-icon-plus"
+                size="small"
+                @click="showKeyDialog"
+                :disabled="device.keys.length >= 3"
+              >
                 {{ $t('Base.add') }}
               </el-button>
               <el-table :data="device.keys" class="data-list">
@@ -138,6 +144,9 @@ export default {
   methods: {
     cutKeyToShow,
     showKeyDialog() {
+      if (this.device.keys.length >= 3) {
+        return
+      }
       this.isPubKeyDialogShow = true
     },
     addPubKey(keyData) {
@@ -147,7 +156,7 @@ export default {
       if (!expireAt || typeof expireAt !== 'number') {
         return this.$t('General.neverExpire')
       }
-      return moment(expireAt).format('YYYY-MM-DD HH:mm:ss')
+      return moment(expireAt * 1000).format('YYYY-MM-DD HH:mm:ss')
     },
     async deleteKey(index) {
       try {
@@ -169,6 +178,8 @@ export default {
       data.keys.forEach((item) => {
         if (!item.expires_at) {
           Reflect.deleteProperty(item, 'expires_at')
+        } else {
+          item.expires_at = Math.floor(item.expires_at / 1000)
         }
       })
 

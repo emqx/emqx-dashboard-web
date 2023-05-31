@@ -442,4 +442,8 @@ export default {
     zh: '设备管理',
     en: 'Devices',
   },
+  importCompleted: {
+    zh: '导入完成：成功 {suc}，失败 {failed}。',
+    en: 'Import completed: {suc} succeeded, {failed} failed.',
+  },
 }

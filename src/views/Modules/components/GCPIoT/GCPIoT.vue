@@ -12,14 +12,6 @@
                 @keyup.enter.native="initPageNLoad"
               />
             </el-col>
-            <el-col :span="8">
-              <el-input
-                v-model="filterParams.registry"
-                size="small"
-                :placeholder="$t('Modules.registry')"
-                @keyup.enter.native="initPageNLoad"
-              />
-            </el-col>
             <el-col :span="6">
               <el-button type="primary" size="small" @click="initPageNLoad">
                 {{ $t('Base.search') }}
@@ -31,9 +23,10 @@
               ref="upload"
               class="upload-table"
               action="/api"
-              accept=".csv,text/csv,application/vnd.ms-excel"
+              accept=".json"
               :limit="1"
               :auto-upload="false"
+              :show-file-list="false"
               :on-change="handleChange"
               :on-error="handleError"
             >
@@ -90,8 +83,9 @@
 </template>
 
 <script>
-import { queryDevices, deleteDevice, queryDeviceDetail } from '@/api/modules.js'
+import { queryDevices, createDevice, deleteDevice, queryDeviceDetail } from '@/api/modules.js'
 import DeviceDialog from './DeviceDialog.vue'
+import { readFile } from '@/common/utils.js'
 
 export default {
   name: 'GCPIoT',
@@ -104,7 +98,6 @@ export default {
       currentDevice: undefined,
       filterParams: {
         deviceid: '',
-        registry: '',
       },
       hasnext: false,
       pageParams: {
@@ -117,13 +110,27 @@ export default {
     }
   },
   methods: {
+    async accurateSearch() {
+      try {
+        this.isListLoading = true
+        const deviceItem = await queryDeviceDetail(this.filterParams.deviceid)
+        this.deviceList = [deviceItem]
+        this.count = 1
+        this.pageParams._page = 1
+      } catch (error) {
+        //
+      } finally {
+        this.isListLoading = false
+      }
+    },
     async getDeviceList() {
       try {
         this.isListLoading = true
         if (this.filterParams.deviceid) {
-          const data = await queryDeviceDetail(this.filterParams.deviceid)
+          this.accurateSearch()
+          return
         }
-        const { items, meta } = await queryDevices({ ...this.filterParams, ...this.pageParams })
+        const { items, meta } = await queryDevices(this.pageParams)
         this.deviceList = items
         this.count = meta.count
         this.hasnext = meta.hasnext
@@ -141,7 +148,17 @@ export default {
       this.pageParams._page = 1
       this.getDeviceList()
     },
-    handleChange() {},
+    async handleChange(file) {
+      try {
+        const jsonContent = await readFile(file.raw, 'text')
+        const devices = JSON.parse(jsonContent)
+        const { imported, errors } = await createDevice(devices)
+        this.$message.success(this.$t('Modules.importCompleted', { suc: imported, failed: errors }))
+        this.initPageNLoad()
+      } catch (error) {
+        //
+      }
+    },
     handleError() {},
     showEdit(device) {
       this.currentDevice = device
