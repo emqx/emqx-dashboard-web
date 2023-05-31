@@ -10,20 +10,25 @@
     <el-form ref="record" :model="record" :rules="rules" size="small" label-position="top">
       <el-row>
         <el-col :span="12">
-          <el-form-item prop="XXXXX" :label="$t('Modules.pubKeyFormat')">
-            <el-select v-model="record.XXXX">
-              <el-option v-for="item in formatOpt" :key="item" :label="item" :value="item" />
+          <el-form-item prop="key_type" :label="$t('Modules.pubKeyFormat')">
+            <el-select v-model="record.key_type">
+              <el-option v-for="item in keyTypeOpts" :key="item" :label="item" :value="item" />
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item prop="XXXXX">
-            <FileEditor v-model="keyFile" :accept="CER_FILE_ACCEPTS" />
+          <el-form-item prop="key">
+            <FileEditor v-model="keyFile" :accept="CER_FILE_ACCEPTS" @update="setKeyValue" />
           </el-form-item>
         </el-col>
         <el-col :span="9">
-          <el-form-item prop="XXXXX" :label="$t('General.expireAt')">
-            <el-date-picker v-model="record.XXXX" type="date" />
+          <el-form-item prop="expires_at" :label="$t('General.expireAt')">
+            <el-date-picker
+              v-model="record.expires_at"
+              type="datetime"
+              format="yyyy-MM-dd HH:mm:ss"
+              value-format="timestamp"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -38,6 +43,14 @@
 <script>
 import FileEditor from '@/components/FileEditor.vue'
 
+const keyTypeOpts = ['RSA_PEM', 'RSA_X509_PEM', 'ES256_PEM', 'ES256_X509_PEM']
+
+const createRawRecord = () => ({
+  key_type: keyTypeOpts[0],
+  key: '',
+  expires_at: '',
+})
+
 export default {
   components: {
     FileEditor,
@@ -49,13 +62,14 @@ export default {
   },
   data() {
     const CER_FILE_ACCEPTS = ['crt', 'key', 'pem', 'jks', 'der', 'cer', 'pfx'].map((type) => `.${type}`).join(', ')
-    const formatOpt = []
     return {
       CER_FILE_ACCEPTS,
-      formatOpt,
+      keyTypeOpts,
       keyFile: {},
-      record: {},
-      rules: {},
+      record: createRawRecord(),
+      rules: {
+        key: { required: true },
+      },
     }
   },
   computed: {
@@ -72,7 +86,14 @@ export default {
   watch: {
     dialogVisible(val) {
       if (!val) {
-        // TODO
+        this.record = createRawRecord()
+        this.keyFile = {}
+      } else {
+        this.$nextTick(() => {
+          if (this.$refs.record.clearValidate) {
+            this.$refs.record.clearValidate()
+          }
+        })
       }
     },
   },
@@ -81,7 +102,18 @@ export default {
     closeDialog() {
       this.dialogVisible = false
     },
-    save() {},
+    setKeyValue(file) {
+      this.record.key = file.file
+    },
+    async save() {
+      try {
+        await this.$refs.record.validate()
+        this.dialogVisible = false
+        this.$emit('save', this.record)
+      } catch (error) {
+        //
+      }
+    },
   },
 }
 </script>

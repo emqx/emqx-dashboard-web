@@ -27,15 +27,14 @@
       <el-tabs class="module-detail-tabs" type="border-card" v-model="detailTabs">
         <!-- modules with more management tools-->
         <template v-if="oper == 'edit'">
-          <GCPIoT v-if="moduleData.type == 'mnesia_authentication'" />
-          <!-- <template v-if="moduleData.type == 'mnesia_authentication'">
+          <template v-if="moduleData.type == 'mnesia_authentication'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.auth')" :name="specialModuleDefaultTabName">
               <mnesia-auth-table ref="auth" v-if="detailTabs === 'auth'"></mnesia-auth-table>
             </el-tab-pane>
             <el-tab-pane label="ACL" name="acl">
               <mnesia-acl-table ref="acl" v-if="detailTabs === 'acl'"></mnesia-acl-table>
             </el-tab-pane>
-          </template> -->
+          </template>
           <template v-else-if="moduleData.type == 'jwt_authentication'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.tabJwt')" :name="specialModuleDefaultTabName">
               <jwt-authentication v-if="detailTabs === 'jwt'"></jwt-authentication>
@@ -64,6 +63,15 @@
           <template v-else-if="moduleData.type == 'tracer'">
             <el-tab-pane ref="moduleSpecialTab" :label="$t('Modules.trace')" :name="specialModuleDefaultTabName">
               <log-trace v-if="detailTabs === 'trace'"></log-trace>
+            </el-tab-pane>
+          </template>
+          <template v-else-if="moduleData.type == 'gcp_device'">
+            <el-tab-pane
+              ref="moduleSpecialTab"
+              :label="$t('Modules.deviceManagement')"
+              :name="specialModuleDefaultTabName"
+            >
+              <GCPIoT v-if="detailTabs === 'devices'" />
             </el-tab-pane>
           </template>
         </template>
@@ -292,6 +300,7 @@ export default {
         topic_metrics: 'topic',
         slow_subscribers_statistics: 'subscribers',
         tracer: 'trace',
+        gcp_device: 'devices',
       },
       // canManageModuleTypes: [
       //   'mnesia_authentication',

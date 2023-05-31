@@ -438,4 +438,8 @@ export default {
     zh: '编辑设备',
     en: 'Edit Device',
   },
+  deviceManagement: {
+    zh: '设备管理',
+    en: 'Devices',
+  },
 }

@@ -107,6 +107,10 @@ export default {
     zh: '创建成功',
     en: 'Create Success',
   },
+  addedSuccessfully: {
+    zh: '添加成功',
+    en: 'Added successfully',
+  },
   deleteSuccess: {
     zh: '删除成功',
     en: 'Delete Success',

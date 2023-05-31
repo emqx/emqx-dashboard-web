@@ -11,7 +11,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item :label="$t('Modules.deviceId')" prop="deviceid">
-              <el-input v-model="device.deviceid" />
+              <el-input v-model="device.deviceid" :disabled="!!editedDevice" />
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -20,16 +20,20 @@
                 <label>{{ $t('Modules.devicePublicKey') }}</label>
                 <p class="pub-key-tip">{{ $t('Modules.devicePublicKeyTip') }}</p>
               </div>
-              <el-button class="btn-add" icon="el-icon-plus" size="small" @click="addPubKey">
+              <el-button class="btn-add" icon="el-icon-plus" size="small" @click="showKeyDialog">
                 {{ $t('Base.add') }}
               </el-button>
-              <el-table :data="keyList" class="data-list">
-                <el-table-column prop="topic" :label="$t('Modules.format')" />
-                <el-table-column prop="topic" :label="$t('Modules.publicKey')" />
-                <el-table-column prop="topic" :label="$t('General.expireAt')" />
-                <el-table-column width="120px">
-                  <template slot-scope="{ row }">
-                    <el-button type="dashed danger" size="mini" @click="deleteKey(row)">
+              <el-table :data="device.keys" class="data-list">
+                <el-table-column prop="key_type" :label="$t('Modules.format')" width="160px" />
+                <el-table-column prop="key" :label="$t('Modules.publicKey')" width="230px">
+                  <template slot-scope="{ row }"> {{ cutKeyToShow(row.key) }} </template>
+                </el-table-column>
+                <el-table-column prop="expires_at" :label="$t('General.expireAt')">
+                  <template slot-scope="{ row }"> {{ formatterExpireAt(row.expires_at) }} </template>
+                </el-table-column>
+                <el-table-column width="80px">
+                  <template slot-scope="{ $index }">
+                    <el-button type="dashed danger" size="mini" @click="deleteKey($index)">
                       {{ $t('Base.delete') }}
                     </el-button>
                   </template>
@@ -59,13 +63,33 @@
       <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
       <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
     </div>
-    <PubKeyDialog v-model="isPubKeyDialogShow" />
+    <PubKeyDialog v-model="isPubKeyDialogShow" @save="addPubKey" />
   </el-dialog>
 </template>
 
 <script>
-import { createDevice } from '@/api/modules.js'
+import { cloneDeep } from 'lodash'
+import moment from 'moment'
+import { createDevice, updateDevice } from '@/api/modules.js'
 import PubKeyDialog from './PubKeyDialog.vue'
+
+const keyBeginning = `-----BEGIN PUBLIC KEY-----\n`
+const keyEnding = `\n-----END PUBLIC KEY-----`
+const cutKeyToShow = (key) => {
+  const beginningIndex = key.indexOf(keyBeginning)
+  const endingIndex = key.indexOf(keyEnding)
+  const beginning = beginningIndex > -1 ? key.slice(keyBeginning.length, keyBeginning.length + 10) : key.slice(0, 10)
+  const ending = endingIndex > -1 ? key.slice(endingIndex - 10, endingIndex) : key.slice(-10)
+  return `${beginning}....${ending}`
+}
+
+const createRawDevice = () => ({
+  deviceid: '',
+  keys: [],
+  registry: '',
+  location: '',
+  project: '',
+})
 
 export default {
   components: { PubKeyDialog },
@@ -79,22 +103,12 @@ export default {
   },
   data() {
     return {
-      device: {
-        key: '',
-        key_type: '',
-        expires_at: '',
-        project: '',
-        location: '',
-        registry: '',
-        deviceid: '123',
-      },
+      device: createRawDevice(),
       rules: {
-        deviceid: {
-          required: true,
-        },
+        deviceid: { required: true },
       },
-      keyList: [],
       isPubKeyDialogShow: false,
+      isSubmitting: false,
     }
   },
   computed: {
@@ -107,28 +121,81 @@ export default {
       },
     },
   },
-
+  watch: {
+    async dialogVisible(val) {
+      if (val) {
+        if (this.editedDevice) {
+          this.device = cloneDeep(this.editedDevice)
+        } else {
+          this.device = createRawDevice()
+          this.$nextTick(() => {
+            this.$refs.recordForm.clearValidate()
+          })
+        }
+      }
+    },
+  },
   methods: {
-    addPubKey() {
+    cutKeyToShow,
+    showKeyDialog() {
       this.isPubKeyDialogShow = true
     },
-    deleteKey() {},
-    closeDialog() {
-      this.dialogVisible = false
+    addPubKey(keyData) {
+      this.device.keys.push(keyData)
     },
-    async save() {
+    formatterExpireAt(expireAt) {
+      if (!expireAt || typeof expireAt !== 'number') {
+        return this.$t('General.neverExpire')
+      }
+      return moment(expireAt).format('YYYY-MM-DD HH:mm:ss')
+    },
+    async deleteKey(index) {
       try {
-        this.$refs.recordForm.validate()
-        createDevice(this.device)
+        await this.$msgbox.confirm(this.$t('General.confirmDelete'), {
+          confirmButtonText: this.$t('Base.confirm'),
+          cancelButtonText: this.$t('Base.cancel'),
+          type: 'warning',
+        })
+        this.device.keys.splice(index, 1)
       } catch (error) {
         //
       }
     },
-  },
-  watch: {
-    dialogVisible(val) {
-      if (!val) {
-        // TODO:
+    closeDialog() {
+      this.dialogVisible = false
+    },
+    getDataForSubmit() {
+      const data = cloneDeep(this.device)
+      data.keys.forEach((item) => {
+        if (!item.expires_at) {
+          Reflect.deleteProperty(item, 'expires_at')
+        }
+      })
+
+      return data
+    },
+    requestAddDevice() {
+      return createDevice([this.getDataForSubmit()])
+    },
+    requestUpdateDevice() {
+      return updateDevice(this.editedDevice.deviceid, this.getDataForSubmit())
+    },
+    async save() {
+      try {
+        this.$refs.recordForm.validate()
+        this.isSubmitting = true
+        if (this.editedDevice) {
+          await this.requestUpdateDevice()
+        } else {
+          await this.requestAddDevice()
+        }
+        this.$message.success(this.$t('Base.addedSuccessfully'))
+        this.dialogVisible = false
+        this.$emit('submitted')
+      } catch (error) {
+        //
+      } finally {
+        this.isSubmitting = false
       }
     },
   },
