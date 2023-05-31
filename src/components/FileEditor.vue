@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="24">
         <div class="input-container">
-          <el-input type="textarea" :rows="5" v-model="fileContent"></el-input>
+          <el-input type="textarea" :rows="5" v-model="fileContent" :placeholder="placeholder"></el-input>
           <div class="editor-ft">
             <p class="tip">{{ uploadTip }}</p>
             <el-upload
@@ -14,6 +14,7 @@
               :auto-upload="false"
               :on-change="handleChange"
               :on-error="handleError"
+              :accept="rawAccept ? rawAccept : undefined"
             >
               <el-button>{{ $t('Backup.selectFile') }}</el-button>
             </el-upload>
@@ -39,6 +40,12 @@ export default {
       required: true,
     },
     accept: {
+      type: String,
+    },
+    rawAccept: {
+      type: String,
+    },
+    placeholder: {
       type: String,
     },
   },
@@ -174,5 +181,13 @@ export default {
       background: #d9d9d9;
     }
   }
+}
+.el-form-item.is-error .file-editor .el-textarea__inner,
+.el-form-item.is-success .file-editor .el-textarea__inner,
+.el-form-item.is-error .file-editor .el-textarea__inner:focus {
+  border-bottom: 60px solid transparent;
+}
+.el-form-item.is-error .file-editor .el-textarea__inner {
+  box-shadow: 0 0 0 1px rgba(245, 34, 45, 1);
 }
 </style>
