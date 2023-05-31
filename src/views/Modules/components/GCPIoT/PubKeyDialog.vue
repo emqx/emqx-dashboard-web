@@ -18,7 +18,12 @@
         </el-col>
         <el-col :span="24">
           <el-form-item prop="key">
-            <FileEditor v-model="keyFile" :accept="CER_FILE_ACCEPTS" @update="setKeyValue" />
+            <FileEditor
+              v-model="keyFile"
+              :raw-accept="CER_FILE_ACCEPTS"
+              @update="setKeyValue"
+              :placeholder="textareaPlaceholder"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="9">
@@ -28,13 +33,15 @@
               type="datetime"
               format="yyyy-MM-dd HH:mm:ss"
               value-format="timestamp"
+              :placeholder="$t('General.neverExpire')"
+              clearable
             />
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-align-footer">
-      <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}'</el-button>
+      <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
       <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
     </div>
   </el-dialog>
@@ -43,12 +50,16 @@
 <script>
 import FileEditor from '@/components/FileEditor.vue'
 
+const textareaPlaceholder = `-----BEGIN PUBLIC KEY-----
+(Public key value must be in PEM format)
+-----END PUBLIC KEY-----`
+
 const keyTypeOpts = ['RSA_PEM', 'RSA_X509_PEM', 'ES256_PEM', 'ES256_X509_PEM']
 
 const createRawRecord = () => ({
   key_type: keyTypeOpts[0],
   key: '',
-  expires_at: '',
+  expires_at: undefined,
 })
 
 export default {
@@ -65,10 +76,11 @@ export default {
     return {
       CER_FILE_ACCEPTS,
       keyTypeOpts,
+      textareaPlaceholder,
       keyFile: {},
       record: createRawRecord(),
       rules: {
-        key: { required: true },
+        key: { required: true, message: this.$t('Tools.pleaseEnter') },
       },
     }
   },
@@ -86,14 +98,11 @@ export default {
   watch: {
     dialogVisible(val) {
       if (!val) {
-        this.record = createRawRecord()
-        this.keyFile = {}
-      } else {
+        this.$refs.record.clearValidate()
         this.$nextTick(() => {
-          if (this.$refs.record.clearValidate) {
-            this.$refs.record.clearValidate()
-          }
+          this.record = createRawRecord()
         })
+        this.keyFile = {}
       }
     },
   },

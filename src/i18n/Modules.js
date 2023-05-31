@@ -396,7 +396,7 @@ export default {
   },
   devicePublicKey: {
     zh: '设备公钥',
-    en: 'Device public key',
+    en: 'Device Public Key',
   },
   devicePublicKeyTip: {
     zh: '添加至多 3 个用于对此设备进行身份验证的公钥',

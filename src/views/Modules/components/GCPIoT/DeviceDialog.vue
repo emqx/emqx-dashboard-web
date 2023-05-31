@@ -79,13 +79,11 @@ import moment from 'moment'
 import { createDevice, updateDevice } from '@/api/modules.js'
 import PubKeyDialog from './PubKeyDialog.vue'
 
-const keyBeginning = `-----BEGIN PUBLIC KEY-----\n`
-const keyEnding = `\n-----END PUBLIC KEY-----`
+const keyBeginningReg = /^(\n)*-----(\w|\s)+-----\n/
+const keyEndingReg = /\n-----(\w|\s)+-----(\n)*$/
 const cutKeyToShow = (key) => {
-  const beginningIndex = key.indexOf(keyBeginning)
-  const endingIndex = key.indexOf(keyEnding)
-  const beginning = beginningIndex > -1 ? key.slice(keyBeginning.length, keyBeginning.length + 10) : key.slice(0, 10)
-  const ending = endingIndex > -1 ? key.slice(endingIndex - 10, endingIndex) : key.slice(-10)
+  const beginning = key.replace(keyBeginningReg, '').slice(0, 10)
+  const ending = key.replace(keyEndingReg, '').slice(-10)
   return `${beginning}....${ending}`
 }
 
@@ -111,7 +109,7 @@ export default {
     return {
       device: createRawDevice(),
       rules: {
-        deviceid: { required: true },
+        deviceid: { required: true, message: this.$t('Tools.pleaseEnter') },
       },
       isPubKeyDialogShow: false,
       isSubmitting: false,
@@ -193,7 +191,7 @@ export default {
     },
     async save() {
       try {
-        this.$refs.recordForm.validate()
+        await this.$refs.recordForm.validate()
         this.isSubmitting = true
         if (this.editedDevice) {
           await this.requestUpdateDevice()
