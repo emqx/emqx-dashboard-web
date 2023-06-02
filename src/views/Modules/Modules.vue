@@ -44,15 +44,20 @@
               </div>
               <div class="item-handle">
                 <div class="handle-oper">
-                  <el-button type="danger" size="small" v-if="item.enabled" @click.stop="updataModule(item, false)">{{
-                    $t('Modules.stop')
-                  }}</el-button>
-                  <el-button type="primary" size="small" v-else @click.stop="updataModule(item, true)">{{
-                    $t('Modules.start')
-                  }}</el-button>
-                  <el-button class="know-more" size="small" @click.stop="toEditModule(item)">{{
-                    $t('Modules.moduleEdit')
-                  }}</el-button>
+                  <el-button type="danger" size="small" v-if="item.enabled" @click.stop="updataModule(item, false)">
+                    {{ $t('Modules.stop') }}
+                  </el-button>
+                  <el-button type="primary" size="small" v-else @click.stop="updataModule(item, true)">
+                    {{ $t('Modules.start') }}
+                  </el-button>
+                  <el-button
+                    class="know-more"
+                    size="small"
+                    :disabled="managementButtonDisabled(item)"
+                    @click.stop="toEditModule(item)"
+                  >
+                    {{ $t('Modules.moduleEdit') }}
+                  </el-button>
                 </div>
               </div>
             </div>
@@ -103,6 +108,12 @@ export default {
   },
 
   methods: {
+    managementButtonDisabled({ type, enabled }) {
+      if (type === 'gcp_device' && !enabled) {
+        return true
+      }
+      return false
+    },
     deleteModule(item) {
       this.$msgbox
         .confirm(this.$t('Modules.thisActionWillDeleteTheModule'), {
@@ -158,6 +169,9 @@ export default {
       }, 500)
     },
     toEditModule(item) {
+      if (this.managementButtonDisabled(item)) {
+        return
+      }
       this.selectedModule = item
       this.selectedModule.from = 'modules'
       this.selectedModule.oper = 'edit'
