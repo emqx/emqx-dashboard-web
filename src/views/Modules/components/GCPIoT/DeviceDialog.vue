@@ -4,7 +4,7 @@
     custom-class="gcp-device-dialog"
     :close-on-click-modal="false"
     :visible.sync="dialogVisible"
-    :title="editedDevice ? $t('Modules.addDevice') : $t('Modules.editDevice')"
+    :title="editedDevice ? $t('Modules.editDevice') : $t('Modules.addDevice')"
   >
     <div>
       <el-form ref="recordForm" size="small" :model="device" :rules="rules" label-position="top">
