@@ -442,6 +442,10 @@ export default {
     zh: '设备管理',
     en: 'Devices',
   },
+  jsonFormatError: {
+    zh: '不正确的 JSON 文件内容',
+    en: 'Invalid JSON file',
+  },
   importCompleted: {
     zh: '导入完成：成功 {suc}，失败 {failed}。',
     en: 'Import completed: {suc} succeeded, {failed} failed.',

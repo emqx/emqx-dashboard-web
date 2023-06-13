@@ -149,9 +149,15 @@ export default {
       this.getDeviceList()
     },
     async handleChange(file) {
+      let devices = []
       try {
         const jsonContent = await readFile(file.raw, 'text')
-        const devices = JSON.parse(jsonContent)
+        devices = JSON.parse(jsonContent)
+      } catch (error) {
+        this.$message.error(this.$t('Modules.jsonFormatError'))
+        return
+      }
+      try {
         const { imported, errors } = await createDevice(devices)
         this.$message.success(this.$t('Modules.importCompleted', { suc: imported, failed: errors }))
         this.initPageNLoad()

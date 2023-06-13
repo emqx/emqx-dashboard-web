@@ -12,7 +12,7 @@
         <el-col :span="12">
           <el-form-item prop="key_type" :label="$t('Modules.pubKeyFormat')">
             <el-select v-model="record.key_type">
-              <el-option v-for="item in keyTypeOpts" :key="item" :label="item" :value="item" />
+              <el-option v-for="{ label, value } in keyFormatOpt" :key="value" :label="label" :value="value" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -49,15 +49,14 @@
 
 <script>
 import FileEditor from '@/components/FileEditor.vue'
+import { keyFormatOpt } from '@/common/GCPCoreIoT.js'
 
 const textareaPlaceholder = `-----BEGIN PUBLIC KEY-----
 (Public key value must be in PEM format)
 -----END PUBLIC KEY-----`
 
-const keyTypeOpts = ['RSA_PEM', 'RSA_X509_PEM', 'ES256_PEM', 'ES256_X509_PEM']
-
 const createRawRecord = () => ({
-  key_type: keyTypeOpts[0],
+  key_type: keyFormatOpt[0].value,
   key: '',
   expires_at: undefined,
 })
@@ -75,7 +74,7 @@ export default {
     const CER_FILE_ACCEPTS = ['crt', 'key', 'pem', 'jks', 'der', 'cer', 'pfx'].map((type) => `.${type}`).join(', ')
     return {
       CER_FILE_ACCEPTS,
-      keyTypeOpts,
+      keyFormatOpt,
       textareaPlaceholder,
       keyFile: {},
       record: createRawRecord(),
@@ -111,6 +110,7 @@ export default {
     closeDialog() {
       this.dialogVisible = false
     },
+    checkFileContent() {},
     setKeyValue(file) {
       this.record.key = file.file
     },
@@ -118,6 +118,7 @@ export default {
       try {
         await this.$refs.record.validate()
         this.dialogVisible = false
+        this.record.expires_at = this.record.expires_at / 1000
         this.$emit('save', this.record)
       } catch (error) {
         //

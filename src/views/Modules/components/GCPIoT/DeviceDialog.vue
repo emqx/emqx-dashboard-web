@@ -30,7 +30,11 @@
                 {{ $t('Base.add') }}
               </el-button>
               <el-table :data="device.keys" class="data-list">
-                <el-table-column prop="key_type" :label="$t('Modules.format')" width="160px" />
+                <el-table-column prop="key_type" :label="$t('Modules.format')" width="160px">
+                  <template slot-scope="{ row }">
+                    {{ getLabelFromValue(row.key_type) }}
+                  </template>
+                </el-table-column>
                 <el-table-column prop="key" :label="$t('Modules.publicKey')" width="230px">
                   <template slot-scope="{ row }"> {{ cutKeyToShow(row.key) }} </template>
                 </el-table-column>
@@ -78,6 +82,7 @@ import { cloneDeep } from 'lodash'
 import moment from 'moment'
 import { createDevice, updateDevice } from '@/api/modules.js'
 import PubKeyDialog from './PubKeyDialog.vue'
+import { getLabelFromValue } from '@/common/GCPCoreIoT.js'
 
 const keyBeginningReg = /^(\n)*-----(\w|\s)+-----\n/
 const keyEndingReg = /\n-----(\w|\s)+-----(\n)*$/
@@ -141,6 +146,7 @@ export default {
   },
   methods: {
     cutKeyToShow,
+    getLabelFromValue,
     showKeyDialog() {
       if (this.device.keys.length >= 3) {
         return
