@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import { isFunction } from 'lodash'
+
 export default {
   name: 'FileEditor',
 
@@ -47,6 +49,9 @@ export default {
     },
     placeholder: {
       type: String,
+    },
+    checkContent: {
+      type: Function,
     },
   },
 
@@ -94,6 +99,12 @@ export default {
       reader.readAsText(file.raw)
       reader.onload = async (event) => {
         const content = event.currentTarget.result
+        if (this.checkContent && isFunction(this.checkContent)) {
+          const checkRet = this.checkContent(content)
+          if (!checkRet) {
+            return
+          }
+        }
         if (this.value.file) {
           await this.confirmReplacement()
         }

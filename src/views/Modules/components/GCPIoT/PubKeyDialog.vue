@@ -23,6 +23,7 @@
               :raw-accept="CER_FILE_ACCEPTS"
               @update="setKeyValue"
               :placeholder="textareaPlaceholder"
+              :check-content="checkFileContent"
             />
           </el-form-item>
         </el-col>
@@ -55,6 +56,10 @@ const textareaPlaceholder = `-----BEGIN PUBLIC KEY-----
 (Public key value must be in PEM format)
 -----END PUBLIC KEY-----`
 
+const X509Reg = /X509/i
+const PEMFormatReg = /^(\s|\n)*-----BEGIN PUBLIC KEY-----(.|\n)+-----END PUBLIC KEY-----(\s|\n)*$/
+const X509FormatReg = /^(\s|\n)*-----BEGIN CERTIFICATE-----(.|\n)+-----END CERTIFICATE-----(\s|\n)*$/
+
 const createRawRecord = () => ({
   key_type: keyFormatOpt[0].value,
   key: '',
@@ -72,6 +77,7 @@ export default {
   },
   data() {
     const CER_FILE_ACCEPTS = ['crt', 'key', 'pem', 'jks', 'der', 'cer', 'pfx'].map((type) => `.${type}`).join(', ')
+    const _this = this
     return {
       CER_FILE_ACCEPTS,
       keyFormatOpt,
@@ -79,7 +85,16 @@ export default {
       keyFile: {},
       record: createRawRecord(),
       rules: {
-        key: { required: true, message: this.$t('Tools.pleaseEnter') },
+        key: [
+          { required: true, message: this.$t('Tools.pleaseEnter') },
+          {
+            validator(rules, value) {
+              const ret = _this.testKeyFormat(value)
+              return !ret ? Promise.reject(_this.$t('Modules.formatMismatch')) : Promise.resolve()
+            },
+            trigger: 'blur',
+          },
+        ],
       },
     }
   },
@@ -110,7 +125,16 @@ export default {
     closeDialog() {
       this.dialogVisible = false
     },
-    checkFileContent() {},
+    testKeyFormat(key) {
+      return X509Reg.test(this.record.key_type) ? X509FormatReg.test(key) : PEMFormatReg.test(key)
+    },
+    checkFileContent(key) {
+      const ret = this.testKeyFormat(key)
+      if (!ret) {
+        this.$message.error(this.$t('Modules.formatMismatch'))
+      }
+      return ret
+    },
     setKeyValue(file) {
       this.record.key = file.file
     },

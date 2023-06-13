@@ -418,6 +418,10 @@ export default {
     zh: '公钥格式',
     en: 'Public Key Format',
   },
+  formatMismatch: {
+    zh: '格式错误，请检查',
+    en: 'Invalid authentication key. Check the format',
+  },
   registry: {
     zh: '注册表',
     en: 'Registry',
