@@ -156,6 +156,8 @@ export default {
       } catch (error) {
         this.$message.error(this.$t('Modules.jsonFormatError'))
         return
+      } finally {
+        this.$refs.upload.clearFiles()
       }
       try {
         const { imported, errors } = await createDevice(devices)
