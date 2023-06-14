@@ -52,10 +52,6 @@
 import FileEditor from '@/components/FileEditor.vue'
 import { keyFormatOpt } from '@/common/GCPCoreIoT.js'
 
-const textareaPlaceholder = `-----BEGIN PUBLIC KEY-----
-(Public key value must be in PEM format)
------END PUBLIC KEY-----`
-
 const X509Reg = /X509/i
 const PEMFormatReg = /^(\s|\n)*-----BEGIN PUBLIC KEY-----(.|\n)+-----END PUBLIC KEY-----(\s|\n)*$/
 const X509FormatReg = /^(\s|\n)*-----BEGIN CERTIFICATE-----(.|\n)+-----END CERTIFICATE-----(\s|\n)*$/
@@ -81,7 +77,6 @@ export default {
     return {
       CER_FILE_ACCEPTS,
       keyFormatOpt,
-      textareaPlaceholder,
       keyFile: {},
       record: createRawRecord(),
       rules: {
@@ -99,6 +94,12 @@ export default {
     }
   },
   computed: {
+    textareaPlaceholder() {
+      const tag = X509Reg.test(this.record.key_type) ? 'CERTIFICATE' : 'PUBLIC KEY'
+      return `-----BEGIN ${tag}-----
+(Public key value must be in PEM format)
+-----END ${tag}-----`
+    },
     dialogVisible: {
       get() {
         return this.value
