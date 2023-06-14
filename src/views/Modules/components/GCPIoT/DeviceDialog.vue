@@ -182,8 +182,6 @@ export default {
       data.keys.forEach((item) => {
         if (!item.expires_at) {
           Reflect.deleteProperty(item, 'expires_at')
-        } else {
-          item.expires_at = Math.floor(item.expires_at / 1000)
         }
       })
 

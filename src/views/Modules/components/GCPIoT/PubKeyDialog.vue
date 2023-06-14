@@ -142,7 +142,7 @@ export default {
       try {
         await this.$refs.record.validate()
         this.dialogVisible = false
-        this.record.expires_at = this.record.expires_at / 1000
+        this.record.expires_at = Math.floor(this.record.expires_at / 1000)
         this.$emit('save', this.record)
       } catch (error) {
         //
