@@ -202,7 +202,8 @@ export default {
         } else {
           await this.requestAddDevice()
         }
-        this.$message.success(this.$t('Base.addedSuccessfully'))
+        const msg = this.editedDevice ? 'editSuccess' : 'addedSuccessfully'
+        this.$message.success(this.$t(`Base.${msg}`))
         this.dialogVisible = false
         this.$emit('submitted')
       } catch (error) {
