@@ -159,6 +159,10 @@ export default {
     zh: '请输入用户名',
     en: 'Please enter username',
   },
+  roleRequired: {
+    zh: '请选择用户角色',
+    en: 'Please select a role',
+  },
   pleaseEnterNotes: {
     zh: '请输入备注',
     en: 'Please enter notes',
@@ -186,6 +190,10 @@ export default {
   confirmDeleteUser: {
     zh: '确认删除该用户?',
     en: 'Confirm delete?',
+  },
+  role: {
+    zh: '角色',
+    en: 'Role',
   },
   blacklistTips: {
     zh: '通过黑名单禁止客户端建立连接，该功能适用于管理少量客户端，客户端认证请使用',

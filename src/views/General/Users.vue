@@ -18,6 +18,11 @@
 
         <el-table :data="tableData" class="data-list">
           <el-table-column min-width="120px" prop="username" :label="$t('General.userName')"></el-table-column>
+          <el-table-column min-width="120px" prop="role" :label="$t('General.role')">
+            <template slot-scope="{ row }">
+              {{ toUpper(row.role) }}
+            </template>
+          </el-table-column>
           <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')"></el-table-column>
           <el-table-column width="120px">
             <template slot-scope="{ row }">
@@ -37,6 +42,7 @@
 
     <el-dialog
       width="520px"
+      custom-class="user-dialog"
       :title="accessType === 'edit' ? $t('General.editorUser') : $t('General.creatingUser')"
       :visible.sync="dialogVisible"
       @close="closeDialog"
@@ -47,6 +53,11 @@
       <el-form ref="recordForm" size="small" :model="record" :rules="rules" :validate-on-rule-change="false">
         <el-form-item prop="username" :label="$t('General.userName')">
           <el-input v-model="record.username" :disabled="accessType === 'edit'"></el-input>
+        </el-form-item>
+        <el-form-item prop="role" :label="$t('General.role')">
+          <el-select v-model="record.role" :disabled="accessType === 'edit'">
+            <el-option v-for="item in roleOpts" :key="item" :label="item" :value="item" />
+          </el-select>
         </el-form-item>
         <el-form-item prop="tags" :label="$t('General.remark')">
           <el-input v-model="record.tags"></el-input>
@@ -80,6 +91,7 @@
 </template>
 
 <script>
+import { toUpper } from 'lodash'
 import { loadUser, createUser, updateUser, destroyUser, changePassword } from '@/api/function'
 import changeDefaultPwd from '@/mixins/changeDefaultPwd'
 import pwdRule from '@/common/pwdRule'
@@ -101,7 +113,9 @@ export default {
   },
 
   data() {
+    const roleOpts = ['ROOT', 'READ', 'WRITE', 'READ_WRITE']
     return {
+      roleOpts,
       dialogVisible: false,
       tableData: [],
       accessType: '',
@@ -109,6 +123,7 @@ export default {
       record: {
         username: '',
         tags: '',
+        role: '',
       },
     }
   },
@@ -137,6 +152,7 @@ export default {
       const { newPassword, repeatPassword } = pwdRule(validatePass)
       const ret = {
         username: [{ required: true, message: this.$t('General.enterOneUserName') }],
+        role: [{ required: true, message: this.$t('General.roleRequired') }],
         tags: [{ required: true, message: this.$t('General.pleaseEnterNotes') }],
         password: [
           {
@@ -187,13 +203,14 @@ export default {
   },
 
   methods: {
+    toUpper,
     async loadData() {
       this.tableData = await loadUser()
     },
     showDialog(type, item) {
       this.accessType = 'create'
       if (type === 'edit') {
-        Object.assign(this.record, item)
+        Object.assign(this.record, { ...item, role: toUpper(item.role) })
         this.accessType = 'edit'
       }
       this.dialogVisible = true
@@ -208,7 +225,7 @@ export default {
         this.$refs.recordForm.clearValidate()
       }
       window.setTimeout(() => {
-        this.record = { username: '', tags: '' }
+        this.record = { username: '', tags: '', role: '' }
       }, 500)
     },
     togglePassword() {
@@ -218,6 +235,7 @@ export default {
         this.record = {
           tags: this.record.tags,
           username: this.record.username,
+          role: this.record.role,
         }
       }
     },
@@ -301,3 +319,11 @@ export default {
   },
 }
 </script>
+
+<style lang="scss">
+.user-dialog {
+  .el-select {
+    width: 100%;
+  }
+}
+</style>
