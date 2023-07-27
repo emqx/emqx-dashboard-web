@@ -1036,18 +1036,19 @@ export default {
     flex-wrap: wrap;
 
     .action-item-field {
+      display: flex;
       margin-right: 20px;
     }
 
     .title {
       color: #888;
-      float: left;
+      flex-shrink: 0;
     }
 
     .value {
-      float: left;
       margin-left: 8px;
       color: #444;
+      word-break: break-all;
     }
   }
 
