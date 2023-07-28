@@ -40,6 +40,7 @@ export default {
     value: {
       type: Object,
       required: true,
+      default: () => ({ file: '', filename: '' }),
     },
     accept: {
       type: String,
@@ -58,7 +59,7 @@ export default {
   computed: {
     fileContent: {
       get() {
-        return this.value.file
+        return this.value.file || ''
       },
       set(val) {
         let name
