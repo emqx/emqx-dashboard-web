@@ -21,11 +21,7 @@
         <div class="emq-table-header">
           <el-row class="search-wrapper" :gutter="20">
             <el-col :span="8">
-              <el-input
-                v-model="fuzzyParams._like_clientid"
-                size="small"
-                :placeholder="$t('Clients.clientId')"
-              ></el-input>
+              <el-input v-model="fuzzyParams.clientid" size="small" :placeholder="$t('Clients.clientId')"></el-input>
             </el-col>
             <el-col :span="8">
               <el-input
@@ -79,6 +75,9 @@
                   <el-option label="True" :value="true" />
                   <el-option label="False" :value="false" />
                 </el-select>
+              </el-col>
+              <el-col :span="8" class="check-box-wrap">
+                <el-checkbox v-model="isExactMatch">{{ $t('Clients.exactlyMatching') }}</el-checkbox>
               </el-col>
             </template>
             <div class="col-oper">
@@ -184,6 +183,11 @@ import CustomPagination from '@/components/CustomPagination.vue'
 import { disconnectClient, listNodeClients } from '@/api/clients'
 import { loadNodes } from '@/api/common'
 
+const clientParamsKey = new Map([
+  [false, '_like_clientid'],
+  [true, 'clientid'],
+])
+
 export default {
   name: 'Clients',
 
@@ -208,7 +212,9 @@ export default {
       nodeName: '',
       currentNodes: [{ name: this.$t('RuleEngine.allNodes'), node: 'all' }],
       resetIcon: 'el-icon-refresh',
+      isExactMatch: false,
       fuzzyParams: {
+        clientId: '',
         comparator: '_gte',
       },
       protoNames: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M'],
@@ -257,18 +263,11 @@ export default {
     },
     genQueryParams(params) {
       let newParams = {}
-      const {
-        _like_clientid,
-        _like_username,
-        ip_address,
-        conn_state,
-        proto_name,
-        comparator,
-        _connected_at,
-        clean_start,
-      } = params
+      const { clientid, _like_username, ip_address, conn_state, proto_name, comparator, _connected_at, clean_start } =
+        params
+      const clientIdKey = clientParamsKey.get(this.isExactMatch)
       newParams = {
-        _like_clientid: _like_clientid || undefined,
+        [clientIdKey]: clientid || undefined,
         _like_username: _like_username || undefined,
         ip_address: ip_address || undefined,
         conn_state: conn_state || undefined,
@@ -364,6 +363,11 @@ export default {
         .el-col-8 {
           margin-bottom: 0;
         }
+      }
+      .check-box-wrap {
+        display: flex;
+        height: 32px;
+        align-items: center;
       }
       .form-item-row {
         margin-top: 0px;

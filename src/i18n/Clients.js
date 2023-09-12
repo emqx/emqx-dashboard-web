@@ -347,4 +347,8 @@ export default {
     zh: '该客户端不存在',
     en: 'This client does not exists',
   },
+  exactlyMatching: {
+    zh: '精确匹配客户端 ID',
+    en: 'Exactly Match Client ID',
+  },
 }
