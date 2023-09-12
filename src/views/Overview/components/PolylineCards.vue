@@ -143,14 +143,16 @@ export default {
         const data = await loadMetricsLog(false, typeName)
         const currentData = this.metricLog[typeName]
         this.metricTitles.forEach((key, index) => {
-          const nodeMetric = data[key]
-          const lastData = nodeMetric[nodeMetric.length - 1]
-          if (currentData[index].xData.length >= 120) {
-            currentData[index].xData.shift()
-            currentData[index].yData.shift()
+          let nodeMetric = data[key]
+          if (nodeMetric.length > 120) {
+            nodeMetric = nodeMetric.slice(-120)
           }
-          currentData[index].xData.push(lastData[0])
-          currentData[index].yData.push(lastData[1])
+          currentData[index].xData = []
+          currentData[index].yData = []
+          nodeMetric.forEach(([x, y]) => {
+            currentData[index].xData.push(x)
+            currentData[index].yData.push(y)
+          })
         })
       })
     },
