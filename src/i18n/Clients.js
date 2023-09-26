@@ -351,4 +351,12 @@ export default {
     zh: '精确匹配客户端 ID',
     en: 'Exactly Match Client ID',
   },
+  fuzzy: {
+    zh: '模糊匹配',
+    en: 'Fuzzy',
+  },
+  exact: {
+    zh: '精确匹配',
+    en: 'Exact',
+  },
 }
