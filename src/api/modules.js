@@ -133,4 +133,12 @@ export function updateDevice(deviceId, data) {
   return http.put(`/gcp_devices/${deviceId}`, data)
 }
 
+export function queryAuditLogs(params) {
+  return http.get(`/audits`, { params })
+}
+
+export function queryNodeAuditLogs(node, params) {
+  return http.get(`/nodes/${node}/audits`, { params })
+}
+
 export default {}

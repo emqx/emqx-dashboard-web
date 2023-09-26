@@ -74,6 +74,15 @@
               <GCPIoT v-if="detailTabs === 'devices'" />
             </el-tab-pane>
           </template>
+          <template v-else-if="moduleData.type == 'audit'">
+            <el-tab-pane
+              ref="moduleSpecialTab"
+              :label="$t('Modules.deviceManagement')"
+              :name="specialModuleDefaultTabName"
+            >
+              <AuditLog v-if="detailTabs === 'logs'" />
+            </el-tab-pane>
+          </template>
         </template>
         <el-tab-pane :label="$t('Modules.configuration')" name="configuration">
           <!-- <div class="emq-title module-title">
@@ -241,6 +250,7 @@ import TLSVersionSelect from '@/components/TLSVersionSelect.vue'
 
 import LogTrace from './components/LogTrace/LogTrace'
 import Listeners from './components/Listeners'
+import AuditLog from './components/AuditLog/AuditLog'
 
 import { getParamItemSpan, isParamBoolType, findParamItemByKey } from '@/common/someUtilsForSchemaForm.js'
 import { diffConfigList } from '@/common/someUtilsForCfgselect.js'
@@ -264,6 +274,7 @@ export default {
     LogTrace,
     TLSVersionSelect,
     GCPIoT,
+    AuditLog,
   },
 
   mixins: [handleMongoDBSRV('module')],
@@ -301,6 +312,7 @@ export default {
         slow_subscribers_statistics: 'subscribers',
         tracer: 'trace',
         gcp_device: 'devices',
+        audit: 'logs',
       },
       // canManageModuleTypes: [
       //   'mnesia_authentication',
