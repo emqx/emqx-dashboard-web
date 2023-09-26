@@ -21,7 +21,18 @@
         <div class="emq-table-header">
           <el-row class="search-wrapper" :gutter="20">
             <el-col :span="8">
-              <el-input v-model="fuzzyParams.clientid" size="small" :placeholder="$t('Clients.clientId')"></el-input>
+              <el-row class="form-item-row">
+                <el-col :span="8">
+                  <el-select v-model="isExactMatch" class="comparator" size="small">
+                    <el-option :label="$t('Clients.fuzzy')" :value="false" />
+                    <el-option :label="$t('Clients.exact')" :value="true" />
+                  </el-select>
+                </el-col>
+                <el-col :span="16">
+                  <el-input v-model="fuzzyParams.clientid" size="small" :placeholder="$t('Clients.clientId')">
+                  </el-input>
+                </el-col>
+              </el-row>
             </el-col>
             <el-col :span="8">
               <el-input
@@ -75,9 +86,6 @@
                   <el-option label="True" :value="true" />
                   <el-option label="False" :value="false" />
                 </el-select>
-              </el-col>
-              <el-col :span="8" class="check-box-wrap">
-                <el-checkbox v-model="isExactMatch">{{ $t('Clients.exactlyMatching') }}</el-checkbox>
               </el-col>
             </template>
             <div class="col-oper">
@@ -214,7 +222,7 @@ export default {
       resetIcon: 'el-icon-refresh',
       isExactMatch: false,
       fuzzyParams: {
-        clientId: '',
+        clientid: '',
         comparator: '_gte',
       },
       protoNames: ['MQTT', 'MQTT-SN', 'CoAP', 'LwM2M'],
@@ -374,7 +382,8 @@ export default {
         .el-select.comparator .el-input__inner {
           border-radius: 4px 0 0 4px;
         }
-        .el-date-editor .el-input__inner {
+        .el-date-editor .el-input__inner,
+        .el-input .el-input__inner {
           border-radius: 0 4px 4px 0;
         }
       }
