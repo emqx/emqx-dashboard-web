@@ -62,7 +62,13 @@
       <el-button plain :disabled="selfDisabled" type="default" size="medium" @click="cancel">
         {{ $t('Base.cancel') }}
       </el-button>
-      <el-button :disabled="selfDisabled" :loading="btnLoading" type="primary" size="medium" @click="save">
+      <el-button
+        :disabled="selfDisabled || notAbleChange"
+        :loading="btnLoading"
+        type="primary"
+        size="medium"
+        @click="save"
+      >
         {{ $t('Base.apply') }}
       </el-button>
     </el-col>

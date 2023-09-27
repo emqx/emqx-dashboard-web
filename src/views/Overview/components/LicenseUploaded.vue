@@ -6,8 +6,9 @@
     action="/api/v4/license/upload"
     :before-upload="handleUpload"
     :on-error="handleError"
+    :disabled="notAbleChange"
   >
-    <el-button type="primary" size="small">
+    <el-button type="primary" size="small" :disabled="notAbleChange">
       <i class="el-icon-upload2" />
       <span> {{ $t('Overview.updateLicense') }} </span>
     </el-button>

@@ -29,12 +29,13 @@
               :show-file-list="false"
               :on-change="handleChange"
               :on-error="handleError"
+              :disabled="notAbleChange"
             >
-              <el-button slot="trigger" size="small" icon="el-icon-upload2">
+              <el-button slot="trigger" size="small" icon="el-icon-upload2" :disabled="notAbleChange">
                 {{ $t('Modules.import') }}
               </el-button>
             </el-upload>
-            <el-button type="primary" icon="el-icon-plus" size="small" @click="addDevice">
+            <el-button type="primary" icon="el-icon-plus" size="small" :disabled="notAbleChange" @click="addDevice">
               {{ $t('Base.add') }}
             </el-button>
           </div>
@@ -47,10 +48,10 @@
           <el-table-column prop="keys.length" :label="$t('Modules.devicePublicKey')" />
           <el-table-column width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showEdit(row)">
+              <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="showEdit(row)">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="handleDelete(row)">
+              <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="handleDelete(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>

@@ -24,10 +24,10 @@
       <el-button plain size="small" class="cache-btn" @click="showDialog = false">
         {{ $t('Base.cancel') }}
       </el-button>
-      <el-button v-if="!auth" type="primary" size="small" @click="add">
+      <el-button v-if="!auth" type="primary" size="small" :disabled="notAbleChange" @click="add">
         {{ $t('Base.add') }}
       </el-button>
-      <el-button v-else type="primary" size="small" @click="handleEdit">
+      <el-button v-else type="primary" size="small" :disabled="notAbleChange" @click="handleEdit">
         {{ $t('Base.confirm') }}
       </el-button>
     </div>

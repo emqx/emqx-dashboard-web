@@ -3,7 +3,7 @@
     <el-row :gutter="30">
       <el-col>
         <div class="slow-query-header">
-          <el-button class="confirm-btn" type="primary" size="small" @click="clearData">
+          <el-button class="confirm-btn" type="primary" size="small" :disabled="notAbleChange" @click="clearData">
             {{ $t('Modules.clearData') }}
           </el-button>
         </div>

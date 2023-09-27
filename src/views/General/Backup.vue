@@ -11,7 +11,7 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="handleExport">
+          <el-button type="primary" size="small" icon="el-icon-plus" :disabled="notAbleChange" @click="handleExport">
             {{ $t('Backup.createBackup') }}
           </el-button>
           <el-upload
@@ -24,8 +24,9 @@
             :auto-upload="false"
             :on-change="handleChange"
             :on-error="handleError"
+            :disabled="notAbleChange"
           >
-            <el-button slot="trigger" size="small" icon="el-icon-upload2">
+            <el-button slot="trigger" size="small" icon="el-icon-upload2" :disabled="notAbleChange">
               {{ $t('Backup.uploadServer') }}
             </el-button>
           </el-upload>
@@ -43,9 +44,11 @@
           <el-table-column width="250px">
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="handleDownload(row)">{{ $t('Backup.download') }} </el-button>
-              <el-button type="dashed" size="mini" @click="handleRestore(row)">{{ $t('Backup.restore') }} </el-button>
-              <el-button type="dashed danger" size="mini" @click="deleteConfirm(row)"
-                >{{ $t('Base.delete') }}
+              <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="handleRestore(row)">
+                {{ $t('Backup.restore') }}
+              </el-button>
+              <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="deleteConfirm(row)">
+                {{ $t('Base.delete') }}
               </el-button>
             </template>
           </el-table-column>

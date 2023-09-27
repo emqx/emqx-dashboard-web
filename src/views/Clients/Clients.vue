@@ -152,7 +152,7 @@
           <el-table-column prop="connected_at" min-width="140px" :label="$t('Clients.connectionAt')"></el-table-column>
           <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
-              <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
+              <el-button size="mini" type="dashed" @click="handleDisconnect(row)" :disabled="notAbleChange">
                 {{ row.connected ? $t('Clients.kickOut') : $t('Clients.cleanSession') }}
               </el-button>
             </template>

@@ -89,7 +89,7 @@
 
                   <el-form-item>
                     <span slot="label">&nbsp;</span>
-                    <el-button type="primary" @click="handleSQLTest">
+                    <el-button type="primary" :disabled="notAbleChange" @click="handleSQLTest">
                       {{ $t('RuleEngine.sqlTest') }}
                     </el-button>
                   </el-form-item>
@@ -139,7 +139,7 @@
       <el-button type="default" size="medium" @click="$router.push({ path: '/rules' })">
         {{ $t('Base.cancel') }}
       </el-button>
-      <el-button type="primary" size="medium" @click="save">
+      <el-button type="primary" size="medium" :disabled="notAbleChange" @click="save">
         {{ isEdit ? $t('Base.confirm') : $t('Base.create') }}
       </el-button>
     </div>

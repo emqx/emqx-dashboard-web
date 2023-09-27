@@ -11,7 +11,7 @@
               type="danger"
               plain
               @click="clearHistoryAlarm"
-              :disabled="!tableData.length"
+              :disabled="!tableData.length || notAbleChange"
               size="mini"
             >
               {{ $t('Alerts.clearHistory') }}

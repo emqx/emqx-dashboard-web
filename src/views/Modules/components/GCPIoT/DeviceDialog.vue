@@ -25,7 +25,7 @@
                 icon="el-icon-plus"
                 size="small"
                 @click="showKeyDialog"
-                :disabled="device.keys.length >= 3"
+                :disabled="device.keys.length >= 3 || notAbleChange"
               >
                 {{ $t('Base.add') }}
               </el-button>
@@ -43,7 +43,7 @@
                 </el-table-column>
                 <el-table-column width="80px">
                   <template slot-scope="{ $index }">
-                    <el-button type="dashed danger" size="mini" @click="deleteKey($index)">
+                    <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="deleteKey($index)">
                       {{ $t('Base.delete') }}
                     </el-button>
                   </template>
@@ -71,7 +71,9 @@
     </div>
     <div slot="footer" class="dialog-align-footer">
       <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
-      <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
+      <el-button type="primary" size="small" :disabled="notAbleChange" @click="save">
+        {{ $t('Base.confirm') }}
+      </el-button>
     </div>
     <PubKeyDialog v-model="isPubKeyDialogShow" @save="addPubKey" />
   </el-dialog>

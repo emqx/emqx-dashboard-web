@@ -16,7 +16,7 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog">
+          <el-button type="primary" size="small" icon="el-icon-plus" :disabled="notAbleChange" @click="showDialog">
             {{ $t('Base.create') }}
           </el-button>
         </div>
@@ -28,7 +28,9 @@
           </el-table-column>
           <el-table-column prop="oper" width="120px" label="">
             <template slot-scope="{ row }">
-              <el-button type="danger" size="mini" @click="deleteConfirm(row)">{{ $t('Base.delete') }} </el-button>
+              <el-button type="danger" size="mini" :disabled="notAbleChange" @click="deleteConfirm(row)">
+                {{ $t('Base.delete') }}
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -84,7 +86,9 @@
 
       <div slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="closeDialog">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
+        <el-button type="primary" size="small" :disabled="notAbleChange" @click="save">
+          {{ $t('Base.confirm') }}
+        </el-button>
       </div>
     </el-dialog>
   </div>

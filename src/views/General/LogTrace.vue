@@ -11,7 +11,13 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="handleDialogOpen('create')">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            :disabled="notAbleChange"
+            @click="handleDialogOpen('create')"
+          >
             {{ $t('LogTrace.createTrace') }}
           </el-button>
         </div>
@@ -32,6 +38,7 @@
                 type="dashed danger"
                 :loading="btnLoading === 'deleteBtn'"
                 size="mini"
+                :disabled="notAbleChange"
                 @click="deleteConfirm(row)"
               >
                 {{ $t('Base.delete') }}
@@ -78,7 +85,13 @@
 
       <div v-if="accessType === 'create'" slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="dialogVisible = false">{{ $t('Base.cancel') }}</el-button>
-        <el-button :loading="btnLoading === 'createBtn'" type="primary" size="small" @click="handleCreateTrace">
+        <el-button
+          :loading="btnLoading === 'createBtn'"
+          type="primary"
+          size="small"
+          :disabled="notAbleChange"
+          @click="handleCreateTrace"
+        >
           {{ $t('Base.confirm') }}
         </el-button>
       </div>

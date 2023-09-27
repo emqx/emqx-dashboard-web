@@ -9,10 +9,16 @@
       </div>
 
       <div class="page-header-top-start btn" v-if="isThisClientExist">
-        <el-button v-if="record.connected" type="danger" size="small" @click="handleDisconnect">
+        <el-button
+          v-if="record.connected"
+          type="danger"
+          size="small"
+          @click="handleDisconnect"
+          :disabled="notAbleChange"
+        >
           {{ $t('Clients.kickOut') }}
         </el-button>
-        <el-button v-else type="danger" size="small" @click="handleDisconnect">
+        <el-button v-else type="danger" size="small" @click="handleDisconnect" :disabled="notAbleChange">
           {{ $t('Clients.cleanSession') }}
         </el-button>
       </div>
@@ -251,7 +257,7 @@
                   <el-button plain size="mini" icon="el-icon-refresh" @click="loadData">
                     {{ $t('Clients.refresh') }}
                   </el-button>
-                  <el-button plain size="mini" icon="el-icon-plus" @click="handlePreAdd">
+                  <el-button plain size="mini" icon="el-icon-plus" :disabled="notAbleChange" @click="handlePreAdd">
                     {{ $t('Clients.addASubscription') }}
                   </el-button>
                 </div>
@@ -262,7 +268,7 @@
                 <el-table-column prop="node" min-width="80px" :label="$t('Clients.node')"></el-table-column>
                 <el-table-column prop="clientid" width="110px">
                   <template slot-scope="{ row }">
-                    <el-button type="dashed" size="mini" @click="handleUnSubscription(row)">
+                    <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="handleUnSubscription(row)">
                       {{ $t('Clients.unsubscribe') }}
                     </el-button>
                   </template>

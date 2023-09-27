@@ -20,7 +20,13 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="showDialog('create')">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            :disabled="notAbleChange"
+            @click="showDialog('create')"
+          >
             {{ $t('Base.create') }}
           </el-button>
         </div>
@@ -53,10 +59,10 @@
           </el-table-column>
           <el-table-column>
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
+              <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="showDialog('edit', row)">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="deleteConfirm(row)">
+              <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="deleteConfirm(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -114,7 +120,9 @@
 
       <div v-if="accessType !== 'view'" slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="dialogVisible = false">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="save">{{ $t('Base.confirm') }}</el-button>
+        <el-button type="primary" size="small" :disabled="notAbleChange" @click="save">
+          {{ $t('Base.confirm') }}
+        </el-button>
       </div>
     </el-dialog>
   </div>

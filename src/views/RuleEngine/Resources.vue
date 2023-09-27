@@ -3,7 +3,13 @@
     <div class="app-wrapper">
       <a-card class="emq-list-card" :loading="listLoading">
         <div class="emq-table-header">
-          <el-button type="primary" size="small" icon="el-icon-plus" @click="handleDialogVisible('add')">
+          <el-button
+            type="primary"
+            size="small"
+            icon="el-icon-plus"
+            :disabled="notAbleChange"
+            @click="handleDialogVisible('add')"
+          >
             {{ $t('Base.create') }}
           </el-button>
         </div>
@@ -64,10 +70,10 @@
               <el-button type="dashed" size="mini" @click="viewResourcesStatus(row, $index)">
                 {{ $t('RuleEngine.status') }}
               </el-button>
-              <el-button type="dashed" size="mini" @click="handleDialogVisible('edit', row)">
+              <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="handleDialogVisible('edit', row)">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="deleteResource(row)">
+              <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="deleteResource(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>

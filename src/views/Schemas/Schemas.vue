@@ -23,6 +23,7 @@
             type="primary"
             size="small"
             icon="el-icon-plus"
+            :disabled="notAbleChange"
             @click="
               $router.push({
                 name: 'schemas-details',
@@ -63,7 +64,7 @@
           <el-table-column prop="descr" show-overflow-tooltip :label="$t('Schemas.description')"></el-table-column>
           <el-table-column width="80px">
             <template slot-scope="{ row }">
-              <el-button type="dashed danger" size="mini" @click="deleteData(row)">
+              <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="deleteData(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>

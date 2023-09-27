@@ -105,7 +105,13 @@
         </a-card>
         <a-card class="emq-list-card" :loading="listLoading">
           <div class="emq-table-header">
-            <el-button type="primary" size="small" icon="el-icon-plus" @click="$router.push('/rules/create')">
+            <el-button
+              type="primary"
+              size="small"
+              icon="el-icon-plus"
+              :disabled="notAbleChange"
+              @click="$router.push('/rules/create')"
+            >
               {{ $t('Base.create') }}
             </el-button>
           </div>
@@ -171,13 +177,13 @@
             </el-table-column>
             <el-table-column width="200px" prop="id">
               <template slot-scope="{ row }">
-                <el-button type="dashed" size="mini" @click="editRule(row)">
+                <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="editRule(row)">
                   {{ $t('Base.edit') }}
                 </el-button>
-                <el-button type="dashed" size="mini" @click="copyRule(row)">
+                <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="copyRule(row)">
                   {{ $t('RuleEngine.duplicate') }}
                 </el-button>
-                <el-button type="dashed danger" size="mini" @click="deleteRule(row)">
+                <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="deleteRule(row)">
                   {{ $t('Base.delete') }}
                 </el-button>
               </template>
@@ -210,7 +216,7 @@
     </div>
 
     <a-drawer v-bind="rulesDrawer" placement="right" closable :visible="metricsDrawerVisible" @close="onMetricsClose">
-      <el-button class="btn-reset" type="primary" plain size="small" @click="resetStatistics">
+      <el-button class="btn-reset" type="primary" plain size="small" :disabled="notAbleChange" @click="resetStatistics">
         {{ $t('RuleEngine.resetRuleStatistics') }}
       </el-button>
       <div class="rule-metrics">

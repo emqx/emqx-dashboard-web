@@ -22,7 +22,7 @@
     <div v-else class="not-settings">
       <img src="../../assets/img/not_settings.png" alt="" width="375" />
       <p v-html="$t('Settings.openModuleTip')">{{ $t('Settings.openModuleTip') }}</p>
-      <el-button size="small" class="confirm-btn" type="primary" @click="handleModLoad">
+      <el-button size="small" class="confirm-btn" type="primary" :disabled="notAbleChange" @click="handleModLoad">
         {{ $t('Analysis.enable') }}
       </el-button>
     </div>

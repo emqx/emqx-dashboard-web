@@ -23,7 +23,7 @@
               </el-input>
             </el-col>
             <div class="col-oper">
-              <el-button type="primary" icon="el-icon-plus" size="small" @click="save">
+              <el-button type="primary" icon="el-icon-plus" size="small" :disabled="notAbleChange" @click="save">
                 {{ $t('Base.add') }}
               </el-button>
             </div>
@@ -34,10 +34,10 @@
           <el-table-column prop="username" :label="$t('Clients.username')"> </el-table-column>
           <el-table-column prop="oper" width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" @click="showEdit(row)">
+              <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="showEdit(row)">
                 {{ $t('Base.edit') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="handleDelete(row)">
+              <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="handleDelete(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -66,7 +66,7 @@
         <el-button plain size="small" class="cache-btn" @click="editVisible = false">
           {{ $t('Base.cancel') }}
         </el-button>
-        <el-button type="primary" size="small" @click="handleEdit">
+        <el-button type="primary" size="small" :disabled="notAbleChange" @click="handleEdit">
           {{ $t('Base.confirm') }}
         </el-button>
       </div>
