@@ -52,6 +52,7 @@
                 v-model="row.status"
                 active-color="#13ce66"
                 inactive-color="#d0d3e0"
+                :disabled="notAbleChange"
                 @change="updateApplication(row)"
               >
               </el-switch>
