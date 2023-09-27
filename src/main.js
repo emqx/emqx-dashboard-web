@@ -5,6 +5,7 @@ import Waves from 'vue-directive-waves'
 import VueI18n from 'vue-i18n'
 import ElementLocale from 'element-ui/lib/locale'
 import lang from './i18n'
+import permission from '@/plugins/permission'
 
 import installer from '@/common/installer'
 import directive from '@/common/directive'
@@ -23,6 +24,7 @@ Vue.use(installer)
 Vue.use(ElementUI)
 Vue.use(Waves)
 Vue.use(directive)
+Vue.use(permission)
 
 const i18n = new VueI18n({
   locale: store.state.lang,
