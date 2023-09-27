@@ -108,13 +108,7 @@ export default {
           this.loginError = ''
           const { is_default_password } = res
           const isUsingDefaultPwd = password === DEFAULT_PWD
-          // FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:
-          // FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:
-          // FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:
-          // FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:
-          // FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:FIXME:
-          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, isUsingDefaultPwd, role: 'viewer' })
-          // this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, isUsingDefaultPwd })
+          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, isUsingDefaultPwd })
           if (is_default_password && this.isNeedAuth) {
             this.needChangePwd = true
             return
