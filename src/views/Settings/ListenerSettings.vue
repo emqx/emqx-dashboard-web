@@ -45,7 +45,9 @@
           </span>
         </el-col>
         <el-col v-if="oper === 'edit'" :span="4" :offset="16">
-          <span class="delete-button" @click="deleteListener">{{ $t('Base.delete') }}</span>
+          <el-button type="text" class="delete-button" :disabled="notAbleChange" @click="deleteListener">
+            {{ $t('Base.delete') }}
+          </el-button>
         </el-col>
       </el-row>
 
@@ -230,14 +232,13 @@ export default {
       font-weight: bold;
     }
   }
-  .delete-button {
-    display: inline-block;
-    color: #ff0000;
-    font-size: 14px;
-    cursor: pointer;
-  }
   .el-col-offset-16 {
     text-align: right;
   }
+}
+.delete-button {
+  display: inline-block;
+  color: #ff0000;
+  font-size: 14px;
 }
 </style>
