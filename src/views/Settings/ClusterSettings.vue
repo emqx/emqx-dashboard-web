@@ -31,14 +31,14 @@
                 <a v-if="node.joined" class="node-oper" href="javascript:;" @click="toNodeDetails(node.name)">
                   {{ $t('Overview.view') }}
                 </a>
-                <a
+                <el-button
                   v-if="node.joined && currentNodes.length > 1 && record.type === 'manual'"
+                  :disabled="notAbleChange"
                   class="node-oper danger"
-                  href="javascript:;"
                   @click="removeNode(node.name)"
                 >
                   {{ $t('Settings.remove') }}
-                </a>
+                </el-button>
                 <!-- static -->
                 <span v-else-if="!node.joined && record.type === 'static'" class="not-join__desc">
                   {{ $t('Settings.notJoined') }}
@@ -54,9 +54,9 @@
               </el-form-item>
             </el-col>
             <el-col :span="12" class="form-item-desc">
-              <a href="javascript:;" @click="handleInviteNode">
+              <el-button type="text" :disabled="notAbleChange" @click="handleInviteNode">
                 {{ $t('Settings.invite') }}
-              </a>
+              </el-button>
             </el-col>
           </template>
         </template>

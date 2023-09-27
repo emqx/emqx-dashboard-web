@@ -24,7 +24,7 @@
           <a-skeleton active></a-skeleton>
         </template>
       </el-tab-pane>
-      <el-tab-pane label="" name="addZone">
+      <el-tab-pane label="" name="addZone" :disabled="notAbleChange">
         <span slot="label" size="mini">
           <i class="el-icon-plus"></i>
         </span>
