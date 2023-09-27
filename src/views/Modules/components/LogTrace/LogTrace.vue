@@ -1,6 +1,8 @@
 <template>
   <div class="log-trace">
-    <el-button size="small" @click="openCreateDialog" type="primary">{{ $t('Base.create') }}</el-button>
+    <el-button size="small" :disabled="notAbleChange" @click="openCreateDialog" type="primary">
+      {{ $t('Base.create') }}
+    </el-button>
     <!-- <div class="part-header">
       {{ $t('LogTrace.activeList') }}
     </div> -->
@@ -42,12 +44,14 @@
             {{ $t('LogTrace.download') }}
           </el-button>
           <template v-if="row.status !== 'stopped'">
-            <el-button size="mini" type="dashed" @click="stopTraceHandler(row)">{{ $t('LogTrace.stop') }}</el-button>
+            <el-button size="mini" type="dashed" :disabled="notAbleChange" @click="stopTraceHandler(row)">
+              {{ $t('LogTrace.stop') }}
+            </el-button>
           </template>
           <template v-else>
-            <el-button size="mini" type="dashed" @click="deleteTraceHandler(row)">{{
-              $t('LogTrace.delete')
-            }}</el-button>
+            <el-button size="mini" type="dashed" :disabled="notAbleChange" @click="deleteTraceHandler(row)">
+              {{ $t('LogTrace.delete') }}
+            </el-button>
           </template>
         </template>
       </el-table-column>
@@ -153,6 +157,7 @@
           class="dialog-primary-btn"
           type="primary"
           size="small"
+          :disabled="notAbleChange"
           @click="submitTrace()"
           :loading="createLoading"
         >

@@ -8,6 +8,7 @@
         type="danger"
         size="mini"
         :loading="item.loading"
+        :disabled="notAbleChange"
         @click="resourceReconnect(item)"
       >
         {{ $t('RuleEngine.reconnect') }}

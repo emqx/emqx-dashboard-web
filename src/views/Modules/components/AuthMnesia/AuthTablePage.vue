@@ -17,7 +17,7 @@
             </el-button>
           </el-col>
         </el-row>
-        <el-button type="primary" icon="el-icon-plus" size="small" @click="addAuth">
+        <el-button type="primary" icon="el-icon-plus" size="small" :disabled="notAbleChange" @click="addAuth">
           {{ $t('Base.add') }}
         </el-button>
       </div>
@@ -26,10 +26,10 @@
       <el-table-column :prop="type" :label="$t(`Clients.${type}`)" />
       <el-table-column prop="oper" width="120px">
         <template slot-scope="{ row }">
-          <el-button type="dashed" size="mini" @click="showEdit(row)">
+          <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="showEdit(row)">
             {{ $t('Base.edit') }}
           </el-button>
-          <el-button type="dashed danger" size="mini" @click="handleDelete(row)">
+          <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="handleDelete(row)">
             {{ $t('Base.delete') }}
           </el-button>
         </template>

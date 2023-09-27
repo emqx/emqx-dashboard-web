@@ -83,6 +83,7 @@
                 <el-button
                   v-if="!primaryList.includes(item.name)"
                   :type="item.active ? 'danger' : 'dashed'"
+                  :disabled="notAbleChange"
                   size="small"
                   @click="togglePlugin(item)"
                 >
@@ -140,6 +141,7 @@
             <el-button
               v-if="!primaryList.includes(item.name)"
               :type="item.active ? 'danger' : 'dashed'"
+              :disabled="notAbleChange"
               size="small"
               @click="togglePlugin(item)"
             >

@@ -17,7 +17,9 @@
     <template #footer>
       <span class="dialog-footer dialog-align-footer">
         <el-button size="small" @click="showDialog = false">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="save" :loading="addLoading">{{ $t('Base.add') }}</el-button>
+        <el-button type="primary" size="small" @click="save" :disabled="notAbleChange" :loading="addLoading">
+          {{ $t('Base.add') }}
+        </el-button>
       </span>
     </template>
   </el-dialog>

@@ -15,10 +15,10 @@
       </div>
 
       <div class="page-header-top-start oper-button">
-        <el-button type="info" size="small" @click="toReadMore(moduleData.type)">{{
-          $t('Modules.readMore')
-        }}</el-button>
-        <el-button type="danger" size="small" v-if="oper === 'edit'" @click="deleteModule">
+        <el-button type="info" size="small" @click="toReadMore(moduleData.type)">
+          {{ $t('Modules.readMore') }}
+        </el-button>
+        <el-button type="danger" size="small" v-if="oper === 'edit'" :disabled="notAbleChange" @click="deleteModule">
           {{ $t('Base.delete') }}
         </el-button>
       </div>
@@ -208,6 +208,7 @@
               class="dialog-primary-btn"
               type="primary"
               size="small"
+              :disabled="notAbleChange"
               @click="handleCreate()"
             >
               <span v-if="oper === 'add'">{{ $t('Base.add') }}</span>

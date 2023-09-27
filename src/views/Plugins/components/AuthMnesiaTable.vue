@@ -37,7 +37,7 @@
                 </el-input>
               </el-col>
               <div class="col-oper">
-                <el-button type="primary" icon="el-icon-plus" size="small" @click="AuthSave">
+                <el-button type="primary" icon="el-icon-plus" size="small" :disabled="notAbleChange" @click="AuthSave">
                   {{ $t('Base.add') }}
                 </el-button>
               </div>
@@ -51,10 +51,10 @@
             </el-table-column>
             <el-table-column prop="oper" width="120px">
               <template slot-scope="{ row }">
-                <el-button type="dashed" size="mini" @click="showAuthEdit(row)">
+                <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="showAuthEdit(row)">
                   {{ $t('Base.edit') }}
                 </el-button>
-                <el-button type="dashed danger" size="mini" @click="handleAuthDelete(row)">
+                <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="handleAuthDelete(row)">
                   {{ $t('Base.delete') }}
                 </el-button>
               </template>
@@ -119,7 +119,7 @@
                 <emq-select v-model="aclRecord.action" size="small" :field="{ options: actionOptions }"> </emq-select>
               </el-col>
               <div class="col-oper">
-                <el-button type="primary" icon="el-icon-plus" size="small" @click="ACLSave">
+                <el-button type="primary" icon="el-icon-plus" size="small" :disabled="notAbleChange" @click="ACLSave">
                   {{ $t('Base.add') }}
                 </el-button>
               </div>
@@ -140,7 +140,7 @@
             </el-table-column>
             <el-table-column prop="oper" width="120px">
               <template slot-scope="{ row }">
-                <el-button type="dashed danger" size="mini" @click="handleACLDelete(row)">
+                <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="handleACLDelete(row)">
                   {{ $t('Base.delete') }}
                 </el-button>
               </template>
@@ -184,7 +184,7 @@
         <el-button plain size="small" class="cache-btn" @click="editVisible = false">
           {{ $t('Base.cancel') }}
         </el-button>
-        <el-button type="primary" size="small" @click="handleAuthEdit">
+        <el-button type="primary" size="small" :disabled="notAbleChange" @click="handleAuthEdit">
           {{ $t('Base.confirm') }}
         </el-button>
       </div>

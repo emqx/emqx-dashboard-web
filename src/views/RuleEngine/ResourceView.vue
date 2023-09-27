@@ -8,7 +8,7 @@
       </div>
 
       <div class="page-header-top-start btn">
-        <el-button type="danger" size="small" @click="deleteResource">
+        <el-button type="danger" size="small" :disabled="notAbleChange" @click="deleteResource">
           {{ $t('Base.delete') }}
         </el-button>
       </div>
@@ -38,6 +38,7 @@
                 size="mini"
                 style="margin-left: 12px"
                 type="primary"
+                :disabled="notAbleChange"
                 @click="reconnectResource"
               >
                 {{ $t('RuleEngine.reconnect') }}

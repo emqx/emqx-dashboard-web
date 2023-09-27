@@ -23,7 +23,7 @@
         </emq-select>
         <el-button
           :loading="loadingButton === 'testButton'"
-          :disabled="!record.type"
+          :disabled="!record.type || notAbleChange"
           type="primary"
           style="margin-left: 20px"
           @click="handleCreate(true)"
@@ -144,6 +144,7 @@
         class="dialog-primary-btn"
         type="primary"
         size="small"
+        :disabled="notAbleChange"
         @click="handleCreate(false)"
       >
         {{ $t('Base.confirm') }}

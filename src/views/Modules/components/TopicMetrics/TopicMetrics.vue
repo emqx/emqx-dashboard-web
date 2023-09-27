@@ -18,10 +18,18 @@
             size="small"
             icon="el-icon-plus"
             @click="handleOperation"
+            :disabled="notAbleChange"
           >
             {{ $t('Base.create') }}
           </el-button>
-          <el-button v-else size="small" class="confirm-btn" type="primary" @click="handleModLoad">
+          <el-button
+            v-else
+            size="small"
+            class="confirm-btn"
+            type="primary"
+            :disabled="notAbleChange"
+            @click="handleModLoad"
+          >
             {{ $t('Analysis.enable') }}
           </el-button>
         </div>
@@ -99,7 +107,7 @@
               <el-button size="mini" type="dashed" @click="viewTopicDetails(row, $index)">
                 {{ $t('Base.view') }}
               </el-button>
-              <el-button type="dashed danger" size="mini" @click="deleteTopicMetric(row)">
+              <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="deleteTopicMetric(row)">
                 {{ $t('Base.delete') }}
               </el-button>
             </template>
@@ -123,7 +131,9 @@
 
       <div slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="handleClose">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="handleAdd">{{ $t('Base.confirm') }}</el-button>
+        <el-button type="primary" size="small" :disabled="notAbleChange" @click="handleAdd">
+          {{ $t('Base.confirm') }}
+        </el-button>
       </div>
     </el-dialog>
   </div>

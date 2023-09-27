@@ -50,7 +50,7 @@
         <el-table-column prop="version" :label="$t('Schemas.version')"> </el-table-column>
         <el-table-column width="120px">
           <template slot-scope="{ row }">
-            <el-button size="mini" type="dashed" @click="handleDisconnect(row)">
+            <el-button size="mini" type="dashed" :disabled="notAbleChange" @click="handleDisconnect(row)">
               {{ $t('Clients.kickOut') }}
             </el-button>
           </template>

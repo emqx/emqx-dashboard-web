@@ -20,7 +20,13 @@
               :open-delay="500"
               :content="$t('RuleEngine.fallbackActionCreate')"
             >
-              <el-button slot="reference" type="text" icon="el-icon-plus" @click="handleAddFallbacks(item, i)">
+              <el-button
+                slot="reference"
+                type="text"
+                icon="el-icon-plus"
+                :disabled="notAbleChange"
+                @click="handleAddFallbacks(item, i)"
+              >
                 {{ $t('RuleEngine.fallbackAction') }}
               </el-button>
             </el-popover>
@@ -166,7 +172,7 @@
       </template>
     </div>
 
-    <el-button v-if="!disabled" size="small" icon="el-icon-plus" @click="addAction">
+    <el-button v-if="!disabled" size="small" icon="el-icon-plus" :disabled="notAbleChange" @click="addAction">
       {{ $t('RuleEngine.addAction') }}
     </el-button>
 
@@ -303,7 +309,13 @@
         <el-button size="small" @click="handleCancel">
           {{ $t('Base.cancel') }}
         </el-button>
-        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">
+        <el-button
+          class="dialog-primary-btn"
+          type="primary"
+          size="small"
+          :disabled="notAbleChange"
+          @click="handleCreate"
+        >
           {{ $t('Base.confirm') }}
         </el-button>
       </div>

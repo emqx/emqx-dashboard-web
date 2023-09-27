@@ -8,13 +8,13 @@
       </div>
 
       <div class="page-header-top-start btn">
-        <el-button size="small" @click="copyRule">
+        <el-button size="small" :disabled="notAbleChange" @click="copyRule">
           {{ $t('RuleEngine.duplicate') }}
         </el-button>
-        <el-button size="small" type="primary" plain @click="resetStatistics">
+        <el-button size="small" type="primary" plain :disabled="notAbleChange" @click="resetStatistics">
           {{ $t('RuleEngine.resetRuleStatistics') }}
         </el-button>
-        <el-button type="danger" size="small" @click="deleteRule">
+        <el-button type="danger" size="small" :disabled="notAbleChange" @click="deleteRule">
           {{ $t('Base.delete') }}
         </el-button>
       </div>

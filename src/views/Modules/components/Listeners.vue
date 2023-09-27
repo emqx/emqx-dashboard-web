@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <el-button size="small" icon="el-icon-plus" @click="addListener">
+    <el-button size="small" icon="el-icon-plus" :disabled="notAbleChange" @click="addListener">
       {{ $t('Modules.addListener') }}
     </el-button>
 
@@ -92,7 +92,13 @@
         <el-button size="small" @click="handleCancel">
           {{ $t('Base.cancel') }}
         </el-button>
-        <el-button class="dialog-primary-btn" type="primary" size="small" @click="handleCreate">
+        <el-button
+          class="dialog-primary-btn"
+          type="primary"
+          size="small"
+          :disabled="notAbleChange"
+          @click="handleCreate"
+        >
           {{ $t('Base.confirm') }}
         </el-button>
       </div>

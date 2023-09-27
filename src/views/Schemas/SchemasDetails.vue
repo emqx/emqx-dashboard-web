@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="page-header-top-start btn">
-        <el-button type="danger" size="small" @click="deleteData">
+        <el-button type="danger" size="small" :disabled="notAbleChange" @click="deleteData">
           {{ $t('Base.delete') }}
         </el-button>
       </div>
@@ -170,7 +170,7 @@
         </el-row>
 
         <div v-if="!disabled" class="button-group">
-          <el-button :loading="saveLoading" type="primary" size="medium" @click="save">
+          <el-button :loading="saveLoading" type="primary" size="medium" :disabled="notAbleChange" @click="save">
             {{ $t('Base.create') }}
           </el-button>
           <el-button type="default" size="medium" @click="$router.push({ path: '/schemas' })">

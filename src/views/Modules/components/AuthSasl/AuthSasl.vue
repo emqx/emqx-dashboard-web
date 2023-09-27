@@ -3,7 +3,7 @@
     <a-card class="emq-list-card">
       <div class="list-header">
         <div class="title">{{ $t('Modules.enhancedAuth') }}</div>
-        <el-button type="primary" size="small" @click="showDialog('add')">
+        <el-button type="primary" size="small" :disabled="notAbleChange" @click="showDialog('add')">
           {{ $t('Base.add') }}
         </el-button>
       </div>
@@ -19,10 +19,10 @@
         </el-table-column>
         <el-table-column prop="oper" width="120px">
           <template slot-scope="{ row }">
-            <el-button type="dashed" size="mini" @click="showDialog('edit', row)">
+            <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="showDialog('edit', row)">
               {{ $t('Base.edit') }}
             </el-button>
-            <el-button type="dashed danger" size="mini" @click="handleDelete(row)">
+            <el-button type="dashed danger" size="mini" :disabled="notAbleChange" @click="handleDelete(row)">
               {{ $t('Base.delete') }}
             </el-button>
           </template>
@@ -100,7 +100,9 @@
 
       <div v-if="oper !== 'view'" slot="footer" class="dialog-align-footer">
         <el-button plain size="small" @click="handleClose">{{ $t('Base.cancel') }}</el-button>
-        <el-button type="primary" size="small" @click="handleUpdate">{{ $t('Base.confirm') }}</el-button>
+        <el-button type="primary" size="small" :disabled="notAbleChange" @click="handleUpdate">
+          {{ $t('Base.confirm') }}
+        </el-button>
       </div>
     </el-dialog>
   </div>

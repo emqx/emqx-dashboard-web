@@ -99,6 +99,10 @@ export default {
     zh: '用户',
     en: 'Users',
   },
+  role: {
+    zh: '角色',
+    en: 'Role',
+  },
   manageDashboardUsers: {
     zh: 'Dashboard 登录管理用户',
     en: 'Manage Dashboard users',

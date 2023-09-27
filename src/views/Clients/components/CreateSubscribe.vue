@@ -23,7 +23,9 @@
 
     <div slot="footer" class="dialog-align-footer">
       <el-button plain size="small" @click="close">{{ $t('Base.cancel') }}</el-button>
-      <el-button type="primary" size="small" @click="handleAdd">{{ $t('Base.add') }}</el-button>
+      <el-button type="primary" size="small" @click="handleAdd" :disabled="notAbleChange">
+        {{ $t('Base.add') }}
+      </el-button>
     </div>
   </el-dialog>
 </template>
