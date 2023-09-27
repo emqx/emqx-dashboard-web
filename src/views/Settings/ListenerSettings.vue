@@ -28,6 +28,7 @@
               v-model="row.enabled"
               active-color="#13ce66"
               inactive-color="#d0d3e0"
+              :disabled="notAbleChange"
               @change="updataStatus(...arguments, row)"
             >
             </el-switch>
