@@ -64,8 +64,9 @@ export function destroyResource(id) {
   return http.delete(`/resources/${encodeURIComponent(id)}`)
 }
 
-export function reconnectResource(id) {
-  return http.post(`/resources/${encodeURIComponent(id)}`)
+export function reconnectResource(id, node) {
+  const params = node ? { node } : undefined
+  return http.post(`/resources/${encodeURIComponent(id)}`, undefined, { params })
 }
 
 export function SQLTest(rule = {}) {
