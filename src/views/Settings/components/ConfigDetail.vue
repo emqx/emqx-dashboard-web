@@ -57,7 +57,7 @@
 
                 <template v-else>
                   <template v-if="item.elType !== 'select'">
-                    <el-input
+                    <CustomNumberInput
                       v-if="item.type === 'number'"
                       v-model.number="record.configs[item.key]"
                       v-bind="item.bindAttributes"
@@ -130,6 +130,7 @@ import { loadZoneConfig, loadConfigSpec } from '@/api/settings'
 import { renderParamsForm, verifyID, verifyListener } from '@/common/utils'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import TLSVersionSelect from '@/components/TLSVersionSelect.vue'
+import CustomNumberInput from '@/components/CustomNumberInput.vue'
 
 export default {
   name: 'ConfigDetail',
@@ -141,6 +142,7 @@ export default {
 
   components: {
     TLSVersionSelect,
+    CustomNumberInput,
   },
 
   data() {
