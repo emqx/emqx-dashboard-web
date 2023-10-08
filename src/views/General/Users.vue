@@ -18,7 +18,11 @@
 
         <el-table :data="tableData" class="data-list">
           <el-table-column min-width="120px" prop="username" :label="$t('General.userName')"></el-table-column>
-          <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')"></el-table-column>
+          <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')">
+            <template slot-scope="{ row }">
+              {{ row.tags.desc }}
+            </template>
+          </el-table-column>
           <el-table-column width="120px">
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" @click="showDialog('edit', row)">{{ $t('Base.edit') }} </el-button>
@@ -137,7 +141,6 @@ export default {
       const { newPassword, repeatPassword } = pwdRule(validatePass)
       const ret = {
         username: [{ required: true, message: this.$t('General.enterOneUserName') }],
-        tags: [{ required: true, message: this.$t('General.pleaseEnterNotes') }],
         password: [
           {
             required: true,
