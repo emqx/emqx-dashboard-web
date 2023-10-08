@@ -454,21 +454,17 @@ export default {
     zh: '导入完成：成功 {suc}，失败 {failed}。',
     en: 'Import completed: {suc} succeeded, {failed} failed.',
   },
-  source: {
-    zh: '来源',
-    en: 'Source',
+  opSource: {
+    zh: '操作来源',
+    en: 'Source Type',
   },
-  sourceIp: {
-    zh: '源 IP',
-    en: 'Source IP',
+  source: {
+    zh: '用户/应用',
+    en: 'Source',
   },
   httpMethod: {
     zh: 'HTTP 请求方法',
     en: 'HTTP Method',
-  },
-  resourceType: {
-    zh: '资源分类',
-    en: 'Resource Type',
   },
   startTime: {
     zh: '开始时间',
@@ -478,9 +474,13 @@ export default {
     zh: '结束时间',
     en: 'End Time',
   },
-  resourceName: {
-    zh: '资源名称',
-    en: 'Resource Name',
+  opType: {
+    zh: '操作类型',
+    en: 'Operation Type',
+  },
+  opName: {
+    zh: '操作名称',
+    en: 'Operation Name',
   },
   resource: {
     zh: '资源',
@@ -505,5 +505,13 @@ export default {
   HTTPStatusCode: {
     zh: 'HTTP 状态码',
     en: ' HTTP Status Code',
+  },
+  info: {
+    zh: '信息',
+    en: 'Info',
+  },
+  user: {
+    zh: '用户',
+    en: 'User',
   },
 }
