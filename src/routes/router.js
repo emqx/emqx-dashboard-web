@@ -223,6 +223,22 @@ let routes = [
       },
     ],
   },
+  // 审计日志
+  {
+    path: '/log',
+    component: Layout,
+    meta: {
+      hideKey: 'general',
+      authRequired: true,
+    },
+    children: [
+      {
+        path: '',
+        name: 'log',
+        component: () => import('@/views/General/Log'),
+      },
+    ],
+  },
   // 黑名单
   {
     path: '/blacklist',

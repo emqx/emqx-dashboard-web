@@ -200,6 +200,12 @@ export default {
             parentKey: 'general',
           },
           {
+            title: this.$t('components.log'),
+            key: 'general.log',
+            path: '/log',
+            parentKey: 'log',
+          },
+          {
             title: this.$t('components.blacklist'),
             key: 'general.blacklist',
             path: '/blacklist',
