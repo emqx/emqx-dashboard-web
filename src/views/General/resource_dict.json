@@ -89,8 +89,8 @@
       "zh": "黑名单"
     },
     "data": {
-      "en": "File Management",
-      "zh": "文件管理"
+      "en": "Backup & Restore",
+      "zh": "备份与恢复"
     },
     "listeners": {
       "en": "Listener",
@@ -123,28 +123,24 @@
       "zh": "踢出客户端"
     },
     "clean_acl_cache": {
-      "en": "Clean ACL Cache",
-      "zh": "清除ACL缓存"
+      "en": "Clean Client ACL Cache",
+      "zh": "清除客户端 ACL 缓存"
     },
     "set_ratelimit_policy": {
-      "en": "Set Ratelimit Policy",
-      "zh": "设置限速策略"
+      "en": "Set Client Ratelimit Policy",
+      "zh": "设置客户端限速策略"
     },
     "clean_ratelimit": {
-      "en": "Clean Ratelimit",
-      "zh": "清除限速"
+      "en": "Clean Client Ratelimit",
+      "zh": "清除客户端限速策略"
     },
     "set_quota_policy": {
-      "en": "Set Quota Policy",
-      "zh": "设置配额策略"
+      "en": "Set Client Quota Policy",
+      "zh": "设置客户端配额策略"
     },
     "clean_quota": {
-      "en": "Clean Quota",
-      "zh": "清除配额"
-    },
-    "set_keepalive": {
-      "en": "Set Keepalive",
-      "zh": "设置保持连接"
+      "en": "Clean Client Quota",
+      "zh": "清除客户端配额"
     },
     "mqtt_subscribe": {
       "en": "MQTT Subscribe",
@@ -360,11 +356,11 @@
     },
     "create_banned": {
       "en": "Create Banned",
-      "zh": "创建封禁"
+      "zh": "创建黑名单"
     },
     "delete_banned": {
       "en": "Delete Banned",
-      "zh": "删除封禁"
+      "zh": "删除黑名单"
     },
     "export": {
       "en": "Export Backup Data",
@@ -449,10 +445,6 @@
     "load_rebalance_evacuation_stop": {
       "en": "Stop Node Evacuation",
       "zh": "停止节点疏散"
-    },
-    "delete": {
-      "en": "Delete File",
-      "zh": "删除文件"
     }
   }
 }
