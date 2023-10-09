@@ -263,8 +263,8 @@
       "zh": "删除监听器"
     },
     "auth_user": {
-      "en": "Auth User",
-      "zh": "认证用户"
+      "en": "User Logged In",
+      "zh": "用户登录"
     },
     "create_user": {
       "en": "Create User",

@@ -87,19 +87,6 @@
           {{ formatDate(row.created_at) }}
         </template>
       </el-table-column>
-      <el-table-column :label="$t('Modules.opSource')">
-        <template slot-scope="{ row }">
-          {{ getLabelFromOpts(row.source_type, sourceTypeOpt) }}
-          <br />
-          {{ getSourceData(row) }}
-        </template>
-      </el-table-column>
-      <el-table-column prop="source_ip" label="IP" />
-      <el-table-column :label="$t('Modules.operationResult')">
-        <template slot-scope="{ row }">
-          {{ getLabelFromOpts(row.operation_result, requestResultOpt) }}
-        </template>
-      </el-table-column>
       <el-table-column prop="operation_type" :label="$t('Modules.info')">
         <template slot-scope="{ row }">
           <template v-if="row.http_request.bindings && Object.keys(row.http_request.bindings).length > 0">
@@ -113,6 +100,19 @@
           </template>
           {{ getLabelFromOpts(row.operation_type, opTypeList) }}:
           {{ getLabelFromOpts(row.operation_name, opNameList) }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('Modules.opSource')">
+        <template slot-scope="{ row }">
+          {{ getLabelFromOpts(row.source_type, sourceTypeOpt) }}
+          <br />
+          {{ getSourceData(row) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="source_ip" label="IP" />
+      <el-table-column :label="$t('Modules.operationResult')">
+        <template slot-scope="{ row }">
+          {{ getLabelFromOpts(row.operation_result, requestResultOpt) }}
         </template>
       </el-table-column>
     </el-table>
