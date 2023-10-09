@@ -175,4 +175,8 @@ export default {
     zh: '在线 Trace',
     en: 'Online Trace',
   },
+  log: {
+    zh: '审计日志',
+    en: 'Audit Log',
+  },
 }
