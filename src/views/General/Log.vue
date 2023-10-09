@@ -192,7 +192,7 @@ import { fillI18n } from '@/common/utils'
 
 const SourceType = {
   Dashboard: 'dashboard',
-  Management: 'rest_api',
+  RestAPI: 'rest_api',
   CLI: 'cli',
 }
 
