@@ -42,7 +42,12 @@
                 </el-col>
                 <!-- Source Type -->
                 <el-col :span="8">
-                  <el-select v-model="filterParams.source_type" size="small" :placeholder="$t('Modules.opSource')">
+                  <el-select
+                    v-model="filterParams.source_type"
+                    size="small"
+                    :placeholder="$t('Modules.opSource')"
+                    clearable
+                  >
                     <el-option v-for="{ value, label } in sourceTypeOpt" :key="value" :label="label" :value="value" />
                   </el-select>
                 </el-col>
@@ -76,6 +81,7 @@
                       class="comparator"
                       size="small"
                       :placeholder="$t('Modules.operationResult')"
+                      clearable
                     >
                       <el-option
                         v-for="{ value, label } in requestResultOpt"
@@ -111,6 +117,13 @@
             </el-table-column>
             <el-table-column prop="operation_type" :label="$t('Modules.info')">
               <template slot-scope="{ row }">
+                <template v-if="row.source_type !== SourceType.CLI">
+                  {{ getLabelFromOpts(row.operation_type, opTypeList) }}:
+                  {{ getLabelFromOpts(row.operation_name, opNameList) }}
+                </template>
+                <template v-else>
+                  {{ Array.isArray(row.cli_args) ? row.cli_args.join(' ') : row.cli_args }}
+                </template>
                 <template v-if="row.http_request.bindings && Object.keys(row.http_request.bindings).length > 0">
                   <el-popover
                     placement="top"
@@ -125,13 +138,6 @@
                       <i class="iconfont icon-bangzhu"></i>
                     </span>
                   </el-popover>
-                </template>
-                <template v-if="row.source_type !== SourceType.CLI">
-                  {{ getLabelFromOpts(row.operation_type, opTypeList) }}:
-                  {{ getLabelFromOpts(row.operation_name, opNameList) }}
-                </template>
-                <template v-else>
-                  {{ Array.isArray(row.cli_args) ? row.cli_args.join(' ') : row.cli_args }}
                 </template>
               </template>
             </el-table-column>
@@ -486,9 +492,6 @@ export default {
         padding: 0 4px;
       }
     }
-  }
-  .icon-bangzhu {
-    cursor: pointer;
   }
 }
 </style>
