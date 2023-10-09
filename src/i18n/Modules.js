@@ -459,7 +459,7 @@ export default {
     en: 'Source Type',
   },
   source: {
-    zh: '用户/应用',
+    zh: '用户/AppID',
     en: 'Source',
   },
   httpMethod: {
