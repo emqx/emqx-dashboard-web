@@ -98,8 +98,13 @@
               </span>
             </el-popover>
           </template>
-          {{ getLabelFromOpts(row.operation_type, opTypeList) }}:
-          {{ getLabelFromOpts(row.operation_name, opNameList) }}
+          <template v-if="row.source_type !== SourceType.CLI">
+            {{ getLabelFromOpts(row.operation_type, opTypeList) }}:
+            {{ getLabelFromOpts(row.operation_name, opNameList) }}
+          </template>
+          <template v-else>
+            {{ Array.isArray(row.cli_args) ? row.cli_args.join(' ') : row.cli_args }}
+          </template>
         </template>
       </el-table-column>
       <el-table-column :label="$t('Modules.opSource')">
@@ -149,7 +154,7 @@ import resourceDict from './resource_dict.json'
 
 const SourceType = {
   Dashboard: 'dashboard',
-  Management: 'management',
+  Management: 'rest_api',
   CLI: 'cli',
 }
 
@@ -183,10 +188,11 @@ export default {
       label: value[langKey],
     }))
     return {
+      SourceType,
       isLoading: true,
       sourceTypeOpt: [
         { value: SourceType.Dashboard, label: 'Dashboard' },
-        { value: SourceType.Management, label: 'Management' },
+        { value: SourceType.RestAPI, label: 'REST API' },
         { value: SourceType.CLI, label: 'CLI' },
       ],
       requestResultOpt: [
@@ -300,7 +306,7 @@ export default {
       if (source_type === SourceType.CLI) {
         return `${this.$t('Clients.node')}: ${node || ''}`
       }
-      const label = source_type === SourceType.Management ? 'AppID' : this.$t('Modules.user')
+      const label = source_type === SourceType.RestAPI ? 'AppID' : this.$t('Modules.user')
       return `${label}: ${source}`
     },
   },
