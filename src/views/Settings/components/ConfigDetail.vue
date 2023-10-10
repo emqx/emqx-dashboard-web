@@ -241,8 +241,9 @@ export default {
     disabled(val) {
       this.selfDisabled = val
     },
-    editConfig() {
-      this.initConfigs()
+    editConfig: {
+      deep: true,
+      handler: 'initConfigs',
     },
   },
 
