@@ -12,7 +12,7 @@
     line-height: 10px;
   }
 
-  &--dashed.danger {
+  &--dashed.danger:not(.is-disabled) {
     &:focus,
     &:hover {
       color: $--color-danger;

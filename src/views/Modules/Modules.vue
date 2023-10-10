@@ -6,7 +6,13 @@
           <div class="content-left">
             {{ $t('Modules.modules') }}
             <span v-cloak class="modules-num">{{ moduleCount }}</span>
-            <el-button class="confirm-btn" type="primary" size="small" @click="$router.push('/modules/select')">
+            <el-button
+              class="confirm-btn"
+              type="primary"
+              size="small"
+              @click="$router.push('/modules/select')"
+              :disabled="notAbleChange"
+            >
               {{ $t('Modules.moduleAdd') }}
             </el-button>
           </div>
