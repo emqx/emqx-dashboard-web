@@ -26,7 +26,7 @@
           <el-table-column min-width="120px" prop="username" :label="$t('General.userName')"></el-table-column>
           <el-table-column min-width="120px" prop="role" :label="$t('General.role')">
             <template slot-scope="{ row }">
-              {{ toUpper(row.role) }}
+              {{ getLabelFromOpts(row.role, roleOpts) }}
             </template>
           </el-table-column>
           <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')">
@@ -69,8 +69,19 @@
           <el-input v-model="record.username" :disabled="accessType === 'edit'"></el-input>
         </el-form-item>
         <el-form-item prop="role" :label="$t('General.role')">
-          <el-select v-model="record.role" :disabled="accessType === 'edit'">
-            <el-option v-for="item in roleOpts" :key="item" :label="item" :value="item" />
+          <el-select v-model="record.role">
+            <el-option
+              class="opt-role"
+              v-for="{ label, value, desc } in roleOpts"
+              :key="value"
+              :value="value"
+              :label="label"
+            >
+              <span>{{ label }}</span>
+              <el-tooltip effect="dark" :content="desc">
+                <i class="iconfont icon-bangzhu"></i>
+              </el-tooltip>
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="tags" :label="$t('General.remark')">
@@ -107,10 +118,11 @@
 </template>
 
 <script>
-import { toUpper } from 'lodash'
 import { loadUser, createUser, updateUser, destroyUser, changePassword } from '@/api/function'
 import changeDefaultPwd from '@/mixins/changeDefaultPwd'
 import pwdRule from '@/common/pwdRule'
+import { ROLE_MAP } from '@/common/constants'
+import { getLabelFromOpts } from '@/common/utils'
 
 export default {
   name: 'Users',
@@ -129,7 +141,10 @@ export default {
   },
 
   data() {
-    const roleOpts = ['ROOT', 'READ', 'WRITE', 'READ_WRITE']
+    const roleOpts = [
+      { label: this.$t('General.admin'), value: ROLE_MAP.Administrator, desc: this.$t('General.adminDesc') },
+      { label: this.$t('General.viewer'), value: ROLE_MAP.Viewer, desc: this.$t('General.viewerDesc') },
+    ]
     return {
       roleOpts,
       dialogVisible: false,
@@ -218,14 +233,14 @@ export default {
   },
 
   methods: {
-    toUpper,
+    getLabelFromOpts,
     async loadData() {
       this.tableData = await loadUser()
     },
     showDialog(type, item) {
       this.accessType = 'create'
       if (type === 'edit') {
-        Object.assign(this.record, { ...item, role: toUpper(item.role) })
+        this.record = { ...item }
         this.accessType = 'edit'
       }
       this.dialogVisible = true
@@ -339,6 +354,11 @@ export default {
 .user-dialog {
   .el-select {
     width: 100%;
+  }
+}
+.opt-role {
+  .icon-bangzhu {
+    margin-left: 4px;
   }
 }
 </style>

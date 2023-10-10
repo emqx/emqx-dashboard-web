@@ -99,10 +99,6 @@ export default {
     zh: '用户',
     en: 'Users',
   },
-  role: {
-    zh: '角色',
-    en: 'Role',
-  },
   manageDashboardUsers: {
     zh: 'Dashboard 登录管理用户',
     en: 'Manage Dashboard users',
@@ -198,6 +194,22 @@ export default {
   role: {
     zh: '角色',
     en: 'Role',
+  },
+  admin: {
+    zh: '管理员',
+    en: 'Administrator',
+  },
+  adminDesc: {
+    zh: '拥有对 EMQX 所有功能和资源的完全管理访问权限，包括客户端管理、系统配置、API 密钥以及用户管理。',
+    en: 'Has full access to manage all features and resources of EMQX, including client management, system configuration, API key and user management.',
+  },
+  viewer: {
+    zh: '查看者',
+    en: 'Viewer',
+  },
+  viewerDesc: {
+    zh: '可以访问 EMQX 的所有数据和配置信息，但无权进行创建、修改和删除操作。',
+    en: 'Can access all data and configuration of EMQX, but has no rights to create, modify or delete.',
   },
   blacklistTips: {
     zh: '通过黑名单禁止客户端建立连接，该功能适用于管理少量客户端，客户端认证请使用',
