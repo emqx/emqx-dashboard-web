@@ -634,4 +634,9 @@ export const judgeIsTLSVersion = ({ key, value, elType }) => {
   return elType === 'input' && key.indexOf('version') > -1 && /^tlsv/i.test(value)
 }
 
+export const getLabelFromOpts = (value, opts) => {
+  const opt = opts.find((item) => item.value === value)
+  return opt ? opt.label : value || ''
+}
+
 export default {}

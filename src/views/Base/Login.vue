@@ -106,9 +106,9 @@ export default {
             return
           }
           this.loginError = ''
-          const { is_default_password } = res
+          const { is_default_password, role } = res
           const isUsingDefaultPwd = password === DEFAULT_PWD
-          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, isUsingDefaultPwd })
+          this.$store.dispatch('UPDATE_USER_INFO', { username, password, remember, isUsingDefaultPwd, role })
           if (is_default_password && this.isNeedAuth) {
             this.needChangePwd = true
             return
