@@ -29,11 +29,7 @@
               {{ getLabelFromOpts(row.role, roleOpts) }}
             </template>
           </el-table-column>
-          <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')">
-            <template slot-scope="{ row }">
-              {{ row.tags.desc }}
-            </template>
-          </el-table-column>
+          <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')" />
           <el-table-column width="120px">
             <template slot-scope="{ row }">
               <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="showDialog('edit', row)">
