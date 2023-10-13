@@ -1,7 +1,7 @@
 <template>
   <div class="audit-log">
     <div v-if="!isModuleEnabled" class="no-log-tip">
-      <img src="../../assets/img/not_settings.png" alt="" width="375" />
+      <img src="../../assets/img/log_disabled.png" alt="" width="375" />
       <p>{{ $t('Modules.auditLogDesc') }}</p>
       <el-button size="small" class="confirm-btn" type="primary" :loading="isStarting" @click="enableModule">
         {{ $t('Analysis.enable') }}
