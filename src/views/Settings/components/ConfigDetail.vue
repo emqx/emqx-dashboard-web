@@ -132,6 +132,23 @@ import { renderParamsForm, verifyID, verifyListener } from '@/common/utils'
 import TLSVersionSelect from '@/components/TLSVersionSelect.vue'
 import CustomNumberInput from '@/components/CustomNumberInput.vue'
 
+const covertNumToString = (obj) => {
+  const ret = _.cloneDeep(obj)
+  const walkALevel = (aLevelDefaultRecord) => {
+    const keys = Object.keys(aLevelDefaultRecord)
+    keys.forEach((key) => {
+      const rawValue = aLevelDefaultRecord[key]
+      if (typeof rawValue === 'object') {
+        walkALevel(aLevelDefaultRecord[key])
+      } else if (typeof rawValue === 'number') {
+        aLevelDefaultRecord[key] = rawValue.toString()
+      }
+    })
+  }
+  walkALevel(ret)
+  return ret
+}
+
 export default {
   name: 'ConfigDetail',
 
@@ -147,6 +164,7 @@ export default {
 
   data() {
     return {
+      omit: _.omit,
       hasValKeyConfigList: [],
       nullKeyConfigList: [],
       nullKeys: [],
@@ -304,7 +322,8 @@ export default {
       return this.configOptions
     },
     handleRecordChange(val) {
-      if (_.isEqual(val, this.originRecord)) {
+      const newRecord = covertNumToString(val)
+      if (_.isEqual(newRecord, this.originRecord)) {
         this.selfDisabled = true
         this.$emit('updateDisabled', this.selfDisabled)
         return
@@ -334,11 +353,18 @@ export default {
         setTimeout(this.$refs.record.clearValidate, 10)
       }
     },
+    getConfigItemByKey(key) {
+      return this.configList.find((item) => item.key === key)
+    },
+    isNumberTypeConfig(key) {
+      const configItem = this.getConfigItemByKey(key)
+      return configItem && configItem.type === 'number'
+    },
     /**
      * for validate
      */
     setValueToNumWhenTypeIsNumAndHasEnum(key, value) {
-      const target = this.configList.find((item) => item.key === key)
+      const target = this.getConfigItemByKey(key)
       if (!target) {
         return value
       }
@@ -358,6 +384,9 @@ export default {
       Object.keys(editConfig).forEach((key) => {
         if (editConfig[key] === 'null' || editConfig[key] === null) {
           editConfig[key] = ''
+          if (this.isNumberTypeConfig(key)) {
+            editConfig[key] = undefined
+          }
           this.nullKeys.push(key)
         }
         editConfig[key] = this.setValueToNumWhenTypeIsNumAndHasEnum(key, editConfig[key])
@@ -467,9 +496,9 @@ export default {
       }
       const { ...record } = this.recordConfig
       const { name, type } = this.record
-      Object.keys(record).forEach((item) => {
-        if (record[item] === '') {
-          record[item] = 'null'
+      Object.entries(record).forEach(([key, value]) => {
+        if ((this.isNumberTypeConfig(key) && value === undefined) || value === '') {
+          record[key] = 'null'
         }
       })
       this.$emit('update', name, record, type)
