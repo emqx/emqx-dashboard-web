@@ -32,7 +32,12 @@
           <el-table-column min-width="60px" prop="tags" :label="$t('General.remark')" />
           <el-table-column width="120px">
             <template slot-scope="{ row }">
-              <el-button type="dashed" size="mini" :disabled="notAbleChange" @click="showDialog('edit', row)">
+              <el-button
+                type="dashed"
+                size="mini"
+                :disabled="!isCurrentUser(row.username) && notAbleChange"
+                @click="showDialog('edit', row)"
+              >
                 {{ $t('Base.edit') }}
               </el-button>
               <el-button
@@ -65,7 +70,7 @@
           <el-input v-model="record.username" :disabled="accessType === 'edit'"></el-input>
         </el-form-item>
         <el-form-item prop="role" :label="$t('General.role')">
-          <el-select v-model="record.role">
+          <el-select v-model="record.role" :disabled="notAbleChange">
             <el-option
               class="opt-role"
               v-for="{ label, value, desc } in roleOpts"
@@ -81,7 +86,7 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="tags" :label="$t('General.remark')">
-          <el-input v-model="record.tags"></el-input>
+          <el-input v-model="record.tags" :disabled="notAbleChange"></el-input>
         </el-form-item>
         <el-form-item
           v-if="accessType !== 'edit' || allowChange"
@@ -96,7 +101,11 @@
         <el-form-item v-if="allowChange" prop="repeatPassword" :label="$t('General.confirmPassword')">
           <el-input v-model="record.repeatPassword" type="password"></el-input>
         </el-form-item>
-        <el-link v-if="accessType === 'edit' && !isForChangeDefaultPwd" :underline="false" @click="togglePassword">
+        <el-link
+          v-if="accessType === 'edit' && !isForChangeDefaultPwd && !notAbleChange"
+          :underline="false"
+          @click="togglePassword"
+        >
           {{ allowChange ? $t('General.dontChangePassword') : $t('General.changePassword') }}
         </el-link>
       </el-form>
@@ -105,9 +114,14 @@
         <el-button plain size="small" @click="closeDialog" v-if="!isForChangeDefaultPwd">
           {{ $t('Base.cancel') }}
         </el-button>
-        <el-button type="primary" size="small" :disabled="notAbleChange" @click="save">{{
-          $t('Base.confirm')
-        }}</el-button>
+        <el-button
+          type="primary"
+          size="small"
+          :disabled="!isCurrentUser(record.username) && notAbleChange"
+          @click="save"
+        >
+          {{ $t('Base.confirm') }}
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -238,6 +252,9 @@ export default {
       if (type === 'edit') {
         this.record = { ...item }
         this.accessType = 'edit'
+        if (this.notAbleChange) {
+          this.allowChange = true
+        }
       }
       this.dialogVisible = true
       if (this.$refs.recordForm) {
@@ -268,49 +285,58 @@ export default {
     isCurrentUser(username) {
       return this.$store.state.user.username === username
     },
-    async save() {
-      /* eslint-disable */
-      const vue = this
-      this.$refs.recordForm.validate(function (valid) {
-        if (!valid) {
-          return false
-        }
-        if (vue.accessType === 'edit') {
-          const { username, password, role } = vue.record
-          updateUser(username, vue.record).then(async () => {
-            if (vue.allowChange) {
-              const passwordData = {
-                new_pwd: vue.record.newPassword,
-                old_pwd: vue.record.password,
-              }
-              await changePassword(username, passwordData)
-              // 更新当前用户
-              if (vue.isCurrentUser(username)) {
-                vue.$store.dispatch('UPDATE_USER_INFO', { username, password: vue.record.newPassword })
-                if (vue.isForChangeDefaultPwd) {
-                  vue.$router.replace({ query: { _t: Date.now().toString().slice(-2) } })
-                }
-              }
-            } else {
-              if (vue.isCurrentUser(username)) {
-                vue.$store.commit('UPDATE_USER_ROLE', role)
-              }
-            }
-            vue.$message.success(vue.$t('Base.editSuccess'))
-            vue.dialogVisible = false
-            vue.allowChange = false
-            vue.accessType = ''
-            vue.loadData()
-          })
-        } else {
-          createUser(vue.record).then(() => {
-            vue.$message.success(vue.$t('General.createUserSuccess'))
-            vue.dialogVisible = false
-            vue.accessType = ''
-            vue.loadData()
-          })
-        }
+    submitNewUser() {
+      createUser(this.record).then(() => {
+        this.$message.success(this.$t('General.createUserSuccess'))
+        this.dialogVisible = false
+        this.accessType = ''
+        this.loadData()
       })
+    },
+    submitNewPwd() {
+      const { username } = this.record
+      const passwordData = {
+        new_pwd: this.record.newPassword,
+        old_pwd: this.record.password,
+      }
+      return changePassword(username, passwordData)
+    },
+    updateCurrentUser() {
+      const { username, role } = this.record
+      if (this.isCurrentUser(username)) {
+        // 更新当前用户
+        if (this.allowChange) {
+          this.$store.dispatch('UPDATE_USER_INFO', { username, password: this.record.newPassword, role })
+        } else {
+          this.$store.commit('UPDATE_USER_ROLE', role)
+        }
+        if (this.isForChangeDefaultPwd) {
+          this.$router.replace({ query: { _t: Date.now().toString().slice(-2) } })
+        }
+      }
+    },
+    async save() {
+      try {
+        await this.$refs.recordForm.validate()
+        if (this.accessType !== 'edit') {
+          this.submitNewUser()
+          return
+        }
+        const { username } = this.record
+        await updateUser(username, this.record)
+        if (this.allowChange) {
+          await this.submitNewPwd()
+        }
+        this.updateCurrentUser()
+        this.$message.success(this.$t('Base.editSuccess'))
+        this.dialogVisible = false
+        this.allowChange = false
+        this.accessType = ''
+        this.loadData()
+      } catch (error) {
+        // eslint-disable-next-line consistent-return
+        return false
+      }
     },
     deleteConfirm(item) {
       const vue = this
