@@ -139,6 +139,9 @@ export default new Vuex.Store({
       // eslint-disable-next-line
       state.user = userInfo
     },
+    UPDATE_USER_ROLE(state, role) {
+      state.user = { ...state.user, role }
+    },
     LOADING(state, loading) {
       // eslint-disable-next-line
       state.loading = loading
