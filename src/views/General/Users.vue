@@ -265,6 +265,9 @@ export default {
         }
       }
     },
+    isCurrentUser(username) {
+      return this.$store.state.user.username === username
+    },
     async save() {
       /* eslint-disable */
       const vue = this
@@ -273,7 +276,7 @@ export default {
           return false
         }
         if (vue.accessType === 'edit') {
-          const { username, password } = vue.record
+          const { username, password, role } = vue.record
           updateUser(username, vue.record).then(async () => {
             if (vue.allowChange) {
               const passwordData = {
@@ -282,11 +285,15 @@ export default {
               }
               await changePassword(username, passwordData)
               // 更新当前用户
-              if (vue.$store.state.user.username === username) {
+              if (vue.isCurrentUser(username)) {
                 vue.$store.dispatch('UPDATE_USER_INFO', { username, password: vue.record.newPassword })
                 if (vue.isForChangeDefaultPwd) {
-                  vue.$router.replace({ name: 'users', query: {} })
+                  vue.$router.replace({ query: { _t: Date.now().toString().slice(-2) } })
                 }
+              }
+            } else {
+              if (vue.isCurrentUser(username)) {
+                vue.$store.commit('UPDATE_USER_ROLE', role)
               }
             }
             vue.$message.success(vue.$t('Base.editSuccess'))
