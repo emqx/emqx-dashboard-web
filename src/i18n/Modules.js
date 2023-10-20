@@ -460,7 +460,7 @@ export default {
   },
   source: {
     zh: '用户/AppID',
-    en: 'Source',
+    en: 'User/AppID',
   },
   httpMethod: {
     zh: 'HTTP 请求方法',
