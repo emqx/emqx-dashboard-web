@@ -3,7 +3,11 @@
     <page-header>
       <div class="page-header-title-view">
         <div style="display: flex; align-items: center">
-          <span class="title keep-spaces">{{ clientId }}</span>
+          <el-tooltip :content="clientId">
+            <span class="title">
+              <pre class="keep-spaces">{{ clientId }}</pre>
+            </span>
+          </el-tooltip>
           <a-badge v-if="isThisClientExist" :status="connStatus" :text="connStatusText"></a-badge>
         </div>
       </div>
@@ -439,6 +443,15 @@ export default {
 
 <style lang="scss">
 .client-details {
+  .title {
+    max-width: calc(100% - 150px);
+    white-space: nowrap;
+    .keep-spaces {
+      margin-bottom: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
   .connection .field-title {
     min-width: 120px;
   }
@@ -477,6 +490,9 @@ export default {
 
   .more-info {
     margin-top: 20px;
+  }
+  .field-value {
+    word-break: break-all;
   }
 }
 </style>
