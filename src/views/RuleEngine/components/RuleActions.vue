@@ -1,6 +1,7 @@
 <template>
   <div class="rule-actions">
     <div v-for="(item, i) in rawValue" :key="i" class="action-item">
+      <!-- ACTION -->
       <div class="action-item-head">
         <div class="action-item-type">
           <div class="title">{{ $t('RuleEngine.actionType') }}</div>
@@ -85,7 +86,7 @@
           <span class="value">{{ metric.failed }}</span>
         </div>
       </div>
-
+      <!-- ACTION FALLBACK -->
       <template v-if="item.fallbacks && item.fallbacks.length">
         <el-divider></el-divider>
         <div v-for="(fallback, k) in item.fallbacks" :key="k" class="action-item error-action">
@@ -494,6 +495,9 @@ export default {
         this.initData()
         this.isFallbacks = false
       }
+    },
+    rawValue() {
+      this.fillRawValue()
     },
   },
 
