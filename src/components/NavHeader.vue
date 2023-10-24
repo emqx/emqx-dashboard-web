@@ -59,8 +59,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Breadcrumb from './Breadcrumb.vue'
 import { loadAlarm } from '@/api/common'
+import { loadUser } from '@/api/function'
 
 export default {
   name: 'NavHeader',
@@ -76,6 +78,7 @@ export default {
   },
 
   computed: {
+    ...mapState({ currentUser: (state) => state.user.username }),
     alertCount() {
       return this.$store.state.alertCount
     },
@@ -96,12 +99,15 @@ export default {
   },
 
   created() {
-    this.loadData()
+    this.handleFocusWindow()
     this.setHtmlLangAttr(this.language)
   },
 
   mounted() {
-    window.onfocus = this.loadData()
+    window.addEventListener('focus', this.handleFocusWindow)
+  },
+  beforeDestroy() {
+    window.removeEventListener('focus', this.handleFocusWindow)
   },
 
   methods: {
@@ -118,9 +124,24 @@ export default {
     clearAlert() {
       // this.alertCount = 0
     },
+    async updateUserRole() {
+      try {
+        const list = await loadUser()
+        const userItem = list.find((item) => item.username === this.currentUser)
+        if (userItem && userItem.role) {
+          this.$store.commit('UPDATE_USER_ROLE', userItem.role)
+        }
+      } catch (error) {
+        //
+      }
+    },
     async loadData() {
       const alert = await loadAlarm()
       this.$store.dispatch('SET_ALERT_COUNT', (alert || []).length)
+    },
+    handleFocusWindow() {
+      this.loadData()
+      this.updateUserRole()
     },
     logout() {
       this.$store.dispatch('UPDATE_USER_INFO', { logOut: true })
