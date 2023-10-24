@@ -225,6 +225,7 @@ export function renderParamsForm(params = {}, propPrefix = '') {
         rows: inputType === 'textarea' ? 5 : 0,
         filterable: isEditableSelect,
         'allow-create': isEditableSelect,
+        ...(inputType === 'number' ? { min: 0 } : {}),
       },
       key: k,
       type: inputType,

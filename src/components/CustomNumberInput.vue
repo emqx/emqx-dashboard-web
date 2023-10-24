@@ -3,6 +3,7 @@
     v-model="num"
     class="custom-input-number"
     :class="{ 'is-focus': isFocus }"
+    v-bind="$attrs"
     controls-position="right"
     @focus="handleFocus"
     @blur="handleBlur"
