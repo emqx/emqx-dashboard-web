@@ -522,15 +522,20 @@ export default {
 
       this.cleanFileContent(config)
       if (this.oper === 'add') {
-        this.buttonLoading = true
-        this.record.type = this.moduleData.type
-        const data = await createModule(this.record)
-        const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
-        addedModules[data.type] = data.id
-        localStorage.setItem('addedModules', JSON.stringify(addedModules))
-        this.$message.success(this.$t('Modules.moduleAddSuccess'))
-        this.exitDetail()
-        this.buttonLoading = false
+        try {
+          this.buttonLoading = true
+          this.record.type = this.moduleData.type
+          const data = await createModule(this.record)
+          const addedModules = JSON.parse(localStorage.getItem('addedModules')) || {}
+          addedModules[data.type] = data.id
+          localStorage.setItem('addedModules', JSON.stringify(addedModules))
+          this.$message.success(this.$t('Modules.moduleAddSuccess'))
+          this.exitDetail()
+        } catch (error) {
+          //
+        } finally {
+          this.buttonLoading = false
+        }
       } else {
         const isEdited = !_.isEqual(this.record.config, this.originRecord.config)
         if (isEdited) {
