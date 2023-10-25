@@ -133,7 +133,6 @@
                     popper-class="detail-popover"
                   >
                     <pre>{{ row.http_request.bindings }}</pre>
-                    <div v-for="(value, label) in row.details" :key="label">{{ label }}: {{ value }}</div>
                     <span slot="reference" class="details">
                       <i class="iconfont icon-bangzhu"></i>
                     </span>
