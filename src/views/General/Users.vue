@@ -323,7 +323,9 @@ export default {
           return
         }
         const { username } = this.record
-        await updateUser(username, this.record)
+        if (!this.notAbleChange) {
+          await updateUser(username, this.record)
+        }
         if (this.allowChange) {
           await this.submitNewPwd()
         }
