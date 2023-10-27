@@ -108,23 +108,23 @@ export default {
         this.listenerZoneOptions.push(oneZoneOption)
       })
     },
+    sureReturn() {
+      this.showConfigDetail = false
+      this.loadData()
+    },
     async returnList() {
-      const sureReturn = () => {
-        this.showConfigDetail = false
-        this.loadData()
-      }
       if (!this.disabled) {
         const status = await this.$confirm(this.$t('Settings.noSaveConfirm'), {
           type: 'warning',
           cancelButtonText: this.$t('Settings.no'),
         })
         if (status === 'confirm') {
-          sureReturn()
+          this.sureReturn()
           return true
         }
         return false
       }
-      sureReturn()
+      this.sureReturn()
       return true
     },
     addListener() {
@@ -213,7 +213,7 @@ export default {
           const res = await deleteOneListener(this.editListenerName, this.transport_type)
           if (res) {
             this.$message.success(this.$t('Base.deleteSuccess'))
-            this.returnList()
+            this.sureReturn()
           }
         })
         .catch(() => {})
