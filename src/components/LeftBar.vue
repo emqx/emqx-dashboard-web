@@ -211,12 +211,12 @@ export default {
             path: '/blacklist',
             parentKey: 'general',
           },
-          {
-            title: this.$t('components.backup'),
-            key: 'general.backup',
-            path: '/backup',
-            parentKey: 'general',
-          },
+          // {
+          //   title: this.$t('components.backup'),
+          //   key: 'general.backup',
+          //   path: '/backup',
+          //   parentKey: 'general',
+          // },
 
           // {
           //   title: this.$t('components.trace'),
