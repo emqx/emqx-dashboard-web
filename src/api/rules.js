@@ -1,6 +1,7 @@
 import { omit } from 'lodash'
 import http from '@/common/http'
 import { fillI18n } from '@/common/utils'
+import { accAdd } from '@/api/common'
 
 let ruleEvents = []
 const eventsMap = {}
@@ -33,7 +34,7 @@ export async function loadRuleDetails(id) {
   rule.metrics.forEach((item) => {
     ;['matched', 'speed', 'speed_last5m', 'speed_max', 'exception', 'passed', 'no_result', 'failed'].forEach((key) => {
       rule.metricsData[key] = rule.metricsData[key] || 0
-      rule.metricsData[key] += item[key] || 0
+      rule.metricsData[key] = accAdd(rule.metricsData[key], item[key] || 0)
     })
   })
   rule.actions = rule.actions.map((action) => {
