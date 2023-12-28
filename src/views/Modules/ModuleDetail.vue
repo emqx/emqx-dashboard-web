@@ -119,6 +119,10 @@
                         </template>
                         <!-- TLS Version -->
                         <TLSVersionSelect v-else-if="judgeIsTLSVersion(item)" v-model="record.config[item.key]" />
+                        <binary-file-editor
+                          v-else-if="item.elType === 'binary_file'"
+                          v-model="record.config[item.key]"
+                        ></binary-file-editor>
                         <!-- input -->
                         <template v-else-if="item.elType !== 'select'">
                           <el-input
@@ -225,6 +229,20 @@
 import _ from 'lodash'
 import { createModule, loadAllModules, updateModule, destroyModule } from '@/api/modules'
 import { renderParamsForm, fillI18n, judgeIsTLSVersion } from '@/common/utils'
+import {
+  findCurrentExtraConfigParams,
+  deleteParamsByKeys,
+  findCurrentExtraRules,
+  deleteRulesByKeys,
+  getOtherExtraConfigs,
+  diffConfigList,
+} from '@/common/someUtilsForCfgselect'
+import {
+  getParamItemSpan,
+  isParamSSLType,
+  isParamBoolType,
+  findParamItemByKey,
+} from '@/common/someUtilsForSchemaForm.js'
 import handleMongoDBSRV from '@/mixins/handleMongoDBSRV'
 import KeyAndValueEditor from '@/components/KeyAndValueEditor'
 import ArrayEditor from '@/components/ArrayEditor'
@@ -239,12 +257,10 @@ import TopicMetrics from './components/TopicMetrics/TopicMetrics'
 import SlowQuery from './components/SlowQuery/SlowQuery.vue'
 import GCPIoT from './components/GCPIoT/GCPIoT.vue'
 import TLSVersionSelect from '@/components/TLSVersionSelect.vue'
+import BinaryFileEditor from '@/components/BinaryFileEditor.vue'
 
 import LogTrace from './components/LogTrace/LogTrace'
 import Listeners from './components/Listeners'
-
-import { getParamItemSpan, isParamBoolType, findParamItemByKey } from '@/common/someUtilsForSchemaForm.js'
-import { diffConfigList } from '@/common/someUtilsForCfgselect.js'
 
 export default {
   name: 'ModuleDetail',
@@ -265,6 +281,7 @@ export default {
     LogTrace,
     TLSVersionSelect,
     GCPIoT,
+    BinaryFileEditor,
   },
 
   mixins: [handleMongoDBSRV('module')],
@@ -371,6 +388,9 @@ export default {
   methods: {
     isParamBoolType,
     getParamItemSpan,
+    deleteParamsByKeys,
+    deleteRulesByKeys,
+    getOtherExtraConfigs,
     diffConfigList,
     judgeIsTLSVersion(item) {
       return judgeIsTLSVersion(item)
@@ -466,7 +486,8 @@ export default {
         config.verify = false
         Object.keys(config).forEach((key) => {
           const oneValue = config[key]
-          if (typeof oneValue === 'object' && Object.keys(oneValue).includes('file')) {
+          const paramItem = this.findParamItemByKey(key)
+          if (typeof oneValue === 'object' && Object.keys(oneValue).includes('file') && isParamSSLType(paramItem)) {
             config[key] = {
               file: '',
               filename: '',
@@ -648,40 +669,53 @@ export default {
         this.$set(this.originRecord.config, key, value)
       })
     },
+    findCurrentExtraConfigParams() {
+      return findCurrentExtraConfigParams(this.originConfigList, this.configList)
+    },
+    findCurrentExtraRules() {
+      return findCurrentExtraRules(this.originRules.config, this.rules.config)
+    },
     addConfigAccordingType(extraConfigs, type, totalExtraConfigs, isInit = false) {
+      // unneeded configuration items
       const [...commonConfig] = this.originConfigList
       const { ...rulesCommonConfig } = this.originRules.config
       const { ...recordCommonConfig } = this.originRecord.config
-      const { needDeleted: needDeletedConfigs, needAdded: needAddedConfigs } = this.diffConfigList(
-        this.configList,
-        commonConfig,
+
+      const otherExtraConfigs = this.getOtherExtraConfigs(totalExtraConfigs, type)
+      const { needAdded: needAddedConfigs } = this.diffConfigList(this.configList, commonConfig)
+
+      const extraParamsNeeds = this.deleteParamsByKeys(
+        this.findCurrentExtraConfigParams(),
+        Object.keys(otherExtraConfigs),
       )
+      const extraRulesNeeds = this.deleteRulesByKeys(this.findCurrentExtraRules(), Object.keys(otherExtraConfigs))
       const record = {
-        ..._.omit(this.record.config, needDeletedConfigs),
+        ..._.omit(this.record.config, Object.keys(otherExtraConfigs)),
         ..._.pick(recordCommonConfig, needAddedConfigs),
       }
+
       if (extraConfigs && typeof extraConfigs === 'object' && Object.keys(extraConfigs).length) {
         const configData = renderParamsForm(extraConfigs, 'config')
         const { form, rules } = configData
         const addConfigs = {}
         if (isInit && this.oper === 'edit') {
           form.forEach(({ key }) => {
-            this.$set(addConfigs, key, this.moduleData.config[key])
+            this.$set(addConfigs, key, this.record.config[key])
           })
         } else {
           form.forEach(({ key, value }) => {
             this.$set(addConfigs, key, value)
           })
         }
-        this.configList = commonConfig.concat(form)
-        this.rules.config = Object.assign(rulesCommonConfig, rules)
+        this.configList = commonConfig.concat(form, extraParamsNeeds)
+        this.rules.config = Object.assign(rulesCommonConfig, rules, extraRulesNeeds)
         this.record.config = Object.assign(record, addConfigs)
       } else {
-        this.configList = commonConfig
+        this.configList = commonConfig.concat(extraParamsNeeds)
         this.rules.config = rulesCommonConfig
         this.record.config = record
       }
-      this.record.config.type = type
+      this.configList.sort((prev, next) => prev.order - next.order)
       if (this.$refs.record) {
         setTimeout(this.$refs.record.clearValidate, 10)
       }
