@@ -9,14 +9,14 @@ export const isParamBoolType = (param) => {
   return isBoolOpts
 }
 
+const sslKeyReg = /certfile|keyfile|cafile/i
 /**
  * @param {ParamItem} param
  * @returns {boolean}
  */
 export const isParamSSLType = (param) => {
-  const fileTypeFieldsButNotForSSL = ['kerberos_keytab']
   return (
-    (param.elType === 'file' && !fileTypeFieldsButNotForSSL.includes(param.key)) ||
+    (param.elType === 'file' && sslKeyReg.test(param.key)) ||
     ['verify', 'tls_version', 'server_name_indication'].includes(param.key)
   )
 }
