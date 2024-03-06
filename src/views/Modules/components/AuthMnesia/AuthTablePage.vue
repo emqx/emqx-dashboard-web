@@ -46,8 +46,14 @@
         :total="count"
         @size-change="initPageNLoad"
         @current-change="loadData"
-      >
-      </el-pagination>
+      />
+      <custom-pagination
+        v-if="count === -1 && tableData.length"
+        :hasnext="hasnext"
+        :page="pageParams._page"
+        @prevClick="handlePrevClick"
+        @nextClick="handleNextClick"
+      />
     </div>
     <AuthDialog v-model="showDialog" :auth="currentAuth" :type="type" @submitted="loadData" />
   </div>
@@ -56,12 +62,13 @@
 <script>
 import { loadAuth, deleteAuth } from '@/api/modules'
 import AuthDialog from './AuthDialog.vue'
+import CustomPagination from '@/components/CustomPagination.vue'
 import { checkNOmitFromObj } from '@/common/utils.js'
 
 export default {
   name: 'AuthTablePage',
 
-  components: { AuthDialog },
+  components: { AuthDialog, CustomPagination },
 
   props: {
     type: {
@@ -78,6 +85,7 @@ export default {
       },
       tableData: [],
       listLoading: false,
+      hasnext: false,
       pageParams: {
         _limit: 10,
         _page: 1,
@@ -103,11 +111,26 @@ export default {
       const data = await loadAuth(this.type, { ...this.pageParams, ...searchParams })
       const {
         items = [],
-        meta: { count = 0 },
+        meta: { count = 0, hasnext = false },
       } = data
       this.tableData = items
       this.count = count
+      this.hasnext = hasnext
       this.listLoading = false
+    },
+    handlePrevClick() {
+      if (this.pageParams._page === 1) {
+        return
+      }
+      this.pageParams._page -= 1
+      this.loadData()
+    },
+    handleNextClick() {
+      if (!this.hasnext) {
+        return
+      }
+      this.pageParams._page += 1
+      this.loadData()
     },
     addAuth() {
       this.currentAuth = undefined
