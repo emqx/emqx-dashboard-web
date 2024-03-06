@@ -59,8 +59,14 @@
         :total="count"
         @size-change="initPageNLoad"
         @current-change="loadData"
-      >
-      </el-pagination>
+      />
+      <custom-pagination
+        v-if="count === -1 && tableData.length"
+        :hasnext="hasnext"
+        :page="aclParams._page"
+        @prevClick="handlePrevClick"
+        @nextClick="handleNextClick"
+      />
     </div>
     <AddACLDialog v-model="showAddDialog" :type="type" @added="loadData" />
   </div>
@@ -70,11 +76,12 @@
 import { loadAcl, deleteAcl, delete$allAcl } from '@/api/modules'
 import AddACLDialog from './AddACLDialog.vue'
 import { checkNOmitFromObj } from '@/common/utils.js'
+import CustomPagination from '@/components/CustomPagination.vue'
 
 export default {
   name: 'AclTablePage',
 
-  components: { AddACLDialog },
+  components: { AddACLDialog, CustomPagination },
 
   props: {
     type: {
@@ -96,6 +103,7 @@ export default {
         _limit: 10,
         _page: 1,
       },
+      hasnext: false,
       count: 0,
       showAddDialog: false,
     }
@@ -119,11 +127,26 @@ export default {
       const data = await loadAcl(this.type, { ...this.aclParams, ...searchParams })
       const {
         items = [],
-        meta: { count = 0 },
+        meta: { count = 0, hasnext = false },
       } = data
       this.tableData = items
       this.count = count
+      this.hasnext = hasnext
       this.listLoading = false
+    },
+    handlePrevClick() {
+      if (this.aclParams._page === 1) {
+        return
+      }
+      this.aclParams._page -= 1
+      this.loadData()
+    },
+    handleNextClick() {
+      if (!this.hasnext) {
+        return
+      }
+      this.aclParams._page += 1
+      this.loadData()
     },
     addACL() {
       this.showAddDialog = true
