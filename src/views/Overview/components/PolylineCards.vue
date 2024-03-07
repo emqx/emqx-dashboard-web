@@ -57,12 +57,12 @@ export default {
 
     return {
       dataTypeMap: {
-        dropped: this.$t('Overview.messageDrop'),
         connection: this.$t('Overview.connection'),
         route: this.$t('Overview.topics'),
         subscriptions: this.$t('Overview.Subscription'),
         sent: this.$t('Overview.messageOut'),
         received: this.$t('Overview.messageIn'),
+        dropped: this.$t('Overview.messageDrop'),
       },
       metricTitles: [],
       metricLog: {
@@ -73,7 +73,7 @@ export default {
         sent: this.chartDataFill(32),
         received: this.chartDataFill(32),
       },
-      dataTypeList: ['dropped', 'connection', 'route', 'subscriptions', 'sent', 'received'],
+      dataTypeList: ['connection', 'route', 'subscriptions', 'sent', 'received', 'dropped'],
       timerMetrics: null,
       bigChartItem: {},
       chartColorList: {
