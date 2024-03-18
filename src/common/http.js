@@ -13,6 +13,15 @@ let timer = 0
 NProgress.configure({ showSpinner: false })
 const { lang = 'zh' } = store.state
 
+const readBlobResponse = async (data) => {
+  try {
+    const ret = await data.text()
+    return JSON.parse(ret)
+  } catch (error) {
+    return {}
+  }
+}
+
 const httpCode = {
   zh: {
     0: '成功',
@@ -96,11 +105,14 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-function handleError(error) {
+async function handleError(error) {
   clearTimeout(timer)
   timer = setTimeout(() => {
     NProgress.done()
   }, 300)
+  if (error.response.data instanceof Blob) {
+    error.response.data = await readBlobResponse(error.response.data)
+  }
   if (!error.response) {
     return Promise.reject(error.message)
   }
