@@ -16,16 +16,21 @@ export function getTraceLog(name, params) {
 }
 
 export async function downloadTrace(name) {
+  let res
   try {
-    const res = await http.get(`/trace/${encodeURIComponent(name)}/download`, {
+    res = await http.get(`/trace/${encodeURIComponent(name)}/download`, {
       responseType: 'blob',
       timeout: 45000,
     })
-    if (!res.data) {
-      throw new Error('No data')
+  } catch (error) {
+    return Promise.reject(error)
+  }
+
+  try {
+    if (res) {
+      downloadBlobData(res)
+      return Promise.resolve()
     }
-    downloadBlobData(res)
-    return Promise.resolve()
   } catch (error) {
     Message.error(error)
     return Promise.reject()
